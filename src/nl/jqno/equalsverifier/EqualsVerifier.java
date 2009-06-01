@@ -53,12 +53,20 @@ import nl.jqno.instantiator.Instantiator;
  * - Call {@link #verify()} to perform the actual verifications.
  * <p>
  * Example use:
+ * 
+ * <pre>{@code
+ * EqualsVerifier.forClass(My.class).verify();
+ * }</pre>
+ * 
+ * Or, with some of the checks disabled:
+ * 
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
  *     .allowMutableFields()
  *     .fieldsAreNeverNull()
  *     .verify();
  * }</pre>
+ * 
  * The following properties are verified:<br>
  * - Preconditions for {@link EqualsVerifier} itself.<br>
  * - Reflexivity and symmetry of the {@code equals} method.<br>
