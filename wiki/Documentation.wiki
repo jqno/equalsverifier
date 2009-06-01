@@ -17,6 +17,10 @@ Use, within a JUnit 4 test method, as follows:
 
 Example use:
 {{{
+EqualsVerifier.forClass(My.class).verify();
+}}}
+Or, with some of the checks disabled:
+{{{
 EqualsVerifier.forClass(My.class)
     .allowMutableFields()
     .fieldsAreNeverNull()
