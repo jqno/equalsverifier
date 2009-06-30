@@ -24,7 +24,6 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.instantiator.Instantiator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +46,16 @@ public class CloningAndScramblingTest {
 	}
 	
 	@Test
-	public void deepClone() throws IllegalArgumentException, IllegalAccessException {
+	public void shallowClone() {
+		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		PointContainer original = new PointContainer(new Point(1, 2));
+		PointContainer clone = instantiator.cloneFrom(original);
+		
+		assertTrue(original.point == clone.point);
+	}
+	
+	@Test
+	public void inheritanceClone() throws IllegalArgumentException, IllegalAccessException {
 		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneFrom(original);
@@ -73,7 +81,16 @@ public class CloningAndScramblingTest {
 	}
 	
 	@Test
-	public void deepCloneToSub() throws IllegalArgumentException, IllegalAccessException {
+	public void shallowCloneToSub() {
+		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		PointContainer original = new PointContainer(new Point(1, 2));
+		SubPointContainer clone = instantiator.cloneToSubclass(original, SubPointContainer.class);
+		
+		assertTrue(original.point == clone.point);
+	}
+	
+	@Test
+	public void inheritanceCloneToSub() throws IllegalArgumentException, IllegalAccessException {
 		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneToSubclass(original, ColorPoint3D.class);
@@ -146,6 +163,8 @@ public class CloningAndScramblingTest {
 	@Test
 	public void scrambleUnscramblablePoint() {
 		Instantiator<FinalAssignedPointContainer> fapcInstantiator = Instantiator.forClass(FinalAssignedPointContainer.class);
+		fapcInstantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
+		
 		FinalAssignedPointContainer fapc = new FinalAssignedPointContainer();
 		Point before = fapc.p;
 		assertTrue(before.equals(fapc.p));
@@ -156,6 +175,20 @@ public class CloningAndScramblingTest {
 	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> klass) throws IllegalAccessException {
 		for (Field field : klass.getDeclaredFields()) {
 			assertEquals(field.get(original), field.get(clone));
+		}
+	}
+	
+	private static class PointContainer {
+		protected final Point point;
+		
+		public PointContainer(Point point) {
+			this.point = point;
+		}
+	}
+	
+	private static class SubPointContainer extends PointContainer {
+		public SubPointContainer(Point point) {
+			super(point);
 		}
 	}
 	

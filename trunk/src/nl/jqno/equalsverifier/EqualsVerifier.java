@@ -132,7 +132,7 @@ import nl.jqno.instantiator.Instantiator;
 public final class EqualsVerifier<T> {
 	private final Class<T> klass;
 	private final List<T> examples;
-	private final boolean constructedFromClass;
+	private final Instantiator<T> instantiator;
 	
 	private final ExamplesChecker<T> examplesChecker;
 	private final HierarchyChecker<T> hierarchyChecker;
@@ -146,17 +146,9 @@ public final class EqualsVerifier<T> {
 	 */
 	public static <T> EqualsVerifier<T> forClass(Class<T> klass) {
 		Instantiator<T> instantiator = Instantiator.forClass(klass);
-
-		T first = instantiator.instantiate();
-		instantiator.scramble(first);
-		T second = instantiator.cloneFrom(first);
-		instantiator.scramble(second);
-		
 		List<T> examples = new ArrayList<T>();
-		examples.add(first);
-		examples.add(second);
 
-		return new EqualsVerifier<T>(klass, instantiator, true, examples);
+		return new EqualsVerifier<T>(klass, instantiator, examples);
 	}
 	
 	/**
@@ -187,21 +179,39 @@ public final class EqualsVerifier<T> {
 			examples.addAll(Arrays.asList(tail));
 		}
 		
-		return new EqualsVerifier<T>(klass, instantiator, false, examples);
+		return new EqualsVerifier<T>(klass, instantiator, examples);
 	}
 
 	/**
 	 * Private constructor. Call {@link #forClass(Class)} or
 	 * {@link #forExamples(Object, Object, Object...)} instead.
 	 */
-	private EqualsVerifier(Class<T> klass, Instantiator<T> instantiator, boolean constructedFromClass, List<T> examples) {
+	private EqualsVerifier(Class<T> klass, Instantiator<T> instantiator, List<T> examples) {
 		this.klass = klass;
 		this.examples = examples;
-		this.constructedFromClass = constructedFromClass;
+		this.instantiator = instantiator;
 		
 		examplesChecker = new ExamplesChecker<T>(instantiator, examples);
 		hierarchyChecker = new HierarchyChecker<T>(instantiator);
 		fieldsChecker = new FieldsChecker<T>(instantiator);
+	}
+	
+	/**
+	 * Add prefabricated values for classes that EqualsVerifier cannot
+	 * instantiate by itself.
+	 * 
+	 * @param <S> The class of the prefabricated values.
+	 * @param klass The class of the prefabricated values.
+	 * @param first An instance of {@code S}.
+	 * @param second An instance of {@code S}.
+	 * @return {@code this}, for easy method chaining.
+	 * @throws NullPointerException If either {@code first} or {@code second}
+	 * 				is null.
+	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
+	 */
+	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherKlass, S first, S second) {
+		instantiator.addPrefabValues(otherKlass, first, second);
+		return this;
 	}
 	
 	/**
@@ -223,6 +233,21 @@ public final class EqualsVerifier<T> {
 	 */
 	public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
 		hierarchyChecker.setRedefinedSubclass(redefinedSubclass);
+		return this;
+	}
+	
+	/**
+	 * Signals that T is part of an inheritance hierarchy where {@code equals}
+	 * is overridden. Call this method if T has overridden {@code equals} and
+	 * {@code hashCode}, and one or more of T's superclasses have as well.
+	 * 
+	 * T itself does not necessarily have to have subclasses that redefine
+	 * {@code equals} and {@code hashCode}.
+	 * 
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> withRedefinedSuperclass() {
+		hierarchyChecker.hasRedefinedSuperclass();
 		return this;
 	}
 	
@@ -290,9 +315,6 @@ public final class EqualsVerifier<T> {
 	 * 				constructed by {@code forClass}.
 	 */
 	public EqualsVerifier<T> fieldsAreNeverNull() {
-		if (constructedFromClass) {
-			fail("fieldsAreNeverNull() requires construction via forExamples() instead of via forClass().");
-		}
 		fieldsChecker.fieldsAreNeverNull();
 		return this;
 	}
@@ -305,6 +327,7 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
+		generateExamplesIfNecessary();
 		try {
 			verifyPreconditions();
 			examplesChecker.check();
@@ -325,5 +348,20 @@ public final class EqualsVerifier<T> {
 			assertTrue("Precondition: " + examples.get(0) + " and " + example + " are of different classes",
 					klass.isAssignableFrom(example.getClass()));
 		}
+	}
+	
+	private void generateExamplesIfNecessary() {
+		if (examples.size() > 1) {
+			return;
+		}
+		
+		T first = instantiator.instantiate();
+		instantiator.scramble(first);
+		T second = instantiator.instantiate();
+		instantiator.scramble(second);
+		instantiator.scramble(second);
+		
+		examples.add(first);
+		examples.add(second);
 	}
 }

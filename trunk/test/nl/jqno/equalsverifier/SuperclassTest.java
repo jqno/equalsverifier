@@ -31,16 +31,16 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 	public void symmetry() {
 		EqualsVerifier<SymmetryBrokenColorPoint> ev =
 				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
-		verifyFailure("Symmetry: SymmetryBrokenColorPoint:0,0,null does not equal" +
-				" Point:0,0.", ev);
+		verifyFailure("Symmetry: SymmetryBrokenColorPoint:1,1,YELLOW does not equal" +
+				" Point:1,1.", ev);
 	}
 	
 	@Test
 	public void transitivity() {
 		EqualsVerifier<TransitivityBrokenColorPoint> ev =
 				EqualsVerifier.forClass(TransitivityBrokenColorPoint.class);
-		verifyFailure("Transitivity: TransitivityBrokenColorPoint:0,0,null and" +
-				" TransitivityBrokenColorPoint:0,0,YELLOW both equal Point:0,0," +
+		verifyFailure("Transitivity: TransitivityBrokenColorPoint:1,1,YELLOW and" +
+				" TransitivityBrokenColorPoint:1,1,BLUE both equal Point:1,1," +
 				" which implies they equal each other.",
 				ev);
 	}
@@ -49,8 +49,8 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 	public void referenceAndSuperSameHaveSameHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev =
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		verifyFailure("Superclass: hashCode for HashCodeBrokenPoint:0,0" +
-				" should be equal to hashCode for Point:0,0.", ev);
+		verifyFailure("Superclass: hashCode for HashCodeBrokenPoint:1,1" +
+				" should be equal to hashCode for Point:1,1.", ev);
 	}
 	
 	public static class SymmetryBrokenColorPoint extends Point {

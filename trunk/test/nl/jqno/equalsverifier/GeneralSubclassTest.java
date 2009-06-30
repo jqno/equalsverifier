@@ -29,7 +29,7 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 	public void liskovSubstitutionPrinciple() {
 		EqualsVerifier<LiskovSubstitutionPrincipleBroken> ev =
 				EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class);
-		verifyFailure("Subclass: LiskovSubstitutionPrincipleBroken:0" +
+		verifyFailure("Subclass: LiskovSubstitutionPrincipleBroken:1" +
 				" is not equal to an instance of a trivial subclass with equal fields." +
 				" (Consider making the class final.)",
 				ev);

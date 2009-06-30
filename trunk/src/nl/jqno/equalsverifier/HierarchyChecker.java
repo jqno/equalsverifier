@@ -28,10 +28,12 @@ class HierarchyChecker<T> {
 	private final Class<T> klass;
 	private final Instantiator<T> instantiator;
 	private final boolean klassIsFinal;
-	private final T reference;
-	private final T other;
+	
+	private T reference;
+	private T other;
 	
 	private Class<? extends T> redefinedSubclass;
+	private boolean hasRedefinedSuperclass = false;
 	private boolean weakInheritanceCheck = false;
 
 	public HierarchyChecker(Instantiator<T> instantiator) {
@@ -39,10 +41,6 @@ class HierarchyChecker<T> {
 		this.klass = instantiator.getKlass();
 		
 		klassIsFinal = Modifier.isFinal(klass.getModifiers());
-		
-		reference = instantiator.instantiate();
-		other = instantiator.cloneFrom(reference);
-		instantiator.scramble(other);
 	}
 	
 	public void setRedefinedSubclass(Class<? extends T> redefinedSubclass) {
@@ -50,6 +48,10 @@ class HierarchyChecker<T> {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		this.redefinedSubclass = redefinedSubclass;
+	}
+	
+	public void hasRedefinedSuperclass() {
+		this.hasRedefinedSuperclass = true;
 	}
 	
 	public void weakInheritanceCheck() {
@@ -60,6 +62,8 @@ class HierarchyChecker<T> {
 	}
 	
 	public void check() {
+		generateExamples();
+		
 		checkSuperclass();
 		checkSubclass();
 		
@@ -75,23 +79,32 @@ class HierarchyChecker<T> {
 			return;
 		}
 
-		T shallow = instantiator.cloneFrom(reference);
-		instantiator.shallowScramble(shallow);
+		Object equalSuper = instantiateSuperclass(superclass);
 		
-		@SuppressWarnings("unchecked")
+		if (hasRedefinedSuperclass) {
+			assertFalse("Redefined superclass: " + reference + " may not equal " + equalSuper + ", but it does.",
+					reference.equals(equalSuper));
+		}
+		else {
+			T shallow = instantiator.cloneFrom(reference);
+			instantiator.shallowScramble(shallow);
+			
+			assertTrue("Symmetry: " + reference + " does not equal " + equalSuper + ".",
+					reference.equals(equalSuper) && equalSuper.equals(reference));
+			
+			assertTrue("Transitivity: " + reference + " and " + shallow +
+					" both equal " + equalSuper + ", which implies they equal each other.",
+					reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
+			
+			assertTrue("Superclass: hashCode for " + reference + " should be equal to hashCode for " + equalSuper + ".",
+					reference.hashCode() == equalSuper.hashCode());
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <S> Object instantiateSuperclass(Class<S> superclass) {
 		Instantiator superInstantiator = Instantiator.forClass(superclass);
-		@SuppressWarnings("unchecked")
-		Object equalSuper = superInstantiator.cloneFrom(reference);
-		
-		assertTrue("Symmetry: " + reference + " does not equal " + equalSuper + ".",
-				reference.equals(equalSuper) == equalSuper.equals(reference));
-		
-		assertTrue("Transitivity: " + reference + " and " + shallow +
-				" both equal " + equalSuper + ", which implies they equal each other.",
-				reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
-		
-		assertTrue("Superclass: hashCode for " + reference + " should be equal to hashCode for " + equalSuper + ".",
-				reference.hashCode() == equalSuper.hashCode());
+		return superInstantiator.cloneFrom(reference);
 	}
 
 	private void checkSubclass() {
@@ -141,5 +154,12 @@ class HierarchyChecker<T> {
 			throw new AssertionError("Impossible: class " + klass + " has no equals method.");
 		}
 		
+	}
+	
+	private void generateExamples() {
+		reference = instantiator.instantiate();
+		instantiator.scramble(reference);
+		other = instantiator.cloneFrom(reference);
+		instantiator.scramble(other);
 	}
 }
