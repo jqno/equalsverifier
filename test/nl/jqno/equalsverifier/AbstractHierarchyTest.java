@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
@@ -30,6 +29,13 @@ public class AbstractHierarchyTest {
 	public void abstractRedefinable() {
 		EqualsVerifier.forClass(AbstractRedefinablePoint.class)
 				.withRedefinedSubclass(FinalRedefinedPoint.class)
+				.verify();
+	}
+	
+	@Test
+	public void abstractNeverNull() {
+		EqualsVerifier.forClass(NullThrowingColorContainer.class)
+				.fieldsAreNeverNull()
 				.verify();
 	}
 	
@@ -120,6 +126,32 @@ public class AbstractHierarchyTest {
 		@Override
 		public String toString() {
 			return super.toString() + "," + color;
+		}
+	}
+	
+	private static abstract class NullThrowingColorContainer {
+		private final Color color;
+		
+		public NullThrowingColorContainer(Color color) {
+			this.color = color;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof NullThrowingColorContainer)) {
+				return false;
+			}
+			return color.equals(((NullThrowingColorContainer)obj).color);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return color.hashCode();
+		}
+		
+		@Override
+		public String toString() {
+			return getClass() + ":" + color;
 		}
 	}
 }

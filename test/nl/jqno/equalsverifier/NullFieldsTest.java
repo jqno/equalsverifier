@@ -15,8 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
@@ -52,14 +50,9 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void fieldsAreNeverNullForClass() {
-		try {
-			EqualsVerifier.forClass(EqualsThrowsNull.class).fieldsAreNeverNull();
-			fail("Assertion didn't fail");
-		}
-		catch (AssertionError e) {
-			assertEquals("fieldsAreNeverNull() requires construction via forExamples() instead of via forClass().",
-					e.getMessage());
-		}
+		EqualsVerifier.forClass(EqualsThrowsNull.class)
+				.fieldsAreNeverNull()
+				.verify();
 	}
 	
 	@Test

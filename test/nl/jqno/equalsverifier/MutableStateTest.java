@@ -59,7 +59,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void detectMutableStateEnumNull() {
 		MutableEnumContainer first = new MutableEnumContainer(null);
-		MutableEnumContainer second = new MutableEnumContainer(MutableEnumContainer.Enum.ELEMENT);
+		MutableEnumContainer second = new MutableEnumContainer(MutableEnumContainer.Enum.SECOND);
 		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forExamples(first, second);
 		verifyFailure("Mutability: equals depends on mutable field _enum", ev);
 		
@@ -160,7 +160,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	}
 	
 	private static final class MutableEnumContainer {
-		public enum Enum { ELEMENT };
+		public enum Enum { FIRST, SECOND };
 		
 		private Enum _enum;
 		
