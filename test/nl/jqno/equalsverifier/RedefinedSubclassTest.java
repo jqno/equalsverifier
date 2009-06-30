@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import nl.jqno.equalsverifier.points.Color;
+import nl.jqno.equalsverifier.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.redefinablepoint.EqualSubclassForRedefinablePoint;
 import nl.jqno.equalsverifier.redefinablepoint.RedefinableColorPoint;
 import nl.jqno.equalsverifier.redefinablepoint.RedefinablePoint;
@@ -29,7 +30,7 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	public void referenceEqualsRedefinedSub() {
 		EqualsVerifier<RedefinablePoint> ev = EqualsVerifier.forClass(RedefinablePoint.class)
 				.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class);
-		verifyFailure("Subclass: RedefinablePoint:0,0 equals EqualSubclassForRedefinablePoint:0,0.", ev);
+		verifyFailure("Subclass: RedefinablePoint:1,1 equals EqualSubclassForRedefinablePoint:1,1.", ev);
 	}
 	
 	@Test
@@ -37,6 +38,20 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(RedefinablePoint.class)
 				.withRedefinedSubclass(RedefinableColorPoint.class)
 				.verify();
+	}
+	
+	@Test
+	public void withRedefinedSuperclass() {
+		EqualsVerifier.forClass(RedefinableColorPoint.class)
+				.withRedefinedSuperclass()
+				.verify();
+	}
+	
+	@Test
+	public void invalidWithRedefinedSuperclass() {
+		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
+		ev.withRedefinedSuperclass();
+		verifyFailure("Redefined superclass: ColorBlindColorPoint:1,1,YELLOW may not equal Point:1,1, but it does.", ev);
 	}
 	
 	@Test

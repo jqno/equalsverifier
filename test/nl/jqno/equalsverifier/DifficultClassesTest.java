@@ -31,7 +31,9 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void threadLocal() {
-		EqualsVerifier.forClass(ThreadLocalContainer.class).verify();
+		EqualsVerifier.forClass(ThreadLocalContainer.class)
+				.withPrefabValues(ThreadLocal.class, ThreadLocalContainer.FIRST_INSTANCE, ThreadLocalContainer.SECOND_INSTANCE)
+				.verify();
 	}
 	
 	private static final class ObjectsContainer {
@@ -81,12 +83,19 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 	}
 	
 	private static final class ThreadLocalContainer {
-		private final ThreadLocal<Integer> tl = new ThreadLocal<Integer>() {
+		public static final ThreadLocal<Integer> FIRST_INSTANCE = new ThreadLocal<Integer>() {
 			@Override
 			protected Integer initialValue() {
 				return 10;
 			}
 		};
+		public static final ThreadLocal<Integer> SECOND_INSTANCE = new ThreadLocal<Integer>() {
+			@Override
+			protected Integer initialValue() {
+				return 20;
+			}
+		};
+		private final ThreadLocal<Integer> tl = FIRST_INSTANCE; 
 		
 		@Override
 		public boolean equals(Object obj) {

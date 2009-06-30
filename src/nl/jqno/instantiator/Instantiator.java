@@ -20,6 +20,7 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -57,6 +58,22 @@ public class Instantiator<T> {
 	private final Objenesis objenesis;
 	private final ObjectInstantiator klassInstantiator;
 
+	@SuppressWarnings("serial")
+	private final Map<Class<?>, List<?>> prefabValues = new HashMap<Class<?>, List<?>>() {{
+		put(String.class, Arrays.asList("one", "two"));
+		put(Boolean.class, Arrays.asList(true, false));
+		put(Byte.class, Arrays.asList((byte)1, (byte)2));
+		put(Character.class, Arrays.asList('a', 'b'));
+		put(Double.class, Arrays.asList(0.5D, 1.0D));
+		put(Float.class, Arrays.asList(0.5F, 1.0F));
+		put(Integer.class, Arrays.asList(1, 2));
+		put(Long.class, Arrays.asList(1L, 2L));
+		put(Short.class, Arrays.asList((short)1, (short)2));
+		put(Object.class, Arrays.asList(new Object(), new Object()));
+		// Necessary for CGLib.
+		put(NoOp.class, Arrays.asList(new NoOp(){}, new NoOp(){}));
+	}};
+	
 	/**
 	 * Factory method.
 	 * 
@@ -86,6 +103,48 @@ public class Instantiator<T> {
 		this.klass = klass;
 		objenesis = new ObjenesisStd();
 		klassInstantiator = objenesis.getInstantiatorOf(klass);
+	}
+	
+	/**
+	 * Add prefabricated values for classes that Instantiator cannot
+	 * instantiate by itself.
+	 * 
+	 * @param <S> The class of the prefabricated values.
+	 * @param klass The class of the prefabricated values.
+	 * @param first An instance of {@code S}.
+	 * @param second An instance of {@code S}.
+	 * @throws NullPointerException If either {@code first} or {@code second}
+	 * 				is null.
+	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
+	 */
+	public <S> void addPrefabValues(Class<S> klass, S first, S second) {
+		if (klass == null) {
+			throw new NullPointerException("klass is null.");
+		}
+		if (first == null || second == null) {
+			throw new NullPointerException("Added null prefab value.");
+		}
+		if (first.equals(second)) {
+			throw new IllegalArgumentException("Added equal prefab values: " + first + ".");
+		}
+		List<S> list = new ArrayList<S>();
+		list.add(first);
+		list.add(second);
+		prefabValues.put(klass, list);
+	}
+	
+	/**
+	 * Copy, from another instantiator, prefabricated values for classes that
+	 * Instantiator cannot instantiate by itself.
+	 * 
+	 * @param <S> The type parameter of {@code otherInstantiator}.
+	 * @param otherInstantiator The instantiator from which the prefabricated
+	 * 				values must be copied.
+	 */
+	public <S> void copyPrefabValues(Instantiator<S> otherInstantiator) {
+		for (Class<?> prefabClass : otherInstantiator.prefabValues.keySet()) {
+			prefabValues.put(prefabClass, otherInstantiator.prefabValues.get(prefabClass));
+		}
 	}
 	
 	/**
@@ -121,6 +180,9 @@ public class Instantiator<T> {
 	/**
 	 * Clones an instance of {@code T}.
 	 * 
+	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * recursively.
+	 * 
 	 * @param original The object that should be cloned.
 	 * @return A new instance of {@code T} that is equal to {@code original}.
 	 */
@@ -141,6 +203,9 @@ public class Instantiator<T> {
 	/**
 	 * Clones an instance of {@code T} into an instance of an unnamed subclass
 	 * of {@code T}.
+	 * 
+	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * recursively.
 	 * 
 	 * @param original The object that should be cloned.
 	 * @return A new instance of {@code S}. All fields in {@code original} are
@@ -302,25 +367,31 @@ public class Instantiator<T> {
 			else if (type == short.class) {
 				field.setShort(obj, (short)(field.getShort(obj) + 1));
 			}
-			else if (PREFAB_VALUES.containsKey(type)) {
+			else if (prefabValues.containsKey(type)) {
 				Object newValue = getNextPrefabValue(type, field.get(obj));
 				field.set(obj, newValue);
 			}
+			else if (type.isEnum()) {
+				Object value = field.get(obj);
+				Object newValue = type.getEnumConstants()[0];
+				if (value == newValue) {
+					newValue = type.getEnumConstants()[1];
+				}
+				field.set(obj, newValue);
+			}
+			else if (type.isArray()) {
+				Object array = field.get(obj);
+				if (array == null) {
+					array = Array.newInstance(type.getComponentType(), 1);
+				}
+				changeArrayElement(array, 0);
+				field.set(obj, array);
+			}
 			else if (field.get(obj) == null) {
-				if (type.isEnum()) {
-					field.set(obj, type.getEnumConstants()[0]);
-				}
-				else if (type.isArray()) {
-					Object array = Array.newInstance(type.getComponentType(), 1);
-					changeArrayElement(array, 0);
-					field.set(obj, array);
-				}
-				else {
-					field.set(obj, instantiateObject(type));
-				}
+				field.set(obj, instantiateObject(type));
 			}
 			else {
-				field.set(obj, null);
+				throw new IllegalStateException("No values for class " + field.getType().getName() + ".");
 			}
 		}
 		catch (IllegalArgumentException e) {
@@ -373,25 +444,31 @@ public class Instantiator<T> {
 		else if (type == short.class) {
 			Array.setShort(array, index, (short)(Array.getShort(array, index) + 1));
 		}
-		else if (PREFAB_VALUES.containsKey(type)) {
+		else if (prefabValues.containsKey(type)) {
 			Object newValue = getNextPrefabValue(type, Array.get(array, index));
 			Array.set(array, index, newValue);
 		}
+		else if (type.isEnum()) {
+			Object value = Array.get(array, index);
+			Object newValue = type.getEnumConstants()[0];
+			if (value == newValue) {
+				newValue = type.getEnumConstants()[1];
+			}
+			Array.set(array, index, newValue);
+		}
+		else if (type.isArray()) {
+			Object nestedArray = Array.get(array, index);
+			if (nestedArray == null) {
+				nestedArray = Array.newInstance(type.getComponentType(), 1);
+			}
+			changeArrayElement(nestedArray, 0);
+			Array.set(array, index, nestedArray);
+		}
 		else if (Array.get(array, index) == null) {
-			if (type.isEnum()) {
-				Array.set(array, index, type.getEnumConstants()[0]);
-			}
-			else if (type.isArray()) {
-				Object nestedArray = Array.newInstance(type.getComponentType(), 1);
-				changeArrayElement(nestedArray, 0);
-				Array.set(array, index, nestedArray);
-			}
-			else {
-				Array.set(array, index, instantiateObject(type));
-			}
+			Array.set(array, index, instantiateObject(type));
 		}
 		else {
-			Array.set(array, index, null);
+			throw new IllegalStateException("No values for class " + type.getComponentType().getName() + ".");
 		}
 	}
 
@@ -413,20 +490,8 @@ public class Instantiator<T> {
 		return !field.getName().startsWith("CGLIB$");
 	}
 	
-	@SuppressWarnings("serial")
-	private final Map<Class<?>, List<?>> PREFAB_VALUES = new HashMap<Class<?>, List<?>>() {{
-		put(String.class, Arrays.asList("one", "two", "three"));
-		put(Byte.class, Arrays.asList((byte)1, (byte)2, (byte)3));
-		put(Character.class, Arrays.asList('a', 'b', 'c'));
-		put(Double.class, Arrays.asList(0.5D, 1.0D, 1.5D));
-		put(Float.class, Arrays.asList(0.5F, 1.0F, 1.5F));
-		put(Integer.class, Arrays.asList(1, 2, 3));
-		put(Long.class, Arrays.asList(1L, 2L, 3L));
-		put(Short.class, Arrays.asList((short)1, (short)2, (short)3));
-	}};
-	
 	private Object getNextPrefabValue(Class<?> type, Object currentValue) {
-		List<?> values = PREFAB_VALUES.get(type);
+		List<?> values = prefabValues.get(type);
 		int index = values.indexOf(currentValue) + 1;
 		if (index >= values.size()) {
 			index = 0;
