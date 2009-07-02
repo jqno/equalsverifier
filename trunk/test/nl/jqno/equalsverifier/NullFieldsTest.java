@@ -21,8 +21,14 @@ import org.junit.Test;
 
 public class NullFieldsTest extends EqualsVerifierTestBase {
 	@Test
-	public void equalsOnNullFields() {
-		EqualsVerifier<EqualsThrowsNull> ev = EqualsVerifier.forClass(EqualsThrowsNull.class);
+	public void equalsOnOwnNullFields() {
+		EqualsVerifier<EqualsThrowsNullOnThis> ev = EqualsVerifier.forClass(EqualsThrowsNullOnThis.class);
+		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
+	}
+
+	@Test
+	public void equalsOnOthersNullFields() {
+		EqualsVerifier<EqualsThrowsNullOnOther> ev = EqualsVerifier.forClass(EqualsThrowsNullOnOther.class);
 		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
 	}
 	
@@ -40,8 +46,8 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void fieldsAreNeverNullForExamples() {
-		EqualsThrowsNull blue = new EqualsThrowsNull(Color.BLUE);
-		EqualsThrowsNull yellow = new EqualsThrowsNull(Color.YELLOW);
+		EqualsThrowsNullOnThis blue = new EqualsThrowsNullOnThis(Color.BLUE);
+		EqualsThrowsNullOnThis yellow = new EqualsThrowsNullOnThis(Color.YELLOW);
 		
 		EqualsVerifier.forExamples(blue, yellow)
 				.fieldsAreNeverNull()
@@ -50,7 +56,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void fieldsAreNeverNullForClass() {
-		EqualsVerifier.forClass(EqualsThrowsNull.class)
+		EqualsVerifier.forClass(EqualsThrowsNullOnThis.class)
 				.fieldsAreNeverNull()
 				.verify();
 	}
@@ -65,19 +71,41 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(StaticObjectFields.class).verify();
 	}
 	
-	private static final class EqualsThrowsNull {
+	private static final class EqualsThrowsNullOnThis {
 		final Color color;
-
-		EqualsThrowsNull(Color color) {
+		
+		EqualsThrowsNullOnThis(Color color) {
 			this.color = color;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof EqualsThrowsNull)) {
+			if (!(obj instanceof EqualsThrowsNullOnThis)) {
 				return false;
 			}
-			EqualsThrowsNull p = (EqualsThrowsNull)obj;
+			EqualsThrowsNullOnThis p = (EqualsThrowsNullOnThis)obj;
+			return color.equals(p.color);
+		}
+		
+		@Override
+		public int hashCode() {
+			return (color == null ? 0 : color.hashCode());
+		}
+	}
+	
+	private static final class EqualsThrowsNullOnOther {
+		final Color color;
+
+		EqualsThrowsNullOnOther(Color color) {
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof EqualsThrowsNullOnOther)) {
+				return false;
+			}
+			EqualsThrowsNullOnOther p = (EqualsThrowsNullOnOther)obj;
 			return p.color.equals(color);
 		}
 		

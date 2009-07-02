@@ -62,22 +62,27 @@ class FieldsChecker<T> {
 	
 	private void check(FieldCheck<T> check) {
 		T reference = instantiator.instantiate();
-		T changed = instantiator.cloneFrom(reference);
+		instantiator.scramble(reference);
+		T changed = instantiator.instantiate();
+		instantiator.scramble(changed);
 
 		Class<? extends Object> klass = changed.getClass();
-		for (Field field : klass.getDeclaredFields()) {
-			try {
-				if (Instantiator.canBeModifiedReflectively(field)) {
-					field.setAccessible(true);
-					check.execute(field, reference, changed, instantiator);
+		while (klass != Object.class) {
+			for (Field field : klass.getDeclaredFields()) {
+				try {
+					if (Instantiator.canBeModifiedReflectively(field)) {
+						field.setAccessible(true);
+						check.execute(field, reference, changed, instantiator);
+					}
+				}
+				catch (IllegalArgumentException e) {
+					fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
+				}
+				catch (IllegalAccessException e) {
+					fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
 				}
 			}
-			catch (IllegalArgumentException e) {
-				fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
-			}
-			catch (IllegalAccessException e) {
-				fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
-			}
+			klass = klass.getSuperclass();
 		}
 	}
 
@@ -93,11 +98,17 @@ class FieldsChecker<T> {
 				changed.toString();
 			}
 			catch (NullPointerException e) {
-				fail("Non-nullity: toString throws NullPointerException");
+				fail("Non-nullity: toString throws NullPointerException.");
 			}
 			
 			try {
 				reference.equals(changed);
+			}
+			catch (NullPointerException e) {
+				fail("Non-nullity: equals throws NullPointerException.");
+			}
+			try {
+				changed.equals(reference);
 			}
 			catch (NullPointerException e) {
 				fail("Non-nullity: equals throws NullPointerException.");
