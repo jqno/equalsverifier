@@ -19,7 +19,7 @@ import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
 
-public class AbstractHierarchyTest {
+public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 	@Test
 	public void abstractFinalMethods() {
 		EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
@@ -37,6 +37,9 @@ public class AbstractHierarchyTest {
 		EqualsVerifier.forClass(NullThrowingColorContainer.class)
 				.fieldsAreNeverNull()
 				.verify();
+		
+		EqualsVerifier<NullThrowingColorContainer> ev = EqualsVerifier.forClass(NullThrowingColorContainer.class);
+		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
 	}
 	
 	private static abstract class AbstractFinalMethodsPoint {

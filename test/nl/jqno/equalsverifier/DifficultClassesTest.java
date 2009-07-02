@@ -52,8 +52,8 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 			}
 			ObjectsContainer other = (ObjectsContainer)obj;
 			return
-					string == null ? other.string == null : string.equals(other.string) &&
-					integer == null ? other.integer == null : integer.equals(other.integer);
+					(string == null ? other.string == null : string.equals(other.string)) &&
+					(integer == null ? other.integer == null : integer.equals(other.integer));
 		}
 		
 		@Override

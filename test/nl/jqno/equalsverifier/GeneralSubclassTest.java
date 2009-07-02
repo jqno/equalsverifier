@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.FinalPoint;
 
 import org.junit.Test;
@@ -23,6 +24,12 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void isFinal() {
 		EqualsVerifier.forClass(FinalPoint.class).verify();
+	}
+	
+	@Test
+	public void fieldsCheckerAlsoWorksForSubclasses() {
+		EqualsVerifier<ColorContainerBrokenSubclass> ev = EqualsVerifier.forClass(ColorContainerBrokenSubclass.class);
+		verifyFailure("Non-nullity: equals throws NullPointerException.", ev);
 	}
 
 	@Test
@@ -33,6 +40,29 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 				" is not equal to an instance of a trivial subclass with equal fields." +
 				" (Consider making the class final.)",
 				ev);
+	}
+	
+	private static class ColorContainer {
+		public final Color color;
+
+		public ColorContainer(Color color) {
+			this.color = color;
+		}
+	}
+	
+	private static final class ColorContainerBrokenSubclass extends ColorContainer {
+		public ColorContainerBrokenSubclass(Color color) {
+			super(color);
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof ColorContainerBrokenSubclass)) {
+				return false;
+			}
+			ColorContainerBrokenSubclass other = (ColorContainerBrokenSubclass)obj;
+			return color.equals(other.color);
+		}
 	}
 	
 	private static class LiskovSubstitutionPrincipleBroken {
