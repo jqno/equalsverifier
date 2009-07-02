@@ -222,6 +222,9 @@ public class Instantiator<T> {
 	 * Clones an instance of {@code T} into an instance of a given subclass of
 	 * {@code T}.
 	 * 
+	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * recursively.
+	 * 
 	 * @param <S> A subclass of {@code T}.
 	 * @param original The object that should be cloned.
 	 * @param subclass A subclass of {@code T}.
