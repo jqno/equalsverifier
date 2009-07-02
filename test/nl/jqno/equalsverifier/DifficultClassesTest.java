@@ -58,7 +58,7 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 		
 		@Override
 		public int hashCode() {
-			return string == null ? 1 : string.hashCode() +
+			return string == null ? 0 : string.hashCode() +
 					31 * (integer == null ? Integer.MIN_VALUE : integer);
 		}
 	}
