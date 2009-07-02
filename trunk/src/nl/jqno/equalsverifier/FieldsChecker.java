@@ -180,8 +180,21 @@ class FieldsChecker<T> {
 
 			field.set(reference, createNewArrayInstance(arrayType, instantiator));
 			field.set(changed, createNewArrayInstance(arrayType, instantiator));
-
-			assertEquals("Array: == used instead of Arrays.equals().", reference, changed);
+			
+			if (arrayType.getComponentType().isArray() || arrayType == Object[].class) {
+				// In case of Object[], arbitrarily pick int as type for the nested array.
+				Class<?> deepType = arrayType == Object[].class ?
+						int[].class :
+						arrayType.getComponentType();
+				
+				Array.set(field.get(reference), 0, createNewArrayInstance(deepType, instantiator));
+				Array.set(field.get(changed), 0, createNewArrayInstance(deepType, instantiator));
+				
+				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", reference, changed);
+			}
+			else {
+				assertEquals("Array: == used instead of Arrays.equals().", reference, changed);
+			}
 		}
 
 		private Object createNewArrayInstance(Class<?> arrayType, Instantiator<T> instantiator) {

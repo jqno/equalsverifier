@@ -24,6 +24,24 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	public void equalButNotSamePrimitiveArray() {
 		EqualsVerifier<PrimitiveArrayContainer> ev = EqualsVerifier.forClass(PrimitiveArrayContainer.class);
 		verifyFailure("Array: == used instead of Arrays.equals().", ev);
+		
+		EqualsVerifier.forClass(PrimitiveArrayContainerCorrect.class).verify();
+	}
+	
+	@Test
+	public void multidimensionalArrayShouldUseDeepEquals() {
+		EqualsVerifier<MultidimensionalArrayContainer> ev = EqualsVerifier.forClass(MultidimensionalArrayContainer.class);
+		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", ev);
+		
+		EqualsVerifier.forClass(MultidimensionalArrayContainerCorrect.class).verify();
+	}
+	
+	@Test
+	public void ObjectArrayShouldUseDeepEquals() {
+		EqualsVerifier<ObjectArrayContainer> ev = EqualsVerifier.forClass(ObjectArrayContainer.class);
+		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", ev);
+		
+		EqualsVerifier.forClass(ObjectArrayContainerCorrect.class).verify();
 	}
 	
 	private static final class PrimitiveArrayContainer {
@@ -40,6 +58,116 @@ public class ArrayTest extends EqualsVerifierTestBase {
 			}
 			PrimitiveArrayContainer other = (PrimitiveArrayContainer)obj;
 			return array == other.array;
+		}
+		
+		@Override
+		public int hashCode() {
+			return (array == null) ? 0 : Arrays.hashCode(array);
+		}
+	}
+	
+	private static final class PrimitiveArrayContainerCorrect {
+		private final int[] array;
+		
+		PrimitiveArrayContainerCorrect(int[] array) {
+			this.array = array;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof PrimitiveArrayContainerCorrect)) {
+				return false;
+			}
+			PrimitiveArrayContainerCorrect other = (PrimitiveArrayContainerCorrect)obj;
+			return Arrays.equals(array, other.array);
+		}
+		
+		@Override
+		public int hashCode() {
+			return (array == null) ? 0 : Arrays.hashCode(array);
+		}
+	}
+	
+	private static final class MultidimensionalArrayContainer {
+		private final int[][] array;
+		
+		MultidimensionalArrayContainer(int[][] array) {
+			this.array = array;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof MultidimensionalArrayContainer)) {
+				return false;
+			}
+			MultidimensionalArrayContainer other = (MultidimensionalArrayContainer)obj;
+			return Arrays.equals(array, other.array);
+		}
+		
+		@Override
+		public int hashCode() {
+			return (array == null) ? 0 : Arrays.hashCode(array);
+		}
+	}
+	
+	private static final class MultidimensionalArrayContainerCorrect {
+		private final int[][] array;
+		
+		MultidimensionalArrayContainerCorrect(int[][] array) {
+			this.array = array;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof MultidimensionalArrayContainerCorrect)) {
+				return false;
+			}
+			MultidimensionalArrayContainerCorrect other = (MultidimensionalArrayContainerCorrect)obj;
+			return Arrays.deepEquals(array, other.array);
+		}
+		
+		@Override
+		public int hashCode() {
+			return (array == null) ? 0 : Arrays.hashCode(array);
+		}
+	}
+	
+	private static final class ObjectArrayContainer {
+		private final Object[] array;
+		
+		ObjectArrayContainer(Object[] array) {
+			this.array = array;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ObjectArrayContainer)) {
+				return false;
+			}
+			ObjectArrayContainer other = (ObjectArrayContainer)obj;
+			return Arrays.equals(array, other.array);
+		}
+		
+		@Override
+		public int hashCode() {
+			return (array == null) ? 0 : Arrays.hashCode(array);
+		}
+	}
+	
+	private static final class ObjectArrayContainerCorrect {
+		private final Object[] array;
+		
+		ObjectArrayContainerCorrect(Object[] array) {
+			this.array = array;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ObjectArrayContainerCorrect)) {
+				return false;
+			}
+			ObjectArrayContainerCorrect other = (ObjectArrayContainerCorrect)obj;
+			return Arrays.deepEquals(array, other.array);
 		}
 		
 		@Override
