@@ -18,24 +18,25 @@ package nl.jqno.equalsverifier;
 /**
  * Enum of features that can be applied to {@link EqualsVerifier}.
  * 
+ * @author Jan Ouwens
  * @see EqualsVerifier#with(Feature...)
  */
 public enum Feature {
 	/**
-	 * Disables checks for mutable fields on which {@code equals} and
+	 * Disables checks for non-final fields on which {@code equals} and
 	 * {@code hashCode} depend.
 	 * <p>
-	 * {@link EqualsVerifier}'s standard behaviour is to disallow mutable
+	 * {@link EqualsVerifier}'s standard behaviour is to disallow non-final
 	 * fields being used in {@code equals} and {@code hashCode} methods, since
-	 * classes that depend on mutable fields in these methods cannot reliably
+	 * classes that depend on non-final fields in these methods cannot reliably
 	 * be used in collections.
 	 * <p>
-	 * However, sometimes an external library requires that fields be mutable.
-	 * A good example of this are Java Beans. In such a case, this method can
-	 * be used to prevent {@link EqualsVerifier} from checking for mutable
-	 * fields.
+	 * However, sometimes an external library requires that fields be
+	 * non-final. An example of this are Java Beans. In such a case, this
+	 * method can be used to prevent {@link EqualsVerifier} from checking for
+	 * non-final fields.
 	 */
-	ALLOW_MUTABLE_FIELDS,
+	ALLOW_NONFINAL_FIELDS,
 	
 	/**
 	 * Disables checks for {@link NullPointerException} within {@code equals},
@@ -63,7 +64,7 @@ public enum Feature {
 	 * Makes {@link EqualsVerifier} more verbose. Every time the
 	 * {@link EqualsVerifier#verify()} method notes a failure and throws an
 	 * {@link AssertionError}, a stacktrace will also be printed to
-	 * {@link System.err}.
+	 * {@link System#err}.
 	 */
 	VERBOSE,
 	

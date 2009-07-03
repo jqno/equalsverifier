@@ -27,15 +27,12 @@ import java.util.List;
 import nl.jqno.instantiator.Instantiator;
 
 /**
- * {@code EqualsVerifier} can be used in JUnit 4 unit tests to verify whether
- * the contract for the {@code equals} and {@code hashCode} methods is met. The
- * contracts are described in the Javadoc comments for the
+ * {@code EqualsVerifier} can be used in unit tests to verify whether the
+ * contract for the {@code equals} and {@code hashCode} methods in a class is
+ * met. The contracts are described in the Javadoc comments for the
  * {@link java.lang.Object} class.
  * <p>
- * By default, {@link EqualsVerifier} is as strict as possible. However,
- * several methods exist to relax the strictness. 
- * <p>
- * Use, within a JUnit 4 test method, as follows:<br>
+ * Use, within unit test method, as follows:<br>
  * - Create an instance of {@link EqualsVerifier}. Either call
  * {@link #forExamples(Object, Object, Object...)} to supply at least two
  * instances of the class under test that are not equal to one another, or
@@ -46,11 +43,10 @@ import nl.jqno.instantiator.Instantiator;
  * of the class is not permitted to be equal to an instance of a subclass, even
  * though all the relevant fields are equal. Call
  * {@link #withRedefinedSubclass(Class)} to supply a reference to such a
- * subclass, or call {@link #weakInheritanceCheck()} to disable the check.<br>
- * - Call {@link #allowMutableFields()} to allow mutable fields within
- * {@code equals} and {@code hashCode} methods.
- * - Call {@link #fieldsAreNeverNull()} if all fields of the class under test
- * are guaranteed never to be null. 
+ * subclass, or call {@link #with(Feature...)} with
+ * {@link Feature#WEAK_INHERITANCE_CHECK} to disable the check.<br>
+ * - Call {@link #with(Feature...)} to modify the behaviour of
+ * {@code EqualsVerifier}.<br>
  * - Call {@link #verify()} to perform the actual verifications.
  * <p>
  * Example use:
@@ -59,12 +55,11 @@ import nl.jqno.instantiator.Instantiator;
  * EqualsVerifier.forClass(My.class).verify();
  * }</pre>
  * 
- * Or, with some of the checks disabled:
+ * Or, with some features enabled:
  * 
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
- *     .allowMutableFields()
- *     .fieldsAreNeverNull()
+ *     .with(Feature.ALLOW_MUTABLE_FIELDS, Feature.FIELDS_ARE_NEVER_NULL)
  *     .verify();
  * }</pre>
  * 
@@ -80,49 +75,19 @@ import nl.jqno.instantiator.Instantiator;
  * - The {@code hashCode} contract.<br>
  * - That {@code equals} and {@code hashCode} be defined in terms of
  * the same fields.<br>
- * - Immutability of the fields in terms of which {@code equals} and
+ * - Final-ness of the fields in terms of which {@code equals} and
  * {@code hashCode} are defined. (Optional)<br>
  * - The finality of the fields in terms of which {@code equals} and
  * {@code hashCode} are defined. (Optional)<br>
  * - Finality of the class under test and of the {@code equals} method
  * itself, when applicable.
  * <p>
- * The last point warrants an explanation. While a class can define a perfect
- * {@code equals} method, a subclass can still break this contract, even
- * for its superclass. Therefore, a class should either be final, or the
- * {@code equals} contract should hold for its subclasses as well. This means
- * that an instance of a class should be equal to an instance of a subclass for
- * which all fields are equal.
- * <p>
- * Similarly, if {@code equals} is overridden, it can break the contract. So
- * either should the {@code equals} method be final, thereby guaranteeing its
- * adherence to the contracts for itself and all its subclasses, or instances
- * of the class may never be equal to instances of the subclass. This should be
- * tested by calling {@link #withRedefinedSubclass(Class)}, and by using the
- * {@link EqualsVerifier} for these subclasses separately as well. For an
- * example of an implementation of such redefined {@code equals} methods,
- * see {@code RedefinablePoint} in the {@link EqualsVerifier}'s unit
- * tests. See Chapter 28 of <i>Programming in Scala</i> (full reference below)
- * for an explanation of how and why this works.
- * <p>
- * By calling {@link #weakInheritanceCheck()}, the latter check can be
- * disabled. A call {@link #withRedefinedSubclass(Class)} is then no longer
- * necessary.
- * <p>
  * Dependencies:<br>
- * - JUnit 4: http://www.junit.org/<br>
  * - objenesis 1.1: http://code.google.com/p/objenesis/<br>
- * - cglib-nodep 2.2: http://cglib.sourceforge.net/<br>
+ * - cglib-nodep 2.2: http://cglib.sourceforge.net/
  * <p>
- * The verifications are inspired by:<br>
- * - <i>Effective Java, Second Edition</i> by Joshua Bloch, Addison-Wesley,
- * 2008: Items 8 (<i>Obey the general contract when overriding
- * {@code equals}</i>) and 9 (<i>Always override {@code hashCode}
- * when you override {@code equals}</i>).<br>
- * - <i>Programming in Scala</i> by Martin Odersky, Lex Spoon and Bill
- * Venners, Artima Press, 2008: Chapter 28 (<i>Object equality</i>).<br>
- * - <i>JUnit Recipes</i> by J.B. Rainsberger, Manning, 2005: Appendix B.2
- * (<i>Strangeness and transitivity</i>).<br>
+ * For more information, see the documentation at
+ * http://equalsverifier.googlecode.com/
  * 
  * @param <T> The class under test.
  * 

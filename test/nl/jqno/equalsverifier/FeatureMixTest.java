@@ -69,11 +69,11 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability:", ev1);
 		
 		EqualsVerifier<MutablePoint> ev2 = EqualsVerifier.forClass(MutablePoint.class);
-		ev2.with(Feature.ALLOW_MUTABLE_FIELDS);
+		ev2.with(Feature.ALLOW_NONFINAL_FIELDS);
 		verifyFailure("Subclass:", ev2);
 		
 		EqualsVerifier.forClass(MutablePoint.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -93,7 +93,7 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 	}
 	
 	@Test
-	public void notFinalAndNeverNullAndMutable() {
+	public void notFinalAndNeverNullAndNonFinal() {
 		// It could happen! Just make sure your setters check for null :).
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev1 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
@@ -101,15 +101,15 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability:", ev1);
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev2 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev2.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_MUTABLE_FIELDS);
+		ev2.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_NONFINAL_FIELDS);
 		verifyFailure("Non-nullity:", ev2);
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev3 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev3.with(Feature.ALLOW_MUTABLE_FIELDS, Feature.FIELDS_ARE_NEVER_NULL);
+		ev3.with(Feature.ALLOW_NONFINAL_FIELDS, Feature.FIELDS_ARE_NEVER_NULL);
 		verifyFailure("Subclass:", ev3);
 		
 		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.FIELDS_ARE_NEVER_NULL, Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.FIELDS_ARE_NEVER_NULL, Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 

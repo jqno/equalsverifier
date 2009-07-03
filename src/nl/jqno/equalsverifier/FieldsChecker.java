@@ -48,7 +48,7 @@ class FieldsChecker<T> {
 		check(new FloatAndDoubleFieldCheck<T>());
 		check(new ArrayFieldCheck<T>());
 		
-		if (!features.contains(Feature.ALLOW_MUTABLE_FIELDS)) {
+		if (!features.contains(Feature.ALLOW_NONFINAL_FIELDS)) {
 			check(new MutableStateFieldCheck<T>());
 		}
 	}
