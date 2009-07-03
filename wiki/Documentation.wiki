@@ -8,8 +8,7 @@ By default, `EqualsVerifier` is as strict as possible. However, several methods 
 
 
 Use, within unit test method, as follows:
-  * Create an instance of `EqualsVerifier`. Either call `#forExamples(Object, Object, Object...)` to supply at least two instances of the class under test that are not equal to one another, or call `#forClass(Class)` to supply a reference to the class itself to
-let the `EqualsVerifier` instantiate objects.
+  * Create an instance of `EqualsVerifier`. Either call `#forExamples(Object, Object, Object...)` to supply at least two instances of the class under test that are not equal to one another, or call `#forClass(Class)` to supply a reference to the class itself to let the `EqualsVerifier` instantiate objects.
   * If the class under test is designed for inheritance, and the `equals` and `hashCode` methods can be overridden, an instance of the class is not permitted to be equal to an instance of a subclass, even though all the relevant fields are equal. Call `#withRedefinedSubclass(Class)` to supply a reference to such a subclass, or call `#with(Feature...)` with `Feature#WEAK_INHERITANCE_CHECK` to disable the check.
   * Call `#with(Feature...)` to modify the behaviour of `EqualsVerifier`.
   * Call `#verify()` to perform the actual verifications.
