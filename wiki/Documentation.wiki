@@ -1,30 +1,38 @@
 #summary Documentation for EqualsVerifier
 #labels Featured
 
-`EqualsVerifier` can be used in JUnit 4 unit tests to verify whether the contract for the `equals` and `hashCode` methods is met. The contracts are described in the Javadoc comments for the `java.lang.Object` class.
+`EqualsVerifier` can be used in Java unit tests to verify whether the contract for the `equals` and `hashCode` methods in a class is met. The contracts are described in the Javadoc comments for the `java.lang.Object` class.
 
 
 By default, `EqualsVerifier` is as strict as possible. However, several methods exist to relax the strictness. 
 
 
-Use, within a JUnit 4 test method, as follows:
-  * Create an instance of `EqualsVerifier`. Either call `#forExamples(Object, Object, Object...)` to supply at least two instances of the class under test that are not equal to one another, or call `#forClass(Class)` to supply a reference to the class itself to let the `EqualsVerifier` instantiate objects.
-  * If the class under test is designed for inheritance, and the `equals` and `hashCode` methods can be overridden, an instance of the class is not permitted to be equal to an instance of a subclass, even though all the relevant fields are equal. Call `#withRedefinedSubclass(Class)` to supply a reference to such a subclass, or call `#weakInheritanceCheck()` to disable the check.
-  * Call `#allowMutableFields()` to allow mutable fields within `equals` and `hashCode` methods.
-  * Call `#fieldsAreNeverNull()` if all fields of the class under test are guaranteed never to be null. 
+Use, within unit test method, as follows:
+  * Create an instance of `EqualsVerifier`. Either call `#forExamples(Object, Object, Object...)` to supply at least two instances of the class under test that are not equal to one another, or call `#forClass(Class)` to supply a reference to the class itself to
+let the `EqualsVerifier` instantiate objects.
+  * If the class under test is designed for inheritance, and the `equals` and `hashCode` methods can be overridden, an instance of the class is not permitted to be equal to an instance of a subclass, even though all the relevant fields are equal. Call `#withRedefinedSubclass(Class)` to supply a reference to such a subclass, or call `#with(Feature...)` with `Feature#WEAK_INHERITANCE_CHECK` to disable the check.
+  * Call `#with(Feature...)` to modify the behaviour of `EqualsVerifier`.
   * Call `#verify()` to perform the actual verifications.
 
 
 Example use:
+
 {{{
-EqualsVerifier.forClass(My.class).verify();
+@Test
+public void equalsContract() {
+    EqualsVerifier.forClass(My.class).verify();
+}
 }}}
-Or, with some of the checks disabled:
+
+Or, with some features enabled:
+
 {{{
-EqualsVerifier.forClass(My.class)
-    .allowMutableFields()
-    .fieldsAreNeverNull()
-    .verify();
+@Test
+public void equalsContract() {
+    EqualsVerifier.forClass(My.class)
+            .with(Feature.ALLOW_MUTABLE_FIELDS, Feature.FIELDS_ARE_NEVER_NULL)
+            .verify();
+}
 }}}
 
 
@@ -50,7 +58,6 @@ By calling `#weakInheritanceCheck()`, the latter check can be disabled. A call `
 
 
 Dependencies:
-  * [http://www.junit.org/ JUnit 4]
   * [http://code.google.com/p/objenesis/ objenesis 1.1]
   * [http://cglib.sourceforge.net/ cglib-nodep 2.2]
 
