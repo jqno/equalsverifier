@@ -4,8 +4,7 @@
 `EqualsVerifier` can be used in Java unit tests to verify whether the contract for the `equals` and `hashCode` methods in a class is met. The contracts are described in the Javadoc comments for the `java.lang.Object` class.
 
 
-By default, `EqualsVerifier` is as strict as possible. However, several methods exist to relax the strictness. 
-
+=Usage=
 
 Use, within unit test method, as follows:
   * Create an instance of `EqualsVerifier`. Either call `#forExamples(Object, Object, Object...)` to supply at least two instances of the class under test that are not equal to one another, or call `#forClass(Class)` to supply a reference to the class itself to let the `EqualsVerifier` instantiate objects.
@@ -35,7 +34,9 @@ public void equalsContract() {
 }}}
 
 
-The following properties are verified:
+=What does it do?=
+
+`EqualsVerifier` checks the following properties:
   * Preconditions for `EqualsVerifier` itself.
   * Reflexivity and symmetry of the `equals` method.
   * Symmetry and transitivity of the `equals` method within an inheritance hierarchy, when applicable.
@@ -49,19 +50,28 @@ The following properties are verified:
   * Finality of the class under test and of the `equals` method itself, when applicable.
 
 
-The last point warrants an explanation. While a class can define a perfect `equals` method, a subclass can still break this contract, even for its superclass. Therefore, a class should either be final, or the `equals` contract should hold for its subclasses as well. This means that an instance of a class should be equal to an instance of a subclass for which all fields are equal.
+=Equality and inheritance=
+
+While a class can define a perfect `equals` method, a subclass can still break this contract, even for its superclass. Therefore, a class should either be final, or the `equals` contract should hold for its subclasses as well. This means that an instance of a class should be equal to an instance of a subclass for which all fields are equal.
 
 Similarly, if `equals` is overridden, it can break the contract. So either should the `equals` method be final, thereby guaranteeing its adherence to the contracts for itself and all its subclasses, or instances of the class may never be equal to instances of the subclass. This should be tested by calling `#withRedefinedSubclass(Class)`, and by using the `EqualsVerifier` for these subclasses separately as well. For an example of an implementation of such redefined `equals` methods, see `RedefinablePoint` in the `EqualsVerifier`'s unit tests. See Chapter 28 of _Programming in Scala_ (full reference below) for an explanation of how and why this works.
 
-By calling `#weakInheritanceCheck()`, the latter check can be disabled. A call `#withRedefinedSubclass(Class)` is then no longer necessary.
+By including the feature `WEAK_INHERITANCE_CHECK`, the latter check can be disabled. A call to `#withRedefinedSubclass(Class)` is then no longer necessary.
 
 
-Dependencies:
+=Dependencies=
+
+`EqualsVerifier` needs the following libraries:
   * [http://code.google.com/p/objenesis/ objenesis 1.1]
   * [http://cglib.sourceforge.net/ cglib-nodep 2.2]
 
+Also, a unit testing framework might come in handy :). I recommend [http://www.junit.org/ JUnit 4].
+
+
+=Inspiration=
 
 The verifications are inspired by:
   * _Effective Java, Second Edition_ by Joshua Bloch, Addison-Wesley, 2008: Items 8 (_Obey the general contract when overriding `equals`_) and 9 (_Always override `hashCode` when you override `equals`_).
   * _Programming in Scala_ by Martin Odersky, Lex Spoon and Bill Venners, Artima Press, 2008: Chapter 28 (_Object equality_).
   * _JUnit Recipes_ by J.B. Rainsberger, Manning, 2005: Appendix B.2 (_Strangeness and transitivity_).
+And of course GSBase's `EqualsTester` by Mike Bowler, Gargoyle Software: [http://gsbase.sourceforge.net/index.html], which I think is pretty good, but lacking with respect to inheritance. Also, it requires that examples be given, while `EqualsVerifier` can auto-generate them in most cases (which, of course, is way cool).
