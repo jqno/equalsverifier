@@ -1,0 +1,14 @@
+#summary Changelog
+
+= Changelog =
+
+What's new?
+
+Well, you can now ...
+
+== Version 0.2 ==
+  * ... use the _fields are never null_ feature on classes instantiated with `#forClass(Class)`. ([http://code.google.com/p/equalsverifier/issues/detail?id=1&can=1 Issue 1])
+  * ... check if `Arrays.deepEquals` was used for multidimensional and `Object` arrays. ([http://code.google.com/p/equalsverifier/issues/detail?id=3 Issue 3])
+  * ... access optional features through a clean enum instead of through lots of different method calls. ([http://code.google.com/p/equalsverifier/issues/detail?id=4 Issue 4])
+  * ... use `EqualsVerifier` in unit test frameworks other than JUnit 4 ([http://code.google.com/p/equalsverifier/issues/detail?id=5 Issue 5])
+  * ... have stacktraces be printed to `System.err`. ([http://code.google.com/p/equalsverifier/issues/detail?id=6 Issue 6])
