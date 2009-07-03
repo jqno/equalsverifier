@@ -267,6 +267,9 @@ public final class EqualsVerifier<T> {
 			fieldsChecker.check();
 		}
 		catch (Throwable e) {
+			if (features.contains(Feature.VERBOSE)) {
+				e.printStackTrace();
+			}
 			fail(e.getMessage());
 		}
 	}

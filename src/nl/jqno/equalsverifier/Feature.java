@@ -60,6 +60,14 @@ public enum Feature {
 	REDEFINED_SUPERCLASS,
 	
 	/**
+	 * Makes {@link EqualsVerifier} more verbose. Every time the
+	 * {@link EqualsVerifier#verify()} method notes a failure and throws an
+	 * {@link AssertionError}, a stacktrace will also be printed to
+	 * {@link System.err}.
+	 */
+	VERBOSE,
+	
+	/**
 	 * Disables some of the stricter inheritance tests; use at your own risk!
 	 * <p>
 	 * {@link EqualsVerifier}'s standard behaviour, if T is not final and
