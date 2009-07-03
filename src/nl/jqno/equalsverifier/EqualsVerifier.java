@@ -21,6 +21,7 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.instantiator.Instantiator;
@@ -134,9 +135,8 @@ public final class EqualsVerifier<T> {
 	private final List<T> examples;
 	private final Instantiator<T> instantiator;
 	
-	private final ExamplesChecker<T> examplesChecker;
-	private final HierarchyChecker<T> hierarchyChecker;
-	private final FieldsChecker<T> fieldsChecker;
+	private final EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
+	private Class<? extends T> redefinedSubclass = null;
 	
 	/**
 	 * Factory method.
@@ -190,14 +190,25 @@ public final class EqualsVerifier<T> {
 		this.klass = klass;
 		this.examples = examples;
 		this.instantiator = instantiator;
-		
-		examplesChecker = new ExamplesChecker<T>(instantiator, examples);
-		hierarchyChecker = new HierarchyChecker<T>(instantiator);
-		fieldsChecker = new FieldsChecker<T>(instantiator);
 	}
 	
 	/**
-	 * Add prefabricated values for instance fields of classes that
+	 * Adds features to the {@code EqualsVerifier}. These features modify the
+	 * behaviour of the {@code EqualsVerifier}. See {@link Feature} to see what
+	 * features are available.
+	 * 
+	 * @param features A list of features to add to the {@code EqualsVerifier}.
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> with(Feature... features) {
+		for (Feature feature : features) {
+			this.features.add(feature);
+		}
+		return this;
+	}
+	
+	/**
+	 * Adds prefabricated values for instance fields of classes that
 	 * EqualsVerifier cannot instantiate by itself.
 	 * 
 	 * @param <S> The class of the prefabricated values.
@@ -226,96 +237,11 @@ public final class EqualsVerifier<T> {
 	 * @param redefinedSubclass A subclass of T for which no instance can be
 	 * 				equal to any instance of T.
 	 * @return {@code this}, for easy method chaining.
-	 * @throws AssertionError If {@link #weakInheritanceCheck} was called
-	 * 				first.
 	 * 
-	 * @see #weakInheritanceCheck()
+	 * @see Feature#WEAK_INHERITANCE_CHECK
 	 */
 	public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
-		hierarchyChecker.setRedefinedSubclass(redefinedSubclass);
-		return this;
-	}
-	
-	/**
-	 * Signals that T is part of an inheritance hierarchy where {@code equals}
-	 * is overridden. Call this method if T has overridden {@code equals} and
-	 * {@code hashCode}, and one or more of T's superclasses have as well.
-	 * 
-	 * T itself does not necessarily have to have subclasses that redefine
-	 * {@code equals} and {@code hashCode}.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> withRedefinedSuperclass() {
-		hierarchyChecker.hasRedefinedSuperclass();
-		return this;
-	}
-	
-	/**
-	 * Disables some of the stricter inheritance tests; use at your own risk!
-	 * <p>
-	 * {@link EqualsVerifier}'s standard behaviour, if T is not final and
-	 * neither are its {@code equals} and {@code hashCode} methods, is to
-	 * require a reference to a subclass of T for which no instance can be
-	 * equal to any instance of T, to make sure that subclasses that can
-	 * redefine {@code equals} or {@code hashCode} don't break the contract.
-	 * <p>
-	 * Some may find that too strict for their liking; this method disables
-	 * that test.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 * @throws AssertionError If {@link #withRedefinedSubclass} was called
-	 * 				first.
-	 * 
-	 * @see #withRedefinedSubclass(Class)
-	 */
-	public EqualsVerifier<T> weakInheritanceCheck() {
-		hierarchyChecker.weakInheritanceCheck();
-		return this;
-	}
-	
-	/**
-	 * Disables checks for mutable fields on which {@code equals} and
-	 * {@code hashCode} depend.
-	 * <p>
-	 * {@link EqualsVerifier}'s standard behaviour is to disallow mutable
-	 * fields being used in {@code equals} and {@code hashCode} methods, since
-	 * classes that depend on mutable fields in these methods cannot reliably
-	 * be used in collections.
-	 * <p>
-	 * However, sometimes an external library requires that fields be mutable.
-	 * A good example of this are Java Beans. In such a case, this method can
-	 * be used to prevent {@link EqualsVerifier} from checking for mutable
-	 * fields.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> allowMutableFields() {
-		fieldsChecker.allowMutableFields();
-		return this;
-	}
-	
-	/**
-	 * Disables checks for {@link NullPointerException} within {@code equals},
-	 * {@code hashCode} and {@code toString} methods.
-	 * <p>
-	 * Sometimes the constructor of a class makes sure no field can be null.
-	 * If this is the case, and if the fields cannot be made null later in the
-	 * lifecycle of the class by setters or other methods, the
-	 * {@code fieldsAreNeverNull} method can be used to disable the check for
-	 * {@link NullPointerException}.
-	 * <p>
-	 * Note that this method can only be used if the {@link EqualsVerifier} was
-	 * constructed with the {@code forExamples} factory, since otherwise,
-	 * {@link EqualsVerifier} may construct examples containing null values,
-	 * causing the test to fail.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 * @throws AssertionError If the method is called while the object was
-	 * 				constructed by {@code forClass}.
-	 */
-	public EqualsVerifier<T> fieldsAreNeverNull() {
-		fieldsChecker.fieldsAreNeverNull();
+		this.redefinedSubclass = redefinedSubclass;
 		return this;
 	}
 	
@@ -327,11 +253,17 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
-		generateExamplesIfNecessary();
+		ensureExamples();
 		try {
+			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);
+			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, examples);
+			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, features, redefinedSubclass);
+			
+			fieldsChecker.checkNull();
 			verifyPreconditions();
 			examplesChecker.check();
 			hierarchyChecker.check();
+			
 			fieldsChecker.check();
 		}
 		catch (Throwable e) {
@@ -340,8 +272,6 @@ public final class EqualsVerifier<T> {
 	}
 	
 	private void verifyPreconditions() {
-		fieldsChecker.checkNull();
-		
 		assertTrue(examples.size() > 0);
 		for (T example : examples) {
 			assertNotNull("Precondition: one of the examples is null", example);
@@ -350,7 +280,7 @@ public final class EqualsVerifier<T> {
 		}
 	}
 	
-	private void generateExamplesIfNecessary() {
+	private void ensureExamples() {
 		if (examples.size() > 1) {
 			return;
 		}

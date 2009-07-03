@@ -50,14 +50,14 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		EqualsThrowsNullOnThis yellow = new EqualsThrowsNullOnThis(Color.YELLOW);
 		
 		EqualsVerifier.forExamples(blue, yellow)
-				.fieldsAreNeverNull()
+				.with(Feature.FIELDS_ARE_NEVER_NULL)
 				.verify();
 	}
 	
 	@Test
 	public void fieldsAreNeverNullForClass() {
 		EqualsVerifier.forClass(EqualsThrowsNullOnThis.class)
-				.fieldsAreNeverNull()
+				.with(Feature.FIELDS_ARE_NEVER_NULL)
 				.verify();
 	}
 	

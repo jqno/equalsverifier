@@ -57,7 +57,7 @@ public class PrefabEqualsVerifierTest {
 	@Test
 	public void testRedefined() {
 		EqualsVerifier.forClass(RedefinedPointContainer.class)
-				.withRedefinedSuperclass()
+				.with(Feature.REDEFINED_SUPERCLASS)
 				.withPrefabValues(Point.class, new Point(1, 2), new Point(2, 3))
 				.verify();
 	}
