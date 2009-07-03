@@ -18,6 +18,8 @@ package nl.jqno.equalsverifier;
 /**
  * Alternative for org.junit.Assert, so we can assert things but not have a
  * dependency on JUnit.
+ * 
+ * @author Jan Ouwens
  */
 public class Assert {
 	/**

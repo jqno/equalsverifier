@@ -32,7 +32,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field second", ev);
 
 		EqualsVerifier.forClass(SecondMutableFieldUsed.class)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -42,7 +42,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field _object", ev);
 		
 		EqualsVerifier.forClass(MutableObjectContainer.class)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -52,7 +52,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field _enum", ev);
 		
 		EqualsVerifier.forClass(MutableEnumContainer.class)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -64,7 +64,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field _enum", ev);
 		
 		EqualsVerifier.forExamples(first, second)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -74,7 +74,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field _array", ev);
 		
 		EqualsVerifier.forClass(MutableArrayContainer.class)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
@@ -84,7 +84,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		verifyFailure("Mutability: equals depends on mutable field _int", ev);
 		
 		EqualsVerifier.forClass(MutableIntContainer.class)
-				.with(Feature.ALLOW_MUTABLE_FIELDS)
+				.with(Feature.ALLOW_NONFINAL_FIELDS)
 				.verify();
 	}
 	
