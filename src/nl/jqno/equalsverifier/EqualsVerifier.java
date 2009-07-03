@@ -197,8 +197,8 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
-	 * Add prefabricated values for classes that EqualsVerifier cannot
-	 * instantiate by itself.
+	 * Add prefabricated values for instance fields of classes that
+	 * EqualsVerifier cannot instantiate by itself.
 	 * 
 	 * @param <S> The class of the prefabricated values.
 	 * @param klass The class of the prefabricated values.
