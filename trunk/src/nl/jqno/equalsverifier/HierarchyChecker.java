@@ -21,44 +21,31 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.EnumSet;
 
 import nl.jqno.instantiator.Instantiator;
 
 class HierarchyChecker<T> {
 	private final Class<T> klass;
 	private final Instantiator<T> instantiator;
+	private final EnumSet<Feature> features;
+	private final Class<? extends T> redefinedSubclass;
 	private final boolean klassIsFinal;
 	
 	private T reference;
 	private T other;
-	
-	private Class<? extends T> redefinedSubclass;
-	private boolean hasRedefinedSuperclass = false;
-	private boolean weakInheritanceCheck = false;
 
-	public HierarchyChecker(Instantiator<T> instantiator) {
+	public HierarchyChecker(Instantiator<T> instantiator, EnumSet<Feature> features, Class<? extends T> redefinedSubclass) {
+		if (features.contains(Feature.WEAK_INHERITANCE_CHECK) && redefinedSubclass != null) {
+			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
+		}
+		
 		this.instantiator = instantiator;
 		this.klass = instantiator.getKlass();
+		this.features = EnumSet.copyOf(features);
+		this.redefinedSubclass = redefinedSubclass;
 		
 		klassIsFinal = Modifier.isFinal(klass.getModifiers());
-	}
-	
-	public void setRedefinedSubclass(Class<? extends T> redefinedSubclass) {
-		if (weakInheritanceCheck) {
-			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
-		}
-		this.redefinedSubclass = redefinedSubclass;
-	}
-	
-	public void hasRedefinedSuperclass() {
-		this.hasRedefinedSuperclass = true;
-	}
-	
-	public void weakInheritanceCheck() {
-		if (redefinedSubclass != null) {
-			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
-		}
-		this.weakInheritanceCheck = true;
 	}
 	
 	public void check() {
@@ -68,7 +55,7 @@ class HierarchyChecker<T> {
 		checkSubclass();
 		
 		checkRedefinedSubclass();
-		if (!weakInheritanceCheck) {
+		if (!features.contains(Feature.WEAK_INHERITANCE_CHECK)) {
 			checkFinalEqualsMethod();
 		}
 	}
@@ -81,7 +68,7 @@ class HierarchyChecker<T> {
 
 		Object equalSuper = instantiateSuperclass(superclass);
 		
-		if (hasRedefinedSuperclass) {
+		if (features.contains(Feature.REDEFINED_SUPERCLASS)) {
 			assertFalse("Redefined superclass: " + reference + " may not equal " + equalSuper + ", but it does.",
 					reference.equals(equalSuper));
 		}

@@ -43,14 +43,14 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void withRedefinedSuperclass() {
 		EqualsVerifier.forClass(RedefinableColorPoint.class)
-				.withRedefinedSuperclass()
+				.with(Feature.REDEFINED_SUPERCLASS)
 				.verify();
 	}
 	
 	@Test
 	public void invalidWithRedefinedSuperclass() {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
-		ev.withRedefinedSuperclass();
+		ev.with(Feature.REDEFINED_SUPERCLASS);
 		verifyFailure("Redefined superclass: ColorBlindColorPoint:1,1,YELLOW may not equal Point:1,1, but it does.", ev);
 	}
 	
@@ -72,8 +72,9 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	public void weakInheritanceBeforeRedefinedSubclass() {
 		try {
 			EqualsVerifier.forClass(RedefinablePoint.class)
-					.weakInheritanceCheck()
-					.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class);
+					.with(Feature.WEAK_INHERITANCE_CHECK)
+					.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class)
+					.verify();
 			fail("Assertion didn't fail");
 		}
 		catch (AssertionError e) {
@@ -86,8 +87,9 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	public void weakInheritanceAfterRedefinedSubclass() {
 		try {
 			EqualsVerifier.forClass(RedefinablePoint.class)
-			.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class)
-			.weakInheritanceCheck();
+					.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class)
+					.with(Feature.WEAK_INHERITANCE_CHECK)
+					.verify();
 			fail("Assertion didn't fail");
 		}
 		catch (AssertionError e) {
