@@ -33,6 +33,8 @@ public void equalsContract() {
 }
 }}}
 
+When `EqualsVerifier` detects a problem, it will explain what it thinks is wrong. In some cases (mostly when it needs more information), it will say what to do to fix the problem.
+
 
 =What does it do?=
 
