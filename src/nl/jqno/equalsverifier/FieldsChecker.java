@@ -22,20 +22,21 @@ import static org.junit.Assert.fail;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.EnumSet;
 
 import nl.jqno.instantiator.Instantiator;
 
 class FieldsChecker<T> {
 	private final Instantiator<T> instantiator;
-	private boolean allowMutableFields = false;
-	private boolean fieldsAreNeverNull = false;
+	private final EnumSet<Feature> features;
 
-	public FieldsChecker(Instantiator<T> instantiator) {
+	public FieldsChecker(Instantiator<T> instantiator, EnumSet<Feature> featureSet) {
 		this.instantiator = instantiator;
+		this.features = EnumSet.copyOf(featureSet);
 	}
 	
 	public void checkNull() {
-		if (fieldsAreNeverNull) {
+		if (features.contains(Feature.FIELDS_ARE_NEVER_NULL)) {
 			return;
 		}
 		
@@ -47,17 +48,9 @@ class FieldsChecker<T> {
 		check(new FloatAndDoubleFieldCheck<T>());
 		check(new ArrayFieldCheck<T>());
 		
-		if (!allowMutableFields) {
+		if (!features.contains(Feature.ALLOW_MUTABLE_FIELDS)) {
 			check(new MutableStateFieldCheck<T>());
 		}
-	}
-	
-	public void allowMutableFields() {
-		allowMutableFields = true;
-	}
-	
-	public void fieldsAreNeverNull() {
-		fieldsAreNeverNull = true;
 	}
 	
 	private void check(FieldCheck<T> check) {
