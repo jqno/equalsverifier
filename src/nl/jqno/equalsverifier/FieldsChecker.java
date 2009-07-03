@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Assert.assertEquals;
+import static nl.jqno.equalsverifier.Assert.assertFalse;
+import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -194,7 +194,8 @@ class FieldsChecker<T> {
 				Array.set(field.get(reference), 0, createNewArrayInstance(deepType, instantiator));
 				Array.set(field.get(changed), 0, createNewArrayInstance(deepType, instantiator));
 				
-				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", reference, changed);
+				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().",
+							reference, changed);
 			}
 			else {
 				assertEquals("Array: == used instead of Arrays.equals().", reference, changed);

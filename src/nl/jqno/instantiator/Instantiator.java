@@ -15,7 +15,7 @@
  */
 package nl.jqno.instantiator;
 
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
