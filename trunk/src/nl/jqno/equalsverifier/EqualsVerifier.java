@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Assert.assertFalse;
+import static nl.jqno.equalsverifier.Assert.assertTrue;
+import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -212,7 +212,7 @@ public final class EqualsVerifier<T> {
 	 * EqualsVerifier cannot instantiate by itself.
 	 * 
 	 * @param <S> The class of the prefabricated values.
-	 * @param klass The class of the prefabricated values.
+	 * @param otherKlass The class of the prefabricated values.
 	 * @param first An instance of {@code S}.
 	 * @param second An instance of {@code S}.
 	 * @return {@code this}, for easy method chaining.
@@ -272,9 +272,9 @@ public final class EqualsVerifier<T> {
 	}
 	
 	private void verifyPreconditions() {
-		assertTrue(examples.size() > 0);
+		assertTrue("Precondition: no examples.", examples.size() > 0);
 		for (T example : examples) {
-			assertNotNull("Precondition: one of the examples is null", example);
+			assertFalse("Precondition: one of the examples is null", example == null);
 			assertTrue("Precondition: " + examples.get(0) + " and " + example + " are of different classes",
 					klass.isAssignableFrom(example.getClass()));
 		}

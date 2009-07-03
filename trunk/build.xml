@@ -37,8 +37,12 @@ limitations under the License.
 	
 	<path id="project.classpath">
 		<pathelement location="${build.src.dir}" />
-		<pathelement location="${build.test.dir}" />
 		<fileset dir="${lib.deploy.dir}" includes="*.jar" />
+	</path>
+	
+	<path id="test.classpath">
+		<path refid="project.classpath" />
+		<pathelement location="${build.test.dir}" />
 		<fileset dir="${lib.build.dir}" includes="*.jar" />
 	</path>
 	
@@ -66,7 +70,7 @@ limitations under the License.
 		<javac 
 				srcdir="${test.dir}"
 				destdir="${build.test.dir}"
-				classpathref="project.classpath"
+				classpathref="test.classpath"
 				source="1.5"
 				target="1.5"
 				encoding="utf-8">
@@ -77,7 +81,7 @@ limitations under the License.
 	<target name="test" depends="compileTest">
 		<mkdir dir="${dist.dir}/testreports" />
 		<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed">
-			<classpath refid="project.classpath" />
+			<classpath refid="test.classpath" />
 			<formatter type="plain" />
 			<batchtest todir="${dist.dir}/testreports">
 				<fileset dir="${build.test.dir}">

@@ -15,11 +15,10 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Assert.assertEquals;
+import static nl.jqno.equalsverifier.Assert.assertFalse;
+import static nl.jqno.equalsverifier.Assert.assertTrue;
+import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.util.List;
 
@@ -70,8 +69,8 @@ class ExamplesChecker<T> {
 	}
 	
 	private void checkNotEqual(T reference, T other) {
-		assertNotSame("Precondition: the same object (" + reference + ") appears twice.",
-				reference, other);
+		assertFalse("Precondition: the same object (" + reference + ") appears twice.",
+				reference == other);
 		assertFalse("Precondition: two objects are equal to each other (" + reference + ").",
 				reference.equals(other));
 	}

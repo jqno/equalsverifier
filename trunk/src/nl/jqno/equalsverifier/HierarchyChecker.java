@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Assert.assertFalse;
+import static nl.jqno.equalsverifier.Assert.assertTrue;
+import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
