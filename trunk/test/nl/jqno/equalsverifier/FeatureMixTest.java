@@ -15,11 +15,53 @@
  */
 package nl.jqno.equalsverifier;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Arrays;
+
 import nl.jqno.equalsverifier.points.Color;
+import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
 public class FeatureMixTest extends EqualsVerifierTestBase {
+	@Test
+	public void verbose() throws IOException {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		PrintStream testStream = new PrintStream(baos);
+		
+		PrintStream syserr = System.err;
+		System.setErr(testStream);
+		
+		try {
+			EqualsVerifier.forClass(Point.class)
+					.verify();
+		}
+		catch (AssertionError ignored) {}
+		
+		assertEquals(0, baos.size());
+		
+		try {
+			EqualsVerifier.forClass(Point.class)
+					.with(Feature.VERBOSE)
+					.verify();
+		}
+		catch (AssertionError ignored) {}
+		
+		System.setErr(syserr);
+		baos.close();
+
+		byte[] expected = new byte[] {'j','a','v','a','.','l','a','n','g','.','A','s','s','e','r','t','i','o','n','E','r','r','o','r',':',' ','S','u','b','c','l','a','s','s',':'};
+		assertTrue(baos.size() > expected.length);
+		byte[] actual = new byte[expected.length];
+		System.arraycopy(baos.toByteArray(), 0, actual, 0, expected.length);
+		assertTrue(Arrays.equals(expected, actual));
+	}
+	
 	@Test
 	public void notFinalAndMutable() {
 		EqualsVerifier<MutablePoint> ev1 = EqualsVerifier.forClass(MutablePoint.class);
