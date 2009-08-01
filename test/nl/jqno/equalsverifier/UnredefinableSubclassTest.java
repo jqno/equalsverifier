@@ -43,7 +43,7 @@ public class UnredefinableSubclassTest extends EqualsVerifierTestBase {
 				.verify();
 	}
 	
-	private static class FinalEqualsPoint extends Point {
+	static class FinalEqualsPoint extends Point {
 		public FinalEqualsPoint(int x, int y) {
 			super(x, y);
 		}

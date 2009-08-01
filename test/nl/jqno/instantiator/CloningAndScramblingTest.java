@@ -178,7 +178,7 @@ public class CloningAndScramblingTest {
 		}
 	}
 	
-	private static class PointContainer {
+	static class PointContainer {
 		protected final Point point;
 		
 		public PointContainer(Point point) {
@@ -186,13 +186,13 @@ public class CloningAndScramblingTest {
 		}
 	}
 	
-	private static class SubPointContainer extends PointContainer {
+	static class SubPointContainer extends PointContainer {
 		public SubPointContainer(Point point) {
 			super(point);
 		}
 	}
 	
-	private static class Point3D extends Point {
+	static class Point3D extends Point {
 		int z;
 		
 		public Point3D(int x, int y, int z) {
@@ -209,7 +209,7 @@ public class CloningAndScramblingTest {
 		}
 	}
 	
-	private static final class ColorPoint3D extends Point3D {
+	static final class ColorPoint3D extends Point3D {
 		final Color color;
 		
 		public ColorPoint3D(int x, int y, int z, Color color) {
@@ -218,19 +218,19 @@ public class CloningAndScramblingTest {
 		}
 	}
 	
-	private static final class StaticFinal {
+	static final class StaticFinal {
 		public static final int STATIC_FINAL = 0;
 	}
 	
-	private static final class StringContainer {
+	static final class StringContainer {
 		private String s = "x";
 	}
 	
-	private static final class FinalAssignedStringContainer {
+	static final class FinalAssignedStringContainer {
 		private final String s = "x";
 	}
 	
-	private static final class FinalAssignedPointContainer {
+	static final class FinalAssignedPointContainer {
 		private final Point p = new Point(2, 3);
 	}
 }

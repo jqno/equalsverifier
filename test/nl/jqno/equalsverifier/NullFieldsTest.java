@@ -71,7 +71,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(StaticObjectFields.class).verify();
 	}
 	
-	private static final class EqualsThrowsNullOnThis {
+	static final class EqualsThrowsNullOnThis {
 		final Color color;
 		
 		EqualsThrowsNullOnThis(Color color) {
@@ -93,7 +93,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class EqualsThrowsNullOnOther {
+	static final class EqualsThrowsNullOnOther {
 		final Color color;
 
 		EqualsThrowsNullOnOther(Color color) {
@@ -115,7 +115,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class HashCodeThrowsNull {
+	static final class HashCodeThrowsNull {
 		private final Color color;
 
 		HashCodeThrowsNull(Color color) {
@@ -143,7 +143,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ToStringThrowsNull {
+	static final class ToStringThrowsNull {
 		private final Color color;
 		
 		public ToStringThrowsNull(Color color) {
@@ -170,7 +170,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class StaticPrimitiveFields {
+	static final class StaticPrimitiveFields {
 		private static int one = Integer.parseInt("1");
 		private static final int two = Integer.parseInt("2");
 		private static int three = 3;
@@ -196,7 +196,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class StaticObjectFields {
+	static final class StaticObjectFields {
 		private static Object one = new Object();
 		private static final Object two = new Object();
 		private static Object three = new Object();

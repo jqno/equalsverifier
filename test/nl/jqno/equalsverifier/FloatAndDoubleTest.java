@@ -42,7 +42,7 @@ public class FloatAndDoubleTest extends EqualsVerifierTestBase {
 		verifyFailure("Double: equals doesn't use Double.compare.", ev);
 	}
 	
-	private static final class PrimitiveFloatContainer {
+	static final class PrimitiveFloatContainer {
 		final float f;
 		
 		PrimitiveFloatContainer(float f) {
@@ -67,7 +67,7 @@ public class FloatAndDoubleTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ObjectFloatContainer {
+	static final class ObjectFloatContainer {
 		final Float f;
 		
 		ObjectFloatContainer(Float f) {
@@ -92,7 +92,7 @@ public class FloatAndDoubleTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class PrimitiveDoubleContainer {
+	static final class PrimitiveDoubleContainer {
 		final double d;
 		
 		PrimitiveDoubleContainer(double d) {
@@ -118,7 +118,7 @@ public class FloatAndDoubleTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ObjectDoubleContainer {
+	static final class ObjectDoubleContainer {
 		final Double d;
 		
 		ObjectDoubleContainer(Double d) {

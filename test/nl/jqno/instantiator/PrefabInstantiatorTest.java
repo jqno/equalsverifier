@@ -186,15 +186,15 @@ public class PrefabInstantiatorTest {
 		assertEquals(values[0], Array.get(array, 0));
 	}
 	
-	private static final class PointContainer {
+	static final class PointContainer {
 		Point point = new Point(1, 2);
 	}
 	
-	private static final class PointArrayContainer {
+	static final class PointArrayContainer {
 		Point[] point = { new Point(1, 2) };
 	}
 	
-	private static final class AllTypesContainer {
+	static final class AllTypesContainer {
 		Boolean _Boolean = false;
 		Byte _Byte = 0;
 		Character _Char = '\u0000';
@@ -231,7 +231,7 @@ public class PrefabInstantiatorTest {
 		}
 	}
 	
-	private static final class AllArrayBoxedTypesContainer {
+	static final class AllArrayBoxedTypesContainer {
 		Boolean[] booleans = { false };
 		Byte[] bytes = { 0 };
 		Character[] chars = { '\u0000' };

@@ -98,7 +98,7 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class RedeFinalPoint {
+	static class RedeFinalPoint {
 		private final int x;
 		private final int y;
 
@@ -127,13 +127,13 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class RedeFinalSubPoint extends RedeFinalPoint {
+	static final class RedeFinalSubPoint extends RedeFinalPoint {
 		public RedeFinalSubPoint(int x, int y) {
 			super(x, y);
 		}
 	}
 	
-	private static abstract class AbstractRedefinablePoint {
+	static abstract class AbstractRedefinablePoint {
 		private final int x;
 		private final int y;
 
@@ -166,7 +166,7 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class SubclassForAbstractRedefinablePoint extends AbstractRedefinablePoint {
+	static final class SubclassForAbstractRedefinablePoint extends AbstractRedefinablePoint {
 		private final Color color;
 
 		SubclassForAbstractRedefinablePoint(int x, int y, Color color) {

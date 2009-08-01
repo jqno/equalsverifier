@@ -62,7 +62,7 @@ public class PrefabEqualsVerifierTest {
 				.verify();
 	}
 	
-	private static class PointContainer {
+	static class PointContainer {
 		public final Point point;
 		
 		public PointContainer(Point point) {
@@ -84,13 +84,13 @@ public class PrefabEqualsVerifierTest {
 		}
 	}
 	
-	private static final class PointContainerSub extends PointContainer {
+	static final class PointContainerSub extends PointContainer {
 		public PointContainerSub(Point point) {
 			super(point);
 		}
 	}
 	
-	private static class RedefinablePointContainer {
+	static class RedefinablePointContainer {
 		private final Point point;
 		
 		public RedefinablePointContainer(Point point) {
@@ -122,7 +122,7 @@ public class PrefabEqualsVerifierTest {
 		}
 	}
 	
-	private static final class RedefinedPointContainer extends RedefinablePointContainer {
+	static final class RedefinedPointContainer extends RedefinablePointContainer {
 		private final Point anotherPoint;
 		
 		public RedefinedPointContainer(Point point, Point anotherPoint) {

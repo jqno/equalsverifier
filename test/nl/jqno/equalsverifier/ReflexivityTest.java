@@ -26,7 +26,7 @@ public class ReflexivityTest extends EqualsVerifierTestBase {
 		verifyFailure("Reflexivity: ReflexivityBrokenPoint:1,1 does not equal itself.", ev);
 	}
 	
-	private static class ReflexivityBrokenPoint extends Point {
+	static class ReflexivityBrokenPoint extends Point {
 		// Instantiator.scramble will flip this boolean.
 		private boolean broken = false;
 		
