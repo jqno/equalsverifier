@@ -15,8 +15,6 @@
  */
 package nl.jqno.instantiator;
 
-import static nl.jqno.equalsverifier.Assert.fail;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -326,10 +324,10 @@ public class Instantiator<T> {
 			field.set(obj, null);
 		}
 		catch (IllegalArgumentException e) {
-			fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
+			throw new AssertionError("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
 		}
 		catch (IllegalAccessException e) {
-			fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
+			throw new AssertionError("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
 		}
 	}
 	
@@ -411,10 +409,10 @@ public class Instantiator<T> {
 			}
 		}
 		catch (IllegalArgumentException e) {
-			fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
+			throw new AssertionError("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
 		}
 		catch (IllegalAccessException e) {
-			fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
+			throw new AssertionError("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
 		}
 	}
 	
@@ -520,7 +518,7 @@ public class Instantiator<T> {
 	@SuppressWarnings("unchecked")
 	private void createPrefabValues(Class<?> type) {
 		if (recursiveCallStack.contains(type)) {
-			fail("Recursive datastructure. Add prefab values for one of the following classes: " + recursiveCallStack + ".");
+			throw new AssertionError("Recursive datastructure. Add prefab values for one of the following classes: " + recursiveCallStack + ".");
 		}
 
 		Instantiator i = new Instantiator(type, prefabValues, recursiveCallStack);

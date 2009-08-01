@@ -21,7 +21,7 @@ package nl.jqno.equalsverifier;
  * 
  * @author Jan Ouwens
  */
-public class Assert {
+class Assert {
 	/**
 	 * Asserts that two ints are equal to one another. Does nothing if they
 	 * are; throws an AssertionError if they're not.
