@@ -6,6 +6,9 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.3 ==
+  * ... use `EqualsVerifier` without having to call `#withPrefabValues(...)` all the time. ([http://code.google.com/p/equalsverifier/issues/detail?id=7 Issue 7])
+
 == Version 0.2 ==
   * ... use the _fields are never null_ feature on classes instantiated with `#forClass(Class)`. ([http://code.google.com/p/equalsverifier/issues/detail?id=1&can=1 Issue 1])
   * ... check if `Arrays.deepEquals` was used for multidimensional and `Object` arrays. ([http://code.google.com/p/equalsverifier/issues/detail?id=3 Issue 3])
