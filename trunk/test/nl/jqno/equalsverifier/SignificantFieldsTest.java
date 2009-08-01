@@ -30,7 +30,7 @@ public class SignificantFieldsTest extends EqualsVerifierTestBase {
 		verifyFailure("Significant fields: hashCode relies on y, but equals does not", ev);
 	}
 	
-	private static final class ExtraFieldInEqualsPoint {
+	static final class ExtraFieldInEqualsPoint {
 		private final int x;
 		private final int y;
 		
@@ -54,7 +54,7 @@ public class SignificantFieldsTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ExtraFieldInHashCodePoint {
+	static final class ExtraFieldInHashCodePoint {
 		private final int x;
 		private final int y;
 

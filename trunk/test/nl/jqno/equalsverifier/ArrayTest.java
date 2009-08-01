@@ -44,7 +44,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(ObjectArrayContainerCorrect.class).verify();
 	}
 	
-	private static final class PrimitiveArrayContainer {
+	static final class PrimitiveArrayContainer {
 		private final int[] array;
 		
 		PrimitiveArrayContainer(int[] array) {
@@ -66,7 +66,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class PrimitiveArrayContainerCorrect {
+	static final class PrimitiveArrayContainerCorrect {
 		private final int[] array;
 		
 		PrimitiveArrayContainerCorrect(int[] array) {
@@ -88,7 +88,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MultidimensionalArrayContainer {
+	static final class MultidimensionalArrayContainer {
 		private final int[][] array;
 		
 		MultidimensionalArrayContainer(int[][] array) {
@@ -110,7 +110,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MultidimensionalArrayContainerCorrect {
+	static final class MultidimensionalArrayContainerCorrect {
 		private final int[][] array;
 		
 		MultidimensionalArrayContainerCorrect(int[][] array) {
@@ -132,7 +132,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ObjectArrayContainer {
+	static final class ObjectArrayContainer {
 		private final Object[] array;
 		
 		ObjectArrayContainer(Object[] array) {
@@ -154,7 +154,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ObjectArrayContainerCorrect {
+	static final class ObjectArrayContainerCorrect {
 		private final Object[] array;
 		
 		ObjectArrayContainerCorrect(Object[] array) {

@@ -34,7 +34,7 @@ public class NonNullityTest extends EqualsVerifierTestBase {
 		verifyFailure("Non-nullity: true returned for null value", ev);
 	}
 	
-	private static class NullPointerExceptionBrokenPoint extends Point {
+	static class NullPointerExceptionBrokenPoint extends Point {
 		public NullPointerExceptionBrokenPoint(int x, int y) {
 			super(x, y);
 		}
@@ -48,7 +48,7 @@ public class NonNullityTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class NullBrokenPoint extends Point {
+	static class NullBrokenPoint extends Point {
 		public NullBrokenPoint(int x, int y) {
 			super(x, y);
 		}

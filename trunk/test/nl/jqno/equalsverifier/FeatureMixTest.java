@@ -113,7 +113,7 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 				.verify();
 	}
 
-	private static class MutablePoint {
+	static class MutablePoint {
 		private int x;
 		private int y;
 		
@@ -137,7 +137,7 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class NeverNullColorContainer {
+	static class NeverNullColorContainer {
 		private final Color color;
 		
 		public NeverNullColorContainer(Color color) {
@@ -158,7 +158,7 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class NeverNullAndMutableColorContainer {
+	static class NeverNullAndMutableColorContainer {
 		private Color color;
 		
 		public NeverNullAndMutableColorContainer(Color color) {

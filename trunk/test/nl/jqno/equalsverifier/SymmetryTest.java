@@ -30,7 +30,7 @@ public class SymmetryTest extends EqualsVerifierTestBase {
 		verifyFailure("Symmetry: SymmetryNotEqualsBrokenPoint:1,1 is not symmetric to SymmetryNotEqualsBrokenPoint:2,2", ev);
 	}
 	
-	private static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {
+	static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {
 		public SymmetryEqualsBrokenPoint(int x, int y) {
 			super(x, y);
 		}
@@ -44,7 +44,7 @@ public class SymmetryTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class SymmetryNotEqualsBrokenPoint extends SymmetryBrokenPoint {
+	static class SymmetryNotEqualsBrokenPoint extends SymmetryBrokenPoint {
 		public SymmetryNotEqualsBrokenPoint(int x, int y) {
 			super(x, y);
 		}
@@ -66,7 +66,7 @@ public class SymmetryTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private abstract static class SymmetryBrokenPoint {
+	abstract static class SymmetryBrokenPoint {
 		public final int x;
 		public final int y;
 

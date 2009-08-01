@@ -88,7 +88,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 				.verify();
 	}
 	
-	private static final class MutableFieldNotUsed {
+	static final class MutableFieldNotUsed {
 		private final int immutable;
 		@SuppressWarnings("unused")
 		private int mutable = 0;
@@ -111,7 +111,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class SecondMutableFieldUsed {
+	static final class SecondMutableFieldUsed {
 		@SuppressWarnings("unused")
 		private int first = 0;
 		private int second;
@@ -134,7 +134,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MutableObjectContainer {
+	static final class MutableObjectContainer {
 		private Object _object;
 		
 		public MutableObjectContainer(Object value) {
@@ -159,7 +159,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MutableEnumContainer {
+	static final class MutableEnumContainer {
 		public enum Enum { FIRST, SECOND };
 		
 		private Enum _enum;
@@ -182,7 +182,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MutableArrayContainer {
+	static final class MutableArrayContainer {
 		private int[] _array;
 		
 		MutableArrayContainer(int[] value) {
@@ -203,7 +203,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class MutableIntContainer {
+	static final class MutableIntContainer {
 		private int _int;
 		
 		MutableIntContainer(int value) {

@@ -57,13 +57,13 @@ public class InstantiationTest {
 		assertFalse(p.getClass() == Point.class);
 	}
 	
-	private static abstract class AbstractClass {
+	static abstract class AbstractClass {
 		public int value = 42; 
 	}
 	
-	private static interface Interface {}
+	static interface Interface {}
 	
-	private static class ArrayContainer {
+	static class ArrayContainer {
 		public int[] array;
 	}
 }

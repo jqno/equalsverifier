@@ -32,7 +32,7 @@ public class HashCodeTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(ZeroablesContainer.class).verify();
 	}
 	
-	private static class HashCodeBrokenPoint extends Point {
+	static class HashCodeBrokenPoint extends Point {
 		public HashCodeBrokenPoint(int x, int y) {
 			super(x, y);
 		}
@@ -43,7 +43,7 @@ public class HashCodeTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ZeroablesContainer {
+	static final class ZeroablesContainer {
 		final String _string;
 		final Byte _byte;
 		final Character _char;

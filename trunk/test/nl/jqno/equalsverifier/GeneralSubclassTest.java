@@ -42,7 +42,7 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 				ev);
 	}
 	
-	private static class ColorContainer {
+	static class ColorContainer {
 		public final Color color;
 
 		public ColorContainer(Color color) {
@@ -50,7 +50,7 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ColorContainerBrokenSubclass extends ColorContainer {
+	static final class ColorContainerBrokenSubclass extends ColorContainer {
 		public ColorContainerBrokenSubclass(Color color) {
 			super(color);
 		}
@@ -65,7 +65,7 @@ public class GeneralSubclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class LiskovSubstitutionPrincipleBroken {
+	static class LiskovSubstitutionPrincipleBroken {
 		private final int x;
 		
 		LiskovSubstitutionPrincipleBroken(int x) {
