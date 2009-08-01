@@ -30,12 +30,35 @@ import org.junit.Test;
 
 public class PrefabInstantiatorTest {
 	@Test
+	public void dontAddPrefabValue() {
+		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		PointContainer pc = new PointContainer();
+		Point p = pc.point;
+		
+		instantiator.scramble(pc);
+		assertFalse(p.equals(pc.point));
+	}
+
+	@Test
+	public void dontAddPrefabArrayValue() {
+		Instantiator<PointArrayContainer> instantiator = Instantiator.forClass(PointArrayContainer.class);
+		PointArrayContainer pc = new PointArrayContainer();
+		Point p = pc.point[0];
+		
+		instantiator.scramble(pc);
+		assertFalse(p.equals(pc.point));
+	}
+	
+	@Test
 	public void addPrefabValue() {
 		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
 		instantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
 		PointContainer pc = new PointContainer();
+		assertEquals(pc.point, new Point(1, 2));
+
 		instantiator.scramble(pc);
+		assertEquals(pc.point, new Point(2, 3));
 	}
 	
 	@Test
@@ -44,20 +67,10 @@ public class PrefabInstantiatorTest {
 		instantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
 		PointArrayContainer pc = new PointArrayContainer();
+		assertEquals(pc.point[0], new Point(1, 2));
+
 		instantiator.scramble(pc);
-	}
-	
-	@Test
-	public void dontAddPrefabValue() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
-		PointContainer pc = new PointContainer();
-		try {
-			instantiator.scramble(pc);
-			fail("No exception thrown.");
-		}
-		catch (IllegalStateException e) {
-			assertEquals("No values for class nl.jqno.equalsverifier.points.Point.", e.getMessage());
-		}
+		assertEquals(pc.point[0], new Point(2, 3));
 	}
 	
 	@Test
@@ -75,6 +88,7 @@ public class PrefabInstantiatorTest {
 	@Test
 	public void addNullPrefabValues() {
 		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		
 		try {
 			instantiator.addPrefabValues(Point.class, null, new Point(1, 2));
 			fail("No exception thrown.");
@@ -82,6 +96,7 @@ public class PrefabInstantiatorTest {
 		catch (NullPointerException e) {
 			assertEquals("Added null prefab value.", e.getMessage());
 		}
+		
 		try {
 			instantiator.addPrefabValues(Point.class, new Point(1, 2), null);
 			fail("No exception thrown.");
@@ -177,6 +192,106 @@ public class PrefabInstantiatorTest {
 		changePrefabArrayElementThreeTimes(instantiator, aabtc.shorts, (short)1, (short)2);
 	}
 	
+	@Test
+	public void dontAddOneStepRecursiveClass() {
+		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
+		Node node = new Node();
+		instantiator.scramble(node);
+		
+		try {
+			instantiator.scramble(node);
+			fail("No exception thrown.");
+		}
+		catch (AssertionError e) {
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.PrefabInstantiatorTest$Node].",
+					e.getMessage());
+		}
+	}
+	
+	@Test
+	public void dontAddOneStepRecursiveArrayClass() {
+		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
+		NodeArray nodeArray = new NodeArray();
+		instantiator.scramble(nodeArray);
+		
+		try {
+			instantiator.scramble(nodeArray);
+			fail("No exception thrown.");
+		}
+		catch (AssertionError e) {
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.PrefabInstantiatorTest$NodeArray].",
+					e.getMessage());
+		}
+	}
+	
+	@Test
+	public void addOneStepRecursiveClass() {
+		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
+		instantiator.addPrefabValues(Node.class, new Node(), new Node());
+		Node node = new Node();
+		instantiator.scramble(node);
+		instantiator.scramble(node);
+	}
+	
+	@Test
+	public void addOneStepRecursiveArrayClass() {
+		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
+		instantiator.addPrefabValues(NodeArray.class, new NodeArray(), new NodeArray());
+		NodeArray nodeArray = new NodeArray();
+		instantiator.scramble(nodeArray);
+		instantiator.scramble(nodeArray);
+	}
+	
+	@Test
+	public void dontAddTwoStepRecursiveClass() {
+		Instantiator<TwoStepNodeA> instantiator = Instantiator.forClass(TwoStepNodeA.class);
+		TwoStepNodeA node = new TwoStepNodeA();
+		instantiator.scramble(node);
+		
+		try {
+			instantiator.scramble(node);
+			fail("No exception thrown.");
+		}
+		catch (AssertionError e) {
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.PrefabInstantiatorTest$TwoStepNodeA, class nl.jqno.instantiator.PrefabInstantiatorTest$TwoStepNodeB].",
+					e.getMessage());
+		}
+	}
+	
+	@Test
+	public void dontAddTwoStepRecursiveArrayClass() {
+		Instantiator<TwoStepNodeArrayA> instantiator = Instantiator.forClass(TwoStepNodeArrayA.class);
+		TwoStepNodeArrayA node = new TwoStepNodeArrayA();
+		instantiator.scramble(node);
+		
+		try {
+			instantiator.scramble(node);
+			fail("No exception thrown.");
+		}
+		catch (AssertionError e) {
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.PrefabInstantiatorTest$TwoStepNodeArrayA, class nl.jqno.instantiator.PrefabInstantiatorTest$TwoStepNodeArrayB].",
+					e.getMessage());
+		}
+	}
+	
+	@Test
+	public void addTwoStepRecursiveClass() {
+		Instantiator<TwoStepNodeA> instantiator = Instantiator.forClass(TwoStepNodeA.class);
+		instantiator.addPrefabValues(TwoStepNodeA.class, new TwoStepNodeA(), new TwoStepNodeA());
+		TwoStepNodeA node = new TwoStepNodeA();
+		instantiator.scramble(node);
+		instantiator.scramble(node);
+	}
+	
+	@Test
+	public void addTwoStepRecursiveArrayClass() {
+		Instantiator<TwoStepNodeArrayA> instantiator = Instantiator.forClass(TwoStepNodeArrayA.class);
+		instantiator.addPrefabValues(TwoStepNodeArrayA.class, new TwoStepNodeArrayA(), new TwoStepNodeArrayA());
+		TwoStepNodeArrayA nodeArray = new TwoStepNodeArrayA();
+		instantiator.scramble(nodeArray);
+		instantiator.scramble(nodeArray);
+	}
+
 	private void changePrefabArrayElementThreeTimes(Instantiator<?> instantiator, Object array, Object... values) {
 		instantiator.changeArrayElement(array, 0);
 		assertEquals(values[0], Array.get(array, 0));
@@ -261,5 +376,29 @@ public class PrefabInstantiatorTest {
 					Arrays.equals(strings, other.strings) &&
 					Arrays.equals(objects, other.objects);
 		}
+	}
+	
+	static final class Node {
+		Node node;
+	}
+	
+	static final class NodeArray {
+		NodeArray[] nodeArrays;
+	}
+	
+	static final class TwoStepNodeA {
+		TwoStepNodeB node;
+	}
+	
+	static final class TwoStepNodeB {
+		TwoStepNodeA node;
+	}
+	
+	static final class TwoStepNodeArrayA {
+		TwoStepNodeArrayB[] nodes;
+	}
+	
+	static final class TwoStepNodeArrayB {
+		TwoStepNodeArrayA[] nodes;
 	}
 }

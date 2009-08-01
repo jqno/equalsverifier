@@ -14,145 +14,51 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-import nl.jqno.equalsverifier.points.Point;
-
 import org.junit.Test;
 
-public class PrefabEqualsVerifierTest {
+public class PrefabEqualsVerifierTest extends EqualsVerifierTestBase {
 	@Test
-	public void happy() {
-		EqualsVerifier.forClass(PointContainer.class)
-				.withPrefabValues(Point.class, new Point(1, 2), new Point(2, 3))
+	public void classRecursiveFail() {
+		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
+		verifyFailure("Recursive datastructure. Add prefab values for one of the following classes:", ev);
+	}
+	
+	@Test
+	public void examplesRecursiveFail() {
+		Node one = new Node(null);
+		Node two = new Node(new Node(null));
+		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(one, two);
+		verifyFailure("Recursive datastructure. Add prefab values for one of the following classes:", ev);
+	}
+	
+	@Test
+	public void recursiveWithPrefabValues() {
+		Node one = new Node(null);
+		Node two = new Node(new Node(null));
+		EqualsVerifier.forClass(Node.class)
+				.withPrefabValues(Node.class, one, two)
 				.verify();
 	}
 	
-	@Test
-	public void dontAddPrefabValues() {
-		try {
-			EqualsVerifier.forClass(PointContainer.class).verify();
-			fail("No exception thrown.");
-		}
-		catch (IllegalStateException e) {
-			assertEquals("No values for class nl.jqno.equalsverifier.points.Point.", e.getMessage());
-		}
-	}
-	
-	@Test
-	public void testSuper() {
-		EqualsVerifier.forClass(PointContainerSub.class)
-				.withPrefabValues(Point.class, new Point(1, 2), new Point(2, 3))
-				.verify();
-	}
-	
-	@Test
-	public void testRedefinable() {
-		EqualsVerifier.forClass(RedefinablePointContainer.class)
-				.withRedefinedSubclass(RedefinedPointContainer.class)
-				.withPrefabValues(Point.class, new Point(1, 2), new Point(2, 3))
-				.verify();
-	}
-	
-	@Test
-	public void testRedefined() {
-		EqualsVerifier.forClass(RedefinedPointContainer.class)
-				.with(Feature.REDEFINED_SUPERCLASS)
-				.withPrefabValues(Point.class, new Point(1, 2), new Point(2, 3))
-				.verify();
-	}
-	
-	static class PointContainer {
-		public final Point point;
+	static final class Node {
+		final Node node;
 		
-		public PointContainer(Point point) {
-			this.point = point;
-		}
-		
-		@Override
-		public final boolean equals(Object obj) {
-			if (!(obj instanceof PointContainer)) {
-				return false;
-			}
-			PointContainer other = (PointContainer)obj;
-			return point == null ? other.point == null : point.equals(other.point);
-		}
-		
-		@Override
-		public final int hashCode() {
-			return point == null ? 0 : point.hashCode();
-		}
-	}
-	
-	static final class PointContainerSub extends PointContainer {
-		public PointContainerSub(Point point) {
-			super(point);
-		}
-	}
-	
-	static class RedefinablePointContainer {
-		private final Point point;
-		
-		public RedefinablePointContainer(Point point) {
-			this.point = point;
-		}
-		
-		public boolean canEqual(Object obj) {
-			return obj instanceof RedefinablePointContainer;
+		Node(Node node) {
+			this.node = node;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof RedefinablePointContainer)) {
+			if (!(obj instanceof Node)) {
 				return false;
 			}
-			RedefinablePointContainer other = (RedefinablePointContainer)obj;
-			return other.canEqual(this) &&
-					(point == null ? other.point == null : point.equals(other.point));
+			Node other = (Node)obj;
+			return node == null ? other.node == null : node.equals(other.node);
 		}
 		
 		@Override
 		public int hashCode() {
-			return point == null ? 0 : point.hashCode();
-		}
-		
-		@Override
-		public String toString() {
-			return getClass() + ":" + point;
-		}
-	}
-	
-	static final class RedefinedPointContainer extends RedefinablePointContainer {
-		private final Point anotherPoint;
-		
-		public RedefinedPointContainer(Point point, Point anotherPoint) {
-			super(point);
-			this.anotherPoint = anotherPoint;
-		}
-		
-		@Override
-		public boolean canEqual(Object obj) {
-			return obj instanceof RedefinedPointContainer;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof RedefinedPointContainer)) {
-				return false;
-			}
-			RedefinedPointContainer other = (RedefinedPointContainer)obj;
-			return other.canEqual(this) && super.equals(other) && 
-					(anotherPoint == null ? other.anotherPoint == null : anotherPoint.equals(other.anotherPoint));
-		}
-		
-		@Override
-		public int hashCode() {
-			return (anotherPoint == null ? 0 : anotherPoint.hashCode())	+ (31 * super.hashCode());
-		}
-		
-		@Override
-		public String toString() {
-			return super.toString() + "," + anotherPoint;
+			return node == null ? 0 : 1 + node.hashCode();
 		}
 	}
 }
