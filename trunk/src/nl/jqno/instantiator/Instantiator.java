@@ -22,7 +22,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -55,11 +57,13 @@ import org.objenesis.instantiator.ObjectInstantiator;
  */
 public class Instantiator<T> {
 	private final Class<T> klass;
+	private final Map<Class<?>, List<?>> prefabValues;
+	private final LinkedHashSet<Class<?>> recursiveCallStack;
 	private final Objenesis objenesis;
 	private final ObjectInstantiator klassInstantiator;
 
 	@SuppressWarnings("serial")
-	private final Map<Class<?>, List<?>> prefabValues = new HashMap<Class<?>, List<?>>() {{
+	private static final Map<Class<?>, List<?>> PREFAB_VALUES = Collections.unmodifiableMap(new HashMap<Class<?>, List<?>>() {{
 		put(String.class, Arrays.asList("one", "two"));
 		put(Boolean.class, Arrays.asList(true, false));
 		put(Byte.class, Arrays.asList((byte)1, (byte)2));
@@ -72,7 +76,7 @@ public class Instantiator<T> {
 		put(Object.class, Arrays.asList(new Object(), new Object()));
 		// Necessary for CGLib.
 		put(NoOp.class, Arrays.asList(new NoOp(){}, new NoOp(){}));
-	}};
+	}});
 	
 	/**
 	 * Factory method.
@@ -91,16 +95,23 @@ public class Instantiator<T> {
 			throw new IllegalArgumentException("Cannot instantiate an interface.");
 		}
 		if (Modifier.isAbstract(klass.getModifiers())) {
-			return new Instantiator<T>(createDynamicSubclass(klass));
+			return new Instantiator<T>(createDynamicSubclass(klass), PREFAB_VALUES, new LinkedHashSet<Class<?>>());
 		}
-		return new Instantiator<T>(klass);
+		return new Instantiator<T>(klass, PREFAB_VALUES, new LinkedHashSet<Class<?>>());
 	}
 	
 	/**
 	 * Private constructor. Call {@link #forClass(Class)} to instantiate.
 	 */
-	private Instantiator(Class<T> klass) {
+	private Instantiator(Class<T> klass, Map<Class<?>, List<?>> prefabValues, LinkedHashSet<Class<?>> recursiveCallStack) {
 		this.klass = klass;
+		
+		this.prefabValues = new HashMap<Class<?>, List<?>>();
+		this.prefabValues.putAll(prefabValues);
+		
+		this.recursiveCallStack = recursiveCallStack;
+		recursiveCallStack.add(klass);
+		
 		objenesis = new ObjenesisStd();
 		klassInstantiator = objenesis.getInstantiatorOf(klass);
 	}
@@ -394,7 +405,9 @@ public class Instantiator<T> {
 				field.set(obj, instantiateObject(type));
 			}
 			else {
-				throw new IllegalStateException("No values for class " + field.getType().getName() + ".");
+				createPrefabValues(type);
+				Object newValue = getNextPrefabValue(type, field.get(obj));
+				field.set(obj, newValue);
 			}
 		}
 		catch (IllegalArgumentException e) {
@@ -471,7 +484,9 @@ public class Instantiator<T> {
 			Array.set(array, index, instantiateObject(type));
 		}
 		else {
-			throw new IllegalStateException("No values for class " + type.getComponentType().getName() + ".");
+			createPrefabValues(type);
+			Object newValue = getNextPrefabValue(type, Array.get(array, index));
+			Array.set(array, index, newValue);
 		}
 	}
 
@@ -500,6 +515,22 @@ public class Instantiator<T> {
 			index = 0;
 		}
 		return values.get(index);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void createPrefabValues(Class<?> type) {
+		if (recursiveCallStack.contains(type)) {
+			fail("Recursive datastructure. Add prefab values for one of the following classes: " + recursiveCallStack + ".");
+		}
+
+		Instantiator i = new Instantiator(type, prefabValues, recursiveCallStack);
+		Object first = i.instantiate();
+		i.scramble(first);
+		Object second = i.instantiate();
+		i.scramble(second);
+		i.scramble(second);
+		
+		addPrefabValues((Class)type, first, second);
 	}
 	
 	private <S extends T> void copyIntoSubclassInstance(T original, S instance) {
