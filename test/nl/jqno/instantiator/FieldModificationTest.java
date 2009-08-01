@@ -154,28 +154,28 @@ public class FieldModificationTest {
 		assertNotNull(aac.interfaces[0]);
 	}
 	
-	private static final class ObjectContainer {
+	static final class ObjectContainer {
 		public Object _object = new Object();
 	}
 	
-	private static final class PrimitiveContainer {
+	static final class PrimitiveContainer {
 		public int i = 10;
 	}
 	
-	private static final class StaticFinalContainer {
+	static final class StaticFinalContainer {
 		public static final int CONST = 42;
 		public static final Object OBJECT = new Object();
 	}
 	
-	private static final class AbstractClassContainer {
+	static final class AbstractClassContainer {
 		public AbstractClass ac;
 	}
 	
-	private static final class InterfaceContainer {
+	static final class InterfaceContainer {
 		public Interface _interface;
 	}
 	
-	private static final class AllTypesContainer {
+	static final class AllTypesContainer {
 		boolean _boolean = false;
 		byte _byte = 0;
 		char _char = '\u0000';
@@ -233,7 +233,7 @@ public class FieldModificationTest {
 		}
 	}
 	
-	private static final class AllArrayTypesContainer {
+	static final class AllArrayTypesContainer {
 		boolean[] booleans = { true };
 		byte[] bytes = { 1 };
 		char[] chars = { 'a' };
@@ -267,11 +267,11 @@ public class FieldModificationTest {
 		}
 	}
 	
-	private static final class AbstractAndInterfaceArrayContainer {
+	static final class AbstractAndInterfaceArrayContainer {
 		AbstractClass[] abstractClasses = new AbstractClass[] { null };
 		Interface[] interfaces = new Interface[] { null };
 	}
 	
-	private static abstract class AbstractClass {}
-	private static interface Interface {}
+	static abstract class AbstractClass {}
+	static interface Interface {}
 }

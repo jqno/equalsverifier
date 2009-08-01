@@ -42,7 +42,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
 	}
 	
-	private static abstract class AbstractFinalMethodsPoint {
+	static abstract class AbstractFinalMethodsPoint {
 		private final int x;
 		private final int y;
 		
@@ -66,7 +66,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static abstract class AbstractRedefinablePoint {
+	static abstract class AbstractRedefinablePoint {
 		private final int x;
 		private final int y;
 		
@@ -99,7 +99,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class FinalRedefinedPoint extends AbstractRedefinablePoint {
+	static final class FinalRedefinedPoint extends AbstractRedefinablePoint {
 		private final Color color;
 		
 		FinalRedefinedPoint(int x, int y, Color color) {
@@ -132,7 +132,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static abstract class NullThrowingColorContainer {
+	static abstract class NullThrowingColorContainer {
 		private final Color color;
 		
 		public NullThrowingColorContainer(Color color) {

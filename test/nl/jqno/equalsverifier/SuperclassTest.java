@@ -53,7 +53,7 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 				" should be equal to hashCode for Point:1,1.", ev);
 	}
 	
-	public static class SymmetryBrokenColorPoint extends Point {
+	static class SymmetryBrokenColorPoint extends Point {
 		private final Color color;
 		
 		public SymmetryBrokenColorPoint(int x, int y, Color color) {
@@ -76,7 +76,7 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 		}
 	}
 
-	public static class TransitivityBrokenColorPoint extends Point {
+	static class TransitivityBrokenColorPoint extends Point {
 		private final Color color;
 
 		public TransitivityBrokenColorPoint(int x, int y, Color color) {
@@ -102,7 +102,7 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static class HashCodeBrokenPoint extends Point {
+	static class HashCodeBrokenPoint extends Point {
 		public HashCodeBrokenPoint(int x, int y) {
 			super(x, y);
 		}

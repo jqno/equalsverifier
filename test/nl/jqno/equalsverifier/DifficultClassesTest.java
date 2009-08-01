@@ -36,7 +36,7 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 				.verify();
 	}
 	
-	private static final class ObjectsContainer {
+	static final class ObjectsContainer {
 		private final String string;
 		private final Integer integer;
 		
@@ -63,7 +63,7 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class CompileTimeConstant {
+	static final class CompileTimeConstant {
 		private final String string = "string";
 		private final int integer = 10;
 		
@@ -82,7 +82,7 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 		}
 	}
 	
-	private static final class ThreadLocalContainer {
+	static final class ThreadLocalContainer {
 		public static final ThreadLocal<Integer> FIRST_INSTANCE = new ThreadLocal<Integer>() {
 			@Override
 			protected Integer initialValue() {
