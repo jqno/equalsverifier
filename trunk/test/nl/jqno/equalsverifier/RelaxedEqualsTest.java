@@ -24,14 +24,12 @@ public class RelaxedEqualsTest extends EqualsVerifierTestBase {
 	private Multiple a;
 	private Multiple b;
 	private Multiple x;
-	private Multiple y;
 	
 	@Before
 	public void setup() {
 		a = new Multiple(1, 2);
 		b = new Multiple(2, 1);
 		x = new Multiple(2, 2);
-		y = new Multiple(2, 3);
 	}
 
 	@Test
@@ -43,14 +41,14 @@ public class RelaxedEqualsTest extends EqualsVerifierTestBase {
 	@Test
 	public void multipleSuccess() {
 		EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(x, y)
+				.andUnequalExample(x)
 				.verify();
 	}
 	
 	@Test
 	public void mixUpEqualAndUnequalExamples() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(a, y);
+				.andUnequalExamples(a);
 		verifyFailure("Precondition: the same object (Multiple:1*2=2) appears twice.", ev);
 	}
 }
