@@ -6,6 +6,9 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.4 ==
+  * ... verify equality rules that are more relaxed than simple field-by-field comparison. ([http://code.google.com/p/equalsverifier/issues/detail?id=7 Issue 7])
+
 == Version 0.3 ==
   * ... use `EqualsVerifier` without having to call `#withPrefabValues(...)` all the time. ([http://code.google.com/p/equalsverifier/issues/detail?id=7 Issue 7])
 
