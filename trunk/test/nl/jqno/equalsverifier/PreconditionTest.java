@@ -46,11 +46,10 @@ public class PreconditionTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
 	}
 	
-	@Test
+	@Test(expected=IllegalArgumentException.class)
 	public void anyNull() {
 		FinalPoint another = new FinalPoint(3, 4);
-		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, second, another, null);
-		verifyFailure("Precondition: one of the examples is null", ev);
+		EqualsVerifier.forExamples(first, second, another, null);
 	}
 	
 	@Test
@@ -61,13 +60,13 @@ public class PreconditionTest extends EqualsVerifierTestBase {
 	}
 	
 	@Test
-	public void allEqual() {
+	public void allSame() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, first);
 		verifyFailure("Precondition: the same object (FinalPoint:1,2) appears twice.", ev);
 	}
 	
 	@Test
-	public void allSame() {
+	public void allEqual() {
 		FinalPoint firstest = new FinalPoint(1, 2);
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, firstest);
 		verifyFailure("Precondition: two objects are equal to each other (FinalPoint:1,2).", ev);
