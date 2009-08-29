@@ -1,0 +1,135 @@
+/*
+ * Copyright 2009 Jan Ouwens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package nl.jqno.equalsverifier;
+
+import nl.jqno.equalsverifier.points.Multiple;
+
+import org.junit.Before;
+import org.junit.Test;
+
+public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
+	private Multiple a;
+	private Multiple b;
+	private Multiple x;
+	private Multiple y;
+	
+	@Before
+	public void setup() {
+		a = new Multiple(1, 2);
+		b = new Multiple(2, 1);
+		x = new Multiple(2, 2);
+		y = new Multiple(2, 3);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void equalFirstNull() {
+		EqualsVerifier.forRelaxedEqualExamples(null, b);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void equalSecondNull() {
+		EqualsVerifier.forRelaxedEqualExamples(a, null);
+	}
+	
+	@Test
+	public void equalTailNull() {
+		EqualsVerifier.forRelaxedEqualExamples(a, b, (Multiple[])null)
+				.unequalExamples(x, y)
+				.verify();
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void equalAnyNull() {
+		Multiple another = new Multiple(-1, -2);
+		EqualsVerifier.forRelaxedEqualExamples(a, b, another, null);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void unequalFirstNull() {
+		EqualsVerifier.forRelaxedEqualExamples(a, b).unequalExamples(null, y);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void unequalSecondNull() {
+		EqualsVerifier.forRelaxedEqualExamples(a, b).unequalExamples(x, null);
+	}
+	
+	@Test
+	public void unequalTailNull() {
+		EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.unequalExamples(x, y, (Multiple[])null)
+				.verify();
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void unequalAnyNull() {
+		Multiple another = new Multiple(3, 3);
+		EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.unequalExamples(x, y, another, null);
+	}
+
+	@Test
+	@SuppressWarnings("unchecked")
+	public void incompatibleClass() {
+		SubMultiple sm = new SubMultiple(1, 2);
+		EqualsVerifier ev = EqualsVerifier.forRelaxedEqualExamples(sm, a)
+				.unequalExamples(x, y);
+		verifyFailure("Precondition: SubMultiple:1*2=2 and Multiple:1*2=2 are of different classes", ev);
+	}
+	
+	@Test
+	public void equalAllSame() {
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, a)
+				.unequalExamples(x, y);
+		verifyFailure("Precondition: the same object (Multiple:1*2=2) appears twice.", ev);
+	}
+	
+	@Test
+	public void equalAllIdentical() {
+		Multiple aa = new Multiple(1, 2);
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, aa)
+				.unequalExamples(x, y);
+		verifyFailure("Precondition: two identical objects (Multiple:1*2=2) appear.", ev);
+	}
+	
+	@Test
+	public void equalAllUnequal() {
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, y)
+				.unequalExamples(x, y);
+		verifyFailure("Precondition: not all equal objects are equal (Multiple:1*2=2, Multiple:2*3=6).", ev);
+	}
+
+	@Test
+	public void unequalAllSame() {
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.unequalExamples(x, x);
+		verifyFailure("Precondition: the same object (Multiple:2*2=4) appears twice.", ev);
+	}
+	
+	@Test
+	public void unequalAllEqual() {
+		Multiple xx = new Multiple(2, 2);
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.unequalExamples(x, xx);
+		verifyFailure("Precondition: two objects are equal to each other (Multiple:2*2=4).", ev);
+	}
+	
+	public static class SubMultiple extends Multiple {
+		public SubMultiple(int a, int b) {
+			super(a, b);
+		}
+	}
+}

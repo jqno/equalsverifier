@@ -15,12 +15,10 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Assert.assertFalse;
 import static nl.jqno.equalsverifier.Assert.assertTrue;
 import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -37,7 +35,11 @@ import nl.jqno.instantiator.Instantiator;
  * {@link #forExamples(Object, Object, Object...)} to supply at least two
  * instances of the class under test that are not equal to one another, or
  * call {@link #forClass(Class)} to supply a reference to the class itself to
- * let the {@link EqualsVerifier} instantiate objects.<br>
+ * let the {@link EqualsVerifier} instantiate objects. Also,
+ * {@link #forRelaxedEqualExamples(Object, Object, Object...)} can be used if
+ * the class under test has relaxed equality rules, for example, if the
+ * contents of two fields of the same type can be interchanged without breaking
+ * equality.<br>
  * - If the class under test is designed for inheritance, and the
  * {@code equals} and {@code hashCode} methods can be overridden, an instance
  * of the class is not permitted to be equal to an instance of a subclass, even
@@ -97,27 +99,33 @@ import nl.jqno.instantiator.Instantiator;
  */
 public final class EqualsVerifier<T> {
 	private final Class<T> klass;
-	private final List<T> examples;
 	private final Instantiator<T> instantiator;
+	private final List<T> equalExamples;
+	private final List<T> unequalExamples;
 	
 	private final EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
 	private Class<? extends T> redefinedSubclass = null;
 	
 	/**
-	 * Factory method.
+	 * Factory method. For general use.
 	 * 
 	 * @param klass The class for which the {@code equals} method should be
 	 * 				tested.
 	 */
 	public static <T> EqualsVerifier<T> forClass(Class<T> klass) {
 		Instantiator<T> instantiator = Instantiator.forClass(klass);
-		List<T> examples = new ArrayList<T>();
+		List<T> equalExamples = new ArrayList<T>();
+		List<T> unequalExamples = new ArrayList<T>();
 
-		return new EqualsVerifier<T>(klass, instantiator, examples);
+		return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
 	}
 	
 	/**
-	 * Factory method.
+	 * Factory method. Use when it is necessary or desired to give explicit
+	 * examples of instances of T. It's theoretically possible that
+	 * {@link #forClass(Class)} doesn't generate the examples that expose a
+	 * certain weakness in the {@code equals} implementation. In such cases,
+	 * this method can be used.
 	 * 
 	 * @param first An instance of T.
 	 * @param second Another instance of T, which is unequal to {@code first}.
@@ -126,35 +134,54 @@ public final class EqualsVerifier<T> {
 	 *				contain instances of subclasses of T.
 	 */
 	public static <T> EqualsVerifier<T> forExamples(T first, T second, T... tail) {
-		if (first == null) {
-			throw new IllegalArgumentException("First example is null");
-		}
-		if (second == null) {
-			throw new IllegalArgumentException("Second example is null");
-		}
-
+		List<T> equalExamples = new ArrayList<T>();
+		List<T> unequalExamples = buildList(first, second, tail);
+		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
 		Instantiator<T> instantiator = Instantiator.forClass(klass);
-
-		List<T> examples = new ArrayList<T>();
-		examples.add(first);
-		examples.add(second);
-		if (tail != null) {
-			examples.addAll(Arrays.asList(tail));
-		}
 		
-		return new EqualsVerifier<T>(klass, instantiator, examples);
+		return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+	}
+	
+	/**
+	 * Factory method. For use when T is a class which has relaxed equality
+	 * rules. For example, if the contents of two fields of the same type can
+	 * be interchanged without breaking equality.
+	 * 
+	 * Asks for a list of equal, but not identical, instances of T.
+	 * 
+	 * Using this factory method requires that
+	 * {@link RelaxedEqualsVerifierHelper#unequalExamples(Object, Object, Object...)}
+	 * be called to supply a list of unequal instances of T.
+	 * 
+	 * @param first An instance of T.
+	 * @param second Another instance of T, which is equal, but not identical,
+	 * 				to {@code first}.
+	 * @param tail An array of instances of T, all of which are equal, but not
+	 * 				identical, to one another and to {@code first} and
+	 * 				{@code second}.
+	 */
+	public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... tail) {
+		List<T> examples = buildList(first, second, tail);
+		
+		@SuppressWarnings("unchecked")
+		Class<T> klass = (Class<T>)first.getClass();
+		Instantiator<T> instantiator = Instantiator.forClass(klass);
+		
+		return new RelaxedEqualsVerifierHelper<T>(klass, instantiator, examples);
 	}
 
 	/**
-	 * Private constructor. Call {@link #forClass(Class)} or
-	 * {@link #forExamples(Object, Object, Object...)} instead.
+	 * Private constructor. Call {@link #forClass(Class)},
+	 * {@link #forExamples(Object, Object, Object...)} or
+	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
 	 */
-	private EqualsVerifier(Class<T> klass, Instantiator<T> instantiator, List<T> examples) {
+	private EqualsVerifier(Class<T> klass, Instantiator<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
 		this.klass = klass;
-		this.examples = examples;
 		this.instantiator = instantiator;
+		this.equalExamples = equalExamples;
+		this.unequalExamples = unequalExamples;
 	}
 	
 	/**
@@ -218,10 +245,10 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
-		ensureExamples();
+		ensureUnequalExamples();
 		try {
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);
-			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, examples);
+			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, features, redefinedSubclass);
 			
 			fieldsChecker.checkNull();
@@ -238,18 +265,44 @@ public final class EqualsVerifier<T> {
 			fail(e.getMessage());
 		}
 	}
+
+	private static <T> List<T> buildList(T first, T second, T... tail) {
+		if (first == null) {
+			throw new IllegalArgumentException("First example is null");
+		}
+		if (second == null) {
+			throw new IllegalArgumentException("Second example is null");
+		}
+
+		List<T> result = new ArrayList<T>();
+		result.add(first);
+		result.add(second);
+		if (tail != null) {
+			for (T e : tail) {
+				if (e == null) {
+					throw new IllegalArgumentException("One of the examples is null");
+				}
+				result.add(e);
+			}
+		}
+		
+		return result;
+	}
 	
 	private void verifyPreconditions() {
-		assertTrue("Precondition: no examples.", examples.size() > 0);
-		for (T example : examples) {
-			assertFalse("Precondition: one of the examples is null", example == null);
-			assertTrue("Precondition: " + examples.get(0) + " and " + example + " are of different classes",
+		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
+		for (T example : equalExamples) {
+			assertTrue("Precondition: " + equalExamples.get(0) + " and " + example + " are of different classes",
+					klass.isAssignableFrom(example.getClass()));
+		}
+		for (T example : unequalExamples) {
+			assertTrue("Precondition: " + unequalExamples.get(0) + " and " + example + " are of different classes",
 					klass.isAssignableFrom(example.getClass()));
 		}
 	}
 	
-	private void ensureExamples() {
-		if (examples.size() > 1) {
+	private void ensureUnequalExamples() {
+		if (unequalExamples.size() > 1) {
 			return;
 		}
 		
@@ -259,7 +312,48 @@ public final class EqualsVerifier<T> {
 		instantiator.scramble(second);
 		instantiator.scramble(second);
 		
-		examples.add(first);
-		examples.add(second);
+		unequalExamples.add(first);
+		unequalExamples.add(second);
+	}
+
+	/**
+	 * Helper class for
+	 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
+	 * Its purpose is to make sure, at compile time, that a list of unequal
+	 * examples is given, as well as the list of equal examples that are
+	 * supplied to the aforementioned method.
+	 * 
+	 * @author Jan Ouwens
+	 */
+	public static class RelaxedEqualsVerifierHelper<T> {
+		private final Class<T> klass;
+		private final Instantiator<T> instantiator;
+		private final List<T> equalExamples;
+
+		/**
+		 * Private constructor, only to be called by
+		 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
+		 */
+		private RelaxedEqualsVerifierHelper(Class<T> klass, Instantiator<T> instantiator, List<T> examples) {
+			this.klass = klass;
+			this.instantiator = instantiator;
+			this.equalExamples = examples;
+		}
+
+		/**
+		 * Asks for a list of unequal instances of T and subsequently returns a
+		 * fully constructed instance of {@link EqualsVerifier}.
+		 * 
+		 * @param first An instance of T.
+		 * @param second Another instance of T, which is unequal to {@code first}.
+		 * @param tail An array of instances of T, all of which are unequal to one
+		 *		 		another and to {@code first} and {@code second}. May also
+		 *				contain instances of subclasses of T.
+		 * @return An instance of {@link EqualsVerifier}.
+		 */
+		public EqualsVerifier<T> unequalExamples(T first, T second, T... tail) {
+			List<T> unequalExamples = buildList(first, second, tail);
+			return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+		}
 	}
 }
