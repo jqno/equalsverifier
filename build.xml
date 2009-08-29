@@ -61,6 +61,7 @@ limitations under the License.
 				source="1.5"
 				target="1.5"
 				encoding="utf-8">
+			<compilerarg value="-Xlint" />
 			<include name="**/*.java" />
 		</javac>
 	</target>
