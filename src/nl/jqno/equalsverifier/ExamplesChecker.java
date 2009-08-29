@@ -20,27 +20,57 @@ import static nl.jqno.equalsverifier.Assert.assertFalse;
 import static nl.jqno.equalsverifier.Assert.assertTrue;
 import static nl.jqno.equalsverifier.Assert.fail;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import nl.jqno.instantiator.Instantiator;
 
 class ExamplesChecker<T> {
-	private final List<T> examples;
 	private final Instantiator<T> instantiator;
+	private final List<T> equalExamples;
+	private final List<T> unequalExamples;
 
-	public ExamplesChecker(Instantiator<T> instantiator, List<T> examples) {
-		this.examples = examples;
+	public ExamplesChecker(Instantiator<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
 		this.instantiator = instantiator;
+		this.equalExamples = equalExamples;
+		this.unequalExamples = unequalExamples;
 	}
 	
 	public void check() {
-		for (int i = 0; i < examples.size(); i++) {
-			checkSingle(examples.get(i));
+		for (int i = 0; i < equalExamples.size(); i++) {
+			T reference = equalExamples.get(i);
+			checkSingle(reference);
 			
-			for (int j = i + 1; j < examples.size(); j++) {
-				checkDouble(examples.get(i), examples.get(j));
+			for (int j = i + 1; j < equalExamples.size(); j++) {
+				T other = equalExamples.get(j);
+				checkEqualButNotIdentical(reference, other);
+				checkSymmetryEquals(reference, other);
+				checkHashCode(reference, other);
+			}
+			
+			for (T other : unequalExamples) {
+				checkDouble(reference, other);
 			}
 		}
+		
+		for (int i = 0; i < unequalExamples.size(); i++) {
+			T reference = unequalExamples.get(i);
+			checkSingle(reference);
+			
+			for (int j = i + 1; j < unequalExamples.size(); j++) {
+				T other = unequalExamples.get(j);
+				checkDouble(reference, other);
+			}
+		}
+	}
+	
+	private void checkEqualButNotIdentical(T reference, T other) {
+		assertFalse("Precondition: the same object (" + reference + ") appears twice.",
+				reference == other);
+		assertFalse("Precondition: two identical objects (" + reference + ") appear.",
+				isIdentical(reference, other));
+		assertTrue("Precondition: not all equal objects are equal (" + reference + ", " + other + ").",
+				reference.equals(other));
 	}
 
 	private void checkSingle(T reference) {
@@ -103,5 +133,28 @@ class ExamplesChecker<T> {
 	private void checkHashCode(T reference, T other) {
 		assertEquals("hashCode: hashCode for " + reference + " should be equal to hashCode for " + other + ".",
 				reference.hashCode(), other.hashCode());
+	}
+	
+	private boolean isIdentical(T reference, T other) {
+		Class<?> i = reference.getClass();
+		while (i != Object.class) {
+			for (Field field : i.getDeclaredFields()) {
+				try {
+					field.setAccessible(true);
+					if (!field.get(reference).equals(field.get(other))) {
+						return false;
+					}
+				}
+				catch (IllegalArgumentException e) {
+					return false;
+				}
+				catch (IllegalAccessException e) {
+					return false;
+				}
+			}
+			i = i.getSuperclass();
+		}
+		
+		return true;
 	}
 }
