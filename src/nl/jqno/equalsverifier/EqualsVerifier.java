@@ -135,7 +135,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public static <T> EqualsVerifier<T> forExamples(T first, T second, T... tail) {
 		List<T> equalExamples = new ArrayList<T>();
-		List<T> unequalExamples = buildList(first, second, tail);
+		List<T> unequalExamples = buildList2(first, second, tail);
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
@@ -152,7 +152,7 @@ public final class EqualsVerifier<T> {
 	 * Asks for a list of equal, but not identical, instances of T.
 	 * 
 	 * Using this factory method requires that
-	 * {@link RelaxedEqualsVerifierHelper#unequalExamples(Object, Object, Object...)}
+	 * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
 	 * be called to supply a list of unequal instances of T.
 	 * 
 	 * @param first An instance of T.
@@ -163,7 +163,7 @@ public final class EqualsVerifier<T> {
 	 * 				{@code second}.
 	 */
 	public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... tail) {
-		List<T> examples = buildList(first, second, tail);
+		List<T> examples = buildList2(first, second, tail);
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
@@ -265,8 +265,20 @@ public final class EqualsVerifier<T> {
 			fail(e.getMessage());
 		}
 	}
+	
+	private static <T> List<T> buildList1(T first, T... tail) {
+		if (first == null) {
+			throw new IllegalArgumentException("First example is null");
+		}
 
-	private static <T> List<T> buildList(T first, T second, T... tail) {
+		List<T> result = new ArrayList<T>();
+		result.add(first);
+		addArrayElementsToList(result, tail);
+		
+		return result;
+	}
+
+	private static <T> List<T> buildList2(T first, T second, T... tail) {
 		if (first == null) {
 			throw new IllegalArgumentException("First example is null");
 		}
@@ -277,18 +289,22 @@ public final class EqualsVerifier<T> {
 		List<T> result = new ArrayList<T>();
 		result.add(first);
 		result.add(second);
+		addArrayElementsToList(result, tail);
+		
+		return result;
+	}
+	
+	private static <T> void addArrayElementsToList(List<T> list, T... tail) {
 		if (tail != null) {
 			for (T e : tail) {
 				if (e == null) {
 					throw new IllegalArgumentException("One of the examples is null");
 				}
-				result.add(e);
+				list.add(e);
 			}
 		}
-		
-		return result;
 	}
-	
+
 	private void verifyPreconditions() {
 		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
 		for (T example : equalExamples) {
@@ -302,7 +318,7 @@ public final class EqualsVerifier<T> {
 	}
 	
 	private void ensureUnequalExamples() {
-		if (unequalExamples.size() > 1) {
+		if (unequalExamples.size() > 0) {
 			return;
 		}
 		
@@ -339,20 +355,34 @@ public final class EqualsVerifier<T> {
 			this.instantiator = instantiator;
 			this.equalExamples = examples;
 		}
+		
+		/**
+		 * Asks for an unequal instance of T and subsequently returns a fully
+		 * constructed instance of {@link EqualsVerifier}.
+		 * 
+		 * @param example An instance of T that is unequal to the previously
+		 * 			supplied equal examples.
+		 * @return An instance of {@link EqualsVerifier}.
+		 */
+		public EqualsVerifier<T> andUnequalExample(T example) {
+			List<T> unequalExamples = buildList1(example, (T[])null);
+			return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+		}
 
 		/**
 		 * Asks for a list of unequal instances of T and subsequently returns a
 		 * fully constructed instance of {@link EqualsVerifier}.
 		 * 
-		 * @param first An instance of T.
-		 * @param second Another instance of T, which is unequal to {@code first}.
-		 * @param tail An array of instances of T, all of which are unequal to one
-		 *		 		another and to {@code first} and {@code second}. May also
-		 *				contain instances of subclasses of T.
+		 * @param first An instance of T that is unequal to the previously
+		 * 			supplied equal examples.
+		 * @param tail An array of instances of T, all of which are unequal to
+		 * 			one	another, to {@code first}, and to the previously
+		 * 			supplied equal examples. May also contain instances of
+		 * 			subclasses of T.
 		 * @return An instance of {@link EqualsVerifier}.
 		 */
-		public EqualsVerifier<T> unequalExamples(T first, T second, T... tail) {
-			List<T> unequalExamples = buildList(first, second, tail);
+		public EqualsVerifier<T> andUnequalExamples(T first, T... tail) {
+			List<T> unequalExamples = buildList1(first, tail);
 			return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
 		}
 	}

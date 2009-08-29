@@ -24,14 +24,12 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	private Multiple a;
 	private Multiple b;
 	private Multiple x;
-	private Multiple y;
 	
 	@Before
 	public void setup() {
 		a = new Multiple(1, 2);
 		b = new Multiple(2, 1);
 		x = new Multiple(2, 2);
-		y = new Multiple(2, 3);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -47,7 +45,7 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalTailNull() {
 		EqualsVerifier.forRelaxedEqualExamples(a, b, (Multiple[])null)
-				.unequalExamples(x, y)
+				.andUnequalExample(x)
 				.verify();
 	}
 	
@@ -59,18 +57,14 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	
 	@Test(expected=IllegalArgumentException.class)
 	public void unequalFirstNull() {
-		EqualsVerifier.forRelaxedEqualExamples(a, b).unequalExamples(null, y);
-	}
-	
-	@Test(expected=IllegalArgumentException.class)
-	public void unequalSecondNull() {
-		EqualsVerifier.forRelaxedEqualExamples(a, b).unequalExamples(x, null);
+		EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.andUnequalExample(null);
 	}
 	
 	@Test
 	public void unequalTailNull() {
 		EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(x, y, (Multiple[])null)
+				.andUnequalExamples(x, (Multiple[])null)
 				.verify();
 	}
 	
@@ -78,7 +72,7 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	public void unequalAnyNull() {
 		Multiple another = new Multiple(3, 3);
 		EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(x, y, another, null);
+				.andUnequalExamples(x, another, null);
 	}
 
 	@Test
@@ -86,14 +80,14 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	public void incompatibleClass() {
 		SubMultiple sm = new SubMultiple(1, 2);
 		EqualsVerifier ev = EqualsVerifier.forRelaxedEqualExamples(sm, a)
-				.unequalExamples(x, y);
+				.andUnequalExample(x);
 		verifyFailure("Precondition: SubMultiple:1*2=2 and Multiple:1*2=2 are of different classes", ev);
 	}
 	
 	@Test
 	public void equalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, a)
-				.unequalExamples(x, y);
+				.andUnequalExample(x);
 		verifyFailure("Precondition: the same object (Multiple:1*2=2) appears twice.", ev);
 	}
 	
@@ -101,21 +95,21 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	public void equalAllIdentical() {
 		Multiple aa = new Multiple(1, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, aa)
-				.unequalExamples(x, y);
+				.andUnequalExample(x);
 		verifyFailure("Precondition: two identical objects (Multiple:1*2=2) appear.", ev);
 	}
 	
 	@Test
 	public void equalAllUnequal() {
-		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, y)
-				.unequalExamples(x, y);
-		verifyFailure("Precondition: not all equal objects are equal (Multiple:1*2=2, Multiple:2*3=6).", ev);
+		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, x)
+				.andUnequalExample(x);
+		verifyFailure("Precondition: not all equal objects are equal (Multiple:1*2=2, Multiple:2*2=4).", ev);
 	}
 
 	@Test
 	public void unequalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(x, x);
+				.andUnequalExamples(x, x);
 		verifyFailure("Precondition: the same object (Multiple:2*2=4) appears twice.", ev);
 	}
 	
@@ -123,7 +117,7 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 	public void unequalAllEqual() {
 		Multiple xx = new Multiple(2, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.unequalExamples(x, xx);
+				.andUnequalExamples(x, xx);
 		verifyFailure("Precondition: two objects are equal to each other (Multiple:2*2=4).", ev);
 	}
 	
