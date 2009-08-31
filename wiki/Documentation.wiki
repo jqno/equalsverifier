@@ -28,7 +28,7 @@ Or, with some features enabled:
 @Test
 public void equalsContract() {
     EqualsVerifier.forClass(My.class)
-            .with(Feature.ALLOW_MUTABLE_FIELDS, Feature.FIELDS_ARE_NEVER_NULL)
+            .with(Feature.ALLOW_NONFINAL_FIELDS, Feature.FIELDS_ARE_NEVER_NULL)
             .verify();
 }
 }}}
