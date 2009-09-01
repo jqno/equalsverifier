@@ -193,6 +193,24 @@ public class PrefabInstantiatorTest {
 	}
 	
 	@Test
+	public void interfaceField() {
+		Instantiator<InterfaceContainer> instantiator = Instantiator.forClass(InterfaceContainer.class);
+		InterfaceContainer ic = new InterfaceContainer();
+		instantiator.scramble(ic);
+		// Second scramble forces prefabValue creation
+		instantiator.scramble(ic);
+	}
+	
+	@Test
+	public void abstractClassField() {
+		Instantiator<AbstractClassContainer> instantiator = Instantiator.forClass(AbstractClassContainer.class);
+		AbstractClassContainer ic = new AbstractClassContainer();
+		instantiator.scramble(ic);
+		// Second scramble forces prefabValue creation
+		instantiator.scramble(ic);
+	}
+	
+	@Test
 	public void dontAddOneStepRecursiveClass() {
 		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
 		Node node = new Node();
@@ -376,6 +394,19 @@ public class PrefabInstantiatorTest {
 					Arrays.equals(strings, other.strings) &&
 					Arrays.equals(objects, other.objects);
 		}
+	}
+	
+	static final class InterfaceContainer {
+		List<String> list;
+	}
+	
+	static final class AbstractClassContainer {
+		AbstractClass ac;
+	}
+	
+	private static abstract class AbstractClass {
+		@SuppressWarnings("unused")
+		private int i; 
 	}
 	
 	static final class Node {

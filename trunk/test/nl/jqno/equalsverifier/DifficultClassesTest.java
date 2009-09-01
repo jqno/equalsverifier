@@ -15,12 +15,27 @@
  */
 package nl.jqno.equalsverifier;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 import org.junit.Test;
 
 public class DifficultClassesTest extends EqualsVerifierTestBase {
 	@Test
-	public void difficultClasses() {
+	public void objects() {
 		EqualsVerifier.forClass(ObjectsContainer.class).verify();
+	}
+	
+	@Test
+	public void collections() {
+		EqualsVerifier.forClass(CollectionsContainer.class).verify();
+	}
+	
+	@Test
+	public void abstractClass() {
+		EqualsVerifier.forClass(AbstractContainer.class).verify();
 	}
 	
 	@Test
@@ -60,6 +75,80 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 		public int hashCode() {
 			return string == null ? 0 : string.hashCode() +
 					31 * (integer == null ? Integer.MIN_VALUE : integer);
+		}
+	}
+	
+	static final class CollectionsContainer {
+		private final List<String> list;
+		private final Set<String> set;
+		private final Map<String, String> map;
+		private final Queue<String> queue;
+		
+		public CollectionsContainer(List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
+			this.list = list;
+			this.set = set;
+			this.map = map;
+			this.queue = queue;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof CollectionsContainer)) {
+				return false;
+			}
+			CollectionsContainer other = (CollectionsContainer)obj;
+			return (list == null ? other.list == null : list.equals(other.list)) &&
+					(set == null ? other.set == null : set.equals(other.set)) &&
+					(map == null ? other.map == null : map.equals(other.map)) &&
+					(queue == null ? other.queue == null : queue.equals(other.queue));
+		}
+		
+		@Override
+		public int hashCode() {
+			int result = list == null ? 0 : list.hashCode();
+			result += 31 * (set == null ? 0 : set.hashCode());
+			result += 31 * (map == null ? 0 : map.hashCode());
+			result += 31 * (queue == null ? 0 : queue.hashCode());
+			return result;
+		}
+	}
+	
+	static final class AbstractContainer {
+		private final AbstractClass ac;
+		
+		AbstractContainer(AbstractClass ac) {
+			this.ac = ac;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AbstractContainer)) {
+				return false;
+			}
+			AbstractContainer other = (AbstractContainer)obj;
+			return ac == null ? other.ac == null : ac.equals(other.ac);
+		}
+		
+		@Override
+		public int hashCode() {
+			return ac == null ? 0 : ac.hashCode();
+		}
+	}
+	
+	private static abstract class AbstractClass {
+		private int i;
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AbstractClass)) {
+				return false;
+			}
+			return i == ((AbstractClass)obj).i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
 		}
 	}
 	

@@ -265,7 +265,7 @@ public class Instantiator<T> {
 	 */
 	public void scramble(T obj) {
 		Class<?> i = klass;
-		while (i != Object.class) {
+		while (i != Object.class && i != null) {
 			for (Field field : i.getDeclaredFields()) {
 				changeField(field, obj);
 			}
@@ -522,9 +522,19 @@ public class Instantiator<T> {
 		}
 
 		Instantiator i = new Instantiator(type, prefabValues, recursiveCallStack);
-		Object first = i.instantiate();
+		final Object first;
+		final Object second;
+		
+		if (type.isInterface() || Modifier.isAbstract(type.getModifiers())) {
+			first = instantiateDynamicSubclass(type);
+			second = instantiateDynamicSubclass(type);
+		}
+		else {
+			first = i.instantiate();
+			second = i.instantiate();
+		}
+
 		i.scramble(first);
-		Object second = i.instantiate();
 		i.scramble(second);
 		i.scramble(second);
 		
