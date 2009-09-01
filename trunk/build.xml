@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <project name="stripscript" default="deploy" basedir=".">
-	<property name="version" value="0.4" />
+	<property name="version" value="0.5" />
 	
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="test.dir" value="${basedir}/test" />
