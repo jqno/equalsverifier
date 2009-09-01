@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.5 ==
+  * ... Test classes that contain fields of interface or abstract class types (such as Lists, and other Collection types). ([http://code.google.com/p/equalsverifier/issues/detail?id=12 Issue 12])
+  * ... Step through the source code in Eclipse after adding the EqualsVerifier jar to your project. ([http://code.google.com/p/equalsverifier/issues/detail?id=11 Issue 11])
+
 == Version 0.4 ==
   * ... verify equality rules that are more relaxed than simple field-by-field comparison. ([http://code.google.com/p/equalsverifier/issues/detail?id=9 Issue 9])
 
