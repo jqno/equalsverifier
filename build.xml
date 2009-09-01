@@ -60,6 +60,7 @@ limitations under the License.
 				classpathref="project.classpath"
 				source="1.5"
 				target="1.5"
+				debug="on"
 				encoding="utf-8">
 			<compilerarg value="-Xlint" />
 			<include name="**/*.java" />
@@ -74,6 +75,7 @@ limitations under the License.
 				classpathref="test.classpath"
 				source="1.5"
 				target="1.5"
+				debug="on"
 				encoding="utf-8">
 			<include name="**/*.java" />
 		</javac>
