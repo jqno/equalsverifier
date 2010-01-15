@@ -54,10 +54,12 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 	static final class ObjectsContainer {
 		private final String string;
 		private final Integer integer;
+		private final Class<?> klass;
 		
-		ObjectsContainer(String string, Integer integer) {
+		ObjectsContainer(String string, Integer integer, Class<?> klass) {
 			this.string = string;
 			this.integer = integer;
+			this.klass = klass;
 		}
 		
 		@Override
@@ -68,13 +70,16 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 			ObjectsContainer other = (ObjectsContainer)obj;
 			return
 					(string == null ? other.string == null : string.equals(other.string)) &&
-					(integer == null ? other.integer == null : integer.equals(other.integer));
+					(integer == null ? other.integer == null : integer.equals(other.integer)) &&
+					(klass == other.klass);
 		}
 		
 		@Override
 		public int hashCode() {
-			return string == null ? 0 : string.hashCode() +
-					31 * (integer == null ? Integer.MIN_VALUE : integer);
+			int result = string == null ? 0 : string.hashCode();
+			result += 31 * (integer == null ? Integer.MIN_VALUE : integer);
+			result += 31 * (klass == null ? 0 : klass.hashCode());
+			return result;
 		}
 	}
 	
