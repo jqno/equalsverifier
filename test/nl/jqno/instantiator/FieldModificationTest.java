@@ -21,14 +21,19 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+
+import nl.jqno.instantiator.TypeHelper.AbstractAndInterfaceArrayContainer;
+import nl.jqno.instantiator.TypeHelper.AbstractClassContainer;
+import nl.jqno.instantiator.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.instantiator.TypeHelper.AllTypesContainer;
+import nl.jqno.instantiator.TypeHelper.InterfaceContainer;
+import nl.jqno.instantiator.TypeHelper.ObjectContainer;
+import nl.jqno.instantiator.TypeHelper.PrimitiveContainer;
+import nl.jqno.instantiator.TypeHelper.StaticFinalContainer;
 
 import org.junit.Test;
 
 public class FieldModificationTest {
-	private static enum Enum { FIRST, SECOND }
-	private static final Object OBJECT = new Object();
-	
 	@Test
 	public void nullField() throws SecurityException, NoSuchFieldException {
 		Class<ObjectContainer> klass = ObjectContainer.class;
@@ -153,125 +158,4 @@ public class FieldModificationTest {
 		instantiator.changeArrayElement(aac.interfaces, 0);
 		assertNotNull(aac.interfaces[0]);
 	}
-	
-	static final class ObjectContainer {
-		public Object _object = new Object();
-	}
-	
-	static final class PrimitiveContainer {
-		public int i = 10;
-	}
-	
-	static final class StaticFinalContainer {
-		public static final int CONST = 42;
-		public static final Object OBJECT = new Object();
-	}
-	
-	static final class AbstractClassContainer {
-		public AbstractClass ac;
-	}
-	
-	static final class InterfaceContainer {
-		public Interface _interface;
-	}
-	
-	static final class AllTypesContainer {
-		boolean _boolean = false;
-		byte _byte = 0;
-		char _char = '\u0000';
-		double _double = 0.0D;
-		float _float = 0.0F;
-		int _int = 0;
-		long _long = 0L;
-		short _short = 0;
-
-		Boolean _Boolean = false;
-		Byte _Byte = 0;
-		Character _Char = '\u0000';
-		Double _Double = 0.0D;
-		Float _Float = 0.0F;
-		Integer _Int = 0;
-		Long _Long = 0L;
-		Short _Short = 0;
-		
-		Enum _enum = Enum.FIRST;
-		int[] _array = {1, 2, 3};
-		Object _object = OBJECT;
-		String _string = "";
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof AllTypesContainer)) {
-				return false;
-			}
-			AllTypesContainer other = (AllTypesContainer)obj;
-			return
-					_boolean == other._boolean &&
-					_byte == other._byte &&
-					_char == other._char &&
-					(Double.compare(_double, other._double) == 0) &&
-					(Float.compare(_float, other._float) == 0) &&
-					_int == other._int &&
-					_long == other._long &&
-					_short == other._short &&
-					_Boolean == other._Boolean &&
-					_Byte == other._Byte &&
-					_Char == other._Char &&
-					((_Double == null || other._Double == null) ?
-							_Double == other._Double :
-							Double.compare(_Double, other._Double) == 0) &&
-					((_Float == null || other._Float == null) ?
-							_Float == other._Float :
-							Float.compare(_Float, other._Float) == 0) &&
-					_Int == other._Int &&
-					_Long == other._Long &&
-					_Short == other._Short &&
-					_enum == other._enum &&
-					Arrays.equals(_array, other._array) &&
-					(_object == null ? other._object == null : _object.equals(other._object)) &&
-					(_string == null ? other._string == null : _string.equals(other._string));
-		}
-	}
-	
-	static final class AllArrayTypesContainer {
-		boolean[] booleans = { true };
-		byte[] bytes = { 1 };
-		char[] chars = { 'a' };
-		double[] doubles = { 1.0D };
-		float[] floats = { 1.0F };
-		int[] ints = { 1 };
-		long[] longs = { 1L };
-		short[] shorts = { 1 };
-		Enum[] enums = { Enum.FIRST };
-		int[][] arrays = { { 1 } };
-		Object[] objects = { OBJECT };
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof AllArrayTypesContainer)) {
-				return false;
-			}
-			AllArrayTypesContainer other = (AllArrayTypesContainer)obj;
-			return
-					Arrays.equals(booleans, other.booleans) &&
-					Arrays.equals(bytes, other.bytes) &&
-					Arrays.equals(chars, other.chars) &&
-					Arrays.equals(doubles, other.doubles) &&
-					Arrays.equals(floats, other.floats) &&
-					Arrays.equals(ints, other.ints) &&
-					Arrays.equals(longs, other.longs) &&
-					Arrays.equals(shorts, other.shorts) &&
-					Arrays.equals(enums, other.enums) &&
-					Arrays.deepEquals(arrays, other.arrays) &&
-					Arrays.equals(objects, other.objects);
-		}
-	}
-	
-	static final class AbstractAndInterfaceArrayContainer {
-		AbstractClass[] abstractClasses = new AbstractClass[] { null };
-		Interface[] interfaces = new Interface[] { null };
-	}
-	
-	static abstract class AbstractClass {}
-	static interface Interface {}
 }
