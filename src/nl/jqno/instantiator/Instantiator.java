@@ -72,6 +72,7 @@ public class Instantiator<T> {
 		put(Long.class, Arrays.asList(1L, 2L));
 		put(Short.class, Arrays.asList((short)1, (short)2));
 		put(Object.class, Arrays.asList(new Object(), new Object()));
+		put(Class.class, Arrays.<Class<?>>asList(Class.class, Object.class));
 		// Necessary for CGLib.
 		put(NoOp.class, Arrays.asList(new NoOp(){}, new NoOp(){}));
 	}});
