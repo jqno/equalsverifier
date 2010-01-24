@@ -400,9 +400,6 @@ public class Instantiator<T> {
 				changeArrayElement(array, 0);
 				field.set(obj, array);
 			}
-			else if (field.get(obj) == null) {
-				field.set(obj, instantiateObject(type));
-			}
 			else {
 				createPrefabValues(type);
 				Object newValue = getNextPrefabValue(type, field.get(obj));
@@ -478,9 +475,6 @@ public class Instantiator<T> {
 			}
 			changeArrayElement(nestedArray, 0);
 			Array.set(array, index, nestedArray);
-		}
-		else if (Array.get(array, index) == null) {
-			Array.set(array, index, instantiateObject(type));
 		}
 		else {
 			createPrefabValues(type);
@@ -573,16 +567,6 @@ public class Instantiator<T> {
 		}
 	}
 	
-	private <S> S instantiateObject(Class<S> type) {
-		if (type.isInterface() || Modifier.isAbstract(type.getModifiers())) {
-			return instantiateDynamicSubclass(type);
-		}
-		
-		@SuppressWarnings("unchecked")
-		S result = (S)objenesis.newInstance(type);
-		return result;
-	}
-
 	private <S> S instantiateDynamicSubclass(Class<S> superclass) {
 		Class<S> proxyClass = createDynamicSubclass(superclass);
 		
