@@ -258,12 +258,13 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
-		if (CORE_CLASSES.contains(klass) || klass.isEnum()) {
-			return;
-		}
-		
-		ensureUnequalExamples();
 		try {
+			if (CORE_CLASSES.contains(klass) || klass.isEnum()) {
+				return;
+			}
+		
+			ensureUnequalExamples();
+			
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, features, redefinedSubclass);
