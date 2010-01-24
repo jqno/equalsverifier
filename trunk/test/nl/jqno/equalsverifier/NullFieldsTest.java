@@ -62,6 +62,26 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 	}
 	
 	@Test
+	public void deepFieldsAreNeverNull() {
+		EqualsVerifier.forClass(DeepNullA.class)
+				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.verify();
+	}
+	
+	@Test
+	public void deepNull() {
+		EqualsVerifier.forClass(CheckedDeepNullA.class)
+				.verify();
+	}
+	
+	@Test
+	public void deepNullSanity() {
+		EqualsVerifier.forClass(DeepNullB.class)
+				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.verify();
+	}
+	
+	@Test
 	public void staticPrimitiveFields() {
 		EqualsVerifier.forClass(StaticPrimitiveFields.class).verify();
 	}
@@ -223,6 +243,72 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 			result = 31 * result + (three == null ? 0 : three.hashCode());
 			result = 31 * result + (four == null ? 0 : four.hashCode());
 			return result;
+		}
+	}
+	
+	static final class DeepNullA {
+		private final DeepNullB b;
+		
+		public DeepNullA(DeepNullB b) {
+			if (b == null) {
+				throw new NullPointerException("b");
+			}
+
+			this.b = b;
+		}
+		
+		@Override 
+		public int hashCode() {
+			return b.hashCode();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			return (obj instanceof DeepNullA) && ((DeepNullA) obj).b.equals(b);
+		}
+	}
+
+	static final class CheckedDeepNullA {
+		private final DeepNullB b;
+		
+		public CheckedDeepNullA(DeepNullB b) {
+			this.b = b;
+		}
+		
+		@Override 
+		public int hashCode() {
+			return b == null ? 0 : b.hashCode();
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof CheckedDeepNullA)) {
+				return false;
+			}
+			CheckedDeepNullA other = (CheckedDeepNullA)obj;
+			return b == null ? other.b == null : b.equals(other.b);
+		}
+	}
+
+	static final class DeepNullB {
+		private final Object o;
+		
+		public DeepNullB(Object o) {
+			if (o == null) {
+				throw new NullPointerException("o");
+			}
+
+			this.o = o;
+		}
+
+		@Override
+		public int hashCode() {
+			return o.hashCode();
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return (obj instanceof DeepNullB) && o.equals(((DeepNullB) obj).o);
 		}
 	}
 }

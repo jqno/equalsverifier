@@ -24,7 +24,6 @@ public class RecursiveInstantiationTest {
 	public void dontAddOneStepRecursiveClass() {
 		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
 		Node node = new Node();
-		instantiator.scramble(node);
 		
 		try {
 			instantiator.scramble(node);
@@ -40,7 +39,6 @@ public class RecursiveInstantiationTest {
 	public void dontAddOneStepRecursiveArrayClass() {
 		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
 		NodeArray nodeArray = new NodeArray();
-		instantiator.scramble(nodeArray);
 		
 		try {
 			instantiator.scramble(nodeArray);
@@ -74,7 +72,6 @@ public class RecursiveInstantiationTest {
 	public void dontAddTwoStepRecursiveClass() {
 		Instantiator<TwoStepNodeA> instantiator = Instantiator.forClass(TwoStepNodeA.class);
 		TwoStepNodeA node = new TwoStepNodeA();
-		instantiator.scramble(node);
 		
 		try {
 			instantiator.scramble(node);
@@ -90,7 +87,6 @@ public class RecursiveInstantiationTest {
 	public void dontAddTwoStepRecursiveArrayClass() {
 		Instantiator<TwoStepNodeArrayA> instantiator = Instantiator.forClass(TwoStepNodeArrayA.class);
 		TwoStepNodeArrayA node = new TwoStepNodeArrayA();
-		instantiator.scramble(node);
 		
 		try {
 			instantiator.scramble(node);
