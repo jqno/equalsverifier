@@ -120,6 +120,14 @@ public class RecursiveInstantiationTest {
 		instantiator.scramble(nodeArray);
 	}
 	
+	@Test
+	public void sameClassButNotRecursive() {
+		Instantiator<NotRecursiveA> instantiator = Instantiator.forClass(NotRecursiveA.class);
+		NotRecursiveA a = instantiator.instantiate();
+		instantiator.scramble(a);
+		instantiator.scramble(a);
+	}
+	
 	static final class Node {
 		Node node;
 	}
@@ -143,4 +151,19 @@ public class RecursiveInstantiationTest {
 	static final class TwoStepNodeArrayB {
 		TwoStepNodeArrayA[] nodes;
 	}
+	
+	static final class NotRecursiveA {
+		NotRecursiveB b;
+		NotRecursiveC c;
+	}
+	
+	static final class NotRecursiveB {
+		NotRecursiveD d;
+	}
+	
+	static final class NotRecursiveC {
+		NotRecursiveD d;
+	}
+	
+	static final class NotRecursiveD {}
 }
