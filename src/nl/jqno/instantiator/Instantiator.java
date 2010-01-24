@@ -522,7 +522,7 @@ public class Instantiator<T> {
 			throw new AssertionError("Recursive datastructure. Add prefab values for one of the following classes: " + recursiveCallStack + ".");
 		}
 
-		Instantiator i = new Instantiator(type, prefabValues, recursiveCallStack);
+		Instantiator i = new Instantiator(type, prefabValues, (LinkedHashSet<Class<?>>)recursiveCallStack.clone());
 		final Object first;
 		final Object second;
 		
