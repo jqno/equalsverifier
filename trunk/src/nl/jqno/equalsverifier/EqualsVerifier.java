@@ -106,6 +106,19 @@ public final class EqualsVerifier<T> {
 	private final EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
 	private Class<? extends T> redefinedSubclass = null;
 	
+	@SuppressWarnings("serial")
+	private static final List<Class<?>> CORE_CLASSES = new ArrayList<Class<?>>() {{
+		add(Object.class);
+		add(Class.class);
+		add(String.class);
+		add(Byte.class);
+		add(Double.class);
+		add(Float.class);
+		add(Integer.class);
+		add(Long.class);
+		add(Short.class);
+	}};
+	
 	/**
 	 * Factory method. For general use.
 	 * 
@@ -245,6 +258,10 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
+		if (CORE_CLASSES.contains(klass) || klass.isEnum()) {
+			return;
+		}
+		
 		ensureUnequalExamples();
 		try {
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);

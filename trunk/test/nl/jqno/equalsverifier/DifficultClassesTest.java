@@ -24,6 +24,26 @@ import org.junit.Test;
 
 public class DifficultClassesTest extends EqualsVerifierTestBase {
 	@Test
+	public void coreClasses() {
+		EqualsVerifier.forClass(Object.class).verify();
+		EqualsVerifier.forClass(Class.class).verify();
+		EqualsVerifier.forClass(String.class).verify();
+		EqualsVerifier.forClass(Boolean.class).verify();
+		EqualsVerifier.forClass(Byte.class).verify();
+		EqualsVerifier.forClass(Character.class).verify();
+		EqualsVerifier.forClass(Double.class).verify();
+		EqualsVerifier.forClass(Float.class).verify();
+		EqualsVerifier.forClass(Integer.class).verify();
+		EqualsVerifier.forClass(Long.class).verify();
+		EqualsVerifier.forClass(Short.class).verify();
+	}
+	
+	@Test
+	public void enumClasses() {
+		EqualsVerifier.forClass(E.class).verify();
+	}
+	
+	@Test
 	public void objects() {
 		EqualsVerifier.forClass(ObjectsContainer.class).verify();
 	}
@@ -49,6 +69,10 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 		EqualsVerifier.forClass(ThreadLocalContainer.class)
 				.withPrefabValues(ThreadLocal.class, ThreadLocalContainer.FIRST_INSTANCE, ThreadLocalContainer.SECOND_INSTANCE)
 				.verify();
+	}
+	
+	static enum E {
+		ONE, TWO;
 	}
 	
 	static final class ObjectsContainer {
