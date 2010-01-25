@@ -146,7 +146,8 @@ class HierarchyChecker<T> {
 	private void generateExamples() {
 		reference = instantiator.instantiate();
 		instantiator.scramble(reference);
-		other = instantiator.cloneFrom(reference);
+		other = instantiator.instantiate();
+		instantiator.scramble(other);
 		instantiator.scramble(other);
 	}
 }

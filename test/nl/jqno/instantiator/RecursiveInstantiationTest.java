@@ -56,7 +56,6 @@ public class RecursiveInstantiationTest {
 		instantiator.addPrefabValues(Node.class, new Node(), new Node());
 		Node node = new Node();
 		instantiator.scramble(node);
-		instantiator.scramble(node);
 	}
 	
 	@Test
@@ -64,7 +63,6 @@ public class RecursiveInstantiationTest {
 		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
 		instantiator.addPrefabValues(NodeArray.class, new NodeArray(), new NodeArray());
 		NodeArray nodeArray = new NodeArray();
-		instantiator.scramble(nodeArray);
 		instantiator.scramble(nodeArray);
 	}
 	
@@ -104,7 +102,6 @@ public class RecursiveInstantiationTest {
 		instantiator.addPrefabValues(TwoStepNodeA.class, new TwoStepNodeA(), new TwoStepNodeA());
 		TwoStepNodeA node = new TwoStepNodeA();
 		instantiator.scramble(node);
-		instantiator.scramble(node);
 	}
 	
 	@Test
@@ -113,14 +110,12 @@ public class RecursiveInstantiationTest {
 		instantiator.addPrefabValues(TwoStepNodeArrayA.class, new TwoStepNodeArrayA(), new TwoStepNodeArrayA());
 		TwoStepNodeArrayA nodeArray = new TwoStepNodeArrayA();
 		instantiator.scramble(nodeArray);
-		instantiator.scramble(nodeArray);
 	}
 	
 	@Test
 	public void sameClassButNotRecursive() {
 		Instantiator<NotRecursiveA> instantiator = Instantiator.forClass(NotRecursiveA.class);
 		NotRecursiveA a = instantiator.instantiate();
-		instantiator.scramble(a);
 		instantiator.scramble(a);
 	}
 	

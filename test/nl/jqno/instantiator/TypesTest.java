@@ -41,16 +41,12 @@ public class TypesTest {
 		Instantiator<InterfaceContainer> instantiator = Instantiator.forClass(InterfaceContainer.class);
 		InterfaceContainer ic = new InterfaceContainer();
 		instantiator.scramble(ic);
-		// Second scramble forces prefabValue creation
-		instantiator.scramble(ic);
 	}
 	
 	@Test
 	public void abstractClassField() {
 		Instantiator<AbstractClassContainer> instantiator = Instantiator.forClass(AbstractClassContainer.class);
 		AbstractClassContainer ic = new AbstractClassContainer();
-		instantiator.scramble(ic);
-		// Second scramble forces prefabValue creation
 		instantiator.scramble(ic);
 	}
 }
