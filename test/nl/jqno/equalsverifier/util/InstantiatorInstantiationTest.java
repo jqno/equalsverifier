@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertFalse;
 import nl.jqno.equalsverifier.points.FinalPoint;
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.instantiator.Instantiator;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 import org.junit.Test;
 
-public class InstantiationTest {
+public class InstantiatorInstantiationTest {
 	@Test
 	public void instantiateClass() {
 		Instantiator<Point> instantiator = Instantiator.forClass(Point.class);
