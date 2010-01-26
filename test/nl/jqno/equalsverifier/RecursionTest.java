@@ -16,7 +16,7 @@ package nl.jqno.equalsverifier;
 
 import org.junit.Test;
 
-public class PrefabEqualsVerifierTest extends EqualsVerifierTestBase {
+public class RecursionTest extends EqualsVerifierTestBase {
 	@Test
 	public void classRecursiveFail() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
