@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.redefinablepoint;
+package nl.jqno.equalsverifier.points;
 
-public class RedefinablePoint {
+public class BlindlyEqualsPoint {
 	private final int x;
 	private final int y;
 
-	public RedefinablePoint(int x, int y) {
+	public BlindlyEqualsPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	public boolean canEqual(Object obj) {
-		return obj instanceof RedefinablePoint;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof RedefinablePoint)) {
-			return false;
-		}
-		RedefinablePoint p = (RedefinablePoint)obj;
-		return p.canEqual(this) && p.x == x && p.y == y;
-	}
+    protected boolean blindlyEquals(Object o) {
+        if (!(o instanceof BlindlyEqualsPoint)) {
+            return false;
+        }
+        BlindlyEqualsPoint p = (BlindlyEqualsPoint)o;
+        return p.x == this.x && p.y == this.y;
+    }
+
+    public boolean equals(Object o) {
+        return (this.blindlyEquals(o) && ((BlindlyEqualsPoint)o).blindlyEquals(this));
+    }
 	
 	@Override
 	public int hashCode() {

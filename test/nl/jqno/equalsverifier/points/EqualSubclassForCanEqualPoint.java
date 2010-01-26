@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.redefinablepoint;
+package nl.jqno.equalsverifier.points;
 
-public class EqualSubclassForRedefinablePoint extends RedefinablePoint {
-	public EqualSubclassForRedefinablePoint(int x, int y) {
+
+public class EqualSubclassForCanEqualPoint extends CanEqualPoint {
+	public EqualSubclassForCanEqualPoint(int x, int y) {
 		super(x, y);
 	}
 }
