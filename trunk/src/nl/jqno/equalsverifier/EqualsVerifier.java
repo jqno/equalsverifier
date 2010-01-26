@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
-import nl.jqno.instantiator.Instantiator;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the

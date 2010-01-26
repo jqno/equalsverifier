@@ -23,7 +23,7 @@ import static nl.jqno.equalsverifier.Assert.fail;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import nl.jqno.instantiator.Instantiator;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 class ExamplesChecker<T> {
 	private final Instantiator<T> instantiator;

@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,12 +24,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.instantiator.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.instantiator.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
 
 import org.junit.Test;
 
-public class PrefabInstantiatorTest {
+public class InstantiatorPrefabInstantiatorTest {
 	@Test
 	public void dontAddPrefabValue() {
 		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);

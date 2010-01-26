@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
-import nl.jqno.instantiator.Instantiator;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 class HierarchyChecker<T> {
 	private final Class<T> klass;

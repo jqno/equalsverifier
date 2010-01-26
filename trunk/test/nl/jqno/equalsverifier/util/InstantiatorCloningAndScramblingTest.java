@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,11 +24,12 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class CloningAndScramblingTest {
+public class InstantiatorCloningAndScramblingTest {
 	private Instantiator<Point> instantiator;
 	
 	@Before

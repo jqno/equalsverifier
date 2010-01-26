@@ -19,7 +19,7 @@ import static nl.jqno.equalsverifier.Assert.fail;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.instantiator.Instantiator;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 public class AbstractDelegationChecker<T> {
 	private final Class<T> klass;

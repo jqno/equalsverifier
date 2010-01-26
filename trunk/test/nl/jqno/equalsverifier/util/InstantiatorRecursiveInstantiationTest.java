@@ -12,14 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import nl.jqno.equalsverifier.util.Instantiator;
+
 import org.junit.Test;
 
-public class RecursiveInstantiationTest {
+public class InstantiatorRecursiveInstantiationTest {
 	@Test
 	public void dontAddOneStepRecursiveClass() {
 		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
@@ -30,7 +32,7 @@ public class RecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.RecursiveInstantiationTest$Node].",
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$Node].",
 					e.getMessage());
 		}
 	}
@@ -45,7 +47,7 @@ public class RecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.RecursiveInstantiationTest$NodeArray].",
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$NodeArray].",
 					e.getMessage());
 		}
 	}
@@ -76,7 +78,7 @@ public class RecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.RecursiveInstantiationTest$TwoStepNodeA, class nl.jqno.instantiator.RecursiveInstantiationTest$TwoStepNodeB].",
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeB].",
 					e.getMessage());
 		}
 	}
@@ -91,7 +93,7 @@ public class RecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.instantiator.RecursiveInstantiationTest$TwoStepNodeArrayA, class nl.jqno.instantiator.RecursiveInstantiationTest$TwoStepNodeArrayB].",
+			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayB].",
 					e.getMessage());
 		}
 	}
