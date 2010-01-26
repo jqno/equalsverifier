@@ -13,39 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.redefinablepoint;
+package nl.jqno.equalsverifier.points;
 
-import nl.jqno.equalsverifier.points.Color;
+public class CanEqualPoint {
+	private final int x;
+	private final int y;
 
-public final class RedefinableColorPoint extends RedefinablePoint {
-	private final Color color;
-
-	public RedefinableColorPoint(int x, int y, Color color) {
-		super(x, y);
-		this.color = color;
+	public CanEqualPoint(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
-
-	@Override
+	
 	public boolean canEqual(Object obj) {
-		return obj instanceof RedefinableColorPoint;
+		return obj instanceof CanEqualPoint;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof RedefinableColorPoint)) {
+		if (!(obj instanceof CanEqualPoint)) {
 			return false;
 		}
-		RedefinableColorPoint p = (RedefinableColorPoint)obj;
-		return p.canEqual(this) && super.equals(p) && color == p.color;
+		CanEqualPoint p = (CanEqualPoint)obj;
+		return p.canEqual(this) && p.x == x && p.y == y;
 	}
 	
 	@Override
 	public int hashCode() {
-		return (color == null ? 0 : color.hashCode()) + (31 * super.hashCode());
+		return x + (31 * y);
 	}
-	
+
 	@Override
 	public String toString() {
-		return super.toString() + "," + color;
+		return getClass().getSimpleName() + ":" + x + "," + y;
 	}
 }

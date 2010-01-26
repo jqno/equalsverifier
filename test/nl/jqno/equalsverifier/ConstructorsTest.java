@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.points.CanEqualColorPoint;
+import nl.jqno.equalsverifier.points.CanEqualPoint;
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.FinalPoint;
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.redefinablepoint.RedefinableColorPoint;
-import nl.jqno.equalsverifier.redefinablepoint.RedefinablePoint;
 
 import org.junit.Test;
 
@@ -49,12 +49,12 @@ public class ConstructorsTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void examplesContainsSubclasses() {
-		RedefinablePoint first = new RedefinablePoint(1, 2);
-		RedefinablePoint second = new RedefinablePoint(2, 3);
-		RedefinableColorPoint third = new RedefinableColorPoint(1, 2, Color.INDIGO);
+		CanEqualPoint first = new CanEqualPoint(1, 2);
+		CanEqualPoint second = new CanEqualPoint(2, 3);
+		CanEqualColorPoint third = new CanEqualColorPoint(1, 2, Color.INDIGO);
 		
 		EqualsVerifier.forExamples(first, second, third)
-				.withRedefinedSubclass(RedefinableColorPoint.class)
+				.withRedefinedSubclass(CanEqualColorPoint.class)
 				.verify();
 	}
 }

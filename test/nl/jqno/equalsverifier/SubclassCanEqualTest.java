@@ -17,32 +17,67 @@ package nl.jqno.equalsverifier;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import nl.jqno.equalsverifier.points.BlindlyEqualsColorPoint;
+import nl.jqno.equalsverifier.points.BlindlyEqualsPoint;
+import nl.jqno.equalsverifier.points.CanEqualColorPoint;
+import nl.jqno.equalsverifier.points.CanEqualPoint;
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.ColorBlindColorPoint;
-import nl.jqno.equalsverifier.redefinablepoint.EqualSubclassForRedefinablePoint;
-import nl.jqno.equalsverifier.redefinablepoint.RedefinableColorPoint;
-import nl.jqno.equalsverifier.redefinablepoint.RedefinablePoint;
+import nl.jqno.equalsverifier.points.EqualSubclassForBlindlyEqualsPoint;
+import nl.jqno.equalsverifier.points.EqualSubclassForCanEqualPoint;
 
 import org.junit.Test;
 
-public class RedefinedSubclassTest extends EqualsVerifierTestBase {
+/**
+ * Tests, among other things, the following approaches to inheritance with added
+ * fields:
+ * 
+ * 1. "blindly equals", as described by Tal Cohen in Dr. Dobb's Journal, May
+ *    2002. See also http://www.ddj.com/java/184405053 and
+ *    http://tal.forum2.org/equals
+ * 
+ * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
+ *    Scala.
+ */
+public class SubclassCanEqualTest extends EqualsVerifierTestBase {
 	@Test
-	public void referenceEqualsRedefinedSub() {
-		EqualsVerifier<RedefinablePoint> ev = EqualsVerifier.forClass(RedefinablePoint.class)
-				.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class);
-		verifyFailure("Subclass: RedefinablePoint:1,1 equals EqualSubclassForRedefinablePoint:1,1.", ev);
+	public void blindlyEqualsReferenceEqualsSub() {
+		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
+				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
+		verifyFailure("Subclass: BlindlyEqualsPoint:1,1 equals EqualSubclassForBlindlyEqualsPoint:1,1.", ev);
 	}
 	
 	@Test
-	public void sanityEqualsIsValidForSuper() {
-		EqualsVerifier.forClass(RedefinablePoint.class)
-				.withRedefinedSubclass(RedefinableColorPoint.class)
+	public void blindlyEqualsSanityEqualsIsValidForSuper() {
+		EqualsVerifier.forClass(BlindlyEqualsPoint.class)
+				.withRedefinedSubclass(BlindlyEqualsColorPoint.class)
 				.verify();
 	}
 	
 	@Test
-	public void withRedefinedSuperclass() {
-		EqualsVerifier.forClass(RedefinableColorPoint.class)
+	public void blindlyEqualsWithRedefinedSuperclass() {
+		EqualsVerifier.forClass(BlindlyEqualsColorPoint.class)
+				.with(Feature.REDEFINED_SUPERCLASS)
+				.verify();
+	}
+	
+	@Test
+	public void canEqualReferenceEqualsSub() {
+		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
+				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
+		verifyFailure("Subclass: CanEqualPoint:1,1 equals EqualSubclassForCanEqualPoint:1,1.", ev);
+	}
+	
+	@Test
+	public void canEqualSanityEqualsIsValidForSuper() {
+		EqualsVerifier.forClass(CanEqualPoint.class)
+				.withRedefinedSubclass(CanEqualColorPoint.class)
+				.verify();
+	}
+	
+	@Test
+	public void canEqualWithRedefinedSuperclass() {
+		EqualsVerifier.forClass(CanEqualColorPoint.class)
 				.with(Feature.REDEFINED_SUPERCLASS)
 				.verify();
 	}
@@ -71,9 +106,9 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void weakInheritanceBeforeRedefinedSubclass() {
 		try {
-			EqualsVerifier.forClass(RedefinablePoint.class)
+			EqualsVerifier.forClass(CanEqualPoint.class)
 					.with(Feature.WEAK_INHERITANCE_CHECK)
-					.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class)
+					.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
 					.verify();
 			fail("Assertion didn't fail");
 		}
@@ -86,8 +121,8 @@ public class RedefinedSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void weakInheritanceAfterRedefinedSubclass() {
 		try {
-			EqualsVerifier.forClass(RedefinablePoint.class)
-					.withRedefinedSubclass(EqualSubclassForRedefinablePoint.class)
+			EqualsVerifier.forClass(CanEqualPoint.class)
+					.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
 					.with(Feature.WEAK_INHERITANCE_CHECK)
 					.verify();
 			fail("Assertion didn't fail");
