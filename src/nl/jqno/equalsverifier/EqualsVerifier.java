@@ -262,12 +262,15 @@ public final class EqualsVerifier<T> {
 			if (CORE_CLASSES.contains(klass) || klass.isEnum()) {
 				return;
 			}
-		
-			ensureUnequalExamples();
 			
+			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator);
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, features, redefinedSubclass);
+			
+			abstractDelegationChecker.check();
+			
+			ensureUnequalExamples();
 			
 			fieldsChecker.checkNull();
 			verifyPreconditions();
