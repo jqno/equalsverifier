@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.util;
 
 /**
  * Alternative for org.junit.Assert, so we can assert things but not have a
@@ -21,7 +21,7 @@ package nl.jqno.equalsverifier;
  * 
  * @author Jan Ouwens
  */
-class Assert {
+public class Assert {
 	/**
 	 * Asserts that two ints are equal to one another. Does nothing if they
 	 * are; throws an AssertionError if they're not.
