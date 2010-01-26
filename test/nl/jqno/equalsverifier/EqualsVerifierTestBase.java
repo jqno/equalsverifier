@@ -25,7 +25,7 @@ public class EqualsVerifierTestBase {
 		}
 		catch (AssertionError e) {
 			// Using startsWith because Assert class sometimes adds extra info to the error message.
-			assertTrue("Assertion has incorrect message: expected <" + message + "> but was <" + e.getMessage() + ">",
+			assertTrue("Assertion has incorrect message. Expected:\n  " + message + "\nbut was\n  " + e.getMessage(),
 					e.getMessage().startsWith(message));
 			return;
 		}
