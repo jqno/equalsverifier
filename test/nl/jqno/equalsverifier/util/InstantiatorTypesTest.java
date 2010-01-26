@@ -12,16 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
-import nl.jqno.instantiator.TypeHelper.AbstractClassContainer;
-import nl.jqno.instantiator.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.instantiator.TypeHelper.AllTypesContainer;
-import nl.jqno.instantiator.TypeHelper.InterfaceContainer;
+import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
 
 import org.junit.Test;
 
-public class TypesTest {
+public class InstantiatorTypesTest {
 	@Test
 	public void instantiateTypes() {
 		Instantiator<AllTypesContainer> instantiator = Instantiator.forClass(AllTypesContainer.class);

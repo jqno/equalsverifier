@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.instantiator;
+package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -22,18 +22,19 @@ import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.instantiator.TypeHelper.AbstractAndInterfaceArrayContainer;
-import nl.jqno.instantiator.TypeHelper.AbstractClassContainer;
-import nl.jqno.instantiator.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.instantiator.TypeHelper.AllTypesContainer;
-import nl.jqno.instantiator.TypeHelper.InterfaceContainer;
-import nl.jqno.instantiator.TypeHelper.ObjectContainer;
-import nl.jqno.instantiator.TypeHelper.PrimitiveContainer;
-import nl.jqno.instantiator.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.TypeHelper.AbstractAndInterfaceArrayContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.ObjectContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.PrimitiveContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
 
 import org.junit.Test;
 
-public class FieldModificationTest {
+public class InstantiatorFieldModificationTest {
 	@Test
 	public void nullField() throws SecurityException, NoSuchFieldException {
 		Class<ObjectContainer> klass = ObjectContainer.class;
