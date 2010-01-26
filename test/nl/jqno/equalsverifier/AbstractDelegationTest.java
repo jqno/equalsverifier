@@ -21,7 +21,6 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		ev.with(Feature.VERBOSE);
 		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method. Add prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractEqualsDelegator.", ev);
 	}
 	
