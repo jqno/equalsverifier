@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Assert.fail;
+import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
 
