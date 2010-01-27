@@ -24,6 +24,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
+import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Instantiator;
 
 class FieldsChecker<T> {
@@ -59,23 +60,19 @@ class FieldsChecker<T> {
 		T changed = instantiator.instantiate();
 		instantiator.scramble(changed);
 
-		Class<? extends Object> klass = changed.getClass();
-		while (klass != Object.class) {
-			for (Field field : klass.getDeclaredFields()) {
-				try {
-					if (Instantiator.canBeModifiedReflectively(field)) {
-						field.setAccessible(true);
-						check.execute(field, reference, changed, instantiator);
-					}
-				}
-				catch (IllegalArgumentException e) {
-					fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
-				}
-				catch (IllegalAccessException e) {
-					fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
+		for (Field field : new FieldIterable(changed.getClass())) {
+			try {
+				if (Instantiator.canBeModifiedReflectively(field)) {
+					field.setAccessible(true);
+					check.execute(field, reference, changed, instantiator);
 				}
 			}
-			klass = klass.getSuperclass();
+			catch (IllegalArgumentException e) {
+				fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
+			}
+			catch (IllegalAccessException e) {
+				fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
+			}
 		}
 	}
 
