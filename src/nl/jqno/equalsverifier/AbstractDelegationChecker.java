@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
 
+import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Instantiator;
 
 public class AbstractDelegationChecker<T> {
@@ -39,33 +40,25 @@ public class AbstractDelegationChecker<T> {
 	}
 	
 	private void checkAbstractDelegationInFields() {
-		Class<?> k = klass;
-		while (k != Object.class) {
-			for (Field field : k.getDeclaredFields()) {
-				Class<?> type = field.getType();
-				Object o = safelyGetInstance(type);
-				if (o != null) {
-					checkAbstractMethods(type, o);
-				}
+		for (Field field : new FieldIterable(klass)) {
+			Class<?> type = field.getType();
+			Object o = safelyGetInstance(type);
+			if (o != null) {
+				checkAbstractMethods(type, o);
 			}
-			k = k.getSuperclass();
 		}
 	}
 	
 	private void checkAbstractDelegation(T instance) {
 		checkAbstractMethods(klass, instance);
-		Class<?> i = klass;
-		while (i != Object.class) {
-			for (Field field : i.getDeclaredFields()) {
-				try {
-					Object object = field.get(instance);
-					checkAbstractMethods(field.getType(), object);
-				}
-				catch (IllegalAccessException ignored) {
-					// Skip this field.
-				}
+		for (Field field : new FieldIterable(klass)) {
+			try {
+				Object object = field.get(instance);
+				checkAbstractMethods(field.getType(), object);
 			}
-			i = i.getSuperclass();
+			catch (IllegalAccessException ignored) {
+				// Skip this field.
+			}
 		}
 	}
 	

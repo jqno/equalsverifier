@@ -23,6 +23,7 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Instantiator;
 
 class ExamplesChecker<T> {
@@ -136,23 +137,19 @@ class ExamplesChecker<T> {
 	}
 	
 	private boolean isIdentical(T reference, T other) {
-		Class<?> i = reference.getClass();
-		while (i != Object.class) {
-			for (Field field : i.getDeclaredFields()) {
-				try {
-					field.setAccessible(true);
-					if (!field.get(reference).equals(field.get(other))) {
-						return false;
-					}
-				}
-				catch (IllegalArgumentException e) {
-					return false;
-				}
-				catch (IllegalAccessException e) {
+		for (Field field : new FieldIterable(reference.getClass())) {
+			try {
+				field.setAccessible(true);
+				if (!field.get(reference).equals(field.get(other))) {
 					return false;
 				}
 			}
-			i = i.getSuperclass();
+			catch (IllegalArgumentException e) {
+				return false;
+			}
+			catch (IllegalAccessException e) {
+				return false;
+			}
 		}
 		
 		return true;

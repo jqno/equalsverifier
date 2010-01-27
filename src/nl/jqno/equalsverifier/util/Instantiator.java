@@ -199,12 +199,8 @@ public class Instantiator<T> {
 	public T cloneFrom(T original) {
 		T result = instantiate();
 		
-		Class<?> i = klass;
-		while (i != Object.class) {
-			for (Field field : i.getDeclaredFields()) {
-				copyField(field, original, result);
-			}
-			i = i.getSuperclass();
+		for (Field field : new FieldIterable(klass)) {
+			copyField(field, original, result);
 		}
 		
 		return result;
@@ -265,12 +261,8 @@ public class Instantiator<T> {
 	 * @param obj The object to be scrambled.
 	 */
 	public void scramble(T obj) {
-		Class<?> i = klass;
-		while (i != Object.class && i != null) {
-			for (Field field : i.getDeclaredFields()) {
-				changeField(field, obj);
-			}
-			i = i.getSuperclass();
+		for (Field field : new FieldIterable(klass)) {
+			changeField(field, obj);
 		}
 	}
 	
@@ -537,12 +529,8 @@ public class Instantiator<T> {
 	}
 	
 	private <S extends T> void copyIntoSubclassInstance(T original, S instance) {
-		Class<?> i = klass;
-		while (i != Object.class) {
-			for (Field field : i.getDeclaredFields()) {
-				copyField(field, original, instance);
-			}
-			i = i.getSuperclass();
+		for (Field field : new FieldIterable(klass)) {
+			copyField(field, original, instance);
 		}
 	}
 
