@@ -138,12 +138,14 @@ class FieldsChecker<T> {
 			if (isFloat(type)) {
 				set(field, reference, Float.NaN);
 				set(field, changed, Float.NaN);
-				assertEquals("Float: equals doesn't use Float.compare.", reference, changed);
+				assertEquals("Float: equals doesn't use Float.compare for field " + field.getName() + ".",
+						reference, changed);
 			}
 			if (isDouble(type)) {
 				set(field, reference, Double.NaN);
 				set(field, changed, Double.NaN);
-				assertEquals("Double: equals doesn't use Double.compare.", reference, changed);
+				assertEquals("Double: equals doesn't use Double.compare for field " + field.getName() + ".",
+						reference, changed);
 			}
 		}
 
@@ -191,11 +193,12 @@ class FieldsChecker<T> {
 				Array.set(field.get(reference), 0, createNewArrayInstance(deepType, instantiator));
 				Array.set(field.get(changed), 0, createNewArrayInstance(deepType, instantiator));
 				
-				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().",
+				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals() for field " + field.getName() + ".",
 							reference, changed);
 			}
 			else {
-				assertEquals("Array: == used instead of Arrays.equals().", reference, changed);
+				assertEquals("Array: == used instead of Arrays.equals() for field " + field.getName() + ".",
+						reference, changed);
 			}
 		}
 

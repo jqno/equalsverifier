@@ -329,11 +329,11 @@ public final class EqualsVerifier<T> {
 	private void verifyPreconditions() {
 		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
 		for (T example : equalExamples) {
-			assertTrue("Precondition: " + equalExamples.get(0) + " and " + example + " are of different classes",
+			assertTrue("Precondition:\n  " + equalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
 					klass.isAssignableFrom(example.getClass()));
 		}
 		for (T example : unequalExamples) {
-			assertTrue("Precondition: " + unequalExamples.get(0) + " and " + example + " are of different classes",
+			assertTrue("Precondition:\n  " + unequalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
 					klass.isAssignableFrom(example.getClass()));
 		}
 	}
