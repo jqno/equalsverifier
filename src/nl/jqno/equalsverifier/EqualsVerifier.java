@@ -45,9 +45,9 @@ import nl.jqno.equalsverifier.util.Instantiator;
  * of the class is not permitted to be equal to an instance of a subclass, even
  * though all the relevant fields are equal. Call
  * {@link #withRedefinedSubclass(Class)} to supply a reference to such a
- * subclass, or call {@link #with(Feature...)} with
- * {@link Feature#WEAK_INHERITANCE_CHECK} to disable the check.<br>
- * - Call {@link #with(Feature...)} to modify the behaviour of
+ * subclass, or call {@link #suppress(Warning...)} with
+ * {@link Warning#STRICT_INHERITANCE} to disable the check.<br>
+ * - Call {@link #suppress(Warning...)} to suppress warnings given by
  * {@code EqualsVerifier}.<br>
  * - Call {@link #verify()} to perform the actual verifications.
  * <p>
@@ -57,11 +57,11 @@ import nl.jqno.equalsverifier.util.Instantiator;
  * EqualsVerifier.forClass(My.class).verify();
  * }</pre>
  * 
- * Or, with some features enabled:
+ * Or, with some warnings suppressed:
  * 
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
- *     .with(Feature.ALLOW_MUTABLE_FIELDS, Feature.FIELDS_ARE_NEVER_NULL)
+ *     .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
  *     .verify();
  * }</pre>
  * 
@@ -103,7 +103,9 @@ public final class EqualsVerifier<T> {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	
-	private final EnumSet<Feature> features = EnumSet.noneOf(Feature.class);
+	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+	private boolean verbose = false;
+	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	
 	@SuppressWarnings("serial")
@@ -198,16 +200,16 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
-	 * Adds features to the {@code EqualsVerifier}. These features modify the
-	 * behaviour of the {@code EqualsVerifier}. See {@link Feature} to see what
-	 * features are available.
+	 * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning}
+	 * to see what warnings can be suppressed.
 	 * 
-	 * @param features A list of features to add to the {@code EqualsVerifier}.
+	 * @param warnings A list of warnings to suppress in
+	 * 			{@code EqualsVerifier}.
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public EqualsVerifier<T> with(Feature... features) {
-		for (Feature feature : features) {
-			this.features.add(feature);
+	public EqualsVerifier<T> suppress(Warning... warnings) {
+		for (Warning warning : warnings) {
+			this.warningsToSuppress.add(warning);
 		}
 		return this;
 	}
@@ -231,6 +233,21 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
+	 * Signals that T is part of an inheritance hierarchy where {@code equals}
+	 * is overridden. Call this method if T has overridden {@code equals} and
+	 * {@code hashCode}, and one or more of T's superclasses have as well.
+	 * <p>
+	 * T itself does not necessarily have to have subclasses that redefine
+	 * {@code equals} and {@code hashCode}.
+	 * 
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> withRedefinedSuperclass() {
+		hasRedefinedSubclass = true;
+		return this;
+	}
+	
+	/**
 	 * Supplies a reference to a subclass of T in which {@code equals} is
 	 * overridden. Calling this method is mandatory if {@code equals} is not
 	 * final and a strong verification is performed.
@@ -243,10 +260,23 @@ public final class EqualsVerifier<T> {
 	 * 				equal to any instance of T.
 	 * @return {@code this}, for easy method chaining.
 	 * 
-	 * @see Feature#WEAK_INHERITANCE_CHECK
+	 * @see Warning#STRICT_INHERITANCE
 	 */
 	public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
 		this.redefinedSubclass = redefinedSubclass;
+		return this;
+	}
+	
+	/**
+	 * Makes {@link EqualsVerifier} more verbose. Every time the
+	 * {@link EqualsVerifier#verify()} method notes a failure and throws an
+	 * {@link AssertionError}, a stacktrace will also be printed to
+	 * {@link System#err}.
+	 * 
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> verbose() {
+		verbose = true;
 		return this;
 	}
 	
@@ -264,9 +294,9 @@ public final class EqualsVerifier<T> {
 			}
 			
 			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator);
-			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, features);
+			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
-			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, features, redefinedSubclass);
+			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
 			
 			abstractDelegationChecker.check();
 			
@@ -280,7 +310,7 @@ public final class EqualsVerifier<T> {
 			fieldsChecker.check();
 		}
 		catch (Throwable e) {
-			if (features.contains(Feature.VERBOSE)) {
+			if (verbose) {
 				e.printStackTrace();
 			}
 			fail(e.getMessage());

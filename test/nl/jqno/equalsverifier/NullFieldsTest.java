@@ -50,21 +50,21 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 		EqualsThrowsNullOnThis yellow = new EqualsThrowsNullOnThis(Color.YELLOW);
 		
 		EqualsVerifier.forExamples(blue, yellow)
-				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
 	@Test
 	public void fieldsAreNeverNullForClass() {
 		EqualsVerifier.forClass(EqualsThrowsNullOnThis.class)
-				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
 	@Test
 	public void deepFieldsAreNeverNull() {
 		EqualsVerifier.forClass(DeepNullA.class)
-				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
@@ -77,7 +77,7 @@ public class NullFieldsTest extends EqualsVerifierTestBase {
 	@Test
 	public void deepNullSanity() {
 		EqualsVerifier.forClass(DeepNullB.class)
-				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	

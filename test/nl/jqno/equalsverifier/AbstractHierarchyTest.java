@@ -35,7 +35,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 	@Test
 	public void abstractNeverNull() {
 		EqualsVerifier.forClass(NullThrowingColorContainer.class)
-				.with(Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 		
 		EqualsVerifier<NullThrowingColorContainer> ev = EqualsVerifier.forClass(NullThrowingColorContainer.class);

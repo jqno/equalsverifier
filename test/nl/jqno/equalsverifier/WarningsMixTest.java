@@ -15,80 +15,38 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Arrays;
-
 import nl.jqno.equalsverifier.points.Color;
-import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class FeatureMixTest extends EqualsVerifierTestBase {
-	@Test
-	public void verbose() throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintStream testStream = new PrintStream(baos);
-		
-		PrintStream syserr = System.err;
-		System.setErr(testStream);
-		
-		try {
-			EqualsVerifier.forClass(Point.class)
-					.verify();
-		}
-		catch (AssertionError ignored) {}
-		
-		assertEquals(0, baos.size());
-		
-		try {
-			EqualsVerifier.forClass(Point.class)
-					.with(Feature.VERBOSE)
-					.verify();
-		}
-		catch (AssertionError ignored) {}
-		
-		System.setErr(syserr);
-		baos.close();
-
-		byte[] expected = new byte[] {'j','a','v','a','.','l','a','n','g','.','A','s','s','e','r','t','i','o','n','E','r','r','o','r',':',' ','S','u','b','c','l','a','s','s',':'};
-		assertTrue(baos.size() > expected.length);
-		byte[] actual = new byte[expected.length];
-		System.arraycopy(baos.toByteArray(), 0, actual, 0, expected.length);
-		assertTrue(Arrays.equals(expected, actual));
-	}
-	
+public class WarningsMixTest extends EqualsVerifierTestBase {
 	@Test
 	public void notFinalAndMutable() {
 		EqualsVerifier<MutablePoint> ev1 = EqualsVerifier.forClass(MutablePoint.class);
-		ev1.with(Feature.WEAK_INHERITANCE_CHECK);
+		ev1.suppress(Warning.STRICT_INHERITANCE);
 		verifyFailure("Mutability:", ev1);
 		
 		EqualsVerifier<MutablePoint> ev2 = EqualsVerifier.forClass(MutablePoint.class);
-		ev2.with(Feature.ALLOW_NONFINAL_FIELDS);
+		ev2.suppress(Warning.NONFINAL_FIELDS);
 		verifyFailure("Subclass:", ev2);
 		
 		EqualsVerifier.forClass(MutablePoint.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_NONFINAL_FIELDS)
+				.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
 				.verify();
 	}
 	
 	@Test
 	public void notFinalAndNeverNull() {
 		EqualsVerifier<NeverNullColorContainer> ev1 = EqualsVerifier.forClass(NeverNullColorContainer.class);
-		ev1.with(Feature.WEAK_INHERITANCE_CHECK);
+		ev1.suppress(Warning.STRICT_INHERITANCE);
 		verifyFailure("Non-nullity:", ev1);
 		
 		EqualsVerifier<NeverNullColorContainer> ev2 = EqualsVerifier.forClass(NeverNullColorContainer.class);
-		ev2.with(Feature.FIELDS_ARE_NEVER_NULL);
+		ev2.suppress(Warning.NULL_FIELDS);
 		verifyFailure("Subclass:", ev2);
 		
 		EqualsVerifier.forClass(NeverNullColorContainer.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.FIELDS_ARE_NEVER_NULL)
+				.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
 				.verify();
 	}
 	
@@ -97,19 +55,19 @@ public class FeatureMixTest extends EqualsVerifierTestBase {
 		// It could happen! Just make sure your setters check for null :).
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev1 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev1.with(Feature.WEAK_INHERITANCE_CHECK, Feature.FIELDS_ARE_NEVER_NULL);
+		ev1.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS);
 		verifyFailure("Mutability:", ev1);
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev2 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev2.with(Feature.WEAK_INHERITANCE_CHECK, Feature.ALLOW_NONFINAL_FIELDS);
+		ev2.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
 		verifyFailure("Non-nullity:", ev2);
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev3 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev3.with(Feature.ALLOW_NONFINAL_FIELDS, Feature.FIELDS_ARE_NEVER_NULL);
+		ev3.suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS);
 		verifyFailure("Subclass:", ev3);
 		
 		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK, Feature.FIELDS_ARE_NEVER_NULL, Feature.ALLOW_NONFINAL_FIELDS)
+				.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
 				.verify();
 	}
 

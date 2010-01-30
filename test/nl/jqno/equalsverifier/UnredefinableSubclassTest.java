@@ -35,11 +35,11 @@ public class UnredefinableSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void notFinal() {
 		EqualsVerifier.forClass(Point.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK)
+				.suppress(Warning.STRICT_INHERITANCE)
 				.verify();
 		
 		EqualsVerifier.forClass(FinalEqualsPoint.class)
-				.with(Feature.WEAK_INHERITANCE_CHECK)
+				.suppress(Warning.STRICT_INHERITANCE)
 				.verify();
 	}
 	
