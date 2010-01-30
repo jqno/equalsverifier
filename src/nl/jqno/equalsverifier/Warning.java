@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 package nl.jqno.equalsverifier;
 
 /**
- * Enum of features that can be applied to {@link EqualsVerifier}.
+ * Enum of warnings that can be suppressed in {@link EqualsVerifier}.
  * 
  * @author Jan Ouwens
- * @see EqualsVerifier#with(Feature...)
+ * @see EqualsVerifier#suppress(Warning...)
  */
-public enum Feature {
+public enum Warning {
 	/**
 	 * Disables checks for non-final fields on which {@code equals} and
 	 * {@code hashCode} depend.
@@ -36,7 +36,7 @@ public enum Feature {
 	 * method can be used to prevent {@link EqualsVerifier} from checking for
 	 * non-final fields.
 	 */
-	ALLOW_NONFINAL_FIELDS,
+	NONFINAL_FIELDS,
 	
 	/**
 	 * Disables checks for {@link NullPointerException} within {@code equals},
@@ -48,25 +48,7 @@ public enum Feature {
 	 * {@code fieldsAreNeverNull} method can be used to disable the check for
 	 * {@link NullPointerException}.
 	 */
-	FIELDS_ARE_NEVER_NULL,
-	
-	/**
-	 * Signals that T is part of an inheritance hierarchy where {@code equals}
-	 * is overridden. Call this method if T has overridden {@code equals} and
-	 * {@code hashCode}, and one or more of T's superclasses have as well.
-	 * <p>
-	 * T itself does not necessarily have to have subclasses that redefine
-	 * {@code equals} and {@code hashCode}.
-	 */
-	REDEFINED_SUPERCLASS,
-	
-	/**
-	 * Makes {@link EqualsVerifier} more verbose. Every time the
-	 * {@link EqualsVerifier#verify()} method notes a failure and throws an
-	 * {@link AssertionError}, a stacktrace will also be printed to
-	 * {@link System#err}.
-	 */
-	VERBOSE,
+	NULL_FIELDS,
 	
 	/**
 	 * Disables some of the stricter inheritance tests; use at your own risk!
@@ -82,5 +64,5 @@ public enum Feature {
 	 * 
 	 * @see EqualsVerifier#withRedefinedSubclass(Class)
 	 */
-	WEAK_INHERITANCE_CHECK;
+	STRICT_INHERITANCE;
 }
