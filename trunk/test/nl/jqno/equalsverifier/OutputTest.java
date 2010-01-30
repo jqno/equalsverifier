@@ -27,7 +27,12 @@ import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class VerbosityTest {
+public class OutputTest {
+	@Test(expected=UnsupportedOperationException.class)
+	public void anotherException() {
+		EqualsVerifier.forClass(ExceptionThrower.class).verify();
+	}
+	
 	@Test
 	public void verbose() throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -59,5 +64,17 @@ public class VerbosityTest {
 		byte[] actual = new byte[expected.length];
 		System.arraycopy(baos.toByteArray(), 0, actual, 0, expected.length);
 		assertTrue(Arrays.equals(expected, actual));
+	}
+	
+	static class ExceptionThrower {
+		@Override
+		public boolean equals(Object obj) {
+			throw new UnsupportedOperationException();
+		}
+		
+		@Override
+		public int hashCode() {
+			throw new UnsupportedOperationException();
+		}
 	}
 }

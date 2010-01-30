@@ -292,7 +292,7 @@ public final class EqualsVerifier<T> {
 			
 			fieldsChecker.check();
 		}
-		catch (Throwable e) {
+		catch (AssertionError e) {
 			if (verbose) {
 				e.printStackTrace();
 			}
