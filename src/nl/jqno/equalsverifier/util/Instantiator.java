@@ -507,7 +507,7 @@ public class Instantiator<T> {
 	@SuppressWarnings("unchecked")
 	private void createPrefabValues(Class<?> type) {
 		if (recursiveCallStack.contains(type)) {
-			throw new AssertionError("Recursive datastructure. Add prefab values for one of the following classes: " + recursiveCallStack + ".");
+			throw new AssertionError("Recursive datastructure.\nAdd prefab values for one of the following classes: " + recursiveCallStack + ".");
 		}
 
 		Instantiator i = new Instantiator(type, prefabValues, (LinkedHashSet<Class<?>>)recursiveCallStack.clone());

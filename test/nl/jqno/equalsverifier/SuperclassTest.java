@@ -31,17 +31,16 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 	public void symmetry() {
 		EqualsVerifier<SymmetryBrokenColorPoint> ev =
 				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
-		verifyFailure("Symmetry: SymmetryBrokenColorPoint:1,1,YELLOW does not equal" +
-				" Point:1,1.", ev);
+		verifyFailure("Symmetry:\n  SymmetryBrokenColorPoint:1,1,YELLOW\ndoes not equal superclass instance\n  Point:1,1", ev);
 	}
 	
 	@Test
 	public void transitivity() {
 		EqualsVerifier<TransitivityBrokenColorPoint> ev =
 				EqualsVerifier.forClass(TransitivityBrokenColorPoint.class);
-		verifyFailure("Transitivity: TransitivityBrokenColorPoint:1,1,YELLOW and" +
-				" TransitivityBrokenColorPoint:1,1,BLUE both equal Point:1,1," +
-				" which implies they equal each other.",
+		verifyFailure("Transitivity:\n  TransitivityBrokenColorPoint:1,1,YELLOW\nand\n  " +
+				"TransitivityBrokenColorPoint:1,1,BLUE\nboth equal superclass instance\n  " +
+				"Point:1,1\nwhich implies they equal each other.",
 				ev);
 	}
 
@@ -49,8 +48,8 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 	public void referenceAndSuperSameHaveSameHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev =
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		verifyFailure("Superclass: hashCode for HashCodeBrokenPoint:1,1" +
-				" should be equal to hashCode for Point:1,1.", ev);
+		verifyFailure("Superclass: hashCode for\n  HashCodeBrokenPoint:1,1 (33)" +
+				"\nshould be equal to hashCode for superclass instance\n  Point:1,1 (32)", ev);
 	}
 	
 	static class SymmetryBrokenColorPoint extends Point {

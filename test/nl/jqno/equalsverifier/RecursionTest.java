@@ -20,7 +20,7 @@ public class RecursionTest extends EqualsVerifierTestBase {
 	@Test
 	public void classRecursiveFail() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
-		verifyFailure("Recursive datastructure. Add prefab values for one of the following classes:", ev);
+		verifyFailure("Recursive datastructure.\nAdd prefab values for one of the following classes:", ev);
 	}
 	
 	@Test
@@ -28,7 +28,7 @@ public class RecursionTest extends EqualsVerifierTestBase {
 		Node one = new Node(null);
 		Node two = new Node(new Node(null));
 		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(one, two);
-		verifyFailure("Recursive datastructure. Add prefab values for one of the following classes:", ev);
+		verifyFailure("Recursive datastructure.\nAdd prefab values for one of the following classes:", ev);
 	}
 	
 	@Test

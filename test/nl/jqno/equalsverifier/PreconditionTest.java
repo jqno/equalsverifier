@@ -56,19 +56,19 @@ public class PreconditionTest extends EqualsVerifierTestBase {
 	@SuppressWarnings("unchecked")
 	public void incompatibleClass() {
 		EqualsVerifier ev = EqualsVerifier.forExamples(first, new Point(1, 2));
-		verifyFailure("Precondition: FinalPoint:1,2 and Point:1,2 are of different classes", ev);
+		verifyFailure("Precondition:\n  FinalPoint:1,2\nand\n  Point:1,2\nare of different classes", ev);
 	}
 	
 	@Test
 	public void allSame() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, first);
-		verifyFailure("Precondition: the same object (FinalPoint:1,2) appears twice.", ev);
+		verifyFailure("Precondition: the same object appears twice:\n  FinalPoint:1,2", ev);
 	}
 	
 	@Test
 	public void allEqual() {
 		FinalPoint firstest = new FinalPoint(1, 2);
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, firstest);
-		verifyFailure("Precondition: two objects are equal to each other (FinalPoint:1,2).", ev);
+		verifyFailure("Precondition: two objects are equal to each other:\n  FinalPoint:1,2", ev);
 	}
 }

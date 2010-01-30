@@ -81,14 +81,14 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		SubMultiple sm = new SubMultiple(1, 2);
 		EqualsVerifier ev = EqualsVerifier.forRelaxedEqualExamples(sm, a)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: SubMultiple:1*2=2 and Multiple:1*2=2 are of different classes", ev);
+		verifyFailure("Precondition:\n  SubMultiple:1*2=2\nand\n  Multiple:1*2=2\nare of different classes", ev);
 	}
 	
 	@Test
 	public void equalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, a)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: the same object (Multiple:1*2=2) appears twice.", ev);
+		verifyFailure("Precondition: the same object appears twice:\n  Multiple:1*2=2", ev);
 	}
 	
 	@Test
@@ -96,21 +96,21 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		Multiple aa = new Multiple(1, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, aa)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: two identical objects (Multiple:1*2=2) appear.", ev);
+		verifyFailure("Precondition: two identical objects appear:\n  Multiple:1*2=2", ev);
 	}
 	
 	@Test
 	public void equalAllUnequal() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, x)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: not all equal objects are equal (Multiple:1*2=2, Multiple:2*2=4).", ev);
+		verifyFailure("Precondition: not all equal objects are equal:\n  Multiple:1*2=2\nand\n  Multiple:2*2=4", ev);
 	}
 
 	@Test
 	public void unequalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(x, x);
-		verifyFailure("Precondition: the same object (Multiple:2*2=4) appears twice.", ev);
+		verifyFailure("Precondition: the same object appears twice:\n  Multiple:2*2=4", ev);
 	}
 	
 	@Test
@@ -118,7 +118,7 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		Multiple xx = new Multiple(2, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(x, xx);
-		verifyFailure("Precondition: two objects are equal to each other (Multiple:2*2=4).", ev);
+		verifyFailure("Precondition: two objects are equal to each other:\n  Multiple:2*2=4", ev);
 	}
 	
 	public static class SubMultiple extends Multiple {

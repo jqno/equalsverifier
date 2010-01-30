@@ -79,7 +79,7 @@ public class AbstractDelegationChecker<T> {
 		catch (AbstractMethodError e) {
 			fail("Abstract delegation: " + 
 					instanceClass.getSimpleName() +
-					"'s equals method delegates to an abstract method. Add prefab values for " +
+					"'s equals method delegates to an abstract method.\nAdd prefab values for " +
 					instanceClass.getName() + ".");
 		}
 		catch (Throwable ignored) {
@@ -93,7 +93,7 @@ public class AbstractDelegationChecker<T> {
 		catch (AbstractMethodError e) {
 			fail("Abstract delegation: " + 
 					instanceClass.getSimpleName() +
-					"'s hashCode method delegates to an abstract method. Add prefab values for " +
+					"'s hashCode method delegates to an abstract method.\nAdd prefab values for " +
 					instanceClass.getName() + ".");
 		}
 		catch (Throwable ignored) {

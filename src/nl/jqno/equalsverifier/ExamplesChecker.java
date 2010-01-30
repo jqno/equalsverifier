@@ -66,11 +66,11 @@ class ExamplesChecker<T> {
 	}
 	
 	private void checkEqualButNotIdentical(T reference, T other) {
-		assertFalse("Precondition: the same object (" + reference + ") appears twice.",
+		assertFalse("Precondition: the same object appears twice:\n  " + reference,
 				reference == other);
-		assertFalse("Precondition: two identical objects (" + reference + ") appear.",
+		assertFalse("Precondition: two identical objects appear:\n  " + reference,
 				isIdentical(reference, other));
-		assertTrue("Precondition: not all equal objects are equal (" + reference + ", " + other + ").",
+		assertTrue("Precondition: not all equal objects are equal:\n  " + reference + "\nand\n  " + other,
 				reference.equals(other));
 	}
 
@@ -100,24 +100,24 @@ class ExamplesChecker<T> {
 	}
 	
 	private void checkNotEqual(T reference, T other) {
-		assertFalse("Precondition: the same object (" + reference + ") appears twice.",
+		assertFalse("Precondition: the same object appears twice:\n  " + reference,
 				reference == other);
-		assertFalse("Precondition: two objects are equal to each other (" + reference + ").",
+		assertFalse("Precondition: two objects are equal to each other:\n  " + reference,
 				reference.equals(other));
 	}
 	
 	private void checkReflexivity(T reference) {
-		assertEquals("Reflexivity: " + reference + " does not equal itself.",
+		assertEquals("Reflexivity: object does not equal itself:\n  " + reference,
 				reference, reference);
 	}
 
 	private void checkSymmetryEquals(T reference, T copy) {
-		assertTrue("Symmetry: " + reference + " is not symmetric to " + copy + ".",
+		assertTrue("Symmetry: objects are not symmetric:\n  " + reference + "\nand\n  " + copy,
 				reference.equals(copy) == copy.equals(reference));
 	}
 
 	private void checkSymmetryNotEquals(T reference, T other) {
-		assertTrue("Symmetry: " + reference + " is not symmetric to " + other + ".",
+		assertTrue("Symmetry: objects are not symmetric:\n  " + reference + "\nand\n  " + other,
 				reference.equals(other) == other.equals(reference));
 	}
 
@@ -132,7 +132,7 @@ class ExamplesChecker<T> {
 	}
 
 	private void checkHashCode(T reference, T other) {
-		assertEquals("hashCode: hashCode for " + reference + " should be equal to hashCode for " + other + ".",
+		assertEquals("hashCode: hashCodes should be equal:\n  " + reference + " (" + reference.hashCode() + ")\nand\n  " + other + " (" +  other.hashCode() + ")",
 				reference.hashCode(), other.hashCode());
 	}
 	

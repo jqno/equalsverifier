@@ -69,21 +69,22 @@ class HierarchyChecker<T> {
 		Object equalSuper = instantiateSuperclass(superclass);
 		
 		if (features.contains(Feature.REDEFINED_SUPERCLASS)) {
-			assertFalse("Redefined superclass: " + reference + " may not equal " + equalSuper + ", but it does.",
+			assertFalse("Redefined superclass:\n  " + reference + "\nmay not equal superclass instance\n  " + equalSuper + "\nbut it does.",
 					reference.equals(equalSuper));
 		}
 		else {
 			T shallow = instantiator.cloneFrom(reference);
 			instantiator.shallowScramble(shallow);
 			
-			assertTrue("Symmetry: " + reference + " does not equal " + equalSuper + ".",
+			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n  " + equalSuper,
 					reference.equals(equalSuper) && equalSuper.equals(reference));
 			
-			assertTrue("Transitivity: " + reference + " and " + shallow +
-					" both equal " + equalSuper + ", which implies they equal each other.",
+			assertTrue("Transitivity:\n  " + reference + "\nand\n  " + shallow +
+					"\nboth equal superclass instance\n  " + equalSuper + "\nwhich implies they equal each other.",
 					reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
 			
-			assertTrue("Superclass: hashCode for " + reference + " should be equal to hashCode for " + equalSuper + ".",
+			assertTrue("Superclass: hashCode for\n  " + reference + " (" + reference.hashCode() +
+					")\nshould be equal to hashCode for superclass instance\n  " + equalSuper + " (" + equalSuper.hashCode() + ")",
 					reference.hashCode() == equalSuper.hashCode());
 		}
 	}
@@ -100,7 +101,7 @@ class HierarchyChecker<T> {
 		}
 		
 		T equalSub = instantiator.cloneToSubclass(reference);
-		assertTrue("Subclass: " + reference + " is not equal to an instance of a trivial subclass with equal fields. (Consider making the class final.)",
+		assertTrue("Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  " + reference + "\nConsider making the class final.",
 				reference.equals(equalSub));
 	}
 	
@@ -110,11 +111,11 @@ class HierarchyChecker<T> {
 		}
 		
 		if (methodIsFinal("equals", Object.class)) {
-			fail("Subclass: " + klass.getSimpleName() + " has a final equals method; don't need to supply a redefined subclass.");
+			fail("Subclass: " + klass.getSimpleName() + " has a final equals method.\nNo need to supply a redefined subclass.");
 		}
 
 		T redefinedSub = instantiator.cloneToSubclass(reference, redefinedSubclass);
-		assertFalse("Subclass: " + reference + " equals " + redefinedSub + ".",
+		assertFalse("Subclass:\n  " + reference + "\nequals subclass instance\n  " + redefinedSub,
 				reference.equals(redefinedSub));
 	}
 	
@@ -123,9 +124,9 @@ class HierarchyChecker<T> {
 			return;
 		}
 		
-		assertTrue("Subclass: equals is not final. Supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.",
+		assertTrue("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.",
 				methodIsFinal("equals", Object.class));
-		assertTrue("Subclass: hashCode is not final. Supply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.",
+		assertTrue("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.",
 				methodIsFinal("hashCode"));
 	}
 
