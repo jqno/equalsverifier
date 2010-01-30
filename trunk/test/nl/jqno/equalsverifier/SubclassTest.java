@@ -44,7 +44,7 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	public void blindlyEqualsReferenceEqualsSub() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
 				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
-		verifyFailure("Subclass: BlindlyEqualsPoint:1,1 equals EqualSubclassForBlindlyEqualsPoint:1,1.", ev);
+		verifyFailure("Subclass:\n  BlindlyEqualsPoint:1,1\nequals subclass instance\n  EqualSubclassForBlindlyEqualsPoint:1,1", ev);
 	}
 	
 	@Test
@@ -65,7 +65,7 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	public void canEqualReferenceEqualsSub() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
-		verifyFailure("Subclass: CanEqualPoint:1,1 equals EqualSubclassForCanEqualPoint:1,1.", ev);
+		verifyFailure("Subclass:\n  CanEqualPoint:1,1\nequals subclass instance\n  EqualSubclassForCanEqualPoint:1,1", ev);
 	}
 	
 	@Test
@@ -86,14 +86,14 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	public void invalidWithRedefinedSuperclass() {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
 		ev.with(Feature.REDEFINED_SUPERCLASS);
-		verifyFailure("Redefined superclass: ColorBlindColorPoint:1,1,YELLOW may not equal Point:1,1, but it does.", ev);
+		verifyFailure("Redefined superclass:\n  ColorBlindColorPoint:1,1,YELLOW\nmay not equal superclass instance\n  Point:1,1\nbut it does.", ev);
 	}
 	
 	@Test
 	public void equalsMethodFinalSoNoRedefinedSubclassNecessary() {
 		EqualsVerifier<RedeFinalPoint> ev = EqualsVerifier.forClass(RedeFinalPoint.class)
 				.withRedefinedSubclass(RedeFinalSubPoint.class);
-		verifyFailure("Subclass: RedeFinalPoint has a final equals method; don't need to supply a redefined subclass.", ev);
+		verifyFailure("Subclass: RedeFinalPoint has a final equals method.\nNo need to supply a redefined subclass.", ev);
 	}
 	
 	@Test

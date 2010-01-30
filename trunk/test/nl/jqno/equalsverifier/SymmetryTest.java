@@ -21,13 +21,13 @@ public class SymmetryTest extends EqualsVerifierTestBase {
 	@Test
 	public void symmetryEquals() {
 		EqualsVerifier<SymmetryEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryEqualsBrokenPoint.class);
-		verifyFailure("Symmetry: SymmetryEqualsBrokenPoint:1,1 is not symmetric to SymmetryEqualsBrokenPoint:1,1", ev);
+		verifyFailure("Symmetry: objects are not symmetric:\n  SymmetryEqualsBrokenPoint:1,1\nand\n  SymmetryEqualsBrokenPoint:1,1", ev);
 	}
 	
 	@Test
 	public void symmetryNotEquals() {
 		EqualsVerifier<SymmetryNotEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryNotEqualsBrokenPoint.class);
-		verifyFailure("Symmetry: SymmetryNotEqualsBrokenPoint:1,1 is not symmetric to SymmetryNotEqualsBrokenPoint:2,2", ev);
+		verifyFailure("Symmetry: objects are not symmetric:\n  SymmetryNotEqualsBrokenPoint:1,1\nand\n  SymmetryNotEqualsBrokenPoint:2,2", ev);
 	}
 	
 	static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {

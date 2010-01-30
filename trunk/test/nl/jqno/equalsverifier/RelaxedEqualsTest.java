@@ -49,6 +49,6 @@ public class RelaxedEqualsTest extends EqualsVerifierTestBase {
 	public void mixUpEqualAndUnequalExamples() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(a);
-		verifyFailure("Precondition: the same object (Multiple:1*2=2) appears twice.", ev);
+		verifyFailure("Precondition: the same object appears twice:\n  Multiple:1*2=2", ev);
 	}
 }

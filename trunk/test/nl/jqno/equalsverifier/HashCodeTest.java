@@ -23,8 +23,8 @@ public class HashCodeTest extends EqualsVerifierTestBase {
 	@Test
 	public void invalidHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev = EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		verifyFailure("hashCode: hashCode for HashCodeBrokenPoint:1,1 should be equal to" +
-				" hashCode for HashCodeBrokenPoint:1,1.", ev);
+		// Cut off error message because hashCode will be different each time.
+		verifyFailure("hashCode: hashCodes should be equal:\n  HashCodeBrokenPoint:1,1 (", ev);
 	}
 	
 	@Test

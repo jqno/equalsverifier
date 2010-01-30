@@ -23,13 +23,13 @@ public class UnredefinableSubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalsFinal() {
 		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
-		verifyFailure("Subclass: equals is not final. Supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.", ev);
+		verifyFailure("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.", ev);
 	}
 	
 	@Test
 	public void hashCodeFinal() {
 		EqualsVerifier<FinalEqualsPoint> ev = EqualsVerifier.forClass(FinalEqualsPoint.class);
-		verifyFailure("Subclass: hashCode is not final. Supply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.", ev);
+		verifyFailure("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.", ev);
 	}
 	
 	@Test

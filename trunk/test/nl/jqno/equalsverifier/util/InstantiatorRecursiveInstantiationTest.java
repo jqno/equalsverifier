@@ -32,7 +32,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$Node].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$Node].",
 					e.getMessage());
 		}
 	}
@@ -47,7 +47,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$NodeArray].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$NodeArray].",
 					e.getMessage());
 		}
 	}
@@ -78,7 +78,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeB].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeB].",
 					e.getMessage());
 		}
 	}
@@ -93,7 +93,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure. Add prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayB].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayB].",
 					e.getMessage());
 		}
 	}

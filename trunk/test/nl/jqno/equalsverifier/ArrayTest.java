@@ -23,7 +23,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalButNotSamePrimitiveArray() {
 		EqualsVerifier<PrimitiveArrayContainer> ev = EqualsVerifier.forClass(PrimitiveArrayContainer.class);
-		verifyFailure("Array: == used instead of Arrays.equals().", ev);
+		verifyFailure("Array: == used instead of Arrays.equals() for field array.", ev);
 		
 		EqualsVerifier.forClass(PrimitiveArrayContainerCorrect.class).verify();
 	}
@@ -31,7 +31,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	@Test
 	public void multidimensionalArrayShouldUseDeepEquals() {
 		EqualsVerifier<MultidimensionalArrayContainer> ev = EqualsVerifier.forClass(MultidimensionalArrayContainer.class);
-		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", ev);
+		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals() for field array.", ev);
 		
 		EqualsVerifier.forClass(MultidimensionalArrayContainerCorrect.class).verify();
 	}
@@ -39,7 +39,7 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	@Test
 	public void ObjectArrayShouldUseDeepEquals() {
 		EqualsVerifier<ObjectArrayContainer> ev = EqualsVerifier.forClass(ObjectArrayContainer.class);
-		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals().", ev);
+		verifyFailure("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals() for field array.", ev);
 		
 		EqualsVerifier.forClass(ObjectArrayContainerCorrect.class).verify();
 	}

@@ -23,7 +23,7 @@ public class ReflexivityTest extends EqualsVerifierTestBase {
 	@Test
 	public void reflexivity() {
 		EqualsVerifier<ReflexivityBrokenPoint> ev = EqualsVerifier.forClass(ReflexivityBrokenPoint.class);
-		verifyFailure("Reflexivity: ReflexivityBrokenPoint:1,1 does not equal itself.", ev);
+		verifyFailure("Reflexivity: object does not equal itself:\n  ReflexivityBrokenPoint:1,1", ev);
 	}
 	
 	static class ReflexivityBrokenPoint extends Point {
