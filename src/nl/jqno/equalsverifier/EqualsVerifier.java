@@ -108,19 +108,6 @@ public final class EqualsVerifier<T> {
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	
-	@SuppressWarnings("serial")
-	private static final List<Class<?>> CORE_CLASSES = new ArrayList<Class<?>>() {{
-		add(Object.class);
-		add(Class.class);
-		add(String.class);
-		add(Byte.class);
-		add(Double.class);
-		add(Float.class);
-		add(Integer.class);
-		add(Long.class);
-		add(Short.class);
-	}};
-	
 	/**
 	 * Factory method. For general use.
 	 * 
@@ -289,10 +276,6 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			if (CORE_CLASSES.contains(klass) || klass.isEnum()) {
-				return;
-			}
-			
 			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator);
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
