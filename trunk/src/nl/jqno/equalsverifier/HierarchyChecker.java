@@ -28,21 +28,23 @@ import nl.jqno.equalsverifier.util.Instantiator;
 class HierarchyChecker<T> {
 	private final Class<T> klass;
 	private final Instantiator<T> instantiator;
-	private final EnumSet<Feature> features;
+	private final EnumSet<Warning> warningsToSuppress;
+	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final boolean klassIsFinal;
 	
 	private T reference;
 	private T other;
 
-	public HierarchyChecker(Instantiator<T> instantiator, EnumSet<Feature> features, Class<? extends T> redefinedSubclass) {
-		if (features.contains(Feature.WEAK_INHERITANCE_CHECK) && redefinedSubclass != null) {
+	public HierarchyChecker(Instantiator<T> instantiator, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
+		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		
 		this.instantiator = instantiator;
 		this.klass = instantiator.getKlass();
-		this.features = EnumSet.copyOf(features);
+		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.redefinedSubclass = redefinedSubclass;
 		
 		klassIsFinal = Modifier.isFinal(klass.getModifiers());
@@ -55,7 +57,7 @@ class HierarchyChecker<T> {
 		checkSubclass();
 		
 		checkRedefinedSubclass();
-		if (!features.contains(Feature.WEAK_INHERITANCE_CHECK)) {
+		if (!warningsToSuppress.contains(Warning.STRICT_INHERITANCE)) {
 			checkFinalEqualsMethod();
 		}
 	}
@@ -68,7 +70,7 @@ class HierarchyChecker<T> {
 
 		Object equalSuper = instantiateSuperclass(superclass);
 		
-		if (features.contains(Feature.REDEFINED_SUPERCLASS)) {
+		if (hasRedefinedSuperclass) {
 			assertFalse("Redefined superclass:\n  " + reference + "\nmay not equal superclass instance\n  " + equalSuper + "\nbut it does.",
 					reference.equals(equalSuper));
 		}

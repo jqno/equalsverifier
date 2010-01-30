@@ -29,15 +29,15 @@ import nl.jqno.equalsverifier.util.Instantiator;
 
 class FieldsChecker<T> {
 	private final Instantiator<T> instantiator;
-	private final EnumSet<Feature> features;
+	private final EnumSet<Warning> warningsToSuppress;
 
-	public FieldsChecker(Instantiator<T> instantiator, EnumSet<Feature> featureSet) {
+	public FieldsChecker(Instantiator<T> instantiator, EnumSet<Warning> warningsToSuppress) {
 		this.instantiator = instantiator;
-		this.features = EnumSet.copyOf(featureSet);
+		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 	}
 	
 	public void checkNull() {
-		if (features.contains(Feature.FIELDS_ARE_NEVER_NULL)) {
+		if (warningsToSuppress.contains(Warning.NULL_FIELDS)) {
 			return;
 		}
 		
@@ -49,7 +49,7 @@ class FieldsChecker<T> {
 		check(new FloatAndDoubleFieldCheck<T>());
 		check(new ArrayFieldCheck<T>());
 		
-		if (!features.contains(Feature.ALLOW_NONFINAL_FIELDS)) {
+		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
 			check(new MutableStateFieldCheck<T>());
 		}
 	}
