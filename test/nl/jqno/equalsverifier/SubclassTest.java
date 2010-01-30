@@ -39,7 +39,7 @@ import org.junit.Test;
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
  *    Scala.
  */
-public class SubclassCanEqualTest extends EqualsVerifierTestBase {
+public class SubclassTest extends EqualsVerifierTestBase {
 	@Test
 	public void blindlyEqualsReferenceEqualsSub() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
