@@ -37,14 +37,15 @@ limitations under the License.
 
 	<property name="svn.cmd" value="svn" />
 	<property name="mvn.cmd" value="mvn" />
-	<property name="project.svn" value="https://equalsverifier.googlecode.com/svn/" />
+	<property name="project.svn" value="https://equalsverifier.googlecode.com/svn" />
 	
 	<property name="publish.dir" value="${dist.dir}/publish" />
 	<property name="tag.dir" value="${publish.dir}/tag" />
 	<property name="mvn.dir" value="${publish.dir}/mvn" />
 	
-	<property name="equalsverifier.pom" value="${publish.dir}/${tag}/equalsverifier.pom" />
+	<property name="equalsverifier.pom" value="${tag.dir}/equalsverifier.pom" />
 	<property name="credentialsFile" value="google.properties" />
+	<property file="${credentialsFile}" prefix="google" />
 
 	<path id="project.classpath">
 		<pathelement location="${build.src.dir}" />
@@ -163,27 +164,38 @@ limitations under the License.
 		<fail message="Please set a version" unless="version" />
 		<fail message="Please set a tag" unless="tag" />
 	</target>
+	
+	<target name="-publish-ask">
+		<!-- Check valid input -->
+		<input message="Creating tag ${tag} for version ${version}. Continue?" validargs="y,n" addproperty="continue.answer" />
+		<condition property="continue">
+			<equals arg1="n" arg2="${continue.answer}" />
+		</condition>
+		<fail message="Build aborted by user" if="continue" />
+	</target>
 
-	<target name="publish-tag" depends="-publish-validate, deploy">
+	<target name="publish-tag" depends="-publish-validate, -checkCredentialsFile, deploy">
 		<exec dir="${basedir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="copy trunk/ tags/${tag}/" />
+			<arg line='copy ${project.svn}/trunk/ ${project.svn}/tags/${tag}/ -m "Tagged: version ${version}" --username ${google.username} --password ${google.password}' />
 		</exec>
 	</target>
 
-	<target name="publish-maven" depends="-publish-validate, deploy">
+	<target name="publish-maven" depends="-publish-validate, -checkCredentialsFile, deploy">
 		<!-- Create directories -->
 		<mkdir dir="${tag.dir}" />
 		<mkdir dir="${mvn.dir}" />
 		
 		<!-- Checkout tag -->
 		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="checkout ${project.svn}tags/${tag}" />
+			<arg line="checkout ${project.svn}/tags/${tag} --username ${google.username} --password ${google.password}" />
 		</exec>
 
 		<!-- Version bump POM file -->
 		<replace file="${equalsverifier.pom}" token="???" value="${version}" />
+		
+		<!-- Commit POM file -->
 		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line='commit -m "Version bump"' />
+			<arg line='commit -m "Version bump" --username ${google.username} --password ${google.password}' />
 		</exec>
 
 		<!-- Prepare Maven repo -->
@@ -193,10 +205,10 @@ limitations under the License.
 
 		<!-- Commit Maven repo -->
 		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="add *" />
+			<arg line="add * --username ${google.username} --password ${google.password}" />
 		</exec>
 		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line='commit -m "Deploy to Maven repo"' />
+			<arg line='commit -m "Deploy to Maven repo" --username ${google.username} --password ${google.password}' />
 		</exec>
 	</target>
 
@@ -212,7 +224,6 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 
 	<target name="publish-googlecode" depends="-publish-validate, -checkCredentialsFile, deploy">
 		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="lib/build/ant-googlecode-0.0.2.jar" name="gcupload"/>
-		<property file="${credentialsFile}" prefix="google" />
 		<gcupload 
 				username="${google.username}"
 				password="${google.password}"
@@ -233,17 +244,5 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 				verbose="true" />
 	</target>
 
-	<target name="publish" depends="-publish-validate, -checkCredentialsFile, deploy">
-		<!-- Check valid input -->
-		<input message="Creating tag ${tag} for version ${version}. Continue?" validargs="y,n" addproperty="continue.answer" />
-		<condition property="continue">
-			<equals arg1="n" arg2="${continue.answer}" />
-		</condition>
-		<fail message="Build aborted by user" if="continue" />
-
-		<!-- Do the actual deployment -->
-		<antcall target="publish-tag" />
-		<antcall target="publish-maven" />
-		<antcall target="publish-googlecode" />
-	</target>
+	<target name="publish" depends="-publish-validate, -checkCredentialsFile, deploy, -publish-ask, publish-tag, publish-maven, publish-googlecode" />
 </project>
