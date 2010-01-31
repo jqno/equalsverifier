@@ -43,7 +43,7 @@ limitations under the License.
 	<property name="tag.dir" value="${publish.dir}/tag" />
 	<property name="mvn.dir" value="${publish.dir}/mvn" />
 	
-	<property name="equalsverifier.pom" value="${tag.dir}/equalsverifier.pom" />
+	<property name="equalsverifier.pom" value="${tag.dir}/${tag}/equalsverifier.pom" />
 	<property name="credentialsFile" value="google.properties" />
 	<property file="${credentialsFile}" prefix="google" />
 
@@ -181,33 +181,39 @@ limitations under the License.
 	</target>
 
 	<target name="publish-maven" depends="-publish-validate, -checkCredentialsFile, deploy">
-		<!-- Create directories -->
 		<mkdir dir="${tag.dir}" />
 		<mkdir dir="${mvn.dir}" />
 		
-		<!-- Checkout tag -->
+		<echo message="Checking out ${project.svn}/tags/${tag}" />
 		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
 			<arg line="checkout ${project.svn}/tags/${tag} --username ${google.username} --password ${google.password}" />
 		</exec>
-
-		<!-- Version bump POM file -->
+		
+		<echo message="Bump version in ${equalsverifier.pom}" />
 		<replace file="${equalsverifier.pom}" token="???" value="${version}" />
 		
-		<!-- Commit POM file -->
-		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
+		<echo message="Committing files in ${tag.dir}" />
+		<exec dir="${tag.dir}/${tag}" executable="${svn.cmd}" failonerror="true">
 			<arg line='commit -m "Version bump" --username ${google.username} --password ${google.password}' />
 		</exec>
+		
+		<echo message="Checking out ${project.svn}/maven" />
+		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
+			<arg line="checkout ${project.svn}/maven --username ${google.username} --password ${google.password}" />
+		</exec>
 
-		<!-- Prepare Maven repo -->
+		<echo message="Preparing Maven repo" />
 		<exec dir="${tag.dir}" executable="${mvn.cmd}" failonerror="true">
-			<arg line="deploy:deploy-file -Durl=file://${mvn.dir} -Dfile=${equalsverifier.jar} -Dpomfile=${equalsverifier.pom}" />
+			<arg line="deploy:deploy-file -Durl=file://${mvn.dir}/maven -Dfile=${equalsverifier.jar} -DpomFile=${equalsverifier.pom}" />
 		</exec>
 
-		<!-- Commit Maven repo -->
-		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="add * --username ${google.username} --password ${google.password}" />
+		<echo message="Adding contents of ${mvn.dir}/maven to SVN" />
+		<exec dir="${mvn.dir}/maven" executable="${svn.cmd}" failonerror="true">
+			<arg line="add . --force --username ${google.username} --password ${google.password}" />
 		</exec>
-		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
+		
+		<echo message="Committing Maven repo in ${mvn.dir} to SVN" />
+		<exec dir="${mvn.dir}/maven" executable="${svn.cmd}" failonerror="true">
 			<arg line='commit -m "Deploy to Maven repo" --username ${google.username} --password ${google.password}' />
 		</exec>
 	</target>
