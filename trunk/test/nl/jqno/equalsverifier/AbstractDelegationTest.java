@@ -21,54 +21,139 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractEqualsDelegator.", ev);
+		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.", ev);
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegator> ev = EqualsVerifier.forClass(AbstractHashCodeDelegator.class);
-		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractHashCodeDelegator.", ev);
+		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.", ev);
 	}
 	
 	@Test
 	public void equalsDelegatesToAbstractMethodInField() {
 		EqualsVerifier<EqualsDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class);
-		verifyFailure("Abstract delegation: EqualsDelegatesToAbstractMethodInField's equals method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$EqualsDelegatesToAbstractMethodInField.", ev);
+		verifyFailure("Abstract delegation: EqualsDelegatesToAbstractMethodInField's equals method delegates to an abstract method.", ev);
+		
+		EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class)
+				.suppress(Warning.NULL_FIELDS)
+				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(), new AbstractDelegatorImpl())
+				.verify();
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethodInField() {
 		EqualsVerifier<HashCodeDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class);
-		verifyFailure("Abstract delegation: HashCodeDelegatesToAbstractMethodInField's hashCode method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$HashCodeDelegatesToAbstractMethodInField.", ev);
+		verifyFailure("Abstract delegation: HashCodeDelegatesToAbstractMethodInField's hashCode method delegates to an abstract method.", ev);
+		
+		EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
+				.suppress(Warning.NULL_FIELDS)
+				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(), new AbstractDelegatorImpl())
+				.verify();
 	}
 	
 	@Test
 	public void equalsInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<EqualsInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class);
 		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractEqualsDelegator.", ev);
+		
+		EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class)
+				.withPrefabValues(AbstractEqualsDelegator.class, new AbstractEqualsDelegatorImpl(1), new AbstractEqualsDelegatorImpl(2))
+				.verify();
 	}
 	
 	@Test
 	public void hashCodeInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<HashCodeInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class);
 		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractHashCodeDelegator.", ev);
+		
+		EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
+				.withPrefabValues(AbstractHashCodeDelegator.class, new AbstractHashCodeDelegatorImpl(1), new AbstractHashCodeDelegatorImpl(2))
+				.verify();
+	}
+	
+	@Test
+	public void equalsInSuperclassDelegatesToAbstractMethod() {
+		EqualsVerifier<AbstractEqualsDelegatorImpl> ev = EqualsVerifier.forClass(AbstractEqualsDelegatorImpl.class);
+		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.", ev);
+	}
+	
+	@Test
+	public void hashCodeInSuperclassDelegatesToAbstractMethod() {
+		EqualsVerifier<AbstractHashCodeDelegatorImpl> ev = EqualsVerifier.forClass(AbstractHashCodeDelegatorImpl.class);
+		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.", ev);
 	}
 	
 	static abstract class AbstractEqualsDelegator {
+		private final int i;
+		
+		AbstractEqualsDelegator(int i) {
+			this.i = i;
+		}
+		
 		abstract boolean theAnswer();
 		
 		@Override
 		public boolean equals(Object obj) {
-			return theAnswer();
+			if (!(obj instanceof AbstractEqualsDelegator)) {
+				return false;
+			}
+			if (theAnswer()) {
+				return true;
+			}
+			AbstractEqualsDelegator other = (AbstractEqualsDelegator)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	static class AbstractEqualsDelegatorImpl extends AbstractEqualsDelegator {
+		AbstractEqualsDelegatorImpl(int i) {
+			super(i);
+		}
+		
+		@Override
+		public boolean theAnswer() {
+			return false;
 		}
 	}
 	
 	static abstract class AbstractHashCodeDelegator {
-		abstract int theAnswer();
+		private final int i;
 		
+		AbstractHashCodeDelegator(int i) {
+			this.i = i;
+		}
+		
+		abstract int theAnswer();
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AbstractHashCodeDelegator)) {
+				return false;
+			}
+			AbstractHashCodeDelegator other = (AbstractHashCodeDelegator)obj;
+			return i == other.i;
+		}
+
 		@Override
 		public int hashCode() {
-			return theAnswer();
+			return i + theAnswer();
+		}
+	}
+	
+	static class AbstractHashCodeDelegatorImpl extends AbstractHashCodeDelegator {
+		AbstractHashCodeDelegatorImpl(int i) {
+			super(i);
+		}
+		
+		@Override
+		public int theAnswer() {
+			return 0;
 		}
 	}
 	
@@ -76,11 +161,18 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 		abstract void abstractDelegation();
 	}
 	
+	static final class AbstractDelegatorImpl extends AbstractDelegator {
+		@Override
+		public void abstractDelegation() {}
+	}
+	
 	static final class EqualsDelegatesToAbstractMethodInField {
 		final AbstractDelegator ad;
+		final int i;
 		
-		EqualsDelegatesToAbstractMethodInField(AbstractDelegator ad) {
+		EqualsDelegatesToAbstractMethodInField(AbstractDelegator ad, int i) {
 			this.ad = ad;
+			this.i = i;
 		}
 		
 		@Override
@@ -88,40 +180,44 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 			if (!(obj instanceof EqualsDelegatesToAbstractMethodInField)) {
 				return false;
 			}
-			if (ad == null) {
-				return ((EqualsDelegatesToAbstractMethodInField)obj).ad == null;
-			}
 			ad.abstractDelegation();
-			throw new IllegalStateException("Should have failed earlier.");
+			EqualsDelegatesToAbstractMethodInField other = (EqualsDelegatesToAbstractMethodInField)obj;
+			return i == other.i;
 		}
 		
 		@Override
 		public int hashCode() {
-			return 0;
+			return i;
 		}
 	}
 	
 	static final class HashCodeDelegatesToAbstractMethodInField {
 		final AbstractDelegator ad;
+		final int i;
 		
-		HashCodeDelegatesToAbstractMethodInField(AbstractDelegator ad) {
+		HashCodeDelegatesToAbstractMethodInField(AbstractDelegator ad, int i) {
 			this.ad = ad;
+			this.i = i;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			return true;
+			if (!(obj instanceof HashCodeDelegatesToAbstractMethodInField)) {
+				return false;
+			}
+			HashCodeDelegatesToAbstractMethodInField other = (HashCodeDelegatesToAbstractMethodInField)obj;
+			return i == other.i;
 		}
 		
 		@Override
 		public int hashCode() {
 			ad.abstractDelegation();
-			throw new IllegalStateException("Should have failed earlier.");
+			return i;
 		}
 	}
 	
 	static final class EqualsInFieldDelegatesToAbstractMethod {
-		AbstractEqualsDelegator aed;
+		final AbstractEqualsDelegator aed;
 		
 		EqualsInFieldDelegatesToAbstractMethod(AbstractEqualsDelegator aed) {
 			this.aed = aed;
@@ -143,7 +239,7 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	}
 	
 	static final class HashCodeInFieldDelegatesToAbstractMethod {
-		AbstractHashCodeDelegator ahcd;
+		final AbstractHashCodeDelegator ahcd;
 		
 		HashCodeInFieldDelegatesToAbstractMethod(AbstractHashCodeDelegator ahcd) {
 			this.ahcd = ahcd;
