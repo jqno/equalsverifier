@@ -20,7 +20,9 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import nl.jqno.equalsverifier.util.Instantiator;
 
@@ -104,9 +106,10 @@ public final class EqualsVerifier<T> {
 	private final List<T> unequalExamples;
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
-	private boolean verbose = false;
+	private final Map<Class<?>, List<?>> prefabValues = new HashMap<Class<?>, List<?>>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
+	private boolean verbose = false;
 	
 	/**
 	 * Factory method. For general use.
@@ -215,7 +218,13 @@ public final class EqualsVerifier<T> {
 	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
 	 */
 	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherKlass, S first, S second) {
+		List<S> values = new ArrayList<S>();
+		values.add(first);
+		values.add(second);
+		prefabValues.put(otherKlass, values);
+		
 		instantiator.addPrefabValues(otherKlass, first, second);
+		
 		return this;
 	}
 	
@@ -278,7 +287,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator);
+			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator, prefabValues);
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
