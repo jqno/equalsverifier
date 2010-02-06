@@ -16,7 +16,15 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
-
+ 	<developers>
+		<developer>
+			<id>Jan</id>
+			<name>Jan Ouwens</name>
+			<email>jan.ouwens@gmail.com</email>
+			<url>http://www.jqno.nl</url>
+			<timezone>Central European Time</timezone>
+		</developer>
+	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>org.objenesis</groupId>
