@@ -25,7 +25,7 @@ import org.junit.Test;
 
 public class ConstructorsTest extends EqualsVerifierTestBase {
 	@Test
-	public void klassSuccess() {
+	public void classSuccess() {
 		EqualsVerifier.forClass(FinalPoint.class).verify();
 	}
 	
@@ -55,6 +55,13 @@ public class ConstructorsTest extends EqualsVerifierTestBase {
 		
 		EqualsVerifier.forExamples(first, second, third)
 				.withRedefinedSubclass(CanEqualColorPoint.class)
+				.verify();
+	}
+	
+	@Test
+	public void classWithPrefabExamples() {
+		EqualsVerifier.forClass(FinalPoint.class)
+				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
 				.verify();
 	}
 }
