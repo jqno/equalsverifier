@@ -51,7 +51,7 @@ public class OutputTest {
 		
 		try {
 			EqualsVerifier.forClass(Point.class)
-					.verbose()
+					.debug()
 					.verify();
 		}
 		catch (AssertionError ignored) {}

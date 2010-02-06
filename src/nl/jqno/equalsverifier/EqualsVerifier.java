@@ -260,9 +260,11 @@ public final class EqualsVerifier<T> {
 	 * {@link AssertionError}, a stacktrace will also be printed to
 	 * {@link System#err}.
 	 * 
+	 * Primarily intended for debugging purposes.
+	 * 
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public EqualsVerifier<T> verbose() {
+	public EqualsVerifier<T> debug() {
 		verbose = true;
 		return this;
 	}
