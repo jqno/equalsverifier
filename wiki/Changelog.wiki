@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.6.1 ==
+  * ... use `#withPrefabValues()` for fields which delegate to abstract methods again. ([http://code.google.com/p/equalsverifier/issues/detail?id=14 Issue 14])
+  * ... access the `#verify()` method more quickly using autocompletion in IDEs. (The method `#verbose()` has been renamed to `#debug()`.)
+
 == Version 0.6 ==
   * ... use a more consistent API. `#with(Feature)` is now `#suppress(Warning)`, which feels more Java-y. Former features that were not warnings, are now proper methods on `EqualsVerifier`: `#verbose()` and `#withRedefinedSuperclass()`.
   * ... get better error messages:
