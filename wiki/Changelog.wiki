@@ -6,6 +6,9 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.6.2 ==
+  * ... use `#withPrefabValues()` for recursive data structure fields in superclasses again. ([http://code.google.com/p/equalsverifier/issues/detail?id=20 Issue 20])
+
 == Version 0.6.1 ==
   * ... use `#withPrefabValues()` for fields which delegate to abstract methods again. ([http://code.google.com/p/equalsverifier/issues/detail?id=14 Issue 14])
   * ... access the `#verify()` method more quickly using autocompletion in IDEs. (The method `#verbose()` has been renamed to `#debug()`.)
