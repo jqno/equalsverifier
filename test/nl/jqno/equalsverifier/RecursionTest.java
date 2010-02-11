@@ -14,9 +14,19 @@
  */
 package nl.jqno.equalsverifier;
 
+import org.junit.Before;
 import org.junit.Test;
 
 public class RecursionTest extends EqualsVerifierTestBase {
+	private Node one;
+	private Node two;
+	
+	@Before
+	public void createSomeNodes() {
+		one = new Node(null);
+		two = new Node(new Node(null));
+	}
+	
 	@Test
 	public void classRecursiveFail() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
@@ -25,22 +35,39 @@ public class RecursionTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void examplesRecursiveFail() {
-		Node one = new Node(null);
-		Node two = new Node(new Node(null));
 		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(one, two);
 		verifyFailure("Recursive datastructure.\nAdd prefab values for one of the following classes:", ev);
 	}
 	
 	@Test
 	public void recursiveWithPrefabValues() {
-		Node one = new Node(null);
-		Node two = new Node(new Node(null));
 		EqualsVerifier.forClass(Node.class)
 				.withPrefabValues(Node.class, one, two)
 				.verify();
 	}
 	
-	static final class Node {
+	@Test
+	public void recursiveWithPrefabValuesForSuper() {
+		EqualsVerifier.forClass(SubNode.class)
+				.withPrefabValues(Node.class, one, two)
+				.verify();
+	}
+	
+	@Test
+	public void recursiveClassContainerWithPrefabValues() {
+		EqualsVerifier.forClass(NodeContainer.class)
+				.withPrefabValues(Node.class, one, two)
+				.verify();
+	}
+	
+	@Test
+	public void recursiveClassContainerWithPrefabValuesForSuper() {
+		EqualsVerifier.forClass(SubNodeContainer.class)
+				.withPrefabValues(Node.class, one, two)
+				.verify();
+	}
+	
+	static class Node {
 		final Node node;
 		
 		Node(Node node) {
@@ -48,7 +75,7 @@ public class RecursionTest extends EqualsVerifierTestBase {
 		}
 		
 		@Override
-		public boolean equals(Object obj) {
+		public final boolean equals(Object obj) {
 			if (!(obj instanceof Node)) {
 				return false;
 			}
@@ -57,8 +84,42 @@ public class RecursionTest extends EqualsVerifierTestBase {
 		}
 		
 		@Override
-		public int hashCode() {
+		public final int hashCode() {
 			return node == null ? 0 : 1 + node.hashCode();
+		}
+	}
+	
+	static class SubNode extends Node {
+		SubNode(Node node) {
+			super(node);
+		}
+	}
+	
+	static class NodeContainer {
+		final Node node;
+		
+		NodeContainer(Node node) {
+			this.node = node;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof NodeContainer)) {
+				return false;
+			}
+			NodeContainer other = (NodeContainer)obj;
+			return node == null ? other.node == null : node.equals(other.node);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return node == null ? 0 : node.hashCode();
+		}
+	}
+	
+	static class SubNodeContainer extends NodeContainer {
+		public SubNodeContainer(Node node) {
+			super(node);
 		}
 	}
 }
