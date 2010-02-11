@@ -66,6 +66,7 @@ public class AbstractDelegationChecker<T> {
 		S instance = getPrefabValue(superclass);
 		if (instance == null) {
 			Instantiator<S> superInstantiator = Instantiator.forClass(superclass);
+			superInstantiator.copyPrefabValues(instantiator);
 			instance = superInstantiator.instantiate();
 			superInstantiator.scramble(instance);
 		}
