@@ -132,6 +132,10 @@ class ExamplesChecker<T> {
 	}
 
 	private void checkHashCode(T reference, T other) {
+		if (!reference.equals(other)) {
+			return;
+		}
+		
 		assertEquals("hashCode: hashCodes should be equal:\n  " + reference + " (" + reference.hashCode() + ")\nand\n  " + other + " (" +  other.hashCode() + ")",
 				reference.hashCode(), other.hashCode());
 	}
