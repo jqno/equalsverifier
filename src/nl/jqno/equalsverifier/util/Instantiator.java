@@ -303,14 +303,7 @@ public class Instantiator<T> {
 	 * @param obj The object on which {@code field} is to be set to null.
 	 */
 	public void nullField(Field field, Object obj) {
-		if (field.getType().isPrimitive()) {
-			return;
-		}
-		int modifiers = field.getModifiers();
-		if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
-			return;
-		}
-		if (!canBeModifiedReflectively(field)) {
+		if (field.getType().isPrimitive() || !canBeModifiedReflectively(field)) {
 			return;
 		}
 		
@@ -478,21 +471,23 @@ public class Instantiator<T> {
 	}
 
 	/**
-	 * Determines if the given field belongs to {@code T}, and consequently, if
-	 * it can be modified using reflection.
-	 * <p>
-	 * The reason for adding this method is that CGLib, which is a dependency
-	 * of {@code Instantiator}, adds several fields to classes that it creates.
-	 * If they are changed using reflection, exceptions are thrown. Hence,
-	 * client code that wants to use reflection to change fields on objects
-	 * that are created by {@code Instantiator}, must first verify if this is
-	 * possible using this method.
+	 * Determines whether the {@code field} can be modified using reflection.
 	 * 
 	 * @param field The field that needs to be checked.
 	 * @return Whether or not the given field can be modified reflectively.
 	 */
 	public static boolean canBeModifiedReflectively(Field field) {
-		return !field.getName().startsWith("CGLIB$");
+		int modifiers = field.getModifiers();
+		if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
+			return false;
+		}
+		// CGLib, which is used by this class, adds several fields to classes
+		// that it creates. If they are changed using reflection, exceptions
+		// are thrown.
+		if (field.getName().startsWith("CGLIB$")) {
+			return false;
+		}
+		return true;
 	}
 	
 	private Object getNextPrefabValue(Class<?> type, Object currentValue) {
@@ -537,10 +532,6 @@ public class Instantiator<T> {
 	}
 
 	private void copyField(Field field, Object original, Object clone) {
-		int modifiers = field.getModifiers();
-		if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
-			return;
-		}
 		if (!canBeModifiedReflectively(field)) {
 			return;
 		}
