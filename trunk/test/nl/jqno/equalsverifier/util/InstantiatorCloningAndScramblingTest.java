@@ -175,7 +175,9 @@ public class InstantiatorCloningAndScramblingTest {
 
 	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> klass) throws IllegalAccessException {
 		for (Field field : klass.getDeclaredFields()) {
-			assertEquals(field.get(original), field.get(clone));
+			if (Instantiator.canBeModifiedReflectively(field)) {
+				assertEquals(field.get(original), field.get(clone));
+			}
 		}
 	}
 	

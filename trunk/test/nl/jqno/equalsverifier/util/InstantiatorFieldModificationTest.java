@@ -80,10 +80,12 @@ public class InstantiatorFieldModificationTest {
 		
 		assertEquals(reference, changed);
 		for (Field field : AllTypesContainer.class.getDeclaredFields()) {
-			instantiator.changeField(field, changed);
-			assertFalse(reference.equals(changed));
-			instantiator.changeField(field, reference);
-			assertEquals(reference, changed);
+			if (Instantiator.canBeModifiedReflectively(field)) {
+				instantiator.changeField(field, changed);
+				assertFalse(reference.equals(changed));
+				instantiator.changeField(field, reference);
+				assertEquals(reference, changed);
+			}
 		}
 	}
 	
@@ -137,10 +139,12 @@ public class InstantiatorFieldModificationTest {
 		
 		assertEquals(reference, changed);
 		for (Field field : AllArrayTypesContainer.class.getDeclaredFields()) {
-			instantiator.changeArrayElement(field.get(changed), 0);
-			assertFalse(reference.equals(changed));
-			instantiator.changeArrayElement(field.get(reference), 0);
-			assertEquals(reference, changed);
+			if (Instantiator.canBeModifiedReflectively(field)) {
+				instantiator.changeArrayElement(field.get(changed), 0);
+				assertFalse(reference.equals(changed));
+				instantiator.changeArrayElement(field.get(reference), 0);
+				assertEquals(reference, changed);
+			}
 		}
 	}
 	
