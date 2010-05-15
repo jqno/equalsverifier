@@ -335,8 +335,7 @@ public class Instantiator<T> {
 	 * @param obj The object on which {@code field} is to be modified.
 	 */
 	public void changeField(Field field, Object obj) {
-		int modifiers = field.getModifiers();
-		if (Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers)) {
+		if (!canBeModifiedReflectively(field)) {
 			return;
 		}
 		
@@ -477,6 +476,9 @@ public class Instantiator<T> {
 	 * @return Whether or not the given field can be modified reflectively.
 	 */
 	public static boolean canBeModifiedReflectively(Field field) {
+		if (field.isSynthetic()) {
+			return false;
+		}
 		int modifiers = field.getModifiers();
 		if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
 			return false;
