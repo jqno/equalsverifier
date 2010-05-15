@@ -56,7 +56,9 @@ public class FieldIterable implements Iterable<Field> {
 		Class<?> i = klass;
 		while (i != null && i != Object.class) {
 			for (Field field : i.getDeclaredFields()) {
-				result.add(field);
+				if (!field.isSynthetic()) {
+					result.add(field);
+				}
 			}
 			i = i.getSuperclass();
 		}

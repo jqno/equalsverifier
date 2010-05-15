@@ -108,6 +108,12 @@ public class FieldIterableTest {
 		assertFalse(iterable.iterator().hasNext());
 	}
 	
+	@Test
+	public void ignoreSyntheticFields() {
+		FieldIterable iterable = new FieldIterable(Outer.Inner.class);
+		assertFalse(iterable.iterator().hasNext());
+	}
+	
 	@SuppressWarnings("serial")
 	private static final Set<Field> FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
 		try {
@@ -173,4 +179,8 @@ public class FieldIterableTest {
 	}
 	
 	interface Interface {}
+	
+	static class Outer {
+		class Inner {}
+	}
 }
