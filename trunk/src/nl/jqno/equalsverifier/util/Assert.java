@@ -16,12 +16,16 @@
 package nl.jqno.equalsverifier.util;
 
 /**
- * Alternative for org.junit.Assert, so we can assert things but not have a
+ * Alternative for org.junit.Assert, so we can assert things without having a
  * dependency on JUnit.
  * 
  * @author Jan Ouwens
  */
 public class Assert {
+	private Assert() {
+		// Do not instantiate
+	}
+	
 	/**
 	 * Asserts that two ints are equal to one another. Does nothing if they
 	 * are; throws an AssertionError if they're not.
