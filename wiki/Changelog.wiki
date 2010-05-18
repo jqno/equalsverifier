@@ -6,6 +6,11 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.6.3 ==
+  * ... test the equals/hashCode contract for classes that don't override `equals` or `hashCode`. ([http://code.google.com/p/equalsverifier/issues/detail?id=23 Issue 23])
+  * ... use `EqualsVerifier` in conjuction with the [http://www.eclemma.org/ EclEmma] code coverage tool. ([http://code.google.com/p/equalsverifier/issues/detail?id=22 Issue 22])
+  * ... test classes that contain (indirect) references to non-static inner classes, without getting messages about recursive data structures. ([http://code.google.com/p/equalsverifier/issues/detail?id=21 Issue 21])
+
 == Version 0.6.2 ==
   * ... use `#withPrefabValues()` for recursive data structure fields in superclasses again. ([http://code.google.com/p/equalsverifier/issues/detail?id=20 Issue 20])
 
