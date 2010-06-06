@@ -38,7 +38,7 @@ public class AbstractDelegationChecker<T> {
 	public void check() {
 		checkAbstractDelegationInFields();
 
-		T instance = getPrefabValue(klass);
+		T instance = this.<T>getPrefabValue(klass);
 		if (instance == null) {
 			instance = instantiator.instantiate();
 			instantiator.scramble(instance);
@@ -63,7 +63,7 @@ public class AbstractDelegationChecker<T> {
 	}
 	
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
-		S instance = getPrefabValue(superclass);
+		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
 			Instantiator<S> superInstantiator = Instantiator.forClass(superclass);
 			superInstantiator.copyPrefabValues(instantiator);
