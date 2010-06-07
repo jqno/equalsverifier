@@ -2,6 +2,19 @@
 
 <wiki:toc max_depth="2" />
 
+=Error messages=
+==Abstract delegation==
+<pre>
+Abstract delegation: !MyClass's equals method delegates to an abstract method
+Abstract delegation: !MyClass's hashCode method delegates to an abstract method
+</pre>
+
+This error may occur when the class under test, one of its fields, or its superclass, is abstract, and their `equals` or `hashCode` method calls an abstract method.
+
+!EqualsVerifier creates instances of the class under test and its superclass and repeatedly calls their `equals` and `hashCode` methods. However, it can't create implementations of abstract methods. The "Abstract delegation" error therefore occurs when calling `equals` or `hashCode` would throw an `AbstractMethodError`.
+
+If one of the fields has an abstract type, the error can be avoided by calling `withPrefabValues` for that type. For other cases, there is currently no solution. Try rewriting the class so that `equals` and `hashCode` can use fields, instead of the abstract method.
+
 =Build=
 ==Can I use !EqualsVerifier with Maven?==
 Yes! Click [Maven here] for details.
@@ -10,9 +23,9 @@ Yes! Click [Maven here] for details.
 First, check out the code. You can open the project in Eclipse, or you can run ANT directly. Note that Java 6 is required to compile the project, although the ANT script will generate Java 5 compatible JAR files.
 
 ==I get generics errors while building==
-{{{
+<pre>
 type parameters of <S>S cannot be determined; no unique maximal instance exists for 
 type variable S with upper bounds T,java.lang.Object
-}}}
+</pre>
 
 !EqualsVerifier makes heavy use of generics. Sun's Java compiler has a known bug regarding generics. Since I use Eclipse and OpenJDK, which do not exhibit this bug, it's possible I write code that triggers the bug, and the code might not compile. If this happens, please let me know in an issue and I'll fix it.
