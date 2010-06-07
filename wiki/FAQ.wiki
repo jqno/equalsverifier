@@ -1,5 +1,7 @@
 #summary Frequently Asked Questions.
 
+<wiki:toc max_depth="2" />
+
 =Build=
 ==Can I use !EqualsVerifier with Maven?==
 Yes! Click [Maven here] for details.
@@ -7,7 +9,7 @@ Yes! Click [Maven here] for details.
 ==How do I build !EqualsVerifier?==
 First, check out the code. You can open the project in Eclipse, or you can run ANT directly. Note that Java 6 is required to compile the project, although the ANT script will generate Java 5 compatible JAR files.
 
-==I get a strange generics error while building==
+==I get generics errors while building==
 {{{
 type parameters of <S>S cannot be determined; no unique maximal instance exists for 
 type variable S with upper bounds T,java.lang.Object
