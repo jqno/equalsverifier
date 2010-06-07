@@ -1,6 +1,9 @@
 #summary Frequently Asked Questions.
 
-=Practical things=
+=Build=
+==Can I use !EqualsVerifier with Maven?==
+Yes! Click [Maven here] for details.
+
 ==How do I build !EqualsVerifier?==
 First, check out the code. You can open the project in Eclipse, or you can run ANT directly. Note that Java 6 is required to compile the project, although the ANT script will generate Java 5 compatible JAR files.
 
