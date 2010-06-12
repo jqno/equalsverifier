@@ -15,23 +15,23 @@
  */
 package nl.jqno.equalsverifier;
 
-
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class NonNullityTest extends EqualsVerifierTestBase {
+public class NonNullityTest {
 	@Test
 	public void throwsNullPointerException() {
 		EqualsVerifier<NullPointerExceptionBrokenPoint> ev =
 				EqualsVerifier.forClass(NullPointerExceptionBrokenPoint.class);
-		verifyFailure("Non-nullity: NullPointerException thrown", ev);
+		assertFailure(ev, "Non-nullity: NullPointerException thrown");
 	}
 	
 	@Test
 	public void nullValue() {
 		EqualsVerifier<NullBrokenPoint> ev = EqualsVerifier.forClass(NullBrokenPoint.class);
-		verifyFailure("Non-nullity: true returned for null value", ev);
+		assertFailure(ev, "Non-nullity: true returned for null value");
 	}
 	
 	static class NullPointerExceptionBrokenPoint extends Point {

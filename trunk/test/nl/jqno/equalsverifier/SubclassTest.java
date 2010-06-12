@@ -15,8 +15,10 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
+import java.awt.Point;
+
 import nl.jqno.equalsverifier.points.BlindlyEqualsColorPoint;
 import nl.jqno.equalsverifier.points.BlindlyEqualsPoint;
 import nl.jqno.equalsverifier.points.CanEqualColorPoint;
@@ -39,12 +41,12 @@ import org.junit.Test;
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
  *    Scala.
  */
-public class SubclassTest extends EqualsVerifierTestBase {
+public class SubclassTest {
 	@Test
 	public void blindlyEqualsReferenceEqualsSub() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
 				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
-		verifyFailure("Subclass:\n  BlindlyEqualsPoint:1,1\nequals subclass instance\n  EqualSubclassForBlindlyEqualsPoint:1,1", ev);
+		assertFailure(ev, "Subclass", "equals subclass instance", BlindlyEqualsPoint.class.getSimpleName(), EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
 	}
 	
 	@Test
@@ -65,7 +67,7 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	public void canEqualReferenceEqualsSub() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
-		verifyFailure("Subclass:\n  CanEqualPoint:1,1\nequals subclass instance\n  EqualSubclassForCanEqualPoint:1,1", ev);
+		assertFailure(ev, "Subclass", "equals subclass instance", CanEqualPoint.class.getSimpleName(), EqualSubclassForCanEqualPoint.class.getSimpleName());
 	}
 	
 	@Test
@@ -86,14 +88,15 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	public void invalidWithRedefinedSuperclass() {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
 		ev.withRedefinedSuperclass();
-		verifyFailure("Redefined superclass:\n  ColorBlindColorPoint:1,1,YELLOW\nmay not equal superclass instance\n  Point:1,1\nbut it does.", ev);
+		assertFailure(ev, "Redefined superclass", "may not equal superclass instance", "but it does",
+				ColorBlindColorPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
 	@Test
 	public void equalsMethodFinalSoNoRedefinedSubclassNecessary() {
 		EqualsVerifier<RedeFinalPoint> ev = EqualsVerifier.forClass(RedeFinalPoint.class)
 				.withRedefinedSubclass(RedeFinalSubPoint.class);
-		verifyFailure("Subclass: RedeFinalPoint has a final equals method.\nNo need to supply a redefined subclass.", ev);
+		assertFailure(ev, "Subclass", "has a final equals method", "No need to supply a redefined subclass", RedeFinalPoint.class.getSimpleName());
 	}
 	
 	@Test
@@ -105,32 +108,18 @@ public class SubclassTest extends EqualsVerifierTestBase {
 	
 	@Test
 	public void weakInheritanceBeforeRedefinedSubclass() {
-		try {
-			EqualsVerifier.forClass(CanEqualPoint.class)
-					.suppress(Warning.STRICT_INHERITANCE)
-					.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-					.verify();
-			fail("Assertion didn't fail");
-		}
-		catch (AssertionError e) {
-			assertEquals("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.",
-					e.getMessage());
-		}
+		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
+				.suppress(Warning.STRICT_INHERITANCE)
+				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
+		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
 	}
 	
 	@Test
 	public void weakInheritanceAfterRedefinedSubclass() {
-		try {
-			EqualsVerifier.forClass(CanEqualPoint.class)
-					.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-					.suppress(Warning.STRICT_INHERITANCE)
-					.verify();
-			fail("Assertion didn't fail");
-		}
-		catch (AssertionError e) {
-			assertEquals("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.",
-					e.getMessage());
-		}
+		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
+				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+				.suppress(Warning.STRICT_INHERITANCE);
+		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
 	}
 	
 	static class RedeFinalPoint {

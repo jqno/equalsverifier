@@ -15,11 +15,12 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
 
-public class AbstractHierarchyTest extends EqualsVerifierTestBase {
+public class AbstractHierarchyTest {
 	@Test
 	public void abstractFinalMethods() {
 		EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
@@ -39,7 +40,7 @@ public class AbstractHierarchyTest extends EqualsVerifierTestBase {
 				.verify();
 		
 		EqualsVerifier<NullThrowingColorContainer> ev = EqualsVerifier.forClass(NullThrowingColorContainer.class);
-		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
+		assertFailure(ev, "Non-nullity: equals throws NullPointerException");
 	}
 	
 	static abstract class AbstractFinalMethodsPoint {

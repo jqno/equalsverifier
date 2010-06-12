@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.CanEqualColorPoint;
 import nl.jqno.equalsverifier.points.CanEqualPoint;
 import nl.jqno.equalsverifier.points.Color;
@@ -23,7 +24,7 @@ import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class ConstructorsTest extends EqualsVerifierTestBase {
+public class ConstructorsTest {
 	@Test
 	public void classSuccess() {
 		EqualsVerifier.forClass(FinalPoint.class).verify();
@@ -44,7 +45,7 @@ public class ConstructorsTest extends EqualsVerifierTestBase {
 		Point first = new Point(1, 2);
 		Point second = new Point(2, 3);
 		EqualsVerifier<Point> ev = EqualsVerifier.forExamples(first, second);
-		verifyFailure("Subclass:", ev);
+		assertFailure(ev, "Subclass:");
 	}
 	
 	@Test

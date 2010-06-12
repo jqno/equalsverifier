@@ -15,31 +15,36 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import org.junit.Test;
 
-public class FloatAndDoubleTest extends EqualsVerifierTestBase {
+public class FloatAndDoubleTest {
+	private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
+	private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
+
 	@Test
 	public void primitiveUseFloatDotCompare() {
 		EqualsVerifier<PrimitiveFloatContainer> ev = EqualsVerifier.forClass(PrimitiveFloatContainer.class);
-		verifyFailure("Float: equals doesn't use Float.compare for field f.", ev);
+		assertFailure(ev, FLOAT, "f");
 	}
 	
 	@Test
 	public void objectUseFloatDotCompare() {
 		EqualsVerifier<ObjectFloatContainer> ev = EqualsVerifier.forClass(ObjectFloatContainer.class);
-		verifyFailure("Float: equals doesn't use Float.compare for field f.", ev);
+		assertFailure(ev, FLOAT, "f");
 	}
 	
 	@Test
 	public void primitiveUseDoubleDotCompare() {
 		EqualsVerifier<PrimitiveDoubleContainer> ev = EqualsVerifier.forClass(PrimitiveDoubleContainer.class);
-		verifyFailure("Double: equals doesn't use Double.compare for field d.", ev);
+		assertFailure(ev, DOUBLE, "d");
 	}
 	
 	@Test
 	public void objectUseDoubleDotCompare() {
 		EqualsVerifier<ObjectDoubleContainer> ev = EqualsVerifier.forClass(ObjectDoubleContainer.class);
-		verifyFailure("Double: equals doesn't use Double.compare for field d.", ev);
+		assertFailure(ev, DOUBLE, "d");
 	}
 	
 	static final class PrimitiveFloatContainer {

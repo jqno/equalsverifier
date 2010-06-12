@@ -15,13 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.FinalPoint;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class PreconditionTest extends EqualsVerifierTestBase {
+public class PreconditionTest {
+	private static final String PRECONDITION = "Precondition";
+	
 	FinalPoint first;
 	FinalPoint second;
 	
@@ -56,19 +59,19 @@ public class PreconditionTest extends EqualsVerifierTestBase {
 	@SuppressWarnings("unchecked")
 	public void incompatibleClass() {
 		EqualsVerifier ev = EqualsVerifier.forExamples(first, new Point(1, 2));
-		verifyFailure("Precondition:\n  FinalPoint:1,2\nand\n  Point:1,2\nare of different classes", ev);
+		assertFailure(ev, PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
 	@Test
 	public void allSame() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, first);
-		verifyFailure("Precondition: the same object appears twice:\n  FinalPoint:1,2", ev);
+		assertFailure(ev, PRECONDITION, "the same object appears twice", FinalPoint.class.getSimpleName());
 	}
 	
 	@Test
 	public void allEqual() {
 		FinalPoint firstest = new FinalPoint(1, 2);
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, firstest);
-		verifyFailure("Precondition: two objects are equal to each other:\n  FinalPoint:1,2", ev);
+		assertFailure(ev, PRECONDITION, "two objects are equal to each other", FinalPoint.class.getSimpleName());
 	}
 }

@@ -15,12 +15,13 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Multiple;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelaxedEqualsTest extends EqualsVerifierTestBase {
+public class RelaxedEqualsTest {
 	private Multiple a;
 	private Multiple b;
 	private Multiple x;
@@ -35,7 +36,7 @@ public class RelaxedEqualsTest extends EqualsVerifierTestBase {
 	@Test
 	public void multipleFails() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forExamples(a, b);
-		verifyFailure("Precondition: two objects are equal to each other", ev);
+		assertFailure(ev, "Precondition", "two objects are equal to each other");
 	}
 	
 	@Test
@@ -49,6 +50,6 @@ public class RelaxedEqualsTest extends EqualsVerifierTestBase {
 	public void mixUpEqualAndUnequalExamples() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(a);
-		verifyFailure("Precondition: the same object appears twice:\n  Multiple:1*2=2", ev);
+		assertFailure(ev, "Precondition", "the same object appears twice", Multiple.class.getSimpleName());
 	}
 }

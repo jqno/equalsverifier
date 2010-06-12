@@ -15,12 +15,15 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import java.util.Arrays;
 
 import org.junit.Test;
 
+public class MutableStateTest {
+	private static final String MUTABILITY = "Mutability: equals depends on mutable field";
 
-public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void mutableFieldNotUsed() {
 		EqualsVerifier.forClass(MutableFieldNotUsed.class).verify();
@@ -29,7 +32,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void secondMutableFieldUsed() {
 		EqualsVerifier<SecondMutableFieldUsed> ev = EqualsVerifier.forClass(SecondMutableFieldUsed.class);
-		verifyFailure("Mutability: equals depends on mutable field second", ev);
+		assertFailure(ev, MUTABILITY, "second");
 
 		EqualsVerifier.forClass(SecondMutableFieldUsed.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -39,7 +42,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void detectMutableStateObject() {
 		EqualsVerifier<MutableObjectContainer> ev = EqualsVerifier.forClass(MutableObjectContainer.class);
-		verifyFailure("Mutability: equals depends on mutable field _object", ev);
+		assertFailure(ev, MUTABILITY, "_object");
 		
 		EqualsVerifier.forClass(MutableObjectContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -49,7 +52,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void detectMutableStateEnumValue() {
 		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forClass(MutableEnumContainer.class);
-		verifyFailure("Mutability: equals depends on mutable field _enum", ev);
+		assertFailure(ev, MUTABILITY, "_enum");
 		
 		EqualsVerifier.forClass(MutableEnumContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -61,7 +64,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 		MutableEnumContainer first = new MutableEnumContainer(null);
 		MutableEnumContainer second = new MutableEnumContainer(MutableEnumContainer.Enum.SECOND);
 		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forExamples(first, second);
-		verifyFailure("Mutability: equals depends on mutable field _enum", ev);
+		assertFailure(ev, MUTABILITY, "_enum");
 		
 		EqualsVerifier.forExamples(first, second)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -71,7 +74,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void detectMutableStateArray() {
 		EqualsVerifier<MutableArrayContainer> ev = EqualsVerifier.forClass(MutableArrayContainer.class);
-		verifyFailure("Mutability: equals depends on mutable field _array", ev);
+		assertFailure(ev, MUTABILITY, "_array");
 		
 		EqualsVerifier.forClass(MutableArrayContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -81,7 +84,7 @@ public class MutableStateTest extends EqualsVerifierTestBase {
 	@Test
 	public void detectMutableStateInt() {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-		verifyFailure("Mutability: equals depends on mutable field _int", ev);
+		assertFailure(ev, MUTABILITY, "_int");
 		
 		EqualsVerifier.forClass(MutableIntContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)

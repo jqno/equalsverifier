@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -22,7 +24,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-public class DifficultClassesTest extends EqualsVerifierTestBase {
+public class DifficultClassesTest {
 	@Test
 	public void objects() {
 		EqualsVerifier.forClass(ObjectsContainer.class).verify();
@@ -41,7 +43,7 @@ public class DifficultClassesTest extends EqualsVerifierTestBase {
 	@Test
 	public void compileTimeConstant() {
 		EqualsVerifier<CompileTimeConstant> ev = EqualsVerifier.forClass(CompileTimeConstant.class);
-		verifyFailure("Precondition: two objects are equal to each other", ev);
+		assertFailure(ev, "Precondition: two objects are equal to each other");
 	}
 	
 	@Test
