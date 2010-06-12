@@ -15,19 +15,25 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import org.junit.Test;
 
-public class SymmetryTest extends EqualsVerifierTestBase {
+public class SymmetryTest {
+	private static final String SYMMETRY = "Symmetry";
+	private static final String NOT_SYMMETRIC = "objects are not symmetric";
+	private static final String AND = "and";
+
 	@Test
 	public void symmetryEquals() {
 		EqualsVerifier<SymmetryEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryEqualsBrokenPoint.class);
-		verifyFailure("Symmetry: objects are not symmetric:\n  SymmetryEqualsBrokenPoint:1,1\nand\n  SymmetryEqualsBrokenPoint:1,1", ev);
+		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryEqualsBrokenPoint.class.getSimpleName());
 	}
 	
 	@Test
 	public void symmetryNotEquals() {
 		EqualsVerifier<SymmetryNotEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryNotEqualsBrokenPoint.class);
-		verifyFailure("Symmetry: objects are not symmetric:\n  SymmetryNotEqualsBrokenPoint:1,1\nand\n  SymmetryNotEqualsBrokenPoint:2,2", ev);
+		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryNotEqualsBrokenPoint.class.getSimpleName());
 	}
 	
 	static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {

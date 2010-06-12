@@ -15,21 +15,25 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class UnredefinableSubclassTest extends EqualsVerifierTestBase {
+public class UnredefinableSubclassTest {
+	private static final String SUBCLASS = "Subclass";
+	private static final String SUPPLY_AN_INSTANCE = "Supply an instance of a redefined subclass using withRedefinedSubclass";
+
 	@Test
 	public void equalsFinal() {
 		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
-		verifyFailure("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.", ev);
+		assertFailure(ev, SUBCLASS, "equals is not final", SUPPLY_AN_INSTANCE, "if equals cannot be final");
 	}
 	
 	@Test
 	public void hashCodeFinal() {
 		EqualsVerifier<FinalEqualsPoint> ev = EqualsVerifier.forClass(FinalEqualsPoint.class);
-		verifyFailure("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.", ev);
+		assertFailure(ev, SUBCLASS, "hashCode is not final", SUPPLY_AN_INSTANCE, "if hashCode cannot be final");
 	}
 	
 	@Test

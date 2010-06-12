@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,20 @@
  */
 package nl.jqno.equalsverifier;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.*;
 
-public class EqualsVerifierTestBase {
-	public void verifyFailure(String message, EqualsVerifier<?> equalsVerifier) {
+import org.hamcrest.Matcher;
+import org.junit.internal.matchers.CombinableMatcher;
+
+public class Helper {
+	public static void assertFailure(EqualsVerifier<?> equalsVerifier, String message, String... more) {
 		try {
 			equalsVerifier.verify();
 		}
 		catch (AssertionError e) {
-			// Using startsWith because Assert class sometimes adds extra info to the error message.
-			assertTrue("Assertion has incorrect message. Expected:\n  " + message + "\nbut was\n  " + e.getMessage(),
-					e.getMessage().startsWith(message));
+			assertThat(e.getMessage(), containsAll(message, more));
 			return;
 		}
 		catch (Throwable e) {
@@ -34,5 +36,13 @@ public class EqualsVerifierTestBase {
 			fail("Wrong exception thrown: " + e.getClass());
 		}
 		fail("Assertion didn't fail");
+	}
+	
+	private static Matcher<String> containsAll(String message, String... more) {
+		CombinableMatcher<String> result = both(containsString(message));
+		for (String m : more) {
+			result = result.and(containsString(m));
+		}
+		return result;
 	}
 }

@@ -15,33 +15,39 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
 
-public class NullFieldsTest extends EqualsVerifierTestBase {
+public class NullFieldsTest {
+	private static final String NON_NULLITY = "Non-nullity";
+	private static final String EQUALS = "equals throws NullPointerException";
+	private static final String HASHCODE = "hashCode throws NullPointerException";
+	private static final String TOSTRING = "toString throws NullPointerException";
+
 	@Test
 	public void equalsOnOwnNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnThis> ev = EqualsVerifier.forClass(EqualsThrowsNullOnThis.class);
-		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
+		assertFailure(ev, NON_NULLITY, EQUALS);
 	}
 
 	@Test
 	public void equalsOnOthersNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnOther> ev = EqualsVerifier.forClass(EqualsThrowsNullOnOther.class);
-		verifyFailure("Non-nullity: equals throws NullPointerException", ev);
+		assertFailure(ev, NON_NULLITY, EQUALS);
 	}
 	
 	@Test
 	public void hashCodeOnNullFields() {
 		EqualsVerifier<HashCodeThrowsNull> ev = EqualsVerifier.forClass(HashCodeThrowsNull.class);
-		verifyFailure("Non-nullity: hashCode throws NullPointerException", ev);
+		assertFailure(ev, NON_NULLITY, HASHCODE);
 	}
 	
 	@Test
 	public void toStringOnNullFields() {
 		EqualsVerifier<ToStringThrowsNull> ev = EqualsVerifier.forClass(ToStringThrowsNull.class);
-		verifyFailure("Non-nullity: toString throws NullPointerException", ev);
+		assertFailure(ev, NON_NULLITY, TOSTRING);
 	}
 	
 	@Test

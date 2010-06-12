@@ -15,20 +15,21 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
 
-public class WarningsMixTest extends EqualsVerifierTestBase {
+public class WarningsMixTest {
 	@Test
 	public void notFinalAndMutable() {
 		EqualsVerifier<MutablePoint> ev1 = EqualsVerifier.forClass(MutablePoint.class);
 		ev1.suppress(Warning.STRICT_INHERITANCE);
-		verifyFailure("Mutability:", ev1);
+		assertFailure(ev1, "Mutability:");
 		
 		EqualsVerifier<MutablePoint> ev2 = EqualsVerifier.forClass(MutablePoint.class);
 		ev2.suppress(Warning.NONFINAL_FIELDS);
-		verifyFailure("Subclass:", ev2);
+		assertFailure(ev2, "Subclass:");
 		
 		EqualsVerifier.forClass(MutablePoint.class)
 				.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
@@ -39,11 +40,11 @@ public class WarningsMixTest extends EqualsVerifierTestBase {
 	public void notFinalAndNeverNull() {
 		EqualsVerifier<NeverNullColorContainer> ev1 = EqualsVerifier.forClass(NeverNullColorContainer.class);
 		ev1.suppress(Warning.STRICT_INHERITANCE);
-		verifyFailure("Non-nullity:", ev1);
+		assertFailure(ev1, "Non-nullity:");
 		
 		EqualsVerifier<NeverNullColorContainer> ev2 = EqualsVerifier.forClass(NeverNullColorContainer.class);
 		ev2.suppress(Warning.NULL_FIELDS);
-		verifyFailure("Subclass:", ev2);
+		assertFailure(ev2, "Subclass:");
 		
 		EqualsVerifier.forClass(NeverNullColorContainer.class)
 				.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
@@ -56,15 +57,15 @@ public class WarningsMixTest extends EqualsVerifierTestBase {
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev1 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
 		ev1.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS);
-		verifyFailure("Mutability:", ev1);
+		assertFailure(ev1, "Mutability:");
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev2 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
 		ev2.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
-		verifyFailure("Non-nullity:", ev2);
+		assertFailure(ev2, "Non-nullity:");
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev3 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
 		ev3.suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS);
-		verifyFailure("Subclass:", ev3);
+		assertFailure(ev3, "Subclass:");
 		
 		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
 				.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)

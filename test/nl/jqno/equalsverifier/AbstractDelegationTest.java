@@ -15,25 +15,32 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import org.junit.Test;
 
-public class AbstractDelegationTest extends EqualsVerifierTestBase {
+public class AbstractDelegationTest {
+	private static final String ABSTRACT_DELEGATION = "Abstract delegation";
+	private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
+	private static final String HASHCODE_DELEGATES = "hashCode method delegates to an abstract method";
+	private static final String PREFAB = "Add prefab values for";
+
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegator> ev = EqualsVerifier.forClass(AbstractHashCodeDelegator.class);
-		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void equalsDelegatesToAbstractMethodInField() {
 		EqualsVerifier<EqualsDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class);
-		verifyFailure("Abstract delegation: EqualsDelegatesToAbstractMethodInField's equals method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
 		
 		EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class)
 				.suppress(Warning.NULL_FIELDS)
@@ -44,7 +51,7 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void hashCodeDelegatesToAbstractMethodInField() {
 		EqualsVerifier<HashCodeDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class);
-		verifyFailure("Abstract delegation: HashCodeDelegatesToAbstractMethodInField's hashCode method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
 		
 		EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
 				.suppress(Warning.NULL_FIELDS)
@@ -55,7 +62,7 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalsInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<EqualsInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class);
-		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractEqualsDelegator.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, PREFAB, AbstractEqualsDelegator.class.getSimpleName());
 		
 		EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class)
 				.withPrefabValues(AbstractEqualsDelegator.class, new AbstractEqualsDelegatorImpl(1), new AbstractEqualsDelegatorImpl(2))
@@ -65,7 +72,7 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void hashCodeInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<HashCodeInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class);
-		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.\nAdd prefab values for nl.jqno.equalsverifier.AbstractDelegationTest$AbstractHashCodeDelegator.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, PREFAB, AbstractHashCodeDelegator.class.getSimpleName());
 		
 		EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
 				.withPrefabValues(AbstractHashCodeDelegator.class, new AbstractHashCodeDelegatorImpl(1), new AbstractHashCodeDelegatorImpl(2))
@@ -75,13 +82,13 @@ public class AbstractDelegationTest extends EqualsVerifierTestBase {
 	@Test
 	public void equalsInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegatorImpl> ev = EqualsVerifier.forClass(AbstractEqualsDelegatorImpl.class);
-		verifyFailure("Abstract delegation: AbstractEqualsDelegator's equals method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void hashCodeInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegatorImpl> ev = EqualsVerifier.forClass(AbstractHashCodeDelegatorImpl.class);
-		verifyFailure("Abstract delegation: AbstractHashCodeDelegator's hashCode method delegates to an abstract method.", ev);
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
 	}
 	
 	static abstract class AbstractEqualsDelegator {

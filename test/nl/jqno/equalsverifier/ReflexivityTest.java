@@ -15,15 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class ReflexivityTest extends EqualsVerifierTestBase {
+public class ReflexivityTest {
 	@Test
 	public void reflexivity() {
 		EqualsVerifier<ReflexivityBrokenPoint> ev = EqualsVerifier.forClass(ReflexivityBrokenPoint.class);
-		verifyFailure("Reflexivity: object does not equal itself:\n  ReflexivityBrokenPoint:1,1", ev);
+		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityBrokenPoint.class.getSimpleName());
 	}
 	
 	static class ReflexivityBrokenPoint extends Point {
