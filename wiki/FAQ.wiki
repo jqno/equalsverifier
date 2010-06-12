@@ -18,13 +18,15 @@ If one of the fields has an abstract type, the error can be avoided by calling `
 
 ==Non-nullity: equals/hashCode/toString throws !NullPointerException==
 This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
-
-`return someField.equals(other.someField);`
-
+{{{
+return someField.equals(other.someField);
+}}}
 It will throw a `NullPointerException` if `someField` is null. This can be avoided in two ways.
 
  # You can add a null check, like so:
- `return someField == null ? other.someField == null : someField.equals(other.someField);`
+ {{{
+ return someField == null ? other.someField == null : someField.equals(other.someField);
+ }}}
  # If you're certain the field can never be null (for instance, because the class's constructor explicitly checks for it), you can suppress `Warning.NULL_FIELDS` in your call to !EqualsVerifier.
 
 =Build=
