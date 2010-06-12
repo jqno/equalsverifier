@@ -45,9 +45,9 @@ class FieldsChecker<T> {
 	}
 	
 	public void check() {
+		check(new ArrayFieldCheck<T>());
 		check(new SignificanceFieldCheck<T>());
 		check(new FloatAndDoubleFieldCheck<T>());
-		check(new ArrayFieldCheck<T>());
 		
 		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
 			check(new MutableStateFieldCheck<T>());
@@ -193,12 +193,16 @@ class FieldsChecker<T> {
 				Array.set(field.get(reference), 0, createNewArrayInstance(deepType, instantiator));
 				Array.set(field.get(changed), 0, createNewArrayInstance(deepType, instantiator));
 				
-				assertEquals("Multidimensional or Object array: == or Arrays.equals used instead of Arrays.deepEquals() for field " + field.getName() + ".",
-							reference, changed);
+				assertEquals("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + field.getName() + ".",
+						reference, changed);
+				assertEquals("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + field.getName() + ".",
+						reference.hashCode(), changed.hashCode());
 			}
 			else {
 				assertEquals("Array: == used instead of Arrays.equals() for field " + field.getName() + ".",
-						reference, changed);
+					reference, changed);
+				assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + field.getName() + ".",
+					reference.hashCode(), changed.hashCode());
 			}
 		}
 
