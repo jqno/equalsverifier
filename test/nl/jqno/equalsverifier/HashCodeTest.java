@@ -15,16 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class HashCodeTest extends EqualsVerifierTestBase {
+public class HashCodeTest {
 	@Test
 	public void invalidHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev = EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		// Cut off error message because hashCode will be different each time.
-		verifyFailure("hashCode: hashCodes should be equal:\n  HashCodeBrokenPoint:1,1 (", ev);
+		assertFailure(ev, "hashCode: hashCodes should be equal", HashCodeBrokenPoint.class.getSimpleName());
 	}
 	
 	@Test

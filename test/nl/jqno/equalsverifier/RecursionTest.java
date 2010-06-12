@@ -14,10 +14,15 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class RecursionTest extends EqualsVerifierTestBase {
+public class RecursionTest {
+	private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
+	private static final String PREFAB = "Add prefab values for one of the following classes";
+	
 	private Node one;
 	private Node two;
 	
@@ -30,13 +35,13 @@ public class RecursionTest extends EqualsVerifierTestBase {
 	@Test
 	public void classRecursiveFail() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
-		verifyFailure("Recursive datastructure.\nAdd prefab values for one of the following classes:", ev);
+		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
 	}
 	
 	@Test
 	public void examplesRecursiveFail() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(one, two);
-		verifyFailure("Recursive datastructure.\nAdd prefab values for one of the following classes:", ev);
+		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
 	}
 	
 	@Test

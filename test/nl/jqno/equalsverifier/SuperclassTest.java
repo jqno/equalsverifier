@@ -15,13 +15,14 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class SuperclassTest extends EqualsVerifierTestBase {
+public class SuperclassTest {
 	@Test
 	public void happyPath() {
 		EqualsVerifier.forClass(ColorBlindColorPoint.class).verify();
@@ -31,25 +32,26 @@ public class SuperclassTest extends EqualsVerifierTestBase {
 	public void symmetry() {
 		EqualsVerifier<SymmetryBrokenColorPoint> ev =
 				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
-		verifyFailure("Symmetry:\n  SymmetryBrokenColorPoint:1,1,YELLOW\ndoes not equal superclass instance\n  Point:1,1", ev);
+		assertFailure(ev, "Symmetry", "does not equal superclass instance", SymmetryBrokenColorPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
 	@Test
 	public void transitivity() {
 		EqualsVerifier<TransitivityBrokenColorPoint> ev =
 				EqualsVerifier.forClass(TransitivityBrokenColorPoint.class);
-		verifyFailure("Transitivity:\n  TransitivityBrokenColorPoint:1,1,YELLOW\nand\n  " +
-				"TransitivityBrokenColorPoint:1,1,BLUE\nboth equal superclass instance\n  " +
-				"Point:1,1\nwhich implies they equal each other.",
-				ev);
+		assertFailure(ev, "Transitivity",
+				"TransitivityBrokenColorPoint:1,1,YELLOW\nand\n  TransitivityBrokenColorPoint:1,1,BLUE",
+				"both equal superclass instance",
+				"Point:1,1",
+				"which implies they equal each other.");
 	}
 
 	@Test
 	public void referenceAndSuperSameHaveSameHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev =
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		verifyFailure("Superclass: hashCode for\n  HashCodeBrokenPoint:1,1 (33)" +
-				"\nshould be equal to hashCode for superclass instance\n  Point:1,1 (32)", ev);
+		assertFailure(ev, "Superclass", "hashCode for",	"should be equal to hashCode for superclass instance",
+				HashCodeBrokenPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
 	static class SymmetryBrokenColorPoint extends Point {

@@ -15,12 +15,20 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
 import nl.jqno.equalsverifier.points.Multiple;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
+public class RelaxedEqualsPreconditionTest {
+	private static final String PRECONDITION = "Precondition";
+	private static final String DIFFERENT_CLASSES = "are of different classes";
+	private static final String TWO_IDENTICAL_OBJECTS_APPEAR = "two identical objects appear";
+	private static final String NOT_ALL_EQUAL = "not all equal objects are equal";
+	private static final String OBJECT_APPEARS_TWICE = "the same object appears twice";
+	private static final String TWO_OBJECTS_ARE_EQUAL = "two objects are equal to each other";
+	
 	private Multiple a;
 	private Multiple b;
 	private Multiple x;
@@ -81,14 +89,14 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		SubMultiple sm = new SubMultiple(1, 2);
 		EqualsVerifier ev = EqualsVerifier.forRelaxedEqualExamples(sm, a)
 				.andUnequalExample(x);
-		verifyFailure("Precondition:\n  SubMultiple:1*2=2\nand\n  Multiple:1*2=2\nare of different classes", ev);
+		assertFailure(ev, PRECONDITION, DIFFERENT_CLASSES, SubMultiple.class.getSimpleName(), Multiple.class.getSimpleName());
 	}
 	
 	@Test
 	public void equalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, a)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: the same object appears twice:\n  Multiple:1*2=2", ev);
+		assertFailure(ev, PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
 	}
 	
 	@Test
@@ -96,21 +104,21 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		Multiple aa = new Multiple(1, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, aa)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: two identical objects appear:\n  Multiple:1*2=2", ev);
+		assertFailure(ev, PRECONDITION, TWO_IDENTICAL_OBJECTS_APPEAR, Multiple.class.getSimpleName());
 	}
 	
 	@Test
 	public void equalAllUnequal() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, x)
 				.andUnequalExample(x);
-		verifyFailure("Precondition: not all equal objects are equal:\n  Multiple:1*2=2\nand\n  Multiple:2*2=4", ev);
+		assertFailure(ev, PRECONDITION, NOT_ALL_EQUAL, "and", Multiple.class.getSimpleName());
 	}
 
 	@Test
 	public void unequalAllSame() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(x, x);
-		verifyFailure("Precondition: the same object appears twice:\n  Multiple:2*2=4", ev);
+		assertFailure(ev, PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
 	}
 	
 	@Test
@@ -118,7 +126,7 @@ public class RelaxedEqualsPreconditionTest extends EqualsVerifierTestBase {
 		Multiple xx = new Multiple(2, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(x, xx);
-		verifyFailure("Precondition: two objects are equal to each other:\n  Multiple:2*2=4", ev);
+		assertFailure(ev, PRECONDITION, TWO_OBJECTS_ARE_EQUAL, Multiple.class.getSimpleName());
 	}
 	
 	public static class SubMultiple extends Multiple {

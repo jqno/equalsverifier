@@ -15,21 +15,28 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import java.util.Arrays;
 
 import org.junit.Test;
 
-public class ArrayTest extends EqualsVerifierTestBase {
+public class ArrayTest {
+	private static final String PRIMITIVE_EQUALS = "Array: == used instead of Arrays.equals() for field";
+	private static final String PRIMITIVE_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
+	private static final String OBJECT_EQUALS = "Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field";
+	private static final String OBJECT_HASHCODE = "Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
+
 	@Test
 	public void primitiveArrayShouldUseArraysEquals() {
 		EqualsVerifier<PrimitiveArrayContainerWrongEquals> ev = EqualsVerifier.forClass(PrimitiveArrayContainerWrongEquals.class);
-		verifyFailure("Array: == used instead of Arrays.equals() for field array.", ev);
+		assertFailure(ev, PRIMITIVE_EQUALS, "array");
 	}
 	
 	@Test
 	public void primitiveArrayShouldUseArraysHashCode() {
 		EqualsVerifier<PrimitiveArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(PrimitiveArrayContainerWrongHashCode.class);
-		verifyFailure("Array: regular hashCode() used instead of Arrays.hashCode() for field array.", ev);
+		assertFailure(ev, PRIMITIVE_HASHCODE, "array");
 	}
 	
 	@Test
@@ -40,19 +47,19 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	@Test
 	public void multidimensionalArrayShouldUseDeepEquals() {
 		EqualsVerifier<MultidimensionalArrayContainerWrongEquals> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerWrongEquals.class);
-		verifyFailure("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field array.", ev);
+		assertFailure(ev, OBJECT_EQUALS, "array");
 	}
 	
 	@Test
 	public void multidimensionalArrayShouldNotUseRegularHashCode() {
 		EqualsVerifier<MultidimensionalArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerWrongHashCode.class);
-		verifyFailure("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field array.", ev);
+		assertFailure(ev, OBJECT_HASHCODE, "array");
 	}
 	
 	@Test
 	public void multidimensionalArrayShouldUseDeepHashCode() {
 		EqualsVerifier<MultidimensionalArrayContainerNotDeepHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerNotDeepHashCode.class);
-		verifyFailure("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field array.", ev);
+		assertFailure(ev, OBJECT_HASHCODE, "array");
 	}
 	
 	@Test
@@ -63,19 +70,19 @@ public class ArrayTest extends EqualsVerifierTestBase {
 	@Test
 	public void objectArrayShouldUseDeepEquals() {
 		EqualsVerifier<ObjectArrayContainerWrongEquals> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongEquals.class);
-		verifyFailure("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field array.", ev);
+		assertFailure(ev, OBJECT_EQUALS, "array");
 	}
 	
 	@Test
 	public void objectArrayShouldNotUseRegularHashCode() {
 		EqualsVerifier<ObjectArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongHashCode.class);
-		verifyFailure("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field array.", ev);
+		assertFailure(ev, OBJECT_HASHCODE, "array");
 	}
 	
 	@Test
 	public void objectArrayShouldUseDeepHashCode() {
 		EqualsVerifier<ObjectArrayContainerNotDeepHashCode> ev = EqualsVerifier.forClass(ObjectArrayContainerNotDeepHashCode.class);
-		verifyFailure("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field array.", ev);
+		assertFailure(ev, OBJECT_HASHCODE, "array");
 	}
 	
 	@Test

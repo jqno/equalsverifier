@@ -15,19 +15,21 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.assertFailure;
+
 import org.junit.Test;
 
-public class SignificantFieldsTest extends EqualsVerifierTestBase {
+public class SignificantFieldsTest {
 	@Test
 	public void extraFieldInEquals() {
 		EqualsVerifier<ExtraFieldInEqualsPoint> ev = EqualsVerifier.forClass(ExtraFieldInEqualsPoint.class);
-		verifyFailure("Significant fields: equals relies on y, but hashCode does not", ev);
+		assertFailure(ev, "Significant fields", "equals relies on", "but hashCode does not");
 	}
 	
 	@Test
 	public void extraFieldInHashCode() {
 		EqualsVerifier<ExtraFieldInHashCodePoint> ev = EqualsVerifier.forClass(ExtraFieldInHashCodePoint.class);
-		verifyFailure("Significant fields: hashCode relies on y, but equals does not", ev);
+		assertFailure(ev, "Significant fields", "hashCode relies on", "but equals does not");
 	}
 	
 	static final class ExtraFieldInEqualsPoint {
