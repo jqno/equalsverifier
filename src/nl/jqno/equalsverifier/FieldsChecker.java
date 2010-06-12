@@ -85,13 +85,6 @@ class FieldsChecker<T> {
 			instantiator.nullField(field, changed);
 			
 			try {
-				changed.toString();
-			}
-			catch (NullPointerException e) {
-				fail("Non-nullity: toString throws NullPointerException.");
-			}
-			
-			try {
 				reference.equals(changed);
 			}
 			catch (NullPointerException e) {
@@ -110,6 +103,14 @@ class FieldsChecker<T> {
 			catch (NullPointerException e) {
 				fail("Non-nullity: hashCode throws NullPointerException.");
 			}
+			
+			try {
+				changed.toString();
+			}
+			catch (NullPointerException e) {
+				fail("Non-nullity: toString throws NullPointerException.");
+			}
+			
 			instantiator.nullField(field, reference);
 		}
 	}
