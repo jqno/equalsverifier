@@ -3,6 +3,36 @@
 
 <wiki:toc max_depth="2" />
 
+=Philosophy=
+==Can !EqualsVerifier give false positives?==
+Yes, it can. !EqualsVerifier will not search a class's entire state space. If you write an `equals` method as below, !EqualsVerifier will not notice that it's incorrect.
+{{{
+public boolean equals(Object obj) {
+    if (!(obj instanceof MyClass)) {
+        return false;
+    }
+    if (myInt == 100) {
+        return false;
+    }
+    return myInt == ((MyClass)obj).myInt;
+}
+}}}
+The example is a little far-fetched, but it illustrates the point that you have to write bad code _on purpose_ to make !EqualsVerifier think your `equals` method is correct when it is not.
+
+==Can !EqualsVerifier give false negatives?==
+Yes, it can. Just try to verify `String`: it will fail. `String` employs some tricks for better performance, that !EqualsVerifer can't verify. However, the good people who wrote `String` knew what they were doing, and have proven their implementation correct. If you prove your implementation correct, you don't need !EqualsVerifier.
+
+==So what's the point of !EqualsVerifier then?==
+!EqualsVerifier is a useful tool for anyone who wants to implement the `equals` and `hashCode` methods, without trying anything fancy. Implementing `equals` is hard, even for simple classes. Since most classes are simple, !EqualsVerifier can be a great help in making sure that your implementation fulfills the contract.
+
+If you run into a situation where !EqualsVerifier can't help you, you are in one (or more) of the following situations:
+ # You're writing non-trivial, high-performance niche code at NASA.
+ # You're a Java API developer.
+ # You're writing malicious code on purpose.
+ # You're writing code that's way too complicated, and you should probably refactor.
+
+(And even in the first two cases, !EqualsVerifier can help creating an initial working implementation.)
+
 =Error messages=
 ==Abstract delegation==
 <pre>
