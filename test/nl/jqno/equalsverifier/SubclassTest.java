@@ -46,7 +46,7 @@ public class SubclassTest {
 	public void blindlyEqualsReferenceEqualsSub() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
 				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
-		assertFailure(ev, "Subclass", "equals subclass instance", BlindlyEqualsPoint.class.getSimpleName(), EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
+		assertFailure(ev, "Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
 	}
 	
 	@Test
@@ -67,7 +67,7 @@ public class SubclassTest {
 	public void canEqualReferenceEqualsSub() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
-		assertFailure(ev, "Subclass", "equals subclass instance", CanEqualPoint.class.getSimpleName(), EqualSubclassForCanEqualPoint.class.getSimpleName());
+		assertFailure(ev, "Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForCanEqualPoint.class.getSimpleName());
 	}
 	
 	@Test
@@ -88,15 +88,15 @@ public class SubclassTest {
 	public void invalidWithRedefinedSuperclass() {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
 		ev.withRedefinedSuperclass();
-		assertFailure(ev, "Redefined superclass", "may not equal superclass instance", "but it does",
-				ColorBlindColorPoint.class.getSimpleName(), Point.class.getSimpleName());
+		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
+				"may not equal superclass instance", Point.class.getSimpleName(), "but it does");
 	}
 	
 	@Test
 	public void equalsMethodFinalSoNoRedefinedSubclassNecessary() {
 		EqualsVerifier<RedeFinalPoint> ev = EqualsVerifier.forClass(RedeFinalPoint.class)
 				.withRedefinedSubclass(RedeFinalSubPoint.class);
-		assertFailure(ev, "Subclass", "has a final equals method", "No need to supply a redefined subclass", RedeFinalPoint.class.getSimpleName());
+		assertFailure(ev, "Subclass", RedeFinalPoint.class.getSimpleName(), "has a final equals method", "No need to supply a redefined subclass");
 	}
 	
 	@Test
