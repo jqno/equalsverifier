@@ -4,7 +4,7 @@
 	<groupId>nl.jqno.equalsverifier</groupId>
 	<artifactId>equalsverifier</artifactId>
 	<name>EqualsVerifier</name>
-	<version>???</version>
+	<version>0.6.4</version>
 	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
 	<url>http://code.google.com/p/equalsverifier/</url>
 	<scm>
