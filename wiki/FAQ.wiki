@@ -25,7 +25,9 @@ Yes, it can. Just try to verify `String`: it will fail. `String` employs some tr
 ==So what's the point of !EqualsVerifier then?==
 !EqualsVerifier is a useful tool for anyone who wants to implement the `equals` and `hashCode` methods, without trying anything fancy. Implementing `equals` is hard, even for simple classes. Since most classes are simple, !EqualsVerifier can be a great help in making sure that your implementation fulfills the contract.
 
-If you run into a situation where !EqualsVerifier can't help you, you are in one (or more) of the following situations:
+!EqualsVerifier catches common mistakes, such as forgetting to include a field in `hashCode` that is tested in `equals`. It also encourages robustness, for example by warning about non-final fields, and by watching out for inheritance issues.
+
+If you run into a situation where !EqualsVerifier can't help you, you are probably in one (or more) of the following situations:
  # You're writing non-trivial, high-performance niche code at NASA.
  # You're a Java API developer.
  # You're writing malicious code on purpose.
