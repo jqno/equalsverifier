@@ -32,7 +32,7 @@ public class SuperclassTest {
 	public void symmetry() {
 		EqualsVerifier<SymmetryBrokenColorPoint> ev =
 				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
-		assertFailure(ev, "Symmetry", "does not equal superclass instance", SymmetryBrokenColorPoint.class.getSimpleName(), Point.class.getSimpleName());
+		assertFailure(ev, "Symmetry", SymmetryBrokenColorPoint.class.getSimpleName(), "does not equal superclass instance", Point.class.getSimpleName());
 	}
 	
 	@Test
@@ -50,8 +50,8 @@ public class SuperclassTest {
 	public void referenceAndSuperSameHaveSameHashCode() {
 		EqualsVerifier<HashCodeBrokenPoint> ev =
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		assertFailure(ev, "Superclass", "hashCode for",	"should be equal to hashCode for superclass instance",
-				HashCodeBrokenPoint.class.getSimpleName(), Point.class.getSimpleName());
+		assertFailure(ev, "Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
+				"should be equal to hashCode for superclass instance", Point.class.getSimpleName());
 	}
 	
 	static class SymmetryBrokenColorPoint extends Point {
