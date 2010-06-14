@@ -214,7 +214,7 @@ limitations under the License.
 		
 		<echo message="Committing Maven repo in ${mvn.dir} to SVN" />
 		<exec dir="${mvn.dir}/maven" executable="${svn.cmd}" failonerror="true">
-			<arg line='commit -m "Deploy to Maven repo" --username ${google.username} --password ${google.password}' />
+			<arg line='commit -m "Deploy to Maven repo: version ${version}" --username ${google.username} --password ${google.password}' />
 		</exec>
 	</target>
 
