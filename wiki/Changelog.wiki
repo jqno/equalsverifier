@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.6.4 ==
+  * ... get an appropriate error message when `Arrays.hashCode()` or `Arrays.deepHashCode()` should have been used, instead of a message that a certain field is used in `equals` but not in `hashCode` or the other way around. ([http://code.google.com/p/equalsverifier/issues/detail?id=27 Issue 27])
+  * ... get less frequent non-nullity errors on `toString`.
+
 == Version 0.6.3 ==
   * ... test the equals/hashCode contract for classes that don't override `equals` or `hashCode`. ([http://code.google.com/p/equalsverifier/issues/detail?id=23 Issue 23])
   * ... use `EqualsVerifier` in conjuction with the [http://www.eclemma.org/ EclEmma] code coverage tool. ([http://code.google.com/p/equalsverifier/issues/detail?id=22 Issue 22])
