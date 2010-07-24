@@ -15,6 +15,16 @@
 package nl.jqno.equalsverifier.util;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.Properties;
+import java.util.TreeMap;
+import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Pattern;
 
 public class TypeHelper {
 	private static enum Enum { FIRST, SECOND }
@@ -51,32 +61,33 @@ public class TypeHelper {
 				return false;
 			}
 			AllTypesContainer other = (AllTypesContainer)obj;
-			return
-					_boolean == other._boolean &&
-					_byte == other._byte &&
-					_char == other._char &&
-					(Double.compare(_double, other._double) == 0) &&
-					(Float.compare(_float, other._float) == 0) &&
-					_int == other._int &&
-					_long == other._long &&
-					_short == other._short &&
-					_Boolean == other._Boolean &&
-					_Byte == other._Byte &&
-					_Char == other._Char &&
-					((_Double == null || other._Double == null) ?
+			boolean result = true;
+			result &= _boolean == other._boolean;
+			result &= _byte == other._byte;
+			result &= _char == other._char;
+			result &= Double.compare(_double, other._double) == 0;
+			result &= Float.compare(_float, other._float) == 0;
+			result &= _int == other._int;
+			result &= _long == other._long;
+			result &= _short == other._short;
+			result &= _Boolean == other._Boolean;
+			result &= _Byte == other._Byte;
+			result &= _Char == other._Char;
+			result &= (_Double == null || other._Double == null) ?
 							_Double == other._Double :
-							Double.compare(_Double, other._Double) == 0) &&
-					((_Float == null || other._Float == null) ?
+							Double.compare(_Double, other._Double) == 0;
+			result &= (_Float == null || other._Float == null) ?
 							_Float == other._Float :
-							Float.compare(_Float, other._Float) == 0) &&
-					_Int == other._Int &&
-					_Long == other._Long &&
-					_Short == other._Short &&
-					_enum == other._enum &&
-					Arrays.equals(_array, other._array) &&
-					(_object == null ? other._object == null : _object.equals(other._object)) &&
-					_klass == other._klass &&
-					(_string == null ? other._string == null : _string.equals(other._string));
+							Float.compare(_Float, other._Float) == 0;
+			result &= _Int == other._Int;
+			result &= _Long == other._Long;
+			result &= _Short == other._Short;
+			result &= _enum == other._enum;
+			result &= Arrays.equals(_array, other._array);
+			result &= _object == null ? other._object == null : _object.equals(other._object);
+			result &= _klass == other._klass;
+			result &= _string == null ? other._string == null : _string.equals(other._string);
+			return result;
 		}
 	}
 	
@@ -111,28 +122,76 @@ public class TypeHelper {
 				return false;
 			}
 			AllArrayTypesContainer other = (AllArrayTypesContainer)obj;
-			return
-					Arrays.equals(booleans, other.booleans) &&
-					Arrays.equals(bytes, other.bytes) &&
-					Arrays.equals(chars, other.chars) &&
-					Arrays.equals(doubles, other.doubles) &&
-					Arrays.equals(floats, other.floats) &&
-					Arrays.equals(ints, other.ints) &&
-					Arrays.equals(longs, other.longs) &&
-					Arrays.equals(shorts, other.shorts) &&
-					Arrays.equals(Booleans, other.Booleans) &&
-					Arrays.equals(Bytes, other.Bytes) &&
-					Arrays.equals(Characters, other.Characters) &&
-					Arrays.equals(Doubles, other.Doubles) &&
-					Arrays.equals(Floats, other.Floats) &&
-					Arrays.equals(Integers, other.Integers) &&
-					Arrays.equals(Longs, other.Longs) &&
-					Arrays.equals(Shorts, other.Shorts) &&
-					Arrays.equals(enums, other.enums) &&
-					Arrays.deepEquals(arrays, other.arrays) &&
-					Arrays.equals(objects, other.objects) &&
-					Arrays.equals(classes, other.classes) &&
-					Arrays.equals(strings, other.strings);
+			boolean result = true;
+			result &= Arrays.equals(booleans, other.booleans);
+			result &= Arrays.equals(bytes, other.bytes);
+			result &= Arrays.equals(chars, other.chars);
+			result &= Arrays.equals(doubles, other.doubles);
+			result &= Arrays.equals(floats, other.floats);
+			result &= Arrays.equals(ints, other.ints);
+			result &= Arrays.equals(longs, other.longs);
+			result &= Arrays.equals(shorts, other.shorts);
+			result &= Arrays.equals(Booleans, other.Booleans);
+			result &= Arrays.equals(Bytes, other.Bytes);
+			result &= Arrays.equals(Characters, other.Characters);
+			result &= Arrays.equals(Doubles, other.Doubles);
+			result &= Arrays.equals(Floats, other.Floats);
+			result &= Arrays.equals(Integers, other.Integers);
+			result &= Arrays.equals(Longs, other.Longs);
+			result &= Arrays.equals(Shorts, other.Shorts);
+			result &= Arrays.equals(enums, other.enums);
+			result &= Arrays.deepEquals(arrays, other.arrays);
+			result &= Arrays.equals(objects, other.objects);
+			result &= Arrays.equals(classes, other.classes);
+			result &= Arrays.equals(strings, other.strings);
+			return result;
+		}
+	}
+	
+	static class RecursiveApiClassesContainer {
+		Date date;
+		Pattern pattern;
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof RecursiveApiClassesContainer)) {
+				return false;
+			}
+			RecursiveApiClassesContainer other = (RecursiveApiClassesContainer)obj;
+			boolean result = true;
+			result &= date.equals(other.date);
+			result &= pattern.equals(other.pattern);
+			return result;
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	static class AllMapImplementationsContainer {
+		ConcurrentHashMap concurrentHashMap;
+		EnumMap enumMap;
+		HashMap hashMap;
+		Hashtable hashtable;
+		LinkedHashMap linkedHashMap;
+		Properties properties;
+		TreeMap treeMap;
+		WeakHashMap weakHashMap;
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AllMapImplementationsContainer)) {
+				return false;
+			}
+			AllMapImplementationsContainer other = (AllMapImplementationsContainer)obj;
+			boolean result = true;
+			result &= concurrentHashMap.equals(other.concurrentHashMap);
+			result &= enumMap.equals(other.enumMap);
+			result &= hashMap.equals(other.hashMap);
+			result &= hashtable.equals(other.hashtable);
+			result &= linkedHashMap.equals(other.linkedHashMap);
+			result &= properties.equals(other.properties);
+			result &= treeMap.equals(other.treeMap);
+			result &= weakHashMap.equals(other.weakHashMap);
+			return result;
 		}
 	}
 
