@@ -17,10 +17,12 @@ package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 
@@ -31,8 +33,13 @@ public class DifficultClassesTest {
 	}
 	
 	@Test
-	public void collections() {
-		EqualsVerifier.forClass(CollectionsContainer.class).verify();
+	public void collectionInterfaces() {
+		EqualsVerifier.forClass(CollectionInterfacesContainer.class).verify();
+	}
+	
+	@Test
+	public void commonClasses() {
+		EqualsVerifier.forClass(CommonClassesContainer.class).verify();
 	}
 	
 	@Test
@@ -73,11 +80,13 @@ public class DifficultClassesTest {
 			if (!(obj instanceof ObjectsContainer)) {
 				return false;
 			}
+			
 			ObjectsContainer other = (ObjectsContainer)obj;
-			return
-					(string == null ? other.string == null : string.equals(other.string)) &&
-					(integer == null ? other.integer == null : integer.equals(other.integer)) &&
-					(klass == other.klass);
+			boolean result = true;
+			result &= string == null ? other.string == null : string.equals(other.string);
+			result &= integer == null ? other.integer == null : integer.equals(other.integer);
+			result &= klass == other.klass;
+			return result;
 		}
 		
 		@Override
@@ -89,13 +98,13 @@ public class DifficultClassesTest {
 		}
 	}
 	
-	static final class CollectionsContainer {
+	static final class CollectionInterfacesContainer {
 		private final List<String> list;
 		private final Set<String> set;
 		private final Map<String, String> map;
 		private final Queue<String> queue;
 		
-		public CollectionsContainer(List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
+		public CollectionInterfacesContainer(List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
 			this.list = list;
 			this.set = set;
 			this.map = map;
@@ -104,22 +113,57 @@ public class DifficultClassesTest {
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof CollectionsContainer)) {
+			if (!(obj instanceof CollectionInterfacesContainer)) {
 				return false;
 			}
-			CollectionsContainer other = (CollectionsContainer)obj;
-			return (list == null ? other.list == null : list.equals(other.list)) &&
-					(set == null ? other.set == null : set.equals(other.set)) &&
-					(map == null ? other.map == null : map.equals(other.map)) &&
-					(queue == null ? other.queue == null : queue.equals(other.queue));
+			
+			CollectionInterfacesContainer other = (CollectionInterfacesContainer)obj;
+			boolean result = true;
+			result &= list == null ? other.list == null : list.equals(other.list);
+			result &= set == null ? other.set == null : set.equals(other.set);
+			result &= map == null ? other.map == null : map.equals(other.map);
+			result &= queue == null ? other.queue == null : queue.equals(other.queue);
+			return result;
 		}
 		
 		@Override
 		public int hashCode() {
-			int result = list == null ? 0 : list.hashCode();
+			int result = 0;
+			result += 31 * (list == null ? 0 : list.hashCode());
 			result += 31 * (set == null ? 0 : set.hashCode());
 			result += 31 * (map == null ? 0 : map.hashCode());
 			result += 31 * (queue == null ? 0 : queue.hashCode());
+			return result;
+		}
+	}
+	
+	static final class CommonClassesContainer {
+		private final Date date;
+		private final Pattern pattern;
+		
+		public CommonClassesContainer(Date date, Pattern pattern) {
+			this.date = date;
+			this.pattern = pattern;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof CommonClassesContainer)) {
+				return false;
+			}
+			
+			CommonClassesContainer other = (CommonClassesContainer)obj;
+			boolean result = true;
+			result &= date == null ? other.date == null : date.equals(other.date);
+			result &= pattern == null ? other.pattern == null : pattern.equals(other.pattern);
+			return result;
+		}
+		
+		@Override
+		public int hashCode() {
+			int result = 0;
+			result += 31 * (date == null ? 0 : date.hashCode());
+			result += 31 * (pattern == null ? 0 : pattern.hashCode());
 			return result;
 		}
 	}

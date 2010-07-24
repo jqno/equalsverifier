@@ -19,8 +19,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -60,25 +58,6 @@ public class Instantiator<T> {
 	private final Objenesis objenesis;
 	private final ObjectInstantiator klassInstantiator;
 
-	private static final Map<Class<?>, List<?>> PREFAB_VALUES;
-	static {
-		Map<Class<?>, List<?>> prefabValues = new HashMap<Class<?>, List<?>>();
-		prefabValues.put(String.class, Arrays.asList("one", "two"));
-		prefabValues.put(Boolean.class, Arrays.asList(true, false));
-		prefabValues.put(Byte.class, Arrays.asList((byte)1, (byte)2));
-		prefabValues.put(Character.class, Arrays.asList('a', 'b'));
-		prefabValues.put(Double.class, Arrays.asList(0.5D, 1.0D));
-		prefabValues.put(Float.class, Arrays.asList(0.5F, 1.0F));
-		prefabValues.put(Integer.class, Arrays.asList(1, 2));
-		prefabValues.put(Long.class, Arrays.asList(1L, 2L));
-		prefabValues.put(Short.class, Arrays.asList((short)1, (short)2));
-		prefabValues.put(Object.class, Arrays.asList(new Object(), new Object()));
-		prefabValues.put(Class.class, Arrays.<Class<?>>asList(Class.class, Object.class));
-		// Necessary for CGLib.
-		prefabValues.put(NoOp.class, Arrays.asList(new NoOp(){}, new NoOp(){}));
-		PREFAB_VALUES = Collections.unmodifiableMap(prefabValues);
-	}
-	
 	/**
 	 * Factory method.
 	 * 
@@ -96,9 +75,9 @@ public class Instantiator<T> {
 			throw new IllegalArgumentException("Cannot instantiate an interface.");
 		}
 		if (Modifier.isAbstract(klass.getModifiers())) {
-			return new Instantiator<T>(createDynamicSubclass(klass), PREFAB_VALUES, new LinkedHashSet<Class<?>>());
+			return new Instantiator<T>(createDynamicSubclass(klass), PrefabValues.get(), new LinkedHashSet<Class<?>>());
 		}
-		return new Instantiator<T>(klass, PREFAB_VALUES, new LinkedHashSet<Class<?>>());
+		return new Instantiator<T>(klass, PrefabValues.get(), new LinkedHashSet<Class<?>>());
 	}
 	
 	/**
