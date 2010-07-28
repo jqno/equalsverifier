@@ -15,6 +15,8 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -85,7 +87,7 @@ public class RecursionTest {
 				return false;
 			}
 			Node other = (Node)obj;
-			return node == null ? other.node == null : node.equals(other.node);
+			return nullSafeEquals(node, other.node);
 		}
 		
 		@Override
@@ -113,12 +115,12 @@ public class RecursionTest {
 				return false;
 			}
 			NodeContainer other = (NodeContainer)obj;
-			return node == null ? other.node == null : node.equals(other.node);
+			return nullSafeEquals(node, other.node);
 		}
 		
 		@Override
 		public final int hashCode() {
-			return node == null ? 0 : node.hashCode();
+			return nullSafeHashCode(node);
 		}
 	}
 	

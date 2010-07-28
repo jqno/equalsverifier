@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import java.util.Arrays;
 
@@ -135,7 +136,7 @@ public class ArrayTest {
 		
 		@Override
 		public int hashCode() {
-			return (array == null ? 0 : array.hashCode());
+			return nullSafeHashCode(array);
 		}
 	}
 	
@@ -358,7 +359,7 @@ public class ArrayTest {
 		
 		@Override
 		public int hashCode() {
-			return (array == null ? 0 : Arrays.hashCode(array));
+			return Arrays.hashCode(array);
 		}
 	}
 }

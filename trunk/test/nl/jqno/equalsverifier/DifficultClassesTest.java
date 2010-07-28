@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import java.util.Date;
 import java.util.List;
@@ -83,17 +85,18 @@ public class DifficultClassesTest {
 			
 			ObjectsContainer other = (ObjectsContainer)obj;
 			boolean result = true;
-			result &= string == null ? other.string == null : string.equals(other.string);
-			result &= integer == null ? other.integer == null : integer.equals(other.integer);
+			result &= nullSafeEquals(string, other.string);
+			result &= nullSafeEquals(integer, other.integer);
 			result &= klass == other.klass;
 			return result;
 		}
 		
 		@Override
 		public int hashCode() {
-			int result = string == null ? 0 : string.hashCode();
-			result += 31 * (integer == null ? Integer.MIN_VALUE : integer);
-			result += 31 * (klass == null ? 0 : klass.hashCode());
+			int result = 0;
+			result += 31 * nullSafeHashCode(string);
+			result += 31 * nullSafeHashCode(integer);
+			result += 31 * nullSafeHashCode(klass);
 			return result;
 		}
 	}
@@ -119,20 +122,20 @@ public class DifficultClassesTest {
 			
 			CollectionInterfacesContainer other = (CollectionInterfacesContainer)obj;
 			boolean result = true;
-			result &= list == null ? other.list == null : list.equals(other.list);
-			result &= set == null ? other.set == null : set.equals(other.set);
-			result &= map == null ? other.map == null : map.equals(other.map);
-			result &= queue == null ? other.queue == null : queue.equals(other.queue);
+			result &= nullSafeEquals(list, other.list);
+			result &= nullSafeEquals(set, other.set);
+			result &= nullSafeEquals(map, other.map);
+			result &= nullSafeEquals(queue, other.queue);
 			return result;
 		}
 		
 		@Override
 		public int hashCode() {
 			int result = 0;
-			result += 31 * (list == null ? 0 : list.hashCode());
-			result += 31 * (set == null ? 0 : set.hashCode());
-			result += 31 * (map == null ? 0 : map.hashCode());
-			result += 31 * (queue == null ? 0 : queue.hashCode());
+			result += 31 * nullSafeHashCode(list);
+			result += 31 * nullSafeHashCode(set);
+			result += 31 * nullSafeHashCode(map);
+			result += 31 * nullSafeHashCode(queue);
 			return result;
 		}
 	}
@@ -154,16 +157,16 @@ public class DifficultClassesTest {
 			
 			CommonClassesContainer other = (CommonClassesContainer)obj;
 			boolean result = true;
-			result &= date == null ? other.date == null : date.equals(other.date);
-			result &= pattern == null ? other.pattern == null : pattern.equals(other.pattern);
+			result &= nullSafeEquals(date, other.date);
+			result &= nullSafeEquals(pattern, other.pattern);
 			return result;
 		}
 		
 		@Override
 		public int hashCode() {
 			int result = 0;
-			result += 31 * (date == null ? 0 : date.hashCode());
-			result += 31 * (pattern == null ? 0 : pattern.hashCode());
+			result += 31 * nullSafeHashCode(date);
+			result += 31 * nullSafeHashCode(pattern);
 			return result;
 		}
 	}
@@ -181,12 +184,12 @@ public class DifficultClassesTest {
 				return false;
 			}
 			AbstractContainer other = (AbstractContainer)obj;
-			return ac == null ? other.ac == null : ac.equals(other.ac);
+			return nullSafeEquals(ac, other.ac);
 		}
 		
 		@Override
 		public int hashCode() {
-			return ac == null ? 0 : ac.hashCode();
+			return nullSafeHashCode(ac);
 		}
 	}
 	
@@ -222,7 +225,7 @@ public class DifficultClassesTest {
 		
 		@Override
 		public int hashCode() {
-			return string == null ? 0 : string.hashCode() + 31 * integer;
+			return nullSafeHashCode(string) + 31 * integer;
 		}
 	}
 	
@@ -261,7 +264,7 @@ public class DifficultClassesTest {
 		
 		@Override
 		public int hashCode() {
-			return tl == null ? 0 : tl.hashCode();
+			return nullSafeHashCode(tl);
 		}
 	}
 }

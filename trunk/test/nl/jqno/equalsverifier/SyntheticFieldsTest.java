@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
+
 import org.junit.Test;
 
 public class SyntheticFieldsTest {
@@ -47,12 +50,12 @@ public class SyntheticFieldsTest {
 				return false;
 			}
 			Outer other = (Outer)obj;
-			return inner == null ? other.inner == null : inner.equals(other.inner);
+			return nullSafeEquals(inner, other.inner);
 		}
 		
 		@Override
 		public int hashCode() {
-			return inner == null ? 0 : inner.hashCode();
+			return nullSafeHashCode(inner);
 		}
 	}
 	
@@ -69,12 +72,12 @@ public class SyntheticFieldsTest {
 				return false;
 			}
 			OuterContainer other = (OuterContainer)obj;
-			return outer == null ? other.outer == null : outer.equals(other.outer);
+			return nullSafeEquals(outer, other.outer);
 		}
 		
 		@Override
 		public int hashCode() {
-			return outer == null ? 0 : outer.hashCode();
+			return nullSafeHashCode(outer);
 		}
 	}
 }

@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import org.junit.Test;
 
@@ -236,12 +238,12 @@ public class AbstractDelegationTest {
 				return false;
 			}
 			EqualsInFieldDelegatesToAbstractMethod other = (EqualsInFieldDelegatesToAbstractMethod)obj;
-			return aed == null ? other.aed == null : aed.equals(other.aed);
+			return nullSafeEquals(aed, other.aed);
 		}
 		
 		@Override
 		public int hashCode() {
-			return aed == null ? 0 : aed.hashCode();
+			return nullSafeHashCode(aed);
 		}
 	}
 	
@@ -258,12 +260,12 @@ public class AbstractDelegationTest {
 				return false;
 			}
 			HashCodeInFieldDelegatesToAbstractMethod other = (HashCodeInFieldDelegatesToAbstractMethod)obj;
-			return ahcd == null ? other.ahcd == null : ahcd.equals(other.ahcd);
+			return nullSafeEquals(ahcd, other.ahcd);
 		}
 		
 		@Override
 		public int hashCode() {
-			return ahcd == null ? 0 : ahcd.hashCode();
+			return nullSafeHashCode(ahcd);
 		}
 	}
 }

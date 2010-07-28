@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
@@ -115,7 +117,7 @@ public class NullFieldsTest {
 		
 		@Override
 		public int hashCode() {
-			return (color == null ? 0 : color.hashCode());
+			return nullSafeHashCode(color);
 		}
 	}
 	
@@ -137,7 +139,7 @@ public class NullFieldsTest {
 		
 		@Override
 		public int hashCode() {
-			return (color == null ? 0 : color.hashCode());
+			return nullSafeHashCode(color);
 		}
 	}
 	
@@ -187,7 +189,7 @@ public class NullFieldsTest {
 		
 		@Override
 		public int hashCode() {
-			return (color == null ? 0 : color.hashCode());
+			return nullSafeHashCode(color);
 		}
 		
 		@Override
@@ -244,10 +246,11 @@ public class NullFieldsTest {
 		
 		@Override
 		public int hashCode() {
-			int result = 31 + (one == null ? 0 : one.hashCode());
-			result = 31 * result + (two == null ? 0 : two.hashCode());
-			result = 31 * result + (three == null ? 0 : three.hashCode());
-			result = 31 * result + (four == null ? 0 : four.hashCode());
+			int result = 0;
+			result += 31 + nullSafeHashCode(one);
+			result += 31 * nullSafeHashCode(two);
+			result += 31 * nullSafeHashCode(three);
+			result += 31 * nullSafeHashCode(four);
 			return result;
 		}
 	}
@@ -283,7 +286,7 @@ public class NullFieldsTest {
 		
 		@Override 
 		public int hashCode() {
-			return b == null ? 0 : b.hashCode();
+			return nullSafeHashCode(b);
 		}
 		
 		@Override
@@ -292,7 +295,7 @@ public class NullFieldsTest {
 				return false;
 			}
 			CheckedDeepNullA other = (CheckedDeepNullA)obj;
-			return b == null ? other.b == null : b.equals(other.b);
+			return nullSafeEquals(b, other.b);
 		}
 	}
 
