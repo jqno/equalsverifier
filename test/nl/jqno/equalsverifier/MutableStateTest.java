@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import java.util.Arrays;
 
@@ -158,7 +159,7 @@ public class MutableStateTest {
 		
 		@Override
 		public int hashCode() {
-			return _object == null ? 0 : _object.hashCode();
+			return nullSafeHashCode(_object);
 		}
 	}
 	
@@ -181,7 +182,7 @@ public class MutableStateTest {
 		
 		@Override
 		public int hashCode() {
-			return _enum == null ? 0 : _enum.hashCode();
+			return nullSafeHashCode(_enum);
 		}
 	}
 	

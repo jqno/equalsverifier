@@ -14,6 +14,8 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumMap;
@@ -73,20 +75,16 @@ public class TypeHelper {
 			result &= _Boolean == other._Boolean;
 			result &= _Byte == other._Byte;
 			result &= _Char == other._Char;
-			result &= (_Double == null || other._Double == null) ?
-							_Double == other._Double :
-							Double.compare(_Double, other._Double) == 0;
-			result &= (_Float == null || other._Float == null) ?
-							_Float == other._Float :
-							Float.compare(_Float, other._Float) == 0;
+			result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
+			result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
 			result &= _Int == other._Int;
 			result &= _Long == other._Long;
 			result &= _Short == other._Short;
 			result &= _enum == other._enum;
 			result &= Arrays.equals(_array, other._array);
-			result &= _object == null ? other._object == null : _object.equals(other._object);
+			result &= nullSafeEquals(_object, other._object);
 			result &= _klass == other._klass;
-			result &= _string == null ? other._string == null : _string.equals(other._string);
+			result &= nullSafeEquals(_string, other._string);
 			return result;
 		}
 	}

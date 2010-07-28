@@ -16,9 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
-
-import java.awt.Point;
-
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 import nl.jqno.equalsverifier.points.BlindlyEqualsColorPoint;
 import nl.jqno.equalsverifier.points.BlindlyEqualsPoint;
 import nl.jqno.equalsverifier.points.CanEqualColorPoint;
@@ -27,6 +25,7 @@ import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.points.EqualSubclassForBlindlyEqualsPoint;
 import nl.jqno.equalsverifier.points.EqualSubclassForCanEqualPoint;
+import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
@@ -214,7 +213,7 @@ public class SubclassTest {
 		
 		@Override
 		public int hashCode() {
-			return (color == null ? 0 : color.hashCode()) + (31 * super.hashCode());
+			return nullSafeHashCode(color) + (31 * super.hashCode());
 		}
 		
 		@Override

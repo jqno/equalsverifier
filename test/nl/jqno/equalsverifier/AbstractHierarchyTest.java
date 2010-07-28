@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 import nl.jqno.equalsverifier.points.Color;
 
 import org.junit.Test;
@@ -124,7 +125,7 @@ public class AbstractHierarchyTest {
 		
 		@Override
 		public int hashCode() {
-			return (color == null ? 0 : color.hashCode()) + (31 * super.hashCode());
+			return nullSafeHashCode(color) + (31 * super.hashCode());
 		}
 		
 		@Override

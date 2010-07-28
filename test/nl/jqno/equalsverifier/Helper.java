@@ -17,7 +17,8 @@ package nl.jqno.equalsverifier;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import static org.junit.matchers.JUnitMatchers.*;
+import static org.junit.matchers.JUnitMatchers.both;
+import static org.junit.matchers.JUnitMatchers.containsString;
 
 import org.hamcrest.Matcher;
 import org.junit.internal.matchers.CombinableMatcher;
@@ -44,5 +45,13 @@ public class Helper {
 			result = result.and(containsString(m));
 		}
 		return result;
+	}
+	
+	public static boolean nullSafeEquals(Object x, Object y) {
+		return x == null ? y == null : x.equals(y);
+	}
+	
+	public static int nullSafeHashCode(Object x) {
+		return x == null ? 0 : x.hashCode();
 	}
 }
