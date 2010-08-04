@@ -19,7 +19,9 @@ import static nl.jqno.equalsverifier.Helper.assertFailure;
 import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
 import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -141,11 +143,15 @@ public class DifficultClassesTest {
 	}
 	
 	static final class CommonClassesContainer {
+		private final Calendar calendar;
 		private final Date date;
+		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
 		
-		public CommonClassesContainer(Date date, Pattern pattern) {
+		public CommonClassesContainer(Calendar calendar, Date date, GregorianCalendar gregorianCalendar, Pattern pattern) {
+			this.calendar = calendar;
 			this.date = date;
+			this.gregorianCalendar = gregorianCalendar;
 			this.pattern = pattern;
 		}
 		
@@ -157,7 +163,9 @@ public class DifficultClassesTest {
 			
 			CommonClassesContainer other = (CommonClassesContainer)obj;
 			boolean result = true;
+			result &= nullSafeEquals(calendar, other.calendar);
 			result &= nullSafeEquals(date, other.date);
+			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
 			result &= nullSafeEquals(pattern, other.pattern);
 			return result;
 		}
@@ -165,7 +173,9 @@ public class DifficultClassesTest {
 		@Override
 		public int hashCode() {
 			int result = 0;
+			result += 31 * nullSafeHashCode(calendar);
 			result += 31 * nullSafeHashCode(date);
+			result += 31 * nullSafeHashCode(gregorianCalendar);
 			result += 31 * nullSafeHashCode(pattern);
 			return result;
 		}

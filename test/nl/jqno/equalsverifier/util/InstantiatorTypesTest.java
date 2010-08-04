@@ -14,10 +14,9 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.AllMapImplementationsContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllRecursiveCollectionImplementationsContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.RecursiveApiClassesContainer;
@@ -48,9 +47,9 @@ public class InstantiatorTypesTest {
 	
 	@Test
 	public void instantiateMapImplementations() {
-		Instantiator<AllMapImplementationsContainer> instantiator = Instantiator.forClass(AllMapImplementationsContainer.class);
-		AllMapImplementationsContainer acic = instantiator.instantiate();
-		instantiator.scramble(acic);
+		Instantiator<AllRecursiveCollectionImplementationsContainer> instantiator = Instantiator.forClass(AllRecursiveCollectionImplementationsContainer.class);
+		AllRecursiveCollectionImplementationsContainer arcic = instantiator.instantiate();
+		instantiator.scramble(arcic);
 	}
 	
 	@Test
