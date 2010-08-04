@@ -16,16 +16,36 @@ package nl.jqno.equalsverifier.util;
 
 import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
 
+import java.text.DateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.EnumMap;
+import java.util.EnumSet;
+import java.util.Formatter;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.Scanner;
+import java.util.TimeZone;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.WeakHashMap;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.DelayQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 public class TypeHelper {
@@ -147,24 +167,22 @@ public class TypeHelper {
 	}
 	
 	static class RecursiveApiClassesContainer {
+		Calendar calendar;
 		Date date;
+		DateFormat dateFormat;
+		Formatter formatter;
+		GregorianCalendar gregorianCalendar;
+		Locale locale;
 		Pattern pattern;
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof RecursiveApiClassesContainer)) {
-				return false;
-			}
-			RecursiveApiClassesContainer other = (RecursiveApiClassesContainer)obj;
-			boolean result = true;
-			result &= date.equals(other.date);
-			result &= pattern.equals(other.pattern);
-			return result;
-		}
+		Scanner scanner;
+		TimeZone timeZone;
 	}
 	
 	@SuppressWarnings("unchecked")
-	static class AllMapImplementationsContainer {
+	static class AllRecursiveCollectionImplementationsContainer {
+		CopyOnWriteArrayList copyOnWriteArrayList;
+		LinkedList linkedList;
+		
 		ConcurrentHashMap concurrentHashMap;
 		EnumMap enumMap;
 		HashMap hashMap;
@@ -174,23 +192,18 @@ public class TypeHelper {
 		TreeMap treeMap;
 		WeakHashMap weakHashMap;
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof AllMapImplementationsContainer)) {
-				return false;
-			}
-			AllMapImplementationsContainer other = (AllMapImplementationsContainer)obj;
-			boolean result = true;
-			result &= concurrentHashMap.equals(other.concurrentHashMap);
-			result &= enumMap.equals(other.enumMap);
-			result &= hashMap.equals(other.hashMap);
-			result &= hashtable.equals(other.hashtable);
-			result &= linkedHashMap.equals(other.linkedHashMap);
-			result &= properties.equals(other.properties);
-			result &= treeMap.equals(other.treeMap);
-			result &= weakHashMap.equals(other.weakHashMap);
-			return result;
-		}
+		CopyOnWriteArraySet copyOnWriteArraySet;
+		EnumSet enumSet;
+		HashSet hashSet;
+		LinkedHashSet linkedHashSet;
+		TreeSet treeSet;
+		
+		ArrayBlockingQueue arrayBlockingQueue;
+		ConcurrentLinkedQueue concurrentLinkedQueue;
+		DelayQueue delayQueue;
+		LinkedBlockingQueue linkedBlockingQueue;
+		PriorityBlockingQueue priorityBlockingQueue;
+		SynchronousQueue synchronousQueue;
 	}
 
 	static interface Interface {}
