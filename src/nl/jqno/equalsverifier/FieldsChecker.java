@@ -88,30 +88,50 @@ class FieldsChecker<T> {
 				reference.equals(changed);
 			}
 			catch (NullPointerException e) {
-				fail("Non-nullity: equals throws NullPointerException.");
+				npeThrown("equals");
+			}
+			catch (Exception e) {
+				exceptionThrown("equals", field, e);
 			}
 			try {
 				changed.equals(reference);
 			}
 			catch (NullPointerException e) {
-				fail("Non-nullity: equals throws NullPointerException.");
+				npeThrown("equals");
+			}
+			catch (Exception e) {
+				exceptionThrown("equals", field, e);
 			}
 			
 			try {
 				changed.hashCode();
 			}
 			catch (NullPointerException e) {
-				fail("Non-nullity: hashCode throws NullPointerException.");
+				npeThrown("hashCode");
+			}
+			catch (Exception e) {
+				exceptionThrown("hashCode", field, e);
 			}
 			
 			try {
 				changed.toString();
 			}
 			catch (NullPointerException e) {
-				fail("Non-nullity: toString throws NullPointerException.");
+				npeThrown("toString");
+			}
+			catch (Exception e) {
+				exceptionThrown("toString", field, e);
 			}
 			
 			instantiator.nullField(field, reference);
+		}
+
+		private void npeThrown(String method) {
+			fail("Non-nullity: " + method + " throws NullPointerException.");
+		}
+		
+		private void exceptionThrown(String method, Field field, Exception e) {
+			fail(method + " throws " + e.getClass().getSimpleName() + " when field " + field.getName() + " is null.");
 		}
 	}
 	
