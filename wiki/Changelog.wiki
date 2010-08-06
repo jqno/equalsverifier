@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 0.6.5 ===
+  * ... use `EqualsVerifier` on classes with fields of a wide variety of Java API types, without getting 'Recursive datastructure' errors all the time. ([http://code.google.com/p/equalsverifier/issues/detail?id=30 Issue 30])
+  * ... get a more helpful error message when `equals`, `hashCode` or `toString` throws something other than a `NullPointerException` when one of the fields in `null`. ([http://code.google.com/p/equalsverifier/issues/detail?id=31 Issue 31])
+
 == Version 0.6.4 ==
   * ... get an appropriate error message when `Arrays.hashCode()` or `Arrays.deepHashCode()` should have been used, instead of a message that a certain field is used in `equals` but not in `hashCode` or the other way around. ([http://code.google.com/p/equalsverifier/issues/detail?id=27 Issue 27])
   * ... get less frequent non-nullity errors on `toString`.
