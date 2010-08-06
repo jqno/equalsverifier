@@ -189,7 +189,7 @@ limitations under the License.
 			<arg line="checkout ${project.svn}/tags/${tag} --username ${google.username} --password ${google.password}" />
 		</exec>
 		
-		<echo message="Bump version in ${equalsverifier.pom}" />
+		<echo message="Bumping version in ${equalsverifier.pom}" />
 		<replace file="${equalsverifier.pom}" token="???" value="${version}" />
 		
 		<echo message="Committing files in ${tag.dir}" />
