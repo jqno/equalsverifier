@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,51 +23,52 @@ import nl.jqno.equalsverifier.points.Point;
 
 import org.junit.Test;
 
-public class InstantiatorInstantiationTest {
+public class InstantiatorTest {
 	@Test
 	public void instantiateClass() {
-		InstantiatorFacade<Point> instantiator = InstantiatorFacade.forClass(Point.class);
+		Instantiator<Point> instantiator = Instantiator.of(Point.class);
 		Point p = instantiator.instantiate();
 		assertEquals(Point.class, p.getClass());
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
 	public void instantiateInterface() {
-		InstantiatorFacade.forClass(Interface.class);
+		Instantiator<Interface> instantiator = Instantiator.of(Interface.class);
+		Interface i = instantiator.instantiate();
+		assertTrue(Interface.class.isAssignableFrom(i.getClass()));
 	}
 	
 	@Test
 	public void instantiateFinalClass() {
-		InstantiatorFacade.forClass(FinalPoint.class);
+		Instantiator.of(FinalPoint.class);
 	}
 	
 	@Test
 	public void instantiateArrayContainer() {
-		InstantiatorFacade.forClass(ArrayContainer.class);
+		Instantiator.of(ArrayContainer.class);
 	}
 	
 	@Test
 	public void instantiateAbstractClass() {
-		InstantiatorFacade<AbstractClass> instantiator = InstantiatorFacade.forClass(AbstractClass.class);
+		Instantiator<AbstractClass> instantiator = Instantiator.of(AbstractClass.class);
 		AbstractClass ac = instantiator.instantiate();
 		assertTrue(AbstractClass.class.isAssignableFrom(ac.getClass()));
 	}
 	
 	@Test
 	public void instantiateSubclass() {
-		InstantiatorFacade<Point> instantiator = InstantiatorFacade.forClass(Point.class);
-		Point p = instantiator.instantiateSubclass();
+		Instantiator<Point> instantiator = Instantiator.of(Point.class);
+		Point p = instantiator.instantiateAnonymousSubclass();
 		assertFalse(p.getClass() == Point.class);
 		assertTrue(Point.class.isAssignableFrom(p.getClass()));
-	}
-	
-	static abstract class AbstractClass {
-		public int value = 42; 
 	}
 	
 	static interface Interface {}
 	
 	static class ArrayContainer {
 		public int[] array;
+	}
+	
+	static abstract class AbstractClass {
+		public int value = 42; 
 	}
 }

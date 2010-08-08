@@ -26,42 +26,42 @@ import org.junit.Test;
 public class InstantiatorTypesTest {
 	@Test
 	public void instantiateTypes() {
-		Instantiator<AllTypesContainer> instantiator = Instantiator.forClass(AllTypesContainer.class);
+		InstantiatorFacade<AllTypesContainer> instantiator = InstantiatorFacade.forClass(AllTypesContainer.class);
 		AllTypesContainer cc = instantiator.instantiate();
 		instantiator.scramble(cc);
 	}
 
 	@Test
 	public void instantiateArrayTypes() {
-		Instantiator<AllArrayTypesContainer> instantiator = Instantiator.forClass(AllArrayTypesContainer.class);
+		InstantiatorFacade<AllArrayTypesContainer> instantiator = InstantiatorFacade.forClass(AllArrayTypesContainer.class);
 		AllArrayTypesContainer cc = instantiator.instantiate();
 		instantiator.scramble(cc);
 	}
 	
 	@Test
 	public void instantiateRecursiveApiTypes() {
-		Instantiator<RecursiveApiClassesContainer> instantiator = Instantiator.forClass(RecursiveApiClassesContainer.class);
+		InstantiatorFacade<RecursiveApiClassesContainer> instantiator = InstantiatorFacade.forClass(RecursiveApiClassesContainer.class);
 		RecursiveApiClassesContainer racc = instantiator.instantiate();
 		instantiator.scramble(racc);
 	}
 	
 	@Test
 	public void instantiateMapImplementations() {
-		Instantiator<AllRecursiveCollectionImplementationsContainer> instantiator = Instantiator.forClass(AllRecursiveCollectionImplementationsContainer.class);
+		InstantiatorFacade<AllRecursiveCollectionImplementationsContainer> instantiator = InstantiatorFacade.forClass(AllRecursiveCollectionImplementationsContainer.class);
 		AllRecursiveCollectionImplementationsContainer arcic = instantiator.instantiate();
 		instantiator.scramble(arcic);
 	}
 	
 	@Test
 	public void interfaceField() {
-		Instantiator<InterfaceContainer> instantiator = Instantiator.forClass(InterfaceContainer.class);
+		InstantiatorFacade<InterfaceContainer> instantiator = InstantiatorFacade.forClass(InterfaceContainer.class);
 		InterfaceContainer ic = new InterfaceContainer();
 		instantiator.scramble(ic);
 	}
 	
 	@Test
 	public void abstractClassField() {
-		Instantiator<AbstractClassContainer> instantiator = Instantiator.forClass(AbstractClassContainer.class);
+		InstantiatorFacade<AbstractClassContainer> instantiator = InstantiatorFacade.forClass(AbstractClassContainer.class);
 		AbstractClassContainer ic = new AbstractClassContainer();
 		instantiator.scramble(ic);
 	}

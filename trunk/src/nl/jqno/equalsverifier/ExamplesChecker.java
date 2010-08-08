@@ -24,14 +24,14 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 class ExamplesChecker<T> {
-	private final Instantiator<T> instantiator;
+	private final InstantiatorFacade<T> instantiator;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public ExamplesChecker(Instantiator<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
+	public ExamplesChecker(InstantiatorFacade<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
 		this.instantiator = instantiator;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
@@ -89,7 +89,7 @@ class ExamplesChecker<T> {
 		}
 		else {
 			@SuppressWarnings("unchecked")
-			Instantiator<T> subInstantiator = Instantiator.forClass((Class<T>)reference.getClass());
+			InstantiatorFacade<T> subInstantiator = InstantiatorFacade.forClass((Class<T>)reference.getClass());
 			return subInstantiator.cloneFrom(reference);
 		}
 	}

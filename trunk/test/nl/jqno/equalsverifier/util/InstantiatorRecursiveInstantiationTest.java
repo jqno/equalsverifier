@@ -17,14 +17,14 @@ package nl.jqno.equalsverifier.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 import org.junit.Test;
 
 public class InstantiatorRecursiveInstantiationTest {
 	@Test
 	public void dontAddOneStepRecursiveClass() {
-		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
+		InstantiatorFacade<Node> instantiator = InstantiatorFacade.forClass(Node.class);
 		Node node = new Node();
 		
 		try {
@@ -39,7 +39,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void dontAddOneStepRecursiveArrayClass() {
-		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
+		InstantiatorFacade<NodeArray> instantiator = InstantiatorFacade.forClass(NodeArray.class);
 		NodeArray nodeArray = new NodeArray();
 		
 		try {
@@ -54,7 +54,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void addOneStepRecursiveClass() {
-		Instantiator<Node> instantiator = Instantiator.forClass(Node.class);
+		InstantiatorFacade<Node> instantiator = InstantiatorFacade.forClass(Node.class);
 		instantiator.addPrefabValues(Node.class, new Node(), new Node());
 		Node node = new Node();
 		instantiator.scramble(node);
@@ -62,7 +62,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void addOneStepRecursiveArrayClass() {
-		Instantiator<NodeArray> instantiator = Instantiator.forClass(NodeArray.class);
+		InstantiatorFacade<NodeArray> instantiator = InstantiatorFacade.forClass(NodeArray.class);
 		instantiator.addPrefabValues(NodeArray.class, new NodeArray(), new NodeArray());
 		NodeArray nodeArray = new NodeArray();
 		instantiator.scramble(nodeArray);
@@ -70,7 +70,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void dontAddTwoStepRecursiveClass() {
-		Instantiator<TwoStepNodeA> instantiator = Instantiator.forClass(TwoStepNodeA.class);
+		InstantiatorFacade<TwoStepNodeA> instantiator = InstantiatorFacade.forClass(TwoStepNodeA.class);
 		TwoStepNodeA node = new TwoStepNodeA();
 		
 		try {
@@ -85,7 +85,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void dontAddTwoStepRecursiveArrayClass() {
-		Instantiator<TwoStepNodeArrayA> instantiator = Instantiator.forClass(TwoStepNodeArrayA.class);
+		InstantiatorFacade<TwoStepNodeArrayA> instantiator = InstantiatorFacade.forClass(TwoStepNodeArrayA.class);
 		TwoStepNodeArrayA node = new TwoStepNodeArrayA();
 		
 		try {
@@ -100,7 +100,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void addTwoStepRecursiveClass() {
-		Instantiator<TwoStepNodeA> instantiator = Instantiator.forClass(TwoStepNodeA.class);
+		InstantiatorFacade<TwoStepNodeA> instantiator = InstantiatorFacade.forClass(TwoStepNodeA.class);
 		instantiator.addPrefabValues(TwoStepNodeA.class, new TwoStepNodeA(), new TwoStepNodeA());
 		TwoStepNodeA node = new TwoStepNodeA();
 		instantiator.scramble(node);
@@ -108,7 +108,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void addTwoStepRecursiveArrayClass() {
-		Instantiator<TwoStepNodeArrayA> instantiator = Instantiator.forClass(TwoStepNodeArrayA.class);
+		InstantiatorFacade<TwoStepNodeArrayA> instantiator = InstantiatorFacade.forClass(TwoStepNodeArrayA.class);
 		instantiator.addPrefabValues(TwoStepNodeArrayA.class, new TwoStepNodeArrayA(), new TwoStepNodeArrayA());
 		TwoStepNodeArrayA nodeArray = new TwoStepNodeArrayA();
 		instantiator.scramble(nodeArray);
@@ -116,7 +116,7 @@ public class InstantiatorRecursiveInstantiationTest {
 	
 	@Test
 	public void sameClassButNotRecursive() {
-		Instantiator<NotRecursiveA> instantiator = Instantiator.forClass(NotRecursiveA.class);
+		InstantiatorFacade<NotRecursiveA> instantiator = InstantiatorFacade.forClass(NotRecursiveA.class);
 		NotRecursiveA a = instantiator.instantiate();
 		instantiator.scramble(a);
 	}
