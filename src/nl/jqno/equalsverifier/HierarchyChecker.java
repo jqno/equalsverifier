@@ -23,11 +23,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 class HierarchyChecker<T> {
 	private final Class<T> klass;
-	private final Instantiator<T> instantiator;
+	private final InstantiatorFacade<T> instantiator;
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
@@ -36,7 +36,7 @@ class HierarchyChecker<T> {
 	private T reference;
 	private T other;
 
-	public HierarchyChecker(Instantiator<T> instantiator, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(InstantiatorFacade<T> instantiator, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
@@ -93,7 +93,7 @@ class HierarchyChecker<T> {
 	
 	@SuppressWarnings("unchecked")
 	private <S> Object instantiateSuperclass(Class<S> superclass) {
-		Instantiator superInstantiator = Instantiator.forClass(superclass);
+		InstantiatorFacade superInstantiator = InstantiatorFacade.forClass(superclass);
 		return superInstantiator.cloneFrom(reference);
 	}
 

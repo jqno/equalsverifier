@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -101,7 +101,7 @@ import nl.jqno.equalsverifier.util.Instantiator;
  */
 public final class EqualsVerifier<T> {
 	private final Class<T> klass;
-	private final Instantiator<T> instantiator;
+	private final InstantiatorFacade<T> instantiator;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	
@@ -118,7 +118,7 @@ public final class EqualsVerifier<T> {
 	 * 				tested.
 	 */
 	public static <T> EqualsVerifier<T> forClass(Class<T> klass) {
-		Instantiator<T> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		List<T> equalExamples = new ArrayList<T>();
 		List<T> unequalExamples = new ArrayList<T>();
 
@@ -144,7 +144,7 @@ public final class EqualsVerifier<T> {
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
-		Instantiator<T> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		
 		return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
 	}
@@ -172,7 +172,7 @@ public final class EqualsVerifier<T> {
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
-		Instantiator<T> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		
 		return new RelaxedEqualsVerifierHelper<T>(klass, instantiator, examples);
 	}
@@ -182,7 +182,7 @@ public final class EqualsVerifier<T> {
 	 * {@link #forExamples(Object, Object, Object...)} or
 	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
 	 */
-	private EqualsVerifier(Class<T> klass, Instantiator<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
+	private EqualsVerifier(Class<T> klass, InstantiatorFacade<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
 		this.klass = klass;
 		this.instantiator = instantiator;
 		this.equalExamples = equalExamples;
@@ -388,14 +388,14 @@ public final class EqualsVerifier<T> {
 	 */
 	public static class RelaxedEqualsVerifierHelper<T> {
 		private final Class<T> klass;
-		private final Instantiator<T> instantiator;
+		private final InstantiatorFacade<T> instantiator;
 		private final List<T> equalExamples;
 
 		/**
 		 * Private constructor, only to be called by
 		 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
 		 */
-		private RelaxedEqualsVerifierHelper(Class<T> klass, Instantiator<T> instantiator, List<T> examples) {
+		private RelaxedEqualsVerifierHelper(Class<T> klass, InstantiatorFacade<T> instantiator, List<T> examples) {
 			this.klass = klass;
 			this.instantiator = instantiator;
 			this.equalExamples = examples;

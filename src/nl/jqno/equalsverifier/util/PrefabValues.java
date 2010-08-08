@@ -53,7 +53,7 @@ import net.sf.cglib.proxy.NoOp;
 
 /**
  * Contains prefabricated instances of classes that are hard to instantiate
- * or scramble by {@link Instantiator}.
+ * or scramble by {@link InstantiatorFacade}.
  * 
  * @author Jan Ouwens
  */

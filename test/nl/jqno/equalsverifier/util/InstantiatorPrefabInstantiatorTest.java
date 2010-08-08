@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
 
@@ -33,7 +33,7 @@ import org.junit.Test;
 public class InstantiatorPrefabInstantiatorTest {
 	@Test
 	public void dontAddPrefabValue() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		PointContainer pc = new PointContainer();
 		Point p = pc.point;
 		
@@ -43,7 +43,7 @@ public class InstantiatorPrefabInstantiatorTest {
 
 	@Test
 	public void dontAddPrefabArrayValue() {
-		Instantiator<PointArrayContainer> instantiator = Instantiator.forClass(PointArrayContainer.class);
+		InstantiatorFacade<PointArrayContainer> instantiator = InstantiatorFacade.forClass(PointArrayContainer.class);
 		PointArrayContainer pc = new PointArrayContainer();
 		Point p = pc.point[0];
 		
@@ -53,7 +53,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void addPrefabValue() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		instantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
 		PointContainer pc = new PointContainer();
@@ -65,7 +65,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void addPrefabArrayValue() {
-		Instantiator<PointArrayContainer> instantiator = Instantiator.forClass(PointArrayContainer.class);
+		InstantiatorFacade<PointArrayContainer> instantiator = InstantiatorFacade.forClass(PointArrayContainer.class);
 		instantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
 		PointArrayContainer pc = new PointArrayContainer();
@@ -77,7 +77,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void addNullClass() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		try {
 			instantiator.addPrefabValues(null, new Point(1, 2), new Point(2, 3));
 			fail("No exception thrown.");
@@ -89,7 +89,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void addNullPrefabValues() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		
 		try {
 			instantiator.addPrefabValues(Point.class, null, new Point(1, 2));
@@ -111,7 +111,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void addEqualPrefabValues() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		try {
 			instantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(1, 2));
 			fail("No exception thrown.");
@@ -123,10 +123,10 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void copyPrefabValues() {
-		Instantiator<AllTypesContainer> firstInstantiator = Instantiator.forClass(AllTypesContainer.class);
+		InstantiatorFacade<AllTypesContainer> firstInstantiator = InstantiatorFacade.forClass(AllTypesContainer.class);
 		firstInstantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
-		Instantiator<PointContainer> secondInstantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> secondInstantiator = InstantiatorFacade.forClass(PointContainer.class);
 		secondInstantiator.copyPrefabValues(firstInstantiator);
 		
 		PointContainer pc = new PointContainer();
@@ -135,7 +135,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void changeFieldPrefabValues() {
-		Instantiator<AllTypesContainer> instantiator = Instantiator.forClass(AllTypesContainer.class);
+		InstantiatorFacade<AllTypesContainer> instantiator = InstantiatorFacade.forClass(AllTypesContainer.class);
 		AllTypesContainer atc = new AllTypesContainer();
 		List<Object> objects = new ArrayList<Object>();
 		objects.add(atc._object);
@@ -181,7 +181,7 @@ public class InstantiatorPrefabInstantiatorTest {
 	
 	@Test
 	public void changePrefabArrayElement() {
-		Instantiator<AllArrayTypesContainer> instantiator = Instantiator.forClass(AllArrayTypesContainer.class);
+		InstantiatorFacade<AllArrayTypesContainer> instantiator = InstantiatorFacade.forClass(AllArrayTypesContainer.class);
 		AllArrayTypesContainer aabtc = new AllArrayTypesContainer();
 		
 		changePrefabArrayElementThreeTimes(instantiator, aabtc.strings, "one", "two");
@@ -194,7 +194,7 @@ public class InstantiatorPrefabInstantiatorTest {
 		changePrefabArrayElementThreeTimes(instantiator, aabtc.Shorts, (short)2, (short)1);
 	}
 	
-	private void changePrefabArrayElementThreeTimes(Instantiator<?> instantiator, Object array, Object... values) {
+	private void changePrefabArrayElementThreeTimes(InstantiatorFacade<?> instantiator, Object array, Object... values) {
 		instantiator.changeArrayElement(array, 0);
 		assertEquals(values[0], Array.get(array, 0));
 		instantiator.changeArrayElement(array, 0);

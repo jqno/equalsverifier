@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 public class AbstractDelegationChecker<T> {
 	private final Class<T> klass;
-	private final Instantiator<T> instantiator;
+	private final InstantiatorFacade<T> instantiator;
 	private final Map<Class<?>, List<?>> prefabValues;
 
-	public AbstractDelegationChecker(Class<T> klass, Instantiator<T> instantiator, Map<Class<?>, List<?>> prefabValues) {
+	public AbstractDelegationChecker(Class<T> klass, InstantiatorFacade<T> instantiator, Map<Class<?>, List<?>> prefabValues) {
 		this.klass = klass;
 		this.instantiator = instantiator;
 		this.prefabValues = prefabValues;
@@ -65,7 +65,7 @@ public class AbstractDelegationChecker<T> {
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
 		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
-			Instantiator<S> superInstantiator = Instantiator.forClass(superclass);
+			InstantiatorFacade<S> superInstantiator = InstantiatorFacade.forClass(superclass);
 			superInstantiator.copyPrefabValues(instantiator);
 			instance = superInstantiator.instantiate();
 			superInstantiator.scramble(instance);
@@ -87,7 +87,7 @@ public class AbstractDelegationChecker<T> {
 			return result;
 		}
 		try {
-			return Instantiator.forClass(type).instantiate();
+			return InstantiatorFacade.forClass(type).instantiate();
 		}
 		catch (Throwable e) {
 			// If it fails for some reason, any reason, just return null.
