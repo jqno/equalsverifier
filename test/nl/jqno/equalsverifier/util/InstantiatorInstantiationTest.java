@@ -20,6 +20,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.points.FinalPoint;
 import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.util.TypeHelper.AbstractClass;
+import nl.jqno.equalsverifier.util.TypeHelper.ArrayContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.Interface;
 
 import org.junit.Test;
 
@@ -59,15 +62,5 @@ public class InstantiatorInstantiationTest {
 		Point p = instantiator.instantiateSubclass();
 		assertFalse(p.getClass() == Point.class);
 		assertTrue(Point.class.isAssignableFrom(p.getClass()));
-	}
-	
-	static abstract class AbstractClass {
-		public int value = 42; 
-	}
-	
-	static interface Interface {}
-	
-	static class ArrayContainer {
-		public int[] array;
 	}
 }

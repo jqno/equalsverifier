@@ -22,9 +22,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.points.Color;
+import nl.jqno.equalsverifier.points.ColorPoint3D;
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.points.Point3D;
+import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -102,8 +103,8 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void cloneStaticFinal() {
-		InstantiatorFacade<StaticFinal> sfInstantiator = InstantiatorFacade.forClass(StaticFinal.class);
-		StaticFinal sf = new StaticFinal();
+		InstantiatorFacade<StaticFinalContainer> sfInstantiator = InstantiatorFacade.forClass(StaticFinalContainer.class);
+		StaticFinalContainer sf = new StaticFinalContainer();
 		sfInstantiator.cloneFrom(sf);
 	}
 
@@ -138,8 +139,8 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void scrambleStaticFinal() {
-		InstantiatorFacade<StaticFinal> sfInstantiator = InstantiatorFacade.forClass(StaticFinal.class);
-		StaticFinal sf = new StaticFinal();
+		InstantiatorFacade<StaticFinalContainer> sfInstantiator = InstantiatorFacade.forClass(StaticFinalContainer.class);
+		StaticFinalContainer sf = new StaticFinalContainer();
 		sfInstantiator.scramble(sf);
 	}
 	
@@ -195,34 +196,8 @@ public class InstantiatorCloningAndScramblingTest {
 		}
 	}
 	
-	static class Point3D extends Point {
-		int z;
-		
-		public Point3D(int x, int y, int z) {
-			super(x, y);
-			this.z = z;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof Point3D)) {
-				return false;
-			}
-			return super.equals(obj) && ((Point3D)obj).z == z;
-		}
-	}
-	
-	static final class ColorPoint3D extends Point3D {
-		final Color color;
-		
-		public ColorPoint3D(int x, int y, int z, Color color) {
-			super(x, y, z);
-			this.color = color;
-		}
-	}
-	
-	static final class StaticFinal {
-		public static final int STATIC_FINAL = 0;
+	static final class FinalAssignedPointContainer {
+		private final Point p = new Point(2, 3);
 	}
 	
 	static final class StringContainer {
@@ -231,9 +206,5 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	static final class FinalAssignedStringContainer {
 		private final String s = "x";
-	}
-	
-	static final class FinalAssignedPointContainer {
-		private final Point p = new Point(2, 3);
 	}
 }
