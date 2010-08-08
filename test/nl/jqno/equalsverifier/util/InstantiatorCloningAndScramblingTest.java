@@ -24,17 +24,17 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.points.Color;
 import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 import org.junit.Before;
 import org.junit.Test;
 
 public class InstantiatorCloningAndScramblingTest {
-	private Instantiator<Point> instantiator;
+	private InstantiatorFacade<Point> instantiator;
 	
 	@Before
 	public void setup() {
-		instantiator = Instantiator.forClass(Point.class);
+		instantiator = InstantiatorFacade.forClass(Point.class);
 	}
 
 	@Test
@@ -48,7 +48,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void shallowClone() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		PointContainer original = new PointContainer(new Point(1, 2));
 		PointContainer clone = instantiator.cloneFrom(original);
 		
@@ -57,7 +57,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void inheritanceClone() throws IllegalArgumentException, IllegalAccessException {
-		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
+		InstantiatorFacade<Point3D> subInstantiator = InstantiatorFacade.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneFrom(original);
 
@@ -83,7 +83,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void shallowCloneToSub() {
-		Instantiator<PointContainer> instantiator = Instantiator.forClass(PointContainer.class);
+		InstantiatorFacade<PointContainer> instantiator = InstantiatorFacade.forClass(PointContainer.class);
 		PointContainer original = new PointContainer(new Point(1, 2));
 		SubPointContainer clone = instantiator.cloneToSubclass(original, SubPointContainer.class);
 		
@@ -92,7 +92,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void inheritanceCloneToSub() throws IllegalArgumentException, IllegalAccessException {
-		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
+		InstantiatorFacade<Point3D> subInstantiator = InstantiatorFacade.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneToSubclass(original, ColorPoint3D.class);
 
@@ -102,7 +102,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void cloneStaticFinal() {
-		Instantiator<StaticFinal> sfInstantiator = Instantiator.forClass(StaticFinal.class);
+		InstantiatorFacade<StaticFinal> sfInstantiator = InstantiatorFacade.forClass(StaticFinal.class);
 		StaticFinal sf = new StaticFinal();
 		sfInstantiator.cloneFrom(sf);
 	}
@@ -117,7 +117,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void deepScramble() {
-		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
+		InstantiatorFacade<Point3D> subInstantiator = InstantiatorFacade.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneFrom(original);
 		subInstantiator.scramble(clone);
@@ -127,7 +127,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void shallowScramble() {
-		Instantiator<Point3D> subInstantiator = Instantiator.forClass(Point3D.class);
+		InstantiatorFacade<Point3D> subInstantiator = InstantiatorFacade.forClass(Point3D.class);
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = subInstantiator.cloneFrom(original);
 		subInstantiator.shallowScramble(clone);
@@ -138,14 +138,14 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void scrambleStaticFinal() {
-		Instantiator<StaticFinal> sfInstantiator = Instantiator.forClass(StaticFinal.class);
+		InstantiatorFacade<StaticFinal> sfInstantiator = InstantiatorFacade.forClass(StaticFinal.class);
 		StaticFinal sf = new StaticFinal();
 		sfInstantiator.scramble(sf);
 	}
 	
 	@Test
 	public void scrambleString() {
-		Instantiator<StringContainer> scInstantiator = Instantiator.forClass(StringContainer.class);
+		InstantiatorFacade<StringContainer> scInstantiator = InstantiatorFacade.forClass(StringContainer.class);
 		StringContainer sc = new StringContainer();
 		String before = sc.s;
 		scInstantiator.scramble(sc);
@@ -154,7 +154,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void scrambleUnscramblableString() {
-		Instantiator<FinalAssignedStringContainer> fascInstantiator = Instantiator.forClass(FinalAssignedStringContainer.class);
+		InstantiatorFacade<FinalAssignedStringContainer> fascInstantiator = InstantiatorFacade.forClass(FinalAssignedStringContainer.class);
 		FinalAssignedStringContainer fasc = new FinalAssignedStringContainer();
 		String before = fasc.s;
 		fascInstantiator.scramble(fasc);
@@ -163,7 +163,7 @@ public class InstantiatorCloningAndScramblingTest {
 	
 	@Test
 	public void scrambleUnscramblablePoint() {
-		Instantiator<FinalAssignedPointContainer> fapcInstantiator = Instantiator.forClass(FinalAssignedPointContainer.class);
+		InstantiatorFacade<FinalAssignedPointContainer> fapcInstantiator = InstantiatorFacade.forClass(FinalAssignedPointContainer.class);
 		fapcInstantiator.addPrefabValues(Point.class, new Point(1, 2), new Point(2, 3));
 		
 		FinalAssignedPointContainer fapc = new FinalAssignedPointContainer();
@@ -175,7 +175,7 @@ public class InstantiatorCloningAndScramblingTest {
 
 	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> klass) throws IllegalAccessException {
 		for (Field field : klass.getDeclaredFields()) {
-			if (Instantiator.canBeModifiedReflectively(field)) {
+			if (InstantiatorFacade.canBeModifiedReflectively(field)) {
 				assertEquals(field.get(original), field.get(clone));
 			}
 		}

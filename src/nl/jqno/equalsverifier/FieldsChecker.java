@@ -25,13 +25,13 @@ import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 
 class FieldsChecker<T> {
-	private final Instantiator<T> instantiator;
+	private final InstantiatorFacade<T> instantiator;
 	private final EnumSet<Warning> warningsToSuppress;
 
-	public FieldsChecker(Instantiator<T> instantiator, EnumSet<Warning> warningsToSuppress) {
+	public FieldsChecker(InstantiatorFacade<T> instantiator, EnumSet<Warning> warningsToSuppress) {
 		this.instantiator = instantiator;
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 	}
@@ -62,7 +62,7 @@ class FieldsChecker<T> {
 
 		for (Field field : new FieldIterable(changed.getClass())) {
 			try {
-				if (Instantiator.canBeModifiedReflectively(field)) {
+				if (InstantiatorFacade.canBeModifiedReflectively(field)) {
 					field.setAccessible(true);
 					check.execute(field, reference, changed, instantiator);
 				}
@@ -77,7 +77,7 @@ class FieldsChecker<T> {
 	}
 
 	private static class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, Instantiator<T> instantiator) {
+		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
 			if (field.getType().isPrimitive()) {
 				return;
 			}
@@ -136,7 +136,7 @@ class FieldsChecker<T> {
 	}
 	
 	private static class SignificanceFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, Instantiator<T> instantiator) {
+		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
 			instantiator.changeField(field, changed);
 			
 			boolean equalsChanged = !reference.equals(changed);
@@ -154,7 +154,7 @@ class FieldsChecker<T> {
 	}
 	
 	private static class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, Instantiator<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
+		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
 			Class<?> type = field.getType();
 			if (isFloat(type)) {
 				set(field, reference, Float.NaN);
@@ -196,7 +196,7 @@ class FieldsChecker<T> {
 	}
 	
 	private static class ArrayFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, Instantiator<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
+		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
 			Class<?> arrayType = field.getType();
 			if (!arrayType.isArray()) {
 				return;
@@ -227,7 +227,7 @@ class FieldsChecker<T> {
 			}
 		}
 
-		private Object createNewArrayInstance(Class<?> arrayType, Instantiator<T> instantiator) {
+		private Object createNewArrayInstance(Class<?> arrayType, InstantiatorFacade<T> instantiator) {
 			Object array = Array.newInstance(arrayType.getComponentType(), 1);
 			instantiator.changeArrayElement(array, 0);
 			return array;
@@ -235,7 +235,7 @@ class FieldsChecker<T> {
 	}
 	
 	private static class MutableStateFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, Instantiator<T> instantiator) {
+		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
 			instantiator.changeField(field, changed);
 
 			boolean equalsChanged = !reference.equals(changed);
@@ -250,6 +250,6 @@ class FieldsChecker<T> {
 	}
 	
 	private interface FieldCheck<T> {
-		void execute(Field field, T reference, T changed, Instantiator<T> instantiator) throws IllegalArgumentException, IllegalAccessException;
+		void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException;
 	}
 }

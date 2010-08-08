@@ -22,7 +22,7 @@ import static org.junit.Assert.assertNull;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.util.InstantiatorFacade;
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractAndInterfaceArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
@@ -38,7 +38,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void nullField() throws SecurityException, NoSuchFieldException {
 		Class<ObjectContainer> klass = ObjectContainer.class;
-		Instantiator<ObjectContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<ObjectContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		ObjectContainer oc = new ObjectContainer();
 		instantiator.nullField(klass.getField("_object"), oc);
@@ -49,7 +49,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void nullFieldPrimitive() throws SecurityException, NoSuchFieldException {
 		Class<PrimitiveContainer> klass = PrimitiveContainer.class;
-		Instantiator<PrimitiveContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<PrimitiveContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		PrimitiveContainer pc = new PrimitiveContainer();
 		instantiator.nullField(klass.getField("i"), pc);
@@ -61,7 +61,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void nullFieldStaticFinal() throws SecurityException, NoSuchFieldException {
 		Class<StaticFinalContainer> klass = StaticFinalContainer.class;
-		Instantiator<StaticFinalContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<StaticFinalContainer> instantiator = InstantiatorFacade.forClass(klass);
 		StaticFinalContainer sfc = new StaticFinalContainer();
 		
 		instantiator.nullField(klass.getField("CONST"), sfc);
@@ -74,13 +74,13 @@ public class InstantiatorFieldModificationTest {
 	
 	@Test
 	public void changeField() {
-		Instantiator<AllTypesContainer> instantiator = Instantiator.forClass(AllTypesContainer.class);
+		InstantiatorFacade<AllTypesContainer> instantiator = InstantiatorFacade.forClass(AllTypesContainer.class);
 		AllTypesContainer reference = new AllTypesContainer();
 		AllTypesContainer changed = new AllTypesContainer();
 		
 		assertEquals(reference, changed);
 		for (Field field : AllTypesContainer.class.getDeclaredFields()) {
-			if (Instantiator.canBeModifiedReflectively(field)) {
+			if (InstantiatorFacade.canBeModifiedReflectively(field)) {
 				instantiator.changeField(field, changed);
 				assertFalse(reference.equals(changed));
 				instantiator.changeField(field, reference);
@@ -93,7 +93,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void changeFieldStaticFinal() throws SecurityException, NoSuchFieldException {
 		Class<StaticFinalContainer> klass = StaticFinalContainer.class;
-		Instantiator<StaticFinalContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<StaticFinalContainer> instantiator = InstantiatorFacade.forClass(klass);
 		StaticFinalContainer sfc = new StaticFinalContainer();
 		
 		instantiator.changeField(klass.getField("CONST"), sfc);
@@ -107,7 +107,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void changeFieldAbstract() throws SecurityException, NoSuchFieldException {
 		Class<AbstractClassContainer> klass = AbstractClassContainer.class;
-		Instantiator<AbstractClassContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<AbstractClassContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		AbstractClassContainer acc = new AbstractClassContainer();
 		instantiator.changeField(klass.getField("ac"), acc);
@@ -117,7 +117,7 @@ public class InstantiatorFieldModificationTest {
 	@Test
 	public void changeFieldInterface() throws SecurityException, NoSuchFieldException {
 		Class<InterfaceContainer> klass = InterfaceContainer.class;
-		Instantiator<InterfaceContainer> instantiator = Instantiator.forClass(klass);
+		InstantiatorFacade<InterfaceContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		InterfaceContainer ic = new InterfaceContainer();
 		instantiator.changeField(klass.getField("_interface"), ic);
@@ -127,19 +127,19 @@ public class InstantiatorFieldModificationTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void changeNotArrayElement() {
 		Object o = new Object();
-		Instantiator<Object> instantiator = Instantiator.forClass(Object.class);
+		InstantiatorFacade<Object> instantiator = InstantiatorFacade.forClass(Object.class);
 		instantiator.changeArrayElement(o, 0);
 	}
 	
 	@Test
 	public void changeArrayElement() throws IllegalArgumentException, IllegalAccessException {
-		Instantiator<AllArrayTypesContainer> instantiator = Instantiator.forClass(AllArrayTypesContainer.class);
+		InstantiatorFacade<AllArrayTypesContainer> instantiator = InstantiatorFacade.forClass(AllArrayTypesContainer.class);
 		AllArrayTypesContainer reference = new AllArrayTypesContainer();
 		AllArrayTypesContainer changed = new AllArrayTypesContainer();
 		
 		assertEquals(reference, changed);
 		for (Field field : AllArrayTypesContainer.class.getDeclaredFields()) {
-			if (Instantiator.canBeModifiedReflectively(field)) {
+			if (InstantiatorFacade.canBeModifiedReflectively(field)) {
 				instantiator.changeArrayElement(field.get(changed), 0);
 				assertFalse(reference.equals(changed));
 				instantiator.changeArrayElement(field.get(reference), 0);
@@ -150,7 +150,7 @@ public class InstantiatorFieldModificationTest {
 	
 	@Test
 	public void changeAbstractArrayElement() {
-		Instantiator<AbstractAndInterfaceArrayContainer> instantiator = Instantiator.forClass(AbstractAndInterfaceArrayContainer.class);
+		InstantiatorFacade<AbstractAndInterfaceArrayContainer> instantiator = InstantiatorFacade.forClass(AbstractAndInterfaceArrayContainer.class);
 		AbstractAndInterfaceArrayContainer aac = new AbstractAndInterfaceArrayContainer();
 		instantiator.changeArrayElement(aac.abstractClasses, 0);
 		assertNotNull(aac.abstractClasses[0]);
@@ -158,7 +158,7 @@ public class InstantiatorFieldModificationTest {
 	
 	@Test
 	public void changeInterfaceArrayElement() {
-		Instantiator<AbstractAndInterfaceArrayContainer> instantiator = Instantiator.forClass(AbstractAndInterfaceArrayContainer.class);
+		InstantiatorFacade<AbstractAndInterfaceArrayContainer> instantiator = InstantiatorFacade.forClass(AbstractAndInterfaceArrayContainer.class);
 		AbstractAndInterfaceArrayContainer aac = new AbstractAndInterfaceArrayContainer();
 		instantiator.changeArrayElement(aac.interfaces, 0);
 		assertNotNull(aac.interfaces[0]);
