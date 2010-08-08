@@ -41,7 +41,7 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<ObjectContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		ObjectContainer oc = new ObjectContainer();
-		instantiator.nullField(klass.getField("_object"), oc);
+		instantiator.nullField(klass.getDeclaredField("_object"), oc);
 		
 		assertNull(oc._object);
 	}
@@ -52,7 +52,8 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<PrimitiveContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		PrimitiveContainer pc = new PrimitiveContainer();
-		instantiator.nullField(klass.getField("i"), pc);
+		pc.i = 10;
+		instantiator.nullField(klass.getDeclaredField("i"), pc);
 		
 		assertEquals(10, pc.i);
 	}
@@ -64,11 +65,11 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<StaticFinalContainer> instantiator = InstantiatorFacade.forClass(klass);
 		StaticFinalContainer sfc = new StaticFinalContainer();
 		
-		instantiator.nullField(klass.getField("CONST"), sfc);
+		instantiator.nullField(klass.getDeclaredField("CONST"), sfc);
 		assertEquals(42, sfc.CONST);
 		
 		Object original = sfc.OBJECT;
-		instantiator.nullField(klass.getField("OBJECT"), sfc);
+		instantiator.nullField(klass.getDeclaredField("OBJECT"), sfc);
 		assertEquals(original, sfc.OBJECT);
 	}
 	
@@ -96,11 +97,11 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<StaticFinalContainer> instantiator = InstantiatorFacade.forClass(klass);
 		StaticFinalContainer sfc = new StaticFinalContainer();
 		
-		instantiator.changeField(klass.getField("CONST"), sfc);
+		instantiator.changeField(klass.getDeclaredField("CONST"), sfc);
 		assertEquals(42, sfc.CONST);
 
 		Object original = sfc.OBJECT;
-		instantiator.changeField(klass.getField("OBJECT"), sfc);
+		instantiator.changeField(klass.getDeclaredField("OBJECT"), sfc);
 		assertEquals(original, sfc.OBJECT);
 	}
 	
@@ -110,7 +111,7 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<AbstractClassContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		AbstractClassContainer acc = new AbstractClassContainer();
-		instantiator.changeField(klass.getField("ac"), acc);
+		instantiator.changeField(klass.getDeclaredField("ac"), acc);
 		assertNotNull(acc.ac);
 	}
 	
@@ -120,7 +121,7 @@ public class InstantiatorFieldModificationTest {
 		InstantiatorFacade<InterfaceContainer> instantiator = InstantiatorFacade.forClass(klass);
 		
 		InterfaceContainer ic = new InterfaceContainer();
-		instantiator.changeField(klass.getField("_interface"), ic);
+		instantiator.changeField(klass.getDeclaredField("_interface"), ic);
 		assertNotNull(ic._interface);
 	}
 	

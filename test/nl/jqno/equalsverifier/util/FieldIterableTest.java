@@ -23,13 +23,22 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import nl.jqno.equalsverifier.util.TypeHelper.DifferentAccessModifiersFieldContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.DifferentAccessModifiersSubFieldContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.EmptySubFieldContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.Interface;
+import nl.jqno.equalsverifier.util.TypeHelper.NoFields;
+import nl.jqno.equalsverifier.util.TypeHelper.NoFieldsSubWithFields;
+import nl.jqno.equalsverifier.util.TypeHelper.Outer;
+import nl.jqno.equalsverifier.util.TypeHelper.SubEmptySubFieldContainer;
+
 import org.junit.Test;
 
 public class FieldIterableTest {
 	@Test
 	public void simpleFields() {
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(FieldContainer.class)) {
+		for (Field field : new FieldIterable(DifferentAccessModifiersFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -39,7 +48,7 @@ public class FieldIterableTest {
 	@Test
 	public void subClassFields() {
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(SubFieldContainer.class)) {
+		for (Field field : new FieldIterable(DifferentAccessModifiersSubFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -55,10 +64,10 @@ public class FieldIterableTest {
 	@Test
 	public void superHasNoFields() throws NoSuchFieldException {
 		Set<Field> expected = new HashSet<Field>();
-		expected.add(SubNoFields.class.getField("o"));
+		expected.add(NoFieldsSubWithFields.class.getField("o"));
 		
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(SubNoFields.class)) {
+		for (Field field : new FieldIterable(NoFieldsSubWithFields.class)) {
 			actual.add(field);
 		}
 		
@@ -95,7 +104,7 @@ public class FieldIterableTest {
 
 	@Test(expected=NoSuchElementException.class)
 	public void nextAfterLastElement() {
-		Iterator<Field> iterator = new FieldIterable(FieldContainer.class).iterator();
+		Iterator<Field> iterator = new FieldIterable(DifferentAccessModifiersFieldContainer.class).iterator();
 		while (iterator.hasNext()) {
 			iterator.next();
 		}
@@ -116,15 +125,16 @@ public class FieldIterableTest {
 	
 	@SuppressWarnings("serial")
 	private static final Set<Field> FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
+		Class<DifferentAccessModifiersFieldContainer> klass = DifferentAccessModifiersFieldContainer.class;
 		try {
-			add(FieldContainer.class.getDeclaredField("i"));
-			add(FieldContainer.class.getDeclaredField("j"));
-			add(FieldContainer.class.getDeclaredField("k"));
-			add(FieldContainer.class.getDeclaredField("l"));
-			add(FieldContainer.class.getDeclaredField("I"));
-			add(FieldContainer.class.getDeclaredField("J"));
-			add(FieldContainer.class.getDeclaredField("K"));
-			add(FieldContainer.class.getDeclaredField("L"));
+			add(klass.getDeclaredField("i"));
+			add(klass.getDeclaredField("j"));
+			add(klass.getDeclaredField("k"));
+			add(klass.getDeclaredField("l"));
+			add(klass.getDeclaredField("I"));
+			add(klass.getDeclaredField("J"));
+			add(klass.getDeclaredField("K"));
+			add(klass.getDeclaredField("L"));
 		}
 		catch (NoSuchFieldException e) {
 			throw new IllegalStateException(e);
@@ -133,54 +143,16 @@ public class FieldIterableTest {
 	
 	@SuppressWarnings("serial")
 	private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
+		Class<DifferentAccessModifiersSubFieldContainer> klass = DifferentAccessModifiersSubFieldContainer.class;
 		try {
 			addAll(FIELD_CONTAINER_FIELDS);
-			add(SubFieldContainer.class.getDeclaredField("a"));
-			add(SubFieldContainer.class.getDeclaredField("b"));
-			add(SubFieldContainer.class.getDeclaredField("c"));
-			add(SubFieldContainer.class.getDeclaredField("d"));
+			add(klass.getDeclaredField("a"));
+			add(klass.getDeclaredField("b"));
+			add(klass.getDeclaredField("c"));
+			add(klass.getDeclaredField("d"));
 		}
 		catch (NoSuchFieldException e) {
 			throw new IllegalStateException(e);
 		}
 	}};
-	
-	static class FieldContainer {
-		@SuppressWarnings("unused")
-		private final int i = 0;
-		final int j = 0;
-		protected final int k = 0;
-		public final int l = 0;
-		@SuppressWarnings("unused")
-		private static final int I = 0;
-		final static int J = 0;
-		protected static final int K = 0;
-		public static final int L = 0;
-	}
-	
-	static class SubFieldContainer extends FieldContainer {
-		@SuppressWarnings("unused")
-		private final String a = "";
-		final String b = "";
-		protected final String c = "";
-		public final String d = "";
-	}
-	
-	static class NoFields {}
-	
-	static class SubNoFields extends NoFields {
-		public Object o;
-	}
-	
-	static class EmptySubFieldContainer extends FieldContainer {}
-	
-	static class SubEmptySubFieldContainer extends EmptySubFieldContainer {
-		public long ll = 0;
-	}
-	
-	interface Interface {}
-	
-	static class Outer {
-		class Inner {}
-	}
 }

@@ -205,36 +205,77 @@ public class TypeHelper {
 		PriorityBlockingQueue priorityBlockingQueue;
 		SynchronousQueue synchronousQueue;
 	}
+	
+	static class DifferentAccessModifiersFieldContainer {
+		@SuppressWarnings("unused")
+		private final int i = 0;
+		final int j = 0;
+		protected final int k = 0;
+		public final int l = 0;
+		@SuppressWarnings("unused")
+		private static final int I = 0;
+		final static int J = 0;
+		protected static final int K = 0;
+		public static final int L = 0;
+	}
+	
+	static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
+		@SuppressWarnings("unused")
+		private final String a = "";
+		final String b = "";
+		protected final String c = "";
+		public final String d = "";
+	}
+
+	static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}
+	
+	static class SubEmptySubFieldContainer extends EmptySubFieldContainer {
+		public long ll = 0;
+	}
 
 	static interface Interface {}
 	
 	static abstract class AbstractClass {
-		public int i; 
+		int i; 
+	}
+	
+	static class Outer {
+		class Inner {}
 	}
 	
 	static final class InterfaceContainer {
-		public Interface _interface;
+		Interface _interface;
 	}
 	
 	static final class AbstractClassContainer {
-		public AbstractClass ac;
+		AbstractClass ac;
 	}
 	
 	static final class AbstractAndInterfaceArrayContainer {
-		public AbstractClass[] abstractClasses = new AbstractClass[] { null };
-		public Interface[] interfaces = new Interface[] { null };
+		AbstractClass[] abstractClasses = new AbstractClass[] { null };
+		Interface[] interfaces = new Interface[] { null };
 	}
 
 	static final class ObjectContainer {
-		public Object _object = new Object();
+		Object _object = new Object();
+	}
+	
+	static class ArrayContainer {
+		int[] array;
 	}
 	
 	static final class PrimitiveContainer {
-		public int i = 10;
+		int i;
 	}
 	
 	static final class StaticFinalContainer {
-		public static final int CONST = 42;
-		public static final Object OBJECT = new Object();
+		static final int CONST = 42;
+		static final Object OBJECT = new Object();
+	}
+	
+	static class NoFields {}
+	
+	static class NoFieldsSubWithFields extends NoFields {
+		public Object o;
 	}
 }
