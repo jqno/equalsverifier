@@ -1,5 +1,6 @@
 /*
  * Copyright 2010 Jan Ouwens
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,8 +17,11 @@ package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.Node;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.NodeArray;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.NotRecursiveA;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeA;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeArrayA;
 
 import org.junit.Test;
 
@@ -32,7 +36,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$Node].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.RecursiveTypeHelper$Node].",
 					e.getMessage());
 		}
 	}
@@ -47,7 +51,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$NodeArray].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.RecursiveTypeHelper$NodeArray].",
 					e.getMessage());
 		}
 	}
@@ -78,7 +82,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeB].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.RecursiveTypeHelper$TwoStepNodeA, class nl.jqno.equalsverifier.util.RecursiveTypeHelper$TwoStepNodeB].",
 					e.getMessage());
 		}
 	}
@@ -93,7 +97,7 @@ public class InstantiatorRecursiveInstantiationTest {
 			fail("No exception thrown.");
 		}
 		catch (AssertionError e) {
-			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayA, class nl.jqno.equalsverifier.util.InstantiatorRecursiveInstantiationTest$TwoStepNodeArrayB].",
+			assertEquals("Recursive datastructure.\nAdd prefab values for one of the following classes: [class nl.jqno.equalsverifier.util.RecursiveTypeHelper$TwoStepNodeArrayA, class nl.jqno.equalsverifier.util.RecursiveTypeHelper$TwoStepNodeArrayB].",
 					e.getMessage());
 		}
 	}
@@ -120,43 +124,4 @@ public class InstantiatorRecursiveInstantiationTest {
 		NotRecursiveA a = instantiator.instantiate();
 		instantiator.scramble(a);
 	}
-	
-	static final class Node {
-		Node node;
-	}
-	
-	static final class NodeArray {
-		NodeArray[] nodeArrays;
-	}
-	
-	static final class TwoStepNodeA {
-		TwoStepNodeB node;
-	}
-	
-	static final class TwoStepNodeB {
-		TwoStepNodeA node;
-	}
-	
-	static final class TwoStepNodeArrayA {
-		TwoStepNodeArrayB[] nodes;
-	}
-	
-	static final class TwoStepNodeArrayB {
-		TwoStepNodeArrayA[] nodes;
-	}
-	
-	static final class NotRecursiveA {
-		NotRecursiveB b;
-		NotRecursiveC c;
-	}
-	
-	static final class NotRecursiveB {
-		NotRecursiveD d;
-	}
-	
-	static final class NotRecursiveC {
-		NotRecursiveD d;
-	}
-	
-	static final class NotRecursiveD {}
 }
