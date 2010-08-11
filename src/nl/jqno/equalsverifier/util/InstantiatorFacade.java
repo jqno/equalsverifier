@@ -18,11 +18,7 @@ package nl.jqno.equalsverifier.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Can instantiate, clone, and modify objects.
@@ -46,7 +42,7 @@ import java.util.Map;
  */
 public class InstantiatorFacade<T> {
 	private final Class<T> klass;
-	private final Map<Class<?>, List<?>> prefabValues;
+	private final PrefabValues prefabValues;
 	private final LinkedHashSet<Class<?>> recursiveCallStack;
 	private final Instantiator<T> instantiator;
 
@@ -66,18 +62,17 @@ public class InstantiatorFacade<T> {
 		if (klass.isInterface()) {
 			throw new IllegalArgumentException("Cannot instantiate an interface.");
 		}
-		return new InstantiatorFacade<T>(klass, PrefabValues.get(), new LinkedHashSet<Class<?>>());
+		return new InstantiatorFacade<T>(klass, PrefabValuesFactory.get(), new LinkedHashSet<Class<?>>());
 	}
 	
 	/**
 	 * Private constructor. Call {@link #forClass(Class)} to instantiate.
 	 */
-	private InstantiatorFacade(Class<T> klass, Map<Class<?>, List<?>> prefabValues, LinkedHashSet<Class<?>> recursiveCallStack) {
+	InstantiatorFacade(Class<T> klass, PrefabValues prefabValues, LinkedHashSet<Class<?>> recursiveCallStack) {
 		this.klass = klass;
 		this.instantiator = Instantiator.of(klass);
 		
-		this.prefabValues = new HashMap<Class<?>, List<?>>();
-		this.prefabValues.putAll(prefabValues);
+		this.prefabValues = prefabValues;
 		
 		this.recursiveCallStack = recursiveCallStack;
 		recursiveCallStack.add(klass);
@@ -105,10 +100,7 @@ public class InstantiatorFacade<T> {
 		if (first.equals(second)) {
 			throw new IllegalArgumentException("Added equal prefab values: " + first + ".");
 		}
-		List<S> list = new ArrayList<S>();
-		list.add(first);
-		list.add(second);
-		prefabValues.put(klass, list);
+		prefabValues.put(klass, first, second);
 	}
 	
 	/**
@@ -120,9 +112,7 @@ public class InstantiatorFacade<T> {
 	 * 				values must be copied.
 	 */
 	public <S> void copyPrefabValues(InstantiatorFacade<S> otherInstantiator) {
-		for (Class<?> prefabClass : otherInstantiator.prefabValues.keySet()) {
-			prefabValues.put(prefabClass, otherInstantiator.prefabValues.get(prefabClass));
-		}
+		prefabValues.putAll(otherInstantiator.prefabValues);
 	}
 	
 	/**
@@ -330,8 +320,8 @@ public class InstantiatorFacade<T> {
 			else if (type == short.class) {
 				field.setShort(obj, (short)(field.getShort(obj) + 1));
 			}
-			else if (prefabValues.containsKey(type)) {
-				Object newValue = getNextPrefabValue(type, field.get(obj));
+			else if (prefabValues.contains(type)) {
+				Object newValue = prefabValues.getOther(type, field.get(obj));
 				field.set(obj, newValue);
 			}
 			else if (type.isEnum()) {
@@ -352,7 +342,7 @@ public class InstantiatorFacade<T> {
 			}
 			else {
 				createPrefabValues(type);
-				Object newValue = getNextPrefabValue(type, field.get(obj));
+				Object newValue = prefabValues.getOther(type, field.get(obj));
 				field.set(obj, newValue);
 			}
 		}
@@ -406,8 +396,8 @@ public class InstantiatorFacade<T> {
 		else if (type == short.class) {
 			Array.setShort(array, index, (short)(Array.getShort(array, index) + 1));
 		}
-		else if (prefabValues.containsKey(type)) {
-			Object newValue = getNextPrefabValue(type, Array.get(array, index));
+		else if (prefabValues.contains(type)) {
+			Object newValue = prefabValues.getOther(type, Array.get(array, index));
 			Array.set(array, index, newValue);
 		}
 		else if (type.isEnum()) {
@@ -428,7 +418,7 @@ public class InstantiatorFacade<T> {
 		}
 		else {
 			createPrefabValues(type);
-			Object newValue = getNextPrefabValue(type, Array.get(array, index));
+			Object newValue = prefabValues.getOther(type, Array.get(array, index));
 			Array.set(array, index, newValue);
 		}
 	}
@@ -456,15 +446,6 @@ public class InstantiatorFacade<T> {
 		return true;
 	}
 	
-	private Object getNextPrefabValue(Class<?> type, Object currentValue) {
-		List<?> values = prefabValues.get(type);
-		int index = values.indexOf(currentValue) + 1;
-		if (index >= values.size()) {
-			index = 0;
-		}
-		return values.get(index);
-	}
-
 	@SuppressWarnings("unchecked")
 	private void createPrefabValues(Class<?> type) {
 		if (recursiveCallStack.contains(type)) {
