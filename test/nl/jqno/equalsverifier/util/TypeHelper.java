@@ -236,7 +236,7 @@ public class TypeHelper {
 	static interface Interface {}
 	
 	static abstract class AbstractClass {
-		int i; 
+		int i;
 	}
 	
 	static class Outer {
