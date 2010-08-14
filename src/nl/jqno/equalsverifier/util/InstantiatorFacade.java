@@ -446,14 +446,18 @@ public class InstantiatorFacade<T> {
 		return true;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private void createPrefabValues(Class<?> type) {
 		if (recursiveCallStack.contains(type)) {
 			throw new AssertionError("Recursive datastructure.\nAdd prefab values for one of the following classes: " + recursiveCallStack + ".");
 		}
 
+		createPrefabValues(type, recursiveCallStack);
+	}
+
+	@SuppressWarnings("unchecked")
+	public void createPrefabValues(Class<?> type, LinkedHashSet<Class<?>> xxxx) {
 		Instantiator<?> i = Instantiator.of(type);
-		InstantiatorFacade ii = new InstantiatorFacade(type, prefabValues, (LinkedHashSet<Class<?>>)recursiveCallStack.clone());
+		InstantiatorFacade ii = new InstantiatorFacade(type, prefabValues, (LinkedHashSet<Class<?>>)xxxx.clone());
 		final Object first;
 		final Object second;
 		

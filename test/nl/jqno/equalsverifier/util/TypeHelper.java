@@ -240,7 +240,11 @@ public class TypeHelper {
 	}
 	
 	static class Outer {
-		class Inner {}
+		class Inner {
+			Outer getOuter() {
+				return Outer.this;
+			}
+		}
 	}
 	
 	static final class InterfaceContainer {
@@ -258,6 +262,14 @@ public class TypeHelper {
 
 	static final class ObjectContainer {
 		Object _object = new Object();
+	}
+	
+	static class PrivateObjectContainer {
+		private Object object = new Object();
+		
+		public Object get() {
+			return object;
+		}
 	}
 	
 	static class ArrayContainer {
