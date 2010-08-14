@@ -60,9 +60,9 @@ public class Instantiator<T> {
 	}
 	
 	/**
-	 * Instantiates an object of {@link T}.
+	 * Instantiates an object of type T.
 	 * 
-	 * @return An object of {@link T}.
+	 * @return An object of type T.
 	 */
 	public T instantiate() {
 		@SuppressWarnings("unchecked")
@@ -71,10 +71,10 @@ public class Instantiator<T> {
 	}
 	
 	/**
-	 * Instantiates an anonymous subclass of {@link T}. The subclass is
+	 * Instantiates an anonymous subclass of T. The subclass is
 	 * generated dynamically.
 	 * 
-	 * @return An instance of an anonymous subclass of {@link T}.
+	 * @return An instance of an anonymous subclass of T.
 	 */
 	public T instantiateAnonymousSubclass() {
 		Class<T> proxyClass = createDynamicSubclass(klass);
