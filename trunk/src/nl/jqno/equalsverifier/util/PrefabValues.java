@@ -34,8 +34,8 @@ public class PrefabValues {
 	 * @param type The class of the values.
 	 * @param first A value of type T.
 	 * @param second Another value of type T.
-	 * @throws IllegalArgumentException When {@link first} or {@link second}
-	 * 			is null, or when they are equal.
+	 * @throws IllegalArgumentException When first or second is null, or when
+	 * 			they are equal.
 	 */
 	public <T> void put(Class<T> type, T first, T second) {
 		if (first == null || second == null) {
@@ -70,13 +70,11 @@ public class PrefabValues {
 	}
 	
 	/**
-	 * Returns a prefabricated value for {@link type} which is not equal to
-	 * {@link value}.
+	 * Returns a prefabricated value for type which is not equal to value.
 	 * 
 	 * @param type Class for which to return a prefabricated value.
-	 * @param value An instance of {@link type}.
-	 * @return A prefabricated value for {@link type} which is not equal to
-	 * 			{@link value}.
+	 * @param value An instance of type.
+	 * @return A prefabricated value for type which is not equal to value.
 	 */
 	public Object getOther(Class<?> type, Object value) {
 		if (type == null) {
