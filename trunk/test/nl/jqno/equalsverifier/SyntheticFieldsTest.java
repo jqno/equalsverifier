@@ -23,7 +23,7 @@ import org.junit.Test;
 public class SyntheticFieldsTest {
 	@Test
 	public void nonstaticInnerClassHasSyntheticReferenceToOuterDirect() {
-		EqualsVerifier.forClass(Outer.class).debug().verify();
+		EqualsVerifier.forClass(Outer.class).verify();
 	}
 	
 	@Test
