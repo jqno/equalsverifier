@@ -455,8 +455,8 @@ public class InstantiatorFacade<T> {
 			second = i.instantiateAnonymousSubclass();
 		}
 		else {
-			first = ii.instantiate();
-			second = ii.instantiate();
+			first = i.instantiate();
+			second = i.instantiate();
 		}
 
 		ii.scramble(first);
