@@ -30,4 +30,9 @@ public class Point3D extends Point {
 		}
 		return super.equals(obj) && ((Point3D)obj).z == z;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + "," + z;
+	}
 }
