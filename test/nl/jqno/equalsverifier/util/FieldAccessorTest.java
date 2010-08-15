@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 Jan Ouwens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertEquals;
@@ -70,18 +85,9 @@ public class FieldAccessorTest {
 	public void nullFieldOnSyntheticIsNoOp() throws NoSuchFieldException {
 		Outer outer = new Outer();
 		Inner inner = outer.new Inner();
-		String fieldName = getSyntheticFieldName(inner);
+		String fieldName = getSyntheticFieldName(inner, "this$");
 		nullField(inner, fieldName);
 		assertSame(outer, inner.getOuter());
-	}
-	
-	private String getSyntheticFieldName(Inner inner) {
-		for (Field field : inner.getClass().getDeclaredFields()) {
-			if (field.getName().startsWith("this$")) {
-				return field.getName();
-			}
-		}
-		throw new IllegalStateException("Cannot find internal reference to Outer");
 	}
 	
 	@Test
@@ -91,6 +97,32 @@ public class FieldAccessorTest {
 		assertNull(foo.get());
 	}
 	
+	@Test
+	public void copyToPrimitiveField() {
+		int value = 10;
+		
+		PrimitiveContainer from = new PrimitiveContainer();
+		from.i = value;
+		
+		PrimitiveContainer to = new PrimitiveContainer();
+		copyField(to, from, "i");
+		
+		assertEquals(value, to.i);
+	}
+	
+	@Test
+	public void copyToObjectField() {
+		Object value = new Object();
+		
+		ObjectContainer from = new ObjectContainer();
+		from._object = value;
+		
+		ObjectContainer to = new ObjectContainer();
+		copyField(to, from, "_object");
+		
+		assertSame(value, to._object);
+	}
+
 	@Test
 	public void changeField() {
 		AllTypesContainer reference = new AllTypesContainer();
@@ -134,6 +166,21 @@ public class FieldAccessorTest {
 		InterfaceContainer foo = new InterfaceContainer();
 		changeField(foo, "_interface");
 		assertNotNull(foo._interface);
+	}
+	
+	@Test
+	public void changeFieldOnCglibFieldIsNoOp() throws NoSuchFieldException, IllegalAccessException {
+		class Empty {}
+		
+		Empty cglibed = Instantiator.of(Empty.class).instantiateAnonymousSubclass();
+		String fieldName = getSyntheticFieldName(cglibed, "CGLIB$");
+		Field field = cglibed.getClass().getDeclaredField(fieldName);
+		field.setAccessible(true);
+		
+		Object original = field.get(cglibed);
+		changeField(cglibed, fieldName);
+		
+		assertEquals(original, field.get(cglibed));
 	}
 	
 	@Test
@@ -182,6 +229,10 @@ public class FieldAccessorTest {
 		getAccessorFor(object, fieldName).nullField();
 	}
 	
+	private void copyField(Object to, Object from, String fieldName) {
+		getAccessorFor(from, fieldName).copyTo(to);
+	}
+	
 	private void changeField(Object object, String fieldName) {
 		getAccessorFor(object, fieldName).changeField(prefabValues);
 	}
@@ -198,5 +249,14 @@ public class FieldAccessorTest {
 		catch (NoSuchFieldException e) {
 			throw new IllegalArgumentException("fieldName: " + fieldName);
 		}
+	}
+	
+	private String getSyntheticFieldName(Object object, String prefix) {
+		for (Field field : object.getClass().getDeclaredFields()) {
+			if (field.getName().startsWith(prefix)) {
+				return field.getName();
+			}
+		}
+		throw new IllegalStateException("Cannot find internal field starting with " + prefix);
 	}
 }

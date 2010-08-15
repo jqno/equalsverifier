@@ -153,13 +153,7 @@ public class InstantiatorFacade<T> {
 	 * @return A new instance of {@code T} that is equal to {@code original}.
 	 */
 	public T cloneFrom(T original) {
-		T result = instantiate();
-		
-		for (Field field : new FieldIterable(klass)) {
-			copyField(field, original, result);
-		}
-		
-		return result;
+		return ObjectAccessor.of(original, klass).clone();
 	}
 	
 	/**
@@ -175,9 +169,7 @@ public class InstantiatorFacade<T> {
 	 * 			from {@code original}'s perspective.
 	 */
 	public T cloneToSubclass(T original) {
-		T result = instantiateSubclass();
-		copyIntoSubclassInstance(original, result);
-		return result;
+		return ObjectAccessor.of(original).cloneIntoAnonymousSubclass();
 	}
 	
 	/**
@@ -195,10 +187,7 @@ public class InstantiatorFacade<T> {
 	 * 			from {@code original}'s perspective.
 	 */
 	public <S extends T> S cloneToSubclass(T original, Class<S> subclass) {
-		Instantiator<S> subclassInstantiator = Instantiator.of(subclass);
-		S result = subclassInstantiator.instantiate();
-		copyIntoSubclassInstance(original, result);
-		return result;
+		return ObjectAccessor.of(original).cloneIntoSubclass(subclass);
 	}
 	
 	/**
@@ -475,28 +464,5 @@ public class InstantiatorFacade<T> {
 		ii.scramble(second);
 		
 		addPrefabValues((Class)type, first, second);
-	}
-	
-	private <S extends T> void copyIntoSubclassInstance(T original, S instance) {
-		for (Field field : new FieldIterable(klass)) {
-			copyField(field, original, instance);
-		}
-	}
-
-	private void copyField(Field field, Object original, Object clone) {
-		if (!canBeModifiedReflectively(field)) {
-			return;
-		}
-		
-		try {
-			field.setAccessible(true);
-			field.set(clone, field.get(original));
-		}
-		catch (IllegalArgumentException e) {
-			throw new IllegalArgumentException(e);
-		}
-		catch (IllegalAccessException e) {
-			throw new IllegalArgumentException(e);
-		}
 	}
 }
