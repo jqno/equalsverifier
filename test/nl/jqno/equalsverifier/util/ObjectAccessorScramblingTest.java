@@ -30,7 +30,7 @@ public class ObjectAccessorScramblingTest {
 	
 	@Before
 	public void setup() {
-		prefabValues = PrefabValuesFactory.get();
+		prefabValues = PrefabValuesFactory.withJavaClasses();
 	}
 	
 	@Test

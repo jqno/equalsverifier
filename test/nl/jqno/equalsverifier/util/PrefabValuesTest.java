@@ -62,6 +62,11 @@ public class PrefabValuesTest {
 		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void putTheSameKeyTwice() {
+		p.put(EXISTING_KEY, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
+	}
+	
 	@Test
 	public void putAll() {
 		PrefabValues q = new PrefabValues();

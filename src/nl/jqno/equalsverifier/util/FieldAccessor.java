@@ -96,7 +96,12 @@ public class FieldAccessor {
 		}
 	}
 	
-	private boolean canBeModifiedReflectively() {
+	/**
+	 * Determines whether the field can be modified using reflection.
+	 * 
+	 * @return Whether or not the field can be modified reflectively.
+	 */
+	public boolean canBeModifiedReflectively() {
 		if (field.isSynthetic()) {
 			return false;
 		}
@@ -184,14 +189,6 @@ public class FieldAccessor {
 				Object newValue = prefabValues.getOther(type, field.get(object));
 				field.set(object, newValue);
 			}
-			else if (type.isEnum()) {
-				Object value = field.get(object);
-				Object newValue = type.getEnumConstants()[0];
-				if (value == newValue) {
-					newValue = type.getEnumConstants()[1];
-				}
-				field.set(object, newValue);
-			}
 			else if (type.isArray()) {
 				Object array = field.get(object);
 				if (array == null) {
@@ -223,7 +220,7 @@ public class FieldAccessor {
 		}
 	}
 	
-	private static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
+	public static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
 		if (!array.getClass().isArray()) {
 			throw new IllegalArgumentException("Expected array is not an array.");
 		}
@@ -255,14 +252,6 @@ public class FieldAccessor {
 		}
 		else if (prefabValues.contains(type)) {
 			Object newValue = prefabValues.getOther(type, Array.get(array, index));
-			Array.set(array, index, newValue);
-		}
-		else if (type.isEnum()) {
-			Object value = Array.get(array, index);
-			Object newValue = type.getEnumConstants()[0];
-			if (value == newValue) {
-				newValue = type.getEnumConstants()[1];
-			}
 			Array.set(array, index, newValue);
 		}
 		else if (type.isArray()) {

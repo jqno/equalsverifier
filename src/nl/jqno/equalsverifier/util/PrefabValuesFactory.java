@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -26,6 +27,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
@@ -49,28 +51,101 @@ import java.util.regex.Pattern;
 import net.sf.cglib.proxy.NoOp;
 
 /**
- * Contains prefabricated instances of Java API classes that are hard to
- * instantiate or scramble by {@link InstantiatorFacade}.
+ * Creates instances of classes for use in a {@link PrefabValues} object.
+ * 
+ * Can create new instances of a given type and the types of its fields, and
+ * contains hand-made instances of well-known Java API classes that cannot be
+ * instantiated dynamically because of an internal infinite recursion of types.
  * 
  * @author Jan Ouwens
  */
 class PrefabValuesFactory {
-	private PrefabValues b;
+	private PrefabValues prefabValues;
 	
 	/**
 	 * @return An instance of {@link PrefabValues}, filled with instances
 	 * 			of Java API classes that are hard to instantiate or scramble by
 	 * 			{@link InstantiatorFacade}.
 	 */
-	public static PrefabValues get() {
-		return new PrefabValuesFactory().build();
+	public static PrefabValues withJavaClasses() {
+		return new PrefabValuesFactory(new PrefabValues()).addJavaClasses();
 	}
 	
-	private PrefabValuesFactory() {
-		b = new PrefabValues();
+	/**
+	 * Private constructor. Use {@link #withJavaClasses()} instead.
+	 */
+	PrefabValuesFactory(PrefabValues prefabValues) {
+		this.prefabValues = prefabValues;
 	}
 	
-	private PrefabValues build() {
+	/**
+	 * Creates instances for the specified type, and for the types of the
+	 * fields contained within the specified type, recursively.
+	 * 
+	 * @param type The type to create prefabValues for.
+	 * @throws RecursionException If recursion is detected.
+	 */
+	public void createFor(Class<?> type) {
+		createFor(type, new LinkedHashSet<Class<?>>());
+	}
+	
+	private void createFor(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
+		if (noNeedToCreatePrefabValues(type)) {
+			return;
+		}
+		if (typeStack.contains(type)) {
+			throw new RecursionException(typeStack);
+		}
+		typeStack.add(type);
+		
+		if (type.isEnum()) {
+			addEnumInstances(type);
+		}
+		else {
+			traverseFields(type, typeStack);
+			createInstances(type);
+		}
+	}
+	
+	private boolean noNeedToCreatePrefabValues(Class<?> type) {
+		return prefabValues.contains(type) || type.isPrimitive();
+	}
+
+	private <T> void addEnumInstances(Class<T> type) {
+		T[] enumConstants = type.getEnumConstants();
+		if (enumConstants.length < 2) {
+			throw new IllegalStateException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
+		}
+		prefabValues.put(type, enumConstants[0], enumConstants[1]);
+	}
+	
+	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
+		for (Field field : new FieldIterable(type)) {
+			Class<?> fieldType = field.getType();
+			if (fieldType.isArray()) {
+				createFor(fieldType.getComponentType(), typeStack);
+			}
+			else {
+				createFor(fieldType, typeStack);
+			}
+		}
+	}
+
+	private <T> void createInstances(Class<T> type) {
+		Instantiator<T> instantiator = Instantiator.of(type);
+		T first = instantiator.instantiate();
+		T second = instantiator.instantiate();
+		
+		ObjectAccessor.of(first).scramble(prefabValues);
+		
+		ObjectAccessor<T> secondAccessor = ObjectAccessor.of(second);
+		secondAccessor.scramble(prefabValues);
+		secondAccessor.scramble(prefabValues);
+		
+		prefabValues.put(type, first, second);
+	}
+	
+	private PrefabValues addJavaClasses() {
 		addPrimitiveClasses();
 		addClasses();
 		addLists();
@@ -78,33 +153,33 @@ class PrefabValuesFactory {
 		addSets();
 		addQueues();
 		addClassesNecessaryForCgLib();
-		return b;
+		return prefabValues;
 	}
 	
 	private void addPrimitiveClasses() {
-		b.put(Boolean.class, true, false);
-		b.put(Byte.class, (byte)1, (byte)2);
-		b.put(Character.class, 'a', 'b');
-		b.put(Double.class, 0.5D, 1.0D);
-		b.put(Float.class, 0.5F, 1.0F);
-		b.put(Integer.class, 1, 2);
-		b.put(Long.class, 1L, 2L);
-		b.put(Short.class, (short)1, (short)2);
-		b.put(Object.class, new Object(), new Object());
-		b.put(Class.class, Class.class, Object.class);
-		b.put(String.class, "one", "two");
+		prefabValues.put(Boolean.class, true, false);
+		prefabValues.put(Byte.class, (byte)1, (byte)2);
+		prefabValues.put(Character.class, 'a', 'b');
+		prefabValues.put(Double.class, 0.5D, 1.0D);
+		prefabValues.put(Float.class, 0.5F, 1.0F);
+		prefabValues.put(Integer.class, 1, 2);
+		prefabValues.put(Long.class, 1L, 2L);
+		prefabValues.put(Short.class, (short)1, (short)2);
+		prefabValues.put(Object.class, new Object(), new Object());
+		prefabValues.put(Class.class, Class.class, Object.class);
+		prefabValues.put(String.class, "one", "two");
 	}
 
 	private void addClasses() {
-		b.put(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-		b.put(Date.class, new Date(0), new Date(1));
-		b.put(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
-		b.put(Formatter.class, new Formatter(), new Formatter());
-		b.put(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-		b.put(Locale.class, new Locale("nl"), new Locale("hu"));
-		b.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
-		b.put(Scanner.class, new Scanner("one"), new Scanner("two"));
-		b.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
+		prefabValues.put(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
+		prefabValues.put(Date.class, new Date(0), new Date(1));
+		prefabValues.put(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
+		prefabValues.put(Formatter.class, new Formatter(), new Formatter());
+		prefabValues.put(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
+		prefabValues.put(Locale.class, new Locale("nl"), new Locale("hu"));
+		prefabValues.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
+		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
+		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -115,7 +190,7 @@ class PrefabValuesFactory {
 
 	@SuppressWarnings("unchecked")
 	private void addMaps() {
-		b.put(EnumMap.class, Dummy.FIRST.map(), Dummy.SECOND.map());
+		prefabValues.put(EnumMap.class, Dummy.FIRST.map(), Dummy.SECOND.map());
 		addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
 		addMap(HashMap.class, new HashMap(), new HashMap());
 		addMap(Hashtable.class, new Hashtable(), new Hashtable());
@@ -129,36 +204,36 @@ class PrefabValuesFactory {
 	private void addSets() {
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
-		b.put(EnumSet.class, EnumSet.of(Dummy.FIRST), EnumSet.of(Dummy.SECOND));
+		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.FIRST), EnumSet.of(Dummy.SECOND));
 	}
 	
 	@SuppressWarnings("unchecked")
 	private void addQueues() {
-		b.put(ArrayBlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
-		b.put(ConcurrentLinkedQueue.class, new ConcurrentLinkedQueue(), new ConcurrentLinkedQueue());
-		b.put(DelayQueue.class, new DelayQueue(), new DelayQueue());
-		b.put(LinkedBlockingQueue.class, new LinkedBlockingQueue(), new LinkedBlockingQueue());
-		b.put(PriorityBlockingQueue.class, new PriorityBlockingQueue(), new PriorityBlockingQueue());
-		b.put(SynchronousQueue.class, new SynchronousQueue(), new SynchronousQueue());
+		prefabValues.put(ArrayBlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
+		prefabValues.put(ConcurrentLinkedQueue.class, new ConcurrentLinkedQueue(), new ConcurrentLinkedQueue());
+		prefabValues.put(DelayQueue.class, new DelayQueue(), new DelayQueue());
+		prefabValues.put(LinkedBlockingQueue.class, new LinkedBlockingQueue(), new LinkedBlockingQueue());
+		prefabValues.put(PriorityBlockingQueue.class, new PriorityBlockingQueue(), new PriorityBlockingQueue());
+		prefabValues.put(SynchronousQueue.class, new SynchronousQueue(), new SynchronousQueue());
 		
 	}
 
 	private void addClassesNecessaryForCgLib() {
-		b.put(NoOp.class, new NoOp(){}, new NoOp(){});
+		prefabValues.put(NoOp.class, new NoOp(){}, new NoOp(){});
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <T extends Collection> void addCollection(Class<T> klass, T first, T second) {
 		first.add("first");
 		second.add("second");
-		b.put(klass, first, second);
+		prefabValues.put(klass, first, second);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <T extends Map> void addMap(Class<T> klass, T first, T second) {
 		first.put("first_key", "first_value");
 		second.put("second_key", "second_key");
-		b.put(klass, first, second);
+		prefabValues.put(klass, first, second);
 	}
 	
 	private enum Dummy { 

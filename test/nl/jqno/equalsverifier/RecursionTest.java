@@ -23,7 +23,7 @@ import org.junit.Test;
 
 public class RecursionTest {
 	private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
-	private static final String PREFAB = "Add prefab values for one of the following classes";
+	private static final String PREFAB = "Add prefab values for one of the following types";
 	
 	private Node one;
 	private Node two;
