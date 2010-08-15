@@ -70,6 +70,26 @@ public class PrefabValues {
 	}
 	
 	/**
+	 * Getter for the first prefabricated value of the specified type.
+	 * 
+	 * @param type Class for which to return the prefabricated value.
+	 * @return The first prefabricated value for the specified type.
+	 */
+	public Object getFirst(Class<?> type) {
+		return values.get(type).first;
+	}
+	
+	/**
+	 * Getter for the second prefabricated value of the specified type.
+	 * 
+	 * @param type Class for which to return the prefabricated value.
+	 * @return The second prefabricated value for the specified type.
+	 */
+	public Object getSecond(Class<?> type) {
+		return values.get(type).second;
+	}
+	
+	/**
 	 * Returns a prefabricated value for type which is not equal to value.
 	 * 
 	 * @param type Class for which to return a prefabricated value.

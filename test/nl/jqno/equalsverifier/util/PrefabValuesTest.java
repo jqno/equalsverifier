@@ -27,8 +27,8 @@ import org.junit.Test;
 
 public class PrefabValuesTest {
 	private static final Class<String> EXISTING_KEY = String.class;
-	private static final String EXISTING_SECOND_VALUE = "the other";
 	private static final String EXISTING_FIRST_VALUE = "the one";
+	private static final String EXISTING_SECOND_VALUE = "the other";
 	private static final String NON_EXISTING_VALUE = "the unknown";
 	
 	private static final Class<Object> NON_EXISTING_KEY = Object.class;
@@ -73,6 +73,16 @@ public class PrefabValuesTest {
 	public void contains() {
 		assertTrue(p.contains(EXISTING_KEY));
 		assertFalse(p.contains(NON_EXISTING_KEY));
+	}
+	
+	@Test
+	public void getFirst() {
+		assertEquals(EXISTING_FIRST_VALUE, p.getFirst(EXISTING_KEY));
+	}
+	
+	@Test
+	public void getSecond() {
+		assertEquals(EXISTING_SECOND_VALUE, p.getSecond(EXISTING_KEY));
 	}
 	
 	@Test
