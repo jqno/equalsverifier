@@ -41,7 +41,6 @@ public class ObjectAccessorTest {
 		Point original = new Point(2, 3);
 		Point clone = cloneOf(original);
 		
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 	}
 	
@@ -65,7 +64,6 @@ public class ObjectAccessorTest {
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = cloneOf(original);
 
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 		assertAllFieldsEqual(original, clone, Point3D.class);
 	}
@@ -76,7 +74,6 @@ public class ObjectAccessorTest {
 		Point clone = cloneOf(original, Point.class);
 		
 		assertEquals(Point.class, clone.getClass());
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 	}
 	
@@ -85,7 +82,6 @@ public class ObjectAccessorTest {
 		Point original = new Point(2, 3);
 		Point3D clone = cloneIntoSubclass(original, Point3D.class);
 		
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 	}
 
@@ -103,7 +99,6 @@ public class ObjectAccessorTest {
 		Point3D original = new Point3D(2, 3, 4);
 		Point3D clone = cloneIntoSubclass(original, ColorPoint3D.class);
 
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 		assertAllFieldsEqual(original, clone, Point3D.class);
 	}
@@ -114,7 +109,6 @@ public class ObjectAccessorTest {
 		ObjectAccessor<Point> accessor = ObjectAccessor.of(original);
 		Point clone = accessor.cloneIntoAnonymousSubclass();
 		
-		assertNotSame(original, clone);
 		assertAllFieldsEqual(original, clone, Point.class);
 		
 		assertNotSame(original.getClass(), clone.getClass());
@@ -133,10 +127,11 @@ public class ObjectAccessorTest {
 		return ObjectAccessor.of(from).cloneIntoSubclass(subclass);
 	}
 	
-	private static <T> void assertAllFieldsEqual(T original, T copy, Class<? extends T> klass) {
+	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> klass) {
+		assertNotSame(original, clone);
 		for (Field field : new FieldIterable(klass)) {
 			try {
-				assertEquals(field.get(original), field.get(copy));
+				assertEquals(field.get(original), field.get(clone));
 			}
 			catch (IllegalAccessException e) {
 				throw new IllegalStateException(e);
