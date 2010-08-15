@@ -39,7 +39,7 @@ public class Helper {
 		fail("Assertion didn't fail");
 	}
 	
-	private static Matcher<String> containsAll(String message, String... more) {
+	public static Matcher<String> containsAll(String message, String... more) {
 		CombinableMatcher<String> result = both(containsString(message));
 		for (String m : more) {
 			result = result.and(containsString(m));
