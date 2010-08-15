@@ -39,10 +39,10 @@ public class Instantiator<T> {
 	/**
 	 * Factory method.
 	 * 
-	 * @param <T> The class on which {@code Instantiator} operates.
-	 * @param klass The class on which {@code Instantiator} operates. Should be
-	 * 				the same as {@code <T>}.
-	 * @return An instantiator for {@code klass}.
+	 * @param <T> The class on which {@link Instantiator} operates.
+	 * @param klass The class on which {@link Instantiator} operates. Should be
+	 * 				the same as T.
+	 * @return An Instantiator for {@link #klass}.
 	 */
 	public static <T> Instantiator<T> of(Class<T> klass) {
 		if (Modifier.isAbstract(klass.getModifiers())) {
