@@ -41,6 +41,9 @@ public class PrefabValues {
 		if (first == null || second == null) {
 			throw new IllegalArgumentException("First or second parameter is null.");
 		}
+		if (values.containsKey(type)) {
+			throw new IllegalArgumentException("Type " + type + " is already present.");
+		}
 		if (first.equals(second)) {
 			throw new IllegalArgumentException("First and second parameters are equal.");
 		}
@@ -75,8 +78,8 @@ public class PrefabValues {
 	 * @param type Class for which to return the prefabricated value.
 	 * @return The first prefabricated value for the specified type.
 	 */
-	public Object getFirst(Class<?> type) {
-		return values.get(type).first;
+	public <T> T getFirst(Class<T> type) {
+		return getTuple(type).first;
 	}
 	
 	/**
@@ -85,8 +88,13 @@ public class PrefabValues {
 	 * @param type Class for which to return the prefabricated value.
 	 * @return The second prefabricated value for the specified type.
 	 */
-	public Object getSecond(Class<?> type) {
-		return values.get(type).second;
+	public <T> T getSecond(Class<T> type) {
+		return getTuple(type).second;
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Tuple<T> getTuple(Class<T> type) {
+		return (Tuple<T>)values.get(type);
 	}
 	
 	/**
