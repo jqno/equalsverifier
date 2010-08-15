@@ -49,8 +49,9 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 public class TypeHelper {
-	private static enum Enum { FIRST, SECOND }
 	private static final Object OBJECT = new Object();
+	
+	static enum Enum { FIRST, SECOND }
 	
 	static final class AllTypesContainer {
 		boolean _boolean = false;
@@ -290,4 +291,8 @@ public class TypeHelper {
 	static class NoFieldsSubWithFields extends NoFields {
 		public Object o;
 	}
+	
+	static enum OneElementEnum { ONE }
+	
+	static enum EmptyEnum {}
 }
