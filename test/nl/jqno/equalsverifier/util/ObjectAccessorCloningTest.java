@@ -30,7 +30,7 @@ import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
 
 import org.junit.Test;
 
-public class ObjectAccessorTest {
+public class ObjectAccessorCloningTest {
 	@Test
 	public void constructInvalidClass() {
 		ObjectAccessor.of("string", Object.class);
