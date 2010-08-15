@@ -1,3 +1,18 @@
+/*
+ * Copyright 2010 Jan Ouwens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Array;
@@ -30,6 +45,15 @@ public class FieldAccessor {
 	 */
 	public void nullField() {
 		modify(new FieldNuller());
+	}
+	
+	/**
+	 * Copies field's value to the corresponding field in the specified object.
+	 * 
+	 * @param to The object into which to copy the field.
+	 */
+	public void copyTo(Object to) {
+		modify(new FieldCopier(to));
 	}
 	
 	/**
@@ -80,6 +104,12 @@ public class FieldAccessor {
 		if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
 			return false;
 		}
+		// CGLib, which is used by this class, adds several fields to classes
+		// that it creates. If they are changed using reflection, exceptions
+		// are thrown.
+		if (field.getName().startsWith("CGLIB$")) {
+			return false;
+		}
 		
 		return true;
 	}
@@ -100,6 +130,19 @@ public class FieldAccessor {
 			if (!field.getType().isPrimitive()) {
 				field.set(object, null);
 			}
+		}
+	}
+	
+	private class FieldCopier implements FieldModifier {
+		private final Object to;
+
+		public FieldCopier(Object to) {
+			this.to = to;
+		}
+
+		@Override
+		public void modify() throws IllegalAccessException {
+			field.set(to, field.get(object));
 		}
 	}
 	
