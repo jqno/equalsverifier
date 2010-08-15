@@ -112,4 +112,48 @@ public class ObjectAccessor<T> {
 		}
 		return clone;
 	}
+	
+	/**
+	 * Modifies all fields of the wrapped object that are declared in T and in
+	 * its superclasses.
+	 * 
+	 * This method is consistent: given two equal objects; after scrambling
+	 * both objects, they remain equal to each other.
+	 * 
+	 * It cannot modifiy:
+	 * 1. static final fields, and
+	 * 2. final fields that are initialized to a compile-time constant in the
+	 *		field declaration.
+	 * These fields will be left unmodified.
+	 * 
+	 * @param prefabValues Prefabricated values to take values from.
+	 */
+	public void scramble(PrefabValues prefabValues) {
+		for (Field field : new FieldIterable(klass)) {
+			FieldAccessor accessor = new FieldAccessor(object, field);
+			accessor.changeField(prefabValues);
+		}
+	}
+	
+	/**
+	 * Modifies all fields of the wrapped object that are declared in T, but
+	 * not those inherited from superclasses.
+	 * 
+	 * This method is consistent: given two equal objects; after scrambling
+	 * both objects, they remain equal to each other.
+	 * 
+	 * It cannot modifiy:
+	 * 1. static final fields, and
+	 * 2. final fields that are initialized to a compile-time constant in the
+	 *		field declaration.
+	 * These fields will be left unmodified.
+	 * 
+	 * @param prefabValues Prefabricated values to take values from.
+	 */
+	public void shallowScramble(PrefabValues prefabValues) {
+		for (Field field : klass.getDeclaredFields()) {
+			FieldAccessor accessor = new FieldAccessor(object, field);
+			accessor.changeField(prefabValues);
+		}
+	}
 }
