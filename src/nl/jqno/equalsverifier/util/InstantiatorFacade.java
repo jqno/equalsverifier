@@ -368,7 +368,7 @@ public class InstantiatorFacade<T> {
 	 */
 	public void changeArrayElement(Object array, int index) {
 		if (!array.getClass().isArray()) {
-			throw new IllegalArgumentException("Expected arrary is not an array.");
+			throw new IllegalArgumentException("Expected array is not an array.");
 		}
 		
 		Class<?> type = array.getClass().getComponentType();

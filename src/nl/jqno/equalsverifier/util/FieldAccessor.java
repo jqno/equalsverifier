@@ -182,7 +182,7 @@ public class FieldAccessor {
 	
 	private static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
 		if (!array.getClass().isArray()) {
-			throw new IllegalArgumentException("Expected arrary is not an array.");
+			throw new IllegalArgumentException("Expected array is not an array.");
 		}
 		
 		Class<?> type = array.getClass().getComponentType();
