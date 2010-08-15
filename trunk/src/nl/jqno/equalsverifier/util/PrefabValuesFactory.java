@@ -64,8 +64,7 @@ class PrefabValuesFactory {
 	
 	/**
 	 * @return An instance of {@link PrefabValues}, filled with instances
-	 * 			of Java API classes that are hard to instantiate or scramble by
-	 * 			{@link InstantiatorFacade}.
+	 * 			of Java API classes that cannot be instantiated dynamically.
 	 */
 	public static PrefabValues withJavaClasses() {
 		return new PrefabValuesFactory(new PrefabValues()).addJavaClasses();
