@@ -71,6 +71,7 @@ public class InstantiatorCloningAndScramblingTest {
 		Point3D original = new Point3D(2, 3, 4);
 		Point clone = instantiator.cloneFrom(original);
 		
+		assertEquals(Point.class, clone.getClass());
 		assertAllFieldsEqual(original, clone, Point.class);
 	}
 
