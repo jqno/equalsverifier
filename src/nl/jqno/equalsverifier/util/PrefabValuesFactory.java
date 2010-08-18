@@ -131,16 +131,9 @@ class PrefabValuesFactory {
 	}
 
 	private <T> void createInstances(Class<T> type) {
-		Instantiator<T> instantiator = Instantiator.of(type);
-		T first = instantiator.instantiate();
-		T second = instantiator.instantiate();
-		
-		ObjectAccessor.of(first).scramble(prefabValues);
-		
-		ObjectAccessor<T> secondAccessor = ObjectAccessor.of(second);
-		secondAccessor.scramble(prefabValues);
-		secondAccessor.scramble(prefabValues);
-		
+		ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues);
+		T first = accessor.getFirstObject();
+		T second = accessor.getSecondObject();
 		prefabValues.put(type, first, second);
 	}
 	
