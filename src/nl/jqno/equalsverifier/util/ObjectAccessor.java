@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.util;
 import java.lang.reflect.Field;
 
 /**
- * Wraps an object and provides reflective access to it. ObjectAccessor can
+ * Wraps an object to provide reflective access to it. ObjectAccessor can
  * clone and scramble the wrapped object.
  * 
  * @param <T> The specified object's class.
@@ -61,6 +61,25 @@ public class ObjectAccessor<T> {
 	private ObjectAccessor(T object, Class<T> klass) {
 		this.object = object;
 		this.klass = klass;
+	}
+	
+	/**
+	 * Returns the wrapped object.
+	 * 
+	 * @return The wrapped object.
+	 */
+	public T get() {
+		return object;
+	}
+	
+	/**
+	 * Returns a FieldAccessor for the wrapped object and the specified field.
+	 * 
+	 * @param field A field in T.
+	 * @return A FieldAccessor for the wrapped object and the specified field.
+	 */
+	public FieldAccessor fieldAccessorFor(Field field) {
+		return new FieldAccessor(object, field);
 	}
 	
 	/**
