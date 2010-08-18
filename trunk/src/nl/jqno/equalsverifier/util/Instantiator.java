@@ -42,7 +42,7 @@ public class Instantiator<T> {
 	 * @param <T> The class on which {@link Instantiator} operates.
 	 * @param klass The class on which {@link Instantiator} operates. Should be
 	 * 				the same as T.
-	 * @return An Instantiator for {@link #klass}.
+	 * @return An {@link Instantiator} for {@link #klass}.
 	 */
 	public static <T> Instantiator<T> of(Class<T> klass) {
 		if (Modifier.isAbstract(klass.getModifiers())) {
