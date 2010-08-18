@@ -32,11 +32,6 @@ import org.junit.Test;
 
 public class ObjectAccessorCloningTest {
 	@Test
-	public void constructInvalidClass() {
-		ObjectAccessor.of("string", Object.class);
-	}
-	
-	@Test
 	public void cloneHappyPath() {
 		Point original = new Point(2, 3);
 		Point clone = cloneOf(original);
