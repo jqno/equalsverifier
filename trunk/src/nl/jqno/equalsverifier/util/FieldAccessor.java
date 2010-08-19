@@ -40,6 +40,20 @@ public class FieldAccessor {
 	}
 	
 	/**
+	 * Getter.
+	 */
+	public Object getObject() {
+		return object;
+	}
+	
+	/**
+	 * Getter.
+	 */
+	public Field getField() {
+		return field;
+	}
+	
+	/**
 	 * Tries to make the field null. If this fails, nothing happens.
 	 */
 	public void nullField() {
