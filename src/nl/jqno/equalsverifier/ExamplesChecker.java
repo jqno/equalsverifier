@@ -24,15 +24,15 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class ExamplesChecker<T> {
-	private final InstantiatorFacade<T> instantiator;
+	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public ExamplesChecker(InstantiatorFacade<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
-		this.instantiator = instantiator;
+	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = type;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}
@@ -75,7 +75,7 @@ class ExamplesChecker<T> {
 	}
 
 	private void checkSingle(T reference) {
-		final T copy = createCopy(reference);
+		final T copy = ObjectAccessor.of(reference, type).clone();
 		
 		checkReflexivity(reference);
 		checkSymmetryEquals(reference, copy);
@@ -83,17 +83,6 @@ class ExamplesChecker<T> {
 		checkHashCode(reference, copy);
 	}
 
-	private T createCopy(T reference) {
-		if (instantiator.getKlass() == reference.getClass()) {
-			return instantiator.cloneFrom(reference);
-		}
-		else {
-			@SuppressWarnings("unchecked")
-			InstantiatorFacade<T> subInstantiator = InstantiatorFacade.forClass((Class<T>)reference.getClass());
-			return subInstantiator.cloneFrom(reference);
-		}
-	}
-	
 	private void checkDouble(T reference, T other) {
 		checkNotEqual(reference, other);
 		checkSymmetryNotEquals(reference, other);
