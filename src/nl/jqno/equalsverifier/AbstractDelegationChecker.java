@@ -29,10 +29,10 @@ public class AbstractDelegationChecker<T> {
 	private final PrefabValues prefabValues;
 	private final ClassAccessor<T> classAccessor;
 
-	public AbstractDelegationChecker(Class<T> klass, PrefabValues prefabValues) {
-		this.klass = klass;
-		this.prefabValues = prefabValues;
-		this.classAccessor = ClassAccessor.of(klass, this.prefabValues);
+	public AbstractDelegationChecker(ClassAccessor<T> classAccessor) {
+		this.klass = classAccessor.getType();
+		this.prefabValues = classAccessor.getPrefabValues();
+		this.classAccessor = classAccessor;
 	}
 
 	public void check() {
