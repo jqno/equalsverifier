@@ -59,7 +59,7 @@ import net.sf.cglib.proxy.NoOp;
  * 
  * @author Jan Ouwens
  */
-class PrefabValuesFactory {
+public class PrefabValuesFactory {
 	private PrefabValues prefabValues;
 	
 	/**
