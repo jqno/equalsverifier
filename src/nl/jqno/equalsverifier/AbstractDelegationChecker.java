@@ -18,21 +18,21 @@ package nl.jqno.equalsverifier;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class AbstractDelegationChecker<T> {
 	private final Class<T> klass;
-	private final InstantiatorFacade<T> instantiator;
-	private final Map<Class<?>, List<?>> prefabValues;
+	private final PrefabValues prefabValues;
+	private final ClassAccessor<T> classAccessor;
 
-	public AbstractDelegationChecker(Class<T> klass, InstantiatorFacade<T> instantiator, Map<Class<?>, List<?>> prefabValues) {
+	public AbstractDelegationChecker(Class<T> klass, PrefabValues prefabValues) {
 		this.klass = klass;
-		this.instantiator = instantiator;
 		this.prefabValues = prefabValues;
+		this.classAccessor = ClassAccessor.of(klass, this.prefabValues);
 	}
 
 	public void check() {
@@ -40,8 +40,7 @@ public class AbstractDelegationChecker<T> {
 
 		T instance = this.<T>getPrefabValue(klass);
 		if (instance == null) {
-			instance = instantiator.instantiate();
-			instantiator.scramble(instance);
+			instance = classAccessor.getFirstObject();
 		}
 		checkAbstractDelegation(instance);
 
@@ -65,18 +64,16 @@ public class AbstractDelegationChecker<T> {
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
 		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
-			InstantiatorFacade<S> superInstantiator = InstantiatorFacade.forClass(superclass);
-			superInstantiator.copyPrefabValues(instantiator);
-			instance = superInstantiator.instantiate();
-			superInstantiator.scramble(instance);
+			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues);
+			instance = superclassAccessor.getFirstObject();
 		}
 		checkAbstractMethods(superclass, instance, false);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <S> S getPrefabValue(Class<?> type) {
-		if (prefabValues.containsKey(type)) {
-			return (S)prefabValues.get(type).iterator().next();
+		if (prefabValues.contains(type)) {
+			return (S)prefabValues.getFirst(type);
 		}
 		return null;
 	}
