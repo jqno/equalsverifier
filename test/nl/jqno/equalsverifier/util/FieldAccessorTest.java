@@ -49,6 +49,21 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
+	public void getObject() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
+		assertSame(foo, fieldAccessor.getObject());
+	}
+	
+	@Test
+	public void getField() throws NoSuchFieldException {
+		ObjectContainer foo = new ObjectContainer();
+		Field field = foo.getClass().getDeclaredField("_object");
+		FieldAccessor fieldAccessor = new FieldAccessor(foo, field);
+		assertSame(field, fieldAccessor.getField());
+	}
+	
+	@Test
 	public void nullFieldHappyPath() throws NoSuchFieldException {
 		ObjectContainer foo = new ObjectContainer();
 		foo._object = new Object();
