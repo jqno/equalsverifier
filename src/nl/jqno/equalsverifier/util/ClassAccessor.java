@@ -25,6 +25,7 @@ package nl.jqno.equalsverifier.util;
  * @author Jan Ouwens
  */
 public class ClassAccessor<T> {
+	private final Class<T> type;
 	private final Instantiator<T> instantiator;
 	private final PrefabValues prefabValues;
 
@@ -46,8 +47,23 @@ public class ClassAccessor<T> {
 	 * Private constructor. Call {@link #of(Class, PrefabValues)} instead.
 	 */
 	private ClassAccessor(Class<T> type, PrefabValues prefabValues) {
+		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
+	}
+	
+	/**
+	 * Getter.
+	 */
+	public Class<T> getType() {
+		return type;
+	}
+	
+	/**
+	 * Getter.
+	 */
+	public PrefabValues getPrefabValues() {
+		return prefabValues;
 	}
 	
 	/**

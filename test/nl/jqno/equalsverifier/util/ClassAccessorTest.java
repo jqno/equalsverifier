@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import nl.jqno.equalsverifier.points.PointContainer;
 
 import org.junit.Before;
@@ -31,6 +32,16 @@ public class ClassAccessorTest {
 	public void setup() {
 		prefabValues = PrefabValuesFactory.withJavaClasses();
 		classAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
+	}
+	
+	@Test
+	public void getType() {
+		assertSame(PointContainer.class, classAccessor.getType());
+	}
+	
+	@Test
+	public void getPrefabValues() {
+		assertSame(prefabValues, classAccessor.getPrefabValues());
 	}
 	
 	@Test
