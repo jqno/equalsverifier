@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.InstantiatorFacade;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.PrefabValuesFactory;
@@ -286,7 +287,9 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, prefabValues);
+			ClassAccessor<T> classAccessor = ClassAccessor.of(klass, prefabValues);
+			
+			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
