@@ -20,11 +20,12 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.util.PrefabValuesFactory;
+import nl.jqno.equalsverifier.util.RecursionException;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -104,9 +105,9 @@ public final class EqualsVerifier<T> {
 	private final InstantiatorFacade<T> instantiator;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
+	private final PrefabValues prefabValues;
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
-	private final Map<Class<?>, List<?>> prefabValues = new HashMap<Class<?>, List<?>>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	private boolean verbose = false;
@@ -187,6 +188,7 @@ public final class EqualsVerifier<T> {
 		this.instantiator = instantiator;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
+		this.prefabValues = PrefabValuesFactory.withJavaClasses();
 	}
 	
 	/**
@@ -218,10 +220,7 @@ public final class EqualsVerifier<T> {
 	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
 	 */
 	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherKlass, S first, S second) {
-		List<S> values = new ArrayList<S>();
-		values.add(first);
-		values.add(second);
-		prefabValues.put(otherKlass, values);
+		prefabValues.put(otherKlass, first, second);
 		
 		instantiator.addPrefabValues(otherKlass, first, second);
 		
@@ -287,7 +286,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, instantiator, prefabValues);
+			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(klass, prefabValues);
 			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
 			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(instantiator, equalExamples, unequalExamples);
 			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
@@ -304,6 +303,12 @@ public final class EqualsVerifier<T> {
 			fieldsChecker.check();
 		}
 		catch (AssertionError e) {
+			if (verbose) {
+				e.printStackTrace();
+			}
+			fail(e.getMessage());
+		}
+		catch (RecursionException e) {
 			if (verbose) {
 				e.printStackTrace();
 			}
