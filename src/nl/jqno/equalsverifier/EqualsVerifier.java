@@ -287,36 +287,41 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			ClassAccessor<T> classAccessor = ClassAccessor.of(klass, prefabValues);
-			
-			AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
-			FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
-			ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
-			HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
-			
-			abstractDelegationChecker.check();
-			
-			ensureUnequalExamples();
-			
-			fieldsChecker.checkNull();
-			verifyPreconditions();
-			examplesChecker.check();
-			hierarchyChecker.check();
-			
-			fieldsChecker.check();
+			performVerification();
 		}
 		catch (AssertionError e) {
-			if (verbose) {
-				e.printStackTrace();
-			}
-			fail(e.getMessage());
+			handleError(e);
 		}
 		catch (RecursionException e) {
-			if (verbose) {
-				e.printStackTrace();
-			}
-			fail(e.getMessage());
+			handleError(e);
 		}
+	}
+
+	private void performVerification() {
+		ClassAccessor<T> classAccessor = ClassAccessor.of(klass, prefabValues);
+		
+		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
+		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(instantiator, warningsToSuppress);
+		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
+		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
+		
+		abstractDelegationChecker.check();
+		
+		ensureUnequalExamples();
+		
+		fieldsChecker.checkNull();
+		verifyPreconditions();
+		examplesChecker.check();
+		hierarchyChecker.check();
+		
+		fieldsChecker.check();
+	}
+
+	private void handleError(Throwable e) {
+		if (verbose) {
+			e.printStackTrace();
+		}
+		fail(e.getMessage());
 	}
 	
 	private static <T> List<T> buildList1(T first, T... tail) {
