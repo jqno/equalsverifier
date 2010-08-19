@@ -64,6 +64,52 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
+	public void getFieldType() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
+		assertEquals(Object.class, fieldAccessor.getFieldType());
+	}
+	
+	@Test
+	public void getFieldName() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
+		assertEquals("_object", fieldAccessor.getFieldName());
+	}
+	
+	@Test
+	public void setValuePrimitive() {
+		PrimitiveContainer foo = new PrimitiveContainer();
+		setField(foo, "i", 20);
+		assertEquals(20, foo.i);
+	}
+	
+	@Test
+	public void getValuePrimitive() {
+		PrimitiveContainer foo = new PrimitiveContainer();
+		foo.i = 10;
+		Object value = getValue(foo, "i");
+		assertEquals(10, value);
+	}
+	
+	@Test
+	public void getValueObject() {
+		Object object = new Object();
+		ObjectContainer foo = new ObjectContainer();
+		foo._object = object;
+		Object value = getValue(foo, "_object");
+		assertEquals(object, value);
+	}
+	
+	@Test
+	public void setValueObject() {
+		Object object = new Object();
+		ObjectContainer foo = new ObjectContainer();
+		setField(foo, "_object", object);
+		assertEquals(object, foo._object);
+	}
+	
+	@Test
 	public void nullFieldHappyPath() throws NoSuchFieldException {
 		ObjectContainer foo = new ObjectContainer();
 		foo._object = new Object();
@@ -238,6 +284,14 @@ public class FieldAccessorTest {
 		AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
 		changeArrayField(foo, "interfaces", 0);
 		assertNotNull(foo.interfaces[0]);
+	}
+	
+	private Object getValue(Object object, String fieldName) {
+		return getAccessorFor(object, fieldName).get();
+	}
+	
+	private void setField(Object object, String fieldName, Object value) {
+		getAccessorFor(object, fieldName).set(value);
 	}
 
 	private void nullField(Object object, String fieldName) {
