@@ -54,7 +54,48 @@ public class FieldAccessor {
 	}
 	
 	/**
-	 * Tries to make the field null. If this fails, nothing happens.
+	 * Getter for the field's type.
+	 */
+	public Class<?> getFieldType() {
+		return field.getType();
+	}
+	
+	/**
+	 * Getter for the field's name.
+	 */
+	public String getFieldName() {
+		return field.getName();
+	}
+	
+	/**
+	 * Tries to get the field's value.
+	 * 
+	 * @return The field's value.
+	 * @throws IllegalStateException If the operation fails.
+	 */
+	public Object get() {
+		try {
+			return field.get(object);
+		}
+		catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
+	
+	/**
+	 * Tries to set the field to the specified value.
+	 * 
+	 * @param value The value that the field should get.
+	 * @throws IllegalStateException If the operation fails.
+	 */
+	public void set(Object value) {
+		modify(new FieldSetter(value));
+	}
+	
+	/**
+	 * Tries to make the field null.
+	 * 
+	 * @throws IllegalStateException If the operation fails.
 	 */
 	public void nullField() {
 		modify(new FieldNuller());
@@ -64,6 +105,7 @@ public class FieldAccessor {
 	 * Copies field's value to the corresponding field in the specified object.
 	 * 
 	 * @param to The object into which to copy the field.
+	 * @throws IllegalStateException If the operation fails.
 	 */
 	public void copyTo(Object to) {
 		modify(new FieldCopier(to));
@@ -75,6 +117,7 @@ public class FieldAccessor {
 	 * 
 	 * @param prefabValues If the field is of a type contained within
 	 * 			prefabValues, the new value will be taken from it.
+	 * @throws IllegalStateException If the operation fails.
 	 */
 	public void changeField(PrefabValues prefabValues) {
 		modify(new FieldChanger(prefabValues));
@@ -88,6 +131,7 @@ public class FieldAccessor {
 	 * @param index The value at this index of the array will be changed.
 	 * @param prefabValues If the field is of a type contained within
 	 * 			prefabValues, the new value will be taken from it.
+	 * @throws IllegalStateException If the operation fails.
 	 * @throws IllegalArgumentException if field is not an array.
 	 * @throws ArrayIndexOutOfBoundsException if index is out of bounds.
 	 */
@@ -139,6 +183,19 @@ public class FieldAccessor {
 	
 	private interface FieldModifier {
 		void modify() throws IllegalAccessException;
+	}
+	
+	private class FieldSetter implements FieldModifier {
+		private final Object newValue;
+		
+		public FieldSetter(Object newValue) {
+			this.newValue = newValue;
+		}
+		
+		@Override
+		public void modify() throws IllegalAccessException {
+			field.set(object, newValue);
+		}
 	}
 	
 	private class FieldNuller implements FieldModifier {
