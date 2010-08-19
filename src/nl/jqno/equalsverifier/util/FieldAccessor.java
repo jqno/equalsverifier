@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.util;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.LinkedHashSet;
 
 /**
  * Provides reflective access to one field of an object.
@@ -119,10 +118,9 @@ public class FieldAccessor {
 		return true;
 	}
 	
-	@SuppressWarnings("unchecked")
 	private static void createPrefabValues(PrefabValues prefabValues, Class<?> type) {
-		InstantiatorFacade foo = new InstantiatorFacade(type, prefabValues, new LinkedHashSet<Class<?>>());
-		foo.createPrefabValues(type, new LinkedHashSet<Class<?>>());
+		PrefabValuesFactory factory = new PrefabValuesFactory(prefabValues);
+		factory.createFor(type);
 	}
 	
 	private interface FieldModifier {
