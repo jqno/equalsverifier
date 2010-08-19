@@ -287,9 +287,4 @@ public class InstantiatorFacade<T> {
 	public static boolean canBeModifiedReflectively(Field field) {
 		return new FieldAccessor(null, field).canBeModifiedReflectively();
 	}
-	
-	public void createPrefabValues(Class<?> type, LinkedHashSet<Class<?>> xxxx) {
-		PrefabValuesFactory factory = new PrefabValuesFactory(prefabValues);
-		factory.createFor(type);
-	}
 }
