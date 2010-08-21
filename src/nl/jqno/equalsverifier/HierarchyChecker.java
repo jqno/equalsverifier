@@ -23,27 +23,29 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class HierarchyChecker<T> {
 	private final Class<T> klass;
-	private final InstantiatorFacade<T> instantiator;
+	private final ClassAccessor<T> classAccessor;
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final boolean klassIsFinal;
 	
+	private ObjectAccessor<T> referenceAccessor;
 	private T reference;
-	private T other;
 
-	public HierarchyChecker(InstantiatorFacade<T> instantiator, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		
-		this.instantiator = instantiator;
-		this.klass = instantiator.getKlass();
+		this.classAccessor = classAccessor;
+		this.klass = classAccessor.getType();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.redefinedSubclass = redefinedSubclass;
 		
@@ -62,6 +64,11 @@ class HierarchyChecker<T> {
 		}
 	}
 	
+	private void generateExamples() {
+		referenceAccessor = classAccessor.getFirstAccessor();
+		reference = referenceAccessor.get();
+	}
+	
 	private void checkSuperclass() {
 		Class<? super T> superclass = klass.getSuperclass();
 		if (redefinedSubclass != null || superclass == Object.class) {
@@ -75,8 +82,8 @@ class HierarchyChecker<T> {
 					reference.equals(equalSuper));
 		}
 		else {
-			T shallow = instantiator.cloneFrom(reference);
-			instantiator.shallowScramble(shallow);
+			T shallow = referenceAccessor.clone();
+			ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
 			
 			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n  " + equalSuper,
 					reference.equals(equalSuper) && equalSuper.equals(reference));
@@ -102,8 +109,8 @@ class HierarchyChecker<T> {
 			return;
 		}
 		
-		T equalSub = instantiator.cloneToSubclass(reference);
-		assertTrue("Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  " + reference + "\nConsider making the class final.",
+		T equalSub = referenceAccessor.cloneIntoAnonymousSubclass();
+		assertTrue("Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n " + reference + "\nConsider making the class final.",
 				reference.equals(equalSub));
 	}
 	
@@ -116,7 +123,7 @@ class HierarchyChecker<T> {
 			fail("Subclass: " + klass.getSimpleName() + " has a final equals method.\nNo need to supply a redefined subclass.");
 		}
 
-		T redefinedSub = instantiator.cloneToSubclass(reference, redefinedSubclass);
+		T redefinedSub = referenceAccessor.cloneIntoSubclass(redefinedSubclass);
 		assertFalse("Subclass:\n  " + reference + "\nequals subclass instance\n  " + redefinedSub,
 				reference.equals(redefinedSub));
 	}
@@ -144,13 +151,5 @@ class HierarchyChecker<T> {
 			throw new AssertionError("Impossible: class " + klass + " has no equals method.");
 		}
 		
-	}
-	
-	private void generateExamples() {
-		reference = instantiator.instantiate();
-		instantiator.scramble(reference);
-		other = instantiator.instantiate();
-		instantiator.scramble(other);
-		instantiator.scramble(other);
 	}
 }
