@@ -38,6 +38,9 @@ public class PrefabValues {
 	 * 			they are equal.
 	 */
 	public <T> void put(Class<T> type, T first, T second) {
+		if (type == null) {
+			throw new InternalException("Type is null");
+		}
 		if (first == null || second == null) {
 			throw new InternalException("First or second parameter is null.");
 		}
