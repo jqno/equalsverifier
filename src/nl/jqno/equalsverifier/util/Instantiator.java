@@ -33,29 +33,29 @@ import org.objenesis.ObjenesisStd;
  * @author Jan Ouwens
  */
 public class Instantiator<T> {
-	private final Class<T> klass;
+	private final Class<T> type;
 	private Objenesis objenesis;
 
 	/**
 	 * Factory method.
 	 * 
 	 * @param <T> The class on which {@link Instantiator} operates.
-	 * @param klass The class on which {@link Instantiator} operates. Should be
+	 * @param type The class on which {@link Instantiator} operates. Should be
 	 * 				the same as T.
-	 * @return An {@link Instantiator} for {@link #klass}.
+	 * @return An {@link Instantiator} for {@link #type}.
 	 */
-	public static <T> Instantiator<T> of(Class<T> klass) {
-		if (Modifier.isAbstract(klass.getModifiers())) {
-			return new Instantiator<T>(createDynamicSubclass(klass));
+	public static <T> Instantiator<T> of(Class<T> type) {
+		if (Modifier.isAbstract(type.getModifiers())) {
+			return new Instantiator<T>(createDynamicSubclass(type));
 		}
-		return new Instantiator<T>(klass);
+		return new Instantiator<T>(type);
 	}
 	
 	/**
 	 * Private constructor. Call {@link #of(Class)} to instantiate.
 	 */
-	private Instantiator(Class<T> klass) {
-		this.klass = klass;
+	private Instantiator(Class<T> type) {
+		this.type = type;
 		this.objenesis = new ObjenesisStd();
 	}
 	
@@ -66,7 +66,7 @@ public class Instantiator<T> {
 	 */
 	public T instantiate() {
 		@SuppressWarnings("unchecked")
-		T result = (T)objenesis.newInstance(klass);
+		T result = (T)objenesis.newInstance(type);
 		return result;
 	}
 	
@@ -77,7 +77,7 @@ public class Instantiator<T> {
 	 * @return An instance of an anonymous subclass of T.
 	 */
 	public T instantiateAnonymousSubclass() {
-		Class<T> proxyClass = createDynamicSubclass(klass);
+		Class<T> proxyClass = createDynamicSubclass(type);
 		@SuppressWarnings("unchecked")
 		T instance = (T)objenesis.newInstance(proxyClass);
 		return instance;

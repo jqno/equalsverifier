@@ -27,15 +27,15 @@ import java.util.List;
  * @author Jan Ouwens
  */
 public class FieldIterable implements Iterable<Field> {
-	private final Class<?> klass;
+	private final Class<?> type;
 	
 	/**
 	 * Constructor.
 	 * 
-	 * @param klass The class that contains the fields over which to iterate.
+	 * @param type The class that contains the fields over which to iterate.
 	 */
-	public FieldIterable(Class<?> klass) {
-		this.klass = klass;
+	public FieldIterable(Class<?> type) {
+		this.type = type;
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class FieldIterable implements Iterable<Field> {
 	private List<Field> createFieldList() {
 		List<Field> result = new ArrayList<Field>();
 		
-		Class<?> i = klass;
+		Class<?> i = type;
 		while (i != null && i != Object.class) {
 			for (Field field : i.getDeclaredFields()) {
 				if (!field.isSynthetic()) {
