@@ -125,7 +125,7 @@ public class InstantiatorFieldModificationTest {
 		assertNotNull(ic._interface);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void changeNotArrayElement() {
 		Object o = new Object();
 		InstantiatorFacade<Object> instantiator = InstantiatorFacade.forClass(Object.class);

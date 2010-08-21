@@ -113,7 +113,7 @@ public class PrefabValuesFactory {
 	private <T> void addEnumInstances(Class<T> type) {
 		T[] enumConstants = type.getEnumConstants();
 		if (enumConstants.length < 2) {
-			throw new IllegalStateException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
+			throw new InternalException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
 		}
 		prefabValues.put(type, enumConstants[0], enumConstants[1]);
 	}
