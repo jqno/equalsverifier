@@ -24,15 +24,20 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
+import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.ObjectAccessor;
+import nl.jqno.equalsverifier.util.PrefabValues;
 
 class FieldsChecker<T> {
-	private final InstantiatorFacade<T> instantiator;
+	private final ClassAccessor<T> classAccessor;
+	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
 
-	public FieldsChecker(InstantiatorFacade<T> instantiator, EnumSet<Warning> warningsToSuppress) {
-		this.instantiator = instantiator;
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress) {
+		this.classAccessor = classAccessor;
+		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 	}
 	
@@ -41,48 +46,39 @@ class FieldsChecker<T> {
 			return;
 		}
 		
-		check(new NullPointerExceptionFieldCheck<T>());
+		check(new NullPointerExceptionFieldCheck());
 	}
 	
 	public void check() {
-		check(new ArrayFieldCheck<T>());
-		check(new SignificanceFieldCheck<T>());
-		check(new FloatAndDoubleFieldCheck<T>());
+		check(new ArrayFieldCheck());
+		check(new SignificanceFieldCheck());
+		check(new FloatAndDoubleFieldCheck());
 		
 		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
-			check(new MutableStateFieldCheck<T>());
+			check(new MutableStateFieldCheck());
 		}
 	}
 	
-	private void check(FieldCheck<T> check) {
-		T reference = instantiator.instantiate();
-		instantiator.scramble(reference);
-		T changed = instantiator.instantiate();
-		instantiator.scramble(changed);
+	private void check(FieldCheck check) {
+		ObjectAccessor<T> reference = classAccessor.getFirstAccessor();
+		ObjectAccessor<T> changed = classAccessor.getFirstAccessor();
 
-		for (Field field : new FieldIterable(changed.getClass())) {
-			try {
-				if (InstantiatorFacade.canBeModifiedReflectively(field)) {
-					field.setAccessible(true);
-					check.execute(field, reference, changed, instantiator);
-				}
-			}
-			catch (IllegalArgumentException e) {
-				fail("Caught IllegalArgumentException on " + field.getName() + " (" + e.getMessage() + ")");
-			}
-			catch (IllegalAccessException e) {
-				fail("Caught IllegalAccessException on " + field.getName() + " (" + e.getMessage() + ")");
-			}
+		for (Field field : new FieldIterable(classAccessor.getType())) {
+			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
 		}
 	}
 
-	private static class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
+	private class NullPointerExceptionFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Field field = referenceAccessor.getField();
 			if (field.getType().isPrimitive()) {
 				return;
 			}
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
 			
-			instantiator.nullField(field, changed);
+			changedAccessor.nullField();
 			
 			try {
 				reference.equals(changed);
@@ -123,7 +119,7 @@ class FieldsChecker<T> {
 				exceptionThrown("toString", field, e);
 			}
 			
-			instantiator.nullField(field, reference);
+			referenceAccessor.nullField();
 		}
 
 		private void npeThrown(String method) {
@@ -135,38 +131,43 @@ class FieldsChecker<T> {
 		}
 	}
 	
-	private static class SignificanceFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
-			instantiator.changeField(field, changed);
+	private class SignificanceFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
+			
+			changedAccessor.changeField(prefabValues);
 			
 			boolean equalsChanged = !reference.equals(changed);
 			boolean hashCodeChanged = reference.hashCode() != changed.hashCode();
 			
 			if (equalsChanged != hashCodeChanged) {
-				assertFalse("Significant fields: equals relies on " + field.getName() + ", but hashCode does not.",
+				assertFalse("Significant fields: equals relies on " + referenceAccessor.getFieldName() + ", but hashCode does not.",
 						equalsChanged);
-				assertFalse("Significant fields: hashCode relies on " + field.getName() + ", but equals does not.",
+				assertFalse("Significant fields: hashCode relies on " + referenceAccessor.getFieldName() + ", but equals does not.",
 						hashCodeChanged);
 			}
 			
-			instantiator.changeField(field, reference);
+			referenceAccessor.changeField(prefabValues);
 		}
 	}
 	
-	private static class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
-			Class<?> type = field.getType();
+	private class FloatAndDoubleFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Class<?> type = referenceAccessor.getFieldType();
 			if (isFloat(type)) {
-				set(field, reference, Float.NaN);
-				set(field, changed, Float.NaN);
-				assertEquals("Float: equals doesn't use Float.compare for field " + field.getName() + ".",
-						reference, changed);
+				referenceAccessor.set(Float.NaN);
+				changedAccessor.set(Float.NaN);
+				assertEquals("Float: equals doesn't use Float.compare for field " + referenceAccessor.getFieldName() + ".",
+						referenceAccessor.getObject(), changedAccessor.getObject());
 			}
 			if (isDouble(type)) {
-				set(field, reference, Double.NaN);
-				set(field, changed, Double.NaN);
-				assertEquals("Double: equals doesn't use Double.compare for field " + field.getName() + ".",
-						reference, changed);
+				referenceAccessor.set(Double.NaN);
+				changedAccessor.set(Double.NaN);
+				assertEquals("Double: equals doesn't use Double.compare for field " + referenceAccessor.getFieldName() + ".",
+						referenceAccessor.getObject(), changedAccessor.getObject());
 			}
 		}
 
@@ -177,33 +178,22 @@ class FieldsChecker<T> {
 		private boolean isDouble(Class<?> type) {
 			return type == double.class || type == Double.class;
 		}
-		
-		private void set(Field field, T object, double value) throws IllegalArgumentException, IllegalAccessException {
-			Class<?> type = field.getType();
-			if (type == float.class) {
-				field.setFloat(object, (float)value);
-			}
-			if (type == Float.class) {
-				field.set(object, (float)value);
-			}
-			if (type == double.class) {
-				field.setDouble(object, value);
-			}
-			if (type == Double.class) {
-				field.set(object, value);
-			}
-		}
 	}
 	
-	private static class ArrayFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException {
-			Class<?> arrayType = field.getType();
+	private class ArrayFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Class<?> arrayType = referenceAccessor.getFieldType();
 			if (!arrayType.isArray()) {
 				return;
 			}
+			
+			String fieldName = referenceAccessor.getFieldName();
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
 
-			field.set(reference, createNewArrayInstance(arrayType, instantiator));
-			field.set(changed, createNewArrayInstance(arrayType, instantiator));
+			referenceAccessor.set(createNewArrayInstance(arrayType));
+			changedAccessor.set(createNewArrayInstance(arrayType));
 			
 			if (arrayType.getComponentType().isArray() || arrayType == Object[].class) {
 				// In case of Object[], arbitrarily pick int as type for the nested array.
@@ -211,45 +201,49 @@ class FieldsChecker<T> {
 						int[].class :
 						arrayType.getComponentType();
 				
-				Array.set(field.get(reference), 0, createNewArrayInstance(deepType, instantiator));
-				Array.set(field.get(changed), 0, createNewArrayInstance(deepType, instantiator));
+				Array.set(referenceAccessor.get(), 0, createNewArrayInstance(deepType));
+				Array.set(changedAccessor.get(), 0, createNewArrayInstance(deepType));
 				
-				assertEquals("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + field.getName() + ".",
+				assertEquals("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + fieldName + ".",
 						reference, changed);
-				assertEquals("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + field.getName() + ".",
+				assertEquals("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + fieldName + ".",
 						reference.hashCode(), changed.hashCode());
 			}
 			else {
-				assertEquals("Array: == used instead of Arrays.equals() for field " + field.getName() + ".",
+				assertEquals("Array: == used instead of Arrays.equals() for field " + fieldName + ".",
 					reference, changed);
-				assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + field.getName() + ".",
+				assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + fieldName + ".",
 					reference.hashCode(), changed.hashCode());
 			}
 		}
 
-		private Object createNewArrayInstance(Class<?> arrayType, InstantiatorFacade<T> instantiator) {
+		private Object createNewArrayInstance(Class<?> arrayType) {
 			Object array = Array.newInstance(arrayType.getComponentType(), 1);
-			instantiator.changeArrayElement(array, 0);
+			FieldAccessor.modifyArrayElement(array, 0, prefabValues);
 			return array;
 		}
 	}
 	
-	private static class MutableStateFieldCheck<T> implements FieldCheck<T> {
-		public void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) {
-			instantiator.changeField(field, changed);
+	private class MutableStateFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
+			
+			changedAccessor.changeField(prefabValues);
 
 			boolean equalsChanged = !reference.equals(changed);
 
-			if (equalsChanged && !Modifier.isFinal(field.getModifiers())) {
-				assertEquals("Mutability: equals depends on mutable field " + field.getName() + ".",
+			if (equalsChanged && !Modifier.isFinal(referenceAccessor.getField().getModifiers())) {
+				assertEquals("Mutability: equals depends on mutable field " + referenceAccessor.getFieldName() + ".",
 						reference, changed);
 			}
 			
-			instantiator.changeField(field, reference);
+			referenceAccessor.changeField(prefabValues);
 		}
 	}
 	
-	private interface FieldCheck<T> {
-		void execute(Field field, T reference, T changed, InstantiatorFacade<T> instantiator) throws IllegalArgumentException, IllegalAccessException;
+	private interface FieldCheck {
+		void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
 	}
 }
