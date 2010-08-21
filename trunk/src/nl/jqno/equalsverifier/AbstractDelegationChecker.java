@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
+import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class AbstractDelegationChecker<T> {
@@ -84,7 +84,7 @@ public class AbstractDelegationChecker<T> {
 			return result;
 		}
 		try {
-			return InstantiatorFacade.forClass(type).instantiate();
+			return Instantiator.of(type).instantiate();
 		}
 		catch (Throwable e) {
 			// If it fails for some reason, any reason, just return null.
