@@ -303,7 +303,7 @@ public final class EqualsVerifier<T> {
 		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
 		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
-		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(instantiator, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
+		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
 		
 		abstractDelegationChecker.check();
 		
