@@ -113,17 +113,17 @@ public class ObjectAccessorCloningTest {
 		return ObjectAccessor.of(from).clone();
 	}
 	
-	private <T> T cloneOf(T from, Class<T> klass) {
-		return ObjectAccessor.of(from, klass).clone();
+	private <T> T cloneOf(T from, Class<T> type) {
+		return ObjectAccessor.of(from, type).clone();
 	}
 	
 	private <T, S extends T> S cloneIntoSubclass(T from, Class<S> subclass) {
 		return ObjectAccessor.of(from).cloneIntoSubclass(subclass);
 	}
 	
-	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> klass) {
+	private static <T> void assertAllFieldsEqual(T original, T clone, Class<? extends T> type) {
 		assertNotSame(original, clone);
-		for (Field field : new FieldIterable(klass)) {
+		for (Field field : new FieldIterable(type)) {
 			try {
 				assertEquals(field.get(original), field.get(clone));
 			}

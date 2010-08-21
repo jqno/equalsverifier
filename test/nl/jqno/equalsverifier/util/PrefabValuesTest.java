@@ -132,14 +132,14 @@ public class PrefabValuesTest {
 		assertPrefabValues(p, Interface.class);
 	}
 	
-	private static void assertPrefabValues(PrefabValues p, Class<?> klass) {
-		Object first = p.getOther(klass, null);
+	private static void assertPrefabValues(PrefabValues p, Class<?> type) {
+		Object first = p.getOther(type, null);
 		assertNotNull(first);
 		
-		Object second = p.getOther(klass, first);
+		Object second = p.getOther(type, first);
 		assertNotNull(second);
 		
 		assertFalse(first.equals(second));
-		assertEquals(first, p.getOther(klass, second));
+		assertEquals(first, p.getOther(type, second));
 	}
 }

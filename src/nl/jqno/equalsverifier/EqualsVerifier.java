@@ -101,7 +101,7 @@ import nl.jqno.equalsverifier.util.RecursionException;
  * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
-	private final Class<T> klass;
+	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
@@ -115,14 +115,14 @@ public final class EqualsVerifier<T> {
 	/**
 	 * Factory method. For general use.
 	 * 
-	 * @param klass The class for which the {@code equals} method should be
+	 * @param type The class for which the {@code equals} method should be
 	 * 				tested.
 	 */
-	public static <T> EqualsVerifier<T> forClass(Class<T> klass) {
+	public static <T> EqualsVerifier<T> forClass(Class<T> type) {
 		List<T> equalExamples = new ArrayList<T>();
 		List<T> unequalExamples = new ArrayList<T>();
 
-		return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
+		return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 	}
 	
 	/**
@@ -143,9 +143,9 @@ public final class EqualsVerifier<T> {
 		List<T> unequalExamples = buildList2(first, second, tail);
 		
 		@SuppressWarnings("unchecked")
-		Class<T> klass = (Class<T>)first.getClass();
+		Class<T> type = (Class<T>)first.getClass();
 		
-		return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
+		return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 	}
 	
 	/**
@@ -170,9 +170,9 @@ public final class EqualsVerifier<T> {
 		List<T> examples = buildList2(first, second, tail);
 		
 		@SuppressWarnings("unchecked")
-		Class<T> klass = (Class<T>)first.getClass();
+		Class<T> type = (Class<T>)first.getClass();
 		
-		return new RelaxedEqualsVerifierHelper<T>(klass, examples);
+		return new RelaxedEqualsVerifierHelper<T>(type, examples);
 	}
 
 	/**
@@ -180,13 +180,13 @@ public final class EqualsVerifier<T> {
 	 * {@link #forExamples(Object, Object, Object...)} or
 	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
 	 */
-	private EqualsVerifier(Class<T> klass, List<T> equalExamples, List<T> unequalExamples) {
-		this.klass = klass;
+	private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = type;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 		
 		this.prefabValues = PrefabValuesFactory.withJavaClasses();
-		this.classAccessor = ClassAccessor.of(klass, prefabValues);
+		this.classAccessor = ClassAccessor.of(type, prefabValues);
 	}
 	
 	/**
@@ -209,7 +209,7 @@ public final class EqualsVerifier<T> {
 	 * EqualsVerifier cannot instantiate by itself.
 	 * 
 	 * @param <S> The class of the prefabricated values.
-	 * @param otherKlass The class of the prefabricated values.
+	 * @param otherType The class of the prefabricated values.
 	 * @param first An instance of {@code S}.
 	 * @param second An instance of {@code S}.
 	 * @return {@code this}, for easy method chaining.
@@ -217,8 +217,8 @@ public final class EqualsVerifier<T> {
 	 * 				is null.
 	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
 	 */
-	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherKlass, S first, S second) {
-		prefabValues.put(otherKlass, first, second);
+	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S first, S second) {
+		prefabValues.put(otherType, first, second);
 		return this;
 	}
 	
@@ -294,7 +294,7 @@ public final class EqualsVerifier<T> {
 	private void performVerification() {
 		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
-		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
+		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
 		
 		abstractDelegationChecker.check();
@@ -359,11 +359,11 @@ public final class EqualsVerifier<T> {
 		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
 		for (T example : equalExamples) {
 			assertTrue("Precondition:\n  " + equalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
-					klass.isAssignableFrom(example.getClass()));
+					type.isAssignableFrom(example.getClass()));
 		}
 		for (T example : unequalExamples) {
 			assertTrue("Precondition:\n  " + unequalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
-					klass.isAssignableFrom(example.getClass()));
+					type.isAssignableFrom(example.getClass()));
 		}
 	}
 	
@@ -386,15 +386,15 @@ public final class EqualsVerifier<T> {
 	 * @author Jan Ouwens
 	 */
 	public static class RelaxedEqualsVerifierHelper<T> {
-		private final Class<T> klass;
+		private final Class<T> type;
 		private final List<T> equalExamples;
 
 		/**
 		 * Private constructor, only to be called by
 		 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
 		 */
-		private RelaxedEqualsVerifierHelper(Class<T> klass, List<T> examples) {
-			this.klass = klass;
+		private RelaxedEqualsVerifierHelper(Class<T> type, List<T> examples) {
+			this.type = type;
 			this.equalExamples = examples;
 		}
 		
@@ -408,7 +408,7 @@ public final class EqualsVerifier<T> {
 		 */
 		public EqualsVerifier<T> andUnequalExample(T example) {
 			List<T> unequalExamples = buildList1(example, (T[])null);
-			return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
+			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 		}
 
 		/**
@@ -425,7 +425,7 @@ public final class EqualsVerifier<T> {
 		 */
 		public EqualsVerifier<T> andUnequalExamples(T first, T... tail) {
 			List<T> unequalExamples = buildList1(first, tail);
-			return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
+			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 		}
 	}
 }

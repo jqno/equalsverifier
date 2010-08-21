@@ -125,16 +125,16 @@ public class FieldIterableTest {
 	
 	@SuppressWarnings("serial")
 	private static final Set<Field> FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
-		Class<DifferentAccessModifiersFieldContainer> klass = DifferentAccessModifiersFieldContainer.class;
+		Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
 		try {
-			add(klass.getDeclaredField("i"));
-			add(klass.getDeclaredField("j"));
-			add(klass.getDeclaredField("k"));
-			add(klass.getDeclaredField("l"));
-			add(klass.getDeclaredField("I"));
-			add(klass.getDeclaredField("J"));
-			add(klass.getDeclaredField("K"));
-			add(klass.getDeclaredField("L"));
+			add(type.getDeclaredField("i"));
+			add(type.getDeclaredField("j"));
+			add(type.getDeclaredField("k"));
+			add(type.getDeclaredField("l"));
+			add(type.getDeclaredField("I"));
+			add(type.getDeclaredField("J"));
+			add(type.getDeclaredField("K"));
+			add(type.getDeclaredField("L"));
 		}
 		catch (NoSuchFieldException e) {
 			throw new IllegalStateException(e);
@@ -143,13 +143,13 @@ public class FieldIterableTest {
 	
 	@SuppressWarnings("serial")
 	private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
-		Class<DifferentAccessModifiersSubFieldContainer> klass = DifferentAccessModifiersSubFieldContainer.class;
+		Class<DifferentAccessModifiersSubFieldContainer> type = DifferentAccessModifiersSubFieldContainer.class;
 		try {
 			addAll(FIELD_CONTAINER_FIELDS);
-			add(klass.getDeclaredField("a"));
-			add(klass.getDeclaredField("b"));
-			add(klass.getDeclaredField("c"));
-			add(klass.getDeclaredField("d"));
+			add(type.getDeclaredField("a"));
+			add(type.getDeclaredField("b"));
+			add(type.getDeclaredField("c"));
+			add(type.getDeclaredField("d"));
 		}
 		catch (NoSuchFieldException e) {
 			throw new IllegalStateException(e);

@@ -27,12 +27,12 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class HierarchyChecker<T> {
-	private final Class<T> klass;
+	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
-	private final boolean klassIsFinal;
+	private final boolean typeIsFinal;
 	
 	private ObjectAccessor<T> referenceAccessor;
 	private T reference;
@@ -44,11 +44,11 @@ class HierarchyChecker<T> {
 		}
 		
 		this.classAccessor = classAccessor;
-		this.klass = classAccessor.getType();
+		this.type = classAccessor.getType();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.redefinedSubclass = redefinedSubclass;
 		
-		klassIsFinal = Modifier.isFinal(klass.getModifiers());
+		typeIsFinal = Modifier.isFinal(type.getModifiers());
 	}
 	
 	public void check() {
@@ -69,7 +69,7 @@ class HierarchyChecker<T> {
 	}
 	
 	private void checkSuperclass() {
-		Class<? super T> superclass = klass.getSuperclass();
+		Class<? super T> superclass = type.getSuperclass();
 		if (redefinedSubclass != null || superclass == Object.class) {
 			return;
 		}
@@ -98,7 +98,7 @@ class HierarchyChecker<T> {
 	}
 	
 	private void checkSubclass() {
-		if (klassIsFinal) {
+		if (typeIsFinal) {
 			return;
 		}
 		
@@ -108,12 +108,12 @@ class HierarchyChecker<T> {
 	}
 	
 	private void checkRedefinedSubclass() {
-		if (klassIsFinal || redefinedSubclass == null) {
+		if (typeIsFinal || redefinedSubclass == null) {
 			return;
 		}
 		
 		if (methodIsFinal("equals", Object.class)) {
-			fail("Subclass: " + klass.getSimpleName() + " has a final equals method.\nNo need to supply a redefined subclass.");
+			fail("Subclass: " + type.getSimpleName() + " has a final equals method.\nNo need to supply a redefined subclass.");
 		}
 
 		T redefinedSub = referenceAccessor.cloneIntoSubclass(redefinedSubclass);
@@ -122,7 +122,7 @@ class HierarchyChecker<T> {
 	}
 	
 	private void checkFinalEqualsMethod() {
-		if (klassIsFinal || redefinedSubclass != null) {
+		if (typeIsFinal || redefinedSubclass != null) {
 			return;
 		}
 		
@@ -134,14 +134,14 @@ class HierarchyChecker<T> {
 
 	private boolean methodIsFinal(String methodName, Class<?>... parameterTypes) {
 		try {
-			Method method = klass.getMethod(methodName, parameterTypes);
+			Method method = type.getMethod(methodName, parameterTypes);
 			return Modifier.isFinal(method.getModifiers());
 		}
 		catch (SecurityException e) {
-			throw new AssertionError("Security error: cannot access equals method for class " + klass);
+			throw new AssertionError("Security error: cannot access equals method for class " + type);
 		}
 		catch (NoSuchMethodException e) {
-			throw new AssertionError("Impossible: class " + klass + " has no equals method.");
+			throw new AssertionError("Impossible: class " + type + " has no equals method.");
 		}
 		
 	}
