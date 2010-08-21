@@ -39,13 +39,13 @@ public class PrefabValues {
 	 */
 	public <T> void put(Class<T> type, T first, T second) {
 		if (first == null || second == null) {
-			throw new IllegalArgumentException("First or second parameter is null.");
+			throw new InternalException("First or second parameter is null.");
 		}
 		if (values.containsKey(type)) {
-			throw new IllegalArgumentException("Type " + type + " is already present.");
+			throw new InternalException("Type " + type + " is already present.");
 		}
 		if (first.equals(second)) {
-			throw new IllegalArgumentException("First and second parameters are equal.");
+			throw new InternalException("First and second parameters are equal.");
 		}
 		values.put(type, new Tuple<T>(first, second));
 	}
@@ -106,16 +106,16 @@ public class PrefabValues {
 	 */
 	public Object getOther(Class<?> type, Object value) {
 		if (type == null) {
-			throw new IllegalArgumentException("Type is null.");
+			throw new InternalException("Type is null.");
 		}
 		
 		if (value != null && !type.isAssignableFrom(value.getClass())) {
-			throw new IllegalArgumentException("Type does not match value.");
+			throw new InternalException("Type does not match value.");
 		}
 		
 		Tuple<?> tuple = values.get(type);
 		if (tuple == null) {
-			throw new IllegalArgumentException("No prefab values for " + type + " exist.");
+			throw new InternalException("No prefab values for " + type + " exist.");
 		}
 		
 		if (tuple.first.equals(value)) {

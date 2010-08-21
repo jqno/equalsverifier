@@ -47,22 +47,22 @@ public class PrefabValuesTest {
 		assertPrefabValues(p, EXISTING_KEY);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void putFirstNull() {
 		p.put(NON_EXISTING_KEY, null, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void putSecondNull() {
 		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, null);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void putTwoEqualValues() {
 		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void putTheSameKeyTwice() {
 		p.put(EXISTING_KEY, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
 	}
@@ -101,12 +101,12 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_FIRST_VALUE, p.getOther(EXISTING_KEY, NON_EXISTING_VALUE));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void getOtherWhenClassDoesntExist() {
 		p.getOther(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void getOtherWhenClassIsNull() {
 		p.getOther(null, VALUE_FOR_NON_EXISTING_KEY);
 	}
@@ -116,7 +116,7 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_FIRST_VALUE, p.getOther(EXISTING_KEY, null));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void getOtherWhenClassDoesntMatchValue() {
 		p.getOther(String.class, 1);
 	}
