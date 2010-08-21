@@ -71,14 +71,14 @@ public class FieldAccessor {
 	 * Tries to get the field's value.
 	 * 
 	 * @return The field's value.
-	 * @throws IllegalStateException If the operation fails.
+	 * @throws InternalException If the operation fails.
 	 */
 	public Object get() {
 		try {
 			return field.get(object);
 		}
 		catch (IllegalAccessException e) {
-			throw new IllegalStateException(e);
+			throw new InternalException(e);
 		}
 	}
 	
@@ -86,7 +86,7 @@ public class FieldAccessor {
 	 * Tries to set the field to the specified value.
 	 * 
 	 * @param value The value that the field should get.
-	 * @throws IllegalStateException If the operation fails.
+	 * @throws InternalException If the operation fails.
 	 */
 	public void set(Object value) {
 		modify(new FieldSetter(value));
@@ -95,7 +95,7 @@ public class FieldAccessor {
 	/**
 	 * Tries to make the field null.
 	 * 
-	 * @throws IllegalStateException If the operation fails.
+	 * @throws InternalException If the operation fails.
 	 */
 	public void nullField() {
 		modify(new FieldNuller());
@@ -105,7 +105,7 @@ public class FieldAccessor {
 	 * Copies field's value to the corresponding field in the specified object.
 	 * 
 	 * @param to The object into which to copy the field.
-	 * @throws IllegalStateException If the operation fails.
+	 * @throws InternalException If the operation fails.
 	 */
 	public void copyTo(Object to) {
 		modify(new FieldCopier(to));
@@ -117,7 +117,7 @@ public class FieldAccessor {
 	 * 
 	 * @param prefabValues If the field is of a type contained within
 	 * 			prefabValues, the new value will be taken from it.
-	 * @throws IllegalStateException If the operation fails.
+	 * @throws InternalException If the operation fails.
 	 */
 	public void changeField(PrefabValues prefabValues) {
 		modify(new FieldChanger(prefabValues));
@@ -131,8 +131,8 @@ public class FieldAccessor {
 	 * @param index The value at this index of the array will be changed.
 	 * @param prefabValues If the field is of a type contained within
 	 * 			prefabValues, the new value will be taken from it.
-	 * @throws IllegalStateException If the operation fails.
-	 * @throws IllegalArgumentException if field is not an array.
+	 * @throws InternalException If the operation fails or if field is not an
+	 * 			array.
 	 * @throws ArrayIndexOutOfBoundsException if index is out of bounds.
 	 */
 	public void changeArrayField(int index, PrefabValues prefabValues) {
@@ -149,7 +149,7 @@ public class FieldAccessor {
 			modifier.modify();
 		}
 		catch (IllegalAccessException e) {
-			throw new IllegalStateException(e);
+			throw new InternalException(e);
 		}
 	}
 	
@@ -289,11 +289,22 @@ public class FieldAccessor {
 		}
 	}
 	
+	/**
+	 * Changes the content of an array element.
+	 * 
+	 * @param array The array in which to change an element.
+	 * @param index The index at which to change the element.
+	 * @param prefabValues If the array is of a component type contained within
+	 * 			prefabValues, the new value will be taken from it.
+	 */
 	public static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
 		if (!array.getClass().isArray()) {
-			throw new IllegalArgumentException("Expected array is not an array.");
+			throw new InternalException("Expected array is not an array.");
 		}
-		
+		if (index < 0 || index >= Array.getLength(array)) {
+			throw new InternalException("Array index out of bounds.");
+		}
+
 		Class<?> type = array.getClass().getComponentType();
 		if (type == boolean.class) {
 			Array.setBoolean(array, index, !Array.getBoolean(array, index));

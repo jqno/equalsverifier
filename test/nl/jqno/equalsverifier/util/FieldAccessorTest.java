@@ -78,13 +78,6 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void setValuePrimitive() {
-		PrimitiveContainer foo = new PrimitiveContainer();
-		setField(foo, "i", 20);
-		assertEquals(20, foo.i);
-	}
-	
-	@Test
 	public void getValuePrimitive() {
 		PrimitiveContainer foo = new PrimitiveContainer();
 		foo.i = 10;
@@ -99,6 +92,13 @@ public class FieldAccessorTest {
 		foo._object = object;
 		Object value = getValue(foo, "_object");
 		assertEquals(object, value);
+	}
+	
+	@Test
+	public void setValuePrimitive() {
+		PrimitiveContainer foo = new PrimitiveContainer();
+		setField(foo, "i", 20);
+		assertEquals(20, foo.i);
 	}
 	
 	@Test
@@ -258,13 +258,13 @@ public class FieldAccessorTest {
 		}
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected=InternalException.class)
 	public void changeArrayFieldWhichIsNotAnArrayField() {
 		ObjectContainer foo = new ObjectContainer();
 		changeArrayField(foo, "_object", 0);
 	}
 	
-	@Test(expected=ArrayIndexOutOfBoundsException.class)
+	@Test(expected=InternalException.class)
 	public void changeArrayFieldWithInvalidIndex() {
 		final int size = 10;
 		ArrayContainer foo = new ArrayContainer();

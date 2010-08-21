@@ -70,12 +70,12 @@ public class PrefabValuesFactoryTest {
 		factory.createFor(Enum.class);
 	}
 	
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=InternalException.class)
 	public void createOneElementEnum() {
 		factory.createFor(OneElementEnum.class);
 	}
 	
-	@Test(expected=IllegalStateException.class)
+	@Test(expected=InternalException.class)
 	public void createEmptyEnum() {
 		factory.createFor(EmptyEnum.class);
 	}
