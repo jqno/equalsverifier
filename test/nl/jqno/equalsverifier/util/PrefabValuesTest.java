@@ -48,6 +48,11 @@ public class PrefabValuesTest {
 	}
 	
 	@Test(expected=InternalException.class)
+	public void putNullClass() {
+		p.put(null, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
+	}
+	
+	@Test(expected=InternalException.class)
 	public void putFirstNull() {
 		p.put(NON_EXISTING_KEY, null, VALUE_FOR_NON_EXISTING_KEY);
 	}

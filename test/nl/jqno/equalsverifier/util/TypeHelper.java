@@ -48,6 +48,8 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
+import nl.jqno.equalsverifier.points.Point;
+
 public class TypeHelper {
 	private static final Object OBJECT = new Object();
 	
@@ -295,4 +297,8 @@ public class TypeHelper {
 	static enum OneElementEnum { ONE }
 	
 	static enum EmptyEnum {}
+	
+	static final class PointArrayContainer {
+		Point[] point = { new Point(1, 2) };
+	}
 }

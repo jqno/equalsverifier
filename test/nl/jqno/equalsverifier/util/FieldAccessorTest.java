@@ -24,6 +24,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
+import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.points.PointContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractAndInterfaceArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
@@ -32,6 +34,7 @@ import nl.jqno.equalsverifier.util.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.ObjectContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.Outer;
+import nl.jqno.equalsverifier.util.TypeHelper.PointArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrimitiveContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrivateObjectContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
@@ -41,6 +44,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class FieldAccessorTest {
+	private static final Point FIRST_NEW_POINT = new Point(10, 20);
+	private static final Point SECOND_NEW_POINT = new Point(20, 10);
+	
 	private PrefabValues prefabValues;
 	
 	@Before
@@ -284,6 +290,36 @@ public class FieldAccessorTest {
 		AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
 		changeArrayField(foo, "interfaces", 0);
 		assertNotNull(foo.interfaces[0]);
+	}
+	
+	@Test
+	public void addPrefabValues() {
+		PointContainer foo = new PointContainer(new Point(1, 2));
+		prefabValues.put(Point.class, FIRST_NEW_POINT, SECOND_NEW_POINT);
+		
+		changeField(foo, "point");
+		assertEquals(FIRST_NEW_POINT, foo.getPoint());
+		
+		changeField(foo, "point");
+		assertEquals(SECOND_NEW_POINT, foo.getPoint());
+		
+		changeField(foo, "point");
+		assertEquals(FIRST_NEW_POINT, foo.getPoint());
+	}
+	
+	@Test
+	public void addPrefabArrayValues() {
+		PointArrayContainer foo = new PointArrayContainer();
+		prefabValues.put(Point.class, FIRST_NEW_POINT, SECOND_NEW_POINT);
+		
+		changeField(foo, "point");
+		assertEquals(FIRST_NEW_POINT, foo.point[0]);
+		
+		changeField(foo, "point");
+		assertEquals(SECOND_NEW_POINT, foo.point[0]);
+		
+		changeField(foo, "point");
+		assertEquals(FIRST_NEW_POINT, foo.point[0]);
 	}
 	
 	private Object getValue(Object object, String fieldName) {
