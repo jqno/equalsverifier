@@ -23,7 +23,6 @@ import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.PrefabValuesFactory;
 import nl.jqno.equalsverifier.util.RecursionException;
@@ -103,7 +102,7 @@ import nl.jqno.equalsverifier.util.RecursionException;
  */
 public final class EqualsVerifier<T> {
 	private final Class<T> klass;
-	private final InstantiatorFacade<T> instantiator;
+	private final ClassAccessor<T> classAccessor;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
@@ -120,11 +119,10 @@ public final class EqualsVerifier<T> {
 	 * 				tested.
 	 */
 	public static <T> EqualsVerifier<T> forClass(Class<T> klass) {
-		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		List<T> equalExamples = new ArrayList<T>();
 		List<T> unequalExamples = new ArrayList<T>();
 
-		return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+		return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
 	}
 	
 	/**
@@ -146,9 +144,8 @@ public final class EqualsVerifier<T> {
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
-		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		
-		return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+		return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
 	}
 	
 	/**
@@ -174,9 +171,8 @@ public final class EqualsVerifier<T> {
 		
 		@SuppressWarnings("unchecked")
 		Class<T> klass = (Class<T>)first.getClass();
-		InstantiatorFacade<T> instantiator = InstantiatorFacade.forClass(klass);
 		
-		return new RelaxedEqualsVerifierHelper<T>(klass, instantiator, examples);
+		return new RelaxedEqualsVerifierHelper<T>(klass, examples);
 	}
 
 	/**
@@ -184,12 +180,13 @@ public final class EqualsVerifier<T> {
 	 * {@link #forExamples(Object, Object, Object...)} or
 	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
 	 */
-	private EqualsVerifier(Class<T> klass, InstantiatorFacade<T> instantiator, List<T> equalExamples, List<T> unequalExamples) {
+	private EqualsVerifier(Class<T> klass, List<T> equalExamples, List<T> unequalExamples) {
 		this.klass = klass;
-		this.instantiator = instantiator;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
+		
 		this.prefabValues = PrefabValuesFactory.withJavaClasses();
+		this.classAccessor = ClassAccessor.of(klass, prefabValues);
 	}
 	
 	/**
@@ -222,9 +219,6 @@ public final class EqualsVerifier<T> {
 	 */
 	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherKlass, S first, S second) {
 		prefabValues.put(otherKlass, first, second);
-		
-		instantiator.addPrefabValues(otherKlass, first, second);
-		
 		return this;
 	}
 	
@@ -298,8 +292,6 @@ public final class EqualsVerifier<T> {
 	}
 
 	private void performVerification() {
-		ClassAccessor<T> classAccessor = ClassAccessor.of(klass, prefabValues);
-		
 		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
 		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(klass, equalExamples, unequalExamples);
@@ -380,14 +372,8 @@ public final class EqualsVerifier<T> {
 			return;
 		}
 		
-		T first = instantiator.instantiate();
-		instantiator.scramble(first);
-		T second = instantiator.instantiate();
-		instantiator.scramble(second);
-		instantiator.scramble(second);
-		
-		unequalExamples.add(first);
-		unequalExamples.add(second);
+		unequalExamples.add(classAccessor.getFirstObject());
+		unequalExamples.add(classAccessor.getSecondObject());
 	}
 
 	/**
@@ -401,16 +387,14 @@ public final class EqualsVerifier<T> {
 	 */
 	public static class RelaxedEqualsVerifierHelper<T> {
 		private final Class<T> klass;
-		private final InstantiatorFacade<T> instantiator;
 		private final List<T> equalExamples;
 
 		/**
 		 * Private constructor, only to be called by
 		 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
 		 */
-		private RelaxedEqualsVerifierHelper(Class<T> klass, InstantiatorFacade<T> instantiator, List<T> examples) {
+		private RelaxedEqualsVerifierHelper(Class<T> klass, List<T> examples) {
 			this.klass = klass;
-			this.instantiator = instantiator;
 			this.equalExamples = examples;
 		}
 		
@@ -424,7 +408,7 @@ public final class EqualsVerifier<T> {
 		 */
 		public EqualsVerifier<T> andUnequalExample(T example) {
 			List<T> unequalExamples = buildList1(example, (T[])null);
-			return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+			return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
 		}
 
 		/**
@@ -441,7 +425,7 @@ public final class EqualsVerifier<T> {
 		 */
 		public EqualsVerifier<T> andUnequalExamples(T first, T... tail) {
 			List<T> unequalExamples = buildList1(first, tail);
-			return new EqualsVerifier<T>(klass, instantiator, equalExamples, unequalExamples);
+			return new EqualsVerifier<T>(klass, equalExamples, unequalExamples);
 		}
 	}
 }
