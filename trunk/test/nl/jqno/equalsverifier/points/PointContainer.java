@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.points;
 import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
 import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
-public final class PointContainer {
+public class PointContainer {
 	private final Point point;
 	
 	public PointContainer(Point point) {

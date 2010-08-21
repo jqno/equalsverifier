@@ -20,6 +20,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import nl.jqno.equalsverifier.points.PointContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllRecursiveCollectionImplementationsContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.RecursiveApiClassesContainer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -73,9 +79,38 @@ public class ClassAccessorTest {
 		PointContainer first = classAccessor.getFirstObject();
 		PointContainer second = classAccessor.getSecondObject();
 		assertFalse(first.equals(second));
-		
 	}
-
+	
+	@Test
+	public void instantiateAllTypes() {
+		ClassAccessor.of(AllTypesContainer.class, prefabValues).getFirstObject();
+	}
+	
+	@Test
+	public void instantiateArrayTypes() {
+		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues).getFirstObject();
+	}
+	
+	@Test
+	public void instantiateRecursiveApiTypes() {
+		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues).getFirstObject();
+	}
+	
+	@Test
+	public void instantiateMapImplementations() {
+		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues).getFirstObject();
+	}
+	
+	@Test
+	public void instantiateInterfaceField() {
+		ClassAccessor.of(InterfaceContainer.class, prefabValues).getFirstObject();
+	}
+	
+	@Test
+	public void instantiateAbstractClassField() {
+		ClassAccessor.of(AbstractClassContainer.class, prefabValues).getFirstObject();
+	}
+	
 	private void assertObjectHasNoNullFields(PointContainer foo) {
 		assertNotNull(foo);
 		assertNotNull(foo.getPoint());

@@ -24,8 +24,7 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.points.ColorPoint3D;
 import nl.jqno.equalsverifier.points.Point;
 import nl.jqno.equalsverifier.points.Point3D;
-import nl.jqno.equalsverifier.util.InstantiatorCloningAndScramblingTest.PointContainer;
-import nl.jqno.equalsverifier.util.InstantiatorCloningAndScramblingTest.SubPointContainer;
+import nl.jqno.equalsverifier.points.PointContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
 
 import org.junit.Test;
@@ -45,7 +44,7 @@ public class ObjectAccessorCloningTest {
 		PointContainer clone = cloneOf(original);
 		
 		assertNotSame(original, clone);
-		assertTrue(original.point == clone.point);
+		assertTrue(original.getPoint() == clone.getPoint());
 	}
 	
 	@Test
@@ -86,7 +85,7 @@ public class ObjectAccessorCloningTest {
 		SubPointContainer clone = cloneIntoSubclass(original, SubPointContainer.class);
 		
 		assertNotSame(original, clone);
-		assertTrue(original.point == clone.point);
+		assertTrue(original.getPoint() == clone.getPoint());
 	}
 	
 	@Test
@@ -131,6 +130,12 @@ public class ObjectAccessorCloningTest {
 			catch (IllegalAccessException e) {
 				throw new IllegalStateException(e);
 			}
+		}
+	}
+
+	static class SubPointContainer extends PointContainer {
+		public SubPointContainer(Point point) {
+			super(point);
 		}
 	}
 }
