@@ -24,7 +24,6 @@ import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.InstantiatorFacade;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class HierarchyChecker<T> {
@@ -75,7 +74,7 @@ class HierarchyChecker<T> {
 			return;
 		}
 
-		Object equalSuper = instantiateSuperclass(superclass);
+		Object equalSuper = ObjectAccessor.of(reference, superclass).clone();
 		
 		if (hasRedefinedSuperclass) {
 			assertFalse("Redefined superclass:\n  " + reference + "\nmay not equal superclass instance\n  " + equalSuper + "\nbut it does.",
@@ -98,12 +97,6 @@ class HierarchyChecker<T> {
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	private <S> Object instantiateSuperclass(Class<S> superclass) {
-		InstantiatorFacade superInstantiator = InstantiatorFacade.forClass(superclass);
-		return superInstantiator.cloneFrom(reference);
-	}
-
 	private void checkSubclass() {
 		if (klassIsFinal) {
 			return;
