@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
  */
 public class ObjectAccessor<T> {
 	private final T object;
-	private final Class<T> klass;
+	private final Class<T> type;
 
 	/**
 	 * Factory method.
@@ -38,8 +38,8 @@ public class ObjectAccessor<T> {
 	 */
 	public static <T> ObjectAccessor<T> of(T object) {
 		@SuppressWarnings("unchecked")
-		Class<T> klass = (Class<T>)object.getClass();
-		return new ObjectAccessor<T>(object, klass);
+		Class<T> type = (Class<T>)object.getClass();
+		return new ObjectAccessor<T>(object, type);
 	}
 	
 	/**
@@ -47,20 +47,20 @@ public class ObjectAccessor<T> {
 	 * 
 	 * @param <T> {@link #object}'s type, or a supertype.
 	 * @param object The object to wrap.
-	 * @param klass Superclass of {@link #object}'s type, as which it will be
+	 * @param type Superclass of {@link #object}'s type, as which it will be
 	 * 			treated by {@link ObjectAccessor}.
 	 * @return An {@link ObjectAccessor} for {@link #object}.
 	 */
-	public static <T> ObjectAccessor<T> of(T object, Class<T> klass) {
-		return new ObjectAccessor<T>(object, klass);
+	public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
+		return new ObjectAccessor<T>(object, type);
 	}
 	
 	/**
 	 * Private constructor. Call {@link #of(Object)} to instantiate.
 	 */
-	private ObjectAccessor(T object, Class<T> klass) {
+	private ObjectAccessor(T object, Class<T> type) {
 		this.object = object;
-		this.klass = klass;
+		this.type = type;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ public class ObjectAccessor<T> {
 	 * @return A shallow clone.
 	 */
 	public T clone() {
-		T clone = Instantiator.of(klass).instantiate();
+		T clone = Instantiator.of(type).instantiate();
 		return cloneInto(clone);
 	}
 
@@ -120,12 +120,12 @@ public class ObjectAccessor<T> {
 	 * @return A shallow clone.
 	 */
 	public T cloneIntoAnonymousSubclass() {
-		T clone = Instantiator.of(klass).instantiateAnonymousSubclass();
+		T clone = Instantiator.of(type).instantiateAnonymousSubclass();
 		return cloneInto(clone);
 	}
 
 	private <S> S cloneInto(S clone) {
-		for (Field field : new FieldIterable(klass)) {
+		for (Field field : new FieldIterable(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.copyTo(clone);
 		}
@@ -148,7 +148,7 @@ public class ObjectAccessor<T> {
 	 * @param prefabValues Prefabricated values to take values from.
 	 */
 	public void scramble(PrefabValues prefabValues) {
-		for (Field field : new FieldIterable(klass)) {
+		for (Field field : new FieldIterable(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.changeField(prefabValues);
 		}
@@ -170,7 +170,7 @@ public class ObjectAccessor<T> {
 	 * @param prefabValues Prefabricated values to take values from.
 	 */
 	public void shallowScramble(PrefabValues prefabValues) {
-		for (Field field : klass.getDeclaredFields()) {
+		for (Field field : type.getDeclaredFields()) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.changeField(prefabValues);
 		}

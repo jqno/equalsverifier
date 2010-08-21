@@ -71,12 +71,12 @@ public class DifficultClassesTest {
 	static final class ObjectsContainer {
 		private final String string;
 		private final Integer integer;
-		private final Class<?> klass;
+		private final Class<?> type;
 		
-		ObjectsContainer(String string, Integer integer, Class<?> klass) {
+		ObjectsContainer(String string, Integer integer, Class<?> type) {
 			this.string = string;
 			this.integer = integer;
-			this.klass = klass;
+			this.type = type;
 		}
 		
 		@Override
@@ -89,7 +89,7 @@ public class DifficultClassesTest {
 			boolean result = true;
 			result &= nullSafeEquals(string, other.string);
 			result &= nullSafeEquals(integer, other.integer);
-			result &= klass == other.klass;
+			result &= type == other.type;
 			return result;
 		}
 		
@@ -98,7 +98,7 @@ public class DifficultClassesTest {
 			int result = 0;
 			result += 31 * nullSafeHashCode(string);
 			result += 31 * nullSafeHashCode(integer);
-			result += 31 * nullSafeHashCode(klass);
+			result += 31 * nullSafeHashCode(type);
 			return result;
 		}
 	}

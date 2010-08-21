@@ -25,12 +25,12 @@ import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class AbstractDelegationChecker<T> {
-	private final Class<T> klass;
+	private final Class<T> type;
 	private final PrefabValues prefabValues;
 	private final ClassAccessor<T> classAccessor;
 
 	public AbstractDelegationChecker(ClassAccessor<T> classAccessor) {
-		this.klass = classAccessor.getType();
+		this.type = classAccessor.getType();
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.classAccessor = classAccessor;
 	}
@@ -38,17 +38,17 @@ public class AbstractDelegationChecker<T> {
 	public void check() {
 		checkAbstractDelegationInFields();
 
-		T instance = this.<T>getPrefabValue(klass);
+		T instance = this.<T>getPrefabValue(type);
 		if (instance == null) {
 			instance = classAccessor.getFirstObject();
 		}
 		checkAbstractDelegation(instance);
 
-		checkAbstractDelegationInSuper(klass.getSuperclass());
+		checkAbstractDelegationInSuper(type.getSuperclass());
 	}
 	
 	private void checkAbstractDelegationInFields() {
-		for (Field field : new FieldIterable(klass)) {
+		for (Field field : new FieldIterable(type)) {
 			Class<?> type = field.getType();
 			Object o = safelyGetInstance(type);
 			if (o != null) {
@@ -58,7 +58,7 @@ public class AbstractDelegationChecker<T> {
 	}
 	
 	private void checkAbstractDelegation(T instance) {
-		checkAbstractMethods(klass, instance, false);
+		checkAbstractMethods(type, instance, false);
 	}
 	
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
@@ -116,16 +116,16 @@ public class AbstractDelegationChecker<T> {
 		}
 	}
 	
-	private String buildErrorMessage(Class<?> klass, boolean prefabPossible, String method) {
+	private String buildErrorMessage(Class<?> type, boolean prefabPossible, String method) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Abstract delegation: ");
-		sb.append(klass.getSimpleName());
+		sb.append(type.getSimpleName());
 		sb.append("'s ");
 		sb.append(method);
 		sb.append(" method delegates to an abstract method.");
 		if (prefabPossible) {
 			sb.append("\nAdd prefab values for ");
-			sb.append(klass.getName());
+			sb.append(type.getName());
 			sb.append(".");
 		}
 		return sb.toString();

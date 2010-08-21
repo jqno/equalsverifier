@@ -77,7 +77,7 @@ public class TypeHelper {
 		Enum _enum = Enum.FIRST;
 		int[] _array = {1, 2, 3};
 		Object _object = OBJECT;
-		Class<?> _klass = Class.class;
+		Class<?> _type = Class.class;
 		String _string = "";
 		
 		@Override
@@ -106,7 +106,7 @@ public class TypeHelper {
 			result &= _enum == other._enum;
 			result &= Arrays.equals(_array, other._array);
 			result &= nullSafeEquals(_object, other._object);
-			result &= _klass == other._klass;
+			result &= _type == other._type;
 			result &= nullSafeEquals(_string, other._string);
 			return result;
 		}

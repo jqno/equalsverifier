@@ -215,17 +215,17 @@ public class PrefabValuesFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends Collection> void addCollection(Class<T> klass, T first, T second) {
+	private <T extends Collection> void addCollection(Class<T> type, T first, T second) {
 		first.add("first");
 		second.add("second");
-		prefabValues.put(klass, first, second);
+		prefabValues.put(type, first, second);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends Map> void addMap(Class<T> klass, T first, T second) {
+	private <T extends Map> void addMap(Class<T> type, T first, T second) {
 		first.put("first_key", "first_value");
 		second.put("second_key", "second_key");
-		prefabValues.put(klass, first, second);
+		prefabValues.put(type, first, second);
 	}
 	
 	private enum Dummy { 
