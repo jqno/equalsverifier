@@ -25,7 +25,7 @@ import java.util.LinkedHashSet;
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public class RecursionException extends RuntimeException {
+public class RecursionException extends InternalException {
 	private final LinkedHashSet<Class<?>> typeStack;
 
 	/**
@@ -35,6 +35,7 @@ public class RecursionException extends RuntimeException {
 	 * 			to detecting the recursion.
 	 */
 	public RecursionException(LinkedHashSet<Class<?>> typeStack) {
+		super();
 		this.typeStack = typeStack;
 	}
 	
