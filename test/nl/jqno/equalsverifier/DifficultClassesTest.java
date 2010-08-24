@@ -206,6 +206,8 @@ public class DifficultClassesTest {
 	private static abstract class AbstractClass {
 		private int i;
 		
+		abstract void someMethod();
+		
 		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof AbstractClass)) {
