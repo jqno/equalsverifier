@@ -23,9 +23,9 @@ import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
+import nl.jqno.equalsverifier.util.InternalException;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.PrefabValuesFactory;
-import nl.jqno.equalsverifier.util.RecursionException;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -286,7 +286,7 @@ public final class EqualsVerifier<T> {
 		catch (AssertionError e) {
 			handleError(e);
 		}
-		catch (RecursionException e) {
+		catch (InternalException e) {
 			handleError(e);
 		}
 	}
