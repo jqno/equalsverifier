@@ -23,7 +23,7 @@ package nl.jqno.equalsverifier.util;
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-class InternalException extends RuntimeException {
+public class InternalException extends RuntimeException {
 	public InternalException(String message) {
 		super(message);
 	}
