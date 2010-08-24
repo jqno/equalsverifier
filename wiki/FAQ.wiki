@@ -68,6 +68,9 @@ Yes! Click [Maven here] for details.
 ==How do I build !EqualsVerifier?==
 First, check out the code. You can open the project in Eclipse, or you can run ANT directly. Note that Java 6 is required to compile the project, although the ANT script will generate Java 5 compatible JAR files.
 
+==Why can't Eclipse resolve the dependencies?==
+!EqualsVerifier uses [http://ant.apache.org/ivy/ Apache Ivy] to resolve all dependencies. If you want !EqualsVerifier to compile in Eclipse, you need to install the [http://ant.apache.org/ivy/ivyde/ IvyDE] plugin, which will take care of the dependencies for you.
+
 ==I get generics errors while building==
 <pre>
 type parameters of <S>S cannot be determined; no unique maximal instance exists for 
