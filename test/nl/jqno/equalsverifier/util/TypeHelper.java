@@ -233,13 +233,13 @@ public class TypeHelper {
 	static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}
 	
 	static class SubEmptySubFieldContainer extends EmptySubFieldContainer {
-		public long ll = 0;
+		public long field = 0;
 	}
 
 	static interface Interface {}
 	
 	static abstract class AbstractClass {
-		int i;
+		int field;
 	}
 	
 	static class Outer {
@@ -251,11 +251,11 @@ public class TypeHelper {
 	}
 	
 	static final class InterfaceContainer {
-		Interface _interface;
+		Interface field;
 	}
 	
 	static final class AbstractClassContainer {
-		AbstractClass ac;
+		AbstractClass field;
 	}
 	
 	static final class AbstractAndInterfaceArrayContainer {
@@ -264,23 +264,23 @@ public class TypeHelper {
 	}
 
 	static final class ObjectContainer {
-		Object _object = new Object();
+		Object field = new Object();
 	}
 	
 	static class PrivateObjectContainer {
-		private Object object = new Object();
+		private Object field = new Object();
 		
 		public Object get() {
-			return object;
+			return field;
 		}
 	}
 	
 	static class ArrayContainer {
-		int[] array;
+		int[] field;
 	}
 	
 	static final class PrimitiveContainer {
-		int i;
+		int field;
 	}
 	
 	static final class StaticFinalContainer {
@@ -291,7 +291,7 @@ public class TypeHelper {
 	static class NoFields {}
 	
 	static class NoFieldsSubWithFields extends NoFields {
-		public Object o;
+		public Object field;
 	}
 	
 	static enum OneElementEnum { ONE }
@@ -299,6 +299,6 @@ public class TypeHelper {
 	static enum EmptyEnum {}
 	
 	static final class PointArrayContainer {
-		Point[] point = { new Point(1, 2) };
+		Point[] points = { new Point(1, 2) };
 	}
 }

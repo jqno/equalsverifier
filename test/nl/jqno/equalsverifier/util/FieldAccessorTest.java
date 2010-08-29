@@ -46,6 +46,7 @@ import org.junit.Test;
 public class FieldAccessorTest {
 	private static final Point FIRST_NEW_POINT = new Point(10, 20);
 	private static final Point SECOND_NEW_POINT = new Point(20, 10);
+	private static final String FIELD_NAME = "field";
 	
 	private PrefabValues prefabValues;
 	
@@ -57,14 +58,14 @@ public class FieldAccessorTest {
 	@Test
 	public void getObject() {
 		ObjectContainer foo = new ObjectContainer();
-		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertSame(foo, fieldAccessor.getObject());
 	}
 	
 	@Test
 	public void getField() throws NoSuchFieldException {
 		ObjectContainer foo = new ObjectContainer();
-		Field field = foo.getClass().getDeclaredField("_object");
+		Field field = foo.getClass().getDeclaredField(FIELD_NAME);
 		FieldAccessor fieldAccessor = new FieldAccessor(foo, field);
 		assertSame(field, fieldAccessor.getField());
 	}
@@ -72,22 +73,22 @@ public class FieldAccessorTest {
 	@Test
 	public void getFieldType() {
 		ObjectContainer foo = new ObjectContainer();
-		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertEquals(Object.class, fieldAccessor.getFieldType());
 	}
 	
 	@Test
 	public void getFieldName() {
 		ObjectContainer foo = new ObjectContainer();
-		FieldAccessor fieldAccessor = getAccessorFor(foo, "_object");
-		assertEquals("_object", fieldAccessor.getFieldName());
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertEquals(FIELD_NAME, fieldAccessor.getFieldName());
 	}
 	
 	@Test
 	public void getValuePrimitive() {
 		PrimitiveContainer foo = new PrimitiveContainer();
-		foo.i = 10;
-		Object value = getValue(foo, "i");
+		foo.field = 10;
+		Object value = getValue(foo, "field");
 		assertEquals(10, value);
 	}
 	
@@ -95,40 +96,40 @@ public class FieldAccessorTest {
 	public void getValueObject() {
 		Object object = new Object();
 		ObjectContainer foo = new ObjectContainer();
-		foo._object = object;
-		Object value = getValue(foo, "_object");
+		foo.field = object;
+		Object value = getValue(foo, FIELD_NAME);
 		assertEquals(object, value);
 	}
 	
 	@Test
 	public void setValuePrimitive() {
 		PrimitiveContainer foo = new PrimitiveContainer();
-		setField(foo, "i", 20);
-		assertEquals(20, foo.i);
+		setField(foo, FIELD_NAME, 20);
+		assertEquals(20, foo.field);
 	}
 	
 	@Test
 	public void setValueObject() {
 		Object object = new Object();
 		ObjectContainer foo = new ObjectContainer();
-		setField(foo, "_object", object);
-		assertEquals(object, foo._object);
+		setField(foo, FIELD_NAME, object);
+		assertEquals(object, foo.field);
 	}
 	
 	@Test
 	public void nullFieldHappyPath() throws NoSuchFieldException {
 		ObjectContainer foo = new ObjectContainer();
-		foo._object = new Object();
-		nullField(foo, "_object");
-		assertNull(foo._object);
+		foo.field = new Object();
+		nullField(foo, FIELD_NAME);
+		assertNull(foo.field);
 	}
 	
 	@Test
 	public void nullFieldOnPrimitiveIsNoOp() throws NoSuchFieldException {
 		PrimitiveContainer foo = new PrimitiveContainer();
-		foo.i = 10;
-		nullField(foo, "i");
-		assertEquals(10, foo.i);
+		foo.field = 10;
+		nullField(foo, FIELD_NAME);
+		assertEquals(10, foo.field);
 	}
 	
 	@SuppressWarnings("static-access")
@@ -160,7 +161,7 @@ public class FieldAccessorTest {
 	@Test
 	public void nullPrivateField() throws NoSuchFieldException {
 		PrivateObjectContainer foo = new PrivateObjectContainer();
-		nullField(foo, "object");
+		nullField(foo, FIELD_NAME);
 		assertNull(foo.get());
 	}
 	
@@ -169,12 +170,12 @@ public class FieldAccessorTest {
 		int value = 10;
 		
 		PrimitiveContainer from = new PrimitiveContainer();
-		from.i = value;
+		from.field = value;
 		
 		PrimitiveContainer to = new PrimitiveContainer();
-		copyField(to, from, "i");
+		copyField(to, from, FIELD_NAME);
 		
-		assertEquals(value, to.i);
+		assertEquals(value, to.field);
 	}
 	
 	@Test
@@ -182,12 +183,12 @@ public class FieldAccessorTest {
 		Object value = new Object();
 		
 		ObjectContainer from = new ObjectContainer();
-		from._object = value;
+		from.field = value;
 		
 		ObjectContainer to = new ObjectContainer();
-		copyField(to, from, "_object");
+		copyField(to, from, FIELD_NAME);
 		
-		assertSame(value, to._object);
+		assertSame(value, to.field);
 	}
 
 	@Test
@@ -224,15 +225,15 @@ public class FieldAccessorTest {
 	@Test
 	public void changeAbstractField() {
 		AbstractClassContainer foo = new AbstractClassContainer();
-		changeField(foo, "ac");
-		assertNotNull(foo.ac);
+		changeField(foo, FIELD_NAME);
+		assertNotNull(foo.field);
 	}
 	
 	@Test
 	public void changeInterfaceField() {
 		InterfaceContainer foo = new InterfaceContainer();
-		changeField(foo, "_interface");
-		assertNotNull(foo._interface);
+		changeField(foo, FIELD_NAME);
+		assertNotNull(foo.field);
 	}
 	
 	@Test
@@ -267,15 +268,15 @@ public class FieldAccessorTest {
 	@Test(expected=InternalException.class)
 	public void changeArrayFieldWhichIsNotAnArrayField() {
 		ObjectContainer foo = new ObjectContainer();
-		changeArrayField(foo, "_object", 0);
+		changeArrayField(foo, FIELD_NAME, 0);
 	}
 	
 	@Test(expected=InternalException.class)
 	public void changeArrayFieldWithInvalidIndex() {
 		final int size = 10;
 		ArrayContainer foo = new ArrayContainer();
-		foo.array = new int[size];
-		changeArrayField(foo, "array", size);
+		foo.field = new int[size];
+		changeArrayField(foo, FIELD_NAME, size);
 	}
 	
 	@Test
@@ -312,14 +313,14 @@ public class FieldAccessorTest {
 		PointArrayContainer foo = new PointArrayContainer();
 		prefabValues.put(Point.class, FIRST_NEW_POINT, SECOND_NEW_POINT);
 		
-		changeField(foo, "point");
-		assertEquals(FIRST_NEW_POINT, foo.point[0]);
+		changeField(foo, "points");
+		assertEquals(FIRST_NEW_POINT, foo.points[0]);
 		
-		changeField(foo, "point");
-		assertEquals(SECOND_NEW_POINT, foo.point[0]);
+		changeField(foo, "points");
+		assertEquals(SECOND_NEW_POINT, foo.points[0]);
 		
-		changeField(foo, "point");
-		assertEquals(FIRST_NEW_POINT, foo.point[0]);
+		changeField(foo, "points");
+		assertEquals(FIRST_NEW_POINT, foo.points[0]);
 	}
 	
 	private Object getValue(Object object, String fieldName) {

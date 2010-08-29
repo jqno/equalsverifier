@@ -176,11 +176,11 @@ public class AbstractDelegationTest {
 	}
 	
 	static final class EqualsDelegatesToAbstractMethodInField {
-		final AbstractDelegator ad;
+		final AbstractDelegator delegator;
 		final int i;
 		
 		EqualsDelegatesToAbstractMethodInField(AbstractDelegator ad, int i) {
-			this.ad = ad;
+			this.delegator = ad;
 			this.i = i;
 		}
 		
@@ -189,7 +189,7 @@ public class AbstractDelegationTest {
 			if (!(obj instanceof EqualsDelegatesToAbstractMethodInField)) {
 				return false;
 			}
-			ad.abstractDelegation();
+			delegator.abstractDelegation();
 			EqualsDelegatesToAbstractMethodInField other = (EqualsDelegatesToAbstractMethodInField)obj;
 			return i == other.i;
 		}
@@ -201,11 +201,11 @@ public class AbstractDelegationTest {
 	}
 	
 	static final class HashCodeDelegatesToAbstractMethodInField {
-		final AbstractDelegator ad;
+		final AbstractDelegator delegator;
 		final int i;
 		
 		HashCodeDelegatesToAbstractMethodInField(AbstractDelegator ad, int i) {
-			this.ad = ad;
+			this.delegator = ad;
 			this.i = i;
 		}
 		
@@ -220,16 +220,16 @@ public class AbstractDelegationTest {
 		
 		@Override
 		public int hashCode() {
-			ad.abstractDelegation();
+			delegator.abstractDelegation();
 			return i;
 		}
 	}
 	
 	static final class EqualsInFieldDelegatesToAbstractMethod {
-		final AbstractEqualsDelegator aed;
+		final AbstractEqualsDelegator delegator;
 		
 		EqualsInFieldDelegatesToAbstractMethod(AbstractEqualsDelegator aed) {
-			this.aed = aed;
+			this.delegator = aed;
 		}
 		
 		@Override
@@ -238,20 +238,20 @@ public class AbstractDelegationTest {
 				return false;
 			}
 			EqualsInFieldDelegatesToAbstractMethod other = (EqualsInFieldDelegatesToAbstractMethod)obj;
-			return nullSafeEquals(aed, other.aed);
+			return nullSafeEquals(delegator, other.delegator);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(aed);
+			return nullSafeHashCode(delegator);
 		}
 	}
 	
 	static final class HashCodeInFieldDelegatesToAbstractMethod {
-		final AbstractHashCodeDelegator ahcd;
+		final AbstractHashCodeDelegator delegator;
 		
 		HashCodeInFieldDelegatesToAbstractMethod(AbstractHashCodeDelegator ahcd) {
-			this.ahcd = ahcd;
+			this.delegator = ahcd;
 		}
 		
 		@Override
@@ -260,12 +260,12 @@ public class AbstractDelegationTest {
 				return false;
 			}
 			HashCodeInFieldDelegatesToAbstractMethod other = (HashCodeInFieldDelegatesToAbstractMethod)obj;
-			return nullSafeEquals(ahcd, other.ahcd);
+			return nullSafeEquals(delegator, other.delegator);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(ahcd);
+			return nullSafeHashCode(delegator);
 		}
 	}
 }
