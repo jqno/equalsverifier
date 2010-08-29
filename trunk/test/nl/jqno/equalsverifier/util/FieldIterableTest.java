@@ -64,7 +64,7 @@ public class FieldIterableTest {
 	@Test
 	public void superHasNoFields() throws NoSuchFieldException {
 		Set<Field> expected = new HashSet<Field>();
-		expected.add(NoFieldsSubWithFields.class.getField("o"));
+		expected.add(NoFieldsSubWithFields.class.getField("field"));
 		
 		Set<Field> actual = new HashSet<Field>();
 		for (Field field : new FieldIterable(NoFieldsSubWithFields.class)) {
@@ -86,7 +86,7 @@ public class FieldIterableTest {
 	
 	@Test
 	public void classInTheMiddleHasNoFields() throws NoSuchFieldException {
-		FIELD_CONTAINER_FIELDS.add(SubEmptySubFieldContainer.class.getDeclaredField("ll"));
+		FIELD_CONTAINER_FIELDS.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 		
 		Set<Field> actual = new HashSet<Field>();
 		for (Field field : new FieldIterable(SubEmptySubFieldContainer.class)) {

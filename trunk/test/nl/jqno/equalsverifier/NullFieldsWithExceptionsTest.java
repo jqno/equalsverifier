@@ -15,7 +15,7 @@ public class NullFieldsWithExceptionsTest {
 	private static final String ILLEGAL_STATE_EXCEPTION = "IllegalStateException";
 	private static final String ILLEGAL_FORMAT_CONVERSION_EXCEPTION = "IllegalFormatConversionException";
 	private static final String WHEN_FIRST_IS_NULL = "when field first is null";
-	private static final String WHEN_S_IS_NULL = "when field s is null";
+	private static final String WHEN_S_IS_NULL = "when field foo is null";
 
 	@Test
 	public void issue31() {
@@ -90,12 +90,12 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	abstract static class EqualsThrower {
-		private final String s;
+		private final String foo;
 		
 		abstract RuntimeException throwable();
 		
-		EqualsThrower(String s) {
-			this.s = s;
+		EqualsThrower(String foo) {
+			this.foo = foo;
 		}
 		
 		@Override
@@ -104,21 +104,21 @@ public class NullFieldsWithExceptionsTest {
 				return false;
 			}
 			EqualsThrower other = (EqualsThrower)obj;
-			if (s == null) {
+			if (foo == null) {
 				throw throwable();
 			}
-			return nullSafeEquals(s, other.s);
+			return nullSafeEquals(foo, other.foo);
 		}
 		
 		@Override
 		public final int hashCode() {
-			return nullSafeHashCode(s);
+			return nullSafeHashCode(foo);
 		}
 	}
 	
 	static class EqualsIllegalArgumentThrower extends EqualsThrower {
-		EqualsIllegalArgumentThrower(String s) {
-			super(s);
+		EqualsIllegalArgumentThrower(String foo) {
+			super(foo);
 		}
 
 		@Override
@@ -128,8 +128,8 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class EqualsIllegalStateThrower extends EqualsThrower {
-		EqualsIllegalStateThrower(String s) {
-			super(s);
+		EqualsIllegalStateThrower(String foo) {
+			super(foo);
 		}
 		
 		@Override
@@ -139,12 +139,12 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	abstract static class HashCodeThrower {
-		private final String s;
+		private final String foo;
 		
 		abstract RuntimeException throwable();
 		
-		public HashCodeThrower(String s) {
-			this.s = s;
+		public HashCodeThrower(String foo) {
+			this.foo = foo;
 		}
 		
 		@Override
@@ -153,21 +153,21 @@ public class NullFieldsWithExceptionsTest {
 				return false;
 			}
 			EqualsThrower other = (EqualsThrower)obj;
-			return nullSafeEquals(s, other.s);
+			return nullSafeEquals(foo, other.foo);
 		}
 		
 		@Override
 		public int hashCode() {
-			if (s == null) {
+			if (foo == null) {
 				throw throwable();
 			}
-			return s.hashCode();
+			return foo.hashCode();
 		}
 	}
 	
 	static class HashCodeIllegalArgumentThrower extends HashCodeThrower {
-		public HashCodeIllegalArgumentThrower(String s) {
-			super(s);
+		public HashCodeIllegalArgumentThrower(String foo) {
+			super(foo);
 		}
 
 		@Override
@@ -177,8 +177,8 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class HashCodeIllegalStateThrower extends HashCodeThrower {
-		public HashCodeIllegalStateThrower(String s) {
-			super(s);
+		public HashCodeIllegalStateThrower(String foo) {
+			super(foo);
 		}
 		
 		@Override
@@ -188,12 +188,12 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	abstract static class ToStringThrower {
-		private final String s;
+		private final String foo;
 		
 		abstract RuntimeException throwable();
 		
-		public ToStringThrower(String s) {
-			this.s = s;
+		public ToStringThrower(String foo) {
+			this.foo = foo;
 		}
 		
 		@Override
@@ -202,26 +202,26 @@ public class NullFieldsWithExceptionsTest {
 				return false;
 			}
 			EqualsThrower other = (EqualsThrower)obj;
-			return nullSafeEquals(s, other.s);
+			return nullSafeEquals(foo, other.foo);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(s);
+			return nullSafeHashCode(foo);
 		}
 		
 		@Override
 		public String toString() {
-			if (s == null) {
+			if (foo == null) {
 				throw throwable();
 			}
-			return s;
+			return foo;
 		}
 	}
 	
 	static class ToStringIllegalArgumentThrower extends ToStringThrower {
-		public ToStringIllegalArgumentThrower(String s) {
-			super(s);
+		public ToStringIllegalArgumentThrower(String foo) {
+			super(foo);
 		}
 
 		@Override
@@ -231,8 +231,8 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class ToStringIllegalStateThrower extends ToStringThrower {
-		public ToStringIllegalStateThrower(String s) {
-			super(s);
+		public ToStringIllegalStateThrower(String foo) {
+			super(foo);
 		}
 		
 		@Override

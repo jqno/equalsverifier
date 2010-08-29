@@ -37,7 +37,7 @@ public class SyntheticFieldsTest {
 		
 		private class Inner {
 			@SuppressWarnings("unused")
-			int i;
+			int foo;
 		}
 		
 		public Outer() {
