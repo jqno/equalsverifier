@@ -24,6 +24,7 @@ import org.junit.Test;
 
 public class MutableStateTest {
 	private static final String MUTABILITY = "Mutability: equals depends on mutable field";
+	private static final String FIELD_NAME = "field";
 
 	@Test
 	public void mutableFieldNotUsed() {
@@ -43,7 +44,7 @@ public class MutableStateTest {
 	@Test
 	public void detectMutableStateObject() {
 		EqualsVerifier<MutableObjectContainer> ev = EqualsVerifier.forClass(MutableObjectContainer.class);
-		assertFailure(ev, MUTABILITY, "_object");
+		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
 		EqualsVerifier.forClass(MutableObjectContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -53,7 +54,7 @@ public class MutableStateTest {
 	@Test
 	public void detectMutableStateEnumValue() {
 		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forClass(MutableEnumContainer.class);
-		assertFailure(ev, MUTABILITY, "_enum");
+		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
 		EqualsVerifier.forClass(MutableEnumContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -65,7 +66,7 @@ public class MutableStateTest {
 		MutableEnumContainer first = new MutableEnumContainer(null);
 		MutableEnumContainer second = new MutableEnumContainer(MutableEnumContainer.Enum.SECOND);
 		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forExamples(first, second);
-		assertFailure(ev, MUTABILITY, "_enum");
+		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
 		EqualsVerifier.forExamples(first, second)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -75,7 +76,7 @@ public class MutableStateTest {
 	@Test
 	public void detectMutableStateArray() {
 		EqualsVerifier<MutableArrayContainer> ev = EqualsVerifier.forClass(MutableArrayContainer.class);
-		assertFailure(ev, MUTABILITY, "_array");
+		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
 		EqualsVerifier.forClass(MutableArrayContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -85,7 +86,7 @@ public class MutableStateTest {
 	@Test
 	public void detectMutableStateInt() {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-		assertFailure(ev, MUTABILITY, "_int");
+		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
 		EqualsVerifier.forClass(MutableIntContainer.class)
 				.suppress(Warning.NONFINAL_FIELDS)
@@ -139,10 +140,10 @@ public class MutableStateTest {
 	}
 	
 	static final class MutableObjectContainer {
-		private Object _object;
+		private Object field;
 		
 		public MutableObjectContainer(Object value) {
-			_object = value;
+			field = value;
 		}
 		
 		@Override
@@ -151,25 +152,25 @@ public class MutableStateTest {
 				return false;
 			}
 			MutableObjectContainer other = (MutableObjectContainer)obj;
-			if (_object == null) {
-				return other._object == null;
+			if (field == null) {
+				return other.field == null;
 			}
-			return _object.equals(other._object);
+			return field.equals(other.field);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(_object);
+			return nullSafeHashCode(field);
 		}
 	}
 	
 	static final class MutableEnumContainer {
 		public enum Enum { FIRST, SECOND };
 		
-		private Enum _enum;
+		private Enum field;
 		
 		public MutableEnumContainer(Enum value) {
-			_enum = value;
+			field = value;
 		}
 		
 		@Override
@@ -177,20 +178,20 @@ public class MutableStateTest {
 			if (!(obj instanceof MutableEnumContainer)) {
 				return false;
 			}
-			return _enum == ((MutableEnumContainer)obj)._enum;
+			return field == ((MutableEnumContainer)obj).field;
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(_enum);
+			return nullSafeHashCode(field);
 		}
 	}
 	
 	static final class MutableArrayContainer {
-		private int[] _array;
+		private int[] field;
 		
 		MutableArrayContainer(int[] value) {
-			_array = value;
+			field = value;
 		}
 		
 		@Override
@@ -198,20 +199,20 @@ public class MutableStateTest {
 			if (!(obj instanceof MutableArrayContainer)) {
 				return false;
 			}
-			return Arrays.equals(_array, ((MutableArrayContainer)obj)._array);
+			return Arrays.equals(field, ((MutableArrayContainer)obj).field);
 		}
 		
 		@Override
 		public int hashCode() {
-			return (_array == null) ? 0 : Arrays.hashCode(_array);
+			return (field == null) ? 0 : Arrays.hashCode(field);
 		}
 	}
 	
 	static final class MutableIntContainer {
-		private int _int;
+		private int field;
 		
 		MutableIntContainer(int value) {
-			_int = value;
+			field = value;
 		}
 		
 		@Override
@@ -219,12 +220,12 @@ public class MutableStateTest {
 			if (!(obj instanceof MutableIntContainer)) {
 				return false;
 			}
-			return _int == ((MutableIntContainer)obj)._int;
+			return field == ((MutableIntContainer)obj).field;
 		}
 		
 		@Override
 		public int hashCode() {
-			return _int;
+			return field;
 		}
 	}
 }

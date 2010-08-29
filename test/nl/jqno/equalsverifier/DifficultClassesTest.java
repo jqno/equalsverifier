@@ -182,10 +182,10 @@ public class DifficultClassesTest {
 	}
 	
 	static final class AbstractContainer {
-		private final AbstractClass ac;
+		private final AbstractClass foo;
 		
 		AbstractContainer(AbstractClass ac) {
-			this.ac = ac;
+			this.foo = ac;
 		}
 		
 		@Override
@@ -194,12 +194,12 @@ public class DifficultClassesTest {
 				return false;
 			}
 			AbstractContainer other = (AbstractContainer)obj;
-			return nullSafeEquals(ac, other.ac);
+			return nullSafeEquals(foo, other.foo);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(ac);
+			return nullSafeHashCode(foo);
 		}
 	}
 	
@@ -254,29 +254,29 @@ public class DifficultClassesTest {
 				return 20;
 			}
 		};
-		private final ThreadLocal<Integer> tl = FIRST_INSTANCE; 
+		private final ThreadLocal<Integer> instance = FIRST_INSTANCE; 
 		
 		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof ThreadLocalContainer)) {
 				return false;
 			}
-			ThreadLocalContainer tlc = (ThreadLocalContainer)obj;
-			if (tl == null) {
-				return tlc.tl == null;
+			ThreadLocalContainer other = (ThreadLocalContainer)obj;
+			if (instance == null) {
+				return other.instance == null;
 			}
-			if (tlc.tl == null) {
+			if (other.instance == null) {
 				return false;
 			}
-			if (tl.get() == null) {
-				return tlc.tl.get() == null;
+			if (instance.get() == null) {
+				return other.instance.get() == null;
 			}
-			return tl.get().equals(tlc.tl.get());
+			return instance.get().equals(other.instance.get());
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(tl);
+			return nullSafeHashCode(instance);
 		}
 	}
 }
