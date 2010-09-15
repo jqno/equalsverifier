@@ -21,7 +21,6 @@ limitations under the License.
 	</configurations>
 	<dependencies>
 		<dependency org="junit" name="junit" rev="4.6" conf="test->default" />
-		<dependency org="org.projectlombok" name="lombok" rev="0.9.3" conf="test->default" />
 		<dependency org="cglib" name="cglib-nodep" rev="2.2" conf="runtime->default" />
 		<dependency org="org.objenesis" name="objenesis" rev="1.1" conf="runtime->default" />
 	</dependencies>
