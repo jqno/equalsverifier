@@ -15,10 +15,7 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
-import nl.jqno.equalsverifier.util.Assert;
+import static nl.jqno.equalsverifier.Helper.assertAssertionError;
 
 import org.junit.Test;
 
@@ -30,11 +27,12 @@ public class AssertTest {
 	
 	@Test
 	public void assertEqualsIntFailure() {
-		checkAssertionError("fail", new Runnable() {
+		Runnable r = new Runnable() {
 			public void run() {
 				Assert.assertEquals("fail", 1, 2);
 			}
-		});
+		};
+		assertAssertionError(r, "fail");
 	}
 	
 	@Test
@@ -46,11 +44,12 @@ public class AssertTest {
 	
 	@Test
 	public void assertEqualsObjectFailure() {
-		checkAssertionError("fail", new Runnable() {
+		Runnable r = new Runnable() {
 			public void run() {
 				Assert.assertEquals("fail", "one", "two");
 			}
-		});
+		};
+		assertAssertionError(r, "fail");
 	}
 	
 	@Test
@@ -60,11 +59,12 @@ public class AssertTest {
 	
 	@Test
 	public void assertFalseFailure() {
-		checkAssertionError("fail", new Runnable() {
+		Runnable r = new Runnable() {
 			public void run() {
 				Assert.assertFalse("fail", true);
 			}
-		});
+		};
+		assertAssertionError(r, "fail");
 	}
 	
 	@Test
@@ -74,30 +74,21 @@ public class AssertTest {
 	
 	@Test
 	public void assertTrueFailure() {
-		checkAssertionError("fail", new Runnable() {
+		Runnable r = new Runnable() {
 			public void run() {
 				Assert.assertTrue("fail", false);
 			}
-		});
+		};
+		assertAssertionError(r, "fail");
 	}
 	
 	@Test
 	public void failFailure() {
-		checkAssertionError("fail", new Runnable() {
+		Runnable r = new Runnable() {
 			public void run() {
 				Assert.fail("fail");
 			}
-		});
-	}
-	
-	private void checkAssertionError(String message, Runnable runnable) {
-		try {
-			runnable.run();
-		}
-		catch (AssertionError e) {
-			assertEquals(message, e.getMessage());
-			return;
-		}
-		fail("Assertion didn't fail");
+		};
+		assertAssertionError(r, "fail");
 	}
 }
