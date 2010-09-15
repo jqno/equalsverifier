@@ -54,6 +54,7 @@ public class FloatAndDoubleTest {
 			this.f = f;
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof PrimitiveFloatContainer)) {
 				return false;
@@ -79,6 +80,7 @@ public class FloatAndDoubleTest {
 			this.f = f;
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof ObjectFloatContainer)) {
 				return false;
@@ -104,6 +106,7 @@ public class FloatAndDoubleTest {
 			this.d = d;
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof PrimitiveDoubleContainer)) {
 				return false;
@@ -130,6 +133,7 @@ public class FloatAndDoubleTest {
 			this.d = d;
 		}
 		
+		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof ObjectDoubleContainer)) {
 				return false;
