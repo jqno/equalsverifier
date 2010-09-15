@@ -39,6 +39,16 @@ public class Helper {
 		fail("Assertion didn't fail");
 	}
 	
+	public static void assertAssertionError(Runnable runnable, String message, String... more) {
+		try {
+			runnable.run();
+			fail("No exception thrown");
+		}
+		catch (AssertionError e) {
+			assertThat(e.getMessage(), containsAll(message, more));
+		}
+	}
+	
 	public static Matcher<String> containsAll(String message, String... more) {
 		CombinableMatcher<String> result = both(containsString(message));
 		for (String m : more) {

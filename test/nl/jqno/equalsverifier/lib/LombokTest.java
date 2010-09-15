@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.lib;
 
-import static nl.jqno.equalsverifier.Helper.containsAll;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
+import static nl.jqno.equalsverifier.Helper.assertAssertionError;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -26,7 +24,7 @@ public class LombokTest {
 						.verify();
 			}
 		};
-		verifyAssertionError(r, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields");
+		assertAssertionError(r, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields");
 	}
 
 	@Test
@@ -39,7 +37,7 @@ public class LombokTest {
 						.verify();
 			}
 		};
-		verifyAssertionError(r, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields");
+		assertAssertionError(r, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields");
 	}
 
 	@Test
@@ -51,7 +49,7 @@ public class LombokTest {
 						.verify();
 			}
 		};
-		verifyAssertionError(r, "Symmetry", "does not equal superclass instance");
+		assertAssertionError(r, "Symmetry", "does not equal superclass instance");
 	}
 	
 	@Data
@@ -73,16 +71,6 @@ public class LombokTest {
 		public LombokSubPoint(int x, int y, int z) {
 			super(x, y);
 			this.z = z;
-		}
-	}
-	
-	private void verifyAssertionError(Runnable r, String errorPart, String... moreErrorParts) {
-		try {
-			r.run();
-			fail("No exception thrown");
-		}
-		catch (AssertionError e) {
-			assertThat(e.getMessage(), containsAll(errorPart, moreErrorParts));
 		}
 	}
 }
