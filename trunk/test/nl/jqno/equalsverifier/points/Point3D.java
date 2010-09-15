@@ -32,6 +32,11 @@ public class Point3D extends Point {
 	}
 	
 	@Override
+	public int hashCode() {
+		return super.hashCode() + (31 * z);
+	}
+	
+	@Override
 	public String toString() {
 		return super.toString() + "," + z;
 	}
