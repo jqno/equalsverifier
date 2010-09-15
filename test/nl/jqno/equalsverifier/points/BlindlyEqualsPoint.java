@@ -32,6 +32,7 @@ public class BlindlyEqualsPoint {
         return p.x == this.x && p.y == this.y;
     }
 
+    @Override
     public boolean equals(Object o) {
         return (this.blindlyEquals(o) && ((BlindlyEqualsPoint)o).blindlyEquals(this));
     }
