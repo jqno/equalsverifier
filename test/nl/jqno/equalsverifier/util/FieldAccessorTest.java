@@ -31,6 +31,7 @@ import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.ArrayContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.FinalContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.ObjectContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.Outer;
@@ -38,6 +39,7 @@ import nl.jqno.equalsverifier.util.TypeHelper.PointArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrimitiveContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrivateObjectContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.TransientContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.Outer.Inner;
 
 import org.junit.Before;
@@ -82,6 +84,34 @@ public class FieldAccessorTest {
 		ObjectContainer foo = new ObjectContainer();
 		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertEquals(FIELD_NAME, fieldAccessor.getFieldName());
+	}
+	
+	@Test
+	public void isNotFinal() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertFalse(fieldAccessor.fieldIsFinal());
+	}
+	
+	@Test
+	public void isFinal() {
+		FinalContainer foo = new FinalContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertTrue(fieldAccessor.fieldIsFinal());
+	}
+	
+	@Test
+	public void isNotTransitive() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertFalse(fieldAccessor.fieldIsTransient());
+	}
+	
+	@Test
+	public void isTransitive() {
+		TransientContainer foo = new TransientContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertTrue(fieldAccessor.fieldIsTransient());
 	}
 	
 	@Test

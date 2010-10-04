@@ -267,6 +267,14 @@ public class TypeHelper {
 		Object field = new Object();
 	}
 	
+	static final class FinalContainer {
+		final Object field = new Object();
+	}
+	
+	static final class TransientContainer {
+		transient Object field = new Object();
+	}
+	
 	static class PrivateObjectContainer {
 		private Object field = new Object();
 		
