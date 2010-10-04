@@ -21,7 +21,6 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
@@ -57,6 +56,8 @@ class FieldsChecker<T> {
 		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
 			check(new MutableStateFieldCheck());
 		}
+		
+		check(new TransitiveFieldsCheck());
 	}
 	
 	private void check(FieldCheck check) {
@@ -234,9 +235,26 @@ class FieldsChecker<T> {
 
 			boolean equalsChanged = !reference.equals(changed);
 
-			if (equalsChanged && !Modifier.isFinal(referenceAccessor.getField().getModifiers())) {
-				assertEquals("Mutability: equals depends on mutable field " + referenceAccessor.getFieldName() + ".",
-						reference, changed);
+			if (equalsChanged && !referenceAccessor.fieldIsFinal()) {
+				fail("Mutability: equals depends on mutable field " + referenceAccessor.getFieldName() + ".");
+			}
+			
+			referenceAccessor.changeField(prefabValues);
+		}
+	}
+	
+	private class TransitiveFieldsCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
+			
+			changedAccessor.changeField(prefabValues);
+
+			boolean equalsChanged = !reference.equals(changed);
+			
+			if (equalsChanged && referenceAccessor.fieldIsTransient()) {
+				fail("Transient field " + referenceAccessor.getFieldName() + " should not be included in equals/hashCode contract.");
 			}
 			
 			referenceAccessor.changeField(prefabValues);

@@ -68,6 +68,20 @@ public class FieldAccessor {
 	}
 	
 	/**
+	 * Returns whether the field is marked with the final modifier.
+	 */
+	public boolean fieldIsFinal() {
+		return Modifier.isFinal(field.getModifiers());
+	}
+	
+	/**
+	 * Returns whether the field is marked with the transient modifier.
+	 */
+	public boolean fieldIsTransient() {
+		return Modifier.isTransient(field.getModifiers());
+	}
+	
+	/**
 	 * Tries to get the field's value.
 	 * 
 	 * @return The field's value.
