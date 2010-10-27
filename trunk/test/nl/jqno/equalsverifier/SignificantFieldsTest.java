@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
 
 import org.junit.Test;
 
@@ -30,6 +31,11 @@ public class SignificantFieldsTest {
 	public void extraFieldInHashCode() {
 		EqualsVerifier<ExtraFieldInHashCodePoint> ev = EqualsVerifier.forClass(ExtraFieldInHashCodePoint.class);
 		assertFailure(ev, "Significant fields", "hashCode relies on", "but equals does not");
+	}
+	
+	@Test
+	public void skipStaticFinalFields() {
+		EqualsVerifier.forClass(IndirectStaticFinalContainer.class).verify();
 	}
 	
 	static final class ExtraFieldInEqualsPoint {
@@ -77,6 +83,31 @@ public class SignificantFieldsTest {
 		@Override
 		public int hashCode() {
 			return x + (31 * y);
+		}
+	}
+
+	static final class X {
+		public static final X x = new X();
+	}
+	
+	static final class IndirectStaticFinalContainer {
+		private final X x;
+		
+		public IndirectStaticFinalContainer(X x) {
+			this.x = x;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof IndirectStaticFinalContainer)) {
+				return false;
+			}
+			return ((IndirectStaticFinalContainer)obj).x == x;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(x);
 		}
 	}
 }

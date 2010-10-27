@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -120,12 +121,16 @@ public class PrefabValuesFactory {
 	
 	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
 		for (Field field : new FieldIterable(type)) {
-			Class<?> fieldType = field.getType();
-			if (fieldType.isArray()) {
-				createFor(fieldType.getComponentType(), typeStack);
-			}
-			else {
-				createFor(fieldType, typeStack);
+			int modifiers = field.getModifiers();
+			boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+			if (!isStaticAndFinal) {
+				Class<?> fieldType = field.getType();
+				if (fieldType.isArray()) {
+					createFor(fieldType.getComponentType(), typeStack);
+				}
+				else {
+					createFor(fieldType, typeStack);
+				}
 			}
 		}
 	}
