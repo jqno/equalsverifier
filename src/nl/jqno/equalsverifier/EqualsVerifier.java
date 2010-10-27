@@ -149,11 +149,16 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
-	 * Factory method. For use when T is a class which has relaxed equality
-	 * rules. For example, if the contents of two fields of the same type can
-	 * be interchanged without breaking equality.
+	 * Factory method. Asks for a list of equal, but not identical, instances
+	 * of T.
 	 * 
-	 * Asks for a list of equal, but not identical, instances of T.
+	 * For use when T is a class which has relaxed equality
+	 * rules. This happens when two instances of T are equal even though the
+	 * its internal state is different.
+	 * 
+	 * This could happen, for example, in a Rational class that doesn't
+	 * normalize: new Rational(1, 2).equals(new Rational(2, 4)) would return
+	 * true. 
 	 * 
 	 * Using this factory method requires that
 	 * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
