@@ -37,9 +37,9 @@ public class AssertTest {
 	
 	@Test
 	public void assertEqualsObjectSuccess() {
-		String one = new String("text");
-		String two = new String("text");
-		Assert.assertEquals("fail", one, two);
+		String red = new String("text");
+		String black = new String("text");
+		Assert.assertEquals("fail", red, black);
 	}
 	
 	@Test

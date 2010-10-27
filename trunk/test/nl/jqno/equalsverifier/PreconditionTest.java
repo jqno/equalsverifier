@@ -45,7 +45,7 @@ public class PreconditionTest {
 	}
 	
 	@Test
-	public void tailNull() {
+	public void moreNull() {
 		EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
 	}
 	

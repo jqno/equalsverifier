@@ -60,7 +60,7 @@ public class DifficultClassesTest {
 	@Test
 	public void threadLocal() {
 		EqualsVerifier.forClass(ThreadLocalContainer.class)
-				.withPrefabValues(ThreadLocal.class, ThreadLocalContainer.FIRST_INSTANCE, ThreadLocalContainer.SECOND_INSTANCE)
+				.withPrefabValues(ThreadLocal.class, ThreadLocalContainer.RED_INSTANCE, ThreadLocalContainer.BLACK_INSTANCE)
 				.verify();
 	}
 	
@@ -242,19 +242,19 @@ public class DifficultClassesTest {
 	}
 	
 	static final class ThreadLocalContainer {
-		public static final ThreadLocal<Integer> FIRST_INSTANCE = new ThreadLocal<Integer>() {
+		public static final ThreadLocal<Integer> RED_INSTANCE = new ThreadLocal<Integer>() {
 			@Override
 			protected Integer initialValue() {
 				return 10;
 			}
 		};
-		public static final ThreadLocal<Integer> SECOND_INSTANCE = new ThreadLocal<Integer>() {
+		public static final ThreadLocal<Integer> BLACK_INSTANCE = new ThreadLocal<Integer>() {
 			@Override
 			protected Integer initialValue() {
 				return 20;
 			}
 		};
-		private final ThreadLocal<Integer> instance = FIRST_INSTANCE; 
+		private final ThreadLocal<Integer> instance = RED_INSTANCE; 
 		
 		@Override
 		public boolean equals(Object obj) {

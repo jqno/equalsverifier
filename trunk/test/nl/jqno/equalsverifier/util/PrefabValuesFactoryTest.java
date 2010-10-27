@@ -48,21 +48,21 @@ public class PrefabValuesFactoryTest {
 	@Test
 	public void simple() {
 		factory.createFor(Point.class);
-		Point first = prefabValues.getFirst(Point.class);
-		Point second = prefabValues.getSecond(Point.class);
-		assertFalse(first.equals(second));
+		Point red = prefabValues.getRed(Point.class);
+		Point black = prefabValues.getBlack(Point.class);
+		assertFalse(red.equals(black));
 	}
 	
 	@Test
 	public void createSecondTimeIsNoOp() {
 		factory.createFor(Point.class);
-		Point first = prefabValues.getFirst(Point.class);
-		Point second = prefabValues.getSecond(Point.class);
+		Point red = prefabValues.getRed(Point.class);
+		Point black = prefabValues.getBlack(Point.class);
 		
 		factory.createFor(Point.class);
 		
-		assertSame(first, prefabValues.getFirst(Point.class));
-		assertSame(second, prefabValues.getSecond(Point.class));
+		assertSame(red, prefabValues.getRed(Point.class));
+		assertSame(black, prefabValues.getBlack(Point.class));
 	}
 	
 	@Test

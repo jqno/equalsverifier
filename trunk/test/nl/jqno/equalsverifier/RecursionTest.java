@@ -25,13 +25,13 @@ public class RecursionTest {
 	private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
 	private static final String PREFAB = "Add prefab values for one of the following types";
 	
-	private Node first;
-	private Node second;
+	private Node red;
+	private Node black;
 	
 	@Before
 	public void createSomeNodes() {
-		first = new Node(null);
-		second = new Node(new Node(null));
+		red = new Node(null);
+		black = new Node(new Node(null));
 	}
 	
 	@Test
@@ -42,35 +42,35 @@ public class RecursionTest {
 	
 	@Test
 	public void examplesRecursiveFail() {
-		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(first, second);
+		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(red, black);
 		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
 	}
 	
 	@Test
 	public void recursiveWithPrefabValues() {
 		EqualsVerifier.forClass(Node.class)
-				.withPrefabValues(Node.class, first, second)
+				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
 	public void recursiveWithPrefabValuesForSuper() {
 		EqualsVerifier.forClass(SubNode.class)
-				.withPrefabValues(Node.class, first, second)
+				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
 	public void recursiveClassContainerWithPrefabValues() {
 		EqualsVerifier.forClass(NodeContainer.class)
-				.withPrefabValues(Node.class, first, second)
+				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
 	public void recursiveClassContainerWithPrefabValuesForSuper() {
 		EqualsVerifier.forClass(SubNodeContainer.class)
-				.withPrefabValues(Node.class, first, second)
+				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	

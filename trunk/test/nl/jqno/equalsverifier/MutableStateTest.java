@@ -63,12 +63,12 @@ public class MutableStateTest {
 	
 	@Test
 	public void detectMutableStateEnumNull() {
-		MutableEnumContainer first = new MutableEnumContainer(null);
-		MutableEnumContainer second = new MutableEnumContainer(MutableEnumContainer.Enum.SECOND);
-		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forExamples(first, second);
+		MutableEnumContainer red = new MutableEnumContainer(null);
+		MutableEnumContainer black = new MutableEnumContainer(MutableEnumContainer.Enum.BLACK);
+		EqualsVerifier<MutableEnumContainer> ev = EqualsVerifier.forExamples(red, black);
 		assertFailure(ev, MUTABILITY, FIELD_NAME);
 		
-		EqualsVerifier.forExamples(first, second)
+		EqualsVerifier.forExamples(red, black)
 				.suppress(Warning.NONFINAL_FIELDS)
 				.verify();
 	}
@@ -165,7 +165,7 @@ public class MutableStateTest {
 	}
 	
 	static final class MutableEnumContainer {
-		public enum Enum { FIRST, SECOND };
+		public enum Enum { RED, BLACK };
 		
 		private Enum field;
 		

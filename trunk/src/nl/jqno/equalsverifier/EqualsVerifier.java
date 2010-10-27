@@ -134,13 +134,13 @@ public final class EqualsVerifier<T> {
 	 * 
 	 * @param first An instance of T.
 	 * @param second Another instance of T, which is unequal to {@code first}.
-	 * @param tail An array of instances of T, all of which are unequal to one
+	 * @param more More instances of T, all of which are unequal to one
 	 *		 		another and to {@code first} and {@code second}. May also
 	 *				contain instances of subclasses of T.
 	 */
-	public static <T> EqualsVerifier<T> forExamples(T first, T second, T... tail) {
+	public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
 		List<T> equalExamples = new ArrayList<T>();
-		List<T> unequalExamples = buildList2(first, second, tail);
+		List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
 		
 		@SuppressWarnings("unchecked")
 		Class<T> type = (Class<T>)first.getClass();
@@ -162,12 +162,12 @@ public final class EqualsVerifier<T> {
 	 * @param first An instance of T.
 	 * @param second Another instance of T, which is equal, but not identical,
 	 * 				to {@code first}.
-	 * @param tail An array of instances of T, all of which are equal, but not
+	 * @param more More instances of T, all of which are equal, but not
 	 * 				identical, to one another and to {@code first} and
 	 * 				{@code second}.
 	 */
-	public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... tail) {
-		List<T> examples = buildList2(first, second, tail);
+	public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... more) {
+		List<T> examples = buildListOfAtLeastTwo(first, second, more);
 		
 		@SuppressWarnings("unchecked")
 		Class<T> type = (Class<T>)first.getClass();
@@ -210,15 +210,15 @@ public final class EqualsVerifier<T> {
 	 * 
 	 * @param <S> The class of the prefabricated values.
 	 * @param otherType The class of the prefabricated values.
-	 * @param first An instance of {@code S}.
-	 * @param second An instance of {@code S}.
+	 * @param red An instance of {@code S}.
+	 * @param black Another instance of {@code S}.
 	 * @return {@code this}, for easy method chaining.
-	 * @throws NullPointerException If either {@code first} or {@code second}
+	 * @throws NullPointerException If either {@code red} or {@code black}
 	 * 				is null.
-	 * @throws IllegalArgumentException If {@code first} equals {@code second}.
+	 * @throws IllegalArgumentException If {@code red} equals {@code black}.
 	 */
-	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S first, S second) {
-		prefabValues.put(otherType, first, second);
+	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
+		prefabValues.put(otherType, red, black);
 		return this;
 	}
 	
@@ -316,19 +316,19 @@ public final class EqualsVerifier<T> {
 		fail(e.getMessage());
 	}
 	
-	private static <T> List<T> buildList1(T first, T... tail) {
+	private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
 		if (first == null) {
 			throw new IllegalArgumentException("First example is null");
 		}
 
 		List<T> result = new ArrayList<T>();
 		result.add(first);
-		addArrayElementsToList(result, tail);
+		addArrayElementsToList(result, more);
 		
 		return result;
 	}
 
-	private static <T> List<T> buildList2(T first, T second, T... tail) {
+	private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
 		if (first == null) {
 			throw new IllegalArgumentException("First example is null");
 		}
@@ -339,14 +339,14 @@ public final class EqualsVerifier<T> {
 		List<T> result = new ArrayList<T>();
 		result.add(first);
 		result.add(second);
-		addArrayElementsToList(result, tail);
+		addArrayElementsToList(result, more);
 		
 		return result;
 	}
 	
-	private static <T> void addArrayElementsToList(List<T> list, T... tail) {
-		if (tail != null) {
-			for (T e : tail) {
+	private static <T> void addArrayElementsToList(List<T> list, T... more) {
+		if (more != null) {
+			for (T e : more) {
 				if (e == null) {
 					throw new IllegalArgumentException("One of the examples is null");
 				}
@@ -372,8 +372,8 @@ public final class EqualsVerifier<T> {
 			return;
 		}
 		
-		unequalExamples.add(classAccessor.getFirstObject());
-		unequalExamples.add(classAccessor.getSecondObject());
+		unequalExamples.add(classAccessor.getRedObject());
+		unequalExamples.add(classAccessor.getBlackObject());
 	}
 
 	/**
@@ -407,7 +407,7 @@ public final class EqualsVerifier<T> {
 		 * @return An instance of {@link EqualsVerifier}.
 		 */
 		public EqualsVerifier<T> andUnequalExample(T example) {
-			List<T> unequalExamples = buildList1(example, (T[])null);
+			List<T> unequalExamples = buildListOfAtLeastOne(example, (T[])null);
 			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 		}
 
@@ -417,14 +417,14 @@ public final class EqualsVerifier<T> {
 		 * 
 		 * @param first An instance of T that is unequal to the previously
 		 * 			supplied equal examples.
-		 * @param tail An array of instances of T, all of which are unequal to
+		 * @param more More instances of T, all of which are unequal to
 		 * 			one	another, to {@code first}, and to the previously
 		 * 			supplied equal examples. May also contain instances of
 		 * 			subclasses of T.
 		 * @return An instance of {@link EqualsVerifier}.
 		 */
-		public EqualsVerifier<T> andUnequalExamples(T first, T... tail) {
-			List<T> unequalExamples = buildList1(first, tail);
+		public EqualsVerifier<T> andUnequalExamples(T first, T... more) {
+			List<T> unequalExamples = buildListOfAtLeastOne(first, more);
 			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 		}
 	}

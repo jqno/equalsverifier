@@ -64,7 +64,7 @@ class HierarchyChecker<T> {
 	}
 	
 	private void generateExamples() {
-		referenceAccessor = classAccessor.getFirstAccessor();
+		referenceAccessor = classAccessor.getRedAccessor();
 		reference = referenceAccessor.get();
 	}
 	
