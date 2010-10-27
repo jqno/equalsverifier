@@ -46,8 +46,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class FieldAccessorTest {
-	private static final Point FIRST_NEW_POINT = new Point(10, 20);
-	private static final Point SECOND_NEW_POINT = new Point(20, 10);
+	private static final Point RED_NEW_POINT = new Point(10, 20);
+	private static final Point BLACK_NEW_POINT = new Point(20, 10);
 	private static final String FIELD_NAME = "field";
 	
 	private PrefabValues prefabValues;
@@ -326,31 +326,31 @@ public class FieldAccessorTest {
 	@Test
 	public void addPrefabValues() {
 		PointContainer foo = new PointContainer(new Point(1, 2));
-		prefabValues.put(Point.class, FIRST_NEW_POINT, SECOND_NEW_POINT);
+		prefabValues.put(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
 		
 		changeField(foo, "point");
-		assertEquals(FIRST_NEW_POINT, foo.getPoint());
+		assertEquals(RED_NEW_POINT, foo.getPoint());
 		
 		changeField(foo, "point");
-		assertEquals(SECOND_NEW_POINT, foo.getPoint());
+		assertEquals(BLACK_NEW_POINT, foo.getPoint());
 		
 		changeField(foo, "point");
-		assertEquals(FIRST_NEW_POINT, foo.getPoint());
+		assertEquals(RED_NEW_POINT, foo.getPoint());
 	}
 	
 	@Test
 	public void addPrefabArrayValues() {
 		PointArrayContainer foo = new PointArrayContainer();
-		prefabValues.put(Point.class, FIRST_NEW_POINT, SECOND_NEW_POINT);
+		prefabValues.put(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
 		
 		changeField(foo, "points");
-		assertEquals(FIRST_NEW_POINT, foo.points[0]);
+		assertEquals(RED_NEW_POINT, foo.points[0]);
 		
 		changeField(foo, "points");
-		assertEquals(SECOND_NEW_POINT, foo.points[0]);
+		assertEquals(BLACK_NEW_POINT, foo.points[0]);
 		
 		changeField(foo, "points");
-		assertEquals(FIRST_NEW_POINT, foo.points[0]);
+		assertEquals(RED_NEW_POINT, foo.points[0]);
 	}
 	
 	private Object getValue(Object object, String fieldName) {

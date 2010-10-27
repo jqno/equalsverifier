@@ -68,20 +68,20 @@ public class ClassAccessor<T> {
 	
 	/**
 	 * Returns an instance of T that is not equal to the instance of T returned
-	 * by {@link #getSecondObject()}.
+	 * by {@link #getBlackObject()}.
 	 *  
 	 * @return An instance of T.
 	 */
-	public T getFirstObject() {
-		return getFirstAccessor().get();
+	public T getRedObject() {
+		return getRedAccessor().get();
 	}
 
 	/**
-	 * Returns an {@link ObjectAccessor} for {@link #getFirstObject()}.
+	 * Returns an {@link ObjectAccessor} for {@link #getRedObject()}.
 	 * 
-	 * @return An {@link ObjectAccessor} for {@link #getFirstObject()}.
+	 * @return An {@link ObjectAccessor} for {@link #getRedObject()}.
 	 */
-	public ObjectAccessor<T> getFirstAccessor() {
+	public ObjectAccessor<T> getRedAccessor() {
 		ObjectAccessor<T> result = buildObjectAccessor();
 		result.scramble(prefabValues);
 		return result;
@@ -89,20 +89,20 @@ public class ClassAccessor<T> {
 	
 	/**
 	 * Returns an instance of T that is not equal to the instance of T returned
-	 * by {@link #getFirstObject()}.
+	 * by {@link #getRedObject()}.
 	 *  
 	 * @return An instance of T.
 	 */
-	public T getSecondObject() {
-		return getSecondAccessor().get();
+	public T getBlackObject() {
+		return getBlackAccessor().get();
 	}
 
 	/**
-	 * Returns an {@link ObjectAccessor} for {@link #getSecondObject()}.
+	 * Returns an {@link ObjectAccessor} for {@link #getBlackObject()}.
 	 * 
-	 * @return An {@link ObjectAccessor} for {@link #getSecondObject()}.
+	 * @return An {@link ObjectAccessor} for {@link #getBlackObject()}.
 	 */
-	public ObjectAccessor<T> getSecondAccessor() {
+	public ObjectAccessor<T> getBlackAccessor() {
 		ObjectAccessor<T> result = buildObjectAccessor();
 		result.scramble(prefabValues);
 		result.scramble(prefabValues);

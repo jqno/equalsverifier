@@ -61,8 +61,8 @@ class FieldsChecker<T> {
 	}
 	
 	private void check(FieldCheck check) {
-		ObjectAccessor<T> reference = classAccessor.getFirstAccessor();
-		ObjectAccessor<T> changed = classAccessor.getFirstAccessor();
+		ObjectAccessor<T> reference = classAccessor.getRedAccessor();
+		ObjectAccessor<T> changed = classAccessor.getRedAccessor();
 
 		for (Field field : new FieldIterable(classAccessor.getType())) {
 			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));

@@ -27,8 +27,8 @@ import org.junit.Test;
 
 public class PrefabValuesTest {
 	private static final Class<String> EXISTING_KEY = String.class;
-	private static final String EXISTING_FIRST_VALUE = "the one";
-	private static final String EXISTING_SECOND_VALUE = "the other";
+	private static final String EXISTING_RED_VALUE = "the red";
+	private static final String EXISTING_BLACK_VALUE = "the black";
 	private static final String NON_EXISTING_VALUE = "the unknown";
 	
 	private static final Class<Object> NON_EXISTING_KEY = Object.class;
@@ -39,7 +39,7 @@ public class PrefabValuesTest {
 	@Before
 	public void setup() {
 		p = new PrefabValues();
-		p.put(EXISTING_KEY, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
+		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
 	
 	@Test
@@ -49,16 +49,16 @@ public class PrefabValuesTest {
 	
 	@Test(expected=InternalException.class)
 	public void putNullClass() {
-		p.put(null, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
+		p.put(null, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
 	
 	@Test(expected=InternalException.class)
-	public void putFirstNull() {
+	public void putRedNull() {
 		p.put(NON_EXISTING_KEY, null, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
 	@Test(expected=InternalException.class)
-	public void putSecondNull() {
+	public void putBlackNull() {
 		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, null);
 	}
 	
@@ -69,7 +69,7 @@ public class PrefabValuesTest {
 	
 	@Test(expected=InternalException.class)
 	public void putTheSameKeyTwice() {
-		p.put(EXISTING_KEY, EXISTING_FIRST_VALUE, EXISTING_SECOND_VALUE);
+		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
 	
 	@Test
@@ -86,24 +86,24 @@ public class PrefabValuesTest {
 	}
 	
 	@Test
-	public void getFirst() {
-		assertEquals(EXISTING_FIRST_VALUE, p.getFirst(EXISTING_KEY));
+	public void getRed() {
+		assertEquals(EXISTING_RED_VALUE, p.getRed(EXISTING_KEY));
 	}
 	
 	@Test
-	public void getSecond() {
-		assertEquals(EXISTING_SECOND_VALUE, p.getSecond(EXISTING_KEY));
+	public void getBlack() {
+		assertEquals(EXISTING_BLACK_VALUE, p.getBlack(EXISTING_KEY));
 	}
 	
 	@Test
 	public void getOtherWhenOneExists() {
-		assertEquals(EXISTING_SECOND_VALUE, p.getOther(EXISTING_KEY, EXISTING_FIRST_VALUE));
-		assertEquals(EXISTING_FIRST_VALUE, p.getOther(EXISTING_KEY, EXISTING_SECOND_VALUE));
+		assertEquals(EXISTING_BLACK_VALUE, p.getOther(EXISTING_KEY, EXISTING_RED_VALUE));
+		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, EXISTING_BLACK_VALUE));
 	}
 	
 	@Test
 	public void getOtherWhenOneDoesntExist() {
-		assertEquals(EXISTING_FIRST_VALUE, p.getOther(EXISTING_KEY, NON_EXISTING_VALUE));
+		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, NON_EXISTING_VALUE));
 	}
 	
 	@Test(expected=InternalException.class)
@@ -118,7 +118,7 @@ public class PrefabValuesTest {
 	
 	@Test
 	public void getOtherWhenValueIsNull() {
-		assertEquals(EXISTING_FIRST_VALUE, p.getOther(EXISTING_KEY, null));
+		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, null));
 	}
 	
 	@Test(expected=InternalException.class)
@@ -133,13 +133,13 @@ public class PrefabValuesTest {
 	}
 	
 	private static void assertPrefabValues(PrefabValues p, Class<?> type) {
-		Object first = p.getOther(type, null);
-		assertNotNull(first);
+		Object red = p.getOther(type, null);
+		assertNotNull(red);
 		
-		Object second = p.getOther(type, first);
-		assertNotNull(second);
+		Object black = p.getOther(type, red);
+		assertNotNull(black);
 		
-		assertFalse(first.equals(second));
-		assertEquals(first, p.getOther(type, second));
+		assertFalse(red.equals(black));
+		assertEquals(red, p.getOther(type, black));
 	}
 }

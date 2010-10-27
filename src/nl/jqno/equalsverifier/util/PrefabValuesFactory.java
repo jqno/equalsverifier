@@ -132,9 +132,9 @@ public class PrefabValuesFactory {
 
 	private <T> void createInstances(Class<T> type) {
 		ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues);
-		T first = accessor.getFirstObject();
-		T second = accessor.getSecondObject();
-		prefabValues.put(type, first, second);
+		T red = accessor.getRedObject();
+		T black = accessor.getBlackObject();
+		prefabValues.put(type, red, black);
 	}
 	
 	private PrefabValues addJavaClasses() {
@@ -182,7 +182,7 @@ public class PrefabValuesFactory {
 
 	@SuppressWarnings("unchecked")
 	private void addMaps() {
-		prefabValues.put(EnumMap.class, Dummy.FIRST.map(), Dummy.SECOND.map());
+		prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
 		addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
 		addMap(HashMap.class, new HashMap(), new HashMap());
 		addMap(Hashtable.class, new Hashtable(), new Hashtable());
@@ -196,7 +196,7 @@ public class PrefabValuesFactory {
 	private void addSets() {
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
-		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.FIRST), EnumSet.of(Dummy.SECOND));
+		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -215,21 +215,21 @@ public class PrefabValuesFactory {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends Collection> void addCollection(Class<T> type, T first, T second) {
-		first.add("first");
-		second.add("second");
-		prefabValues.put(type, first, second);
+	private <T extends Collection> void addCollection(Class<T> type, T red, T black) {
+		red.add("red");
+		black.add("black");
+		prefabValues.put(type, red, black);
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T extends Map> void addMap(Class<T> type, T first, T second) {
-		first.put("first_key", "first_value");
-		second.put("second_key", "second_key");
-		prefabValues.put(type, first, second);
+	private <T extends Map> void addMap(Class<T> type, T red, T black) {
+		red.put("red_key", "red_value");
+		black.put("black_key", "black_value");
+		prefabValues.put(type, red, black);
 	}
 	
 	private enum Dummy { 
-		FIRST, SECOND;
+		RED, BLACK;
 		
 		public EnumMap<Dummy, String> map() {
 			EnumMap<Dummy, String> result = new EnumMap<Dummy, String>(Dummy.class);
