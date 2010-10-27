@@ -142,4 +142,13 @@ public class PrefabValuesFactoryTest {
 		}
 		fail("No exception thrown");
 	}
+	
+	@Test
+	public void skipStaticFinal() {
+		factory.createFor(StaticFinalContainer.class);
+	}
+	
+	static class StaticFinalContainer {
+		public static final StaticFinalContainer x = new StaticFinalContainer();
+	}
 }
