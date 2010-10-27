@@ -32,25 +32,25 @@ public class PrefabValues {
 	 * 
 	 * @param <T> The type of value to put into this {@link PrefabValues}.
 	 * @param type The class of the values.
-	 * @param first A value of type T.
-	 * @param second Another value of type T.
-	 * @throws IllegalArgumentException When first or second is null, or when
+	 * @param red A value of type T.
+	 * @param black Another value of type T.
+	 * @throws IllegalArgumentException When either value is null, or when
 	 * 			they are equal.
 	 */
-	public <T> void put(Class<T> type, T first, T second) {
+	public <T> void put(Class<T> type, T red, T black) {
 		if (type == null) {
 			throw new InternalException("Type is null");
 		}
-		if (first == null || second == null) {
-			throw new InternalException("First or second parameter is null.");
+		if (red == null || black == null) {
+			throw new InternalException("One or both values are null.");
 		}
 		if (values.containsKey(type)) {
 			throw new InternalException("Type " + type + " is already present.");
 		}
-		if (first.equals(second)) {
-			throw new InternalException("First and second parameters are equal.");
+		if (red.equals(black)) {
+			throw new InternalException("Both values are equal.");
 		}
-		values.put(type, new Tuple<T>(first, second));
+		values.put(type, new Tuple<T>(red, black));
 	}
 	
 	/**
@@ -76,23 +76,23 @@ public class PrefabValues {
 	}
 	
 	/**
-	 * Getter for the first prefabricated value of the specified type.
+	 * Getter for the "red" prefabricated value of the specified type.
 	 * 
 	 * @param type Class for which to return the prefabricated value.
-	 * @return The first prefabricated value for the specified type.
+	 * @return The "red" prefabricated value for the specified type.
 	 */
-	public <T> T getFirst(Class<T> type) {
-		return getTuple(type).first;
+	public <T> T getRed(Class<T> type) {
+		return getTuple(type).red;
 	}
 	
 	/**
-	 * Getter for the second prefabricated value of the specified type.
+	 * Getter for the "black" prefabricated value of the specified type.
 	 * 
 	 * @param type Class for which to return the prefabricated value.
-	 * @return The second prefabricated value for the specified type.
+	 * @return The "black" prefabricated value for the specified type.
 	 */
-	public <T> T getSecond(Class<T> type) {
-		return getTuple(type).second;
+	public <T> T getBlack(Class<T> type) {
+		return getTuple(type).black;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -121,20 +121,20 @@ public class PrefabValues {
 			throw new InternalException("No prefab values for " + type + " exist.");
 		}
 		
-		if (tuple.first.equals(value)) {
-			return tuple.second;
+		if (tuple.red.equals(value)) {
+			return tuple.black;
 		}
 		
-		return tuple.first;
+		return tuple.red;
 	}
 	
 	private static class Tuple<T> {
-		private T first;
-		private T second;
+		private T red;
+		private T black;
 		
-		private Tuple(T first, T second) {
-			this.first = first;
-			this.second = second;
+		private Tuple(T red, T black) {
+			this.red = red;
+			this.black = black;
 		}
 	}
 }

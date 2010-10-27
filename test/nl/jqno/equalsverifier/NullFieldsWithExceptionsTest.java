@@ -14,13 +14,13 @@ public class NullFieldsWithExceptionsTest {
 	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
 	private static final String ILLEGAL_STATE_EXCEPTION = "IllegalStateException";
 	private static final String ILLEGAL_FORMAT_CONVERSION_EXCEPTION = "IllegalFormatConversionException";
-	private static final String WHEN_FIRST_IS_NULL = "when field first is null";
+	private static final String WHEN_RED_IS_NULL = "when field red is null";
 	private static final String WHEN_S_IS_NULL = "when field foo is null";
 
 	@Test
 	public void issue31() {
 		EqualsVerifier<Issue31> ev = EqualsVerifier.forClass(Issue31.class);
-		assertFailure(ev, TO_STRING, THROWS, ILLEGAL_FORMAT_CONVERSION_EXCEPTION, WHEN_FIRST_IS_NULL);
+		assertFailure(ev, TO_STRING, THROWS, ILLEGAL_FORMAT_CONVERSION_EXCEPTION, WHEN_RED_IS_NULL);
 	}
 	
 	@Test
@@ -60,12 +60,12 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	final static class Issue31  {
-		private final String first;
-		private final String second;
+		private final String red;
+		private final String black;
 		
-		Issue31(String first, String second) {
-			this.first = first;
-			this.second = second;
+		Issue31(String red, String black) {
+			this.red = red;
+			this.black = black;
 		}
 		
 		@Override
@@ -74,18 +74,18 @@ public class NullFieldsWithExceptionsTest {
 				return false;
 			}
 			Issue31 other = (Issue31)obj;
-			return nullSafeEquals(first, other.first) && nullSafeEquals(second, other.second);
+			return nullSafeEquals(red, other.red) && nullSafeEquals(black, other.black);
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(first) + 31 * nullSafeHashCode(second);
+			return nullSafeHashCode(red) + 31 * nullSafeHashCode(black);
 		}
 		
 		@Override
 		public String toString() {
 			// Throws IllegalArgumentException once "second" is non-null.
-			return String.format("%d", second);
+			return String.format("%d", black);
 		}
 	}
 	

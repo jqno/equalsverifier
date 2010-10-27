@@ -51,64 +51,64 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
-	public void getFirstObject() {
-		assertObjectHasNoNullFields(classAccessor.getFirstObject());
+	public void getRedObject() {
+		assertObjectHasNoNullFields(classAccessor.getRedObject());
 	}
 	
 	@Test
-	public void getFirstAccessor() {
-		PointContainer foo = classAccessor.getFirstObject();
-		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getFirstAccessor();
+	public void getRedAccessor() {
+		PointContainer foo = classAccessor.getRedObject();
+		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getRedAccessor();
 		assertEquals(foo, objectAccessor.get());
 	}
 	
 	@Test
-	public void getSecondObject() {
-		assertObjectHasNoNullFields(classAccessor.getSecondObject());
+	public void getBlackObject() {
+		assertObjectHasNoNullFields(classAccessor.getBlackObject());
 	}
 
 	@Test
-	public void getSecondAccessor() {
-		PointContainer foo = classAccessor.getSecondObject();
-		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getSecondAccessor();
+	public void getBlackAccessor() {
+		PointContainer foo = classAccessor.getBlackObject();
+		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getBlackAccessor();
 		assertEquals(foo, objectAccessor.get());
 	}
 
 	@Test
-	public void firstAndSecondNotEqual() {
-		PointContainer first = classAccessor.getFirstObject();
-		PointContainer second = classAccessor.getSecondObject();
-		assertFalse(first.equals(second));
+	public void redAndBlackNotEqual() {
+		PointContainer red = classAccessor.getRedObject();
+		PointContainer black = classAccessor.getBlackObject();
+		assertFalse(red.equals(black));
 	}
 	
 	@Test
 	public void instantiateAllTypes() {
-		ClassAccessor.of(AllTypesContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(AllTypesContainer.class, prefabValues).getRedObject();
 	}
 	
 	@Test
 	public void instantiateArrayTypes() {
-		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues).getRedObject();
 	}
 	
 	@Test
 	public void instantiateRecursiveApiTypes() {
-		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues).getRedObject();
 	}
 	
 	@Test
 	public void instantiateMapImplementations() {
-		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues).getRedObject();
 	}
 	
 	@Test
 	public void instantiateInterfaceField() {
-		ClassAccessor.of(InterfaceContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(InterfaceContainer.class, prefabValues).getRedObject();
 	}
 	
 	@Test
 	public void instantiateAbstractClassField() {
-		ClassAccessor.of(AbstractClassContainer.class, prefabValues).getFirstObject();
+		ClassAccessor.of(AbstractClassContainer.class, prefabValues).getRedObject();
 	}
 	
 	private void assertObjectHasNoNullFields(PointContainer foo) {

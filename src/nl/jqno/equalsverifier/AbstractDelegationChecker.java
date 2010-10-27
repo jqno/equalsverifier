@@ -40,7 +40,7 @@ public class AbstractDelegationChecker<T> {
 
 		T instance = this.<T>getPrefabValue(type);
 		if (instance == null) {
-			instance = classAccessor.getFirstObject();
+			instance = classAccessor.getRedObject();
 		}
 		checkAbstractDelegation(instance);
 
@@ -65,7 +65,7 @@ public class AbstractDelegationChecker<T> {
 		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
 			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues);
-			instance = superclassAccessor.getFirstObject();
+			instance = superclassAccessor.getRedObject();
 		}
 		checkAbstractMethods(superclass, instance, false);
 	}
@@ -73,7 +73,7 @@ public class AbstractDelegationChecker<T> {
 	@SuppressWarnings("unchecked")
 	private <S> S getPrefabValue(Class<?> type) {
 		if (prefabValues.contains(type)) {
-			return (S)prefabValues.getFirst(type);
+			return (S)prefabValues.getRed(type);
 		}
 		return null;
 	}
