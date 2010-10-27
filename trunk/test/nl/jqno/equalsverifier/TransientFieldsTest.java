@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier;
 import org.junit.Test;
 import static nl.jqno.equalsverifier.Helper.assertFailure;
 
-public class TransientTest {
+public class TransientFieldsTest {
 	@Test
 	public void transientFieldsDontCount() {
 		EqualsVerifier<TransientFields> ev = EqualsVerifier.forClass(TransientFields.class);
