@@ -30,7 +30,6 @@ import nl.jqno.equalsverifier.util.TypeHelper.AbstractAndInterfaceArrayContainer
 import nl.jqno.equalsverifier.util.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.AllTypesContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.FinalContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.ObjectContainer;
@@ -144,6 +143,12 @@ public class FieldAccessorTest {
 		foo.field = object;
 		Object value = getValue(foo, FIELD_NAME);
 		assertEquals(object, value);
+	}
+	
+	@Test
+	public void getPrivateValue() {
+		PrivateObjectContainer foo = new PrivateObjectContainer();
+		getValue(foo, FIELD_NAME);
 	}
 	
 	@Test
@@ -303,38 +308,24 @@ public class FieldAccessorTest {
 		assertTrue(reference.equals(changed));
 		
 		for (Field field : new FieldIterable(AllArrayTypesContainer.class)) {
-			new FieldAccessor(changed, field).changeArrayField(0, prefabValues);
+			new FieldAccessor(changed, field).changeField(prefabValues);
 			assertFalse("On field: " + field.getName(), reference.equals(changed));
-			new FieldAccessor(reference, field).changeArrayField(0, prefabValues);
+			new FieldAccessor(reference, field).changeField(prefabValues);
 			assertTrue("On field: " + field.getName(), reference.equals(changed));
 		}
-	}
-	
-	@Test(expected=InternalException.class)
-	public void changeArrayFieldWhichIsNotAnArrayField() {
-		ObjectContainer foo = new ObjectContainer();
-		changeArrayField(foo, FIELD_NAME, 0);
-	}
-	
-	@Test(expected=InternalException.class)
-	public void changeArrayFieldWithInvalidIndex() {
-		final int size = 10;
-		ArrayContainer foo = new ArrayContainer();
-		foo.field = new int[size];
-		changeArrayField(foo, FIELD_NAME, size);
 	}
 	
 	@Test
 	public void changeAbstractArrayField() {
 		AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
-		changeArrayField(foo, "abstractClasses", 0);
+		changeField(foo, "abstractClasses");
 		assertNotNull(foo.abstractClasses[0]);
 	}
 	
 	@Test
 	public void changeInterfaceArrayField() {
 		AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
-		changeArrayField(foo, "interfaces", 0);
+		changeField(foo, "interfaces");
 		assertNotNull(foo.interfaces[0]);
 	}
 	
@@ -386,10 +377,6 @@ public class FieldAccessorTest {
 	
 	private void changeField(Object object, String fieldName) {
 		getAccessorFor(object, fieldName).changeField(prefabValues);
-	}
-	
-	private void changeArrayField(Object object, String fieldName, int index) {
-		getAccessorFor(object, fieldName).changeArrayField(index, prefabValues);
 	}
 	
 	private FieldAccessor getAccessorFor(Object object, String fieldName) {
