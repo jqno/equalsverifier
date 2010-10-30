@@ -75,6 +75,13 @@ public class FieldAccessor {
 	}
 	
 	/**
+	 * Returns whether the field is marked with the static modifier.
+	 */
+	public boolean fieldIsStatic() {
+		return Modifier.isStatic(field.getModifiers());
+	}
+	
+	/**
 	 * Returns whether the field is marked with the transient modifier.
 	 */
 	public boolean fieldIsTransient() {
