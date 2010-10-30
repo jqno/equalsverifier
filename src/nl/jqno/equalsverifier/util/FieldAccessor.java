@@ -95,6 +95,7 @@ public class FieldAccessor {
 	 * @throws InternalException If the operation fails.
 	 */
 	public Object get() {
+		field.setAccessible(true);
 		try {
 			return field.get(object);
 		}
@@ -142,22 +143,6 @@ public class FieldAccessor {
 	 */
 	public void changeField(PrefabValues prefabValues) {
 		modify(new FieldChanger(prefabValues));
-	}
-	
-	/**
-	 * Assumes the field is an array, and changes the value at index to
-	 * something else. The new value will never be null. Other than that, the
-	 * precise value is undefined.
-	 * 
-	 * @param index The value at this index of the array will be changed.
-	 * @param prefabValues If the field is of a type contained within
-	 * 			prefabValues, the new value will be taken from it.
-	 * @throws InternalException If the operation fails or if field is not an
-	 * 			array.
-	 * @throws ArrayIndexOutOfBoundsException if index is out of bounds.
-	 */
-	public void changeArrayField(int index, PrefabValues prefabValues) {
-		modify(new ArrayFieldChanger(index, prefabValues));
 	}
 	
 	private void modify(FieldModifier modifier) {
@@ -295,30 +280,7 @@ public class FieldAccessor {
 		}
 	}
 	
-	private class ArrayFieldChanger implements FieldModifier {
-		private final int index;
-		private final PrefabValues prefabValues;
-
-		public ArrayFieldChanger(int index, PrefabValues prefabValues) {
-			this.index = index;
-			this.prefabValues = prefabValues;
-		}
-
-		@Override
-		public void modify() throws IllegalAccessException {
-			modifyArrayElement(field.get(object), index, prefabValues);
-		}
-	}
-	
-	/**
-	 * Changes the content of an array element.
-	 * 
-	 * @param array The array in which to change an element.
-	 * @param index The index at which to change the element.
-	 * @param prefabValues If the array is of a component type contained within
-	 * 			prefabValues, the new value will be taken from it.
-	 */
-	public static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
+	private static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
 		if (!array.getClass().isArray()) {
 			throw new InternalException("Expected array is not an array.");
 		}
