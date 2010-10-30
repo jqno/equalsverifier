@@ -193,35 +193,42 @@ class FieldsChecker<T> {
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
 
-			referenceAccessor.set(createNewArrayInstance(arrayType));
-			changedAccessor.set(createNewArrayInstance(arrayType));
-			
-			if (arrayType.getComponentType().isArray() || arrayType == Object[].class) {
-				// In case of Object[], arbitrarily pick int as type for the nested array.
-				Class<?> deepType = arrayType == Object[].class ?
-						int[].class :
-						arrayType.getComponentType();
-				
-				Array.set(referenceAccessor.get(), 0, createNewArrayInstance(deepType));
-				Array.set(changedAccessor.get(), 0, createNewArrayInstance(deepType));
-				
-				assertEquals("Multidimensional or Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + fieldName + ".",
-						reference, changed);
-				assertEquals("Multidimensional or Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + fieldName + ".",
-						reference.hashCode(), changed.hashCode());
+			if (arrayType == Object[].class) {
+				insertIntArray(referenceAccessor, changedAccessor);
+				assertDeep(fieldName, reference, changed, "Object");
+			}
+			else if (arrayType.getComponentType().isArray()) {
+				changeFields(referenceAccessor, changedAccessor);
+				assertDeep(fieldName, reference, changed, "Multidimensional");
 			}
 			else {
-				assertEquals("Array: == used instead of Arrays.equals() for field " + fieldName + ".",
-					reference, changed);
-				assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + fieldName + ".",
-					reference.hashCode(), changed.hashCode());
+				changeFields(referenceAccessor, changedAccessor);
+				assertArray(fieldName, reference, changed);
 			}
 		}
 
-		private Object createNewArrayInstance(Class<?> arrayType) {
-			Object array = Array.newInstance(arrayType.getComponentType(), 1);
-			FieldAccessor.modifyArrayElement(array, 0, prefabValues);
-			return array;
+		private void insertIntArray(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Array.set(referenceAccessor.get(), 0, new int[]{0});
+			Array.set(changedAccessor.get(), 0, new int[]{0});
+		}
+		
+		private void changeFields(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			referenceAccessor.changeField(prefabValues);
+			changedAccessor.changeField(prefabValues);
+		}
+
+		private void assertDeep(String fieldName, Object reference, Object changed, String type) {
+			assertEquals(type + " array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + fieldName + ".",
+					reference, changed);
+			assertEquals(type + " array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + fieldName + ".",
+					reference.hashCode(), changed.hashCode());
+		}
+		
+		private void assertArray(String fieldName, Object reference, Object changed) {
+			assertEquals("Array: == used instead of Arrays.equals() for field " + fieldName + ".",
+					reference, changed);
+			assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + fieldName + ".",
+					reference.hashCode(), changed.hashCode());
 		}
 	}
 	
