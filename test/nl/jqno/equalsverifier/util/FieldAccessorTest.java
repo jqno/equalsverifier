@@ -38,6 +38,7 @@ import nl.jqno.equalsverifier.util.TypeHelper.Outer;
 import nl.jqno.equalsverifier.util.TypeHelper.PointArrayContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrimitiveContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.PrivateObjectContainer;
+import nl.jqno.equalsverifier.util.TypeHelper.StaticContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.TransientContainer;
 import nl.jqno.equalsverifier.util.TypeHelper.Outer.Inner;
@@ -98,6 +99,20 @@ public class FieldAccessorTest {
 		FinalContainer foo = new FinalContainer();
 		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertTrue(fieldAccessor.fieldIsFinal());
+	}
+	
+	@Test
+	public void isNotStatic() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertFalse(fieldAccessor.fieldIsStatic());
+	}
+	
+	@Test
+	public void isStatic() {
+		StaticContainer foo = new StaticContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertTrue(fieldAccessor.fieldIsStatic());
 	}
 	
 	@Test
