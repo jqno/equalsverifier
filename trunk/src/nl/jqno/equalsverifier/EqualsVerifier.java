@@ -108,6 +108,7 @@ public final class EqualsVerifier<T> {
 	private final PrefabValues prefabValues;
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+	private boolean usingGetClass = false;
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	private boolean verbose = false;
@@ -228,6 +229,17 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
+	 * Signals that {@code getClass} is used in the implementation of the
+	 * {@code equals} method, instead of an {@code instanceof} check.
+	 * 
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> usingGetClass() {
+		usingGetClass = true;
+		return this;
+	}
+	
+	/**
 	 * Signals that T is part of an inheritance hierarchy where {@code equals}
 	 * is overridden. Call this method if T has overridden {@code equals} and
 	 * {@code hashCode}, and one or more of T's superclasses have as well.
@@ -246,7 +258,7 @@ public final class EqualsVerifier<T> {
 	 * Supplies a reference to a subclass of T in which {@code equals} is
 	 * overridden. Calling this method is mandatory if {@code equals} is not
 	 * final and a strong verification is performed.
-	 * <p>
+	 * 
 	 * Note that, for each subclass that overrides {@code equals},
 	 * {@link EqualsVerifier} should be used as well to verify its
 	 * adherence to the contracts.
@@ -300,7 +312,7 @@ public final class EqualsVerifier<T> {
 		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
 		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
-		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, hasRedefinedSubclass, redefinedSubclass);
+		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
 		
 		abstractDelegationChecker.check();
 		
