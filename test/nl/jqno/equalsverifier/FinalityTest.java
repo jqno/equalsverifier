@@ -28,10 +28,26 @@ public class FinalityTest {
 	}
 	
 	@Test
+	public void suppressFinalEqualsNonFinalHashCode() {
+		EqualsVerifier.forClass(FinalEqualsNonFinalHashCode.class)
+				.usingGetClass()
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
+	}
+	
+	@Test
 	public void nonFinalEqualsFinalHashCode() {
 		check(NonFinalEqualsFinalHashCode.class);
 	}
 
+	@Test
+	public void suppressNonFinalEqualsFinalHashCode() {
+		EqualsVerifier.forClass(NonFinalEqualsFinalHashCode.class)
+				.usingGetClass()
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
+	}
+	
 	private <T> void check(Class<T> type) {
 		EqualsVerifier<T> ev = EqualsVerifier.forClass(type).usingGetClass();
 		assertFailure(ev, BOTH_FINAL_OR_NONFINAL);
