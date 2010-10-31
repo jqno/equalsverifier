@@ -38,11 +38,11 @@ class HierarchyChecker<T> {
 	private T reference;
 
 	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
-		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		
+		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.classAccessor = classAccessor;
 		this.type = classAccessor.getType();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
