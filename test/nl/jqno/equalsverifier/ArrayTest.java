@@ -78,7 +78,7 @@ public class ArrayTest {
 	
 	@Test
 	public void objectArrayShouldUseDeepEquals() {
-		EqualsVerifier<ObjectArrayContainerWrongEquals> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongEquals.class).debug();
+		EqualsVerifier<ObjectArrayContainerWrongEquals> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongEquals.class);
 		assertFailure(ev, OBJECT_EQUALS, FIELD_NAME);
 	}
 	
