@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
@@ -30,6 +31,7 @@ class HierarchyChecker<T> {
 	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
 	private final EnumSet<Warning> warningsToSuppress;
+	private final boolean usingGetClass;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final boolean typeIsFinal;
@@ -37,15 +39,16 @@ class HierarchyChecker<T> {
 	private ObjectAccessor<T> referenceAccessor;
 	private T reference;
 
-	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		
-		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.classAccessor = classAccessor;
 		this.type = classAccessor.getType();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+		this.usingGetClass = usingGetClass;
+		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.redefinedSubclass = redefinedSubclass;
 		
 		typeIsFinal = Modifier.isFinal(type.getModifiers());
@@ -98,7 +101,7 @@ class HierarchyChecker<T> {
 	}
 	
 	private void checkSubclass() {
-		if (typeIsFinal) {
+		if (typeIsFinal || usingGetClass) {
 			return;
 		}
 		
@@ -126,10 +129,19 @@ class HierarchyChecker<T> {
 			return;
 		}
 		
-		assertTrue("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.",
-				methodIsFinal("equals", Object.class));
-		assertTrue("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.",
-				methodIsFinal("hashCode"));
+		boolean equalsIsFinal = methodIsFinal("equals", Object.class);
+		boolean hashCodeIsFinal = methodIsFinal("hashCode");
+		
+		if (usingGetClass) {
+			assertEquals("Finality: equals and hashCode must both be final or both be non-final.",
+					equalsIsFinal, hashCodeIsFinal);
+		}
+		else {
+			assertTrue("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.",
+					equalsIsFinal);
+			assertTrue("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.",
+					hashCodeIsFinal);
+		}
 	}
 
 	private boolean methodIsFinal(String methodName, Class<?>... parameterTypes) {
