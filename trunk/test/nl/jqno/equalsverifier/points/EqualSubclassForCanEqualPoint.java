@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.points;
 
-
 public class EqualSubclassForCanEqualPoint extends CanEqualPoint {
 	public EqualSubclassForCanEqualPoint(int x, int y) {
 		super(x, y);
