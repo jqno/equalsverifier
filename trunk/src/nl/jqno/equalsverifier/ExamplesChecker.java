@@ -26,7 +26,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
-class ExamplesChecker<T> {
+class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
@@ -37,6 +37,7 @@ class ExamplesChecker<T> {
 		this.unequalExamples = unequalExamples;
 	}
 	
+	@Override
 	public void check() {
 		for (int i = 0; i < equalExamples.size(); i++) {
 			T reference = equalExamples.get(i);

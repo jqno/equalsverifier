@@ -27,7 +27,7 @@ import java.util.EnumSet;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
-class HierarchyChecker<T> {
+class HierarchyChecker<T> implements Checker {
 	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
 	private final EnumSet<Warning> warningsToSuppress;
@@ -54,6 +54,7 @@ class HierarchyChecker<T> {
 		typeIsFinal = Modifier.isFinal(type.getModifiers());
 	}
 	
+	@Override
 	public void check() {
 		generateExamples();
 		
