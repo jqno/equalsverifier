@@ -219,15 +219,13 @@ public class PrefabValuesFactory {
 		prefabValues.put(NoOp.class, new NoOp(){}, new NoOp(){});
 	}
 	
-	@SuppressWarnings("unchecked")
-	private <T extends Collection> void addCollection(Class<T> type, T red, T black) {
+	private <T extends Collection<Object>> void addCollection(Class<T> type, T red, T black) {
 		red.add("red");
 		black.add("black");
 		prefabValues.put(type, red, black);
 	}
 	
-	@SuppressWarnings("unchecked")
-	private <T extends Map> void addMap(Class<T> type, T red, T black) {
+	private <T extends Map<Object, Object>> void addMap(Class<T> type, T red, T black) {
 		red.put("red_key", "red_value");
 		black.put("black_key", "black_value");
 		prefabValues.put(type, red, black);

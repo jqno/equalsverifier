@@ -56,9 +56,8 @@ public class PreconditionTest {
 	}
 	
 	@Test
-	@SuppressWarnings("unchecked")
 	public void incompatibleClass() {
-		EqualsVerifier ev = EqualsVerifier.forExamples(first, new Point(1, 2));
+		EqualsVerifier<?> ev = EqualsVerifier.forExamples(first, new Point(1, 2));
 		assertFailure(ev, PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
