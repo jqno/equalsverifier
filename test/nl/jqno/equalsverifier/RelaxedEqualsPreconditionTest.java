@@ -84,10 +84,9 @@ public class RelaxedEqualsPreconditionTest {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	public void incompatibleClass() {
 		SubMultiple sm = new SubMultiple(1, 2);
-		EqualsVerifier ev = EqualsVerifier.forRelaxedEqualExamples(sm, red)
+		EqualsVerifier<?> ev = EqualsVerifier.forRelaxedEqualExamples(sm, red)
 				.andUnequalExample(green);
 		assertFailure(ev, PRECONDITION, DIFFERENT_CLASSES, SubMultiple.class.getSimpleName(), Multiple.class.getSimpleName());
 	}
