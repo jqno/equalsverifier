@@ -309,11 +309,13 @@ public final class EqualsVerifier<T> {
 	}
 
 	private void performVerification() {
+		SignatureChecker<T> signatureChecker = new SignatureChecker<T>(type);
 		AbstractDelegationChecker<T> abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
 		ExamplesChecker<T> examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		HierarchyChecker<T> hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
 		
+		signatureChecker.check();
 		abstractDelegationChecker.check();
 		
 		ensureUnequalExamples();
