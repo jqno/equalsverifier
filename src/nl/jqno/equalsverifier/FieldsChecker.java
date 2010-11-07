@@ -29,7 +29,7 @@ import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
-class FieldsChecker<T> {
+class FieldsChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
@@ -48,6 +48,7 @@ class FieldsChecker<T> {
 		check(new NullPointerExceptionFieldCheck());
 	}
 	
+	@Override
 	public void check() {
 		check(new ArrayFieldCheck());
 		check(new SignificanceFieldCheck());
