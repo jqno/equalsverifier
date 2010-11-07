@@ -24,7 +24,7 @@ import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
-public class AbstractDelegationChecker<T> {
+public class AbstractDelegationChecker<T> implements Checker {
 	private final Class<T> type;
 	private final PrefabValues prefabValues;
 	private final ClassAccessor<T> classAccessor;
@@ -35,6 +35,7 @@ public class AbstractDelegationChecker<T> {
 		this.classAccessor = classAccessor;
 	}
 
+	@Override
 	public void check() {
 		checkAbstractDelegationInFields();
 

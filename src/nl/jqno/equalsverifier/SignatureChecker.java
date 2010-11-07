@@ -21,7 +21,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.util.Assert;
 
-public class SignatureChecker<T> {
+public class SignatureChecker<T> implements Checker {
 	private static final String MESSAGE = "Overloaded: %s.\nSignature should be: public boolean equals(Object obj)";
 	private final Class<T> type;
 
@@ -29,6 +29,7 @@ public class SignatureChecker<T> {
 		this.type = type;
 	}
 	
+	@Override
 	public void check() {
 		List<Method> equalsMethods = getEqualsMethods();
 		if (equalsMethods.size() > 1) {
