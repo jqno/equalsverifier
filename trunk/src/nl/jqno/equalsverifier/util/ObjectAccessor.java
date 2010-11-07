@@ -19,7 +19,7 @@ import java.lang.reflect.Field;
 
 /**
  * Wraps an object to provide reflective access to it. ObjectAccessor can
- * clone and scramble the wrapped object.
+ * copy and scramble the wrapped object.
  * 
  * @param <T> The specified object's class.
  *
@@ -83,53 +83,53 @@ public class ObjectAccessor<T> {
 	}
 	
 	/**
-	 * Creates a clone of the wrapped object.
+	 * Creates a copy of the wrapped object.
 	 * 
-	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * Note: it does a "shallow" copy. Reference fields are not copied
 	 * recursively.
 	 * 
-	 * @return A shallow clone.
+	 * @return A shallow copy.
 	 */
-	public T clone() {
-		T clone = Instantiator.of(type).instantiate();
-		return cloneInto(clone);
+	public T copy() {
+		T copy = Instantiator.of(type).instantiate();
+		return copyInto(copy);
 	}
 
 	/**
-	 * Creates a clone of the wrapped object, where the clone's type is a
+	 * Creates a copy of the wrapped object, where the copy's type is a
 	 * specified subclass of the wrapped object's class.
 	 * 
-	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * Note: it does a "shallow" copy. Reference fields are not copied
 	 * recursively.
 	 * 
 	 * @param subclass A subclass of the wrapped object's class.
-	 * @return A shallow clone.
+	 * @return A shallow copy.
 	 */
-	public <S extends T> S cloneIntoSubclass(Class<S> subclass) {
-		S clone = Instantiator.of(subclass).instantiate();
-		return cloneInto(clone);
+	public <S extends T> S copyIntoSubclass(Class<S> subclass) {
+		S copy = Instantiator.of(subclass).instantiate();
+		return copyInto(copy);
 	}
 	
 	/**
-	 * Creates a clone of the wrapped object, where the clone's type is an
+	 * Creates a copy of the wrapped object, where the copy type is an
 	 * anonymous subclass of the wrapped object's class.
 	 * 
-	 * Note: it does a "shallow" clone. Reference fields are copied, not cloned
+	 * Note: it does a "shallow" copy. Reference fields are not copied
 	 * recursively.
 	 * 
-	 * @return A shallow clone.
+	 * @return A shallow copy.
 	 */
-	public T cloneIntoAnonymousSubclass() {
-		T clone = Instantiator.of(type).instantiateAnonymousSubclass();
-		return cloneInto(clone);
+	public T copyIntoAnonymousSubclass() {
+		T copy = Instantiator.of(type).instantiateAnonymousSubclass();
+		return copyInto(copy);
 	}
 
-	private <S> S cloneInto(S clone) {
+	private <S> S copyInto(S copy) {
 		for (Field field : new FieldIterable(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
-			accessor.copyTo(clone);
+			accessor.copyTo(copy);
 		}
-		return clone;
+		return copy;
 	}
 	
 	/**
