@@ -36,17 +36,17 @@ public class ObjectAccessorScramblingTest {
 	@Test
 	public void scramble() {
 		Point original = new Point(2, 3);
-		Point clone = clone(original);
+		Point copy = copy(original);
 		
-		assertTrue(original.equals(clone));
-		scramble(clone);
-		assertFalse(original.equals(clone));
+		assertTrue(original.equals(copy));
+		scramble(copy);
+		assertFalse(original.equals(copy));
 	}
 	
 	@Test
 	public void deepScramble() {
 		Point3D modified = new Point3D(2, 3, 4);
-		Point3D reference = clone(modified);
+		Point3D reference = copy(modified);
 		
 		scramble(modified);
 		
@@ -58,7 +58,7 @@ public class ObjectAccessorScramblingTest {
 	@Test
 	public void shallowScramble() {
 		Point3D modified = new Point3D(2, 3, 4);
-		Point3D reference = clone(modified);
+		Point3D reference = copy(modified);
 		
 		ObjectAccessor.of(modified).shallowScramble(prefabValues);
 		
@@ -109,8 +109,8 @@ public class ObjectAccessorScramblingTest {
 		assertFalse(before.equals(foo.p));
 	}
 
-	private <T> T clone(T object) {
-		return ObjectAccessor.of(object).clone();
+	private <T> T copy(T object) {
+		return ObjectAccessor.of(object).copy();
 	}
 	
 	private void scramble(Object object) {
