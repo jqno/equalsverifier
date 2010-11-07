@@ -76,7 +76,7 @@ class ExamplesChecker<T> implements Checker {
 	}
 
 	private void checkSingle(T reference) {
-		final T copy = ObjectAccessor.of(reference, type).clone();
+		final T copy = ObjectAccessor.of(reference, type).copy();
 		
 		checkReflexivity(reference);
 		checkSymmetryEquals(reference, copy);

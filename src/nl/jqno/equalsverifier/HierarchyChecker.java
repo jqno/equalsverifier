@@ -78,14 +78,14 @@ class HierarchyChecker<T> implements Checker {
 			return;
 		}
 
-		Object equalSuper = ObjectAccessor.of(reference, superclass).clone();
+		Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
 		
 		if (hasRedefinedSuperclass || usingGetClass) {
 			assertFalse("Redefined superclass:\n  " + reference + "\nmay not equal superclass instance\n  " + equalSuper + "\nbut it does.",
 					reference.equals(equalSuper) || equalSuper.equals(reference));
 		}
 		else {
-			T shallow = referenceAccessor.clone();
+			T shallow = referenceAccessor.copy();
 			ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
 			
 			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n  " + equalSuper,
@@ -106,7 +106,7 @@ class HierarchyChecker<T> implements Checker {
 			return;
 		}
 		
-		T equalSub = referenceAccessor.cloneIntoAnonymousSubclass();
+		T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 		
 		if (usingGetClass) {
 			assertFalse("Subclass: object is equal to an instance of a trivial subclass with equal fields:\n " + reference + "\nThis should not happen when using getClass().",
@@ -127,7 +127,7 @@ class HierarchyChecker<T> implements Checker {
 			fail("Subclass: " + type.getSimpleName() + " has a final equals method.\nNo need to supply a redefined subclass.");
 		}
 
-		T redefinedSub = referenceAccessor.cloneIntoSubclass(redefinedSubclass);
+		T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
 		assertFalse("Subclass:\n  " + reference + "\nequals subclass instance\n  " + redefinedSub,
 				reference.equals(redefinedSub));
 	}
