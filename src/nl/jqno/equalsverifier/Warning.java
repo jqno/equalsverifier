@@ -32,8 +32,8 @@ public enum Warning {
 	 * be used in collections.
 	 * 
 	 * However, sometimes an external library requires that fields be
-	 * non-final. An example of this are Java Beans. In such a case, this
-	 * method can be used to prevent {@link EqualsVerifier} from checking for
+	 * non-final. An example of this are Java Beans. In such a case, suppress
+	 * this warning to prevent {@link EqualsVerifier} from checking for
 	 * non-final fields.
 	 */
 	NONFINAL_FIELDS,
@@ -44,9 +44,8 @@ public enum Warning {
 	 * 
 	 * Sometimes the constructor of a class makes sure no field can be null.
 	 * If this is the case, and if the fields cannot be made null later in the
-	 * lifecycle of the class by setters or other methods, the
-	 * {@code fieldsAreNeverNull} method can be used to disable the check for
-	 * {@link NullPointerException}.
+	 * lifecycle of the class by setters or other methods, suppress this
+	 * warning to disable the check for {@link NullPointerException}.
 	 */
 	NULL_FIELDS,
 	
@@ -59,8 +58,8 @@ public enum Warning {
 	 * equal to any instance of T, to make sure that subclasses that can
 	 * redefine {@code equals} or {@code hashCode} don't break the contract.
 	 * 
-	 * Some may find that too strict for their liking; this method disables
-	 * that test.
+	 * Some may find that too strict for their liking; suppressing this warning
+	 * disables that test.
 	 * 
 	 * @see EqualsVerifier#withRedefinedSubclass(Class)
 	 */
