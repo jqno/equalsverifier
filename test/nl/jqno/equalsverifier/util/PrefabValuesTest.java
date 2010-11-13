@@ -67,11 +67,6 @@ public class PrefabValuesTest {
 		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=InternalException.class)
-	public void putTheSameKeyTwice() {
-		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
-	}
-	
 	@Test
 	public void putAll() {
 		PrefabValues q = new PrefabValues();
@@ -93,6 +88,13 @@ public class PrefabValuesTest {
 	@Test
 	public void getBlack() {
 		assertEquals(EXISTING_BLACK_VALUE, p.getBlack(EXISTING_KEY));
+	}
+	
+	@Test
+	public void overwriteKey() {
+		p.put(EXISTING_KEY, "another red one", "another black one");
+		assertEquals("another red one", p.getRed(EXISTING_KEY));
+		assertEquals("another black one", p.getBlack(EXISTING_KEY));
 	}
 	
 	@Test
