@@ -65,4 +65,10 @@ public class ConstructorsTest {
 				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
 				.verify();
 	}
+	
+	@Test
+	public void overwriteExistingPrefabValue() {
+		EqualsVerifier.forClass(FinalPoint.class)
+				.withPrefabValues(Object.class, new Object(), new Object());
+	}
 }

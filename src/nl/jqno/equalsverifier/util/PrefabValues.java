@@ -44,9 +44,6 @@ public class PrefabValues {
 		if (red == null || black == null) {
 			throw new InternalException("One or both values are null.");
 		}
-		if (values.containsKey(type)) {
-			throw new InternalException("Type " + type + " is already present.");
-		}
 		if (red.equals(black)) {
 			throw new InternalException("Both values are equal.");
 		}
