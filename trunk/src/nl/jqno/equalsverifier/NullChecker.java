@@ -24,7 +24,7 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 
-public class NullChecker<T> implements Checker {
+class NullChecker<T> implements Checker {
 	private ClassAccessor<T> classAccessor;
 	private EnumSet<Warning> warningsToSuppress;
 

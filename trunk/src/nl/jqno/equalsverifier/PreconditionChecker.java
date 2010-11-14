@@ -19,7 +19,7 @@ import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 
 import java.util.List;
 
-public class PreconditionChecker<T> implements Checker {
+class PreconditionChecker<T> implements Checker {
 	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
