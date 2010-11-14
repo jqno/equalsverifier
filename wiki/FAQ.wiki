@@ -36,30 +36,8 @@ If you run into a situation where !EqualsVerifier can't help you, you are probab
 (And even in the first two cases, !EqualsVerifier can help creating an initial working implementation.)
 
 =Error messages=
-==Abstract delegation==
-<pre>
-Abstract delegation: !MyClass's equals method delegates to an abstract method
-Abstract delegation: !MyClass's hashCode method delegates to an abstract method
-</pre>
-
-This error can occur when the class under test, one of its fields, or its superclass, is abstract, and their `equals` or `hashCode` method calls an abstract method.
-
-!EqualsVerifier creates instances of the class under test and its superclass and repeatedly calls their `equals` and `hashCode` methods. However, it can't create implementations of abstract methods. The "Abstract delegation" error therefore occurs when calling `equals` or `hashCode` would throw an `AbstractMethodError`.
-
-If one of the fields has an abstract type, the error can be avoided by calling `withPrefabValues` for that type. For other cases, there is currently no solution. Try rewriting the class so that `equals` and `hashCode` can use fields, instead of the abstract method.
-
-==Non-nullity: equals/hashCode/toString throws !NullPointerException==
-This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
-{{{
-return someField.equals(other.someField);
-}}}
-It will throw a `NullPointerException` if `someField` is null. This can be avoided in two ways.
-
- # You can add a null check, like so:
- {{{
- return someField == null ? other.someField == null : someField.equals(other.someField);
- }}}
- # If you're certain the field can never be null (for instance, because the class's constructor explicitly checks for it), you can suppress `Warning.NULL_FIELDS` in your call to !EqualsVerifier.
+==Can you explain the error message I just got from !EqualsVerifier?==
+Take a look at [ErrorMessages the Error Messages page].
 
 =Build=
 ==Can I use !EqualsVerifier with Maven?==
