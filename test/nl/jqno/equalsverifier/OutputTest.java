@@ -44,7 +44,6 @@ public class OutputTest {
 	@Test
 	public void assertionError() {
 		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
-		ev.verify();
 		assertFailure(ev, array(SEE_ALSO, WIKIPAGE_URL), BLACKLISTED_EXCEPTIONS);
 	}
 	
