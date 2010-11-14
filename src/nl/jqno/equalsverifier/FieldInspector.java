@@ -22,7 +22,7 @@ import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
-public class FieldInspector<T> {
+class FieldInspector<T> {
 	private final ClassAccessor<T> classAccessor;
 
 	public FieldInspector(ClassAccessor<T> classAccessor) {
