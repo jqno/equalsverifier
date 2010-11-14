@@ -98,7 +98,8 @@ limitations under the License.
 				source="1.5"
 				target="1.5"
 				debug="on"
-				encoding="utf-8">
+				encoding="utf-8"
+				includeantruntime="false">
 			<classpath>
 				<path refid="ivy.runtime.path" />
 			</classpath>
@@ -115,7 +116,8 @@ limitations under the License.
 				source="1.5"
 				target="1.5"
 				debug="on"
-				encoding="utf-8">
+				encoding="utf-8"
+				includeantruntime="false">
 			<classpath>
 				<path refid="project.classpath" />
 				<path refid="ivy.test.path" />
