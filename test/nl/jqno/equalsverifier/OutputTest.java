@@ -16,7 +16,9 @@
 package nl.jqno.equalsverifier;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -24,13 +26,58 @@ import java.io.PrintStream;
 import java.util.Arrays;
 
 import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.util.InternalException;
+import nl.jqno.equalsverifier.util.RecursionException;
+import nl.jqno.equalsverifier.util.RecursiveTypeHelper.Node;
 
 import org.junit.Test;
 
 public class OutputTest {
-	@Test(expected=UnsupportedOperationException.class)
+	private static final String SEE_ALSO = "For more information, go to";
+	private static final String WIKIPAGE_URL = "http://code.google.com/p/equalsverifier/wiki/ErrorMessages";
+	
+	private static final String[] BLACKLISTED_EXCEPTIONS = array(
+				AssertionError.class.getSimpleName(),
+				InternalException.class.getSimpleName(),
+				RecursionException.class.getSimpleName());
+	
+	@Test
+	public void assertionError() {
+		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
+		ev.verify();
+		assertFailure(ev, array(SEE_ALSO, WIKIPAGE_URL), BLACKLISTED_EXCEPTIONS);
+	}
+	
+	@Test
+	public void internalError() {
+		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
+		assertFailure(ev, array(SEE_ALSO, WIKIPAGE_URL), BLACKLISTED_EXCEPTIONS);
+	}
+
+	@Test
 	public void anotherException() {
-		EqualsVerifier.forClass(ExceptionThrower.class).verify();
+		EqualsVerifier<ExceptionThrower> ev = EqualsVerifier.forClass(ExceptionThrower.class);
+		assertFailure(ev, array(SEE_ALSO, UnsupportedOperationException.class.getName(),  WIKIPAGE_URL), array("null"));
+	}
+	
+	private static String[] array(String... strings) {
+		return strings;
+	}
+	
+	private void assertFailure(EqualsVerifier<?> ev, String[] contains, String[] doesNotContain) {
+		try {
+			ev.verify();
+			fail("No exception thrown");
+		}
+		catch (Throwable e) {
+			String message = "" + e.getMessage();
+			for (String s : contains) {
+				assertTrue("<<" + message + ">> doesn't contain " + s, message.contains(s));
+			}
+			for (String s : doesNotContain) {
+				assertFalse("<<" + message + ">> contains + " + s, message.contains(s));
+			}
+		}
 	}
 	
 	@Test
