@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.util.ArrayList;
@@ -308,31 +307,48 @@ public final class EqualsVerifier<T> {
 		}
 	}
 
-	private void performVerification() {
-		Checker signatureChecker = new SignatureChecker<T>(type);
-		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
-		FieldsChecker<T> fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
-		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
-		
-		signatureChecker.check();
-		abstractDelegationChecker.check();
-		
-		ensureUnequalExamples();
-		
-		fieldsChecker.checkNull();
-		verifyPreconditions();
-		examplesChecker.check();
-		hierarchyChecker.check();
-		
-		fieldsChecker.check();
-	}
-
 	private void handleError(Throwable e) {
 		if (verbose) {
 			e.printStackTrace();
 		}
 		fail(e.getMessage());
+	}
+
+	private void performVerification() {
+		verifyWithoutExamples();
+		ensureUnequalExamples();
+		verifyWithExamples();
+	}
+
+	private void verifyWithoutExamples() {
+		Checker signatureChecker = new SignatureChecker<T>(type);
+		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
+		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress);
+		
+		signatureChecker.check();
+		abstractDelegationChecker.check();
+		nullChecker.check();
+	}
+	
+	private void ensureUnequalExamples() {
+		if (unequalExamples.size() > 0) {
+			return;
+		}
+		
+		unequalExamples.add(classAccessor.getRedObject());
+		unequalExamples.add(classAccessor.getBlackObject());
+	}
+
+	private void verifyWithExamples() {
+		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
+		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
+		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
+		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
+
+		preconditionChecker.check();
+		examplesChecker.check();
+		hierarchyChecker.check();
+		fieldsChecker.check();
 	}
 	
 	private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
@@ -372,27 +388,6 @@ public final class EqualsVerifier<T> {
 				list.add(e);
 			}
 		}
-	}
-
-	private void verifyPreconditions() {
-		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
-		for (T example : equalExamples) {
-			assertTrue("Precondition:\n  " + equalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
-					type.isAssignableFrom(example.getClass()));
-		}
-		for (T example : unequalExamples) {
-			assertTrue("Precondition:\n  " + unequalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
-					type.isAssignableFrom(example.getClass()));
-		}
-	}
-	
-	private void ensureUnequalExamples() {
-		if (unequalExamples.size() > 0) {
-			return;
-		}
-		
-		unequalExamples.add(classAccessor.getRedObject());
-		unequalExamples.add(classAccessor.getBlackObject());
 	}
 
 	/**
