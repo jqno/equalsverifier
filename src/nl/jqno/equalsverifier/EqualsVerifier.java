@@ -300,18 +300,27 @@ public final class EqualsVerifier<T> {
 			performVerification();
 		}
 		catch (AssertionError e) {
-			handleError(e);
+			handleError(e, false);
 		}
 		catch (InternalException e) {
-			handleError(e);
+			handleError(e, false);
+		}
+		catch (Throwable e) {
+			handleError(e, true);
 		}
 	}
 
-	private void handleError(Throwable e) {
+	private void handleError(Throwable e, boolean printExceptionName) {
 		if (verbose) {
 			e.printStackTrace();
 		}
-		fail(e.getMessage());
+		
+		String message = "";
+		message += printExceptionName ? e.getClass().getName() + ": " : "";
+		message += e.getMessage() == null ? "" : e.getMessage();
+		message += "\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages";
+		
+		fail(message);
 	}
 
 	private void performVerification() {

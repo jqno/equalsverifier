@@ -16,7 +16,7 @@
 package nl.jqno.equalsverifier.util;
 
 public class RecursiveTypeHelper {
-	static final class Node {
+	public static final class Node {
 		Node node;
 	}
 	
