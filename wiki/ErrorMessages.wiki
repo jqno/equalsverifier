@@ -4,8 +4,10 @@
 <wiki:toc max_depth="2" />
 
 =Introduction=
-
 Did !EqualsVerifier give an error message that you didn't understand? I do my best, but unfortunately Java stacktraces leave little room for explanation. This page should help make sense of some of !EqualsVerifier's error messages.
+
+==I can't find my error message in the list below==
+Please file [http://code.google.com/p/equalsverifier/issues/entry an issue] in the Issue tracker, and I'll add it to this page as soon as possible.
 
 =Error messages=
 
