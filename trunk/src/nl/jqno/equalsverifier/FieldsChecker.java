@@ -20,13 +20,11 @@ import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import java.util.EnumSet;
 
+import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 class FieldsChecker<T> implements Checker {
@@ -40,97 +38,18 @@ class FieldsChecker<T> implements Checker {
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 	}
 	
-	public void checkNull() {
-		if (warningsToSuppress.contains(Warning.NULL_FIELDS)) {
-			return;
-		}
-		
-		check(new NullPointerExceptionFieldCheck());
-	}
-	
 	@Override
 	public void check() {
-		check(new ArrayFieldCheck());
-		check(new SignificanceFieldCheck());
-		check(new FloatAndDoubleFieldCheck());
+		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
+		inspector.check(new ArrayFieldCheck());
+		inspector.check(new SignificanceFieldCheck());
+		inspector.check(new FloatAndDoubleFieldCheck());
 		
 		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
-			check(new MutableStateFieldCheck());
+			inspector.check(new MutableStateFieldCheck());
 		}
 		
-		check(new TransitiveFieldsCheck());
-	}
-	
-	private void check(FieldCheck check) {
-		ObjectAccessor<T> reference = classAccessor.getRedAccessor();
-		ObjectAccessor<T> changed = classAccessor.getRedAccessor();
-
-		for (Field field : new FieldIterable(classAccessor.getType())) {
-			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
-		}
-	}
-
-	private class NullPointerExceptionFieldCheck implements FieldCheck {
-		@Override
-		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			Field field = referenceAccessor.getField();
-			if (field.getType().isPrimitive()) {
-				return;
-			}
-			Object reference = referenceAccessor.getObject();
-			Object changed = changedAccessor.getObject();
-			
-			changedAccessor.nullField();
-			
-			try {
-				reference.equals(changed);
-			}
-			catch (NullPointerException e) {
-				npeThrown("equals");
-			}
-			catch (Exception e) {
-				exceptionThrown("equals", field, e);
-			}
-			try {
-				changed.equals(reference);
-			}
-			catch (NullPointerException e) {
-				npeThrown("equals");
-			}
-			catch (Exception e) {
-				exceptionThrown("equals", field, e);
-			}
-			
-			try {
-				changed.hashCode();
-			}
-			catch (NullPointerException e) {
-				npeThrown("hashCode");
-			}
-			catch (Exception e) {
-				exceptionThrown("hashCode", field, e);
-			}
-			
-			try {
-				changed.toString();
-			}
-			catch (NullPointerException e) {
-				npeThrown("toString");
-			}
-			catch (Exception e) {
-				exceptionThrown("toString", field, e);
-			}
-			
-			referenceAccessor.nullField();
-		}
-
-		private void npeThrown(String method) {
-			fail("Non-nullity: " + method + " throws NullPointerException.");
-		}
-		
-		private void exceptionThrown(String method, Field field, Exception e) {
-			fail(method + " throws " + e.getClass().getSimpleName() + " when field " + field.getName() + " is null.");
-		}
+		inspector.check(new TransitiveFieldsCheck());
 	}
 	
 	private class SignificanceFieldCheck implements FieldCheck {
@@ -267,9 +186,5 @@ class FieldsChecker<T> implements Checker {
 			
 			referenceAccessor.changeField(prefabValues);
 		}
-	}
-	
-	private interface FieldCheck {
-		void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
 	}
 }
