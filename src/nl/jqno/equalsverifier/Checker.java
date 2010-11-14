@@ -15,6 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-public interface Checker {
+interface Checker {
 	public void check();
 }
