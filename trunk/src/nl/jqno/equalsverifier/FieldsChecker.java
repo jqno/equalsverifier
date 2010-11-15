@@ -41,6 +41,7 @@ class FieldsChecker<T> implements Checker {
 	@Override
 	public void check() {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
+		
 		inspector.check(new ArrayFieldCheck());
 		inspector.check(new SignificanceFieldCheck());
 		inspector.check(new FloatAndDoubleFieldCheck());
@@ -49,7 +50,9 @@ class FieldsChecker<T> implements Checker {
 			inspector.check(new MutableStateFieldCheck());
 		}
 		
-		inspector.check(new TransitiveFieldsCheck());
+		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
+			inspector.check(new TransitiveFieldsCheck());
+		}
 	}
 	
 	private class SignificanceFieldCheck implements FieldCheck {
