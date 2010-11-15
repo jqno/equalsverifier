@@ -6,7 +6,15 @@ What's new?
 
 Well, you can now ...
 
-== Version 0.6.5 ===
+== Version 0.7 ==
+  * ... test `equals` methods that use a call to `getClass()`, instead of an `instanceof` check, to determine the type of the object passed in, by calling the `#useGetClass()` method on `EqualsVerifier`.
+  * ... get a warning when you use a transient field in your `equals` or `hashCode` method. Don't worry; you can suppress this warning too.
+  * ... stop worrying about adding prefab values for certain Java API classes, like `Data`, `GregorianCalendar`, or `Pattern`, to avoid that pesky recursion warning.
+  * ... get a link to the [ErrorMessages Error messages] page to get more help, when !EqualsVerifier finds an error.
+  * ... enjoy many javadoc improvements (including the one in [http://code.google.com/p/equalsverifier/issues/detail?id=32 Issue 32]).
+  * Also, the back end is almost completely re-written.
+
+== Version 0.6.5 ==
   * ... use `EqualsVerifier` on classes with fields of a wide variety of Java API types, without getting 'Recursive datastructure' errors all the time. ([http://code.google.com/p/equalsverifier/issues/detail?id=30 Issue 30])
   * ... get a more helpful error message when `equals`, `hashCode` or `toString` throws something other than a `NullPointerException` when one of the fields in `null`. ([http://code.google.com/p/equalsverifier/issues/detail?id=31 Issue 31])
 
