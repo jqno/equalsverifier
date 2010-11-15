@@ -25,6 +25,13 @@ public class TransientFieldsTest {
 		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
 	}
 	
+	@Test
+	public void suppressTransienceWarning() {
+		EqualsVerifier.forClass(TransientFields.class)
+				.suppress(Warning.TRANSIENT_FIELDS)
+				.verify();
+	}
+	
 	static final class TransientFields {
 		private final int i;
 		private final transient int j;
