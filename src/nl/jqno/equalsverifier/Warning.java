@@ -63,5 +63,19 @@ public enum Warning {
 	 * 
 	 * @see EqualsVerifier#withRedefinedSubclass(Class)
 	 */
-	STRICT_INHERITANCE;
+	STRICT_INHERITANCE,
+	
+	/**
+	 * Disables the check that transient fields not be part of the
+	 * {@code equals} contract.
+	 * <p>
+	 * {@link EqualsVerifier}'s standard behaviour is to disallow transient
+	 * fields being used in {@code equals} and {@code hashCode} methods, since
+	 * these fields may not be restored to their original state after
+	 * deserialization, which would break {@code equals}.
+	 * <p>
+	 * If measures are taken that this will never happen, this warning can be
+	 * suppressed to disable {@link EqualsVerifier}'s transience test.
+	 */
+	TRANSIENT_FIELDS;
 }
