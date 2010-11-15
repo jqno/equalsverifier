@@ -55,11 +55,11 @@ How to fix this? It's easy. Just add a call to `withPrefabValues()`:
 
 {{{
 EqualsVerifier.forClass(StringReference.class)
-        .withPrefabValues(Object.class, "string", "another string")
+        .withPrefabValues(AtomicReference.class, new AtomicReference<String>("string"), new AtomicReference<String>("another string"))
         .verify();
 }}}
 
-!EqualsVerifier will always look inside the pool of prefabricated values before building its own. So in this case, when it looks for instances of `Object`, it will find two `String`s. Problem solved!
+!EqualsVerifier will always look inside the pool of prefabricated values before building its own. So in this case, when it looks for instances of `AtomicReference`, it will find two `AtomicReference`s with `String`s already filled in. Problem solved!
 
 ==Non-nullity: equals/hashCode/toString throws !NullPointerException==
 This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
