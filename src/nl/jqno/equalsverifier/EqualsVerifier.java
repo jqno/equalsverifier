@@ -59,7 +59,16 @@ import nl.jqno.equalsverifier.util.PrefabValuesFactory;
  * EqualsVerifier.forClass(My.class).verify();
  * }</pre>
  * 
- * Or, with some warnings suppressed:
+ * Or, if you prefer to use a {@code getClass()} check instead of an
+ * {@code instanceof} check in the body of your {@code equals} method:
+ * 
+ * <pre>{@code
+ * EqualsVerifier.forClass(My.class)
+ *     .useGetClass()
+ *     .verify();
+ * }</pre>
+ * 
+ * With some warnings suppressed:
  * 
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
@@ -79,12 +88,12 @@ import nl.jqno.equalsverifier.util.PrefabValuesFactory;
  * - The {@code hashCode} contract.<br>
  * - That {@code equals} and {@code hashCode} be defined in terms of
  * the same fields.<br>
- * - Final-ness of the fields in terms of which {@code equals} and
- * {@code hashCode} are defined. (Optional)<br>
  * - The finality of the fields in terms of which {@code equals} and
  * {@code hashCode} are defined. (Optional)<br>
- * - Finality of the class under test and of the {@code equals} method
- * itself, when applicable.
+ * - The finality of the class under test and of the {@code equals} method
+ * itself, when applicable.<br>
+ * - That transient fields not be included in the {@code equals} contract for
+ * the class. (Optional)
  * <p>
  * Dependencies:<br>
  * - objenesis 1.1: http://code.google.com/p/objenesis/<br>
