@@ -97,7 +97,7 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
-	public void instantiateMapImplementations() {
+	public void instantiateCollectionImplementations() {
 		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues).getRedObject();
 	}
 	
