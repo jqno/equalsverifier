@@ -35,6 +35,12 @@ If you run into a situation where !EqualsVerifier can't help you, you are probab
 
 (And even in the first two cases, !EqualsVerifier can help creating an initial working implementation.)
 
+==How should I write a good `equals` method?==
+By far the best explanation on the subject, in my opinion, can be found in Chapter 28 of _Programming in Scala_ by Martin Odersky, Bill Venners and Lex Spoon. The authors have adapted the chapter to Java and placed it online [http://www.artima.com/lejava/articles/equality.html here].
+
+Another excellent source, of course, is Items 8 and 9 from Josh Bloch's _Effective Java, Second Edition_.
+
+
 =Error messages=
 ==Can you explain the error message I just got from !EqualsVerifier?==
 Take a look at [ErrorMessages the Error Messages page].
