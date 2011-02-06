@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
-public class FinalMethodsPoint {
-	private final int x;
-	private final int y;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
-	public FinalMethodsPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
+public class PointContainer {
+	private final Point point;
+	
+	public PointContainer(Point point) {
+		this.point = point;
+	}
+	
+	public Point getPoint() {
+		return point;
 	}
 	
 	@Override
-	public final boolean equals(Object obj) {
-		if (!(obj instanceof FinalMethodsPoint)) {
+	public boolean equals(Object obj) {
+		if (!(obj instanceof PointContainer)) {
 			return false;
 		}
-		FinalMethodsPoint p = (FinalMethodsPoint)obj;
-		return p.x == x && p.y == y;
+		PointContainer other = (PointContainer)obj;
+		return nullSafeEquals(point, other.point);
 	}
 	
 	@Override
-	public final int hashCode() {
-		return x + (31 * y);
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+	public int hashCode() {
+		return nullSafeHashCode(point);
 	}
 }

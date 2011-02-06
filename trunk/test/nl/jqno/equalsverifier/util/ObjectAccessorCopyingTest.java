@@ -21,11 +21,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.points.ColorPoint3D;
-import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.points.Point3D;
-import nl.jqno.equalsverifier.points.PointContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.testhelpers.points.ColorPoint3D;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.points.Point3D;
+import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
 
 import org.junit.Test;
 

@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
-import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
-import nl.jqno.equalsverifier.points.Color;
-import nl.jqno.equalsverifier.points.FinalMethodsPoint;
-import nl.jqno.equalsverifier.points.Point;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.testhelpers.points.Color;
+import nl.jqno.equalsverifier.testhelpers.points.FinalMethodsPoint;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 

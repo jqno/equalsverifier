@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2009-2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
-public class Point {
-	public final int x;
-	public final int y;
-	
-	public Point(int x, int y) {
-		this.x = x;
-		this.y = y;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+
+public final class CanEqualColorPoint extends CanEqualPoint {
+	private final Color color;
+
+	public CanEqualColorPoint(int x, int y, Color color) {
+		super(x, y);
+		this.color = color;
+	}
+
+	@Override
+	public boolean canEqual(Object obj) {
+		return obj instanceof CanEqualColorPoint;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Point)) {
+		if (!(obj instanceof CanEqualColorPoint)) {
 			return false;
 		}
-		Point p = (Point)obj;
-		return p.x == x && p.y == y;
+		CanEqualColorPoint p = (CanEqualColorPoint)obj;
+		return p.canEqual(this) && super.equals(p) && color == p.color;
 	}
 	
 	@Override
 	public int hashCode() {
-		return x + (31 * y);
+		return nullSafeHashCode(color) + (31 * super.hashCode());
 	}
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+		return super.toString() + "," + color;
 	}
 }

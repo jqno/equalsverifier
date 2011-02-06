@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
 import org.junit.Test;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2009 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
-import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
-import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
-
-public class PointContainer {
-	private final Point point;
+public class Point {
+	public final int x;
+	public final int y;
 	
-	public PointContainer(Point point) {
-		this.point = point;
-	}
-	
-	public Point getPoint() {
-		return point;
+	public Point(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof PointContainer)) {
+		if (!(obj instanceof Point)) {
 			return false;
 		}
-		PointContainer other = (PointContainer)obj;
-		return nullSafeEquals(point, other.point);
+		Point p = (Point)obj;
+		return p.x == x && p.y == y;
 	}
 	
 	@Override
 	public int hashCode() {
-		return nullSafeHashCode(point);
+		return x + (31 * y);
+	}
+	
+	@Override
+	public String toString() {
+		return getClass().getSimpleName() + ":" + x + "," + y;
 	}
 }
