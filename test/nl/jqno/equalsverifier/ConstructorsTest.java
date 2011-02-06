@@ -15,12 +15,12 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
-import nl.jqno.equalsverifier.points.CanEqualColorPoint;
-import nl.jqno.equalsverifier.points.CanEqualPoint;
-import nl.jqno.equalsverifier.points.Color;
-import nl.jqno.equalsverifier.points.FinalPoint;
-import nl.jqno.equalsverifier.points.Point;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.testhelpers.points.CanEqualColorPoint;
+import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.points.Color;
+import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 

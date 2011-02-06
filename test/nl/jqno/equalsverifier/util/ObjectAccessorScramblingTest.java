@@ -18,9 +18,9 @@ package nl.jqno.equalsverifier.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.points.Point3D;
-import nl.jqno.equalsverifier.util.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.StaticFinalContainer;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.points.Point3D;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -23,14 +23,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.util.TypeHelper.DifferentAccessModifiersFieldContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.DifferentAccessModifiersSubFieldContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.EmptySubFieldContainer;
-import nl.jqno.equalsverifier.util.TypeHelper.Interface;
-import nl.jqno.equalsverifier.util.TypeHelper.NoFields;
-import nl.jqno.equalsverifier.util.TypeHelper.NoFieldsSubWithFields;
-import nl.jqno.equalsverifier.util.TypeHelper.Outer;
-import nl.jqno.equalsverifier.util.TypeHelper.SubEmptySubFieldContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.DifferentAccessModifiersFieldContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.DifferentAccessModifiersSubFieldContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.EmptySubFieldContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFields;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.Outer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubEmptySubFieldContainer;
 
 import org.junit.Test;
 

@@ -20,8 +20,8 @@ import static org.junit.Assert.assertSame;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.points.PointContainer;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
 
 import org.junit.Test;
 

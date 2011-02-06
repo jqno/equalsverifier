@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
-import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
-import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 import java.util.Calendar;
 import java.util.Date;
