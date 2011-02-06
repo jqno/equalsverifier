@@ -13,17 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.testhelpers;
 
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.both;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 import org.hamcrest.Matcher;
 import org.junit.internal.matchers.CombinableMatcher;
 
-public class Helper {
+public class Util {
 	public static void assertFailure(EqualsVerifier<?> equalsVerifier, String message, String... more) {
 		try {
 			equalsVerifier.verify();

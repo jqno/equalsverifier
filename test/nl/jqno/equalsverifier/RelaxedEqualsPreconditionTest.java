@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
-import nl.jqno.equalsverifier.points.Multiple;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.testhelpers.points.Multiple;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
-import static nl.jqno.equalsverifier.Helper.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
 	private final Color color;

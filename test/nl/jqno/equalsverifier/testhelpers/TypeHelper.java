@@ -12,9 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.testhelpers;
 
-import static nl.jqno.equalsverifier.Helper.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 
 import java.text.DateFormat;
 import java.util.Arrays;
@@ -48,14 +48,14 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
-import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 public class TypeHelper {
 	private static final Object OBJECT = new Object();
 	
-	static enum Enum { FIRST, SECOND }
+	public static enum Enum { FIRST, SECOND }
 	
-	static final class AllTypesContainer {
+	public static final class AllTypesContainer {
 		boolean _boolean = false;
 		byte _byte = 0;
 		char _char = '\u0000';
@@ -112,7 +112,7 @@ public class TypeHelper {
 		}
 	}
 	
-	static final class AllArrayTypesContainer {
+	public static final class AllArrayTypesContainer {
 		boolean[] booleans = { true };
 		byte[] bytes = { 1 };
 		char[] chars = { 'a' };
@@ -169,7 +169,7 @@ public class TypeHelper {
 		}
 	}
 	
-	static class RecursiveApiClassesContainer {
+	public static class RecursiveApiClassesContainer {
 		Calendar calendar;
 		Date date;
 		DateFormat dateFormat;
@@ -181,7 +181,7 @@ public class TypeHelper {
 		TimeZone timeZone;
 	}
 	
-	static class AllRecursiveCollectionImplementationsContainer {
+	public static class AllRecursiveCollectionImplementationsContainer {
 		CopyOnWriteArrayList<?> copyOnWriteArrayList;
 		LinkedList<?> linkedList;
 		
@@ -208,7 +208,7 @@ public class TypeHelper {
 		SynchronousQueue<?> synchronousQueue;
 	}
 	
-	static class DifferentAccessModifiersFieldContainer {
+	public static class DifferentAccessModifiersFieldContainer {
 		@SuppressWarnings("unused")
 		private final int i = 0;
 		final int j = 0;
@@ -221,7 +221,7 @@ public class TypeHelper {
 		public static final int L = 0;
 	}
 	
-	static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
+	public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
 		@SuppressWarnings("unused")
 		private final String a = "";
 		final String b = "";
@@ -229,56 +229,56 @@ public class TypeHelper {
 		public final String d = "";
 	}
 
-	static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}
+	public static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}
 	
-	static class SubEmptySubFieldContainer extends EmptySubFieldContainer {
+	public static class SubEmptySubFieldContainer extends EmptySubFieldContainer {
 		public long field = 0;
 	}
 
-	static interface Interface {}
+	public static interface Interface {}
 	
-	static abstract class AbstractClass {
+	public static abstract class AbstractClass {
 		int field;
 	}
 	
-	static class Outer {
-		class Inner {
-			Outer getOuter() {
+	public static class Outer {
+		public class Inner {
+			public Outer getOuter() {
 				return Outer.this;
 			}
 		}
 	}
 	
-	static final class InterfaceContainer {
-		Interface field;
+	public static final class InterfaceContainer {
+		public Interface field;
 	}
 	
-	static final class AbstractClassContainer {
-		AbstractClass field;
+	public static final class AbstractClassContainer {
+		public AbstractClass field;
 	}
 	
-	static final class AbstractAndInterfaceArrayContainer {
-		AbstractClass[] abstractClasses = new AbstractClass[] { null };
-		Interface[] interfaces = new Interface[] { null };
+	public static final class AbstractAndInterfaceArrayContainer {
+		public AbstractClass[] abstractClasses = new AbstractClass[] { null };
+		public Interface[] interfaces = new Interface[] { null };
 	}
 
-	static final class ObjectContainer {
-		Object field = new Object();
+	public static final class ObjectContainer {
+		public Object field = new Object();
 	}
 	
-	static final class FinalContainer {
+	public static final class FinalContainer {
 		final Object field = new Object();
 	}
 	
-	static final class StaticContainer {
+	public static final class StaticContainer {
 		static Object field = new Object();
 	}
 	
-	static final class TransientContainer {
+	public static final class TransientContainer {
 		transient Object field = new Object();
 	}
 	
-	static class PrivateObjectContainer {
+	public static class PrivateObjectContainer {
 		private Object field = new Object();
 		
 		public Object get() {
@@ -286,30 +286,30 @@ public class TypeHelper {
 		}
 	}
 	
-	static class ArrayContainer {
+	public static class ArrayContainer {
 		int[] field;
 	}
 	
-	static final class PrimitiveContainer {
-		int field;
+	public static final class PrimitiveContainer {
+		public int field;
 	}
 	
-	static final class StaticFinalContainer {
-		static final int CONST = 42;
-		static final Object OBJECT = new Object();
+	public static final class StaticFinalContainer {
+		public static final int CONST = 42;
+		public static final Object OBJECT = new Object();
 	}
 	
-	static class NoFields {}
+	public static class NoFields {}
 	
-	static class NoFieldsSubWithFields extends NoFields {
+	public static class NoFieldsSubWithFields extends NoFields {
 		public Object field;
 	}
 	
-	static enum OneElementEnum { ONE }
+	public static enum OneElementEnum { ONE }
 	
-	static enum EmptyEnum {}
+	public static enum EmptyEnum {}
 	
-	static final class PointArrayContainer {
-		Point[] points = { new Point(1, 2) };
+	public static final class PointArrayContainer {
+		public Point[] points = { new Point(1, 2) };
 	}
 }

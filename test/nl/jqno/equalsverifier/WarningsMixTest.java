@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.Helper.assertFailure;
-import nl.jqno.equalsverifier.points.Color;
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.testhelpers.points.Color;
 
 import org.junit.Test;
 

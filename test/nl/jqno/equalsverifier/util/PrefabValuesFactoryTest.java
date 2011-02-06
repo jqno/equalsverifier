@@ -15,22 +15,22 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import static nl.jqno.equalsverifier.Helper.containsAll;
+import static nl.jqno.equalsverifier.testhelpers.Util.containsAll;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
-import nl.jqno.equalsverifier.points.Point;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.NodeArray;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.NotRecursiveA;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeArrayA;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeArrayB;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.TwoStepNodeB;
-import nl.jqno.equalsverifier.util.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier.util.TypeHelper.Enum;
-import nl.jqno.equalsverifier.util.TypeHelper.OneElementEnum;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NodeArray;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NotRecursiveA;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeA;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeArrayA;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeArrayB;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeB;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.EmptyEnum;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.Enum;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.OneElementEnum;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Before;
 import org.junit.Test;

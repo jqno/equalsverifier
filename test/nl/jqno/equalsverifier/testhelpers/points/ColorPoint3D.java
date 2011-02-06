@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
 public final class ColorPoint3D extends Point3D {
 	final Color color;

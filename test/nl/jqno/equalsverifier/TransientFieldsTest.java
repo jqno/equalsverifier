@@ -16,7 +16,8 @@
 package nl.jqno.equalsverifier;
 
 import org.junit.Test;
-import static nl.jqno.equalsverifier.Helper.assertFailure;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
 public class TransientFieldsTest {
 	@Test

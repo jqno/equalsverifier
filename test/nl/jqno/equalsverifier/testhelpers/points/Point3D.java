@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
-public class EqualSubclassForCanEqualPoint extends CanEqualPoint {
-	public EqualSubclassForCanEqualPoint(int x, int y) {
+public class Point3D extends Point {
+	public int z;
+	
+	public Point3D(int x, int y, int z) {
 		super(x, y);
+		this.z = z;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Point3D)) {
+			return false;
+		}
+		return super.equals(obj) && ((Point3D)obj).z == z;
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode() + (31 * z);
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + "," + z;
 	}
 }

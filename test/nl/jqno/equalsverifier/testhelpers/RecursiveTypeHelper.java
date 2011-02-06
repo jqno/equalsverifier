@@ -13,45 +13,45 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.testhelpers;
 
 public class RecursiveTypeHelper {
 	public static final class Node {
 		Node node;
 	}
 	
-	static final class NodeArray {
+	public static final class NodeArray {
 		NodeArray[] nodeArrays;
 	}
 	
-	static final class TwoStepNodeA {
+	public static final class TwoStepNodeA {
 		TwoStepNodeB node;
 	}
 	
-	static final class TwoStepNodeB {
+	public static final class TwoStepNodeB {
 		TwoStepNodeA node;
 	}
 	
-	static final class TwoStepNodeArrayA {
+	public static final class TwoStepNodeArrayA {
 		TwoStepNodeArrayB[] nodes;
 	}
 	
-	static final class TwoStepNodeArrayB {
+	public static final class TwoStepNodeArrayB {
 		TwoStepNodeArrayA[] nodes;
 	}
 	
-	static final class NotRecursiveA {
+	public static final class NotRecursiveA {
 		NotRecursiveB b;
 		NotRecursiveC c;
 	}
 	
-	static final class NotRecursiveB {
+	public static final class NotRecursiveB {
 		NotRecursiveD d;
 	}
 	
-	static final class NotRecursiveC {
+	public static final class NotRecursiveC {
 		NotRecursiveD d;
 	}
 	
-	static final class NotRecursiveD {}
+	public static final class NotRecursiveD {}
 }

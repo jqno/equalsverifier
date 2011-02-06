@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.points;
+package nl.jqno.equalsverifier.testhelpers.points;
 
 public class CanEqualPoint {
 	private final int x;

@@ -25,10 +25,10 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 
-import nl.jqno.equalsverifier.points.Point;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 import nl.jqno.equalsverifier.util.InternalException;
 import nl.jqno.equalsverifier.util.RecursionException;
-import nl.jqno.equalsverifier.util.RecursiveTypeHelper.Node;
 
 import org.junit.Test;
 
