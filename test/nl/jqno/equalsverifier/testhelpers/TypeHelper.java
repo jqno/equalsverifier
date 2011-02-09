@@ -48,6 +48,10 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 public class TypeHelper {
@@ -311,5 +315,29 @@ public class TypeHelper {
 	
 	public static final class PointArrayContainer {
 		public Point[] points = { new Point(1, 2) };
+	}
+
+	@TypeAnnotationRuntimeRetention
+	public static class AnnotatedWithRuntime {}
+
+	@TypeAnnotationClassRetention
+	public static class AnnotatedWithClass {}
+	
+	@TypeAnnotationRuntimeRetention
+	@TypeAnnotationClassRetention
+	public static class AnnotatedWithBoth {}
+	
+	public static class AnnotatedFields {
+		@FieldAnnotationRuntimeRetention
+		public int runtimeRetention;
+		
+		@FieldAnnotationClassRetention
+		public int classRetention;
+		
+		@FieldAnnotationRuntimeRetention
+		@FieldAnnotationClassRetention
+		public int bothRetentions;
+		
+		public int noRetention;
 	}
 }
