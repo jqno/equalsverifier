@@ -17,9 +17,11 @@ package nl.jqno.equalsverifier.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 
 import org.junit.Test;
@@ -115,29 +117,5 @@ public class AnnotationAccessorTest {
 	private boolean findFieldAnnotationFor(Class<?> type, String fieldName, String annotationDescriptor) {
 		AnnotationAccessor accessor = new AnnotationAccessor(type);
 		return accessor.fieldHas(fieldName, annotationDescriptor);
-	}
-
-	@TypeAnnotationRuntimeRetention
-	static class AnnotatedWithRuntime {}
-
-	@TypeAnnotationClassRetention
-	static class AnnotatedWithClass {}
-	
-	@TypeAnnotationRuntimeRetention
-	@TypeAnnotationClassRetention
-	static class AnnotatedWithBoth {}
-	
-	static class AnnotatedFields {
-		@FieldAnnotationRuntimeRetention
-		int runtimeRetention;
-		
-		@FieldAnnotationClassRetention
-		int classRetention;
-		
-		@FieldAnnotationRuntimeRetention
-		@FieldAnnotationClassRetention
-		int bothRetentions;
-		
-		int noRetention;
 	}
 }
