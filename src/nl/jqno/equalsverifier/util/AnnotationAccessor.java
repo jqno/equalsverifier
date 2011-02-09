@@ -29,11 +29,22 @@ import net.sf.cglib.asm.ClassWriter;
 import net.sf.cglib.asm.FieldVisitor;
 import net.sf.cglib.asm.Type;
 
+/**
+ * Provides access to the annotations that are defined on a class
+ * and its fields.
+ * 
+ * @author JanO
+ */
 public class AnnotationAccessor {
 	private final Class<?> type;
 	private final Set<String> classAnnotations = new HashSet<String>();
 	private final Map<String, Set<String>> fieldAnnotations = new HashMap<String, Set<String>>();
 
+	/**
+	 * Constructor
+	 * 
+	 * @param type The class whose annotations need to be queried.
+	 */
 	public AnnotationAccessor(Class<?> type) {
 		this.type = type;
 		process();
@@ -44,7 +55,7 @@ public class AnnotationAccessor {
 			visitType();
 		}
 		catch (IOException e) {
-			throw new IllegalStateException(e);
+			throw new InternalException(e);
 		}
 	}
 	
@@ -59,12 +70,33 @@ public class AnnotationAccessor {
 		cr.accept(v, 0);
 	}
 	
+	/**
+	 * Determines whether {@link #type} has a particular annotation. 
+	 * 
+	 * @param annotationDescriptor The name of the annotation we want to find.
+	 * @return true if {@link #type} has an annotation with the supplied name.
+	 */
 	public boolean typeHas(String annotationDescriptor) {
 		return find(classAnnotations, annotationDescriptor);
 	}
 	
+	/**
+	 * Determines whether {@link #type} has a particular annotation on a
+	 * particular field.
+	 *  
+	 * @param fieldName The name of the field for which we want to know if it
+	 * 			has the annotation.
+	 * @param annotationDescriptor The name of the annotation we want to find.
+	 * @return true if the specified field in {@link #type} has the specified
+	 * 			annotation.
+	 * @throws InternalException if {@link #type} does not have the specified
+	 * 			field.
+	 */
 	public boolean fieldHas(String fieldName, String annotationDescriptor) {
 		Set<String> annotations = fieldAnnotations.get(fieldName);
+		if (annotations == null) {
+			throw new InternalException("Class " + type.getName() + " does not have field " + fieldName);
+		}
 		return find(annotations, annotationDescriptor);
 	}
 	
