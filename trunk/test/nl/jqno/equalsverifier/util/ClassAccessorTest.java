@@ -19,10 +19,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
+import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllRecursiveCollectionImplementationsContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
 import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
@@ -48,6 +54,21 @@ public class ClassAccessorTest {
 	@Test
 	public void getPrefabValues() {
 		assertSame(prefabValues, classAccessor.getPrefabValues());
+	}
+	
+	@Test
+	public void hasAnnotation() {
+		ClassAccessor<?> accessor = ClassAccessor.of(AnnotatedWithRuntime.class, prefabValues);
+		assertTrue(accessor.hasAnnotation("TypeAnnotationRuntimeRetention"));
+		assertFalse(accessor.hasAnnotation("TypeAnnotationClassRetention"));
+	}
+	
+	@Test
+	public void fieldHasAnnotation() throws NoSuchFieldException {
+		ClassAccessor<?> classAccessor = ClassAccessor.of(AnnotatedFields.class, prefabValues);
+		Field field = AnnotatedFields.class.getField("runtimeRetention");
+		assertTrue(classAccessor.fieldHasAnnotation(field, "FieldAnnotationRuntimeRetention"));
+		assertFalse(classAccessor.fieldHasAnnotation(field, "FieldAnnotationClassRetention"));
 	}
 	
 	@Test
