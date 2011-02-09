@@ -74,6 +74,8 @@ public class AnnotationAccessor {
 	 * Determines whether {@link #type} has a particular annotation. 
 	 * 
 	 * @param annotationDescriptor The name of the annotation we want to find.
+	 * 			It can be in the form of a class name, or a (partial) fully
+	 * 			qualified class name.
 	 * @return True if {@link #type} has an annotation with the supplied name.
 	 */
 	public boolean typeHas(String annotationDescriptor) {
@@ -87,6 +89,8 @@ public class AnnotationAccessor {
 	 * @param fieldName The name of the field for which we want to know if it
 	 * 			has the annotation.
 	 * @param annotationDescriptor The name of the annotation we want to find.
+	 * 			It can be in the form of a class name, or a (partial) fully
+	 * 			qualified class name.
 	 * @return True if the specified field in {@link #type} has the specified
 	 * 			annotation.
 	 * @throws InternalException if {@link #type} does not have the specified
