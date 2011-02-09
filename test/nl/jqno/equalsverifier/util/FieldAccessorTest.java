@@ -115,14 +115,14 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void isNotTransitive() {
+	public void isNotTransient() {
 		ObjectContainer foo = new ObjectContainer();
 		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertFalse(fieldAccessor.fieldIsTransient());
 	}
 	
 	@Test
-	public void isTransitive() {
+	public void isTransient() {
 		TransientContainer foo = new TransientContainer();
 		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
 		assertTrue(fieldAccessor.fieldIsTransient());
