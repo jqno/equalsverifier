@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import java.lang.reflect.Field;
+
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
  * can create two different instances of T, which are guaranteed not to be
@@ -64,6 +66,34 @@ public class ClassAccessor<T> {
 	 */
 	public PrefabValues getPrefabValues() {
 		return prefabValues;
+	}
+	
+	/**
+	 * Determines whether T has a particular annotation.
+	 * 
+	 * @param annotationDescriptor The name of the annotation. It can be in the
+	 * 			form of a class name, or a (partial) fully qualified class
+	 * 			name.
+	 * @return True if T has the specified annotation.
+	 */
+	public boolean hasAnnotation(String annotationDescriptor) {
+		AnnotationAccessor annotationAccessor = new AnnotationAccessor(type);
+		return annotationAccessor.typeHas(annotationDescriptor);
+	}
+	
+	/**
+	 * Determines whether a particular field in T has a particular annotation.
+	 * 
+	 * @param field The field for which we want to know if it has the specified
+	 * 			annotation.
+	 * @param annotationDescriptor The name of the annotation. It can be in the
+	 * 			form of a class name, or a (partial) fully qualified class
+	 * 			name.
+	 * @return True if the specified field in T has the specified annotation.
+	 */
+	public boolean fieldHasAnnotation(Field field, String annotationDescriptor) {
+		AnnotationAccessor annotationAccessor = new AnnotationAccessor(type);
+		return annotationAccessor.fieldHas(field.getName(), annotationDescriptor);
 	}
 	
 	/**
