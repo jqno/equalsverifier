@@ -35,7 +35,7 @@ import net.sf.cglib.asm.Type;
  * 
  * @author Jan Ouwens
  */
-public class AnnotationAccessor {
+class AnnotationAccessor {
 	private final Class<?> type;
 	private final Set<String> classAnnotations = new HashSet<String>();
 	private final Map<String, Set<String>> fieldAnnotations = new HashMap<String, Set<String>>();
