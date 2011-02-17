@@ -33,7 +33,7 @@ import net.sf.cglib.asm.Type;
  * Provides access to the annotations that are defined on a class
  * and its fields.
  * 
- * @author JanO
+ * @author Jan Ouwens
  */
 public class AnnotationAccessor {
 	private final Class<?> type;
