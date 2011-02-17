@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 class FieldsChecker<T> implements Checker {
+	private static final String IMMUTABLE_ANNOTATION = "Immutable"; // Don't care about package
+	
 	private final ClassAccessor<T> classAccessor;
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
@@ -46,13 +48,18 @@ class FieldsChecker<T> implements Checker {
 		inspector.check(new SignificanceFieldCheck());
 		inspector.check(new FloatAndDoubleFieldCheck());
 		
-		if (!warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
+		if (!ignoreMutability()) {
 			inspector.check(new MutableStateFieldCheck());
 		}
 		
 		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
 			inspector.check(new TransitiveFieldsCheck());
 		}
+	}
+
+	private boolean ignoreMutability() {
+		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
+				classAccessor.hasAnnotation(IMMUTABLE_ANNOTATION);
 	}
 	
 	private class SignificanceFieldCheck implements FieldCheck {
