@@ -21,6 +21,8 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 
@@ -93,6 +95,18 @@ public class AnnotationAccessorTest {
 		findFieldAnnotationFor(AnnotatedFields.class, "x", "");
 	}
 	
+	@Test
+	public void findClassAnnotationsInSuperclass() {
+		assertTypeHasAnnotation(SubclassOfAnnotatedWithBoth.class, TYPE_ANNOTATION_RUNTIME_RETENTION);
+		assertTypeHasAnnotation(SubclassOfAnnotatedWithBoth.class, TYPE_ANNOTATION_CLASS_RETENTION);
+	}
+	
+	@Test
+	public void findFieldAnnotationsInSuperclass() {
+		assertFieldHasAnnotation(SubclassOfAnnotatedFields.class, RUNTIME_RETENTION, FIELD_ANNOTATION_RUNTIME_RETENTION);
+		assertFieldHasAnnotation(SubclassOfAnnotatedFields.class, CLASS_RETENTION, FIELD_ANNOTATION_CLASS_RETENTION);
+	}
+	
 	private void assertTypeHasAnnotation(Class<?> type, String annotationDescriptor) {
 		assertTrue(findTypeAnnotationFor(type, annotationDescriptor));
 	}
@@ -102,7 +116,11 @@ public class AnnotationAccessorTest {
 	}
 	
 	private void assertFieldHasAnnotation(String fieldName, String annotationDescriptor) {
-		assertTrue(findFieldAnnotationFor(AnnotatedFields.class, fieldName, annotationDescriptor));
+		assertFieldHasAnnotation(AnnotatedFields.class, fieldName, annotationDescriptor);
+	}
+	
+	private void assertFieldHasAnnotation(Class<?> type, String fieldName, String annotationDescriptor) {
+		assertTrue(findFieldAnnotationFor(type, fieldName, annotationDescriptor));
 	}
 	
 	private void assertFieldDoesNotHaveAnnotation(String fieldName, String annotationDescriptor) {

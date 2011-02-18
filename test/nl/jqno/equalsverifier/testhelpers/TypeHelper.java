@@ -340,4 +340,8 @@ public class TypeHelper {
 		
 		public int noRetention;
 	}
+	
+	public static class SubclassOfAnnotatedWithBoth extends AnnotatedWithBoth {}
+	
+	public static class SubclassOfAnnotatedFields extends AnnotatedFields {}
 }
