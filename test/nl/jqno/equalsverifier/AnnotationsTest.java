@@ -15,7 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
+import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
+import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
+import nl.jqno.equalsverifier.testhelpers.annotations.casefolding.Nonnull;
 
 import org.junit.Test;
 
@@ -24,6 +28,18 @@ public class AnnotationsTest {
 	public void immutable() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
 				.verify();
+	}
+	
+	@Test
+	public void nonnull() {
+		EqualsVerifier.forClass(NonnullByAnnotation.class)
+				.verify();
+	}
+	
+	@Test
+	public void nonnullMissedOne() {
+		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
+		assertFailure(ev, "Non-nullity", "equals throws NullPointerException");
 	}
 
 	@Immutable
@@ -45,6 +61,72 @@ public class AnnotationsTest {
 		@Override
 		public int hashCode() {
 			return i;
+		}
+	}
+	
+	static final class NonnullByAnnotation {
+		@Nonnull
+		private final Object o;
+		@NonNull
+		private final Object p;
+		@NotNull
+		private final Object q;
+		
+		NonnullByAnnotation(Object o, Object p, Object q) {
+			this.o = o;
+			this.p = p;
+			this.q = q;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullByAnnotation)) {
+				return false;
+			}
+			NonnullByAnnotation other = (NonnullByAnnotation)obj;
+			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
+		}
+		
+		@Override
+		public int hashCode() {
+			int result = 0;
+			result += 31 * o.hashCode();
+			result += 31 * p.hashCode();
+			result += 31 * q.hashCode();
+			return result;
+		}
+	}
+	
+	static final class NonnullByAnnotationMissedOne {
+		@Nonnull
+		private final Object o;
+		// No annotation
+		private final Object p;
+		@Nonnull
+		private final Object q;
+		
+		NonnullByAnnotationMissedOne(Object o, Object p, Object q) {
+			this.o = o;
+			this.p = p;
+			this.q = q;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullByAnnotationMissedOne)) {
+				return false;
+			}
+			NonnullByAnnotationMissedOne other = (NonnullByAnnotationMissedOne)obj;
+			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
+		}
+		
+		@Override
+		public int hashCode() {
+			int result = 0;
+			result += 31 * o.hashCode();
+			result += 31 * p.hashCode();
+			result += 31 * q.hashCode();
+			return result;
 		}
 	}
 }
