@@ -28,7 +28,7 @@ import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 class FieldsChecker<T> implements Checker {
-	private static final String IMMUTABLE_ANNOTATION = "Immutable"; // Don't care about package
+	private static final String ANNOTATION_IMMUTABLE = "Immutable"; // Don't care about package
 	
 	private final ClassAccessor<T> classAccessor;
 	private final PrefabValues prefabValues;
@@ -59,7 +59,7 @@ class FieldsChecker<T> implements Checker {
 
 	private boolean ignoreMutability() {
 		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
-				classAccessor.hasAnnotation(IMMUTABLE_ANNOTATION);
+				classAccessor.hasAnnotation(ANNOTATION_IMMUTABLE);
 	}
 	
 	private class SignificanceFieldCheck implements FieldCheck {
