@@ -39,6 +39,8 @@ class AnnotationAccessor {
 	private final Class<?> type;
 	private final Set<String> classAnnotations = new HashSet<String>();
 	private final Map<String, Set<String>> fieldAnnotations = new HashMap<String, Set<String>>();
+	
+	private boolean processed = false;
 
 	/**
 	 * Constructor
@@ -47,27 +49,6 @@ class AnnotationAccessor {
 	 */
 	public AnnotationAccessor(Class<?> type) {
 		this.type = type;
-		process();
-	}
-
-	private void process() {
-		try {
-			visitType();
-		}
-		catch (IOException e) {
-			throw new InternalException(e);
-		}
-	}
-	
-	private void visitType() throws IOException {
-		ClassLoader classLoader = type.getClassLoader();
-		Type asmType = Type.getType(type);
-		String url = asmType.getInternalName() + ".class";
-		InputStream is = classLoader.getResourceAsStream(url);
-		
-		Visitor v = new Visitor();
-		ClassReader cr = new ClassReader(is);
-		cr.accept(v, 0);
 	}
 	
 	/**
@@ -79,6 +60,7 @@ class AnnotationAccessor {
 	 * @return True if {@link #type} has an annotation with the supplied name.
 	 */
 	public boolean typeHas(String annotationDescriptor) {
+		process();
 		return find(classAnnotations, annotationDescriptor);
 	}
 	
@@ -97,6 +79,7 @@ class AnnotationAccessor {
 	 * 			field.
 	 */
 	public boolean fieldHas(String fieldName, String annotationDescriptor) {
+		process();
 		Set<String> annotations = fieldAnnotations.get(fieldName);
 		if (annotations == null) {
 			throw new InternalException("Class " + type.getName() + " does not have field " + fieldName);
@@ -113,7 +96,32 @@ class AnnotationAccessor {
 		}
 		return false;
 	}
+
+	private void process() {
+		if (processed) {
+			return;
+		}
+		
+		try {
+			visitType();
+			processed = true;
+		}
+		catch (IOException e) {
+			throw new InternalException(e);
+		}
+	}
 	
+	private void visitType() throws IOException {
+		ClassLoader classLoader = type.getClassLoader();
+		Type asmType = Type.getType(type);
+		String url = asmType.getInternalName() + ".class";
+		InputStream is = classLoader.getResourceAsStream(url);
+		
+		Visitor v = new Visitor();
+		ClassReader cr = new ClassReader(is);
+		cr.accept(v, 0);
+	}
+
 	private class Visitor extends ClassWriter {
 		public Visitor() {
 			super(0);
