@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
+
+import nl.jqno.equalsverifier.Annotation;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
@@ -78,8 +80,13 @@ public class ClassAccessor<T> {
 	 * 			name.
 	 * @return True if T has the specified annotation.
 	 */
-	public boolean hasAnnotation(String annotationDescriptor) {
-		return annotationAccessor.typeHas(annotationDescriptor);
+	public boolean hasAnnotation(Annotation annotation) {
+		for (String annotationDescriptor : annotation.descriptors()) {
+			if (annotationAccessor.typeHas(annotationDescriptor)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -92,8 +99,13 @@ public class ClassAccessor<T> {
 	 * 			name.
 	 * @return True if the specified field in T has the specified annotation.
 	 */
-	public boolean fieldHasAnnotation(Field field, String annotationDescriptor) {
-		return annotationAccessor.fieldHas(field.getName(), annotationDescriptor);
+	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
+		for (String annotationDescriptor : annotation.descriptors()) {
+			if (annotationAccessor.fieldHas(field.getName(), annotationDescriptor)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/**
