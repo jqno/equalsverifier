@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -50,8 +50,12 @@ import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
+import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
+import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.casefolding.Nonnull;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 public class TypeHelper {
@@ -344,4 +348,59 @@ public class TypeHelper {
 	public static class SubclassOfAnnotatedWithBoth extends AnnotatedWithBoth {}
 	
 	public static class SubclassOfAnnotatedFields extends AnnotatedFields {}
+
+	@Immutable
+	public static final class ImmutableByAnnotation {
+		private int i;
+		
+		ImmutableByAnnotation(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ImmutableByAnnotation)) {
+				return false;
+			}
+			return i == ((ImmutableByAnnotation)obj).i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	public static final class NonnullByAnnotation {
+		@Nonnull
+		private final Object o;
+		@NonNull
+		private final Object p;
+		@NotNull
+		private final Object q;
+		
+		NonnullByAnnotation(Object o, Object p, Object q) {
+			this.o = o;
+			this.p = p;
+			this.q = q;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullByAnnotation)) {
+				return false;
+			}
+			NonnullByAnnotation other = (NonnullByAnnotation)obj;
+			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
+		}
+		
+		@Override
+		public int hashCode() {
+			int result = 0;
+			result += 31 * o.hashCode();
+			result += 31 * p.hashCode();
+			result += 31 * q.hashCode();
+			return result;
+		}
+	}
 }
