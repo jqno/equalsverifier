@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,10 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 
 class NullChecker<T> implements Checker {
+	private static final String ANNOTATION_NONNULL_LOWERCASE = "Nonnull";
+	private static final String ANNOTATION_NONNULL = "NonNull";
+	private static final String ANNOTATION_NOTNULL = "NotNull";
+	
 	private ClassAccessor<T> classAccessor;
 	private EnumSet<Warning> warningsToSuppress;
 
@@ -48,6 +52,9 @@ class NullChecker<T> implements Checker {
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Field field = referenceAccessor.getField();
 			if (field.getType().isPrimitive()) {
+				return;
+			}
+			if (hasNonnullAnnotation(field)) {
 				return;
 			}
 			final Object reference = referenceAccessor.getObject();
@@ -86,6 +93,12 @@ class NullChecker<T> implements Checker {
 			referenceAccessor.nullField();
 		}
 		
+		private boolean hasNonnullAnnotation(Field field) {
+			return classAccessor.fieldHasAnnotation(field, ANNOTATION_NONNULL_LOWERCASE) ||
+					classAccessor.fieldHasAnnotation(field, ANNOTATION_NONNULL) ||
+					classAccessor.fieldHasAnnotation(field, ANNOTATION_NOTNULL);
+		}
+
 		private void handle(Field field, String testedMethodName, Runnable r) {
 			try {
 				r.run();
