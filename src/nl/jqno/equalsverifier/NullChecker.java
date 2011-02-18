@@ -50,7 +50,7 @@ class NullChecker<T> implements Checker {
 			if (field.getType().isPrimitive()) {
 				return;
 			}
-			if (classAccessor.fieldHasAnnotation(field, Annotation.NONNULL)) {
+			if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
 				return;
 			}
 			final Object reference = referenceAccessor.getObject();

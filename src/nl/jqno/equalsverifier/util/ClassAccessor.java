@@ -81,12 +81,7 @@ public class ClassAccessor<T> {
 	 * @return True if T has the specified annotation.
 	 */
 	public boolean hasAnnotation(Annotation annotation) {
-		for (String annotationDescriptor : annotation.descriptors()) {
-			if (annotationAccessor.typeHas(annotationDescriptor)) {
-				return true;
-			}
-		}
-		return false;
+		return annotationAccessor.typeHas(annotation);
 	}
 	
 	/**
@@ -100,12 +95,7 @@ public class ClassAccessor<T> {
 	 * @return True if the specified field in T has the specified annotation.
 	 */
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
-		for (String annotationDescriptor : annotation.descriptors()) {
-			if (annotationAccessor.fieldHas(field.getName(), annotationDescriptor)) {
-				return true;
-			}
-		}
-		return false;
+		return annotationAccessor.fieldHas(field.getName(), annotation);
 	}
 	
 	/**

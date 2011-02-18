@@ -15,6 +15,20 @@
  */
 package nl.jqno.equalsverifier;
 
-public interface Annotation {
-	public Iterable<String> descriptors();
+import java.util.Arrays;
+import java.util.List;
+
+enum SupportedAnnotations implements Annotation {
+	IMMUTABLE("Immutable"),
+	NONNULL("Nonnull", "NonNull", "NotNull");
+	
+	private final List<String> descriptors;
+
+	private SupportedAnnotations(String... descriptors) {
+		this.descriptors = Arrays.asList(descriptors);
+	}
+	
+	public Iterable<String> descriptors() {
+		return descriptors;
+	}
 }
