@@ -30,7 +30,7 @@ public class ClassAccessor<T> {
 	private final Class<T> type;
 	private final Instantiator<T> instantiator;
 	private final PrefabValues prefabValues;
-	private AnnotationAccessor annotationAccessor = null;
+	private final AnnotationAccessor annotationAccessor;
 
 	/**
 	 * Factory method.
@@ -53,6 +53,7 @@ public class ClassAccessor<T> {
 		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
+		this.annotationAccessor = new AnnotationAccessor(type);
 	}
 	
 	/**
@@ -78,7 +79,6 @@ public class ClassAccessor<T> {
 	 * @return True if T has the specified annotation.
 	 */
 	public boolean hasAnnotation(String annotationDescriptor) {
-		ensureAnnotationAccessor();
 		return annotationAccessor.typeHas(annotationDescriptor);
 	}
 	
@@ -93,14 +93,7 @@ public class ClassAccessor<T> {
 	 * @return True if the specified field in T has the specified annotation.
 	 */
 	public boolean fieldHasAnnotation(Field field, String annotationDescriptor) {
-		ensureAnnotationAccessor();
 		return annotationAccessor.fieldHas(field.getName(), annotationDescriptor);
-	}
-	
-	private void ensureAnnotationAccessor() {
-		if (annotationAccessor == null) {
-			annotationAccessor = new AnnotationAccessor(type);
-		}
 	}
 	
 	/**
