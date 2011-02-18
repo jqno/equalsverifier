@@ -103,7 +103,7 @@ class AnnotationAccessor {
 		}
 		
 		try {
-			visitType();
+			visit();
 			processed = true;
 		}
 		catch (IOException e) {
@@ -111,7 +111,15 @@ class AnnotationAccessor {
 		}
 	}
 	
-	private void visitType() throws IOException {
+	private void visit() throws IOException {
+		Class<?> i = type;
+		while (i != null && i != Object.class) {
+			visitType(i);
+			i = i.getSuperclass();
+		}
+	}
+	
+	private void visitType(Class<?> type) throws IOException {
 		ClassLoader classLoader = type.getClassLoader();
 		Type asmType = Type.getType(type);
 		String url = asmType.getInternalName() + ".class";
