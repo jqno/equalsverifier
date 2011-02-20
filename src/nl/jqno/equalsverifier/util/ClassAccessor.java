@@ -73,9 +73,7 @@ public class ClassAccessor<T> {
 	/**
 	 * Determines whether T has a particular annotation.
 	 * 
-	 * @param annotationDescriptor The name of the annotation. It can be in the
-	 * 			form of a class name, or a (partial) fully qualified class
-	 * 			name.
+	 * @param annotation The annotation we want to find.
 	 * @return True if T has the specified annotation.
 	 */
 	public boolean hasAnnotation(Annotation annotation) {
@@ -87,9 +85,7 @@ public class ClassAccessor<T> {
 	 * 
 	 * @param field The field for which we want to know if it has the specified
 	 * 			annotation.
-	 * @param annotationDescriptor The name of the annotation. It can be in the
-	 * 			form of a class name, or a (partial) fully qualified class
-	 * 			name.
+	 * @param annotation The annotation we want to find.
 	 * @return True if the specified field in T has the specified annotation.
 	 */
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
