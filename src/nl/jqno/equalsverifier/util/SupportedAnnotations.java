@@ -22,6 +22,7 @@ import java.util.List;
 public enum SupportedAnnotations implements Annotation {
 	IMMUTABLE(false, "Immutable"),
 	NONNULL(true, "Nonnull", "NonNull", "NotNull"),
+	ENTITY(false, "javax.persistence.Entity"),
 	TRANSIENT(true, "javax.persistence.Transient"),
 	;
 	
