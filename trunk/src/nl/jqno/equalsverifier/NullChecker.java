@@ -59,28 +59,28 @@ class NullChecker<T> implements Checker {
 			
 			changedAccessor.nullField();
 			
-			handle(field, "equals", new Runnable() {
+			handle("equals", field, new Runnable() {
 				@Override
 				public void run() {
 					reference.equals(changed);
 				}
 			});
 			
-			handle(field, "equals", new Runnable() {
+			handle("equals", field, new Runnable() {
 				@Override
 				public void run() {
 					changed.equals(reference);
 				}
 			});
 			
-			handle(field, "hashCode", new Runnable() {
+			handle("hashCode", field, new Runnable() {
 				@Override
 				public void run() {
 					changed.hashCode();
 				}
 			});
 			
-			handle(field, "toString", new Runnable() {
+			handle("toString", field, new Runnable() {
 				@Override
 				public void run() {
 					changed.toString();
@@ -90,20 +90,20 @@ class NullChecker<T> implements Checker {
 			referenceAccessor.nullField();
 		}
 		
-		private void handle(Field field, String testedMethodName, Runnable r) {
+		private void handle(String testedMethodName, Field field, Runnable r) {
 			try {
 				r.run();
 			}
 			catch (NullPointerException e) {
-				npeThrown(testedMethodName);
+				npeThrown(testedMethodName, field);
 			}
 			catch (Exception e) {
 				exceptionThrown(testedMethodName, field, e);
 			}
 		}
 
-		private void npeThrown(String method) {
-			fail("Non-nullity: " + method + " throws NullPointerException.");
+		private void npeThrown(String method, Field field) {
+			fail("Non-nullity: " + method + " throws NullPointerException on field " + field.getName() + ".");
 		}
 		
 		private void exceptionThrown(String method, Field field, Exception e) {
