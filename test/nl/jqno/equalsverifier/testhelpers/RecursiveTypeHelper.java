@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,4 +54,11 @@ public class RecursiveTypeHelper {
 	}
 	
 	public static final class NotRecursiveD {}
+	
+	public static final class RecursiveWithAnotherFieldFirst {
+		RecursiveThisIsTheOtherField point;
+		RecursiveWithAnotherFieldFirst recurse;
+	}
+	
+	public static final class RecursiveThisIsTheOtherField {}
 }
