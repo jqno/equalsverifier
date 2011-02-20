@@ -58,7 +58,8 @@ class FieldsChecker<T> implements Checker {
 
 	private boolean ignoreMutability() {
 		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
-				classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE);
+				classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
+				classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
 	}
 	
 	private class SignificanceFieldCheck implements FieldCheck {
