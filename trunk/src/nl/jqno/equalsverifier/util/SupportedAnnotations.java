@@ -18,19 +18,25 @@ package nl.jqno.equalsverifier.util;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.jqno.equalsverifier.Annotation;
 
 public enum SupportedAnnotations implements Annotation {
-	IMMUTABLE("Immutable"),
-	NONNULL("Nonnull", "NonNull", "NotNull");
+	IMMUTABLE(false, "Immutable"),
+	NONNULL(true, "Nonnull", "NonNull", "NotNull");
 	
+	private final boolean inherits;
 	private final List<String> descriptors;
 
-	private SupportedAnnotations(String... descriptors) {
+	private SupportedAnnotations(boolean inherits, String... descriptors) {
+		this.inherits = inherits;
 		this.descriptors = Arrays.asList(descriptors);
 	}
 	
 	public Iterable<String> descriptors() {
 		return descriptors;
+	}
+	
+	@Override
+	public boolean inherits() {
+		return inherits;
 	}
 }

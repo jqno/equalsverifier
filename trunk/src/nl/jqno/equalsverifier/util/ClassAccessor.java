@@ -17,8 +17,6 @@ package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.Annotation;
-
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
  * can create two different instances of T, which are guaranteed not to be

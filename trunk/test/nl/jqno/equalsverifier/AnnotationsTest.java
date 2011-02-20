@@ -20,6 +20,8 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.casefolding.Nonnull;
+import nl.jqno.equalsverifier.testhelpers.points.ImmutableCanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.points.MutableCanEqualColorPoint;
 
 import org.junit.Test;
 
@@ -28,6 +30,17 @@ public class AnnotationsTest {
 	public void immutable() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
 				.verify();
+	}
+	
+	@Test
+	public void immutableDoesntInherit() {
+		EqualsVerifier.forClass(ImmutableCanEqualPoint.class)
+				.withRedefinedSubclass(MutableCanEqualColorPoint.class)
+				.verify();
+		
+		EqualsVerifier<MutableCanEqualColorPoint> ev = EqualsVerifier.forClass(MutableCanEqualColorPoint.class)
+				.withRedefinedSuperclass();
+		assertFailure(ev, "Mutability", "equals depends on mutable field", "color");
 	}
 	
 	@Test
@@ -40,6 +53,12 @@ public class AnnotationsTest {
 	public void nonnullMissedOne() {
 		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
 		assertFailure(ev, "Non-nullity", "equals throws NullPointerException");
+	}
+	
+	@Test
+	public void nonnullInherits() {
+		EqualsVerifier.forClass(SubclassNonnullByAnnotation.class)
+				.verify();
 	}
 
 	@Immutable
@@ -64,7 +83,7 @@ public class AnnotationsTest {
 		}
 	}
 	
-	public static final class NonnullByAnnotation {
+	static class NonnullByAnnotation {
 		@Nonnull
 		private final Object o;
 		@NonNull
@@ -79,7 +98,7 @@ public class AnnotationsTest {
 		}
 		
 		@Override
-		public boolean equals(Object obj) {
+		public final boolean equals(Object obj) {
 			if (!(obj instanceof NonnullByAnnotation)) {
 				return false;
 			}
@@ -88,12 +107,18 @@ public class AnnotationsTest {
 		}
 		
 		@Override
-		public int hashCode() {
+		public final int hashCode() {
 			int result = 0;
 			result += 31 * o.hashCode();
 			result += 31 * p.hashCode();
 			result += 31 * q.hashCode();
 			return result;
+		}
+	}
+	
+	static final class SubclassNonnullByAnnotation extends NonnullByAnnotation {
+		SubclassNonnullByAnnotation(Object o, Object p, Object q) {
+			super(o, p, q);
 		}
 	}
 
