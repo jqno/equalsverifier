@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -190,6 +191,7 @@ public class PrefabValuesFactory {
 	private void addLists() {
 		addCollection(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
 		addCollection(LinkedList.class, new LinkedList(), new LinkedList());
+		addCollection(ArrayList.class, new ArrayList(), new ArrayList());
 	}
 
 	@SuppressWarnings("unchecked")
