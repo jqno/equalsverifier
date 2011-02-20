@@ -60,6 +60,24 @@ public class AnnotationsTest {
 		EqualsVerifier.forClass(SubclassNonnullByAnnotation.class)
 				.verify();
 	}
+	
+	@Test
+	public void jpaTransient() {
+		EqualsVerifier<TransientByJpaAnnotation> ev = EqualsVerifier.forClass(TransientByJpaAnnotation.class);
+		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
+	}
+	
+	@Test
+	public void jpaTransientInherits() {
+		EqualsVerifier<SubclassTransientByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassTransientByJpaAnnotation.class);
+		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
+	}
+	
+	@Test
+	public void ignoreNonJpaTransient() {
+		EqualsVerifier.forClass(TransientByNonJpaAnnotation.class)
+				.verify();
+	}
 
 	@Immutable
 	public static final class ImmutableByAnnotation {
@@ -152,6 +170,64 @@ public class AnnotationsTest {
 			result += 31 * noAnnotation.hashCode();
 			result += 31 * q.hashCode();
 			return result;
+		}
+	}
+	
+	static class TransientByJpaAnnotation {
+		private final int i;
+		
+		@javax.persistence.Transient
+		private final int j;
+		
+		public TransientByJpaAnnotation(int i, int j) {
+			this.i = i;
+			this.j = j;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof TransientByJpaAnnotation)) {
+				return false;
+			}
+			TransientByJpaAnnotation other = (TransientByJpaAnnotation)obj;
+			return i == other.i && j == other.j;
+		}
+		
+		@Override
+		public final int hashCode() {
+			return i + (31 * j);
+		}
+	}
+	
+	static final class SubclassTransientByJpaAnnotation extends TransientByJpaAnnotation {
+		public SubclassTransientByJpaAnnotation(int i, int j) {
+			super(i, j);
+		}
+	}
+	
+	static final class TransientByNonJpaAnnotation {
+		private final int i;
+		
+		@nl.jqno.equalsverifier.testhelpers.annotations.Transient
+		private final int j;
+		
+		public TransientByNonJpaAnnotation(int i, int j) {
+			this.i = i;
+			this.j = j;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof TransientByNonJpaAnnotation)) {
+				return false;
+			}
+			TransientByNonJpaAnnotation other = (TransientByNonJpaAnnotation)obj;
+			return i == other.i && j == other.j;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i + (31 * j);
 		}
 	}
 }

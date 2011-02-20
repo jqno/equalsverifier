@@ -188,8 +188,10 @@ class FieldsChecker<T> implements Checker {
 			changedAccessor.changeField(prefabValues);
 
 			boolean equalsChanged = !reference.equals(changed);
+			boolean fieldIsTransient = referenceAccessor.fieldIsTransient() ||
+					classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
 			
-			if (equalsChanged && referenceAccessor.fieldIsTransient()) {
+			if (equalsChanged && fieldIsTransient) {
 				fail("Transient field " + referenceAccessor.getFieldName() + " should not be included in equals/hashCode contract.");
 			}
 			
