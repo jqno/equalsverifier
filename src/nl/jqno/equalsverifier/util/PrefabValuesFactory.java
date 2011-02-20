@@ -17,6 +17,8 @@ package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Collection;
@@ -180,6 +182,8 @@ public class PrefabValuesFactory {
 		prefabValues.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
+		prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
+		prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
 	}
 
 	@SuppressWarnings("unchecked")
