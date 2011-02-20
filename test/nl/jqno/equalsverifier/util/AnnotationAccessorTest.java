@@ -16,22 +16,24 @@
 package nl.jqno.equalsverifier.util;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_CLASS_RETENTION;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_DOESNT_INHERIT;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_INHERITS;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_CLASS_RETENTION;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_DOESNT_INHERIT;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_INHERITS;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.Annotation;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedFields;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedWithBoth;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 
 import org.junit.Test;
@@ -96,15 +98,15 @@ public class AnnotationAccessorTest {
 	}
 	
 	@Test
-	public void findClassAnnotationsInSuperclass() {
-		assertTypeHasAnnotation(SubclassOfAnnotatedWithBoth.class, TYPE_RUNTIME_RETENTION);
-		assertTypeHasAnnotation(SubclassOfAnnotatedWithBoth.class, TYPE_CLASS_RETENTION);
+	public void typeAnnotationInheritance() {
+		assertTypeHasAnnotation(SubclassWithAnnotations.class, TYPE_INHERITS);
+		assertTypeDoesNotHaveAnnotation(SubclassWithAnnotations.class, TYPE_DOESNT_INHERIT);
 	}
 	
 	@Test
-	public void findFieldAnnotationsInSuperclass() {
-		assertFieldHasAnnotation(SubclassOfAnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION);
-		assertFieldHasAnnotation(SubclassOfAnnotatedFields.class, CLASS_RETENTION, FIELD_CLASS_RETENTION);
+	public void fieldAnnotationInheritance() {
+		assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", FIELD_INHERITS);
+		assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
 	}
 	
 	private void assertTypeHasAnnotation(Class<?> type, Annotation annotation) {
@@ -124,7 +126,11 @@ public class AnnotationAccessorTest {
 	}
 	
 	private void assertFieldDoesNotHaveAnnotation(String fieldName, Annotation annotation) {
-		assertFalse(findFieldAnnotationFor(AnnotatedFields.class, fieldName, annotation));
+		assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, fieldName, annotation);
+	}
+	
+	private void assertFieldDoesNotHaveAnnotation(Class<?> type, String fieldName, Annotation annotation) {
+		assertFalse(findFieldAnnotationFor(type, fieldName, annotation));
 	}
 	
 	private boolean findTypeAnnotationFor(Class<?> type, Annotation annotation) {

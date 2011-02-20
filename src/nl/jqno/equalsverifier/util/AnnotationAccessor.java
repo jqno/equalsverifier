@@ -28,7 +28,6 @@ import net.sf.cglib.asm.ClassReader;
 import net.sf.cglib.asm.ClassWriter;
 import net.sf.cglib.asm.FieldVisitor;
 import net.sf.cglib.asm.Type;
-import nl.jqno.equalsverifier.Annotation;
 
 /**
  * Provides access to the annotations that are defined on a class
@@ -101,32 +100,36 @@ class AnnotationAccessor {
 	}
 	
 	private void visit() throws IOException {
-		Class<?> i = type;
+		visitType(type, false);
+		Class<?> i = type.getSuperclass();
 		while (i != null && i != Object.class) {
-			visitType(i);
+			visitType(i, true);
 			i = i.getSuperclass();
 		}
 	}
 	
-	private void visitType(Class<?> type) throws IOException {
+	private void visitType(Class<?> type, boolean inheriting) throws IOException {
 		ClassLoader classLoader = type.getClassLoader();
 		Type asmType = Type.getType(type);
 		String url = asmType.getInternalName() + ".class";
 		InputStream is = classLoader.getResourceAsStream(url);
 		
-		Visitor v = new Visitor();
+		Visitor v = new Visitor(inheriting);
 		ClassReader cr = new ClassReader(is);
 		cr.accept(v, 0);
 	}
 
 	private class Visitor extends ClassWriter {
-		public Visitor() {
+		private final boolean inheriting;
+
+		public Visitor(boolean inheriting) {
 			super(0);
+			this.inheriting = inheriting;
 		}
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			add(classAnnotations, descriptor);
+			add(classAnnotations, descriptor, inheriting);
 			return null;
 		}
 		
@@ -134,20 +137,22 @@ class AnnotationAccessor {
 		public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
 			HashSet<Annotation> annotations = new HashSet<Annotation>();
 			fieldAnnotations.put(name, annotations);
-			return new MyFieldVisitor(annotations);
+			return new MyFieldVisitor(annotations, inheriting);
 		}
 	}
 	
 	public class MyFieldVisitor implements FieldVisitor {
 		private final Set<Annotation> fieldAnnotations;
+		private final boolean inheriting;
 		
-		public MyFieldVisitor(Set<Annotation> fieldAnnotations) {
+		public MyFieldVisitor(Set<Annotation> fieldAnnotations, boolean inheriting) {
 			this.fieldAnnotations = fieldAnnotations;
+			this.inheriting = inheriting;
 		}
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			add(fieldAnnotations, descriptor);
+			add(fieldAnnotations, descriptor, inheriting);
 			return null;
 		}
 
@@ -162,12 +167,14 @@ class AnnotationAccessor {
 		}
 	}
 
-	private void add(Set<Annotation> annotations, String annotationDescriptor) {
+	private void add(Set<Annotation> annotations, String annotationDescriptor, boolean inheriting) {
 		for (Annotation annotation : supportedAnnotations) {
-			for (String descriptor : annotation.descriptors()) {
-				String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
-				if (annotationDescriptor.contains(asBytecodeIdentifier)) {
-					annotations.add(annotation);
+			if (!inheriting || annotation.inherits()) {
+				for (String descriptor : annotation.descriptors()) {
+					String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
+					if (annotationDescriptor.contains(asBytecodeIdentifier)) {
+						annotations.add(annotation);
+					}
 				}
 			}
 		}

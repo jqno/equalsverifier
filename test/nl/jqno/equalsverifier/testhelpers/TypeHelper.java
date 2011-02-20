@@ -49,8 +49,12 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationDoesntInherit;
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationInherits;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationDoesntInherit;
+import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationInherits;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
@@ -341,7 +345,15 @@ public class TypeHelper {
 		public int noRetention;
 	}
 	
-	public static class SubclassOfAnnotatedWithBoth extends AnnotatedWithBoth {}
+	@TypeAnnotationInherits
+	@TypeAnnotationDoesntInherit
+	public static class SuperclassWithAnnotations {
+		@FieldAnnotationInherits
+		public int inherits;
+		
+		@FieldAnnotationDoesntInherit
+		public int doesntInherit;
+	}
 	
-	public static class SubclassOfAnnotatedFields extends AnnotatedFields {}
+	public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}
 }
