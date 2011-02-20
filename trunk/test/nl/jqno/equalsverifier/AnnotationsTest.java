@@ -16,6 +16,9 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
@@ -58,6 +61,24 @@ public class AnnotationsTest {
 	@Test
 	public void nonnullInherits() {
 		EqualsVerifier.forClass(SubclassNonnullByAnnotation.class)
+				.verify();
+	}
+	
+	@Test
+	public void entityHappyPath() {
+		EqualsVerifier.forClass(EntityByJpaAnnotation.class)
+				.verify();
+	}
+	
+	@Test
+	public void entityDoesntInherit() {
+		EqualsVerifier<SubclassEntityByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class);
+		Util.assertFailure(ev, "Mutability");
+	}
+	
+	@Test(expected=AssertionError.class)
+	public void entityNonJpaAnnotation() {
+		EqualsVerifier.forClass(EntityByNonJpaAnnotation.class)
 				.verify();
 	}
 	
@@ -170,6 +191,64 @@ public class AnnotationsTest {
 			result += 31 * noAnnotation.hashCode();
 			result += 31 * q.hashCode();
 			return result;
+		}
+	}
+	
+	@javax.persistence.Entity
+	static class EntityByJpaAnnotation {
+		private int i;
+		private String s;
+		
+		public void setI(int i) {
+			this.i = i;
+		}
+		
+		public void setS(String s) {
+			this.s = s;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof EntityByJpaAnnotation)) {
+				return false;
+			}
+			EntityByJpaAnnotation other = (EntityByJpaAnnotation)obj;
+			return i == other.i && nullSafeEquals(s, other.s);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return i + (31 * nullSafeHashCode(s));
+		}
+	}
+	
+	static class SubclassEntityByJpaAnnotation extends EntityByJpaAnnotation {}
+	
+	@nl.jqno.equalsverifier.testhelpers.annotations.Entity
+	static class EntityByNonJpaAnnotation {
+		private int i;
+		private String s;
+		
+		public void setI(int i) {
+			this.i = i;
+		}
+		
+		public void setS(String s) {
+			this.s = s;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof EntityByNonJpaAnnotation)) {
+				return false;
+			}
+			EntityByNonJpaAnnotation other = (EntityByNonJpaAnnotation)obj;
+			return i == other.i && nullSafeEquals(s, other.s);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return i + (31 * nullSafeHashCode(s));
 		}
 	}
 	
