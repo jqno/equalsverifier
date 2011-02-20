@@ -32,6 +32,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassOfAnnotatedWithBoth;
+import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 
 import org.junit.Test;
 
@@ -127,12 +128,12 @@ public class AnnotationAccessorTest {
 	}
 	
 	private boolean findTypeAnnotationFor(Class<?> type, Annotation annotation) {
-		AnnotationAccessor accessor = new AnnotationAccessor(type);
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type);
 		return accessor.typeHas(annotation);
 	}
 	
 	private boolean findFieldAnnotationFor(Class<?> type, String fieldName, Annotation annotation) {
-		AnnotationAccessor accessor = new AnnotationAccessor(type);
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type);
 		return accessor.fieldHas(fieldName, annotation);
 	}
 }

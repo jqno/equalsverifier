@@ -45,17 +45,17 @@ public class ClassAccessor<T> {
 	 * @return A {@link ClassAccessor} for T.
 	 */
 	public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues) {
-		return new ClassAccessor<T>(type, prefabValues);
+		return new ClassAccessor<T>(type, prefabValues, SupportedAnnotations.values());
 	}
 	
 	/**
 	 * Private constructor. Call {@link #of(Class, PrefabValues)} instead.
 	 */
-	private ClassAccessor(Class<T> type, PrefabValues prefabValues) {
+	ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations) {
 		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
-		this.annotationAccessor = new AnnotationAccessor(type);
+		this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type);
 	}
 	
 	/**
