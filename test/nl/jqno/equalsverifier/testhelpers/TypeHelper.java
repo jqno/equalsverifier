@@ -16,6 +16,8 @@ package nl.jqno.equalsverifier.testhelpers;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -187,6 +189,8 @@ public class TypeHelper {
 		Pattern pattern;
 		Scanner scanner;
 		TimeZone timeZone;
+		BigDecimal bigDecimal;
+		BigInteger bigInteger;
 	}
 	
 	public static class AllRecursiveCollectionImplementationsContainer {
