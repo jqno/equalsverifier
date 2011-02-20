@@ -18,11 +18,43 @@ package nl.jqno.equalsverifier.util;
 import java.util.Arrays;
 import java.util.List;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 
+/**
+ * Descriptions of the annotations that {@link EqualsVerifier} supports.
+ * 
+ * The actual annotations cannot be referenced here, as that would create
+ * dependencies on the libraries that contain them, and it would preclude
+ * people from creating and using their own annotations with the same name.
+ * 
+ * @author Jan Ouwens
+ */
 public enum SupportedAnnotations implements Annotation {
+	/**
+	 * If a class is marked @Immutable, {@link EqualsVerifier} will not
+	 * complain about fields not being final.
+	 */
 	IMMUTABLE(false, "Immutable"),
+	
+	/**
+	 * If a field is marked @Nonnull (or @NonNull or @NotNull),
+	 * {@link EqualsVerifier} will not complain about potential
+	 * {@link NullPointerException}s being thrown if this field is null.
+	 */
 	NONNULL(true, "Nonnull", "NonNull", "NotNull"),
+	
+	/**
+	 * JPA Entities cannot be final, nor can their fields be.
+	 * {@link EqualsVerifier} will not complain about non-final fields on
+	 * @Entity classes.
+	 */
 	ENTITY(false, "javax.persistence.Entity"),
+	
+	/**
+	 * Fields in JPA Entities that are marked @Transient should not be included
+	 * in the equals/hashCode contract, like fields that have the Java
+	 * transient modifier. {@link EqualsVerifier} will treat these the same.
+	 */
 	TRANSIENT(true, "javax.persistence.Transient"),
 	;
 	
