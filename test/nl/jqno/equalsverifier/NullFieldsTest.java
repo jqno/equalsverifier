@@ -27,29 +27,30 @@ public class NullFieldsTest {
 	private static final String EQUALS = "equals throws NullPointerException";
 	private static final String HASHCODE = "hashCode throws NullPointerException";
 	private static final String TOSTRING = "toString throws NullPointerException";
+	private static final String ON_FIELD = "on field";
 
 	@Test
 	public void equalsOnOwnNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnThis> ev = EqualsVerifier.forClass(EqualsThrowsNullOnThis.class);
-		assertFailure(ev, NON_NULLITY, EQUALS);
+		assertFailure(ev, NON_NULLITY, EQUALS, ON_FIELD, "color");
 	}
 
 	@Test
 	public void equalsOnOthersNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnOther> ev = EqualsVerifier.forClass(EqualsThrowsNullOnOther.class);
-		assertFailure(ev, NON_NULLITY, EQUALS);
+		assertFailure(ev, NON_NULLITY, EQUALS, ON_FIELD, "color");
 	}
 	
 	@Test
 	public void hashCodeOnNullFields() {
 		EqualsVerifier<HashCodeThrowsNull> ev = EqualsVerifier.forClass(HashCodeThrowsNull.class);
-		assertFailure(ev, NON_NULLITY, HASHCODE);
+		assertFailure(ev, NON_NULLITY, HASHCODE, ON_FIELD, "color");
 	}
 	
 	@Test
 	public void toStringOnNullFields() {
 		EqualsVerifier<ToStringThrowsNull> ev = EqualsVerifier.forClass(ToStringThrowsNull.class);
-		assertFailure(ev, NON_NULLITY, TOSTRING);
+		assertFailure(ev, NON_NULLITY, TOSTRING, ON_FIELD, "color");
 	}
 	
 	@Test

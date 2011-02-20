@@ -52,7 +52,7 @@ public class AnnotationsTest {
 	@Test
 	public void nonnullMissedOne() {
 		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
-		assertFailure(ev, "Non-nullity", "equals throws NullPointerException");
+		assertFailure(ev, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
 	}
 	
 	@Test
@@ -126,13 +126,13 @@ public class AnnotationsTest {
 		@Nonnull
 		private final Object o;
 		// No annotation
-		private final Object p;
+		private final Object noAnnotation;
 		@Nonnull
 		private final Object q;
 		
 		NonnullByAnnotationMissedOne(Object o, Object p, Object q) {
 			this.o = o;
-			this.p = p;
+			this.noAnnotation = p;
 			this.q = q;
 		}
 		
@@ -142,14 +142,14 @@ public class AnnotationsTest {
 				return false;
 			}
 			NonnullByAnnotationMissedOne other = (NonnullByAnnotationMissedOne)obj;
-			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
+			return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
 		}
 		
 		@Override
 		public int hashCode() {
 			int result = 0;
 			result += 31 * o.hashCode();
-			result += 31 * p.hashCode();
+			result += 31 * noAnnotation.hashCode();
 			result += 31 * q.hashCode();
 			return result;
 		}
