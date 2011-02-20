@@ -45,8 +45,8 @@ public enum SupportedAnnotations implements Annotation {
 	
 	/**
 	 * JPA Entities cannot be final, nor can their fields be.
-	 * {@link EqualsVerifier} will not complain about non-final fields on
-	 * @Entity classes.
+	 * {@link EqualsVerifier} will not complain about non-final fields
+	 * on @Entity classes.
 	 */
 	ENTITY(false, "javax.persistence.Entity"),
 	
