@@ -26,6 +26,7 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.util.SupportedAnnotations;
 
 class FieldsChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;

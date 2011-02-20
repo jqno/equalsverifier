@@ -35,6 +35,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
+import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
 
 import org.junit.Before;
@@ -62,14 +63,14 @@ public class ClassAccessorTest {
 	
 	@Test
 	public void hasAnnotation() {
-		ClassAccessor<?> accessor = ClassAccessor.of(AnnotatedWithRuntime.class, prefabValues);
+		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values());
 		assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));
 		assertFalse(accessor.hasAnnotation(TYPE_CLASS_RETENTION));
 	}
 	
 	@Test
 	public void fieldHasAnnotation() throws NoSuchFieldException {
-		ClassAccessor<?> classAccessor = ClassAccessor.of(AnnotatedFields.class, prefabValues);
+		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values());
 		Field field = AnnotatedFields.class.getField("runtimeRetention");
 		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
 		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));

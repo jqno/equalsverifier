@@ -38,8 +38,9 @@ import nl.jqno.equalsverifier.Annotation;
  */
 class AnnotationAccessor {
 	private final Class<?> type;
-	private final Set<String> classAnnotations = new HashSet<String>();
-	private final Map<String, Set<String>> fieldAnnotations = new HashMap<String, Set<String>>();
+	private final Annotation[] supportedAnnotations;
+	private final Set<Annotation> classAnnotations = new HashSet<Annotation>();
+	private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<String, Set<Annotation>>();
 	
 	private boolean processed = false;
 
@@ -48,7 +49,8 @@ class AnnotationAccessor {
 	 * 
 	 * @param type The class whose annotations need to be queried.
 	 */
-	public AnnotationAccessor(Class<?> type) {
+	public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type) {
+		this.supportedAnnotations = supportedAnnotations;
 		this.type = type;
 	}
 	
@@ -60,7 +62,7 @@ class AnnotationAccessor {
 	 */
 	public boolean typeHas(Annotation annotation) {
 		process();
-		return find(classAnnotations, annotation);
+		return classAnnotations.contains(annotation);
 	}
 	
 	/**
@@ -77,23 +79,11 @@ class AnnotationAccessor {
 	 */
 	public boolean fieldHas(String fieldName, Annotation annotation) {
 		process();
-		Set<String> annotations = fieldAnnotations.get(fieldName);
+		Set<Annotation> annotations = fieldAnnotations.get(fieldName);
 		if (annotations == null) {
 			throw new InternalException("Class " + type.getName() + " does not have field " + fieldName);
 		}
-		return find(annotations, annotation);
-	}
-	
-	private boolean find(Set<String> annotations, Annotation annotation) {
-		for (String annotationDescriptor : annotation.descriptors()) {
-			String needle = annotationDescriptor.replaceAll("\\.", "/");
-			for (String haystack : annotations) {
-				if (haystack.contains(needle)) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return annotations.contains(annotation);
 	}
 
 	private void process() {
@@ -136,28 +126,28 @@ class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			classAnnotations.add(descriptor);
+			add(classAnnotations, descriptor);
 			return null;
 		}
 		
 		@Override
 		public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-			HashSet<String> annotations = new HashSet<String>();
+			HashSet<Annotation> annotations = new HashSet<Annotation>();
 			fieldAnnotations.put(name, annotations);
 			return new MyFieldVisitor(annotations);
 		}
 	}
 	
 	public class MyFieldVisitor implements FieldVisitor {
-		private final Set<String> fieldAnnotations;
+		private final Set<Annotation> fieldAnnotations;
 		
-		public MyFieldVisitor(Set<String> fieldAnnotations) {
+		public MyFieldVisitor(Set<Annotation> fieldAnnotations) {
 			this.fieldAnnotations = fieldAnnotations;
 		}
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			fieldAnnotations.add(descriptor);
+			add(fieldAnnotations, descriptor);
 			return null;
 		}
 
@@ -169,6 +159,17 @@ class AnnotationAccessor {
 		@Override
 		public void visitEnd() {
 			// Deliberately empty
+		}
+	}
+
+	private void add(Set<Annotation> annotations, String annotationDescriptor) {
+		for (Annotation annotation : supportedAnnotations) {
+			for (String descriptor : annotation.descriptors()) {
+				String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
+				if (annotationDescriptor.contains(asBytecodeIdentifier)) {
+					annotations.add(annotation);
+				}
+			}
 		}
 	}
 }

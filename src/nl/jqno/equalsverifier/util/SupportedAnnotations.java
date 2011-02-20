@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.util;
 
 import java.util.Arrays;
 import java.util.List;
 
-enum SupportedAnnotations implements Annotation {
+import nl.jqno.equalsverifier.Annotation;
+
+public enum SupportedAnnotations implements Annotation {
 	IMMUTABLE("Immutable"),
 	NONNULL("Nonnull", "NonNull", "NotNull");
 	
