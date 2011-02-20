@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -43,7 +44,7 @@ public class DifficultClassesTest {
 	
 	@Test
 	public void commonClasses() {
-		EqualsVerifier.forClass(CommonClassesContainer.class).verify();
+		EqualsVerifier.forClass(CommonClassesContainer.class).debug().verify();
 	}
 	
 	@Test
@@ -147,12 +148,14 @@ public class DifficultClassesTest {
 		private final Date date;
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
+		private final ArrayList<String> arrayList;
 		
-		public CommonClassesContainer(Calendar calendar, Date date, GregorianCalendar gregorianCalendar, Pattern pattern) {
+		public CommonClassesContainer(Calendar calendar, Date date, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList) {
 			this.calendar = calendar;
 			this.date = date;
 			this.gregorianCalendar = gregorianCalendar;
 			this.pattern = pattern;
+			this.arrayList = arrayList;
 		}
 		
 		@Override
@@ -167,6 +170,7 @@ public class DifficultClassesTest {
 			result &= nullSafeEquals(date, other.date);
 			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
 			result &= nullSafeEquals(pattern, other.pattern);
+			result &= nullSafeEquals(arrayList, other.arrayList);
 			return result;
 		}
 		
@@ -177,6 +181,7 @@ public class DifficultClassesTest {
 			result += 31 * nullSafeHashCode(date);
 			result += 31 * nullSafeHashCode(gregorianCalendar);
 			result += 31 * nullSafeHashCode(pattern);
+			result += 31 * nullSafeHashCode(arrayList);
 			return result;
 		}
 	}
