@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,17 @@
 package nl.jqno.equalsverifier.util;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.containsAll;
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NotRecursiveA;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.RecursiveThisIsTheOtherField;
+import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.RecursiveWithAnotherFieldFirst;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeArrayA;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeArrayB;
@@ -127,6 +131,19 @@ public class PrefabValuesFactoryTest {
 	@Test
 	public void sameClassTwiceButNoRecursion() {
 		factory.createFor(NotRecursiveA.class);
+	}
+	
+	@Test
+	public void recursiveWithAnotherFieldFirst() {
+		try {
+			factory.createFor(RecursiveWithAnotherFieldFirst.class);
+		}
+		catch (Exception e) {
+			assertThat(e.getMessage(), containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
+			assertThat(e.getMessage(), not(containsString(RecursiveThisIsTheOtherField.class.getSimpleName())));
+			return;
+		}
+		fail("No exception thrown");
 	}
 	
 	@Test
