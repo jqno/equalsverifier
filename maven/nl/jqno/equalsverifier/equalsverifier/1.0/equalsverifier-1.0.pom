@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>nl.jqno.equalsverifier</groupId>
+	<artifactId>equalsverifier</artifactId>
+	<name>EqualsVerifier</name>
+	<version>1.0</version>
+	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
+	<url>http://code.google.com/p/equalsverifier/</url>
+	<scm>
+		<url>http://equalsverifier.googlecode.com/svn/trunk/</url>
+	</scm>
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+ 	<developers>
+		<developer>
+			<id>Jan</id>
+			<name>Jan Ouwens</name>
+			<email>jan.ouwens@gmail.com</email>
+			<url>http://www.jqno.nl</url>
+			<timezone>Central European Time</timezone>
+		</developer>
+	</developers>
+	<dependencies>
+		<dependency>
+			<groupId>org.objenesis</groupId>
+			<artifactId>objenesis</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2</version>
+		</dependency>
+	</dependencies>
+</project>
