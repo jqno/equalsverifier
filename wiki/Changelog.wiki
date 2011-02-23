@@ -6,6 +6,17 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.0 ==
+  * ... use the following annotations on your classes and fields: `EqualsVerifier` will know what to do!
+    * `@Immutable`: `EqualsVerifier` will not complain about non-final fields if your class is `@Immutable`. (It doesn't matter in which package the annotation is defined; `javax.annotations.concurrent.Immutable`, `net.jcip.annotations.Immutable` or your own implementation will all work fine.)
+    * `@Nonnull`, `@NonNull` and `@NotNull`: `EqualsVerifier` will not check for potential `NullPointerException`s for any field marked with any of these annotations. (Again: the source package doesn't matter.) This is similar to calling `suppress(Warning.NULL_FIELDS)`, but on a per-field basis, instead of all-or-nothing. ([http://code.google.com/p/equalsverifier/issues/detail?id=28 Issue 28])
+    * `@Entity`: `EqualsVerifier` will not complain about non-final fields if your class is a JPA Entity. Note that this only works for `javax.persistence.Entity`, not for `Entity` annotations from other packages. ([http://code.google.com/p/equalsverifier/issues/detail?id=37 Issue 37])
+    * `@Transient`: Fields marked with this annotation (again, only from `javax.persistence.Transient`), will be treated the same as fields marked with Java's `transient` modifier; i.e., `EqualsVerifier` will complain if they are used in the `equals` contract.
+  * ... see which field throws a potential `NullPointerException`, instead of having to guess which one it was. ([http://code.google.com/p/equalsverifier/issues/detail?id=39 Issue 39])
+  * ... be sure that `EqualsVerifier` doesn't detect recursive data structures where there are none. ([http://code.google.com/p/equalsverifier/issues/detail?id=34 Issue 34])
+  * ... stop worrying about adding prefab values for `BigDecimal` and `BigInteger`, to avoid that pesky recursion warning. ([http://code.google.com/p/equalsverifier/issues/detail?id=34 Issue 34])
+
+
 == Version 0.7 ==
   * ... test `equals` methods that use a call to `getClass()`, instead of an `instanceof` check, to determine the type of the object passed in, by calling the `#useGetClass()` method on `EqualsVerifier`.
   * ... get a warning when you use a transient field in your `equals` or `hashCode` method. Don't worry; you can suppress this warning too.
