@@ -61,6 +61,26 @@ EqualsVerifier.forClass(StringReference.class)
 
 !EqualsVerifier will always look inside the pool of prefabricated values before building its own. So in this case, when it looks for instances of `AtomicReference`, it will find two `AtomicReference`s with `String`s already filled in. Problem solved!
 
+==!NoClassDefFoundError==
+<pre>
+java.lang.AssertionError: java.lang.NoClassDefFoundError: net/sf/cglib/asm/FieldVisitor
+</pre>
+
+If you get this error message, then you probably have a transitive dependency problem with cglib. `EqualsVerifier` requires version 2.2, but other libraries may depend on earlier versions. If their dependency happens to be resolved before `EqualsVerifier`'s, the wrong version of cglib will be loaded on your classpath.
+
+To fix this, make sure you have cglib 2.2. If you use Maven, add the following lines to your pom:
+{{{
+<dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib-nodep</artifactId>
+			<version>2.2</version>
+		</dependency>
+	</dependencies>
+</dependencyManagement>
+}}}
+
 ==Non-nullity: equals/hashCode/toString throws !NullPointerException==
 This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
 {{{
