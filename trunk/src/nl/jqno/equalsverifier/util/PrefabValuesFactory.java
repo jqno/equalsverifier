@@ -187,14 +187,14 @@ public class PrefabValuesFactory {
 		prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addLists() {
 		addCollection(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
 		addCollection(LinkedList.class, new LinkedList(), new LinkedList());
 		addCollection(ArrayList.class, new ArrayList(), new ArrayList());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addMaps() {
 		prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
 		addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
@@ -206,14 +206,14 @@ public class PrefabValuesFactory {
 		addMap(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addSets() {
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
 		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 	}
 	
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings("rawtypes")
 	private void addQueues() {
 		prefabValues.put(ArrayBlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
 		prefabValues.put(ConcurrentLinkedQueue.class, new ConcurrentLinkedQueue(), new ConcurrentLinkedQueue());
