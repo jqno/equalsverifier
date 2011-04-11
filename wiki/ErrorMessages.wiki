@@ -61,6 +61,14 @@ EqualsVerifier.forClass(StringReference.class)
 
 !EqualsVerifier will always look inside the pool of prefabricated values before building its own. So in this case, when it looks for instances of `AtomicReference`, it will find two `AtomicReference`s with `String`s already filled in. Problem solved!
 
+==Double: equals doesn't use Double.compare for field foo==
+You should never use `==` to compare doubles or floats in an `equals` method. Always use `Double.compare` or [http://download.oracle.com/javase/6/docs/api/java/lang/Double.html#compareTo%28java.lang.Double%29 `Double.compareTo`] instead.
+
+Josh Bloch explains this in his book Effective Java. The short summary is that this method will do the right thing when confronted with `NaN` and positive and negative infinities. For example, `Float.NaN` is not equal to itself, but it has to be for `equals`, or you would never be able to retrieve it from a `HashMap`.
+
+==Float: equals doesn't use Float.compare for field foo==
+See the answer for `Double` above.
+
 ==Mutability: equals depends on mutable field==
 Your `equals` method references a field that is not final. This means that if the value of this field changes, the same object may not be equal to itself at two different points in time. This can be a problem if you use this object as a key in a map, or if you put it in a `HashSet` or other hash-based collection: the collection might not be able to find your object again.
 
@@ -94,36 +102,36 @@ To fix this, make sure you have cglib 2.2. If you use Maven, add the following l
 ==Non-nullity: equals/hashCode/toString throws !NullPointerException==
 This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
 {{{
-return someField.equals(other.someField);
+return foo.equals(other.foo);
 }}}
-It will throw a `NullPointerException` if `someField` is null. This can be avoided in two ways.
+It will throw a `NullPointerException` if `foo` is null. This can be avoided in two ways.
 
  # You can add a null check, like so:
  {{{
- return someField == null ? other.someField == null : someField.equals(other.someField);
+ return foo == null ? other.foo == null : foo.equals(other.foo);
  }}}
  # If you're certain the field can never be null (for instance, because the class's constructor explicitly checks for it), you can suppress `Warning.NULL_FIELDS` in your call to !EqualsVerifier.
 
-==Significant fields: equals relies on x, but hashCode does not.==
+==Significant fields: equals relies on foo, but hashCode does not.==
 The cause for this message is usually the obvious one.
 
 If it's not, then it might be caused by a cached hashCode field, similar to the one in `java.lang.String`. For example, given the following (abridged) class:
 {{{
 class CachedHashCode {
-	private final int x;
-	private final int y;
+	private final int foo;
+	private final int bar;
 	private int cachedHashCode = 0;
 
 	public int hashCode() {
 		if (cachedHashCode == 0) {
-			cachedHashCode += 31 * x;
-			cachedHashCode += 31 * y;
+			cachedHashCode += 31 * foo;
+			cachedHashCode += 31 * bar;
 		}
 		return cachedHashCode;
 	}
 }
 }}}
-`EqualsVerifier` thinks `cachedHashCode` is a regular field like all the others, and assigns it a value other than 0. The first thing the `hashCode` method does is compare it to 0. This yields false, so the method always returns `EqualsVerifier`'s (incorrect) value. `EqualsVerifier` doesn't know about this, so when it tries changing `x`, it notices a difference in the result of `equals`, but not in the result of `hashCode` (since the latter is never properly initialized). And this is why `EqualsVerifier` thinks the problem is caused by `x`.
+`EqualsVerifier` thinks `cachedHashCode` is a regular field like all the others, and assigns it a value other than 0. The first thing the `hashCode` method does is compare it to 0. This yields false, so the method always returns `EqualsVerifier`'s (incorrect) value. `EqualsVerifier` doesn't know about this, so when it tries changing `foo`, it notices a difference in the result of `equals`, but not in the result of `hashCode` (since the latter is never properly initialized). And this is why `EqualsVerifier` thinks the problem is caused by `foo`.
 
 Unfortunately, this kind of hashCode caching is really hard for `EqualsVerifier` to detect. Furthermore, if you actually do this, you either _really_ know what you're doing and then you probably don't need `EqualsVerifier` anyway (this applies to `String`), or you run the risk of doing it wrong (as in the example above, which isn't thread-safe) and shouldn't be using this trick in the first place. It's basically an optimization that will, in most cases anyway, be premature. The chances of `EqualsVerifier` supporting cached hashCodes in the future are therefore quite slim.
 
