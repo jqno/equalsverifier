@@ -109,7 +109,7 @@ class AnnotationAccessor {
 	}
 	
 	private void visitType(Class<?> type, boolean inheriting) throws IOException {
-		ClassLoader classLoader = type.getClassLoader();
+		ClassLoader classLoader = getClassLoaderFor(type);
 		Type asmType = Type.getType(type);
 		String url = asmType.getInternalName() + ".class";
 		InputStream is = classLoader.getResourceAsStream(url);
@@ -117,6 +117,14 @@ class AnnotationAccessor {
 		Visitor v = new Visitor(inheriting);
 		ClassReader cr = new ClassReader(is);
 		cr.accept(v, 0);
+	}
+
+	private ClassLoader getClassLoaderFor(Class<?> type) {
+		ClassLoader result = type.getClassLoader();
+		if (result == null) {
+			result = ClassLoader.getSystemClassLoader();
+		}
+		return result;
 	}
 
 	private class Visitor extends ClassWriter {
