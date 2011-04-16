@@ -362,4 +362,7 @@ public class TypeHelper {
 	}
 	
 	public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}
+
+	@SuppressWarnings("serial")
+	public static final class LoadedBySystemClassLoader extends Exception {}
 }

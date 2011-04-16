@@ -33,6 +33,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 
@@ -43,6 +44,12 @@ public class AnnotationAccessorTest {
 	private static final String CLASS_RETENTION = "classRetention";
 	private static final String BOTH_RETENTIONS = "bothRetentions";
 	private static final String NO_RETENTION = "noRetention";
+
+	@Test
+	public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), LoadedBySystemClassLoader.class);
+		accessor.typeHas(null);
+	}
 
 	@Test
 	public void findRuntimeAnnotationInType() {
