@@ -45,7 +45,10 @@ class FieldsChecker<T> implements Checker {
 		
 		inspector.check(new ArrayFieldCheck());
 		inspector.check(new SignificanceFieldCheck());
-		inspector.check(new FloatAndDoubleFieldCheck());
+		
+		if (hasEqualsMethod(classAccessor.getType())) {
+			inspector.check(new FloatAndDoubleFieldCheck());
+		}
 		
 		if (!ignoreMutability()) {
 			inspector.check(new MutableStateFieldCheck());
@@ -53,6 +56,16 @@ class FieldsChecker<T> implements Checker {
 		
 		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
 			inspector.check(new TransitiveFieldsCheck());
+		}
+	}
+	
+	private boolean hasEqualsMethod(Class<?> type) {
+		try {
+			type.getDeclaredMethod("equals", Object.class);
+			return true;
+		}
+		catch (NoSuchMethodException e) {
+			return false;
 		}
 	}
 
