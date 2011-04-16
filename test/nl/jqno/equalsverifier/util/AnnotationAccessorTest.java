@@ -36,6 +36,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class AnnotationAccessorTest {
 
 	@Test
 	public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
-		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), LoadedBySystemClassLoader.class);
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), LoadedBySystemClassLoader.class, false);
 		accessor.typeHas(null);
 	}
 
@@ -116,6 +117,26 @@ public class AnnotationAccessorTest {
 		assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
 	}
 	
+	@Test(expected=InternalException.class)
+	public void dynamicClassThrowsException() {
+		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
+		accessor.typeHas(TYPE_CLASS_RETENTION);
+	}
+	
+	@Test
+	public void dynamicClassWithSuppressedWarning() {
+		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, true);
+		assertFalse(accessor.typeHas(TYPE_CLASS_RETENTION));
+	}
+	
+	@Test
+	public void regularClassWithSuppressedWarningStillProcessesAnnotation() {
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), AnnotatedWithClass.class, true);
+		assertTrue(accessor.typeHas(TYPE_CLASS_RETENTION));
+	}
+	
 	private void assertTypeHasAnnotation(Class<?> type, Annotation annotation) {
 		assertTrue(findTypeAnnotationFor(type, annotation));
 	}
@@ -141,12 +162,12 @@ public class AnnotationAccessorTest {
 	}
 	
 	private boolean findTypeAnnotationFor(Class<?> type, Annotation annotation) {
-		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type);
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
 		return accessor.typeHas(annotation);
 	}
 	
 	private boolean findFieldAnnotationFor(Class<?> type, String fieldName, Annotation annotation) {
-		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type);
+		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
 		return accessor.fieldHas(fieldName, annotation);
 	}
 }

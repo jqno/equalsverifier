@@ -36,21 +36,27 @@ import net.sf.cglib.asm.Type;
  * @author Jan Ouwens
  */
 class AnnotationAccessor {
-	private final Class<?> type;
 	private final Annotation[] supportedAnnotations;
+	private final Class<?> type;
+	private final boolean ignoreFailure;
 	private final Set<Annotation> classAnnotations = new HashSet<Annotation>();
 	private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<String, Set<Annotation>>();
 	
 	private boolean processed = false;
+	private boolean shortCircuit = false;
 
 	/**
 	 * Constructor
 	 * 
+	 * @param supportedAnnotations Collection of annotations to query.
 	 * @param type The class whose annotations need to be queried.
+	 * @param ignoreFailure Ignore when processing annotations fails when the
+	 * 			class file cannot be read.
 	 */
-	public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type) {
+	public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, boolean ignoreFailure) {
 		this.supportedAnnotations = supportedAnnotations;
 		this.type = type;
+		this.ignoreFailure = ignoreFailure;
 	}
 	
 	/**
@@ -60,6 +66,9 @@ class AnnotationAccessor {
 	 * @return True if {@link #type} has an annotation with the supplied name.
 	 */
 	public boolean typeHas(Annotation annotation) {
+		if (shortCircuit) {
+			return false;
+		}
 		process();
 		return classAnnotations.contains(annotation);
 	}
@@ -77,6 +86,9 @@ class AnnotationAccessor {
 	 * 			field.
 	 */
 	public boolean fieldHas(String fieldName, Annotation annotation) {
+		if (shortCircuit || fieldName.startsWith("CGLIB$")) {
+			return false;
+		}
 		process();
 		Set<Annotation> annotations = fieldAnnotations.get(fieldName);
 		if (annotations == null) {
@@ -90,16 +102,11 @@ class AnnotationAccessor {
 			return;
 		}
 		
-		try {
-			visit();
-			processed = true;
-		}
-		catch (IOException e) {
-			throw new InternalException(e);
-		}
+		visit();
+		processed = true;
 	}
 	
-	private void visit() throws IOException {
+	private void visit() {
 		visitType(type, false);
 		Class<?> i = type.getSuperclass();
 		while (i != null && i != Object.class) {
@@ -108,15 +115,26 @@ class AnnotationAccessor {
 		}
 	}
 	
-	private void visitType(Class<?> type, boolean inheriting) throws IOException {
+	private void visitType(Class<?> type, boolean inheriting) {
 		ClassLoader classLoader = getClassLoaderFor(type);
 		Type asmType = Type.getType(type);
 		String url = asmType.getInternalName() + ".class";
 		InputStream is = classLoader.getResourceAsStream(url);
 		
 		Visitor v = new Visitor(inheriting);
-		ClassReader cr = new ClassReader(is);
-		cr.accept(v, 0);
+		try {
+			ClassReader cr = new ClassReader(is);
+			cr.accept(v, 0);
+		}
+		catch (IOException e) {
+			if (ignoreFailure) {
+				shortCircuit = true;
+			}
+			else {
+				throw new InternalException("Cannot read class file for " + type.getSimpleName() +
+						".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
+			}
+		}
 	}
 
 	private ClassLoader getClassLoaderFor(Class<?> type) {
