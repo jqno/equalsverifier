@@ -191,6 +191,8 @@ public class TypeHelper {
 		TimeZone timeZone;
 		BigDecimal bigDecimal;
 		BigInteger bigInteger;
+		Throwable throwable;
+		Exception exception;
 	}
 	
 	public static class AllRecursiveCollectionImplementationsContainer {
