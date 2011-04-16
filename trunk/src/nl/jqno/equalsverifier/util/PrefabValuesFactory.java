@@ -142,7 +142,7 @@ public class PrefabValuesFactory {
 	}
 
 	private <T> void createInstances(Class<T> type) {
-		ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues);
+		ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues, false);
 		T red = accessor.getRedObject();
 		T black = accessor.getBlackObject();
 		prefabValues.put(type, red, black);
