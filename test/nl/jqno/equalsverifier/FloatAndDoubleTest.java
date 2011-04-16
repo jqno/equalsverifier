@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,18 @@ public class FloatAndDoubleTest {
 	public void objectUseDoubleDotCompare() {
 		EqualsVerifier<ObjectDoubleContainer> ev = EqualsVerifier.forClass(ObjectDoubleContainer.class);
 		assertFailure(ev, DOUBLE, "d");
+	}
+	
+	@Test
+	public void floatWithoutEqualsWorks() {
+		EqualsVerifier.forClass(FloatContainerWithoutEquals.class)
+				.verify();
+	}
+	
+	@Test
+	public void doubleWithoutEqualsWorks() {
+		EqualsVerifier.forClass(DoubleContainerWithoutEquals.class)
+				.verify();
 	}
 	
 	static final class PrimitiveFloatContainer {
@@ -153,6 +165,22 @@ public class FloatAndDoubleTest {
 		@Override
 		public String toString() {
 			return getClass().getSimpleName() + ":" + d;
+		}
+	}
+	
+	static final class FloatContainerWithoutEquals {
+		final float f;
+		
+		FloatContainerWithoutEquals(float f) {
+			this.f = f;
+		}
+	}
+	
+	static final class DoubleContainerWithoutEquals {
+		final double d;
+		
+		DoubleContainerWithoutEquals(double d) {
+			this.d = d;
 		}
 	}
 }
