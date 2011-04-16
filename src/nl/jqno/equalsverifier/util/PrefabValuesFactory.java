@@ -183,6 +183,7 @@ public class PrefabValuesFactory {
 		prefabValues.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
+		prefabValues.put(Throwable.class, new Throwable(), new Throwable());
 		prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
 		prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
 	}
