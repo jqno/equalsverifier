@@ -40,20 +40,21 @@ public class ClassAccessor<T> {
 	 * 			the same as T.
 	 * @param prefabValues Prefabricated values with which to fill instantiated
 	 * 			objects.
+	 * @param ignoreAnnotationFailure Ignore when processing annotations fails.
 	 * @return A {@link ClassAccessor} for T.
 	 */
-	public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues) {
-		return new ClassAccessor<T>(type, prefabValues, SupportedAnnotations.values());
+	public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues, boolean ignoreAnnotationFailure) {
+		return new ClassAccessor<T>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
 	}
 	
 	/**
-	 * Private constructor. Call {@link #of(Class, PrefabValues)} instead.
+	 * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
 	 */
-	ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations) {
+	ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
 		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
-		this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type);
+		this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
 	}
 	
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +110,6 @@ import nl.jqno.equalsverifier.util.PrefabValuesFactory;
  */
 public final class EqualsVerifier<T> {
 	private final Class<T> type;
-	private final ClassAccessor<T> classAccessor;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
@@ -200,7 +199,6 @@ public final class EqualsVerifier<T> {
 		this.unequalExamples = unequalExamples;
 		
 		this.prefabValues = PrefabValuesFactory.withJavaClasses();
-		this.classAccessor = ClassAccessor.of(type, prefabValues);
 	}
 	
 	/**
@@ -333,12 +331,13 @@ public final class EqualsVerifier<T> {
 	}
 
 	private void performVerification() {
-		verifyWithoutExamples();
-		ensureUnequalExamples();
-		verifyWithExamples();
+		ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
+		verifyWithoutExamples(classAccessor);
+		ensureUnequalExamples(classAccessor);
+		verifyWithExamples(classAccessor);
 	}
 
-	private void verifyWithoutExamples() {
+	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
 		Checker signatureChecker = new SignatureChecker<T>(type);
 		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
 		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress);
@@ -348,7 +347,7 @@ public final class EqualsVerifier<T> {
 		nullChecker.check();
 	}
 	
-	private void ensureUnequalExamples() {
+	private void ensureUnequalExamples(ClassAccessor<T> classAccessor) {
 		if (unequalExamples.size() > 0) {
 			return;
 		}
@@ -357,7 +356,7 @@ public final class EqualsVerifier<T> {
 		unequalExamples.add(classAccessor.getBlackObject());
 	}
 
-	private void verifyWithExamples() {
+	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);

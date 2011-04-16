@@ -65,7 +65,7 @@ class AbstractDelegationChecker<T> implements Checker {
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
 		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
-			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues);
+			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues, false);
 			instance = superclassAccessor.getRedObject();
 		}
 		checkAbstractMethods(superclass, instance, false);

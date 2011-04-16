@@ -48,7 +48,7 @@ public class ClassAccessorTest {
 	@Before
 	public void setup() {
 		prefabValues = PrefabValuesFactory.withJavaClasses();
-		classAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
+		classAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
 	}
 	
 	@Test
@@ -63,14 +63,14 @@ public class ClassAccessorTest {
 	
 	@Test
 	public void hasAnnotation() {
-		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values());
+		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
 		assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));
 		assertFalse(accessor.hasAnnotation(TYPE_CLASS_RETENTION));
 	}
 	
 	@Test
 	public void fieldHasAnnotation() throws NoSuchFieldException {
-		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values());
+		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
 		Field field = AnnotatedFields.class.getField("runtimeRetention");
 		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
 		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
@@ -109,32 +109,32 @@ public class ClassAccessorTest {
 	
 	@Test
 	public void instantiateAllTypes() {
-		ClassAccessor.of(AllTypesContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	@Test
 	public void instantiateArrayTypes() {
-		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	@Test
 	public void instantiateRecursiveApiTypes() {
-		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	@Test
 	public void instantiateCollectionImplementations() {
-		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	@Test
 	public void instantiateInterfaceField() {
-		ClassAccessor.of(InterfaceContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(InterfaceContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	@Test
 	public void instantiateAbstractClassField() {
-		ClassAccessor.of(AbstractClassContainer.class, prefabValues).getRedObject();
+		ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject();
 	}
 	
 	private void assertObjectHasNoNullFields(PointContainer foo) {

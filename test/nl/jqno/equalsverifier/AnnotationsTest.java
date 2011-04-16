@@ -23,8 +23,10 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.casefolding.Nonnull;
+import nl.jqno.equalsverifier.testhelpers.points.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.MutableCanEqualColorPoint;
+import nl.jqno.equalsverifier.util.Instantiator;
 
 import org.junit.Test;
 
@@ -97,6 +99,28 @@ public class AnnotationsTest {
 	@Test
 	public void ignoreNonJpaTransient() {
 		EqualsVerifier.forClass(TransientByNonJpaAnnotation.class)
+				.verify();
+	}
+	
+	@Test
+	public void dynamicClassThrowsAppropriateException() {
+		FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
+		EqualsVerifier<? extends FinalMethodsPoint> ev = EqualsVerifier.forClass(dynamic.getClass());
+		assertFailure(ev, "Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
+	}
+	
+	@Test
+	public void dynamicClassWithSuppressedWarning() {
+		FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
+		EqualsVerifier.forClass(dynamic.getClass())
+				.suppress(Warning.ANNOTATION)
+				.verify();
+	}
+	
+	@Test
+	public void regularClassWithSuppressedWarningStillProcessesAnnotation() {
+		EqualsVerifier.forClass(ImmutableByAnnotation.class)
+				.suppress(Warning.ANNOTATION)
 				.verify();
 	}
 
