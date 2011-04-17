@@ -6,6 +6,12 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.0.1 ==
+  * ... use `EqualsVerifier` on dynamically generated classes by disabling annotation processing. ([http://code.google.com/p/equalsverifier/issues/detail?id=41 Issue 41])
+  * ... use `EqualsVerifier` on classes that are a subclass of one of the classes from `rt.jar`, which are loaded by the system classloader. ([http://code.google.com/p/equalsverifier/issues/detail?id=43 Issue 43])
+  * ... use `EqualsVerifier` on classes with `float` or `double` fields but no `equals` method. ([http://code.google.com/p/equalsverifier/issues/detail?id=44 Issue 44])
+  * ... stop worrying about adding prefab values for `Throwable` and `Exception`, to avoid that pesky recursion warning. ([http://code.google.com/p/equalsverifier/issues/detail?id=45 Issue 45])
+
 == Version 1.0 ==
   * ... use the following annotations on your classes and fields: `EqualsVerifier` will know what to do!
     * `@Immutable`: `EqualsVerifier` will not complain about non-final fields if your class is `@Immutable`. (It doesn't matter in which package the annotation is defined; `javax.annotations.concurrent.Immutable`, `net.jcip.annotations.Immutable` or your own implementation will all work fine.)
