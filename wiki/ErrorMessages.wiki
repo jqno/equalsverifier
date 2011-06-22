@@ -135,6 +135,23 @@ class CachedHashCode {
 
 Unfortunately, this kind of hashCode caching is really hard for `EqualsVerifier` to detect. Furthermore, if you actually do this, you either _really_ know what you're doing and then you probably don't need `EqualsVerifier` anyway (this applies to `String`), or you run the risk of doing it wrong (as in the example above, which isn't thread-safe) and shouldn't be using this trick in the first place. It's basically an optimization that will, in most cases anyway, be premature. The chances of `EqualsVerifier` supporting cached hashCodes in the future are therefore quite slim.
 
+==Subclass: equals is not final.==
+<pre>
+Subclass: equals is not final.
+Supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.
+</pre>
+
+There are three ways to solve this error, in order of decreasing preference:
+
+ * Make the `equals` method (or even the whole class) final.
+ * If you intend your `equals` method to be overridden, and you also want subclasses to add state that needs to be included in the contract, things get complicated. In Item 8 of _Effective Java_, Josh Bloch argues that it is impossible to achieve this without breaking the contract. Nevertheless, it turns out to be possible. [http://www.artima.com/lejava/articles/equality.html This article] by Martin Odersky, Bill Venners and Lex Spoon explains how to achieve this. If you decide to go down this path, you will need to supply !EqualsVerifier with an example of a subclass with added state, like this:
+ {{{
+    EqualsVerifier.forClass(MyClass.class)
+        .withRedefinedSubclass(SomeSubclass.class)
+        .verify();
+ }}}
+ * Use `.suppress(Warning.STRICT_INHERITANCE)` to suppress the error message.
+
 ==Subclass: object is not equal to an instance of a trivial subclass with equal fields==
 <pre>
 Subclass: object is not equal to an instance of a trivial subclass with equal fields: ...
