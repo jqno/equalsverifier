@@ -46,7 +46,7 @@ Another excellent source, of course, is Items 8 and 9 from Josh Bloch's _Effecti
 Take a look at [ErrorMessages the Error Messages page].
 
 ==I'm testing `java.lang.String`, but it fails.==
-Please don't test `java.lang.String`, because indeed it fails. Please see the section on [FAQ#Can_EqualsVerifier_give_false_negatives? false negatives] above.
+Please don't test `java.lang.String`, because indeed it fails. Please see the section on [#Can_EqualsVerifier_give_false_negatives? false negatives] above.
 
 =Build=
 ==Can I use !EqualsVerifier with Maven?==
