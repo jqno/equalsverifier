@@ -81,14 +81,14 @@ class HierarchyChecker<T> implements Checker {
 		Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
 		
 		if (hasRedefinedSuperclass || usingGetClass) {
-			assertFalse("Redefined superclass:\n  " + reference + "\nmay not equal superclass instance\n  " + equalSuper + "\nbut it does.",
+			assertFalse("Redefined superclass:\n  " + reference + "\nshould not equal superclass instance\n  " + equalSuper + "\nbut it does.",
 					reference.equals(equalSuper) || equalSuper.equals(reference));
 		}
 		else {
 			T shallow = referenceAccessor.copy();
 			ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
 			
-			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n  " + equalSuper,
+			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n " + equalSuper,
 					reference.equals(equalSuper) && equalSuper.equals(reference));
 			
 			assertTrue("Transitivity:\n  " + reference + "\nand\n  " + shallow +
