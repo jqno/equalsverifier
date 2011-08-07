@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,18 @@ public class NonNullityTest {
 		assertFailure(ev, "Non-nullity: true returned for null value");
 	}
 	
+	@Test
+	public void typeCheckOmitted() {
+		EqualsVerifier<TypeCheckBroken> ev = EqualsVerifier.forClass(TypeCheckBroken.class);
+		assertFailure(ev, "Type-check: equals throws ClassCastException");
+	}
+	
+	@Test
+	public void typeCheckOmittedIllegalState() {
+		EqualsVerifier<TypeCheckBrokenIllegalState> ev = EqualsVerifier.forClass(TypeCheckBrokenIllegalState.class);
+		assertFailure(ev, "Type-check: equals throws IllegalStateException");
+	}
+	
 	static class NullPointerExceptionBrokenPoint extends Point {
 		public NullPointerExceptionBrokenPoint(int x, int y) {
 			super(x, y);
@@ -59,6 +71,43 @@ public class NonNullityTest {
 				return true;
 			}
 			return super.equals(obj);
+		}
+	}
+	
+	static class TypeCheckBroken {
+		private int i;
+		
+		public TypeCheckBroken(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (obj == null) {
+				return false;
+			}
+			return i == ((TypeCheckBroken)obj).i;
+		}
+	}
+	
+	static class TypeCheckBrokenIllegalState {
+		private int i;
+		
+		public TypeCheckBrokenIllegalState(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			try {
+				if (obj == null) {
+					return false;
+				}
+				return i == ((TypeCheckBrokenIllegalState)obj).i;
+			}
+			catch (ClassCastException e) {
+				throw new IllegalStateException(e);
+			}
 		}
 	}
 }
