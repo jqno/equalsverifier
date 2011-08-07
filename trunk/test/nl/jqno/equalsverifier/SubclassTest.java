@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class SubclassTest {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
 		ev.withRedefinedSuperclass();
 		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
-				"may not equal superclass instance", Point.class.getSimpleName(), "but it does");
+				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
 	}
 	
 	@Test
