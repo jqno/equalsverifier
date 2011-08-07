@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +81,7 @@ class ExamplesChecker<T> implements Checker {
 		checkReflexivity(reference);
 		checkSymmetryEquals(reference, copy);
 		checkNonNullity(reference);
+		checkTypeCheck(reference);
 		checkHashCode(reference, copy);
 	}
 
@@ -118,6 +119,20 @@ class ExamplesChecker<T> implements Checker {
 		}
 		catch (NullPointerException e) {
 			fail("Non-nullity: NullPointerException thrown");
+		}
+	}
+	
+	private void checkTypeCheck(T reference) {
+		class SomethingElse {}
+		SomethingElse somethingElse = new SomethingElse();
+		try {
+			reference.equals(somethingElse);
+		}
+		catch (ClassCastException e) {
+			fail("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check.");
+		}
+		catch (Exception e) {
+			fail("Type-check: equals throws " + e.getClass().getSimpleName() + ".\nAdd an instanceof or getClass() check.");
 		}
 	}
 
