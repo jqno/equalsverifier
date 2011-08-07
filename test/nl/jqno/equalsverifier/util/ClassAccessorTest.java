@@ -28,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllRecursiveCollectionImplementationsContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllTypesContainer;
@@ -74,6 +75,28 @@ public class ClassAccessorTest {
 		Field field = AnnotatedFields.class.getField("runtimeRetention");
 		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
 		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
+	}
+	
+	@Test
+	public void equalsIsNotAbstract() {
+		assertFalse(classAccessor.isEqualsAbstract());
+	}
+	
+	@Test
+	public void equalsIsAbstract() {
+		ClassAccessor<AbstractEqualsAndHashCode> accessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, true);
+		assertTrue(accessor.isEqualsAbstract());
+	}
+	
+	@Test
+	public void hashCodeIsNotAbstract() {
+		assertFalse(classAccessor.isHashCodeAbstract());
+	}
+	
+	@Test
+	public void hashCodeIsAbstract() {
+		ClassAccessor<AbstractEqualsAndHashCode> accessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, true);
+		assertTrue(accessor.isHashCodeAbstract());
 	}
 	
 	@Test

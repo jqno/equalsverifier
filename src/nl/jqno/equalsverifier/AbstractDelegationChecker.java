@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,12 +63,34 @@ class AbstractDelegationChecker<T> implements Checker {
 	}
 	
 	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
+		ClassAccessor<S> accessor = ClassAccessor.of(superclass, prefabValues, true);
+		boolean equalsIsAbstract = accessor.isEqualsAbstract();
+		boolean hashCodeIsAbstract = accessor.isHashCodeAbstract();
+		if (equalsIsAbstract != hashCodeIsAbstract) {
+			fail(buildAbstractMethodInSuperErrorMessage(superclass, equalsIsAbstract));
+		}
+		if (equalsIsAbstract && hashCodeIsAbstract) {
+			return;
+		}
+
 		S instance = this.<S>getPrefabValue(superclass);
 		if (instance == null) {
 			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues, false);
 			instance = superclassAccessor.getRedObject();
 		}
 		checkAbstractMethods(superclass, instance, false);
+	}
+
+	private String buildAbstractMethodInSuperErrorMessage(Class<?> type, boolean isEqualsAbstract) {
+		StringBuilder sb = new StringBuilder("Abstract delegation: ");
+		sb.append(type.getSimpleName());
+		sb.append("'s ");
+		sb.append(isEqualsAbstract ? "equals" : "hashCode");
+		sb.append(" method is abstract, but ");
+		sb.append(isEqualsAbstract ? "hashCode" : "equals");
+		sb.append(" is not.");
+		sb.append("\nBoth should be either abstract or concrete.");
+		return sb.toString();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -98,7 +120,7 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.equals(instance);
 		}
 		catch (AbstractMethodError e) {
-			fail(buildErrorMessage(instanceClass, prefabPossible, "equals"));
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals"));
 		}
 		catch (Throwable ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
@@ -109,7 +131,7 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.hashCode();
 		}
 		catch (AbstractMethodError e) {
-			fail(buildErrorMessage(instanceClass, prefabPossible, "hashCode"));
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode"));
 		}
 		catch (Throwable ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
@@ -117,7 +139,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 	}
 	
-	private String buildErrorMessage(Class<?> type, boolean prefabPossible, String method) {
+	private String buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Abstract delegation: ");
 		sb.append(type.getSimpleName());

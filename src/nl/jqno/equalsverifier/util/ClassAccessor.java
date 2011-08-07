@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
@@ -91,6 +92,33 @@ public class ClassAccessor<T> {
 	 */
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
 		return annotationAccessor.fieldHas(field.getName(), annotation);
+	}
+	
+	/**
+	 * Determines whether T's {@code equals} method is abstract.
+	 * 
+	 * @return True if T's {@code equals} method is abstract.
+	 */
+	public boolean isEqualsAbstract() {
+		return isMethodAbstract("equals", Object.class);
+	}
+	
+	/**
+	 * Determines whether T's {@code hashCode} method is abstract.
+	 * 
+	 * @return True if T's {@code hashCode} method is abstract.
+	 */
+	public boolean isHashCodeAbstract() {
+		return isMethodAbstract("hashCode");
+	}
+	
+	private boolean isMethodAbstract(String name, Class<?>... parameterTypes) {
+		try {
+			return Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers());
+		}
+		catch (NoSuchMethodException e) {
+			throw new InternalException("Should never occur (famous last words)");
+		}
 	}
 	
 	/**
