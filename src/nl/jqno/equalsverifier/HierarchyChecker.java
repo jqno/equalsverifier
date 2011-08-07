@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2011 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,7 +74,8 @@ class HierarchyChecker<T> implements Checker {
 	
 	private void checkSuperclass() {
 		Class<? super T> superclass = type.getSuperclass();
-		if (redefinedSubclass != null || superclass == Object.class) {
+		ClassAccessor<? super T> superAccessor = ClassAccessor.of(superclass, classAccessor.getPrefabValues(), true);
+		if (redefinedSubclass != null || superclass == Object.class || superAccessor.isHashCodeAbstract()) {
 			return;
 		}
 
