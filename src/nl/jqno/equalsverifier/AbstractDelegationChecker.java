@@ -109,7 +109,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		try {
 			return Instantiator.of(type).instantiate();
 		}
-		catch (Throwable e) {
+		catch (Exception ignored) {
 			// If it fails for some reason, any reason, just return null.
 			return null;
 		}
@@ -122,7 +122,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		catch (AbstractMethodError e) {
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals"));
 		}
-		catch (Throwable ignored) {
+		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
 			// other errors will be handled later.
 		}
@@ -133,7 +133,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		catch (AbstractMethodError e) {
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode"));
 		}
-		catch (Throwable ignored) {
+		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
 			// other errors will be handled later.
 		}
