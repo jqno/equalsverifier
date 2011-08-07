@@ -89,7 +89,7 @@ class HierarchyChecker<T> implements Checker {
 			T shallow = referenceAccessor.copy();
 			ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
 			
-			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n " + equalSuper,
+			assertTrue("Symmetry:\n  " + reference + "\ndoes not equal superclass instance\n  " + equalSuper,
 					reference.equals(equalSuper) && equalSuper.equals(reference));
 			
 			assertTrue("Transitivity:\n  " + reference + "\nand\n  " + shallow +
