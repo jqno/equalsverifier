@@ -44,6 +44,12 @@ public class AbstractEqualsAndHashCodeTest {
 		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_IS_ABSTRACT, EQUALS_IS_NOT);
 	}
 	
+	@Test
+	public void extraLevelInClassHierarchyIsValid() {
+		EqualsVerifier.forClass(SubclassOfSubclassOfAbstractBoth.class)
+				.verify();
+	}
+	
 	abstract static class AbstractBoth {
 		public abstract boolean equals(Object obj);
 		public abstract int hashCode();
@@ -112,6 +118,29 @@ public class AbstractEqualsAndHashCodeTest {
 				return false;
 			}
 			return foo == ((SubclassOfAbstractHashCodeButNotEquals)obj).foo;
+		}
+		
+		@Override
+		public int hashCode() {
+			return foo;
+		}
+	}
+
+	static abstract class IntermediateSubclassOfAbstractBoth extends AbstractBoth {}
+	
+	static final class SubclassOfSubclassOfAbstractBoth extends IntermediateSubclassOfAbstractBoth {
+		private final int foo;
+		
+		SubclassOfSubclassOfAbstractBoth(int foo) {
+			this.foo = foo;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SubclassOfSubclassOfAbstractBoth)) {
+				return false;
+			}
+			return foo == ((SubclassOfSubclassOfAbstractBoth)obj).foo;
 		}
 		
 		@Override
