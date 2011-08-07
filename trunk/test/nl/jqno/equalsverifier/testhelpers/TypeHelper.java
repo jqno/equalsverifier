@@ -363,6 +363,14 @@ public class TypeHelper {
 	
 	public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}
 
+	public static abstract class AbstractEqualsAndHashCode {
+		@Override
+		public abstract boolean equals(Object obj);
+		
+		@Override
+		public abstract int hashCode();
+	}
+	
 	@SuppressWarnings("serial")
 	public static final class LoadedBySystemClassLoader extends Exception {}
 }
