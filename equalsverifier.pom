@@ -6,9 +6,11 @@
 	<name>EqualsVerifier</name>
 	<version>???</version>
 	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
+	<packaging>jar</packaging>
 	<url>http://code.google.com/p/equalsverifier/</url>
 	<scm>
-		<url>http://equalsverifier.googlecode.com/svn/trunk/</url>
+		<url>http://equalsverifier.googlecode.com/svn/</url>
+		<connection>scm:svn:http://equalsverifier.googlecode.com/svn/</connection>
 	</scm>
 	<licenses>
 		<license>
