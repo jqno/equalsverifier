@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2009-2010 Jan Ouwens
+Copyright 2009-2011 Jan Ouwens
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -56,12 +56,10 @@ limitations under the License.
 	<property name="maven.staging.repository.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
 
 	<property name="svn.cmd" value="svn" />
-	<property name="mvn.cmd" value="mvn" />
 	<property name="project.svn" value="https://equalsverifier.googlecode.com/svn" />
 	
 	<property name="publish.dir" value="${dist.dir}/publish" />
 	<property name="tag.dir" value="${publish.dir}/tag" />
-	<property name="mvn.dir" value="${publish.dir}/mvn" />
 	
 	<property name="equalsverifier.pom" value="${basedir}/equalsverifier.pom" />
 	<property name="equalsverifier.maven.pom" value="${dist.maven.dir}/pom.xml" />
@@ -294,30 +292,6 @@ limitations under the License.
 		</exec>
 	</target>
 
-	<target name="publish-maven" depends="-publish-validate, -checkCredentialsFile, deploy">
-		<mkdir dir="${mvn.dir}" />
-		
-		<echo message="Checking out ${project.svn}/maven" />
-		<exec dir="${mvn.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="checkout ${project.svn}/maven --username ${google.username} --password ${google.password}" />
-		</exec>
-
-		<echo message="Preparing Maven repo" />
-		<exec dir="${tag.dir}" executable="${mvn.cmd}" failonerror="true">
-			<arg line="deploy:deploy-file -Durl=file://${mvn.dir}/maven -Dfile=${equalsverifier.jar} -DpomFile=${equalsverifier.tag.pom}" />
-		</exec>
-
-		<echo message="Adding contents of ${mvn.dir}/maven to SVN" />
-		<exec dir="${mvn.dir}/maven" executable="${svn.cmd}" failonerror="true">
-			<arg line="add . --force --username ${google.username} --password ${google.password}" />
-		</exec>
-		
-		<echo message="Committing Maven repo in ${mvn.dir} to SVN" />
-		<exec dir="${mvn.dir}/maven" executable="${svn.cmd}" failonerror="true">
-			<arg line='commit -m "Deploy to Maven repo: version ${version}" --username ${google.username} --password ${google.password}' />
-		</exec>
-	</target>
-
 	<target name="-credentials">
 		<available property="hasCredentialsFile" file="${credentialsFile}" />
 	</target>
@@ -396,5 +370,5 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
 	</target>
 
-	<target name="publish" depends="-publish-validate, -checkCredentialsFile, deploy, -publish-ask, publish-tag, publish-maven, publish-googlecode, publish-maven-central" />
+	<target name="publish" depends="-publish-validate, -checkCredentialsFile, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
 </project>
