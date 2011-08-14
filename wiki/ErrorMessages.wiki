@@ -140,7 +140,7 @@ If `com.example.Foo` is a interface or an abstract class, it's fine to use insta
 Note that static fields are ignored only if they are also final.
 
 
-==Significant fields: equals relies on foo, but hashCode does not.==
+==Significant fields: equals relies on foo, but hashCode does not==
 The cause for this message is usually the obvious one.
 
 If it's not, then it might be caused by a cached hashCode field, similar to the one in `java.lang.String`. For example, given the following (abridged) class:
@@ -163,7 +163,7 @@ class CachedHashCode {
 
 Unfortunately, this kind of hashCode caching is really hard for `EqualsVerifier` to detect. Furthermore, if you actually do this, you either _really_ know what you're doing and then you probably don't need `EqualsVerifier` anyway (this applies to `String`), or you run the risk of doing it wrong (as in the example above, which isn't thread-safe) and shouldn't be using this trick in the first place. It's basically an optimization that will, in most cases anyway, be premature. The chances of `EqualsVerifier` supporting cached hashCodes in the future are therefore quite slim.
 
-==Subclass: equals is not final.==
+==Subclass: equals is not final==
 <pre>
 Subclass: equals is not final.
 Supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.
