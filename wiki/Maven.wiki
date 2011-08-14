@@ -2,7 +2,9 @@
 
 = Maven =
 
-If you want to add `EqualsVerifier` to your Maven project, add the following to your POM file. Be sure to replace the `???` with the current version!
+*NOTE*: From version 1.0.2 onward, `EqualsVerifier` is available from Maven Central. Therefore, I have deprecated this repository. I will keep it around for those who find it useful, but version 1.0.2 will be the last version published here.
+
+If you want to add version 1.0.2 or below of `EqualsVerifier` to your Maven project, add the following to your POM file. Be sure to replace the `???` with the appropriate version!
 
 {{{
   <dependency>
