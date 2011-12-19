@@ -9,6 +9,11 @@ Did !EqualsVerifier give an error message that you didn't understand? I do my be
 ==I can't find my error message in the list below==
 This is not a complete list. I'll add to it as needed, so if you need help with an error message, please file [http://code.google.com/p/equalsverifier/issues/entry an issue] in the Issue tracker or let me know on the [http://groups.google.com/group/equalsverifier discussion group], and I'll add an explanation as soon as possible.
 
+==A note about static fields==
+As part of the verification process, !EqualsVerifier will assign values to all fields of the class under test, including static fields. The only exception to this are static final fields. These values are unpredictable, and often even invalid under normal conditions. This means that you have to be extra careful in the following circumstances:
+ * If you have non-final static fields, and these fields are relevant in other unit tests, you may experience unpredictable behaviour. Consider making the static field either final or non-static, or reset the field (using reflection if it's private) immediately after calling !EqualsVerifier.
+ * If you use <tt>!EqualsVerifier.forExamples</tt>, don't re-use the instances of the class under test. Instead, use dedicated instances for the !EqualsVerifier test. Otherwise, you might use instances with invalid values, which might mess up your other tests.
+
 =Error messages=
 
 ==Abstract delegation==
