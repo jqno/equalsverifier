@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,6 +113,7 @@ public final class EqualsVerifier<T> {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
+	private final StaticFieldValueStash<T> stash;
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
 	private boolean usingGetClass = false;
@@ -199,6 +200,7 @@ public final class EqualsVerifier<T> {
 		this.unequalExamples = unequalExamples;
 		
 		this.prefabValues = PrefabValuesFactory.withJavaClasses();
+		this.stash = new StaticFieldValueStash<T>(type);
 	}
 	
 	/**
@@ -304,6 +306,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
+			stash.backup();
 			performVerification();
 		}
 		catch (AssertionError e) {
@@ -314,6 +317,9 @@ public final class EqualsVerifier<T> {
 		}
 		catch (Throwable e) {
 			handleError(e, true);
+		}
+		finally {
+			stash.restore();
 		}
 	}
 
