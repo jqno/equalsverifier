@@ -117,6 +117,7 @@ public final class EqualsVerifier<T> {
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
 	private boolean usingGetClass = false;
+	private boolean allFieldsShouldBeUsed = false;
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	private boolean verbose = false;
@@ -257,6 +258,18 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
+	 * Signals that all non-transient fields are relevant in the {@code equals}
+	 * contract. {@code EqualsVerifier} will fail if one non-transient field
+	 * does not affect the outcome of {@code equals}.
+	 * 
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> allFieldsShouldBeUsed() {
+		allFieldsShouldBeUsed = true;
+		return this;
+	}
+	
+	/**
 	 * Signals that T is part of an inheritance hierarchy where {@code equals}
 	 * is overridden. Call this method if T has overridden {@code equals} and
 	 * {@code hashCode}, and one or more of T's superclasses have as well.
@@ -375,7 +388,7 @@ public final class EqualsVerifier<T> {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
-		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress);
+		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed);
 
 		preconditionChecker.check();
 		examplesChecker.check();
