@@ -227,11 +227,20 @@ public final class EqualsVerifier<T> {
 	 * @param red An instance of {@code S}.
 	 * @param black Another instance of {@code S}.
 	 * @return {@code this}, for easy method chaining.
-	 * @throws NullPointerException If either {@code red} or {@code black}
-	 * 				is null.
+	 * @throws NullPointerException If either {@code otherType}, {@code red}
+	 * 				or {@code black} is null.
 	 * @throws IllegalArgumentException If {@code red} equals {@code black}.
 	 */
 	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
+		if (otherType == null) {
+			throw new NullPointerException("Type is null");
+		}
+		if (red == null || black == null) {
+			throw new NullPointerException("One or both values are null.");
+		}
+		if (red.equals(black)) {
+			throw new IllegalArgumentException("Both values are equal.");
+		}
 		prefabValues.put(otherType, red, black);
 		return this;
 	}

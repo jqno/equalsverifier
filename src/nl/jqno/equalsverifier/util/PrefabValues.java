@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2012 Jan Ouwens
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,19 +34,8 @@ public class PrefabValues {
 	 * @param type The class of the values.
 	 * @param red A value of type T.
 	 * @param black Another value of type T.
-	 * @throws IllegalArgumentException When either value is null, or when
-	 * 			they are equal.
 	 */
 	public <T> void put(Class<T> type, T red, T black) {
-		if (type == null) {
-			throw new InternalException("Type is null");
-		}
-		if (red == null || black == null) {
-			throw new InternalException("One or both values are null.");
-		}
-		if (red.equals(black)) {
-			throw new InternalException("Both values are equal.");
-		}
 		values.put(type, new Tuple<T>(red, black));
 	}
 	

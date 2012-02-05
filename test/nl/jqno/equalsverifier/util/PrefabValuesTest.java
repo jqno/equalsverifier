@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,26 +45,6 @@ public class PrefabValuesTest {
 	@Test
 	public void happyPath() {
 		assertPrefabValues(p, EXISTING_KEY);
-	}
-	
-	@Test(expected=InternalException.class)
-	public void putNullClass() {
-		p.put(null, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
-	}
-	
-	@Test(expected=InternalException.class)
-	public void putRedNull() {
-		p.put(NON_EXISTING_KEY, null, VALUE_FOR_NON_EXISTING_KEY);
-	}
-	
-	@Test(expected=InternalException.class)
-	public void putBlackNull() {
-		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, null);
-	}
-	
-	@Test(expected=InternalException.class)
-	public void putTwoEqualValues() {
-		p.put(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
 	@Test
