@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
+import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Array;
@@ -32,11 +33,13 @@ class FieldsChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
+	private final boolean allFieldsShouldBeUsed;
 
-	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress) {
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean checkAllFields) {
 		this.classAccessor = classAccessor;
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+		this.allFieldsShouldBeUsed = checkAllFields;
 	}
 	
 	@Override
@@ -91,6 +94,11 @@ class FieldsChecker<T> implements Checker {
 						equalsChanged);
 				assertFalse("Significant fields: hashCode relies on " + referenceAccessor.getFieldName() + ", but equals does not.",
 						hashCodeChanged);
+			}
+			
+			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsTransient()) {
+				assertTrue("Significant fields: equals does not use " + referenceAccessor.getFieldName() + ".",
+						equalsChanged);
 			}
 			
 			referenceAccessor.changeField(prefabValues);

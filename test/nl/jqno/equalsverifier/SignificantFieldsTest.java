@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,9 @@ package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.testhelpers.points.Color;
+import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
@@ -31,6 +34,34 @@ public class SignificantFieldsTest {
 	public void extraFieldInHashCode() {
 		EqualsVerifier<ExtraFieldInHashCodePoint> ev = EqualsVerifier.forClass(ExtraFieldInHashCodePoint.class);
 		assertFailure(ev, "Significant fields", "hashCode relies on", "but equals does not");
+	}
+	
+	@Test
+	public void allFieldsUsed() {
+		EqualsVerifier.forClass(FinalPoint.class).allFieldsShouldBeUsed().verify();
+	}
+	
+	@Test
+	public void oneFieldUnused() {
+		EqualsVerifier.forClass(OneFieldUnusedColorPoint.class).verify();
+		
+		EqualsVerifier<OneFieldUnusedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedColorPoint.class);
+		ev.allFieldsShouldBeUsed();
+		assertFailure(ev, "Significant fields", "equals does not use");
+	}
+	
+	@Test
+	public void oneTransientFieldUnused() {
+		EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class).allFieldsShouldBeUsed().verify();
+	}
+	
+	@Test
+	public void oneFieldUnusedExtended() {
+		EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class).verify();
+		
+		EqualsVerifier<OneFieldUnusedExtendedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class);
+		ev.allFieldsShouldBeUsed();
+		assertFailure(ev, "Significant fields", "equals does not use");
 	}
 	
 	@Test
@@ -83,6 +114,70 @@ public class SignificantFieldsTest {
 		@Override
 		public int hashCode() {
 			return x + (31 * y);
+		}
+	}
+	
+	static final class OneFieldUnusedColorPoint {
+		private final int x;
+		private final int y;
+		@SuppressWarnings("unused")
+		private final Color color;
+		
+		public OneFieldUnusedColorPoint(int x, int y, Color color) {
+			this.x = x;
+			this.y = y;
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof OneFieldUnusedColorPoint)) {
+				return false;
+			}
+			OneFieldUnusedColorPoint other = (OneFieldUnusedColorPoint)obj;
+			return x == other.x && y == other.y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return x + (31 * y);
+		}
+	}
+	
+	static final class OneTransientFieldUnusedColorPoint {
+		private final int x;
+		private final int y;
+		@SuppressWarnings("unused")
+		private transient final Color color;
+		
+		public OneTransientFieldUnusedColorPoint(int x, int y, Color color) {
+			this.x = x;
+			this.y = y;
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof OneTransientFieldUnusedColorPoint)) {
+				return false;
+			}
+			OneTransientFieldUnusedColorPoint other = (OneTransientFieldUnusedColorPoint)obj;
+			return x == other.x && y == other.y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return x + (31 * y);
+		}
+	}
+	
+	static final class OneFieldUnusedExtendedColorPoint extends Point {
+		@SuppressWarnings("unused")
+		private final Color color;
+		
+		public OneFieldUnusedExtendedColorPoint(int x, int y, Color color) {
+			super(x, y);
+			this.color = color;
 		}
 	}
 
