@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,14 +30,18 @@ import java.util.EnumSet;
 import java.util.Formatter;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -152,6 +156,7 @@ public class PrefabValuesFactory {
 	private PrefabValues addJavaClasses() {
 		addPrimitiveClasses();
 		addClasses();
+		addCollection();
 		addLists();
 		addMaps();
 		addSets();
@@ -191,7 +196,13 @@ public class PrefabValuesFactory {
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes"})
+	private void addCollection() {
+		addCollection(Collection.class, new ArrayList(), new ArrayList());
+	}
+	
+	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addLists() {
+		addCollection(List.class, new ArrayList(), new ArrayList());
 		addCollection(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
 		addCollection(LinkedList.class, new LinkedList(), new LinkedList());
 		addCollection(ArrayList.class, new ArrayList(), new ArrayList());
@@ -199,6 +210,7 @@ public class PrefabValuesFactory {
 
 	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addMaps() {
+		addMap(Map.class, new HashMap(), new HashMap());
 		prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
 		addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
 		addMap(HashMap.class, new HashMap(), new HashMap());
@@ -211,6 +223,7 @@ public class PrefabValuesFactory {
 
 	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addSets() {
+		addCollection(Set.class, new HashSet(), new HashSet());
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
 		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
@@ -218,6 +231,7 @@ public class PrefabValuesFactory {
 	
 	@SuppressWarnings("rawtypes")
 	private void addQueues() {
+		prefabValues.put(Queue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
 		prefabValues.put(ArrayBlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
 		prefabValues.put(ConcurrentLinkedQueue.class, new ConcurrentLinkedQueue(), new ConcurrentLinkedQueue());
 		prefabValues.put(DelayQueue.class, new DelayQueue(), new DelayQueue());

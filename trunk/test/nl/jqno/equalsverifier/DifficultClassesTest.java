@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -45,7 +46,7 @@ public class DifficultClassesTest {
 	
 	@Test
 	public void commonClasses() {
-		EqualsVerifier.forClass(CommonClassesContainer.class).debug().verify();
+		EqualsVerifier.forClass(CommonClassesContainer.class).verify();
 	}
 	
 	@Test
@@ -106,12 +107,14 @@ public class DifficultClassesTest {
 	}
 	
 	static final class CollectionInterfacesContainer {
+		private final Collection<String> collection;
 		private final List<String> list;
 		private final Set<String> set;
 		private final Map<String, String> map;
 		private final Queue<String> queue;
 		
-		public CollectionInterfacesContainer(List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
+		public CollectionInterfacesContainer(Collection<String> collection, List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
+			this.collection = collection;
 			this.list = list;
 			this.set = set;
 			this.map = map;
@@ -126,6 +129,7 @@ public class DifficultClassesTest {
 			
 			CollectionInterfacesContainer other = (CollectionInterfacesContainer)obj;
 			boolean result = true;
+			result &= nullSafeEquals(collection, other.collection);
 			result &= nullSafeEquals(list, other.list);
 			result &= nullSafeEquals(set, other.set);
 			result &= nullSafeEquals(map, other.map);
@@ -136,11 +140,26 @@ public class DifficultClassesTest {
 		@Override
 		public int hashCode() {
 			int result = 0;
+			result += 31 * nullSafeHashCode(collection);
 			result += 31 * nullSafeHashCode(list);
 			result += 31 * nullSafeHashCode(set);
 			result += 31 * nullSafeHashCode(map);
 			result += 31 * nullSafeHashCode(queue);
 			return result;
+		}
+
+		@Override
+		public String toString() {
+			callAbstractMethodsOnInterface();
+			return super.toString();
+		}
+		
+		private void callAbstractMethodsOnInterface() {
+			if (collection != null) collection.iterator();
+			if (list != null) list.iterator();
+			if (set != null) set.iterator();
+			if (map != null) map.keySet();
+			if (queue != null) queue.iterator();
 		}
 	}
 	
