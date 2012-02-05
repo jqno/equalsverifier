@@ -6,4 +6,4 @@ at http://equalsverifier.googlecode.com/
 
 For license information, see LICENSE.TXT.
 
-Copyright 2009-2011 Jan Ouwens
+Copyright 2009-2012 Jan Ouwens
