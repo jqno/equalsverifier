@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -146,13 +147,15 @@ public class DifficultClassesTest {
 	static final class CommonClassesContainer {
 		private final Calendar calendar;
 		private final Date date;
+		private final File file;
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
 		private final ArrayList<String> arrayList;
 		
-		public CommonClassesContainer(Calendar calendar, Date date, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList) {
+		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList) {
 			this.calendar = calendar;
 			this.date = date;
+			this.file = file;
 			this.gregorianCalendar = gregorianCalendar;
 			this.pattern = pattern;
 			this.arrayList = arrayList;
@@ -168,6 +171,7 @@ public class DifficultClassesTest {
 			boolean result = true;
 			result &= nullSafeEquals(calendar, other.calendar);
 			result &= nullSafeEquals(date, other.date);
+			result &= nullSafeEquals(file, other.file);
 			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
 			result &= nullSafeEquals(pattern, other.pattern);
 			result &= nullSafeEquals(arrayList, other.arrayList);
@@ -179,6 +183,7 @@ public class DifficultClassesTest {
 			int result = 0;
 			result += 31 * nullSafeHashCode(calendar);
 			result += 31 * nullSafeHashCode(date);
+			result += 31 * nullSafeHashCode(file);
 			result += 31 * nullSafeHashCode(gregorianCalendar);
 			result += 31 * nullSafeHashCode(pattern);
 			result += 31 * nullSafeHashCode(arrayList);

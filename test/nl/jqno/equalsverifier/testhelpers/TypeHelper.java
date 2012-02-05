@@ -180,19 +180,19 @@ public class TypeHelper {
 	}
 	
 	public static class RecursiveApiClassesContainer {
+		BigDecimal bigDecimal;
+		BigInteger bigInteger;
 		Calendar calendar;
 		Date date;
 		DateFormat dateFormat;
+		Exception exception;
 		Formatter formatter;
 		GregorianCalendar gregorianCalendar;
 		Locale locale;
 		Pattern pattern;
 		Scanner scanner;
 		TimeZone timeZone;
-		BigDecimal bigDecimal;
-		BigInteger bigInteger;
 		Throwable throwable;
-		Exception exception;
 	}
 	
 	public static class AllRecursiveCollectionImplementationsContainer {

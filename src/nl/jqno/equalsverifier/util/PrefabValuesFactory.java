@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
@@ -174,9 +175,12 @@ public class PrefabValuesFactory {
 	}
 
 	private void addClasses() {
+		prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
+		prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
 		prefabValues.put(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
 		prefabValues.put(Date.class, new Date(0), new Date(1));
 		prefabValues.put(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
+		prefabValues.put(File.class, new File(""), new File("/"));
 		prefabValues.put(Formatter.class, new Formatter(), new Formatter());
 		prefabValues.put(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
 		prefabValues.put(Locale.class, new Locale("nl"), new Locale("hu"));
@@ -184,8 +188,6 @@ public class PrefabValuesFactory {
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
 		prefabValues.put(Throwable.class, new Throwable(), new Throwable());
-		prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
-		prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes"})
