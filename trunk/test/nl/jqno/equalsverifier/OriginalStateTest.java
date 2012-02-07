@@ -21,6 +21,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.MutableStateTest.MutableIntContainer;
+import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
@@ -58,7 +59,7 @@ public class OriginalStateTest {
 	@Test
 	public void valuesReturnToOriginalStateAfterException() throws NoSuchFieldException {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-		MockStaticFieldValueStash<MutableIntContainer> stash = new MockStaticFieldValueStash<MutableIntContainer>(MutableIntContainer.class);
+		MockStaticFieldValueStash stash = new MockStaticFieldValueStash();
 
 		// Mock EqualsVerifier's StaticFieldValueStash
 		ObjectAccessor<EqualsVerifier<MutableIntContainer>> objectAccessor = ObjectAccessor.of(ev);
@@ -70,20 +71,6 @@ public class OriginalStateTest {
 
 		// Assert
 		assertTrue(stash.restoreCalled);
-	}
-	
-	private static class MockStaticFieldValueStash<T> extends StaticFieldValueStash<T> {
-		boolean restoreCalled = false;
-		
-		public MockStaticFieldValueStash(Class<T> type) {
-			super(type);
-		}
-		
-		@Override
-		public void restore() {
-			restoreCalled  = true;
-			super.restore();
-		}
 	}
 	
 	static final class CorrectEquals {

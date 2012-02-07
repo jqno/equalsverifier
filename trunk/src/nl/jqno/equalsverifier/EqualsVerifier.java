@@ -24,7 +24,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.InternalException;
 import nl.jqno.equalsverifier.util.PrefabValues;
-import nl.jqno.equalsverifier.util.PrefabValuesCreator;
+import nl.jqno.equalsverifier.util.JavaApiPrefabValues;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -113,7 +113,7 @@ public final class EqualsVerifier<T> {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
-	private final StaticFieldValueStash<T> stash;
+	private final StaticFieldValueStash stash;
 	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
 	private boolean usingGetClass = false;
@@ -200,8 +200,9 @@ public final class EqualsVerifier<T> {
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 		
-		this.prefabValues = PrefabValuesCreator.withJavaClasses();
-		this.stash = new StaticFieldValueStash<T>(type);
+		this.stash = new StaticFieldValueStash();
+		this.prefabValues = new PrefabValues(stash);
+		JavaApiPrefabValues.addTo(prefabValues);
 	}
 	
 	/**
@@ -328,7 +329,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			stash.backup();
+			stash.backup(type);
 			performVerification();
 		}
 		catch (AssertionError e) {
@@ -341,7 +342,7 @@ public final class EqualsVerifier<T> {
 			handleError(e, true);
 		}
 		finally {
-			stash.restore();
+			stash.restoreAll();
 		}
 	}
 

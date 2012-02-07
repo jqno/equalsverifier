@@ -183,8 +183,7 @@ public class FieldAccessor {
 	}
 	
 	private static void createPrefabValues(PrefabValues prefabValues, Class<?> type) {
-		PrefabValuesCreator creator = new PrefabValuesCreator(prefabValues);
-		creator.createFor(type);
+		prefabValues.putFor(type);
 	}
 	
 	private interface FieldModifier {
