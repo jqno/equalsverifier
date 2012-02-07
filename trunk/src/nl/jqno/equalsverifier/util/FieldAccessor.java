@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,8 +183,8 @@ public class FieldAccessor {
 	}
 	
 	private static void createPrefabValues(PrefabValues prefabValues, Class<?> type) {
-		PrefabValuesFactory factory = new PrefabValuesFactory(prefabValues);
-		factory.createFor(type);
+		PrefabValuesCreator creator = new PrefabValuesCreator(prefabValues);
+		creator.createFor(type);
 	}
 	
 	private interface FieldModifier {
