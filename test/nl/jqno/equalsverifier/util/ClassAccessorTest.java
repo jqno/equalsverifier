@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ public class ClassAccessorTest {
 	
 	@Before
 	public void setup() {
-		prefabValues = PrefabValuesFactory.withJavaClasses();
+		prefabValues = PrefabValuesCreator.withJavaClasses();
 		classAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
 	}
 	

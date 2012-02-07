@@ -68,7 +68,7 @@ import net.sf.cglib.proxy.NoOp;
  * 
  * @author Jan Ouwens
  */
-public class PrefabValuesFactory {
+public class PrefabValuesCreator {
 	private PrefabValues prefabValues;
 	
 	/**
@@ -76,13 +76,13 @@ public class PrefabValuesFactory {
 	 * 			of Java API classes that cannot be instantiated dynamically.
 	 */
 	public static PrefabValues withJavaClasses() {
-		return new PrefabValuesFactory(new PrefabValues()).addJavaClasses();
+		return new PrefabValuesCreator(new PrefabValues()).addJavaClasses();
 	}
 	
 	/**
 	 * Private constructor. Use {@link #withJavaClasses()} instead.
 	 */
-	PrefabValuesFactory(PrefabValues prefabValues) {
+	public PrefabValuesCreator(PrefabValues prefabValues) {
 		this.prefabValues = prefabValues;
 	}
 	

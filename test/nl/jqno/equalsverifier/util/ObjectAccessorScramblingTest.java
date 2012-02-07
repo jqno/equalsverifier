@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class ObjectAccessorScramblingTest {
 	
 	@Before
 	public void setup() {
-		prefabValues = PrefabValuesFactory.withJavaClasses();
+		prefabValues = PrefabValuesCreator.withJavaClasses();
 	}
 	
 	@Test
