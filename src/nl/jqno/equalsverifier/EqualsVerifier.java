@@ -24,7 +24,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.InternalException;
 import nl.jqno.equalsverifier.util.PrefabValues;
-import nl.jqno.equalsverifier.util.PrefabValuesFactory;
+import nl.jqno.equalsverifier.util.PrefabValuesCreator;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -200,7 +200,7 @@ public final class EqualsVerifier<T> {
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 		
-		this.prefabValues = PrefabValuesFactory.withJavaClasses();
+		this.prefabValues = PrefabValuesCreator.withJavaClasses();
 		this.stash = new StaticFieldValueStash<T>(type);
 	}
 	

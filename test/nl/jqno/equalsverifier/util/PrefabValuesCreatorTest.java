@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,19 +39,19 @@ import nl.jqno.equalsverifier.testhelpers.points.Point;
 import org.junit.Before;
 import org.junit.Test;
 
-public class PrefabValuesFactoryTest {
+public class PrefabValuesCreatorTest {
 	private PrefabValues prefabValues;
-	private PrefabValuesFactory factory;
+	private PrefabValuesCreator creator;
 	
 	@Before
 	public void setup() {
 		prefabValues = new PrefabValues();
-		factory = new PrefabValuesFactory(prefabValues);
+		creator = new PrefabValuesCreator(prefabValues);
 	}
 	
 	@Test
 	public void simple() {
-		factory.createFor(Point.class);
+		creator.createFor(Point.class);
 		Point red = prefabValues.getRed(Point.class);
 		Point black = prefabValues.getBlack(Point.class);
 		assertFalse(red.equals(black));
@@ -59,11 +59,11 @@ public class PrefabValuesFactoryTest {
 	
 	@Test
 	public void createSecondTimeIsNoOp() {
-		factory.createFor(Point.class);
+		creator.createFor(Point.class);
 		Point red = prefabValues.getRed(Point.class);
 		Point black = prefabValues.getBlack(Point.class);
 		
-		factory.createFor(Point.class);
+		creator.createFor(Point.class);
 		
 		assertSame(red, prefabValues.getRed(Point.class));
 		assertSame(black, prefabValues.getBlack(Point.class));
@@ -71,72 +71,72 @@ public class PrefabValuesFactoryTest {
 	
 	@Test
 	public void createEnum() {
-		factory.createFor(Enum.class);
+		creator.createFor(Enum.class);
 	}
 	
 	@Test(expected=InternalException.class)
 	public void createOneElementEnum() {
-		factory.createFor(OneElementEnum.class);
+		creator.createFor(OneElementEnum.class);
 	}
 	
 	@Test(expected=InternalException.class)
 	public void createEmptyEnum() {
-		factory.createFor(EmptyEnum.class);
+		creator.createFor(EmptyEnum.class);
 	}
 	
 	@Test
 	public void oneStepRecursiveType() {
 		prefabValues.put(Node.class, new Node(), new Node());
-		factory.createFor(Node.class);
+		creator.createFor(Node.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddOneStepRecursiveType() {
-		factory.createFor(Node.class);
+		creator.createFor(Node.class);
 	}
 	
 	@Test
 	public void oneStepRecursiveArrayType() {
 		prefabValues.put(NodeArray.class, new NodeArray(), new NodeArray());
-		factory.createFor(NodeArray.class);
+		creator.createFor(NodeArray.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddOneStepRecursiveArrayType() {
-		factory.createFor(NodeArray.class);
+		creator.createFor(NodeArray.class);
 	}
 	
 	@Test
 	public void addTwoStepRecursiveType() {
 		prefabValues.put(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
-		factory.createFor(TwoStepNodeA.class);
+		creator.createFor(TwoStepNodeA.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddTwoStepRecursiveType() {
-		factory.createFor(TwoStepNodeA.class);
+		creator.createFor(TwoStepNodeA.class);
 	}
 	
 	@Test
 	public void twoStepRecursiveArrayType() {
 		prefabValues.put(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
-		factory.createFor(TwoStepNodeArrayA.class);
+		creator.createFor(TwoStepNodeArrayA.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddTwoStepRecursiveArrayType() {
-		factory.createFor(TwoStepNodeArrayA.class);
+		creator.createFor(TwoStepNodeArrayA.class);
 	}
 	
 	@Test
 	public void sameClassTwiceButNoRecursion() {
-		factory.createFor(NotRecursiveA.class);
+		creator.createFor(NotRecursiveA.class);
 	}
 	
 	@Test
 	public void recursiveWithAnotherFieldFirst() {
 		try {
-			factory.createFor(RecursiveWithAnotherFieldFirst.class);
+			creator.createFor(RecursiveWithAnotherFieldFirst.class);
 		}
 		catch (Exception e) {
 			assertThat(e.getMessage(), containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
@@ -149,7 +149,7 @@ public class PrefabValuesFactoryTest {
 	@Test
 	public void exceptionMessage() {
 		try {
-			factory.createFor(TwoStepNodeA.class);
+			creator.createFor(TwoStepNodeA.class);
 		}
 		catch (RecursionException e) {
 			assertThat(e.getMessage(), containsAll(
@@ -162,7 +162,7 @@ public class PrefabValuesFactoryTest {
 	
 	@Test
 	public void skipStaticFinal() {
-		factory.createFor(StaticFinalContainer.class);
+		creator.createFor(StaticFinalContainer.class);
 	}
 	
 	static class StaticFinalContainer {
