@@ -24,6 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 
+import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractAndInterfaceArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllArrayTypesContainer;
@@ -54,7 +55,8 @@ public class FieldAccessorTest {
 	
 	@Before
 	public void setup() {
-		prefabValues = PrefabValuesCreator.withJavaClasses();
+		prefabValues = new PrefabValues(new StaticFieldValueStash());
+		JavaApiPrefabValues.addTo(prefabValues);
 	}
 	
 	@Test
