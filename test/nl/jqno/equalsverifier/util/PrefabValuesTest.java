@@ -38,7 +38,7 @@ public class PrefabValuesTest {
 	
 	@Before
 	public void setup() {
-		p = new PrefabValues();
+		p = new PrefabValues(null);
 		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
 	
@@ -49,7 +49,7 @@ public class PrefabValuesTest {
 	
 	@Test
 	public void putAll() {
-		PrefabValues q = new PrefabValues();
+		PrefabValues q = new PrefabValues(null);
 		q.putAll(p);
 		assertPrefabValues(q, EXISTING_KEY);
 	}

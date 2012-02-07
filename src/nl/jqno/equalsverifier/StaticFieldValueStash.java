@@ -23,30 +23,32 @@ import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
-public class StaticFieldValueStash<T> {
-	private final Class<T> type;
-	private final ObjectAccessor<T> objectAccessor;
-	private final Map<Field, Object> stash = new HashMap<Field, Object>();
+public class StaticFieldValueStash {
+	private final Map<Class<?>, Map<Field, Object>> stash = new HashMap<Class<?>, Map<Field, Object>>();
 
-	public StaticFieldValueStash(Class<T> type) {
-		this.type = type;
-		this.objectAccessor = ObjectAccessor.of(null, type);
-	}
-	
-	public void backup() {
+	public <T> void backup(Class<T> type) {
+		if (stash.containsKey(type)) {
+			return;
+		}
+		
+		stash.put(type, new HashMap<Field, Object>());
+		ObjectAccessor<T> objectAccessor = ObjectAccessor.of(null, type);
 		for (Field field : new FieldIterable(type)) {
 			FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
 			if (accessor.fieldIsStatic()) {
-				stash.put(field, accessor.get());
+				stash.get(type).put(field, accessor.get());
 			}
 		}
 	}
 	
-	public void restore() {
-		for (Field field : new FieldIterable(type)) {
-			FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
-			if (accessor.fieldIsStatic()) {
-				accessor.set(stash.get(field));
+	public void restoreAll() {
+		for (Class<?> type : stash.keySet()) {
+			ObjectAccessor<?> objectAccessor = ObjectAccessor.of(null, type);
+			for (Field field : new FieldIterable(type)) {
+				FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
+				if (accessor.fieldIsStatic()) {
+					accessor.set(stash.get(type).get(field));
+				}
 			}
 		}
 	}

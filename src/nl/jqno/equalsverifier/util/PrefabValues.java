@@ -15,16 +15,26 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 
+import nl.jqno.equalsverifier.StaticFieldValueStash;
+
 /**
- * Container of prefabricated instances of objects and classes.
+ * Container and creator of prefabricated instances of objects and classes.
  *
  * @author Jan Ouwens
  */
 public class PrefabValues {
+	private final StaticFieldValueStash stash;
 	private final Map<Class<?>, Tuple<?>> values = new HashMap<Class<?>, Tuple<?>>();
+	
+	public PrefabValues(StaticFieldValueStash stash) {
+		this.stash = stash;
+	}
 	
 	/**
 	 * Associates the specified values with the specified class in this
@@ -112,6 +122,74 @@ public class PrefabValues {
 		}
 		
 		return tuple.red;
+	}
+	
+	/**
+	 * Creates instances for the specified type, and for the types of the
+	 * fields contained within the specified type, recursively.
+	 * 
+	 * @param type The type to create prefabValues for.
+	 * @throws RecursionException If recursion is detected.
+	 */
+	public void putFor(Class<?> type) {
+		stash.backup(type);
+		putFor(type, new LinkedHashSet<Class<?>>());
+	}
+	
+	private void putFor(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
+		if (noNeedToCreatePrefabValues(type)) {
+			return;
+		}
+		if (typeStack.contains(type)) {
+			throw new RecursionException(typeStack);
+		}
+		
+		if (type.isEnum()) {
+			putEnumInstances(type);
+		}
+		else {
+			@SuppressWarnings("unchecked")
+			LinkedHashSet<Class<?>> clone = (LinkedHashSet<Class<?>>)typeStack.clone();
+			clone.add(type);
+			
+			traverseFields(type, clone);
+			createAndPutInstances(type);
+		}
+	}
+	
+	private boolean noNeedToCreatePrefabValues(Class<?> type) {
+		return contains(type) || type.isPrimitive();
+	}
+
+	private <T> void putEnumInstances(Class<T> type) {
+		T[] enumConstants = type.getEnumConstants();
+		if (enumConstants.length < 2) {
+			throw new InternalException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
+		}
+		put(type, enumConstants[0], enumConstants[1]);
+	}
+	
+	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
+		for (Field field : new FieldIterable(type)) {
+			int modifiers = field.getModifiers();
+			boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+			if (!isStaticAndFinal) {
+				Class<?> fieldType = field.getType();
+				if (fieldType.isArray()) {
+					putFor(fieldType.getComponentType(), typeStack);
+				}
+				else {
+					putFor(fieldType, typeStack);
+				}
+			}
+		}
+	}
+
+	private <T> void createAndPutInstances(Class<T> type) {
+		ClassAccessor<T> accessor = ClassAccessor.of(type, this, false);
+		T red = accessor.getRedObject();
+		T black = accessor.getBlackObject();
+		put(type, red, black);
 	}
 	
 	private static class Tuple<T> {

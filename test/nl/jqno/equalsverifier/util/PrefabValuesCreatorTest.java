@@ -17,11 +17,13 @@ package nl.jqno.equalsverifier.util;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.containsAll;
 import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
+import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NotRecursiveA;
@@ -40,18 +42,24 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PrefabValuesCreatorTest {
+	private MockStaticFieldValueStash stash;
 	private PrefabValues prefabValues;
-	private PrefabValuesCreator creator;
 	
 	@Before
 	public void setup() {
-		prefabValues = new PrefabValues();
-		creator = new PrefabValuesCreator(prefabValues);
+		stash = new MockStaticFieldValueStash();
+		prefabValues = new PrefabValues(stash);
+	}
+	
+	@Test
+	public void stashed() {
+		prefabValues.putFor(Point.class);
+		assertEquals(Point.class, stash.lastBackuppedType);
 	}
 	
 	@Test
 	public void simple() {
-		creator.createFor(Point.class);
+		prefabValues.putFor(Point.class);
 		Point red = prefabValues.getRed(Point.class);
 		Point black = prefabValues.getBlack(Point.class);
 		assertFalse(red.equals(black));
@@ -59,11 +67,11 @@ public class PrefabValuesCreatorTest {
 	
 	@Test
 	public void createSecondTimeIsNoOp() {
-		creator.createFor(Point.class);
+		prefabValues.putFor(Point.class);
 		Point red = prefabValues.getRed(Point.class);
 		Point black = prefabValues.getBlack(Point.class);
 		
-		creator.createFor(Point.class);
+		prefabValues.putFor(Point.class);
 		
 		assertSame(red, prefabValues.getRed(Point.class));
 		assertSame(black, prefabValues.getBlack(Point.class));
@@ -71,72 +79,72 @@ public class PrefabValuesCreatorTest {
 	
 	@Test
 	public void createEnum() {
-		creator.createFor(Enum.class);
+		prefabValues.putFor(Enum.class);
 	}
 	
 	@Test(expected=InternalException.class)
 	public void createOneElementEnum() {
-		creator.createFor(OneElementEnum.class);
+		prefabValues.putFor(OneElementEnum.class);
 	}
 	
 	@Test(expected=InternalException.class)
 	public void createEmptyEnum() {
-		creator.createFor(EmptyEnum.class);
+		prefabValues.putFor(EmptyEnum.class);
 	}
 	
 	@Test
 	public void oneStepRecursiveType() {
 		prefabValues.put(Node.class, new Node(), new Node());
-		creator.createFor(Node.class);
+		prefabValues.putFor(Node.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddOneStepRecursiveType() {
-		creator.createFor(Node.class);
+		prefabValues.putFor(Node.class);
 	}
 	
 	@Test
 	public void oneStepRecursiveArrayType() {
 		prefabValues.put(NodeArray.class, new NodeArray(), new NodeArray());
-		creator.createFor(NodeArray.class);
+		prefabValues.putFor(NodeArray.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddOneStepRecursiveArrayType() {
-		creator.createFor(NodeArray.class);
+		prefabValues.putFor(NodeArray.class);
 	}
 	
 	@Test
 	public void addTwoStepRecursiveType() {
 		prefabValues.put(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
-		creator.createFor(TwoStepNodeA.class);
+		prefabValues.putFor(TwoStepNodeA.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddTwoStepRecursiveType() {
-		creator.createFor(TwoStepNodeA.class);
+		prefabValues.putFor(TwoStepNodeA.class);
 	}
 	
 	@Test
 	public void twoStepRecursiveArrayType() {
 		prefabValues.put(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
-		creator.createFor(TwoStepNodeArrayA.class);
+		prefabValues.putFor(TwoStepNodeArrayA.class);
 	}
 	
 	@Test(expected=RecursionException.class)
 	public void dontAddTwoStepRecursiveArrayType() {
-		creator.createFor(TwoStepNodeArrayA.class);
+		prefabValues.putFor(TwoStepNodeArrayA.class);
 	}
 	
 	@Test
 	public void sameClassTwiceButNoRecursion() {
-		creator.createFor(NotRecursiveA.class);
+		prefabValues.putFor(NotRecursiveA.class);
 	}
 	
 	@Test
 	public void recursiveWithAnotherFieldFirst() {
 		try {
-			creator.createFor(RecursiveWithAnotherFieldFirst.class);
+			prefabValues.putFor(RecursiveWithAnotherFieldFirst.class);
 		}
 		catch (Exception e) {
 			assertThat(e.getMessage(), containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
@@ -149,7 +157,7 @@ public class PrefabValuesCreatorTest {
 	@Test
 	public void exceptionMessage() {
 		try {
-			creator.createFor(TwoStepNodeA.class);
+			prefabValues.putFor(TwoStepNodeA.class);
 		}
 		catch (RecursionException e) {
 			assertThat(e.getMessage(), containsAll(
@@ -162,7 +170,7 @@ public class PrefabValuesCreatorTest {
 	
 	@Test
 	public void skipStaticFinal() {
-		creator.createFor(StaticFinalContainer.class);
+		prefabValues.putFor(StaticFinalContainer.class);
 	}
 	
 	static class StaticFinalContainer {

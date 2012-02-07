@@ -16,8 +16,6 @@
 package nl.jqno.equalsverifier.util;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
@@ -33,7 +31,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -62,98 +59,34 @@ import net.sf.cglib.proxy.NoOp;
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
  * 
- * Can create new instances of a given type and the types of its fields, and
- * contains hand-made instances of well-known Java API classes that cannot be
- * instantiated dynamically because of an internal infinite recursion of types.
+ * Contains hand-made instances of well-known Java API classes that cannot be
+ * instantiated dynamically because of an internal infinite recursion of types,
+ * or other issues.
  * 
  * @author Jan Ouwens
  */
-public class PrefabValuesCreator {
+public class JavaApiPrefabValues {
 	private PrefabValues prefabValues;
 	
 	/**
-	 * @return An instance of {@link PrefabValues}, filled with instances
-	 * 			of Java API classes that cannot be instantiated dynamically.
+	 * Adds instances of Java API classes that cannot be instantiated
+	 * dynamically to {@code prefabValues}.
+	 * 
+	 * @param prefabValues The instance of prefabValues that should
+	 * 			contain the Java API instances.
 	 */
-	public static PrefabValues withJavaClasses() {
-		return new PrefabValuesCreator(new PrefabValues()).addJavaClasses();
+	public static void addTo(PrefabValues prefabValues) {
+		new JavaApiPrefabValues(prefabValues).addJavaClasses();
 	}
 	
 	/**
-	 * Private constructor. Use {@link #withJavaClasses()} instead.
+	 * Private constructor. Use {@link #create()} instead.
 	 */
-	public PrefabValuesCreator(PrefabValues prefabValues) {
+	private JavaApiPrefabValues(PrefabValues prefabValues) {
 		this.prefabValues = prefabValues;
 	}
 	
-	/**
-	 * Creates instances for the specified type, and for the types of the
-	 * fields contained within the specified type, recursively.
-	 * 
-	 * @param type The type to create prefabValues for.
-	 * @throws RecursionException If recursion is detected.
-	 */
-	public void createFor(Class<?> type) {
-		createFor(type, new LinkedHashSet<Class<?>>());
-	}
-	
-	private void createFor(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
-		if (noNeedToCreatePrefabValues(type)) {
-			return;
-		}
-		if (typeStack.contains(type)) {
-			throw new RecursionException(typeStack);
-		}
-		
-		if (type.isEnum()) {
-			addEnumInstances(type);
-		}
-		else {
-			@SuppressWarnings("unchecked")
-			LinkedHashSet<Class<?>> clone = (LinkedHashSet<Class<?>>)typeStack.clone();
-			clone.add(type);
-			
-			traverseFields(type, clone);
-			createInstances(type);
-		}
-	}
-	
-	private boolean noNeedToCreatePrefabValues(Class<?> type) {
-		return prefabValues.contains(type) || type.isPrimitive();
-	}
-
-	private <T> void addEnumInstances(Class<T> type) {
-		T[] enumConstants = type.getEnumConstants();
-		if (enumConstants.length < 2) {
-			throw new InternalException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
-		}
-		prefabValues.put(type, enumConstants[0], enumConstants[1]);
-	}
-	
-	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
-		for (Field field : new FieldIterable(type)) {
-			int modifiers = field.getModifiers();
-			boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
-			if (!isStaticAndFinal) {
-				Class<?> fieldType = field.getType();
-				if (fieldType.isArray()) {
-					createFor(fieldType.getComponentType(), typeStack);
-				}
-				else {
-					createFor(fieldType, typeStack);
-				}
-			}
-		}
-	}
-
-	private <T> void createInstances(Class<T> type) {
-		ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues, false);
-		T red = accessor.getRedObject();
-		T black = accessor.getBlackObject();
-		prefabValues.put(type, red, black);
-	}
-	
-	private PrefabValues addJavaClasses() {
+	private void addJavaClasses() {
 		addPrimitiveClasses();
 		addClasses();
 		addCollection();
@@ -162,7 +95,6 @@ public class PrefabValuesCreator {
 		addSets();
 		addQueues();
 		addClassesNecessaryForCgLib();
-		return prefabValues;
 	}
 	
 	private void addPrimitiveClasses() {
