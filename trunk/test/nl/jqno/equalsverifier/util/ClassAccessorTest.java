@@ -36,6 +36,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.InterfaceContainer;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
@@ -99,6 +100,18 @@ public class ClassAccessorTest {
 	public void hashCodeIsAbstract() {
 		ClassAccessor<AbstractEqualsAndHashCode> accessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, true);
 		assertTrue(accessor.isHashCodeAbstract());
+	}
+	
+	@Test
+	public void equalsIsInheritedFromObject() {
+		ClassAccessor<NoFieldsSubWithFields> accessor = ClassAccessor.of(NoFieldsSubWithFields.class, prefabValues, true);
+		assertTrue(accessor.isEqualsInheritedFromObject());
+	}
+	
+	@Test
+	public void equalsIsNotInheritedFromObject() {
+		ClassAccessor<PointContainer> accessor = ClassAccessor.of(PointContainer.class, prefabValues, true);
+		assertFalse(accessor.isEqualsInheritedFromObject());
 	}
 	
 	@Test
