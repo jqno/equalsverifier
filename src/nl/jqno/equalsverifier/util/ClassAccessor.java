@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,6 +119,27 @@ public class ClassAccessor<T> {
 		catch (NoSuchMethodException e) {
 			throw new InternalException("Should never occur (famous last words)");
 		}
+	}
+	
+	/**
+	 * Determines whether T's {@code equals} method is inherited from
+	 * {@link Object}.
+	 * 
+	 * @return true if T's {@code equals} method is inherited from
+	 * 			{@link Object}; false if it is overridden in T or in any of its
+	 * 			superclasses (except {@link Object}).
+	 */
+	public boolean isEqualsInheritedFromObject() {
+		Class<?> i = type;
+		while (i != Object.class) {
+			try {
+				i.getDeclaredMethod("equals", Object.class);
+				return false;
+			}
+			catch (NoSuchMethodException ignored) {}
+			i = i.getSuperclass();
+		}
+		return true;
 	}
 	
 	/**
