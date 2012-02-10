@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +23,19 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 import java.lang.reflect.Field;
 import java.util.List;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
+	private final ClassAccessor<T> accessor;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = type;
+	public ExamplesChecker(ClassAccessor<T> accessor, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = accessor.getType();
+		this.accessor = accessor;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}
@@ -100,6 +103,11 @@ class ExamplesChecker<T> implements Checker {
 	private void checkReflexivity(T reference) {
 		assertEquals("Reflexivity: object does not equal itself:\n  " + reference,
 				reference, reference);
+		
+		if (!accessor.isEqualsInheritedFromObject()) {
+			assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference,
+					reference, ObjectAccessor.of(reference).copy());
+		}
 	}
 
 	private void checkSymmetryEquals(T reference, T copy) {
@@ -136,13 +144,13 @@ class ExamplesChecker<T> implements Checker {
 		}
 	}
 
-	private void checkHashCode(T reference, T other) {
-		if (!reference.equals(other)) {
+	private void checkHashCode(T reference, T copy) {
+		if (!reference.equals(copy)) {
 			return;
 		}
 		
-		assertEquals("hashCode: hashCodes should be equal:\n  " + reference + " (" + reference.hashCode() + ")\nand\n  " + other + " (" +  other.hashCode() + ")",
-				reference.hashCode(), other.hashCode());
+		assertEquals("hashCode: hashCodes should be equal:\n  " + reference + " (" + reference.hashCode() + ")\nand\n  " + copy + " (" +  copy.hashCode() + ")",
+				reference.hashCode(), copy.hashCode());
 	}
 	
 	private boolean isIdentical(T reference, T other) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010,2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,9 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+
+import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -36,15 +39,37 @@ public class SymmetryTest {
 		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryNotEqualsBrokenPoint.class.getSimpleName());
 	}
 	
+	private static int seed = 1;
+	private static final Set<Integer> seeded = new HashSet<Integer>();
+	
 	static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {
+		private int n = 0;
+		
 		public SymmetryEqualsBrokenPoint(int x, int y) {
 			super(x, y);
+		}
+		
+		// In the symmetry test, setN will make sure that n is different for
+		// both objects, which will cause this test to fail.
+		// In the reflexivity test, n is copied along with the rest of the
+		// object, and therefore the instances will have equal n's, allowing
+		// the reflexivity test to pass.
+		// The seed has to be defined outside this class, or else
+		// EqualsVerifier will make changes.
+		private void setN() {
+			if (!seeded.contains(hashCode())) {
+				seeded.add(hashCode());
+				seed++;
+				n = seed;
+			}
 		}
 
 		@Override
 		public boolean equals(Object obj) {
+			setN();
+			
 			if (obj != this && goodEquals(obj)) {
-				return hashCode() > obj.hashCode();
+				return n == ((SymmetryEqualsBrokenPoint)obj).n;
 			}
 			return goodEquals(obj);
 		}

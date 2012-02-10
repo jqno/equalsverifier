@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010,2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,12 @@ public class ReflexivityTest {
 		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityBrokenPoint.class.getSimpleName());
 	}
 	
+	@Test
+	public void wrongCast() {
+		EqualsVerifier<WrongCast> ev = EqualsVerifier.forClass(WrongCast.class);
+		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", WrongCast.class.getSimpleName());
+	}
+	
 	static class ReflexivityBrokenPoint extends Point {
 		// Instantiator.scramble will flip this boolean.
 		private boolean broken = false;
@@ -43,4 +49,31 @@ public class ReflexivityTest {
 			return super.equals(obj);
 		}
 	}
+	
+	static final class WrongCast {
+		private final int foo;
+		
+		public WrongCast(int foo) {
+			this.foo = foo;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj) {
+				return true;
+			}
+			if (!(obj instanceof SomethingCompletelyDifferent)) {
+				return false;
+			}
+			WrongCast other = (WrongCast)obj;
+			return foo == other.foo;
+		}
+		
+		@Override
+		public int hashCode() {
+			return foo;
+		}
+	}
+	
+	static class SomethingCompletelyDifferent {}
 }
