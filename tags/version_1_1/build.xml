@@ -1,0 +1,383 @@
+<?xml version="1.0"?>
+<!--
+Copyright 2009-2012 Jan Ouwens
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<project name="EqualsVerifier" default="deploy" basedir="."
+		xmlns:ivy="antlib:org.apache.ivy.ant"
+		xmlns:artifact="antlib:org.apache.maven.artifact.ant">
+
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="test.dir" value="${basedir}/test" />
+
+	<property name="build.src.dir" value="${basedir}/build/src" />
+	<property name="build.test.dir" value="${basedir}/build/test" />
+	<property name="resources.dir" value="${basedir}/resources" />
+
+	<property name="dist.dir" value="${basedir}/dist" />
+	<property name="dist.files.dir" value="${dist.dir}/files" />
+	<property name="dist.final.dir" value="${dist.dir}/deploy" />
+	<property name="dist.javadoc.dir" value="${dist.dir}/javadoc" />
+	<property name="dist.maven.dir" value="${dist.dir}/maven" />
+
+	<property name="equalsverifier.jar.name.prefix" value="EqualsVerifier-${version}" />
+	<property name="equalsverifier.jar.name" value="${equalsverifier.jar.name.prefix}.jar" />
+	<property name="equalsverifier.jar" value="${dist.dir}/${equalsverifier.jar.name}" />
+	<property name="equalsverifier.zip.name" value="EqualsVerifier-${version}.zip" />
+	<property name="equalsverifier.zip" value="${dist.final.dir}/${equalsverifier.zip.name}" />
+	<property name="equalsverifier-code.jar" value="${dist.maven.dir}/${equalsverifier.jar.name.prefix}.jar" />
+	<property name="equalsverifier-sources.jar" value="${dist.maven.dir}/${equalsverifier.jar.name.prefix}-sources.jar" />
+	<property name="equalsverifier-javadoc.jar" value="${dist.maven.dir}/${equalsverifier.jar.name.prefix}-javadoc.jar" />
+
+	<property name="ivy.install.version" value="2.1.0" />
+	<condition property="ivy.home" value="${env.IVY_HOME}">
+		<isset property="env.IVY_HOME" />
+	</condition>
+	<property name="ivy.home" value="${user.home}/.ant" />
+	<property name="ivy.jar.dir" value="${ivy.home}/lib" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	<property name="ivy.jar.url" value="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" />
+	
+	<property name="ant-googlecode.jar.file" value="${ivy.jar.dir}/ant-googlecode.jar" />
+	<property name="ant-googlecode.jar.url" value="http://ant-googlecode.googlecode.com/files/ant-googlecode-0.0.2.jar" />
+	
+	<property name="maven.staging.repository.id" value="sonatype-nexus-staging" />
+	<property name="maven.staging.repository.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
+
+	<property name="svn.cmd" value="svn" />
+	<property name="project.svn" value="https://equalsverifier.googlecode.com/svn" />
+	
+	<property name="publish.dir" value="${dist.dir}/publish" />
+	<property name="tag.dir" value="${publish.dir}/tag" />
+	
+	<property name="equalsverifier.pom" value="${basedir}/equalsverifier.pom" />
+	<property name="equalsverifier.maven.pom" value="${dist.maven.dir}/pom.xml" />
+	<property name="equalsverifier.tag.pom" value="${tag.dir}/${tag}/equalsverifier.pom" />
+	<property name="credentialsFile" value="google.properties" />
+	<property file="${credentialsFile}" prefix="google" />
+	<property name="secringFile" value="${user.home}/.gnupg/secring.gpg" />
+
+	<path id="project.classpath">
+		<pathelement location="${build.src.dir}" />
+	</path>
+
+	<path id="test.classpath">
+		<path refid="project.classpath" />
+		<pathelement location="${build.test.dir}" />
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.src.dir}" />
+		<delete dir="${build.test.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+	
+	<target name="download-ivy" unless="offline">
+		<mkdir dir="${ivy.jar.dir}" />
+		<get src="${ivy.jar.url}" dest="${ivy.jar.file}" usetimestamp="true" />
+	</target>
+	
+	<target name="init-ivy" depends="download-ivy">
+		<path id="ivy.lib.path">
+			<fileset dir="${ivy.jar.dir}" includes="*.jar" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml"
+				uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+	</target>
+	
+	<target name="resolve-dependencies" depends="init-ivy">
+		<ivy:retrieve />
+		<ivy:cachepath pathid="ivy.runtime.path" conf="runtime" />
+		<ivy:cachepath pathid="ivy.test.path" conf="test" />
+		<ivy:cachepath pathid="ivy.deploy.path" conf="deploy" />
+	</target>
+	
+	<target name="compile" depends="clean, resolve-dependencies">
+		<mkdir dir="${build.src.dir}" />
+		<javac 
+				srcdir="${src.dir}"
+				destdir="${build.src.dir}"
+				source="1.5"
+				target="1.5"
+				debug="on"
+				encoding="utf-8"
+				includeantruntime="false">
+			<classpath>
+				<path refid="ivy.runtime.path" />
+			</classpath>
+			<compilerarg value="-Xlint" />
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="compileTest" depends="compile">
+		<mkdir dir="${build.test.dir}" />
+		<javac 
+				srcdir="${test.dir}"
+				destdir="${build.test.dir}"
+				source="1.5"
+				target="1.5"
+				debug="on"
+				encoding="utf-8"
+				includeantruntime="false">
+			<classpath>
+				<path refid="project.classpath" />
+				<path refid="ivy.test.path" />
+			</classpath>
+			<include name="**/*.java" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compileTest">
+		<mkdir dir="${dist.dir}/testreports" />
+		<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed">
+			<classpath>
+				<path refid="test.classpath" />
+				<path refid="ivy.test.path" />
+			</classpath>
+			<formatter type="plain" />
+			<batchtest todir="${dist.dir}/testreports">
+				<fileset dir="${build.test.dir}">
+					<include name="**/*Test.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<fail message="A test has failed" if="test.has.failed" />
+	</target>
+
+	<target name="javadoc">
+		<mkdir dir="${dist.javadoc.dir}" />
+		<javadoc
+				sourcepath="${src.dir}"
+				destdir="${dist.javadoc.dir}"
+				source="1.5"
+				nodeprecated="true"
+				notree="true"
+				failonerror="true">
+			<classpath>
+				<path refid="project.classpath" />
+				<path refid="ivy.runtime.path" />
+			</classpath>
+		</javadoc>
+	</target>
+
+	<target name="jar" depends="compile, test">
+		<tstamp>
+			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
+		</tstamp>
+		<mkdir dir="${dist.dir}" />
+		<jar destfile="${equalsverifier.jar}">
+			<fileset dir="${build.src.dir}" />
+			<fileset dir="${src.dir}" />
+			<manifest>
+				<attribute name="Implementation-Title" value="EqualsVerifier" />
+				<attribute name="Implementation-Version" value="${version} (${TODAY})" />
+				<attribute name="Implementation-Vendor" value="jqno.nl" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-code" depends="compile, test">
+		<tstamp>
+			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
+		</tstamp>
+		<mkdir dir="${dist.maven.dir}" />
+		<jar destfile="${equalsverifier-code.jar}">
+			<fileset dir="${build.src.dir}" />
+			<manifest>
+				<attribute name="Implementation-Title" value="EqualsVerifier" />
+				<attribute name="Implementation-Version" value="${version} (${TODAY})" />
+				<attribute name="Implementation-Vendor" value="jqno.nl" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-sources" depends="compile, test">
+		<tstamp>
+			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
+		</tstamp>
+		<mkdir dir="${dist.maven.dir}" />
+		<jar destfile="${equalsverifier-sources.jar}">
+			<fileset dir="${src.dir}" />
+			<manifest>
+				<attribute name="Implementation-Title" value="EqualsVerifier (sources)" />
+				<attribute name="Implementation-Version" value="${version} (${TODAY})" />
+				<attribute name="Implementation-Vendor" value="jqno.nl" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="jar-javadoc" depends="javadoc">
+		<tstamp>
+			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
+		</tstamp>
+		<mkdir dir="${dist.maven.dir}" />
+		<jar destfile="${equalsverifier-javadoc.jar}">
+			<fileset dir="${dist.javadoc.dir}" />
+			<manifest>
+				<attribute name="Implementation-Title" value="EqualsVerifier (javadoc)" />
+				<attribute name="Implementation-Version" value="${version} (${TODAY})" />
+				<attribute name="Implementation-Vendor" value="jqno.nl" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="deploy" depends="jar, javadoc">
+		<mkdir dir="${dist.files.dir}/lib" />
+		<copy todir="${dist.files.dir}/lib" file="${equalsverifier.jar}" />
+		<copy todir="${dist.files.dir}/src">
+			<fileset dir="${src.dir}" />
+		</copy>
+		<copy todir="${dist.files.dir}/test">
+			<fileset dir="${test.dir}" />
+		</copy>
+		<copy todir="${dist.files.dir}/doc">
+			<fileset dir="${dist.javadoc.dir}" />
+		</copy>
+		<copy todir="${dist.files.dir}">
+			<fileset dir="${resources.dir}" />
+		</copy>
+		<ivy:retrieve conf="runtime" pattern="${dist.files.dir}/lib/[artifact].[ext]" />
+
+		<mkdir dir="${dist.final.dir}" />
+		<zip destfile="${equalsverifier.zip}" basedir="${dist.files.dir}" />
+
+		<copy todir="${dist.final.dir}" file="${equalsverifier.jar}" />
+	</target>
+
+	<target name="deploy-maven-central" depends="jar-code, jar-sources, jar-javadoc" />
+
+	<target name="-publish-validate">
+		<fail message="Please set a version" unless="version" />
+		<fail message="Please set a tag" unless="tag" />
+	</target>
+	
+	<target name="-publish-ask">
+		<!-- Check valid input -->
+		<input message="Creating tag ${tag} for version ${version}. Continue?" validargs="y,n" addproperty="continue.answer" />
+		<condition property="continue">
+			<equals arg1="n" arg2="${continue.answer}" />
+		</condition>
+		<fail message="Build aborted by user" if="continue" />
+	</target>
+
+	<target name="publish-tag" depends="-publish-validate, -checkCredentialsFile, deploy">
+		<exec dir="${basedir}" executable="${svn.cmd}" failonerror="true">
+			<arg line='copy ${project.svn}/trunk/ ${project.svn}/tags/${tag}/ -m "Tagged: version ${version}" --username ${google.username} --password ${google.password}' />
+		</exec>
+
+		<mkdir dir="${tag.dir}" />
+		
+		<echo message="Checking out ${project.svn}/tags/${tag}" />
+		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
+			<arg line="checkout ${project.svn}/tags/${tag} --username ${google.username} --password ${google.password}" />
+		</exec>
+		
+		<echo message="Bumping version in ${equalsverifier.tag.pom}" />
+		<replace file="${equalsverifier.tag.pom}" token="???" value="${version}" />
+		
+		<echo message="Committing files in ${tag.dir}" />
+		<exec dir="${tag.dir}/${tag}" executable="${svn.cmd}" failonerror="true">
+			<arg line='commit -m "Version bump" --username ${google.username} --password ${google.password}' />
+		</exec>
+	</target>
+
+	<target name="-credentials">
+		<available property="hasCredentialsFile" file="${credentialsFile}" />
+	</target>
+
+	<target name="-checkCredentialsFile" depends="-credentials" unless="hasCredentialsFile">
+		<echo file="${credentialsFile}">username=[your google account name without @gmail.com]
+password=[your googlecode password, is NOT your gmail password]</echo>
+		<fail message="Fill in ${credentialsFile} to provide your credentials!" />
+	</target>
+
+	<target name="-secring">
+		<available property="hasSecretRingFile" file="${secringFile}" />
+	</target>
+
+	<target name="-checkSecringFile" depends="-secring" unless="hasSecretRingFile">
+		<fail message="Make sure you have a GPG secring file to publish to Maven Central!" />
+	</target>
+
+	<target name="publish-googlecode" depends="-publish-validate, -checkCredentialsFile, deploy">
+		<get src="${ant-googlecode.jar.url}" dest="${ant-googlecode.jar.file}" usetimestamp="true" />
+		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${ant-googlecode.jar.file}" name="gcupload" />
+		<gcupload 
+				username="${google.username}"
+				password="${google.password}"
+				projectname="equalsverifier"
+				filename="${equalsverifier.jar}"
+				targetfilename="${equalsverifier.jar.name}"
+				summary="The EqualsVerifier jar, including source"
+				labels="Featured, Type-Executable, OpSys-All, Recommended"
+				verbose="true" />
+		<gcupload 
+				username="${google.username}"
+				password="${google.password}"
+				projectname="equalsverifier"
+				filename="${equalsverifier.zip}"
+				targetfilename="${equalsverifier.zip.name}"
+				summary="The EqualsVerifier zip, including jar, source, test suite and dependencies"
+				labels="Featured, Type-Archive, OpSys-All"
+				verbose="true" />
+	</target>
+
+	<target name="publish-maven-central" depends="-publish-validate, deploy-maven-central">
+		<copy tofile="${equalsverifier.maven.pom}" file="${equalsverifier.pom}" />
+
+		<echo message="Bumping version in ${equalsverifier.maven.pom}" />
+		<replace file="${equalsverifier.maven.pom}" token="???" value="${version}" />
+		
+		<typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+				uri="antlib:org.apache.maven.artifact.ant"
+				classpathref="ivy.deploy.path" />
+
+		<!-- sign and deploy the main artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
+			<arg value="-Durl=${maven.staging.repository.url}" />
+			<arg value="-DrepositoryId=${maven.staging.repository.id}" />
+			<arg value="-DpomFile=${equalsverifier.maven.pom}" />
+			<arg value="-Dfile=${equalsverifier-code.jar}" />
+			<arg value="-Pgpg" />
+		</artifact:mvn>
+
+		<!-- sign and deploy the sources artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
+			<arg value="-Durl=${maven.staging.repository.url}" />
+			<arg value="-DrepositoryId=${maven.staging.repository.id}" />
+			<arg value="-DpomFile=${equalsverifier.maven.pom}" />
+			<arg value="-Dfile=${equalsverifier-sources.jar}" />
+			<arg value="-Dclassifier=sources" />
+			<arg value="-Pgpg" />
+		</artifact:mvn>
+
+		<!-- sign and deploy the javadoc artifact -->
+		<artifact:mvn>
+			<arg value="org.apache.maven.plugins:maven-gpg-plugin:1.3:sign-and-deploy-file" />
+			<arg value="-Durl=${maven.staging.repository.url}" />
+			<arg value="-DrepositoryId=${maven.staging.repository.id}" />
+			<arg value="-DpomFile=${equalsverifier.maven.pom}" />
+			<arg value="-Dfile=${equalsverifier-javadoc.jar}" />
+			<arg value="-Dclassifier=javadoc" />
+			<arg value="-Pgpg" />
+		</artifact:mvn>
+		
+		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
+	</target>
+
+	<target name="publish" depends="-publish-validate, -checkCredentialsFile, -checkSecringFile, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
+</project>
