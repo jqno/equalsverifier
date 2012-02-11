@@ -387,6 +387,7 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 			<arg value="-Pgpg" />
 		</artifact:mvn>
 		
+		<echo message="If anything went wrong in this phase, don't forget to check your ~/.m2/settings.xml file. See also https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide#SonatypeOSSMavenRepositoryUsageGuide-7c.DeploySnapshotsandStageReleaseswithAnt" />
 		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
 	</target>
 
