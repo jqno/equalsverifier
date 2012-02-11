@@ -6,6 +6,12 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.1 ==
+  * ... get a warning if you forgot to include a field in your `equals` or `hashCode` method, by calling the `#allFieldsShouldBeUsed()` method on `EqualsVerifier`. ([http://code.google.com/p/equalsverifier/issues/detail?id=53 Issue 53])
+  * ... get an error message if you include a reference-equality check (`this == obj`), followed by an incorrect instanceof check in your `equals` method. `EqualsVerifier` will now notice if you do an instanceof check for a class other than the one that you are testing. ([http://code.google.com/p/equalsverifier/issues/detail?id=55#c2 Issue 55])
+  * ... stop worrying about `EqualsVerifier` changing the value of non-final static fields, causing other tests to fail. ([http://code.google.com/p/equalsverifier/issues/detail?id=52 Issue 52] and [http://code.google.com/p/equalsverifier/issues/detail?id=55 Issue 55])
+  * ... stop worrying about adding prefab values for `File`, `List`, `Set`, `Map` and `Collection` to avoid unjustified warning. ([http://code.google.com/p/equalsverifier/issues/detail?id=49 Issue 49] and [http://code.google.com/p/equalsverifier/issues/detail?id=51 Issue 51])
+
 == Version 1.0.2 ==
   * ... find `EqualsVerifier` in Maven Central! ([http://code.google.com/p/equalsverifier/issues/detail?id=36 Issue 36])
   * ... get an error message when you forget to include an `instanceof` check or a `getClass()` check in your `equals` method. ([http://code.google.com/p/equalsverifier/issues/detail?id=47 Issue 47])
