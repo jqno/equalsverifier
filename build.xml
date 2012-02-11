@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2009-2011 Jan Ouwens
+Copyright 2009-2012 Jan Ouwens
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -66,6 +66,7 @@ limitations under the License.
 	<property name="equalsverifier.tag.pom" value="${tag.dir}/${tag}/equalsverifier.pom" />
 	<property name="credentialsFile" value="google.properties" />
 	<property file="${credentialsFile}" prefix="google" />
+	<property name="secringFile" value="${user.home}/.gnupg/secring.gpg" />
 
 	<path id="project.classpath">
 		<pathelement location="${build.src.dir}" />
@@ -299,7 +300,15 @@ limitations under the License.
 	<target name="-checkCredentialsFile" depends="-credentials" unless="hasCredentialsFile">
 		<echo file="${credentialsFile}">username=[your google account name without @gmail.com]
 password=[your googlecode password, is NOT your gmail password]</echo>
-		<fail message="fill in ${credentialsFile} to provide your credentials" />
+		<fail message="Fill in ${credentialsFile} to provide your credentials!" />
+	</target>
+
+	<target name="-secring">
+		<available property="hasSecretRingFile" file="${secringFile}" />
+	</target>
+
+	<target name="-checkSecringFile" depends="-secring" unless="hasSecretRingFile">
+		<fail message="Make sure you have a GPG secring file to publish to Maven Central!" />
 	</target>
 
 	<target name="publish-googlecode" depends="-publish-validate, -checkCredentialsFile, deploy">
@@ -370,5 +379,5 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
 	</target>
 
-	<target name="publish" depends="-publish-validate, -checkCredentialsFile, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
+	<target name="publish" depends="-publish-validate, -checkCredentialsFile, -checkSecringFile, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
 </project>
