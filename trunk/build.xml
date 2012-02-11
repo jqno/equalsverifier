@@ -64,9 +64,10 @@ limitations under the License.
 	<property name="equalsverifier.pom" value="${basedir}/equalsverifier.pom" />
 	<property name="equalsverifier.maven.pom" value="${dist.maven.dir}/pom.xml" />
 	<property name="equalsverifier.tag.pom" value="${tag.dir}/${tag}/equalsverifier.pom" />
-	<property name="credentialsFile" value="google.properties" />
-	<property file="${credentialsFile}" prefix="google" />
-	<property name="secringFile" value="${user.home}/.gnupg/secring.gpg" />
+	<property name="credentials.file" value="google.properties" />
+	<property file="${credentials.file}" prefix="google" />
+	<property name="secring.file" value="${user.home}/.gnupg/secring.gpg" />
+	<property name="settingsXml.file" value="${user.home}/.m2/settings.xml" />
 
 	<path id="project.classpath">
 		<pathelement location="${build.src.dir}" />
@@ -294,22 +295,32 @@ limitations under the License.
 	</target>
 
 	<target name="-credentials">
-		<available property="hasCredentialsFile" file="${credentialsFile}" />
+		<available property="hasCredentialsFile" file="${credentials.file}" />
 	</target>
 
 	<target name="-checkCredentialsFile" depends="-credentials" unless="hasCredentialsFile">
-		<echo file="${credentialsFile}">username=[your google account name without @gmail.com]
+		<echo file="${credentials.file}">username=[your google account name without @gmail.com]
 password=[your googlecode password, is NOT your gmail password]</echo>
-		<fail message="Fill in ${credentialsFile} to provide your credentials!" />
+		<fail message="Fill in ${credentials.file} to provide your credentials!" />
+	</target>
+
+	<target name="-settingsxml">
+		<available property="hasSettingsXmlFile" file="${settingsXml.file}" />
+	</target>
+
+	<target name="-checkSettingsXmlFile" depends="-settingsxml" unless="hasSettingsXmlFile">
+		<fail message="Make sure you have a ${settingsXml.file}! For more info, see https://docs.sonatype.org/display/Repository/Sonatype+OSS+Maven+Repository+Usage+Guide" />
 	</target>
 
 	<target name="-secring">
-		<available property="hasSecretRingFile" file="${secringFile}" />
+		<available property="hasSecretRingFile" file="${secring.file}" />
 	</target>
 
 	<target name="-checkSecringFile" depends="-secring" unless="hasSecretRingFile">
 		<fail message="Make sure you have a GPG secring file to publish to Maven Central!" />
 	</target>
+	
+	<target name="-checkNecessaryFiles" depends="-checkCredentialsFile, -checkSettingsXmlFile, -checkSecringFile" />
 
 	<target name="publish-googlecode" depends="-publish-validate, -checkCredentialsFile, deploy">
 		<get src="${ant-googlecode.jar.url}" dest="${ant-googlecode.jar.file}" usetimestamp="true" />
@@ -379,5 +390,5 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
 	</target>
 
-	<target name="publish" depends="-publish-validate, -checkCredentialsFile, -checkSecringFile, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
+	<target name="publish" depends="-publish-validate, -checkNecessaryFiles, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
 </project>
