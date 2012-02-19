@@ -21,6 +21,7 @@ import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
+import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
@@ -30,12 +31,14 @@ import nl.jqno.equalsverifier.util.ObjectAccessor;
 class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
 	private final ClassAccessor<T> accessor;
+	private final EnumSet<Warning> warningsToSuppress;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public ExamplesChecker(ClassAccessor<T> accessor, List<T> equalExamples, List<T> unequalExamples) {
+	public ExamplesChecker(ClassAccessor<T> accessor, EnumSet<Warning> warningsToSuppress, List<T> equalExamples, List<T> unequalExamples) {
 		this.type = accessor.getType();
 		this.accessor = accessor;
+		this.warningsToSuppress = warningsToSuppress;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}
@@ -105,8 +108,18 @@ class ExamplesChecker<T> implements Checker {
 				reference, reference);
 		
 		if (!accessor.isEqualsInheritedFromObject()) {
-			assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference,
-					reference, ObjectAccessor.of(reference).copy());
+			T identicalCopy = ObjectAccessor.of(reference).copy();
+			String identicalCopyName = Warning.IDENTICAL_COPY.toString();
+			
+			if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
+				assertFalse("Unnecessary suppression: " + identicalCopyName + ". Two identical copies are equal.",
+						reference.equals(identicalCopy));
+			}
+			else {
+				assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference +
+						"If this is intentional, consider suppressing Warning." + identicalCopyName,
+						reference, identicalCopy);
+			}
 		}
 	}
 
