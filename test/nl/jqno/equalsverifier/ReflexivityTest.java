@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
@@ -31,6 +32,22 @@ public class ReflexivityTest {
 	public void wrongCast() {
 		EqualsVerifier<WrongCast> ev = EqualsVerifier.forClass(WrongCast.class);
 		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", WrongCast.class.getSimpleName());
+	}
+	
+	@Test
+	public void suppressIdenticalCopy() {
+		EqualsVerifier<SuperCaller> ev = EqualsVerifier.forClass(SuperCaller.class);
+		assertFailure(ev, "Reflexivity", "identical copy");
+		
+		EqualsVerifier.forClass(SuperCaller.class)
+				.suppress(Warning.IDENTICAL_COPY)
+				.verify();
+	}
+	
+	@Test
+	public void failOnIdenticalCopy() {
+		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY);
+		assertFailure(ev, "Unnecessary suppression", "IDENTICAL_COPY");
 	}
 	
 	static class ReflexivityBrokenPoint extends Point {
@@ -76,4 +93,16 @@ public class ReflexivityTest {
 	}
 	
 	static class SomethingCompletelyDifferent {}
+	
+	static final class SuperCaller {
+		@Override
+		public boolean equals(Object obj) {
+			return super.equals(obj);
+		}
+		
+		@Override
+		public int hashCode() {
+			return super.hashCode();
+		}
+	}
 }
