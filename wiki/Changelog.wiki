@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.1.1 ==
+_February 21, 2012_
+  * ... suppress `Warning.IDENTICAL_COPY` if you want to use reference equality in an overridden `equals` method. ([http://code.google.com/p/equalsverifier/issues/detail?id=56 Issue 56])
+
 == Version 1.1 ==
 _February 11, 2012_
   * ... get a warning if you forgot to include a field in your `equals` or `hashCode` method, by calling the `#allFieldsShouldBeUsed()` method on `EqualsVerifier`. ([http://code.google.com/p/equalsverifier/issues/detail?id=53 Issue 53])
