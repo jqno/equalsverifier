@@ -132,7 +132,6 @@ public class PrefabValues {
 	 * @throws RecursionException If recursion is detected.
 	 */
 	public void putFor(Class<?> type) {
-		stash.backup(type);
 		putFor(type, new LinkedHashSet<Class<?>>());
 	}
 	
@@ -143,6 +142,8 @@ public class PrefabValues {
 		if (typeStack.contains(type)) {
 			throw new RecursionException(typeStack);
 		}
+		
+		stash.backup(type);
 		
 		if (type.isEnum()) {
 			putEnumInstances(type);

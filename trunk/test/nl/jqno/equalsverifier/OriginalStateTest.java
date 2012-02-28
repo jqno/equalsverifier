@@ -57,6 +57,12 @@ public class OriginalStateTest {
 	}
 	
 	@Test
+	public void staticValueReturnsToOriginalStateDeeplyRecursively() {
+		EqualsVerifier.forClass(CorrectEqualsContainerContainer.class).verify();
+		assertEquals(STATIC, CorrectEquals.staticValue);
+	}
+	
+	@Test
 	public void valuesReturnToOriginalStateAfterException() throws NoSuchFieldException {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
 		MockStaticFieldValueStash stash = new MockStaticFieldValueStash();
@@ -110,6 +116,28 @@ public class OriginalStateTest {
 				return false;
 			}
 			CorrectEqualsContainer other = (CorrectEqualsContainer)obj;
+			return nullSafeEquals(foo, other.foo);
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(foo);
+		}
+	}
+	
+	static final class CorrectEqualsContainerContainer {
+		private final CorrectEqualsContainer foo;
+		
+		public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) {
+			this.foo = foo;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof CorrectEqualsContainerContainer)) {
+				return false;
+			}
+			CorrectEqualsContainerContainer other = (CorrectEqualsContainerContainer)obj;
 			return nullSafeEquals(foo, other.foo);
 		}
 		
