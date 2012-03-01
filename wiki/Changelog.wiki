@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.1.2 ==
+_March 1, 2012_
+  * ... stop worrying about `EqualsVerifier` _recursively_ changing the value of non-final static fields, causing other tests to fail. ([http://code.google.com/p/equalsverifier/issues/detail?id=55#c8 Issue 55, Comment 8])
+
 == Version 1.1.1 ==
 _February 21, 2012_
   * ... suppress `Warning.IDENTICAL_COPY` if you want to use reference equality in an overridden `equals` method. ([http://code.google.com/p/equalsverifier/issues/detail?id=56 Issue 56])
