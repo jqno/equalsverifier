@@ -35,11 +35,11 @@ class FieldsChecker<T> implements Checker {
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean allFieldsShouldBeUsed;
 
-	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean checkAllFields) {
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed) {
 		this.classAccessor = classAccessor;
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
-		this.allFieldsShouldBeUsed = checkAllFields;
+		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
 	}
 	
 	@Override
@@ -96,7 +96,7 @@ class FieldsChecker<T> implements Checker {
 						hashCodeChanged);
 			}
 			
-			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsTransient()) {
+			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
 				assertTrue("Significant fields: equals does not use " + referenceAccessor.getFieldName() + ".",
 						equalsChanged);
 			}
