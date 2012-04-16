@@ -56,6 +56,11 @@ public class SignificantFieldsTest {
 	}
 	
 	@Test
+	public void oneStaticFieldUnused() {
+		EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class).allFieldsShouldBeUsed().verify();
+	}
+	
+	@Test
 	public void oneFieldUnusedExtended() {
 		EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class).verify();
 		
@@ -162,6 +167,33 @@ public class SignificantFieldsTest {
 				return false;
 			}
 			OneTransientFieldUnusedColorPoint other = (OneTransientFieldUnusedColorPoint)obj;
+			return x == other.x && y == other.y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return x + (31 * y);
+		}
+	}
+	
+	static final class OneStaticFieldUnusedColorPoint {
+		private final int x;
+		private final int y;
+		@SuppressWarnings("unused")
+		private static Color color;
+		
+		public OneStaticFieldUnusedColorPoint(int x, int y, Color color) {
+			this.x = x;
+			this.y = y;
+			OneStaticFieldUnusedColorPoint.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof OneStaticFieldUnusedColorPoint)) {
+				return false;
+			}
+			OneStaticFieldUnusedColorPoint other = (OneStaticFieldUnusedColorPoint)obj;
 			return x == other.x && y == other.y;
 		}
 		
