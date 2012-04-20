@@ -38,6 +38,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
+import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
 
@@ -146,6 +147,15 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
+	public void getDefaultValuesObject() {
+		ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
+		DefaultValues foo = accessor.getDefaultValuesObject();
+		assertEquals(0, foo.i);
+		assertEquals(null, foo.s);
+		assertFalse(foo.t == null);
+	}
+	
+	@Test
 	public void instantiateAllTypes() {
 		ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject();
 	}
@@ -178,5 +188,11 @@ public class ClassAccessorTest {
 	private void assertObjectHasNoNullFields(PointContainer foo) {
 		assertNotNull(foo);
 		assertNotNull(foo.getPoint());
+	}
+	
+	static class DefaultValues {
+		int i;
+		String s;
+		@NonNull String t;
 	}
 }
