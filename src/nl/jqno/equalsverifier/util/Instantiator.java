@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010,2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,6 +61,9 @@ public class Instantiator<T> {
 	
 	/**
 	 * Instantiates an object of type T.
+	 * 
+	 * All fields will be initialized to their initial values.
+	 * I.e., 0 for ints, null for objects, etc.
 	 * 
 	 * @return An object of type T.
 	 */
