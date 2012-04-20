@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010,2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractClass;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
+import nl.jqno.equalsverifier.testhelpers.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
@@ -32,6 +33,13 @@ public class InstantiatorTest {
 		Instantiator<Point> instantiator = Instantiator.of(Point.class);
 		Point p = instantiator.instantiate();
 		assertEquals(Point.class, p.getClass());
+	}
+	
+	@Test
+	public void fieldsOfInstantiatedObjectHaveDefaultValues() {
+		ColorBlindColorPoint p = Instantiator.of(ColorBlindColorPoint.class).instantiate();
+		assertEquals(0, p.x);
+		assertEquals(null, p.color);
 	}
 	
 	public void instantiateInterface() {
