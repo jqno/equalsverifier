@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2009,2012 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 package nl.jqno.equalsverifier.testhelpers.points;
 
 public final class ColorBlindColorPoint extends Point {
-	private final Color color;
+	public final Color color;
 
 	public ColorBlindColorPoint(int x, int y, Color color) {
 		super(x, y);
