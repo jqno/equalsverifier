@@ -280,13 +280,6 @@ public class FieldAccessor {
 	}
 	
 	private static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
-		if (!array.getClass().isArray()) {
-			throw new InternalException("Expected array is not an array.");
-		}
-		if (index < 0 || index >= Array.getLength(array)) {
-			throw new InternalException("Array index out of bounds.");
-		}
-
 		Class<?> type = array.getClass().getComponentType();
 		if (type == boolean.class) {
 			Array.setBoolean(array, index, !Array.getBoolean(array, index));
