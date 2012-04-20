@@ -17,9 +17,6 @@ package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.junit.Test;
 
 public class SymmetryTest {
@@ -28,73 +25,9 @@ public class SymmetryTest {
 	private static final String AND = "and";
 
 	@Test
-	public void symmetryEquals() {
-		EqualsVerifier<SymmetryEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryEqualsBrokenPoint.class);
-		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryEqualsBrokenPoint.class.getSimpleName());
-	}
-	
-	@Test
 	public void symmetryNotEquals() {
-		EqualsVerifier<SymmetryNotEqualsBrokenPoint> ev = EqualsVerifier.forClass(SymmetryNotEqualsBrokenPoint.class);
-		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryNotEqualsBrokenPoint.class.getSimpleName());
-	}
-	
-	private static int seed = 1;
-	private static final Set<Integer> seeded = new HashSet<Integer>();
-	
-	static class SymmetryEqualsBrokenPoint extends SymmetryBrokenPoint {
-		private int n = 0;
-		
-		public SymmetryEqualsBrokenPoint(int x, int y) {
-			super(x, y);
-		}
-		
-		// In the symmetry test, setN will make sure that n is different for
-		// both objects, which will cause this test to fail.
-		// In the reflexivity test, n is copied along with the rest of the
-		// object, and therefore the instances will have equal n's, allowing
-		// the reflexivity test to pass.
-		// The seed has to be defined outside this class, or else
-		// EqualsVerifier will make changes.
-		private void setN() {
-			if (!seeded.contains(hashCode())) {
-				seeded.add(hashCode());
-				seed++;
-				n = seed;
-			}
-		}
-
-		@Override
-		public boolean equals(Object obj) {
-			setN();
-			
-			if (obj != this && goodEquals(obj)) {
-				return n == ((SymmetryEqualsBrokenPoint)obj).n;
-			}
-			return goodEquals(obj);
-		}
-	}
-	
-	static class SymmetryNotEqualsBrokenPoint extends SymmetryBrokenPoint {
-		public SymmetryNotEqualsBrokenPoint(int x, int y) {
-			super(x, y);
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (goodEquals(obj)) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			return hashCode() > obj.hashCode();
-		}
-		
-		@Override
-		public int hashCode() {
-			return x + (31 * y);
-		}
+		EqualsVerifier<SymmetryBrokenPoint> ev = EqualsVerifier.forClass(SymmetryBrokenPoint.class);
+		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryBrokenPoint.class.getSimpleName());
 	}
 	
 	abstract static class SymmetryBrokenPoint {
@@ -105,13 +38,29 @@ public class SymmetryTest {
 			this.x = x;
 			this.y = y;
 		}
-		
+
+		@Override
+		public boolean equals(Object obj) {
+			if (goodEquals(obj)) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			return hashCode() > obj.hashCode();
+		}
+
 		public boolean goodEquals(Object obj) {
 			if (!(obj instanceof SymmetryBrokenPoint)) {
 				return false;
 			}
 			SymmetryBrokenPoint p = (SymmetryBrokenPoint)obj;
 			return p.x == x && p.y == y;
+		}
+		
+		@Override
+		public int hashCode() {
+			return x + (31 * y);
 		}
 		
 		@Override
