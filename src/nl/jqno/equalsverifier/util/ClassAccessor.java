@@ -184,6 +184,25 @@ public class ClassAccessor<T> {
 		result.scramble(prefabValues);
 		return result;
 	}
+
+	/**
+	 * Returns an instance of T where all the fields are initialized to their
+	 * default values. I.e., 0 for ints, and null for objects (except when the
+	 * field is marked with a NonNull annotation).
+	 * 
+	 * @return An instance of T where all the fields are initialized to their
+	 * 			default values.
+	 */
+	public T getDefaultValuesObject() {
+		T result = instantiator.instantiate();
+		for (Field field : new FieldIterable(type)) {
+			if (annotationAccessor.fieldHas(field.getName(), SupportedAnnotations.NONNULL)) {
+				FieldAccessor accessor = new FieldAccessor(result, field);
+				accessor.changeField(prefabValues);
+			}
+		}
+		return result;
+	}
 	
 	private ObjectAccessor<T> buildObjectAccessor() {
 		T object = instantiator.instantiate();
