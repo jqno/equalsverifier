@@ -108,18 +108,35 @@ class ExamplesChecker<T> implements Checker {
 				reference, reference);
 		
 		if (!accessor.isEqualsInheritedFromObject()) {
-			T identicalCopy = ObjectAccessor.of(reference).copy();
-			String identicalCopyName = Warning.IDENTICAL_COPY.toString();
-			
-			if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-				assertFalse("Unnecessary suppression: " + identicalCopyName + ". Two identical copies are equal.",
-						reference.equals(identicalCopy));
-			}
-			else {
-				assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference +
-						"If this is intentional, consider suppressing Warning." + identicalCopyName,
-						reference, identicalCopy);
-			}
+			checkReflexivityForNonDefaultValues(reference);
+			checkReflexivityForDefaultValues();
+		}
+	}
+
+	private void checkReflexivityForNonDefaultValues(T reference) {
+		T identicalCopy = ObjectAccessor.of(reference).copy();
+		checkReflexivity(reference, identicalCopy);
+	}
+
+	private void checkReflexivityForDefaultValues() {
+		if (!warningsToSuppress.contains(Warning.NULL_FIELDS)) {
+			T one = accessor.getDefaultValuesObject();
+			T two = ObjectAccessor.of(one).copy();
+			checkReflexivity(one, two);
+		}
+	}
+
+	private void checkReflexivity(T reference, T identicalCopy) {
+		String identicalCopyName = Warning.IDENTICAL_COPY.toString();
+		
+		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
+			assertFalse("Unnecessary suppression: " + identicalCopyName + ". Two identical copies are equal.",
+					reference.equals(identicalCopy));
+		}
+		else {
+			assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference +
+					"If this is intentional, consider suppressing Warning." + identicalCopyName,
+					reference, identicalCopy);
 		}
 	}
 
