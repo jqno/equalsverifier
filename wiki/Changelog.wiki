@@ -6,6 +6,10 @@ What's new?
 
 Well, you can now ...
 
+== Version 1.1.3 ==
+  * ... add static fields to your classes that are tested with `#allFieldsShouldBeUsed()`. `EqualsVerifier` will no longer complain if these static fields aren't used in your `equals` and `hashCode` methods. ([http://code.google.com/p/equalsverifier/issues/detail?id=57 Issue 57])
+  * ... get a complaint from `EqualsVerifier` when your `equals` method works incorrectly if a field in the class under test is null. ([http://code.google.com/p/equalsverifier/issues/detail?id=59 Issue 59])
+
 == Version 1.1.2 ==
 _March 1, 2012_
   * ... stop worrying about `EqualsVerifier` _recursively_ changing the value of non-final static fields, causing other tests to fail. ([http://code.google.com/p/equalsverifier/issues/detail?id=55#c8 Issue 55, Comment 8])
