@@ -104,6 +104,8 @@ To fix this, make sure you have cglib 2.2. If you use Maven, add the following l
 </dependencyManagement>
 }}}
 
+Also, make sure that you use cglib-nodep, instead of 'vanilla' cglib!
+
 ==Non-nullity: equals/hashCode/toString throws !NullPointerException==
 This error occurs when the class under test can throw a `NullPointerException` when one of its fields is null and `equals`/`hashCode`/`toString` is called. For example, `equals` could contain this line:
 {{{
