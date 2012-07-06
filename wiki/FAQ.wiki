@@ -40,6 +40,8 @@ By far the best explanation on the subject, in my opinion, can be found in Chapt
 
 Another excellent source, of course, is Items 8 and 9 from Josh Bloch's _Effective Java, Second Edition_.
 
+Note: if you use the `canEqual` method described by Odersky et al., you need to use `#withRedefinedSubclass(Class)` in the tests of every class that you expect to be overridden, and `#withRedefinedSuperclass()` in the tests of every class that override a superclass's `equals` method. The two can be combined, if necessary.
+
 
 =Error messages=
 ==Can you explain the error message I just got from !EqualsVerifier?==
