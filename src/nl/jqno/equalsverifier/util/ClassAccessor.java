@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,6 +95,34 @@ public class ClassAccessor<T> {
 	}
 	
 	/**
+	 * Determines whether T has an {@code equals} method.
+	 * 
+	 * @return True if T has an {@code equals} method.
+	 */
+	public boolean declaresEquals() {
+		return declaresMethod("equals", Object.class);
+	}
+	
+	/**
+	 * Determines whether T has an {@code hashCode} method.
+	 * 
+	 * @return True if T has an {@code hashCode} method.
+	 */
+	public boolean declaresHashCode() {
+		return declaresMethod("hashCode");
+	}
+	
+	private boolean declaresMethod(String name, Class<?>... parameterTypes) {
+		try {
+			type.getDeclaredMethod(name, parameterTypes);
+			return true;
+		}
+		catch (NoSuchMethodException e) {
+			return false;
+		}
+	}
+	
+	/**
 	 * Determines whether T's {@code equals} method is abstract.
 	 * 
 	 * @return True if T's {@code equals} method is abstract.
@@ -132,11 +160,10 @@ public class ClassAccessor<T> {
 	public boolean isEqualsInheritedFromObject() {
 		Class<?> i = type;
 		while (i != Object.class) {
-			try {
-				i.getDeclaredMethod("equals", Object.class);
+			ClassAccessor<?> accessor = ClassAccessor.of(i, prefabValues, false);
+			if (accessor.declaresEquals()) {
 				return false;
 			}
-			catch (NoSuchMethodException ignored) {}
 			i = i.getSuperclass();
 		}
 		return true;

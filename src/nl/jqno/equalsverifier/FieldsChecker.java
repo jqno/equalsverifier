@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jan Ouwens
+ * Copyright 2009-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,7 @@ class FieldsChecker<T> implements Checker {
 		inspector.check(new ArrayFieldCheck());
 		inspector.check(new SignificanceFieldCheck());
 		
-		if (hasEqualsMethod(classAccessor.getType())) {
+		if (classAccessor.declaresEquals()) {
 			inspector.check(new FloatAndDoubleFieldCheck());
 		}
 		
@@ -59,16 +59,6 @@ class FieldsChecker<T> implements Checker {
 		
 		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
 			inspector.check(new TransitiveFieldsCheck());
-		}
-	}
-	
-	private boolean hasEqualsMethod(Class<?> type) {
-		try {
-			type.getDeclaredMethod("equals", Object.class);
-			return true;
-		}
-		catch (NoSuchMethodException e) {
-			return false;
 		}
 	}
 
