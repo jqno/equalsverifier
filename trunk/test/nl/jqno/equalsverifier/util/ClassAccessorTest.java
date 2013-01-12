@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllRecursiveCollectionImple
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.Empty;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
@@ -46,24 +47,26 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ClassAccessorTest {
-	private ClassAccessor<PointContainer> classAccessor;
 	private PrefabValues prefabValues;
+	private ClassAccessor<PointContainer> pointContainerAccessor;
+	private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
 	
 	@Before
 	public void setup() {
 		prefabValues = new PrefabValues(new StaticFieldValueStash());
 		JavaApiPrefabValues.addTo(prefabValues);
-		classAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
+		pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
+		abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, false);
 	}
 	
 	@Test
 	public void getType() {
-		assertSame(PointContainer.class, classAccessor.getType());
+		assertSame(PointContainer.class, pointContainerAccessor.getType());
 	}
 	
 	@Test
 	public void getPrefabValues() {
-		assertSame(prefabValues, classAccessor.getPrefabValues());
+		assertSame(prefabValues, pointContainerAccessor.getPrefabValues());
 	}
 	
 	@Test
@@ -82,25 +85,47 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
+	public void declaresEquals() {
+		assertTrue(pointContainerAccessor.declaresEquals());
+		assertTrue(abstractEqualsAndHashCodeAccessor.declaresEquals());
+	}
+	
+	@Test
+	public void doesNotDeclareEquals() {
+		ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
+		assertFalse(accessor.declaresEquals());
+	}
+	
+	@Test
+	public void declaresHashCode() {
+		assertTrue(pointContainerAccessor.declaresHashCode());
+		assertTrue(abstractEqualsAndHashCodeAccessor.declaresHashCode());
+	}
+	
+	@Test
+	public void doesNotDeclareHashCode() {
+		ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
+		assertFalse(accessor.declaresHashCode());
+	}
+	
+	@Test
 	public void equalsIsNotAbstract() {
-		assertFalse(classAccessor.isEqualsAbstract());
+		assertFalse(pointContainerAccessor.isEqualsAbstract());
 	}
 	
 	@Test
 	public void equalsIsAbstract() {
-		ClassAccessor<AbstractEqualsAndHashCode> accessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, true);
-		assertTrue(accessor.isEqualsAbstract());
+		assertTrue(abstractEqualsAndHashCodeAccessor.isEqualsAbstract());
 	}
 	
 	@Test
 	public void hashCodeIsNotAbstract() {
-		assertFalse(classAccessor.isHashCodeAbstract());
+		assertFalse(pointContainerAccessor.isHashCodeAbstract());
 	}
 	
 	@Test
 	public void hashCodeIsAbstract() {
-		ClassAccessor<AbstractEqualsAndHashCode> accessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, true);
-		assertTrue(accessor.isHashCodeAbstract());
+		assertTrue(abstractEqualsAndHashCodeAccessor.isHashCodeAbstract());
 	}
 	
 	@Test
@@ -111,38 +136,37 @@ public class ClassAccessorTest {
 	
 	@Test
 	public void equalsIsNotInheritedFromObject() {
-		ClassAccessor<PointContainer> accessor = ClassAccessor.of(PointContainer.class, prefabValues, true);
-		assertFalse(accessor.isEqualsInheritedFromObject());
+		assertFalse(pointContainerAccessor.isEqualsInheritedFromObject());
 	}
 	
 	@Test
 	public void getRedObject() {
-		assertObjectHasNoNullFields(classAccessor.getRedObject());
+		assertObjectHasNoNullFields(pointContainerAccessor.getRedObject());
 	}
 	
 	@Test
 	public void getRedAccessor() {
-		PointContainer foo = classAccessor.getRedObject();
-		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getRedAccessor();
+		PointContainer foo = pointContainerAccessor.getRedObject();
+		ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor();
 		assertEquals(foo, objectAccessor.get());
 	}
 	
 	@Test
 	public void getBlackObject() {
-		assertObjectHasNoNullFields(classAccessor.getBlackObject());
+		assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject());
 	}
 
 	@Test
 	public void getBlackAccessor() {
-		PointContainer foo = classAccessor.getBlackObject();
-		ObjectAccessor<PointContainer> objectAccessor = classAccessor.getBlackAccessor();
+		PointContainer foo = pointContainerAccessor.getBlackObject();
+		ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor();
 		assertEquals(foo, objectAccessor.get());
 	}
 
 	@Test
 	public void redAndBlackNotEqual() {
-		PointContainer red = classAccessor.getRedObject();
-		PointContainer black = classAccessor.getBlackObject();
+		PointContainer red = pointContainerAccessor.getRedObject();
+		PointContainer black = pointContainerAccessor.getBlackObject();
 		assertFalse(red.equals(black));
 	}
 	
