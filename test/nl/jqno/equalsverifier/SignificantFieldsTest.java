@@ -27,13 +27,13 @@ public class SignificantFieldsTest {
 	@Test
 	public void extraFieldInEquals() {
 		EqualsVerifier<ExtraFieldInEqualsPoint> ev = EqualsVerifier.forClass(ExtraFieldInEqualsPoint.class);
-		assertFailure(ev, "Significant fields", "equals relies on", "but hashCode does not");
+		assertFailure(ev, "Significant fields", "equals relies on", "yNotUsed", "but hashCode does not");
 	}
 	
 	@Test
 	public void extraFieldInHashCode() {
 		EqualsVerifier<ExtraFieldInHashCodePoint> ev = EqualsVerifier.forClass(ExtraFieldInHashCodePoint.class);
-		assertFailure(ev, "Significant fields", "hashCode relies on", "but equals does not");
+		assertFailure(ev, "Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class SignificantFieldsTest {
 		
 		EqualsVerifier<OneFieldUnusedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedColorPoint.class);
 		ev.allFieldsShouldBeUsed();
-		assertFailure(ev, "Significant fields", "equals does not use");
+		assertFailure(ev, "Significant fields", "equals does not use", "colorNotUsed");
 	}
 	
 	@Test
@@ -66,7 +66,7 @@ public class SignificantFieldsTest {
 		
 		EqualsVerifier<OneFieldUnusedExtendedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class);
 		ev.allFieldsShouldBeUsed();
-		assertFailure(ev, "Significant fields", "equals does not use");
+		assertFailure(ev, "Significant fields", "equals does not use", "colorNotUsed");
 	}
 	
 	@Test
@@ -85,11 +85,11 @@ public class SignificantFieldsTest {
 	
 	static final class ExtraFieldInEqualsPoint {
 		private final int x;
-		private final int y;
+		private final int yNotUsed;
 		
 		public ExtraFieldInEqualsPoint(int x, int y) {
 			this.x = x;
-			this.y = y;
+			this.yNotUsed = y;
 		}
 		
 		@Override
@@ -98,7 +98,7 @@ public class SignificantFieldsTest {
 				return false;
 			}
 			ExtraFieldInEqualsPoint p = (ExtraFieldInEqualsPoint)obj;
-			return p.x == x && p.y == y;
+			return p.x == x && p.yNotUsed == yNotUsed;
 		}
 		
 		@Override
@@ -109,11 +109,11 @@ public class SignificantFieldsTest {
 	
 	static final class ExtraFieldInHashCodePoint {
 		private final int x;
-		private final int y;
+		private final int yNotUsed;
 
 		public ExtraFieldInHashCodePoint(int x, int y) {
 			this.x = x;
-			this.y = y;
+			this.yNotUsed = y;
 		}
 		
 		@Override
@@ -127,7 +127,7 @@ public class SignificantFieldsTest {
 		
 		@Override
 		public int hashCode() {
-			return x + (31 * y);
+			return x + (31 * yNotUsed);
 		}
 	}
 	
@@ -135,12 +135,12 @@ public class SignificantFieldsTest {
 		private final int x;
 		private final int y;
 		@SuppressWarnings("unused")
-		private final Color color;
+		private final Color colorNotUsed;
 		
 		public OneFieldUnusedColorPoint(int x, int y, Color color) {
 			this.x = x;
 			this.y = y;
-			this.color = color;
+			this.colorNotUsed = color;
 		}
 		
 		@Override
@@ -214,11 +214,11 @@ public class SignificantFieldsTest {
 	
 	static final class OneFieldUnusedExtendedColorPoint extends Point {
 		@SuppressWarnings("unused")
-		private final Color color;
+		private final Color colorNotUsed;
 		
 		public OneFieldUnusedExtendedColorPoint(int x, int y, Color color) {
 			super(x, y);
-			this.color = color;
+			this.colorNotUsed = color;
 		}
 	}
 	
