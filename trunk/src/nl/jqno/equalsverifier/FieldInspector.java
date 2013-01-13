@@ -33,7 +33,7 @@ class FieldInspector<T> {
 		ObjectAccessor<T> reference = classAccessor.getRedAccessor();
 		ObjectAccessor<T> changed = classAccessor.getRedAccessor();
 
-		for (Field field : new FieldIterable(classAccessor.getType())) {
+		for (Field field : FieldIterable.of(classAccessor.getType())) {
 			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
 		}
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2013 Jan Ouwens
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -38,7 +38,7 @@ public class FieldIterableTest {
 	@Test
 	public void simpleFields() {
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(DifferentAccessModifiersFieldContainer.class)) {
+		for (Field field : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -46,9 +46,19 @@ public class FieldIterableTest {
 	}
 	
 	@Test
-	public void subClassFields() {
+	public void subAndSuperClassFields() {
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(DifferentAccessModifiersSubFieldContainer.class)) {
+		for (Field field : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
+			actual.add(field);
+		}
+		
+		assertEquals(FIELD_AND_SUB_FIELD_CONTAINER_FIELDS, actual);
+	}
+	
+	@Test
+	public void onlySubClassFields() {
+		Set<Field> actual = new HashSet<Field>();
+		for (Field field : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -57,7 +67,7 @@ public class FieldIterableTest {
 	
 	@Test
 	public void noFields() {
-		FieldIterable iterable = new FieldIterable(NoFields.class);
+		FieldIterable iterable = FieldIterable.of(NoFields.class);
 		assertFalse(iterable.iterator().hasNext());
 	}
 	
@@ -67,7 +77,7 @@ public class FieldIterableTest {
 		expected.add(NoFieldsSubWithFields.class.getField("field"));
 		
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(NoFieldsSubWithFields.class)) {
+		for (Field field : FieldIterable.of(NoFieldsSubWithFields.class)) {
 			actual.add(field);
 		}
 		
@@ -77,7 +87,7 @@ public class FieldIterableTest {
 	@Test
 	public void subHasNoFields() {
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(EmptySubFieldContainer.class)) {
+		for (Field field : FieldIterable.of(EmptySubFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -89,7 +99,7 @@ public class FieldIterableTest {
 		FIELD_CONTAINER_FIELDS.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 		
 		Set<Field> actual = new HashSet<Field>();
-		for (Field field : new FieldIterable(SubEmptySubFieldContainer.class)) {
+		for (Field field : FieldIterable.of(SubEmptySubFieldContainer.class)) {
 			actual.add(field);
 		}
 		
@@ -98,13 +108,13 @@ public class FieldIterableTest {
 	
 	@Test
 	public void interfaceTest() {
-		FieldIterable iterable = new FieldIterable(Interface.class);
+		FieldIterable iterable = FieldIterable.of(Interface.class);
 		assertFalse(iterable.iterator().hasNext());
 	}
 
 	@Test(expected=NoSuchElementException.class)
 	public void nextAfterLastElement() {
-		Iterator<Field> iterator = new FieldIterable(DifferentAccessModifiersFieldContainer.class).iterator();
+		Iterator<Field> iterator = FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
 		while (iterator.hasNext()) {
 			iterator.next();
 		}
@@ -113,13 +123,13 @@ public class FieldIterableTest {
 	
 	@Test
 	public void objectHasNoElements() {
-		FieldIterable iterable = new FieldIterable(Object.class);
+		FieldIterable iterable = FieldIterable.of(Object.class);
 		assertFalse(iterable.iterator().hasNext());
 	}
 	
 	@Test
 	public void ignoreSyntheticFields() {
-		FieldIterable iterable = new FieldIterable(Outer.Inner.class);
+		FieldIterable iterable = FieldIterable.of(Outer.Inner.class);
 		assertFalse(iterable.iterator().hasNext());
 	}
 	
@@ -145,7 +155,6 @@ public class FieldIterableTest {
 	private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
 		Class<DifferentAccessModifiersSubFieldContainer> type = DifferentAccessModifiersSubFieldContainer.class;
 		try {
-			addAll(FIELD_CONTAINER_FIELDS);
 			add(type.getDeclaredField("a"));
 			add(type.getDeclaredField("b"));
 			add(type.getDeclaredField("c"));
@@ -154,5 +163,11 @@ public class FieldIterableTest {
 		catch (NoSuchFieldException e) {
 			throw new IllegalStateException(e);
 		}
+	}};
+	
+	@SuppressWarnings("serial")
+	private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
+		addAll(FIELD_CONTAINER_FIELDS);
+		addAll(SUB_FIELD_CONTAINER_FIELDS);
 	}};
 }

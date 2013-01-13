@@ -184,7 +184,7 @@ class ExamplesChecker<T> implements Checker {
 	}
 	
 	private boolean isIdentical(T reference, T other) {
-		for (Field field : new FieldIterable(reference.getClass())) {
+		for (Field field : FieldIterable.of(reference.getClass())) {
 			try {
 				field.setAccessible(true);
 				if (!field.get(reference).equals(field.get(other))) {
