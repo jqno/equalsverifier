@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2012 Jan Ouwens
+ * Copyright 2009-2010, 2012-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,15 @@ public class SignificantFieldsTest {
 		EqualsVerifier<OneFieldUnusedExtendedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class);
 		ev.allFieldsShouldBeUsed();
 		assertFailure(ev, "Significant fields", "equals does not use");
+	}
+	
+	@Test
+	public void noFieldsUsed() {
+		EqualsVerifier.forClass(NoFieldsUsed.class).verify();
+		
+		EqualsVerifier<NoFieldsUsed> ev = EqualsVerifier.forClass(NoFieldsUsed.class);
+		ev.allFieldsShouldBeUsed();
+		assertFailure(ev, "Significant fields", "all fields should be used", "has not defined an equals method");
 	}
 	
 	@Test
@@ -209,6 +218,15 @@ public class SignificantFieldsTest {
 		
 		public OneFieldUnusedExtendedColorPoint(int x, int y, Color color) {
 			super(x, y);
+			this.color = color;
+		}
+	}
+	
+	static final class NoFieldsUsed {
+		@SuppressWarnings("unused")
+		private final Color color;
+		
+		public NoFieldsUsed(Color color) {
 			this.color = color;
 		}
 	}
