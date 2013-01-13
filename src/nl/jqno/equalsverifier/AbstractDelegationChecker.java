@@ -49,7 +49,7 @@ class AbstractDelegationChecker<T> implements Checker {
 	}
 	
 	private void checkAbstractDelegationInFields() {
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			Class<?> type = field.getType();
 			Object o = safelyGetInstance(type);
 			if (o != null) {

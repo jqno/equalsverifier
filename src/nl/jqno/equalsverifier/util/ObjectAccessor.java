@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ public class ObjectAccessor<T> {
 	}
 
 	private <S> S copyInto(S copy) {
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.copyTo(copy);
 		}
@@ -148,7 +148,7 @@ public class ObjectAccessor<T> {
 	 * @param prefabValues Prefabricated values to take values from.
 	 */
 	public void scramble(PrefabValues prefabValues) {
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.changeField(prefabValues);
 		}
@@ -170,7 +170,7 @@ public class ObjectAccessor<T> {
 	 * @param prefabValues Prefabricated values to take values from.
 	 */
 	public void shallowScramble(PrefabValues prefabValues) {
-		for (Field field : type.getDeclaredFields()) {
+		for (Field field : FieldIterable.ofIgnoringSuper(type)) {
 			FieldAccessor accessor = new FieldAccessor(object, field);
 			accessor.changeField(prefabValues);
 		}

@@ -171,7 +171,7 @@ public class PrefabValues {
 	}
 	
 	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			int modifiers = field.getModifiers();
 			boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
 			if (!isStaticAndFinal) {

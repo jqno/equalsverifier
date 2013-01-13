@@ -123,7 +123,7 @@ public class ObjectAccessorCopyingTest {
 	
 	private static <T> void assertAllFieldsEqual(T original, T copy, Class<? extends T> type) {
 		assertNotSame(original, copy);
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			try {
 				assertEquals(field.get(original), field.get(copy));
 			}

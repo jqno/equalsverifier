@@ -33,7 +33,7 @@ public class StaticFieldValueStash {
 		
 		stash.put(type, new HashMap<Field, Object>());
 		ObjectAccessor<T> objectAccessor = ObjectAccessor.of(null, type);
-		for (Field field : new FieldIterable(type)) {
+		for (Field field : FieldIterable.of(type)) {
 			FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
 			if (accessor.fieldIsStatic()) {
 				stash.get(type).put(field, accessor.get());
@@ -44,7 +44,7 @@ public class StaticFieldValueStash {
 	public void restoreAll() {
 		for (Class<?> type : stash.keySet()) {
 			ObjectAccessor<?> objectAccessor = ObjectAccessor.of(null, type);
-			for (Field field : new FieldIterable(type)) {
+			for (Field field : FieldIterable.of(type)) {
 				FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
 				if (accessor.fieldIsStatic()) {
 					accessor.set(stash.get(type).get(field));

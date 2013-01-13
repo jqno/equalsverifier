@@ -249,7 +249,7 @@ public class FieldAccessorTest {
 		AllTypesContainer changed = new AllTypesContainer();
 		assertTrue(reference.equals(changed));
 		
-		for (Field field : new FieldIterable(AllTypesContainer.class)) {
+		for (Field field : FieldIterable.of(AllTypesContainer.class)) {
 			new FieldAccessor(changed, field).changeField(prefabValues);
 			assertFalse("On field: " + field.getName(), reference.equals(changed));
 			new FieldAccessor(reference, field).changeField(prefabValues);
@@ -309,7 +309,7 @@ public class FieldAccessorTest {
 		AllArrayTypesContainer changed = new AllArrayTypesContainer();
 		assertTrue(reference.equals(changed));
 		
-		for (Field field : new FieldIterable(AllArrayTypesContainer.class)) {
+		for (Field field : FieldIterable.of(AllArrayTypesContainer.class)) {
 			new FieldAccessor(changed, field).changeField(prefabValues);
 			assertFalse("On field: " + field.getName(), reference.equals(changed));
 			new FieldAccessor(reference, field).changeField(prefabValues);
