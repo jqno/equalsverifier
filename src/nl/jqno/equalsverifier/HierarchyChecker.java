@@ -34,10 +34,9 @@ class HierarchyChecker<T> implements Checker {
 	private final boolean usingGetClass;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
+	private final ObjectAccessor<T> referenceAccessor;
+	private final T reference;
 	private final boolean typeIsFinal;
-	
-	private ObjectAccessor<T> referenceAccessor;
-	private T reference;
 
 	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
@@ -50,14 +49,13 @@ class HierarchyChecker<T> implements Checker {
 		this.usingGetClass = usingGetClass;
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.redefinedSubclass = redefinedSubclass;
-		
-		typeIsFinal = Modifier.isFinal(type.getModifiers());
+		this.referenceAccessor = classAccessor.getRedAccessor();
+		this.reference = referenceAccessor.get();
+		this.typeIsFinal = Modifier.isFinal(type.getModifiers());
 	}
 	
 	@Override
 	public void check() {
-		generateExamples();
-		
 		checkSuperclass();
 		checkSubclass();
 		
@@ -65,11 +63,6 @@ class HierarchyChecker<T> implements Checker {
 		if (!warningsToSuppress.contains(Warning.STRICT_INHERITANCE)) {
 			checkFinalEqualsMethod();
 		}
-	}
-	
-	private void generateExamples() {
-		referenceAccessor = classAccessor.getRedAccessor();
-		reference = referenceAccessor.get();
 	}
 	
 	private void checkSuperclass() {
