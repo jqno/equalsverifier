@@ -161,7 +161,7 @@ public class ClassAccessor<T> {
 		Class<?> i = type;
 		while (i != Object.class) {
 			ClassAccessor<?> accessor = ClassAccessor.of(i, prefabValues, false);
-			if (accessor.declaresEquals()) {
+			if (accessor.declaresEquals() && !accessor.isEqualsAbstract()) {
 				return false;
 			}
 			i = i.getSuperclass();
