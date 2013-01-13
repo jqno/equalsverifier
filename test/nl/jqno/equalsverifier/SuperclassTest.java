@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,10 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractEqualsAndHashCode;
+import nl.jqno.equalsverifier.testhelpers.TypeHelper.Empty;
+import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 import nl.jqno.equalsverifier.testhelpers.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
@@ -52,6 +56,20 @@ public class SuperclassTest {
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
 		assertFailure(ev, "Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
 				"should be equal to hashCode for superclass instance", Point.class.getSimpleName());
+	}
+	
+	@Test
+	public void emptySuperclassesShouldNotFailOnEqualSuperclassInstance() {
+		EqualsVerifier.forClass(SubclassOfEmpty.class).verify();
+		EqualsVerifier.forClass(SubOfEmptySubOfEmpty.class).verify();
+		EqualsVerifier.forClass(SubOfEmptySubOfAbstract.class).verify();
+	}
+	
+	@Test
+	public void emptySuperclassIsIrrelevantWhenTheresEqualsHigherUp() {
+		EqualsVerifier<BrokenCanEqualColorPointWithEmptySuper> ev =
+				EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class);
+		assertFailure(ev, "Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
 	}
 	
 	static class SymmetryBrokenColorPoint extends Point {
@@ -111,6 +129,102 @@ public class SuperclassTest {
 		@Override
 		public int hashCode() {
 			return super.hashCode() + 1;
+		}
+	}
+	
+	static final class SubclassOfEmpty extends Empty {
+		private final Color color;
+		
+		public SubclassOfEmpty(Color color) {
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SubclassOfEmpty)) {
+				return false;
+			}
+			return color == ((SubclassOfEmpty)obj).color;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(color);
+		}
+	}
+	
+	static class EmptySubOfEmpty extends Empty {}
+	
+	static final class SubOfEmptySubOfEmpty extends EmptySubOfEmpty {
+		private final Color color;
+		
+		public SubOfEmptySubOfEmpty(Color color) {
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SubOfEmptySubOfEmpty)) {
+				return false;
+			}
+			return color == ((SubOfEmptySubOfEmpty)obj).color;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(color);
+		}
+	}
+	
+	static abstract class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
+	
+	static final class SubOfEmptySubOfAbstract extends EmptySubOfAbstract {
+		private final Color color;
+		
+		public SubOfEmptySubOfAbstract(Color color) {
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SubOfEmptySubOfAbstract)) {
+				return false;
+			}
+			return color == ((SubOfEmptySubOfAbstract)obj).color;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(color);
+		}
+	}
+	
+	static class EmptySubOfCanEqualPoint extends CanEqualPoint {
+		public EmptySubOfCanEqualPoint(int x, int y) {
+			super(x, y);
+		}
+	}
+	
+	static final class BrokenCanEqualColorPointWithEmptySuper extends EmptySubOfCanEqualPoint {
+		private final Color color;
+		
+		public BrokenCanEqualColorPointWithEmptySuper(int x, int y, Color color) {
+			super(x, y);
+			this.color = color;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof BrokenCanEqualColorPointWithEmptySuper)) {
+				return false;
+			}
+			BrokenCanEqualColorPointWithEmptySuper p = (BrokenCanEqualColorPointWithEmptySuper)obj;
+			return super.equals(p) && color == p.color;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(color) + (31 * super.hashCode());
 		}
 	}
 }
