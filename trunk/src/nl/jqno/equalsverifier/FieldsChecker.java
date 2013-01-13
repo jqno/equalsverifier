@@ -89,6 +89,8 @@ class FieldsChecker<T> implements Checker {
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
 				assertTrue("Significant fields: equals does not use " + referenceAccessor.getFieldName() + ".",
 						equalsChanged);
+				assertTrue("Significant fields: all fields should be used, but " + classAccessor.getType().getSimpleName() + " has not defined an equals method.",
+						classAccessor.declaresEquals());
 			}
 			
 			referenceAccessor.changeField(prefabValues);
