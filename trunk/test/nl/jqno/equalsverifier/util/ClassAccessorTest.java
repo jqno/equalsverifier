@@ -41,6 +41,8 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.RecursiveApiClassesContainer;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
+import nl.jqno.equalsverifier.testhelpers.points.ColorPoint3D;
+import nl.jqno.equalsverifier.testhelpers.points.Point3D;
 import nl.jqno.equalsverifier.testhelpers.points.PointContainer;
 
 import org.junit.Before;
@@ -137,6 +139,19 @@ public class ClassAccessorTest {
 	@Test
 	public void equalsIsNotInheritedFromObject() {
 		assertFalse(pointContainerAccessor.isEqualsInheritedFromObject());
+	}
+	
+	@Test
+	public void getSuperAccessorForPojo() {
+		ClassAccessor<? super PointContainer> superAccessor = pointContainerAccessor.getSuperAccessor();
+		assertEquals(Object.class, superAccessor.getType());
+	}
+	
+	@Test
+	public void getSuperAccessorInHierarchy() {
+		ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
+		ClassAccessor<? super ColorPoint3D> superAccessor = accessor.getSuperAccessor();
+		assertEquals(Point3D.class, superAccessor.getType());
 	}
 	
 	@Test

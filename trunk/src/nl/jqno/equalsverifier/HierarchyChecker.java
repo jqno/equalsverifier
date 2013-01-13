@@ -43,8 +43,8 @@ class HierarchyChecker<T> implements Checker {
 			fail("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive.");
 		}
 		
-		this.classAccessor = classAccessor;
 		this.type = classAccessor.getType();
+		this.classAccessor = classAccessor;
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.usingGetClass = usingGetClass;
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
@@ -67,7 +67,7 @@ class HierarchyChecker<T> implements Checker {
 	
 	private void checkSuperclass() {
 		Class<? super T> superclass = type.getSuperclass();
-		ClassAccessor<? super T> superAccessor = ClassAccessor.of(superclass, classAccessor.getPrefabValues(), true);
+		ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
 		if (superAccessor.isEqualsInheritedFromObject()) {
 			return;
 		}

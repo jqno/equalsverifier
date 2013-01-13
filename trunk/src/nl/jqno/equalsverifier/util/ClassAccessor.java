@@ -31,6 +31,7 @@ public class ClassAccessor<T> {
 	private final Class<T> type;
 	private final Instantiator<T> instantiator;
 	private final PrefabValues prefabValues;
+	private final boolean ignoreAnnotationFailure;
 	private final AnnotationAccessor annotationAccessor;
 
 	/**
@@ -55,6 +56,7 @@ public class ClassAccessor<T> {
 		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
+		this.ignoreAnnotationFailure = ignoreAnnotationFailure;
 		this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
 	}
 	
@@ -158,15 +160,23 @@ public class ClassAccessor<T> {
 	 * 			superclasses (except {@link Object}).
 	 */
 	public boolean isEqualsInheritedFromObject() {
-		Class<?> i = type;
-		while (i != Object.class) {
-			ClassAccessor<?> accessor = ClassAccessor.of(i, prefabValues, false);
-			if (accessor.declaresEquals() && !accessor.isEqualsAbstract()) {
+		ClassAccessor<? super T> i = this;
+		while (i.getType() != Object.class) {
+			if (i.declaresEquals() && !i.isEqualsAbstract()) {
 				return false;
 			}
-			i = i.getSuperclass();
+			i = i.getSuperAccessor();
 		}
 		return true;
+	}
+	
+	/**
+	 * Returns an accessor for T's superclass.
+	 * 
+	 * @return An accessor for T's superclass.
+	 */
+	public ClassAccessor<? super T> getSuperAccessor() {
+		return ClassAccessor.of(type.getSuperclass(), prefabValues, ignoreAnnotationFailure);
 	}
 	
 	/**

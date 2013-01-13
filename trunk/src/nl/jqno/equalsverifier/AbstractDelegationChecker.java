@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2011, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 		checkAbstractDelegation(instance);
 
-		checkAbstractDelegationInSuper(type.getSuperclass());
+		checkAbstractDelegationInSuper();
 	}
 	
 	private void checkAbstractDelegationInFields() {
@@ -62,10 +62,12 @@ class AbstractDelegationChecker<T> implements Checker {
 		checkAbstractMethods(type, instance, false);
 	}
 	
-	private <S> void checkAbstractDelegationInSuper(Class<S> superclass) {
-		ClassAccessor<S> accessor = ClassAccessor.of(superclass, prefabValues, true);
-		boolean equalsIsAbstract = accessor.isEqualsAbstract();
-		boolean hashCodeIsAbstract = accessor.isHashCodeAbstract();
+	private void checkAbstractDelegationInSuper() {
+		Class<? super T> superclass = type.getSuperclass();
+		ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
+		
+		boolean equalsIsAbstract = superAccessor.isEqualsAbstract();
+		boolean hashCodeIsAbstract = superAccessor.isHashCodeAbstract();
 		if (equalsIsAbstract != hashCodeIsAbstract) {
 			fail(buildAbstractMethodInSuperErrorMessage(superclass, equalsIsAbstract));
 		}
@@ -73,10 +75,9 @@ class AbstractDelegationChecker<T> implements Checker {
 			return;
 		}
 
-		S instance = this.<S>getPrefabValue(superclass);
+		Object instance = getPrefabValue(superclass);
 		if (instance == null) {
-			ClassAccessor<S> superclassAccessor = ClassAccessor.of(superclass, prefabValues, false);
-			instance = superclassAccessor.getRedObject();
+			instance = superAccessor.getRedObject();
 		}
 		checkAbstractMethods(superclass, instance, false);
 	}
