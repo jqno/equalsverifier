@@ -30,13 +30,13 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName(), "theAnswer");
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegator> ev = EqualsVerifier.forClass(AbstractHashCodeDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName(), "theAnswer");
 	}
 	
 	@Test

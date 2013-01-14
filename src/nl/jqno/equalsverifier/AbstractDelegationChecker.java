@@ -121,7 +121,7 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.equals(instance);
 		}
 		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals"));
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()));
 		}
 		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
@@ -132,7 +132,8 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.hashCode();
 		}
 		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode"));
+			e.printStackTrace();
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()));
 		}
 		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
@@ -140,13 +141,16 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 	}
 	
-	private String buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method) {
+	private String buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Abstract delegation: ");
 		sb.append(type.getSimpleName());
 		sb.append("'s ");
 		sb.append(method);
-		sb.append(" method delegates to an abstract method.");
+		sb.append(" method delegates to an abstract method:");
+		sb.append("\n");
+		sb.append(originalMessage);
+		
 		if (prefabPossible) {
 			sb.append("\nAdd prefab values for ");
 			sb.append(type.getName());
