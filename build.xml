@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-Copyright 2009-2012 Jan Ouwens
+Copyright 2009-2013 Jan Ouwens
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -55,15 +55,10 @@ limitations under the License.
 	<property name="maven.staging.repository.id" value="sonatype-nexus-staging" />
 	<property name="maven.staging.repository.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
 
-	<property name="svn.cmd" value="svn" />
-	<property name="project.svn" value="https://equalsverifier.googlecode.com/svn" />
-	
-	<property name="publish.dir" value="${dist.dir}/publish" />
-	<property name="tag.dir" value="${publish.dir}/tag" />
+	<property name="git.cmd" value="git" />
 	
 	<property name="equalsverifier.pom" value="${basedir}/equalsverifier.pom" />
 	<property name="equalsverifier.maven.pom" value="${dist.maven.dir}/pom.xml" />
-	<property name="equalsverifier.tag.pom" value="${tag.dir}/${tag}/equalsverifier.pom" />
 	<property name="credentials.file" value="google.properties" />
 	<property file="${credentials.file}" prefix="google" />
 	<property name="secring.file" value="${user.home}/.gnupg/secring.gpg" />
@@ -273,24 +268,40 @@ limitations under the License.
 		<fail message="Build aborted by user" if="continue" />
 	</target>
 
-	<target name="publish-tag" depends="-publish-validate, -checkCredentialsFile, deploy">
-		<exec dir="${basedir}" executable="${svn.cmd}" failonerror="true">
-			<arg line='copy ${project.svn}/trunk/ ${project.svn}/tags/${tag}/ -m "Tagged: version ${version}" --username ${google.username} --password ${google.password}' />
-		</exec>
-
-		<mkdir dir="${tag.dir}" />
-		
-		<echo message="Checking out ${project.svn}/tags/${tag}" />
-		<exec dir="${tag.dir}" executable="${svn.cmd}" failonerror="true">
-			<arg line="checkout ${project.svn}/tags/${tag} --username ${google.username} --password ${google.password}" />
+	<target name="publish-tag" depends="-publish-validate, deploy">
+		<!-- Create a release branch -->
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="checkout -b release-branch" />
 		</exec>
 		
-		<echo message="Bumping version in ${equalsverifier.tag.pom}" />
-		<replace file="${equalsverifier.tag.pom}" token="???" value="${version}" />
+		<!-- Bump the version -->
+		<echo message="Bumping version in ${equalsverifier.pom}" />
+		<replace file="${equalsverifier.pom}" token="???" value="${version}" />
 		
-		<echo message="Committing files in ${tag.dir}" />
-		<exec dir="${tag.dir}/${tag}" executable="${svn.cmd}" failonerror="true">
-			<arg line='commit -m "Version bump" --username ${google.username} --password ${google.password}' />
+		<!-- Commit the version bump -->
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="add ${equalsverifier.pom}" />
+		</exec>
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line='commit -m "Bumped the version to ${version}"' />
+		</exec>
+		
+		<!-- Create a tag -->
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="tag ${tag}" />
+		</exec>
+		
+		<!-- Delete the release branch -->
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="checkout master" />
+		</exec>
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="branch -D release-branch" />
+		</exec>
+		
+		<!-- Push the tag -->
+		<exec dir="${basedir}" executable="${git.cmd}" failonerror="true">
+			<arg line="push origin --tags" />
 		</exec>
 	</target>
 
