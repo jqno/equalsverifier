@@ -8,14 +8,14 @@ Quick Start
 
 Add EqualsVerifier to your `pom`. The `groupId` is `nl.jqno.equalsverifier` and the `artifactId` is `equalsverifier`. Make sure to use the latest version, and put it in the test scope. 
 
-* Use, as follows, in your unit test:
+Use, as follows, in your unit test:
 
     @Test
     public void equalsContract() {
         EqualsVerifier.forClass(My.class).verify();
     }
 
-* Or, if you prefer to use a getClass() check instead of an instanceof check in the body of your equals method:
+Or, if you prefer to use a getClass() check instead of an instanceof check in the body of your equals method:
 
     @Test
     public void equalsContract() {
@@ -24,7 +24,7 @@ Add EqualsVerifier to your `pom`. The `groupId` is `nl.jqno.equalsverifier` and 
                 .verify();
     }
 
-* With some warnings suppressed:
+With some warnings suppressed:
 
     @Test
     public void equalsContract() {
@@ -33,8 +33,8 @@ Add EqualsVerifier to your `pom`. The `groupId` is `nl.jqno.equalsverifier` and 
                 .verify();
     }
 
-Dislaimer
----------
+Disclaimer
+----------
 
 For license information, see LICENSE.TXT.
 
