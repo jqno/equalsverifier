@@ -8,7 +8,7 @@ Well, you can now ...
 
 == Version 1.1.4 ==
 _January 14, 2013_
-  * ... fork `EqualsVerifier` on GitHub! EqualsVerifier has moved its code to GitHub. The project frontpage will remain at Google Code.
+  * ... fork `EqualsVerifier` on !GitHub! `EqualsVerifier` has moved its code to !GitHub. The project frontpage will remain at Google Code.
   * ... use `EqualsVerifier` on a class whose superclasses have no declarations for `equals` and `hashCode`. (Issue 63)
   * ... get an error when using `#allFieldsShouldBeUsed()` on a class that has fields but no declarations for `equals` and `hashCode` (and hence doesn't use these fields). (Issue 67)
   * ... get a more informative error message on Abstract Delegation errors: `EqualsVerifier` now also mentions the name of the abstract method that was called.
