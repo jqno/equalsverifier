@@ -244,6 +244,8 @@ limitations under the License.
 		<copy todir="${dist.files.dir}">
 			<fileset dir="${resources.dir}" />
 		</copy>
+		<copy todir="${dist.files.dir}" file="${basedir}/README.md" />
+		<copy todir="${dist.files.dir}" file="${basedir}/LICENSE.md" />
 		<ivy:retrieve conf="runtime" pattern="${dist.files.dir}/lib/[artifact].[ext]" />
 
 		<mkdir dir="${dist.final.dir}" />
