@@ -132,7 +132,6 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.hashCode();
 		}
 		catch (AbstractMethodError e) {
-			e.printStackTrace();
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()));
 		}
 		catch (Exception ignored) {
