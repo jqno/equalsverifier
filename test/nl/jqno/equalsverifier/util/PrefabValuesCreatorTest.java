@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.containsAll;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -24,6 +23,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
+import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NotRecursiveA;
@@ -160,9 +160,9 @@ public class PrefabValuesCreatorTest {
 			prefabValues.putFor(TwoStepNodeA.class);
 		}
 		catch (RecursionException e) {
-			assertThat(e.getMessage(), containsAll(
+			Util.assertMessageContainsAll(e,
 					TwoStepNodeA.class.getSimpleName(),
-					TwoStepNodeB.class.getSimpleName()));
+					TwoStepNodeB.class.getSimpleName());
 			return;
 		}
 		fail("No exception thrown");
