@@ -77,6 +77,22 @@ public class FormatterTest {
 	}
 	
 	@Test
+	public void oneThrowingContainerParameter() {
+		Instantiator<Throwing> i = Instantiator.of(Throwing.class);
+		ThrowingContainer tc = new ThrowingContainer(i.instantiate());
+		Formatter f = Formatter.of("TC: %%", tc);
+		assertThat(f.format(), containsString("TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)"));
+	}
+	
+	@Test
+	public void oneAbstractContainerParameter() {
+		Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
+		AbstractContainer ac = new AbstractContainer(i.instantiate());
+		Formatter f = Formatter.of("AC: %%", ac);
+		assertThat(f.format(), containsString("AC: [AbstractContainer ad=[FormatterTest$AbstractDelegation y=0]-throws AbstractMethodError(null)]-throws AbstractMethodError(null)"));
+	}
+	
+	@Test
 	public void nullParameter() {
 		Formatter f = Formatter.of("This parameter is null: %%", (Object)null);
 		assertEquals("This parameter is null: null", f.format());
@@ -177,6 +193,32 @@ public class FormatterTest {
 		@Override
 		public String somethingAbstract() {
 			return "something concrete";
+		}
+	}
+	
+	static class ThrowingContainer {
+		private final Throwing t;
+		
+		public ThrowingContainer(Throwing t) {
+			this.t = t;
+		}
+		
+		@Override
+		public String toString() {
+			return "ThrowingContainer " + t.toString();
+		}
+	}
+	
+	static class AbstractContainer {
+		public final AbstractDelegation ad;
+		
+		public AbstractContainer(AbstractDelegation ad) {
+			this.ad = ad;
+		}
+		
+		@Override
+		public String toString() {
+			return "AbstractContainer: " + ad.toString();
 		}
 	}
 }
