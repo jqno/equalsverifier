@@ -21,6 +21,7 @@ import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
@@ -82,16 +83,9 @@ class AbstractDelegationChecker<T> implements Checker {
 		checkAbstractMethods(superclass, instance, false);
 	}
 
-	private String buildAbstractMethodInSuperErrorMessage(Class<?> type, boolean isEqualsAbstract) {
-		StringBuilder sb = new StringBuilder("Abstract delegation: ");
-		sb.append(type.getSimpleName());
-		sb.append("'s ");
-		sb.append(isEqualsAbstract ? "equals" : "hashCode");
-		sb.append(" method is abstract, but ");
-		sb.append(isEqualsAbstract ? "hashCode" : "equals");
-		sb.append(" is not.");
-		sb.append("\nBoth should be either abstract or concrete.");
-		return sb.toString();
+	private Formatter buildAbstractMethodInSuperErrorMessage(Class<?> type, boolean isEqualsAbstract) {
+		return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\nBoth should be either abstract or concrete.",
+				type.getSimpleName(), (isEqualsAbstract ? "equals" : "hashCode"), (isEqualsAbstract ? "hashCode" : "equals"));
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -140,21 +134,10 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 	}
 	
-	private String buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Abstract delegation: ");
-		sb.append(type.getSimpleName());
-		sb.append("'s ");
-		sb.append(method);
-		sb.append(" method delegates to an abstract method:");
-		sb.append("\n");
-		sb.append(originalMessage);
+	private Formatter buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
+		Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", type.getName());
 		
-		if (prefabPossible) {
-			sb.append("\nAdd prefab values for ");
-			sb.append(type.getName());
-			sb.append(".");
-		}
-		return sb.toString();
+		return Formatter.of("Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
+				type.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
 	}
 }

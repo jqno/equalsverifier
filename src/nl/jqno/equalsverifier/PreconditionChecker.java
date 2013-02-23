@@ -19,6 +19,8 @@ import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 
 import java.util.List;
 
+import nl.jqno.equalsverifier.util.Formatter;
+
 class PreconditionChecker<T> implements Checker {
 	private final Class<T> type;
 	private final List<T> equalExamples;
@@ -32,13 +34,13 @@ class PreconditionChecker<T> implements Checker {
 	
 	@Override
 	public void check() {
-		assertTrue("Precondition: no examples.", unequalExamples.size() > 0);
+		assertTrue(Formatter.of("Precondition: no examples."), unequalExamples.size() > 0);
 		for (T example : equalExamples) {
-			assertTrue("Precondition:\n  " + equalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
+			assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
 					type.isAssignableFrom(example.getClass()));
 		}
 		for (T example : unequalExamples) {
-			assertTrue("Precondition:\n  " + unequalExamples.get(0) + "\nand\n  " + example + "\nare of different classes",
+			assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", unequalExamples.get(0), example),
 					type.isAssignableFrom(example.getClass()));
 		}
 	}

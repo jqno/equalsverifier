@@ -118,6 +118,12 @@ public class FormatterTest {
 	}
 	
 	@Test
+	public void connectedParameters() {
+		Formatter f = Formatter.of("%%%%", 1, 2);
+		assertThat(f.format(), containsString("12"));
+	}
+	
+	@Test
 	public void nullParameter() {
 		Formatter f = Formatter.of("This parameter is null: %%", (Object)null);
 		assertEquals("This parameter is null: null", f.format());

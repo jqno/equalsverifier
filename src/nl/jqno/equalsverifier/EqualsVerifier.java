@@ -22,6 +22,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.InternalException;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.JavaApiPrefabValues;
@@ -351,12 +352,9 @@ public final class EqualsVerifier<T> {
 			e.printStackTrace();
 		}
 		
-		String message = "";
-		message += printExceptionName ? e.getClass().getName() + ": " : "";
-		message += e.getMessage() == null ? "" : e.getMessage();
-		message += "\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages";
-		
-		fail(message);
+		fail(Formatter.of("%%%%\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages",
+				printExceptionName ? e.getClass().getName() + ": " : "",
+				e.getMessage() == null ? "" : e.getMessage()));
 	}
 
 	private void performVerification() {

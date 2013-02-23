@@ -26,6 +26,7 @@ import java.util.EnumSet;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.SupportedAnnotations;
 
@@ -80,16 +81,16 @@ class FieldsChecker<T> implements Checker {
 			boolean hashCodeChanged = reference.hashCode() != changed.hashCode();
 			
 			if (equalsChanged != hashCodeChanged) {
-				assertFalse("Significant fields: equals relies on " + referenceAccessor.getFieldName() + ", but hashCode does not.",
+				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", referenceAccessor.getFieldName()),
 						equalsChanged);
-				assertFalse("Significant fields: hashCode relies on " + referenceAccessor.getFieldName() + ", but equals does not.",
+				assertFalse(Formatter.of("Significant fields: hashCode relies on %%, but equals does not.", referenceAccessor.getFieldName()),
 						hashCodeChanged);
 			}
 			
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
-				assertTrue("Significant fields: equals does not use " + referenceAccessor.getFieldName() + ".",
+				assertTrue(Formatter.of("Significant fields: equals does not use %%.", referenceAccessor.getFieldName()),
 						equalsChanged);
-				assertTrue("Significant fields: all fields should be used, but " + classAccessor.getType().getSimpleName() + " has not defined an equals method.",
+				assertTrue(Formatter.of("Significant fields: all fields should be used, but %% has not defined an equals method.", classAccessor.getType().getSimpleName()),
 						classAccessor.declaresEquals());
 			}
 			
@@ -104,13 +105,13 @@ class FieldsChecker<T> implements Checker {
 			if (isFloat(type)) {
 				referenceAccessor.set(Float.NaN);
 				changedAccessor.set(Float.NaN);
-				assertEquals("Float: equals doesn't use Float.compare for field " + referenceAccessor.getFieldName() + ".",
+				assertEquals(Formatter.of("Float: equals doesn't use Float.compare for field %%.", referenceAccessor.getFieldName()),
 						referenceAccessor.getObject(), changedAccessor.getObject());
 			}
 			if (isDouble(type)) {
 				referenceAccessor.set(Double.NaN);
 				changedAccessor.set(Double.NaN);
-				assertEquals("Double: equals doesn't use Double.compare for field " + referenceAccessor.getFieldName() + ".",
+				assertEquals(Formatter.of("Double: equals doesn't use Double.compare for field %%.", referenceAccessor.getFieldName()),
 						referenceAccessor.getObject(), changedAccessor.getObject());
 			}
 		}
@@ -161,16 +162,16 @@ class FieldsChecker<T> implements Checker {
 		}
 
 		private void assertDeep(String fieldName, Object reference, Object changed, String type) {
-			assertEquals(type + " array: == or Arrays.equals() used instead of Arrays.deepEquals() for field " + fieldName + ".",
+			assertEquals(Formatter.of("%% array: == or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", type, fieldName),
 					reference, changed);
-			assertEquals(type + " array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field " + fieldName + ".",
+			assertEquals(Formatter.of("%% array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", type, fieldName),
 					reference.hashCode(), changed.hashCode());
 		}
 		
 		private void assertArray(String fieldName, Object reference, Object changed) {
-			assertEquals("Array: == used instead of Arrays.equals() for field " + fieldName + ".",
+			assertEquals(Formatter.of("Array: == used instead of Arrays.equals() for field %%.", fieldName),
 					reference, changed);
-			assertEquals("Array: regular hashCode() used instead of Arrays.hashCode() for field " + fieldName + ".",
+			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
 					reference.hashCode(), changed.hashCode());
 		}
 	}
@@ -186,7 +187,7 @@ class FieldsChecker<T> implements Checker {
 			boolean equalsChanged = !reference.equals(changed);
 
 			if (equalsChanged && !referenceAccessor.fieldIsFinal()) {
-				fail("Mutability: equals depends on mutable field " + referenceAccessor.getFieldName() + ".");
+				fail(Formatter.of("Mutability: equals depends on mutable field %%.", referenceAccessor.getFieldName()));
 			}
 			
 			referenceAccessor.changeField(prefabValues);
@@ -206,7 +207,7 @@ class FieldsChecker<T> implements Checker {
 					classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
 			
 			if (equalsChanged && fieldIsTransient) {
-				fail("Transient field " + referenceAccessor.getFieldName() + " should not be included in equals/hashCode contract.");
+				fail(Formatter.of("Transient field %% should not be included in equals/hashCode contract.", referenceAccessor.getFieldName()));
 			}
 			
 			referenceAccessor.changeField(prefabValues);

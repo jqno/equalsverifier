@@ -23,6 +23,7 @@ import java.util.EnumSet;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.SupportedAnnotations;
 
 class NullChecker<T> implements Checker {
@@ -103,11 +104,11 @@ class NullChecker<T> implements Checker {
 		}
 
 		private void npeThrown(String method, Field field) {
-			fail("Non-nullity: " + method + " throws NullPointerException on field " + field.getName() + ".");
+			fail(Formatter.of("Non-nullity: %% throws NullPointerException on field %%.", method, field.getName()));
 		}
 		
 		private void exceptionThrown(String method, Field field, Exception e) {
-			fail(method + " throws " + e.getClass().getSimpleName() + " when field " + field.getName() + " is null.");
+			fail(Formatter.of("%% throws %% when field %% is null.", method, e.getClass().getSimpleName(), field.getName()));
 		}
 	}
 }

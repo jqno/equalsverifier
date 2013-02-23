@@ -26,6 +26,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class ExamplesChecker<T> implements Checker {
@@ -73,11 +74,11 @@ class ExamplesChecker<T> implements Checker {
 	}
 	
 	private void checkEqualButNotIdentical(T reference, T other) {
-		assertFalse("Precondition: the same object appears twice:\n  " + reference,
+		assertFalse(Formatter.of("Precondition: the same object appears twice:\n  %%", reference),
 				reference == other);
-		assertFalse("Precondition: two identical objects appear:\n  " + reference,
+		assertFalse(Formatter.of("Precondition: two identical objects appear:\n  %%", reference),
 				isIdentical(reference, other));
-		assertTrue("Precondition: not all equal objects are equal:\n  " + reference + "\nand\n  " + other,
+		assertTrue(Formatter.of("Precondition: not all equal objects are equal:\n  %%\nand\n  %%", reference, other),
 				reference.equals(other));
 	}
 
@@ -97,14 +98,14 @@ class ExamplesChecker<T> implements Checker {
 	}
 	
 	private void checkNotEqual(T reference, T other) {
-		assertFalse("Precondition: the same object appears twice:\n  " + reference,
+		assertFalse(Formatter.of("Precondition: the same object appears twice:\n  %%", reference),
 				reference == other);
-		assertFalse("Precondition: two objects are equal to each other:\n  " + reference,
+		assertFalse(Formatter.of("Precondition: two objects are equal to each other:\n  %%", reference),
 				reference.equals(other));
 	}
 	
 	private void checkReflexivity(T reference) {
-		assertEquals("Reflexivity: object does not equal itself:\n  " + reference,
+		assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
 				reference, reference);
 		
 		if (!accessor.isEqualsInheritedFromObject()) {
@@ -130,33 +131,33 @@ class ExamplesChecker<T> implements Checker {
 		String identicalCopyName = Warning.IDENTICAL_COPY.toString();
 		
 		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-			assertFalse("Unnecessary suppression: " + identicalCopyName + ". Two identical copies are equal.",
+			assertFalse(Formatter.of("Unnecessary suppression: %%. Two identical copies are equal.", identicalCopyName),
 					reference.equals(identicalCopy));
 		}
 		else {
-			assertEquals("Reflexivity: object does not equal an identical copy of itself:\n  " + reference +
-					"If this is intentional, consider suppressing Warning." + identicalCopyName,
-					reference, identicalCopy);
+			Formatter f = Formatter.of("Reflexivity: object does not equal an identical copy of itself:\n  %%" +
+					"\nIf this is intentional, consider suppressing Warning.%%", reference, identicalCopyName);
+			assertEquals(f, reference, identicalCopy);
 		}
 	}
 
 	private void checkSymmetryEquals(T reference, T copy) {
-		assertTrue("Symmetry: objects are not symmetric:\n  " + reference + "\nand\n  " + copy,
+		assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", reference, copy),
 				reference.equals(copy) == copy.equals(reference));
 	}
 
 	private void checkSymmetryNotEquals(T reference, T other) {
-		assertTrue("Symmetry: objects are not symmetric:\n  " + reference + "\nand\n  " + other,
+		assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", reference, other),
 				reference.equals(other) == other.equals(reference));
 	}
 
 	private void checkNonNullity(T reference) {
 		try {
 			boolean nullity = reference.equals(null);
-			assertFalse("Non-nullity: true returned for null value", nullity);
+			assertFalse(Formatter.of("Non-nullity: true returned for null value"), nullity);
 		}
 		catch (NullPointerException e) {
-			fail("Non-nullity: NullPointerException thrown");
+			fail(Formatter.of("Non-nullity: NullPointerException thrown"));
 		}
 	}
 	
@@ -167,10 +168,10 @@ class ExamplesChecker<T> implements Checker {
 			reference.equals(somethingElse);
 		}
 		catch (ClassCastException e) {
-			fail("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check.");
+			fail(Formatter.of("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."));
 		}
 		catch (Exception e) {
-			fail("Type-check: equals throws " + e.getClass().getSimpleName() + ".\nAdd an instanceof or getClass() check.");
+			fail(Formatter.of("Type-check: equals throws %%.\nAdd an instanceof or getClass() check.", e.getClass().getSimpleName()));
 		}
 	}
 
@@ -179,8 +180,8 @@ class ExamplesChecker<T> implements Checker {
 			return;
 		}
 		
-		assertEquals("hashCode: hashCodes should be equal:\n  " + reference + " (" + reference.hashCode() + ")\nand\n  " + copy + " (" +  copy.hashCode() + ")",
-				reference.hashCode(), copy.hashCode());
+		Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)", reference, reference.hashCode(), copy, copy.hashCode());
+		assertEquals(f, reference.hashCode(), copy.hashCode());
 	}
 	
 	private boolean isIdentical(T reference, T other) {

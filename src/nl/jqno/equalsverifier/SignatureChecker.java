@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.Assert;
+import nl.jqno.equalsverifier.util.Formatter;
 
 class SignatureChecker<T> implements Checker {
-	private static final String MESSAGE = "Overloaded: %s.\nSignature should be: public boolean equals(Object obj)";
 	private final Class<T> type;
 
 	public SignatureChecker(Class<T> type) {
@@ -71,6 +71,6 @@ class SignatureChecker<T> implements Checker {
 	}
 
 	private void fail(String message) {
-		Assert.fail(String.format(MESSAGE, message));
+		Assert.fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
 	}
 }

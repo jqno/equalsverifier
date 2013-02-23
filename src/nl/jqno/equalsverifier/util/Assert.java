@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,22 +27,6 @@ public class Assert {
 	}
 	
 	/**
-	 * Asserts that two ints are equal to one another. Does nothing if they
-	 * are; throws an AssertionError if they're not.
-	 * 
-	 * @param message Message to be included in the {@link AssertionError}.
-	 * @param expected Expected value.
-	 * @param actual Actual value.
-	 * @throws AssertionError If {@code expected} and {@code actual} are not
-	 * 				equal.
-	 */
-	public static void assertEquals(String message, int expected, int actual) {
-		if (expected != actual) {
-			throw new AssertionError(message);
-		}
-	}
-	
-	/**
 	 * Asserts that two Objects are equal to one another. Does nothing if they
 	 * are; throws an AssertionError if they're not.
 	 * 
@@ -52,9 +36,9 @@ public class Assert {
 	 * @throws AssertionError If {@code expected} and {@code actual} are not
 	 * 				equal.
 	 */
-	public static void assertEquals(String message, Object expected, Object actual) {
+	public static void assertEquals(Formatter message, Object expected, Object actual) {
 		if (!expected.equals(actual)) {
-			throw new AssertionError(message);
+			throw new AssertionError(message.format());
 		}
 	}
 	
@@ -66,9 +50,9 @@ public class Assert {
 	 * @param assertion Assertion that must be true.
 	 * @throws AssertionError If {@code assertion} is false.
 	 */
-	public static void assertFalse(String message, boolean assertion) {
+	public static void assertFalse(Formatter message, boolean assertion) {
 		if (assertion) {
-			throw new AssertionError(message);
+			throw new AssertionError(message.format());
 		}
 	}
 	
@@ -80,9 +64,9 @@ public class Assert {
 	 * @param assertion Assertion that must be true.
 	 * @throws AssertionError If {@code assertion} is false.
 	 */
-	public static void assertTrue(String message, boolean assertion) {
+	public static void assertTrue(Formatter message, boolean assertion) {
 		if (!assertion) {
-			throw new AssertionError(message);
+			throw new AssertionError(message.format());
 		}
 	}
 	
@@ -92,7 +76,7 @@ public class Assert {
 	 * @param message Message to be included in the {@link AssertionError}.
 	 * @throws AssertionError Always.
 	 */
-	public static void fail(String message) {
-		throw new AssertionError(message);
+	public static void fail(Formatter message) {
+		throw new AssertionError(message.format());
 	}
 }

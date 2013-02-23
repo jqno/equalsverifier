@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,33 +20,19 @@ import static nl.jqno.equalsverifier.testhelpers.Util.assertAssertionError;
 import org.junit.Test;
 
 public class AssertTest {
-	@Test
-	public void assertEqualsIntSuccess() {
-		Assert.assertEquals("fail", 1, 1);
-	}
-	
-	@Test
-	public void assertEqualsIntFailure() {
-		Runnable r = new Runnable() {
-			public void run() {
-				Assert.assertEquals("fail", 1, 2);
-			}
-		};
-		assertAssertionError(r, "fail");
-	}
-	
+	private static final Formatter FAIL = Formatter.of("fail");
 	@Test
 	public void assertEqualsObjectSuccess() {
 		String red = new String("text");
 		String black = new String("text");
-		Assert.assertEquals("fail", red, black);
+		Assert.assertEquals(FAIL, red, black);
 	}
 	
 	@Test
 	public void assertEqualsObjectFailure() {
 		Runnable r = new Runnable() {
 			public void run() {
-				Assert.assertEquals("fail", "one", "two");
+				Assert.assertEquals(FAIL, "one", "two");
 			}
 		};
 		assertAssertionError(r, "fail");
@@ -54,14 +40,14 @@ public class AssertTest {
 	
 	@Test
 	public void assertFalseSuccess() {
-		Assert.assertFalse("fail", false);
+		Assert.assertFalse(FAIL, false);
 	}
 	
 	@Test
 	public void assertFalseFailure() {
 		Runnable r = new Runnable() {
 			public void run() {
-				Assert.assertFalse("fail", true);
+				Assert.assertFalse(FAIL, true);
 			}
 		};
 		assertAssertionError(r, "fail");
@@ -69,14 +55,14 @@ public class AssertTest {
 	
 	@Test
 	public void assertTrueSuccess() {
-		Assert.assertTrue("fail", true);
+		Assert.assertTrue(FAIL, true);
 	}
 	
 	@Test
 	public void assertTrueFailure() {
 		Runnable r = new Runnable() {
 			public void run() {
-				Assert.assertTrue("fail", false);
+				Assert.assertTrue(FAIL, false);
 			}
 		};
 		assertAssertionError(r, "fail");
@@ -86,7 +72,7 @@ public class AssertTest {
 	public void failFailure() {
 		Runnable r = new Runnable() {
 			public void run() {
-				Assert.fail("fail");
+				Assert.fail(FAIL);
 			}
 		};
 		assertAssertionError(r, "fail");
