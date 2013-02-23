@@ -3,14 +3,37 @@ package nl.jqno.equalsverifier.util;
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 
+/**
+ * Formats a string with the contents of one or more objects.
+ * 
+ * If possible, uses each object's {@code toString} method.
+ * If this throws an exception, Formatter creates its own string
+ * representation of the object, containing its class name and
+ * the contents of its fields.
+ *
+ * @author Jan Ouwens
+ */
 public class Formatter {
 	private final String message;
 	private Object[] objects;
-
+	
+	/**
+	 * Factory method.
+	 * 
+	 * @param message The string that will be formatted.
+	 * 				The substring %% represents the location where each
+	 * 				object's will string representation will be inserted. 
+	 * @param objects The objects whose string representation will be inserted
+	 * 				into the message string.
+	 * @return A {@code Formatter}.
+	 */
 	public static Formatter of(String message, Object... objects) {
 		return new Formatter(message, objects);
 	}
 	
+	/**
+	 * Private constructor. Call {@link #of(String, Object...)} to instantiate.
+	 */
 	private Formatter(String message, Object... objects) {
 		if (message == null) {
 			throw new NullPointerException();
@@ -19,6 +42,14 @@ public class Formatter {
 		this.objects = objects;
 	}
 	
+	/**
+	 * Formats the message with the given objects.
+	 * 
+	 * @return The message, with the given objects's string representations
+	 * 			inserted into it.
+	 * @throws IllegalStateException if the number of %%'s in the message does
+	 * 			not match the number of objects.
+	 */
 	public String format() {
 		String result = message;
 		for (int i = 0; i < objects.length; i++) {
