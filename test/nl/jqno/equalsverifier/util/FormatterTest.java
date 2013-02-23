@@ -93,6 +93,16 @@ public class FormatterTest {
 	}
 	
 	@Test
+	public void parameterWithMixOfVariousFields() {
+		Instantiator<Abstract> i = Instantiator.of(Abstract.class);
+		Mix mix = new Mix();
+		mix.ab = i.instantiate();
+		
+		Formatter f = Formatter.of("%%", mix);
+		assertThat(f.format(), containsString("[Mix i=42 s=null t=not null ab=[FormatterTest$Abstract x=0]-throws AbstractMethodError(null)]-throws UnsupportedOperationException(null)"));
+	}
+	
+	@Test
 	public void nullParameter() {
 		Formatter f = Formatter.of("This parameter is null: %%", (Object)null);
 		assertEquals("This parameter is null: null", f.format());
@@ -219,6 +229,18 @@ public class FormatterTest {
 		@Override
 		public String toString() {
 			return "AbstractContainer: " + ad.toString();
+		}
+	}
+	
+	static class Mix {
+		public final int i = 42;
+		public final String s = null;
+		public final String t = "not null";
+		public Abstract ab;
+		
+		@Override
+		public String toString() {
+			throw new UnsupportedOperationException();
 		}
 	}
 }
