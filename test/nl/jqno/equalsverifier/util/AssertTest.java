@@ -15,11 +15,14 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertAssertionError;
-
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AssertTest {
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	private static final Formatter FAIL = Formatter.of("fail");
 	@Test
 	public void assertEqualsObjectSuccess() {
@@ -30,12 +33,9 @@ public class AssertTest {
 	
 	@Test
 	public void assertEqualsObjectFailure() {
-		Runnable r = new Runnable() {
-			public void run() {
-				Assert.assertEquals(FAIL, "one", "two");
-			}
-		};
-		assertAssertionError(r, "fail");
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("fail");
+		Assert.assertEquals(FAIL, "one", "two");
 	}
 	
 	@Test
@@ -45,12 +45,9 @@ public class AssertTest {
 	
 	@Test
 	public void assertFalseFailure() {
-		Runnable r = new Runnable() {
-			public void run() {
-				Assert.assertFalse(FAIL, true);
-			}
-		};
-		assertAssertionError(r, "fail");
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("fail");
+		Assert.assertFalse(FAIL, true);
 	}
 	
 	@Test
@@ -60,21 +57,15 @@ public class AssertTest {
 	
 	@Test
 	public void assertTrueFailure() {
-		Runnable r = new Runnable() {
-			public void run() {
-				Assert.assertTrue(FAIL, false);
-			}
-		};
-		assertAssertionError(r, "fail");
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("fail");
+		Assert.assertTrue(FAIL, false);
 	}
 	
 	@Test
 	public void failFailure() {
-		Runnable r = new Runnable() {
-			public void run() {
-				Assert.fail(FAIL);
-			}
-		};
-		assertAssertionError(r, "fail");
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage("fail");
+		Assert.fail(FAIL);
 	}
 }

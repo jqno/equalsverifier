@@ -36,16 +36,6 @@ public class Util {
 		fail("Assertion didn't fail");
 	}
 	
-	public static void assertAssertionError(Runnable runnable, String first, String... more) {
-		try {
-			runnable.run();
-			fail("No exception thrown");
-		}
-		catch (AssertionError e) {
-			assertMessageContainsAll(e, first, more);
-		}
-	}
-	
 	public static void assertMessageContainsAll(Throwable e, String first, String... more) {
 		String message = e.getMessage();
 		assertThat(message, containsString(first));
