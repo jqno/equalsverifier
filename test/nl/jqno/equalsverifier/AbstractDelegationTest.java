@@ -40,6 +40,11 @@ public class AbstractDelegationTest {
 	}
 	
 	@Test
+	public void toStringDelegatesToAbstractMethod() {
+		EqualsVerifier.forClass(AbstractToStringDelegator.class).verify();
+	}
+	
+	@Test
 	public void equalsDelegatesToAbstractMethodInField() {
 		EqualsVerifier<EqualsDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class);
 		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
@@ -58,6 +63,13 @@ public class AbstractDelegationTest {
 		EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
 				.suppress(Warning.NULL_FIELDS)
 				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(), new AbstractDelegatorImpl())
+				.verify();
+	}
+	
+	@Test
+	public void toStringDelegatesToAbstractMethodInField() {
+		EqualsVerifier.forClass(ToStringDelegatesToAbstractMethodInField.class)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
@@ -82,6 +94,12 @@ public class AbstractDelegationTest {
 	}
 	
 	@Test
+	public void toStringInFieldDelegatesToAbstractMethod() {
+		EqualsVerifier.forClass(ToStringInFieldDelegatesToAbstractMethod.class)
+				.verify();
+	}
+	
+	@Test
 	public void equalsInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegatorImpl> ev = EqualsVerifier.forClass(AbstractEqualsDelegatorImpl.class);
 		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
@@ -91,6 +109,11 @@ public class AbstractDelegationTest {
 	public void hashCodeInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegatorImpl> ev = EqualsVerifier.forClass(AbstractHashCodeDelegatorImpl.class);
 		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
+	}
+	
+	@Test
+	public void toStringInSuperclassDelegatesToAbstractMethod() {
+		EqualsVerifier.forClass(AbstractToStringDelegatorImpl.class).verify();
 	}
 	
 	static abstract class AbstractEqualsDelegator {
@@ -166,6 +189,46 @@ public class AbstractDelegationTest {
 		}
 	}
 	
+	static abstract class AbstractToStringDelegator {
+		private final int i;
+		
+		AbstractToStringDelegator(int i) {
+			this.i = i;
+		}
+		
+		abstract int theAnswer();
+
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof AbstractToStringDelegator)) {
+				return false;
+			}
+			AbstractToStringDelegator other = (AbstractToStringDelegator)obj;
+			return i == other.i;
+		}
+
+		@Override
+		public final int hashCode() {
+			return i;
+		}
+		
+		@Override
+		public String toString() {
+			return "" + theAnswer();
+		}
+	}
+	
+	static class AbstractToStringDelegatorImpl extends AbstractToStringDelegator {
+		public AbstractToStringDelegatorImpl(int i) {
+			super(i);
+		}
+		
+		@Override
+		int theAnswer() {
+			return 0;
+		}
+	}
+	
 	static abstract class AbstractDelegator {
 		abstract void abstractDelegation();
 	}
@@ -225,6 +288,36 @@ public class AbstractDelegationTest {
 		}
 	}
 	
+	static final class ToStringDelegatesToAbstractMethodInField {
+		final AbstractDelegator delegator;
+		final int i;
+		
+		public ToStringDelegatesToAbstractMethodInField(AbstractDelegator ad, int i) {
+			this.delegator = ad;
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ToStringDelegatesToAbstractMethodInField)) {
+				return false;
+			}
+			ToStringDelegatesToAbstractMethodInField other = (ToStringDelegatesToAbstractMethodInField)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+		
+		@Override
+		public String toString() {
+			delegator.abstractDelegation();
+			return "..." + i;
+		}
+	}
+	
 	static final class EqualsInFieldDelegatesToAbstractMethod {
 		final AbstractEqualsDelegator delegator;
 		
@@ -266,6 +359,33 @@ public class AbstractDelegationTest {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(delegator);
+		}
+	}
+	
+	static final class ToStringInFieldDelegatesToAbstractMethod {
+		final AbstractToStringDelegator delegator;
+		
+		public ToStringInFieldDelegatesToAbstractMethod(AbstractToStringDelegator atsd) {
+			this.delegator = atsd;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ToStringInFieldDelegatesToAbstractMethod)) {
+				return false;
+			}
+			ToStringInFieldDelegatesToAbstractMethod other = (ToStringInFieldDelegatesToAbstractMethod)obj;
+			return nullSafeEquals(delegator, other.delegator);
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(delegator);
+		}
+		
+		@Override
+		public String toString() {
+			return "..." + (delegator == null ? "" : delegator.toString());
 		}
 	}
 }
