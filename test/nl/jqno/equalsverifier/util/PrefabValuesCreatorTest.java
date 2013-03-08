@@ -18,12 +18,13 @@ package nl.jqno.equalsverifier.util;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.NotRecursiveA;
@@ -36,14 +37,20 @@ import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.OneElementEnum;
+import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class PrefabValuesCreatorTest {
 	private MockStaticFieldValueStash stash;
 	private PrefabValues prefabValues;
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 	
 	@Before
 	public void setup() {
@@ -80,15 +87,21 @@ public class PrefabValuesCreatorTest {
 	@Test
 	public void createEnum() {
 		prefabValues.putFor(Enum.class);
+		assertNotNull(prefabValues.getRed(Enum.class));
+		assertNotNull(prefabValues.getBlack(Enum.class));
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test
 	public void createOneElementEnum() {
 		prefabValues.putFor(OneElementEnum.class);
+		assertNotNull(prefabValues.getRed(OneElementEnum.class));
+		assertNull(prefabValues.getBlack(OneElementEnum.class));
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test
 	public void createEmptyEnum() {
+		thrown.expect(InternalException.class);
+		thrown.expectMessage("Enum EmptyEnum has no elements");
 		prefabValues.putFor(EmptyEnum.class);
 	}
 	
@@ -98,8 +111,9 @@ public class PrefabValuesCreatorTest {
 		prefabValues.putFor(Node.class);
 	}
 	
-	@Test(expected=RecursionException.class)
+	@Test
 	public void dontAddOneStepRecursiveType() {
+		thrown.expect(RecursionException.class);
 		prefabValues.putFor(Node.class);
 	}
 	
@@ -109,8 +123,9 @@ public class PrefabValuesCreatorTest {
 		prefabValues.putFor(NodeArray.class);
 	}
 	
-	@Test(expected=RecursionException.class)
+	@Test
 	public void dontAddOneStepRecursiveArrayType() {
+		thrown.expect(RecursionException.class);
 		prefabValues.putFor(NodeArray.class);
 	}
 	
@@ -120,8 +135,8 @@ public class PrefabValuesCreatorTest {
 		prefabValues.putFor(TwoStepNodeA.class);
 	}
 	
-	@Test(expected=RecursionException.class)
 	public void dontAddTwoStepRecursiveType() {
+		thrown.expect(RecursionException.class);
 		prefabValues.putFor(TwoStepNodeA.class);
 	}
 	
@@ -131,8 +146,9 @@ public class PrefabValuesCreatorTest {
 		prefabValues.putFor(TwoStepNodeArrayA.class);
 	}
 	
-	@Test(expected=RecursionException.class)
+	@Test
 	public void dontAddTwoStepRecursiveArrayType() {
+		thrown.expect(RecursionException.class);
 		prefabValues.putFor(TwoStepNodeArrayA.class);
 	}
 	

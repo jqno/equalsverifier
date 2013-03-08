@@ -67,6 +67,16 @@ public class DifficultClassesTest {
 				.verify();
 	}
 	
+	@Test
+	public void ignoreSingleValueEnum() {
+		EqualsVerifier.forClass(SingleValueEnumContainer.class).verify();
+	}
+	
+	@Test
+	public void useSingleValueEnum() {
+		EqualsVerifier.forClass(SingleValueEnumUser.class).verify();
+	}
+	
 	static final class ObjectsContainer {
 		private final String string;
 		private final Integer integer;
@@ -302,6 +312,55 @@ public class DifficultClassesTest {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(instance);
+		}
+	}
+	
+	enum SingleValueEnum { INSTANCE }
+	
+	static final class SingleValueEnumContainer {
+		private final int i;
+		
+		@SuppressWarnings("unused")
+		private final SingleValueEnum sve = SingleValueEnum.INSTANCE;
+		
+		public SingleValueEnumContainer(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SingleValueEnumContainer)) {
+				return false;
+			}
+			SingleValueEnumContainer other = (SingleValueEnumContainer)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	static final class SingleValueEnumUser {
+		private final SingleValueEnum sve;
+		
+		public SingleValueEnumUser(SingleValueEnum sve) {
+			this.sve = sve;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SingleValueEnumUser)) {
+				return false;
+			}
+			SingleValueEnumUser other = (SingleValueEnumUser)obj;
+			return sve == other.sve;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(sve);
 		}
 	}
 }

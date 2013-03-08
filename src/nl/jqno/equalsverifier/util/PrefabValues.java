@@ -126,7 +126,10 @@ public class PrefabValues {
 	
 	/**
 	 * Creates instances for the specified type, and for the types of the
-	 * fields contained within the specified type, recursively.
+	 * fields contained within the specified type, recursively, and adds them.
+	 * 
+	 * Both created instances are guaranteed not to be equal to each other,
+	 * but are not guaranteed to be non-null. However, nulls will be very rare.
 	 * 
 	 * @param type The type to create prefabValues for.
 	 * @throws RecursionException If recursion is detected.
@@ -164,10 +167,17 @@ public class PrefabValues {
 
 	private <T> void putEnumInstances(Class<T> type) {
 		T[] enumConstants = type.getEnumConstants();
-		if (enumConstants.length < 2) {
-			throw new InternalException("Enum " + type.getSimpleName() + " only has " + enumConstants.length + " element(s).");
+		
+		switch (enumConstants.length) {
+		case 0:
+			throw new InternalException("Enum " + type.getSimpleName() + " has no elements");
+		case 1:
+			put(type, enumConstants[0], null);
+			break;
+		default:
+			put(type, enumConstants[0], enumConstants[1]);
+			break;
 		}
-		put(type, enumConstants[0], enumConstants[1]);
 	}
 	
 	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
