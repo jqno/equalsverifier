@@ -21,12 +21,15 @@ import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
+import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
+import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.SupportedAnnotations;
 
@@ -48,6 +51,7 @@ class FieldsChecker<T> implements Checker {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
 		
 		inspector.check(new ArrayFieldCheck());
+		inspector.check(new TransitivityFieldCheck());
 		inspector.check(new SignificanceFieldCheck());
 		
 		if (classAccessor.declaresEquals()) {
@@ -117,6 +121,50 @@ class FieldsChecker<T> implements Checker {
 					reference, changed);
 			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
 					reference.hashCode(), changed.hashCode());
+		}
+	}
+	
+	private class TransitivityFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object a1 = referenceAccessor.getObject();
+			Object b1 = buildB1(changedAccessor);
+			Object b2 = buildB2(a1, referenceAccessor.getField());
+			
+			boolean x = a1.equals(b1);
+			boolean y = b1.equals(b2);
+			boolean z = a1.equals(b2);
+			
+			if (countFalses(x, y, z) == 1) {
+				fail(Formatter.of("Transitivity"));
+			}
+		}
+		
+		private Object buildB1(FieldAccessor accessor) {
+			accessor.changeField(prefabValues);
+			return accessor.getObject();
+		}
+		
+		private Object buildB2(Object a1, Field referenceField) {
+			Object result = ObjectAccessor.of(a1).copy();
+			ObjectAccessor<?> objectAccessor = ObjectAccessor.of(result);
+			objectAccessor.fieldAccessorFor(referenceField).changeField(prefabValues);
+			for (Field field : FieldIterable.of(result.getClass())) {
+				if (!field.equals(referenceField)) {
+					objectAccessor.fieldAccessorFor(field).changeField(prefabValues);
+				}
+			}
+			return result;
+		}
+		
+		private int countFalses(boolean... bools) {
+			int result = 0;
+			for (boolean b : bools) {
+				if (!b) {
+					result++;
+				}
+			}
+			return result;
 		}
 	}
 	
