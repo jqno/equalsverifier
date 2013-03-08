@@ -67,10 +67,6 @@ public class DifficultClassesTest {
 				.verify();
 	}
 	
-	static enum E {
-		ONE, TWO;
-	}
-	
 	static final class ObjectsContainer {
 		private final String string;
 		private final Integer integer;
