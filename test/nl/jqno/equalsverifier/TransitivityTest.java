@@ -20,7 +20,7 @@ public class TransitivityTest {
 	@Test
 	public void twoFieldsUsingOr() {
 		EqualsVerifier<TwoFieldsUsingOr> ev = EqualsVerifier.forClass(TwoFieldsUsingOr.class);
-		assertFailure(ev, "Transitivity");
+		assertFailure(ev, "Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOr.class.getSimpleName());
 	}
 	
 	@Test
