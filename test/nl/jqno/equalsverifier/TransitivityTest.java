@@ -70,6 +70,18 @@ public class TransitivityTest {
 		EqualsVerifier<ThreeFieldsUsingOrAnd> ev = EqualsVerifier.forClass(ThreeFieldsUsingOrAnd.class);
 		assertFailure(ev, "Transitivity");
 	}
+	
+	@Test
+	public void fiveFieldsUsingOr() {
+		EqualsVerifier<FiveFieldsUsingOr> ev = EqualsVerifier.forClass(FiveFieldsUsingOr.class);
+		assertFailure(ev, "Transitivity");
+	}
+	
+	@Test
+	public void fiveFieldsUsingAndsAndOrs() {
+		EqualsVerifier<FiveFieldsUsingOr> ev = EqualsVerifier.forClass(FiveFieldsUsingOr.class);
+		assertFailure(ev, "Transitivity");
+	}
 
 	static final class TwoFieldsUsingAnd {
 		public final String f;
@@ -144,10 +156,7 @@ public class TransitivityTest {
 		
 		@Override
 		public int hashCode() {
-			int result = 0;
-			result = result * 31 + nullSafeHashCode(f);
-			result = result * 31 + nullSafeHashCode(g);
-			return result;
+			return 42;
 		}	
 	}
 	
@@ -260,11 +269,7 @@ public class TransitivityTest {
 		
 		@Override
 		public int hashCode() {
-			int result = 0;
-			result = result * 31 + nullSafeHashCode(f);
-			result = result * 31 + nullSafeHashCode(g);
-			result = result * 31 + nullSafeHashCode(h);
-			return result;
+			return 42;
 		}	
 	}
 	
@@ -290,9 +295,7 @@ public class TransitivityTest {
 		
 		@Override
 		public int hashCode() {
-			int result = 0;
-			result = result * 31 + nullSafeHashCode(f);
-			return result;
+			return 42;
 		}	
 	}
 	
@@ -318,9 +321,69 @@ public class TransitivityTest {
 		
 		@Override
 		public int hashCode() {
-			int result = 0;
-			result = result * 31 + nullSafeHashCode(h);
-			return result;
+			return 42;
+		}	
+	}
+	
+	static final class FiveFieldsUsingOr {
+		public final String f;
+		public final String g;
+		public final String h;
+		public final String i;
+		public final String j;
+		
+		public FiveFieldsUsingOr(String f, String g, String h, String i, String j) {
+			this.f = f;
+			this.g = g;
+			this.h = h;
+			this.i = i;
+			this.j = j;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FiveFieldsUsingOr)) {
+				return false;
+			}
+			FiveFieldsUsingOr other = (FiveFieldsUsingOr)obj;
+			return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) || 
+					nullSafeEquals(h, other.h) || nullSafeEquals(i, other.i) || nullSafeEquals(j, other.j);
+		}
+		
+		@Override
+		public int hashCode() {
+			return 42;
+		}	
+	}
+	
+	static final class FiveFieldsUsingAndsAndOrs {
+		public final String f;
+		public final String g;
+		public final String h;
+		public final String i;
+		public final String j;
+		
+		public FiveFieldsUsingAndsAndOrs(String f, String g, String h, String i, String j) {
+			this.f = f;
+			this.g = g;
+			this.h = h;
+			this.i = i;
+			this.j = j;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FiveFieldsUsingAndsAndOrs)) {
+				return false;
+			}
+			FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs)obj;
+			return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) && 
+					nullSafeEquals(h, other.h) || nullSafeEquals(i, other.i) && nullSafeEquals(j, other.j);
+		}
+		
+		@Override
+		public int hashCode() {
+			return 42;
 		}	
 	}
 }
