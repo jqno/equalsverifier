@@ -60,6 +60,18 @@ public class TransitivityTest {
 	}
 	
 	@Test
+	public void threeFieldsUsingOrWithRelaxedEqualExamples() {
+		ThreeFieldsUsingOr one = new ThreeFieldsUsingOr("a", "1", "alpha");
+		ThreeFieldsUsingOr two = new ThreeFieldsUsingOr("b", "1", "alpha");
+		ThreeFieldsUsingOr three = new ThreeFieldsUsingOr("c", "1", "alpha");
+		ThreeFieldsUsingOr other = new ThreeFieldsUsingOr("d", "4", "delta");
+		
+		EqualsVerifier<ThreeFieldsUsingOr> ev = EqualsVerifier.forRelaxedEqualExamples(one, two, three)
+				.andUnequalExample(other);
+		assertFailure(ev, "Transitivity");
+	}
+	
+	@Test
 	public void threeFieldsUsingAndOr() {
 		EqualsVerifier<ThreeFieldsUsingAndOr> ev = EqualsVerifier.forClass(ThreeFieldsUsingAndOr.class);
 		assertFailure(ev, "Transitivity");
