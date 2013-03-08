@@ -59,7 +59,7 @@ class FieldsChecker<T> implements Checker {
 		}
 		
 		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
-			inspector.check(new TransitiveFieldsCheck());
+			inspector.check(new TransientFieldsCheck());
 		}
 	}
 
@@ -194,7 +194,7 @@ class FieldsChecker<T> implements Checker {
 		}
 	}
 	
-	private class TransitiveFieldsCheck implements FieldCheck {
+	private class TransientFieldsCheck implements FieldCheck {
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Object reference = referenceAccessor.getObject();
