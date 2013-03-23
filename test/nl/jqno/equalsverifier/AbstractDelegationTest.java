@@ -30,13 +30,13 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName(), "theAnswer");
+		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegator> ev = EqualsVerifier.forClass(AbstractHashCodeDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName(), "theAnswer");
+		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
 	}
 	
 	@Test
@@ -114,6 +114,12 @@ public class AbstractDelegationTest {
 	@Test
 	public void toStringInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier.forClass(AbstractToStringDelegatorImpl.class).verify();
+	}
+	
+	@Test
+	public void originalMessageIsIncludedInErrorMessage() {
+		EqualsVerifier<ThrowsAbstractMethodErrorWithMessage> ev = EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class);
+		assertFailure(ev, "This is AbstractMethodError's original message");
 	}
 	
 	static abstract class AbstractEqualsDelegator {
@@ -386,6 +392,24 @@ public class AbstractDelegationTest {
 		@Override
 		public String toString() {
 			return "..." + (delegator == null ? "" : delegator.toString());
+		}
+	}
+	
+	static abstract class ThrowsAbstractMethodErrorWithMessage {
+		private final int i;
+		
+		ThrowsAbstractMethodErrorWithMessage(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			throw new AbstractMethodError("This is AbstractMethodError's original message");
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
 		}
 	}
 }
