@@ -96,14 +96,16 @@ public class FieldIterableTest {
 	
 	@Test
 	public void classInTheMiddleHasNoFields() throws NoSuchFieldException {
-		FIELD_CONTAINER_FIELDS.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
+		Set<Field> expected = new HashSet<Field>();
+		expected.addAll(FIELD_CONTAINER_FIELDS);
+		expected.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 		
 		Set<Field> actual = new HashSet<Field>();
 		for (Field field : FieldIterable.of(SubEmptySubFieldContainer.class)) {
 			actual.add(field);
 		}
 		
-		assertEquals(FIELD_CONTAINER_FIELDS, actual);
+		assertEquals(expected, actual);
 	}
 	
 	@Test
