@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jan Ouwens
+ * Copyright 2009-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -188,7 +188,7 @@ class ExamplesChecker<T> implements Checker {
 		for (Field field : FieldIterable.of(reference.getClass())) {
 			try {
 				field.setAccessible(true);
-				if (!field.get(reference).equals(field.get(other))) {
+				if (!nullSafeEquals(field.get(reference), field.get(other))) {
 					return false;
 				}
 			}
@@ -201,5 +201,9 @@ class ExamplesChecker<T> implements Checker {
 		}
 		
 		return true;
+	}
+	
+	private boolean nullSafeEquals(Object x, Object y) {
+		return x == null ? y == null : x.equals(y);
 	}
 }

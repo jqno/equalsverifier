@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,5 +51,21 @@ public class RelaxedEqualsTest {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(a);
 		assertFailure(ev, "Precondition", "the same object appears twice", Multiple.class.getSimpleName());
+	}
+	
+	@Test
+	public void individualFieldsOfEqualExamplesMayBeNull() {
+		EqualsVerifier.forRelaxedEqualExamples(new NullContainingSubMultiple(1, 2), new NullContainingSubMultiple(2, 1))
+				.andUnequalExample(new NullContainingSubMultiple(2, 2))
+				.verify();
+	}
+	
+	public class NullContainingSubMultiple extends Multiple {
+		@SuppressWarnings("unused")
+		private final String noValue = null;
+		
+		public NullContainingSubMultiple(int a, int b) {
+			super(a, b);
+		}
 	}
 }
