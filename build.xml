@@ -137,7 +137,7 @@ limitations under the License.
 
 	<target name="test" depends="compileTest">
 		<mkdir dir="${dist.dir}/testreports" />
-		<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed">
+		<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed" fork="yes" forkmode="once">
 			<classpath>
 				<path refid="test.classpath" />
 				<path refid="ivy.test.path" />
