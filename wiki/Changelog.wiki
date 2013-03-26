@@ -9,7 +9,7 @@ Well, you can now ...
 == Version 1.2 ==
 _March 26, 2013_
   * ...get a transitivity error message for classes that use `or` in their equals method. (Issue 75; blog post about [http://www.jqno.nl/post/2013/02/17/reaction-to-cedric-beusts-equals-challenge/ the problem] and [http://www.jqno.nl/post/2013/03/26/on-transitivity the solution].
-  * ...expect more robustness from EqualsVerifier when the toString method of the class under tests throws exceptions.
+  * ...expect more robustness from `EqualsVerifier` when the `toString` method of the class under tests throws exceptions.
   * ...use single value enums (and hence, singletons) in your classes, even if they don't count for `equals` and `hashCode`. (Issue 74)
   * ...use `forRelaxedEqualExamples` with classes containing null fields. (Issue 73)
   * ...run `EqualsVerifier`'s test suite with less chance of false negatives. (Issue 77)
