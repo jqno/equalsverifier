@@ -12,8 +12,8 @@ _March 26, 2013_
   * ...expect more robustness from EqualsVerifier when the toString method of the class under tests throws exceptions.
   * ...use single value enums (and hence, singletons) in your classes, even if they don't count for `equals` and `hashCode`. (Issue 74)
   * ...use `forRelaxedEqualExamples` with classes containing null fields. (Issue 73)
-  * ...run EqualsVerifier's test suite with less chance of false negatives. (Issue 77)
-  * ...build EqualsVerifier using Ant 1.9. (Issue 76)
+  * ...run `EqualsVerifier`'s test suite with less chance of false negatives. (Issue 77)
+  * ...build `EqualsVerifier` using Ant 1.9. (Issue 76)
 
 == Version 1.1.4 ==
 _January 14, 2013_
