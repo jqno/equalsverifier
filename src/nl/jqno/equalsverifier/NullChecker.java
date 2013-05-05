@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011 Jan Ouwens
+ * Copyright 2010-2011, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,13 +78,6 @@ class NullChecker<T> implements Checker {
 				@Override
 				public void run() {
 					changed.hashCode();
-				}
-			});
-			
-			handle("toString", field, new Runnable() {
-				@Override
-				public void run() {
-					changed.toString();
 				}
 			});
 			

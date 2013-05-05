@@ -26,7 +26,6 @@ public class NullFieldsTest {
 	private static final String NON_NULLITY = "Non-nullity";
 	private static final String EQUALS = "equals throws NullPointerException";
 	private static final String HASHCODE = "hashCode throws NullPointerException";
-	private static final String TOSTRING = "toString throws NullPointerException";
 	private static final String ON_FIELD = "on field";
 
 	@Test
@@ -45,12 +44,6 @@ public class NullFieldsTest {
 	public void hashCodeOnNullFields() {
 		EqualsVerifier<HashCodeThrowsNull> ev = EqualsVerifier.forClass(HashCodeThrowsNull.class);
 		assertFailure(ev, NON_NULLITY, HASHCODE, ON_FIELD, "color");
-	}
-	
-	@Test
-	public void toStringOnNullFields() {
-		EqualsVerifier<ToStringThrowsNull> ev = EqualsVerifier.forClass(ToStringThrowsNull.class);
-		assertFailure(ev, NON_NULLITY, TOSTRING, ON_FIELD, "color");
 	}
 	
 	@Test
@@ -169,33 +162,6 @@ public class NullFieldsTest {
 		public String toString() {
 			//Object.toString calls hashCode()
 			return "";
-		}
-	}
-	
-	static final class ToStringThrowsNull {
-		private final Color color;
-		
-		public ToStringThrowsNull(Color color) {
-			this.color = color;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof HashCodeThrowsNull)) {
-				return false;
-			}
-			HashCodeThrowsNull p = (HashCodeThrowsNull)obj;
-			return p.color == color;
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
-		
-		@Override
-		public String toString() {
-			throw new NullPointerException();
 		}
 	}
 	
