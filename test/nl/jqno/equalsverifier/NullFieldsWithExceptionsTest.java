@@ -112,16 +112,16 @@ public class NullFieldsWithExceptionsTest {
 		}
 		
 		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof EqualsThrower)) {
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof HashCodeThrower)) {
 				return false;
 			}
-			EqualsThrower other = (EqualsThrower)obj;
+			HashCodeThrower other = (HashCodeThrower)obj;
 			return nullSafeEquals(foo, other.foo);
 		}
 		
 		@Override
-		public int hashCode() {
+		public final int hashCode() {
 			if (foo == null) {
 				throw throwable();
 			}
