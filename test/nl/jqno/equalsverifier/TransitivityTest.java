@@ -94,6 +94,12 @@ public class TransitivityTest {
 		EqualsVerifier<FiveFieldsUsingOr> ev = EqualsVerifier.forClass(FiveFieldsUsingOr.class);
 		assertFailure(ev, "Transitivity");
 	}
+	
+	@Test
+	public void atLeastTwoFieldsAreEqual() {
+		// TODO: This class is not transitive, and it should fail. See issue 78.
+		EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class).verify();
+	}
 
 	static final class TwoFieldsUsingAnd {
 		public final String f;
@@ -396,6 +402,44 @@ public class TransitivityTest {
 		@Override
 		public int hashCode() {
 			return 42;
-		}	
+		}
+	}
+	
+	static final class AtLeast2FieldsAreEqual {
+		private final int i;
+		private final int j;
+		private final int k;
+		private final int l;
+
+		public AtLeast2FieldsAreEqual(int i, int j, int k, int l) {
+			this.i = i;
+			this.j = j;
+			this.k = k;
+			this.l = l;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AtLeast2FieldsAreEqual)) {
+				return false;
+			}
+			AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual) obj;
+			int x = 0;
+			if (i == other.i) x++;
+			if (j == other.j) x++;
+			if (k == other.k) x++;
+			if (l == other.l) x++;
+			return x >= 2;
+		}
+
+		@Override
+		public int hashCode() {
+			return 42;
+		}
+
+		@Override
+		public String toString() {
+			return String.format("i=%d, j=%d, k=%d, l=%d", i, j, k, l);
+		}
 	}
 }
