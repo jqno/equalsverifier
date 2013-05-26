@@ -128,6 +128,10 @@ class ExamplesChecker<T> implements Checker {
 	}
 
 	private void checkReflexivity(T reference, T identicalCopy) {
+		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
+			return;
+		}
+		
 		String identicalCopyName = Warning.IDENTICAL_COPY.toString();
 		
 		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {

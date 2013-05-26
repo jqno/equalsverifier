@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,18 +39,44 @@ public enum Warning {
 	 * class under test, that an instance of this class should be equal to an
 	 * identical copy of itself.
 	 * <p>
-	 * Normally, it is important that an object be equal to an identical copy
-	 * of itself: after all, this is the point of overriding {@code equals} in
-	 * the first place. However, when the class is part of a hierarchy, but
-	 * should be (pseudo-)singleton, it can be useful to suppress this warning.
-	 * This can happen in certain implementations of the Null Object Pattern,
-	 * for example.
+	 * Normally, it is important that an object be equal to an identical copy of
+	 * itself: after all, this is the point of overriding {@code equals} in the
+	 * first place.
+	 * <p>
+	 * However, when the class is part of a hierarchy, but should be
+	 * (pseudo-)singleton, it can be useful to suppress this warning. This can
+	 * happen in certain implementations of the Null Object Pattern, for
+	 * example.
 	 * <p>
 	 * If this warning is suppressed, and it turns out that an instance of the
 	 * class under test is equal to an identical copy of itself after all,
 	 * {@link EqualsVerifier} will fail.
 	 */
 	IDENTICAL_COPY,
+	
+	/**
+	 * Disables the check, when the {@code equals} method is overridden in the
+	 * class under test, that an instance of this class should be equal to an
+	 * identical copy of itself.
+	 * <p>
+	 * Normally, it is important that an object be equal to an identical copy of
+	 * itself: after all, this is the point of overriding {@code equals} in the
+	 * first place.
+	 * <p>
+	 * However, when the class is a kind of versioned entity and there is an
+	 * {@code id} field that is zero when the object is new, it is often the
+	 * case that two new objects are never equal to each other. In these cases,
+	 * it can be useful to suppress this warning.
+	 * <p>
+	 * You cannot use {@link #IDENTICAL_COPY} in these cases, because when the
+	 * {@code id}s are equal, the objects should be, too, and
+	 * {@link EqualsVerifier} would fail in this case.
+	 * <p>
+	 * If this warning is suppressed, and it turns out that an instance of the
+	 * class under test is equal to an identical copy of itself after all,
+	 * {@link EqualsVerifier} will NOT fail.
+	 */
+	IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 	
 	/**
 	 * Disables checks for non-final fields on which {@code equals} and
