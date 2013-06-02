@@ -19,6 +19,8 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
+
 /**
  * Provides reflective access to one field of an object.
  *
@@ -92,7 +94,7 @@ public class FieldAccessor {
 	 * Tries to get the field's value.
 	 * 
 	 * @return The field's value.
-	 * @throws InternalException If the operation fails.
+	 * @throws ReflectionException If the operation fails.
 	 */
 	public Object get() {
 		field.setAccessible(true);
@@ -100,7 +102,7 @@ public class FieldAccessor {
 			return field.get(object);
 		}
 		catch (IllegalAccessException e) {
-			throw new InternalException(e);
+			throw new ReflectionException(e);
 		}
 	}
 	
@@ -108,7 +110,7 @@ public class FieldAccessor {
 	 * Tries to set the field to the specified value.
 	 * 
 	 * @param value The value that the field should get.
-	 * @throws InternalException If the operation fails.
+	 * @throws ReflectionException If the operation fails.
 	 */
 	public void set(Object value) {
 		modify(new FieldSetter(value));
@@ -117,7 +119,7 @@ public class FieldAccessor {
 	/**
 	 * Tries to make the field null.
 	 * 
-	 * @throws InternalException If the operation fails.
+	 * @throws ReflectionException If the operation fails.
 	 */
 	public void nullField() {
 		modify(new FieldNuller());
@@ -127,7 +129,7 @@ public class FieldAccessor {
 	 * Copies field's value to the corresponding field in the specified object.
 	 * 
 	 * @param to The object into which to copy the field.
-	 * @throws InternalException If the operation fails.
+	 * @throws ReflectionException If the operation fails.
 	 */
 	public void copyTo(Object to) {
 		modify(new FieldCopier(to));
@@ -139,7 +141,7 @@ public class FieldAccessor {
 	 * 
 	 * @param prefabValues If the field is of a type contained within
 	 * 			prefabValues, the new value will be taken from it.
-	 * @throws InternalException If the operation fails.
+	 * @throws ReflectionException If the operation fails.
 	 */
 	public void changeField(PrefabValues prefabValues) {
 		modify(new FieldChanger(prefabValues));
@@ -155,7 +157,7 @@ public class FieldAccessor {
 			modifier.modify();
 		}
 		catch (IllegalAccessException e) {
-			throw new InternalException(e);
+			throw new ReflectionException(e);
 		}
 	}
 	

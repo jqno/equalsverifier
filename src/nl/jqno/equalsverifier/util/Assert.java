@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import nl.jqno.equalsverifier.util.exceptions.AssertionException;
+
 /**
  * Alternative for org.junit.Assert, so we can assert things without having a
  * dependency on JUnit.
@@ -38,7 +40,7 @@ public class Assert {
 	 */
 	public static void assertEquals(Formatter message, Object expected, Object actual) {
 		if (!expected.equals(actual)) {
-			throw new AssertionError(message.format());
+			throw new AssertionException(message);
 		}
 	}
 	
@@ -52,7 +54,7 @@ public class Assert {
 	 */
 	public static void assertFalse(Formatter message, boolean assertion) {
 		if (assertion) {
-			throw new AssertionError(message.format());
+			throw new AssertionException(message);
 		}
 	}
 	
@@ -66,7 +68,7 @@ public class Assert {
 	 */
 	public static void assertTrue(Formatter message, boolean assertion) {
 		if (!assertion) {
-			throw new AssertionError(message.format());
+			throw new AssertionException(message);
 		}
 	}
 	
@@ -77,6 +79,6 @@ public class Assert {
 	 * @throws AssertionError Always.
 	 */
 	public static void fail(Formatter message) {
-		throw new AssertionError(message.format());
+		throw new AssertionException(message);
 	}
 }

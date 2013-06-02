@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import nl.jqno.equalsverifier.util.exceptions.AssertionException;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -33,7 +35,7 @@ public class AssertTest {
 	
 	@Test
 	public void assertEqualsObjectFailure() {
-		thrown.expect(AssertionError.class);
+		thrown.expect(AssertionException.class);
 		thrown.expectMessage("fail");
 		Assert.assertEquals(FAIL, "one", "two");
 	}
@@ -45,7 +47,7 @@ public class AssertTest {
 	
 	@Test
 	public void assertFalseFailure() {
-		thrown.expect(AssertionError.class);
+		thrown.expect(AssertionException.class);
 		thrown.expectMessage("fail");
 		Assert.assertFalse(FAIL, true);
 	}
@@ -57,14 +59,14 @@ public class AssertTest {
 	
 	@Test
 	public void assertTrueFailure() {
-		thrown.expect(AssertionError.class);
+		thrown.expect(AssertionException.class);
 		thrown.expectMessage("fail");
 		Assert.assertTrue(FAIL, false);
 	}
 	
 	@Test
 	public void failFailure() {
-		thrown.expect(AssertionError.class);
+		thrown.expect(AssertionException.class);
 		thrown.expectMessage("fail");
 		Assert.fail(FAIL);
 	}

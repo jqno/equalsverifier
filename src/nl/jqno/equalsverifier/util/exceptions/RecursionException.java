@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.util.exceptions;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+
 
 /**
  * Signals that a recursion has been detected while traversing the fields of a

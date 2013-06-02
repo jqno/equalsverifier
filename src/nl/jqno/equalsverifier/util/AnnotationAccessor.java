@@ -28,6 +28,7 @@ import net.sf.cglib.asm.ClassReader;
 import net.sf.cglib.asm.ClassWriter;
 import net.sf.cglib.asm.FieldVisitor;
 import net.sf.cglib.asm.Type;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 /**
  * Provides access to the annotations that are defined on a class
@@ -82,7 +83,7 @@ class AnnotationAccessor {
 	 * @param annotation The annotation we want to find.
 	 * @return True if the specified field in {@link #type} has the specified
 	 * 			annotation.
-	 * @throws InternalException if {@link #type} does not have the specified
+	 * @throws ReflectionException if {@link #type} does not have the specified
 	 * 			field.
 	 */
 	public boolean fieldHas(String fieldName, Annotation annotation) {
@@ -92,7 +93,7 @@ class AnnotationAccessor {
 		process();
 		Set<Annotation> annotations = fieldAnnotations.get(fieldName);
 		if (annotations == null) {
-			throw new InternalException("Class " + type.getName() + " does not have field " + fieldName);
+			throw new ReflectionException("Class " + type.getName() + " does not have field " + fieldName);
 		}
 		return annotations.contains(annotation);
 	}
@@ -131,7 +132,7 @@ class AnnotationAccessor {
 				shortCircuit = true;
 			}
 			else {
-				throw new InternalException("Cannot read class file for " + type.getSimpleName() +
+				throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
 						".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
 			}
 		}

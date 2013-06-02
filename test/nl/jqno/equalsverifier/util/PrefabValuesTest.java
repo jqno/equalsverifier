@@ -19,8 +19,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -88,12 +88,12 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, NON_EXISTING_VALUE));
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test(expected=ReflectionException.class)
 	public void getOtherWhenClassDoesntExist() {
 		p.getOther(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test(expected=ReflectionException.class)
 	public void getOtherWhenClassIsNull() {
 		p.getOther(null, VALUE_FOR_NON_EXISTING_KEY);
 	}
@@ -103,7 +103,7 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, null));
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test(expected=ReflectionException.class)
 	public void getOtherWhenClassDoesntMatchValue() {
 		p.getOther(String.class, 1);
 	}

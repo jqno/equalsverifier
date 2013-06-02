@@ -22,6 +22,8 @@ import java.util.LinkedHashSet;
 import java.util.Map;
 
 import nl.jqno.equalsverifier.StaticFieldValueStash;
+import nl.jqno.equalsverifier.util.exceptions.RecursionException;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 /**
  * Container and creator of prefabricated instances of objects and classes.
@@ -105,16 +107,16 @@ public class PrefabValues {
 	 */
 	public Object getOther(Class<?> type, Object value) {
 		if (type == null) {
-			throw new InternalException("Type is null.");
+			throw new ReflectionException("Type is null.");
 		}
 		
 		if (value != null && !type.isAssignableFrom(value.getClass())) {
-			throw new InternalException("Type does not match value.");
+			throw new ReflectionException("Type does not match value.");
 		}
 		
 		Tuple<?> tuple = values.get(type);
 		if (tuple == null) {
-			throw new InternalException("No prefab values for " + type + " exist.");
+			throw new ReflectionException("No prefab values for " + type + " exist.");
 		}
 		
 		if (tuple.red.equals(value)) {
@@ -170,7 +172,7 @@ public class PrefabValues {
 		
 		switch (enumConstants.length) {
 		case 0:
-			throw new InternalException("Enum " + type.getSimpleName() + " has no elements");
+			throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
 		case 1:
 			put(type, enumConstants[0], null);
 			break;

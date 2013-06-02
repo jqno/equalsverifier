@@ -39,6 +39,8 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.util.exceptions.RecursionException;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -100,7 +102,7 @@ public class PrefabValuesCreatorTest {
 	
 	@Test
 	public void createEmptyEnum() {
-		thrown.expect(InternalException.class);
+		thrown.expect(ReflectionException.class);
 		thrown.expectMessage("Enum EmptyEnum has no elements");
 		prefabValues.putFor(EmptyEnum.class);
 	}

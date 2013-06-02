@@ -37,6 +37,7 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Test;
 
@@ -100,7 +101,7 @@ public class AnnotationAccessorTest {
 		assertFieldHasAnnotation(RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test(expected=ReflectionException.class)
 	public void searchNonExistingField() {
 		findFieldAnnotationFor(AnnotatedFields.class, "x", FIELD_RUNTIME_RETENTION);
 	}
@@ -117,7 +118,7 @@ public class AnnotationAccessorTest {
 		assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
 	}
 	
-	@Test(expected=InternalException.class)
+	@Test(expected=ReflectionException.class)
 	public void dynamicClassThrowsException() {
 		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);

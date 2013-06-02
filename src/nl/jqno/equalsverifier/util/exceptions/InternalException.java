@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.util.exceptions;
 
 /**
  * Exception internal to the EqualsVerifier project. Using this exception,
  * EqualsVerifier can distinguish between exceptions thrown internally, and
  * exceptions thrown by external code (e.g., in tested equals methods).
+ * 
+ * This is an abstract class; the subclasses indicate the type of exception
+ * that is signalled by the EqualsVerifier internals.
  *
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public class InternalException extends RuntimeException {
+public abstract class InternalException extends RuntimeException {
 	public InternalException() {
 		super();
 	}

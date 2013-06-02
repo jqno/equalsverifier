@@ -20,6 +20,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.util.exceptions.RecursionException;
 
 import org.junit.Test;
 

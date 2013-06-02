@@ -18,6 +18,8 @@ package nl.jqno.equalsverifier.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
+
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
  * can create two different instances of T, which are guaranteed not to be
@@ -147,7 +149,7 @@ public class ClassAccessor<T> {
 			return Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers());
 		}
 		catch (NoSuchMethodException e) {
-			throw new InternalException("Should never occur (famous last words)");
+			throw new ReflectionException("Should never occur (famous last words)");
 		}
 	}
 	

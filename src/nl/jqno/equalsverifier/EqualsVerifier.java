@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2012 Jan Ouwens
+ * Copyright 2009-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,17 +15,15 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.util.Assert.fail;
-
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.InternalException;
-import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.util.exceptions.InternalException;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -121,7 +119,6 @@ public final class EqualsVerifier<T> {
 	private boolean allFieldsShouldBeUsed = false;
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
-	private boolean verbose = false;
 	
 	/**
 	 * Factory method. For general use.
@@ -307,17 +304,13 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
-	 * Makes {@link EqualsVerifier} more verbose. Every time the
-	 * {@link EqualsVerifier#verify()} method notes a failure and throws an
-	 * {@link AssertionError}, a stacktrace will also be printed to
-	 * {@link System#err}.
-	 * 
-	 * Primarily intended for debugging purposes.
+	 * @deprecated No longer needed. The stack trace that this method printed,
+	 * 				is now included as the cause of the {@code AssertionError}.
 	 * 
 	 * @return {@code this}, for easy method chaining.
 	 */
+	@Deprecated
 	public EqualsVerifier<T> debug() {
-		verbose = true;
 		return this;
 	}
 	
@@ -333,9 +326,6 @@ public final class EqualsVerifier<T> {
 			stash.backup(type);
 			performVerification();
 		}
-		catch (AssertionError e) {
-			handleError(e, false);
-		}
 		catch (InternalException e) {
 			handleError(e, false);
 		}
@@ -347,14 +337,13 @@ public final class EqualsVerifier<T> {
 		}
 	}
 
-	private void handleError(Throwable e, boolean printExceptionName) {
-		if (verbose) {
-			e.printStackTrace();
-		}
+	private void handleError(Throwable e, boolean includeCause) {
+		Formatter message = Formatter.of(
+				"%%%%\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages",
+				includeCause ? e.getClass().getName() + ": " : "",
+				e.getMessage() == null ? "" : e.getMessage());
 		
-		fail(Formatter.of("%%%%\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages",
-				printExceptionName ? e.getClass().getName() + ": " : "",
-				e.getMessage() == null ? "" : e.getMessage()));
+		throw new AssertionError(message.format(), includeCause ? e : null);
 	}
 
 	private void performVerification() {
