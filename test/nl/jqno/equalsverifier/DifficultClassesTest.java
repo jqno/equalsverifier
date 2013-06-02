@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
@@ -176,14 +177,16 @@ public class DifficultClassesTest {
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
 		private final ArrayList<String> arrayList;
+		private final UUID uuid;
 		
-		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList) {
+		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList, UUID uuid) {
 			this.calendar = calendar;
 			this.date = date;
 			this.file = file;
 			this.gregorianCalendar = gregorianCalendar;
 			this.pattern = pattern;
 			this.arrayList = arrayList;
+			this.uuid = uuid;
 		}
 		
 		@Override
@@ -200,6 +203,7 @@ public class DifficultClassesTest {
 			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
 			result &= nullSafeEquals(pattern, other.pattern);
 			result &= nullSafeEquals(arrayList, other.arrayList);
+			result &= nullSafeEquals(uuid, other.uuid);
 			return result;
 		}
 		
@@ -212,6 +216,7 @@ public class DifficultClassesTest {
 			result += 31 * nullSafeHashCode(gregorianCalendar);
 			result += 31 * nullSafeHashCode(pattern);
 			result += 31 * nullSafeHashCode(arrayList);
+			result += 31 * nullSafeHashCode(uuid);
 			return result;
 		}
 	}

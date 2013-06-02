@@ -42,6 +42,7 @@ import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -125,6 +126,7 @@ public class JavaApiPrefabValues {
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
 		prefabValues.put(Throwable.class, new Throwable(), new Throwable());
+		prefabValues.put(UUID.class, new UUID(0, -1), new UUID(1, 0));
 	}
 
 	@SuppressWarnings({"unchecked","rawtypes"})
