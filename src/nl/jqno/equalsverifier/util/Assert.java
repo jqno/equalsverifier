@@ -81,4 +81,14 @@ public class Assert {
 	public static void fail(Formatter message) {
 		throw new AssertionException(message);
 	}
+	
+	/**
+	 * Throws an AssertionException.
+	 * 
+	 * @param message Message to be included in the {@link AssertionException}.
+	 * @throws AssertionException Always.
+	 */
+	public static void fail(Formatter message, Throwable cause) {
+		throw new AssertionException(message, cause);
+	}
 }

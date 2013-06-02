@@ -89,19 +89,19 @@ class NullChecker<T> implements Checker {
 				r.run();
 			}
 			catch (NullPointerException e) {
-				npeThrown(testedMethodName, field);
+				npeThrown(testedMethodName, field, e);
 			}
 			catch (Exception e) {
 				exceptionThrown(testedMethodName, field, e);
 			}
 		}
 
-		private void npeThrown(String method, Field field) {
-			fail(Formatter.of("Non-nullity: %% throws NullPointerException on field %%.", method, field.getName()));
+		private void npeThrown(String method, Field field, Exception e) {
+			fail(Formatter.of("Non-nullity: %% throws NullPointerException on field %%.", method, field.getName()), e);
 		}
 		
 		private void exceptionThrown(String method, Field field, Exception e) {
-			fail(Formatter.of("%% throws %% when field %% is null.", method, e.getClass().getSimpleName(), field.getName()));
+			fail(Formatter.of("%% throws %% when field %% is null.", method, e.getClass().getSimpleName(), field.getName()), e);
 		}
 	}
 }

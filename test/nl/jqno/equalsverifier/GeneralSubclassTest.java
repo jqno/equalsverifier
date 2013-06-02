@@ -30,7 +30,7 @@ public class GeneralSubclassTest {
 	@Test
 	public void fieldsCheckerAlsoWorksForSubclasses() {
 		EqualsVerifier<ColorContainerBrokenSubclass> ev = EqualsVerifier.forClass(ColorContainerBrokenSubclass.class);
-		assertFailure(ev, "Non-nullity: equals throws NullPointerException");
+		assertFailure(ev, NullPointerException.class, "Non-nullity: equals throws NullPointerException");
 	}
 
 	@Test

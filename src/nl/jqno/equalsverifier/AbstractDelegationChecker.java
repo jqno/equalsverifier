@@ -115,7 +115,7 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.equals(instance);
 		}
 		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()));
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()), e);
 		}
 		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;
@@ -126,7 +126,7 @@ class AbstractDelegationChecker<T> implements Checker {
 			instance.hashCode();
 		}
 		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()));
+			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);
 		}
 		catch (Exception ignored) {
 			// Skip. We only care about AbstractMethodError at this point;

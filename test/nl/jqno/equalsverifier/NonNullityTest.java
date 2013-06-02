@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2011, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,13 +37,13 @@ public class NonNullityTest {
 	@Test
 	public void typeCheckOmitted() {
 		EqualsVerifier<TypeCheckBroken> ev = EqualsVerifier.forClass(TypeCheckBroken.class);
-		assertFailure(ev, "Type-check: equals throws ClassCastException");
+		assertFailure(ev, ClassCastException.class, "Type-check: equals throws ClassCastException");
 	}
 	
 	@Test
 	public void typeCheckOmittedIllegalState() {
 		EqualsVerifier<TypeCheckBrokenIllegalState> ev = EqualsVerifier.forClass(TypeCheckBrokenIllegalState.class);
-		assertFailure(ev, "Type-check: equals throws IllegalStateException");
+		assertFailure(ev, IllegalStateException.class, "Type-check: equals throws IllegalStateException");
 	}
 	
 	static class NullPointerExceptionBrokenPoint extends Point {

@@ -40,7 +40,7 @@ public class WarningsMixTest {
 	public void notFinalAndNeverNull() {
 		EqualsVerifier<NeverNullColorContainer> ev1 = EqualsVerifier.forClass(NeverNullColorContainer.class);
 		ev1.suppress(Warning.STRICT_INHERITANCE);
-		assertFailure(ev1, "Non-nullity:");
+		assertFailure(ev1, NullPointerException.class, "Non-nullity:");
 		
 		EqualsVerifier<NeverNullColorContainer> ev2 = EqualsVerifier.forClass(NeverNullColorContainer.class);
 		ev2.suppress(Warning.NULL_FIELDS);
@@ -61,7 +61,7 @@ public class WarningsMixTest {
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev2 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
 		ev2.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
-		assertFailure(ev2, "Non-nullity:");
+		assertFailure(ev2, NullPointerException.class, "Non-nullity:");
 		
 		EqualsVerifier<NeverNullAndMutableColorContainer> ev3 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
 		ev3.suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS);

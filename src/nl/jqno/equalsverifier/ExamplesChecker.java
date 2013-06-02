@@ -161,7 +161,7 @@ class ExamplesChecker<T> implements Checker {
 			assertFalse(Formatter.of("Non-nullity: true returned for null value"), nullity);
 		}
 		catch (NullPointerException e) {
-			fail(Formatter.of("Non-nullity: NullPointerException thrown"));
+			fail(Formatter.of("Non-nullity: NullPointerException thrown"), e);
 		}
 	}
 	
@@ -172,10 +172,10 @@ class ExamplesChecker<T> implements Checker {
 			reference.equals(somethingElse);
 		}
 		catch (ClassCastException e) {
-			fail(Formatter.of("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."));
+			fail(Formatter.of("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."), e);
 		}
 		catch (Exception e) {
-			fail(Formatter.of("Type-check: equals throws %%.\nAdd an instanceof or getClass() check.", e.getClass().getSimpleName()));
+			fail(Formatter.of("Type-check: equals throws %%.\nAdd an instanceof or getClass() check.", e.getClass().getSimpleName()), e);
 		}
 	}
 

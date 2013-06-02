@@ -22,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.exceptions.AssertionException;
 import nl.jqno.equalsverifier.util.exceptions.InternalException;
 import nl.jqno.equalsverifier.util.exceptions.RecursionException;
@@ -48,17 +49,25 @@ public class OutputTest {
 	public void assertionException() {
 		testFor(Point.class);
 		
-		assertMessageContains(SEE_ALSO, WIKIPAGE_URL);
-		assertMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
+		assertBasicValidity();
 		assertNoCause();
+	}
+	
+	@Test
+	public void assertionExceptionWithCause() {
+		testFor(AssertionExceptionWithCauseThrower.class);
+		
+		assertBasicValidity();
+		assertMessageContains(MESSAGE);
+		assertMessageDoesNotContain(NullPointerException.class.getSimpleName());
+		assertCause(NullPointerException.class, null);
 	}
 	
 	@Test
 	public void recursionException() {
 		testFor(Node.class);
 		
-		assertMessageContains(SEE_ALSO, WIKIPAGE_URL);
-		assertMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
+		assertBasicValidity();
 		assertNoCause();
 	}
 
@@ -66,18 +75,20 @@ public class OutputTest {
 	public void anyOtherExceptionWithMessage() {
 		testFor(UnsupportedOperationExceptionThrower.class);
 		
-		assertMessageContains(UnsupportedOperationException.class.getName(), MESSAGE, SEE_ALSO, WIKIPAGE_URL);
+		assertBasicValidity();
+		assertMessageContains(UnsupportedOperationException.class.getName(), MESSAGE);
 		assertMessageDoesNotContain("null");
-		assertCause(UnsupportedOperationException.class);
+		assertCause(UnsupportedOperationException.class, MESSAGE);
 	}
 	
 	@Test
 	public void anyOtherExceptionWithoutMessage() {
 		testFor(IllegalStateExceptionThrower.class);
 		
-		assertMessageContains(IllegalStateException.class.getName(), SEE_ALSO, WIKIPAGE_URL);
+		assertBasicValidity();
+		assertMessageContains(IllegalStateException.class.getName());
 		assertMessageDoesNotContain("null");
-		assertCause(IllegalStateException.class);
+		assertCause(IllegalStateException.class, null);
 	}
 	
 	private void testFor(Class<?> type) {
@@ -89,7 +100,12 @@ public class OutputTest {
 			thrown = e;
 		}
 	}
-
+	
+	private void assertBasicValidity() {
+		assertMessageContains(SEE_ALSO, WIKIPAGE_URL);
+		assertMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
+	}
+	
 	private void assertMessageContains(String... contains) {
 		String message = thrown.getMessage();
 		for (String s : contains) {
@@ -104,12 +120,21 @@ public class OutputTest {
 		}
 	}
 
-	private void assertCause(Class<? extends Throwable> cause) {
+	private void assertCause(Class<? extends Throwable> cause, String message) {
 		assertEquals(cause, thrown.getCause().getClass());
+		assertEquals(message, thrown.getCause().getMessage());
 	}
 	
 	private void assertNoCause() {
 		assertNull(thrown.getCause());
+	}
+	
+	private static class AssertionExceptionWithCauseThrower {
+		@Override
+		public boolean equals(Object obj) {
+			Throwable cause = new NullPointerException();
+			throw new AssertionException(Formatter.of(MESSAGE), cause);
+		}
 	}
 	
 	private static class UnsupportedOperationExceptionThrower {
@@ -117,21 +142,11 @@ public class OutputTest {
 		public boolean equals(Object obj) {
 			throw new UnsupportedOperationException(MESSAGE);
 		}
-		
-		@Override
-		public int hashCode() {
-			throw new UnsupportedOperationException(MESSAGE);
-		}
 	}
 	
 	private static class IllegalStateExceptionThrower {
 		@Override
 		public boolean equals(Object obj) {
-			throw new IllegalStateException();
-		}
-		
-		@Override
-		public int hashCode() {
 			throw new IllegalStateException();
 		}
 	}

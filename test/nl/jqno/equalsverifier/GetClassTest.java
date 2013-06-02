@@ -35,7 +35,7 @@ public class GetClassTest {
 	public void nullCheckForgotten() {
 		EqualsVerifier<GetClassPointNull> ev =
 				EqualsVerifier.forClass(GetClassPointNull.class).usingGetClass();
-		assertFailure(ev, "Non-nullity: NullPointerException thrown");
+		assertFailure(ev, NullPointerException.class, "Non-nullity: NullPointerException thrown");
 	}
 	
 	@Test

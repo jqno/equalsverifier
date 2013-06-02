@@ -30,13 +30,13 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegator> ev = EqualsVerifier.forClass(AbstractEqualsDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void hashCodeDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegator> ev = EqualsVerifier.forClass(AbstractHashCodeDelegator.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
 	}
 	
 	@Test
@@ -47,7 +47,7 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsDelegatesToAbstractMethodInField() {
 		EqualsVerifier<EqualsDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, EQUALS_DELEGATES, EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
 		
 		EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class)
 				.suppress(Warning.NULL_FIELDS)
@@ -58,7 +58,7 @@ public class AbstractDelegationTest {
 	@Test
 	public void hashCodeDelegatesToAbstractMethodInField() {
 		EqualsVerifier<HashCodeDelegatesToAbstractMethodInField> ev = EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
 		
 		EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
 				.suppress(Warning.NULL_FIELDS)
@@ -76,7 +76,7 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<EqualsInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, PREFAB, AbstractEqualsDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, EQUALS_DELEGATES, PREFAB, AbstractEqualsDelegator.class.getSimpleName());
 		
 		EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class)
 				.withPrefabValues(AbstractEqualsDelegator.class, new AbstractEqualsDelegatorImpl(1), new AbstractEqualsDelegatorImpl(2))
@@ -86,7 +86,7 @@ public class AbstractDelegationTest {
 	@Test
 	public void hashCodeInFieldDelegatesToAbstractMethod() {
 		EqualsVerifier<HashCodeInFieldDelegatesToAbstractMethod> ev = EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, PREFAB, AbstractHashCodeDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, PREFAB, AbstractHashCodeDelegator.class.getSimpleName());
 		
 		EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
 				.withPrefabValues(AbstractHashCodeDelegator.class, new AbstractHashCodeDelegatorImpl(1), new AbstractHashCodeDelegatorImpl(2))
@@ -102,13 +102,13 @@ public class AbstractDelegationTest {
 	@Test
 	public void equalsInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractEqualsDelegatorImpl> ev = EqualsVerifier.forClass(AbstractEqualsDelegatorImpl.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, EQUALS_DELEGATES, AbstractEqualsDelegator.class.getSimpleName());
 	}
 	
 	@Test
 	public void hashCodeInSuperclassDelegatesToAbstractMethod() {
 		EqualsVerifier<AbstractHashCodeDelegatorImpl> ev = EqualsVerifier.forClass(AbstractHashCodeDelegatorImpl.class);
-		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
+		assertFailure(ev, AbstractMethodError.class, ABSTRACT_DELEGATION, HASHCODE_DELEGATES, AbstractHashCodeDelegator.class.getSimpleName());
 	}
 	
 	@Test

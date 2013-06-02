@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,19 +31,19 @@ public class NullFieldsTest {
 	@Test
 	public void equalsOnOwnNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnThis> ev = EqualsVerifier.forClass(EqualsThrowsNullOnThis.class);
-		assertFailure(ev, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		assertFailure(ev, NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
 	}
 
 	@Test
 	public void equalsOnOthersNullFields() {
 		EqualsVerifier<EqualsThrowsNullOnOther> ev = EqualsVerifier.forClass(EqualsThrowsNullOnOther.class);
-		assertFailure(ev, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		assertFailure(ev, NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
 	}
 	
 	@Test
 	public void hashCodeOnNullFields() {
 		EqualsVerifier<HashCodeThrowsNull> ev = EqualsVerifier.forClass(HashCodeThrowsNull.class);
-		assertFailure(ev, NON_NULLITY, HASHCODE, ON_FIELD, "color");
+		assertFailure(ev, NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
 	}
 	
 	@Test

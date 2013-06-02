@@ -41,7 +41,7 @@ public class AbstractHierarchyTest {
 				.verify();
 		
 		EqualsVerifier<NullThrowingColorContainer> ev = EqualsVerifier.forClass(NullThrowingColorContainer.class);
-		assertFailure(ev, "Non-nullity: equals throws NullPointerException");
+		assertFailure(ev, NullPointerException.class, "Non-nullity: equals throws NullPointerException");
 	}
 	
 	static abstract class AbstractFinalMethodsPoint {

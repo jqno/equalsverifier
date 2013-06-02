@@ -27,4 +27,8 @@ public class AssertionException extends InternalException {
 	public AssertionException(Formatter message) {
 		super(message.format());
 	}
+	
+	public AssertionException(Formatter message, Throwable cause) {
+		super(message.format(), cause);
+	}
 }

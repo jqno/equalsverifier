@@ -327,23 +327,24 @@ public final class EqualsVerifier<T> {
 			performVerification();
 		}
 		catch (InternalException e) {
-			handleError(e, false);
+			handleError(e, e.getCause());
 		}
 		catch (Throwable e) {
-			handleError(e, true);
+			handleError(e, e);
 		}
 		finally {
 			stash.restoreAll();
 		}
 	}
 
-	private void handleError(Throwable e, boolean includeCause) {
+	private void handleError(Throwable messageContainer, Throwable trueCause) {
+		boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
 		Formatter message = Formatter.of(
 				"%%%%\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages",
-				includeCause ? e.getClass().getName() + ": " : "",
-				e.getMessage() == null ? "" : e.getMessage());
+				showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
+				messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
 		
-		throw new AssertionError(message.format(), includeCause ? e : null);
+		throw new AssertionError(message.format(), trueCause);
 	}
 
 	private void performVerification() {

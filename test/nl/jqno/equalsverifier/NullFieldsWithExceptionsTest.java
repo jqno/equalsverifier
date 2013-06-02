@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,25 +32,25 @@ public class NullFieldsWithExceptionsTest {
 	@Test
 	public void equalsThrowsIllegalArgumentExceptionWhenFieldIsNull() {
 		EqualsVerifier<EqualsIllegalArgumentThrower> ev = EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class);
-		assertFailure(ev, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
+		assertFailure(ev, IllegalArgumentException.class, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
 	public void equalsThrowsIllegalStateExceptionWhenFieldIsNull() {
 		EqualsVerifier<EqualsIllegalStateThrower> ev = EqualsVerifier.forClass(EqualsIllegalStateThrower.class);
-		assertFailure(ev, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
+		assertFailure(ev, IllegalStateException.class, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
 	public void hashCodeThrowsIllegalArgumentExceptionWhenFieldIsNull() {
 		EqualsVerifier<HashCodeIllegalArgumentThrower> ev = EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class);
-		assertFailure(ev, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
+		assertFailure(ev, IllegalArgumentException.class, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
 	public void hashCodeThrowsIllegalStateExceptionWhenFieldIsNull() {
 		EqualsVerifier<HashCodeIllegalStateThrower> ev = EqualsVerifier.forClass(HashCodeIllegalStateThrower.class);
-		assertFailure(ev, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
+		assertFailure(ev, IllegalStateException.class, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	abstract static class EqualsThrower {

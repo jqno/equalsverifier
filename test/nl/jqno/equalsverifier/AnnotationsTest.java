@@ -57,7 +57,7 @@ public class AnnotationsTest {
 	@Test
 	public void nonnullMissedOne() {
 		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
-		assertFailure(ev, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
+		assertFailure(ev, NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
 	}
 	
 	@Test
