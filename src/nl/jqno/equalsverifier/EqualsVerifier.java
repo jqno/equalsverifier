@@ -344,7 +344,9 @@ public final class EqualsVerifier<T> {
 				showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
 				messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
 		
-		throw new AssertionError(message.format(), trueCause);
+		AssertionError error = new AssertionError(message.format());
+		error.initCause(trueCause);
+		throw error;
 	}
 
 	private void performVerification() {
