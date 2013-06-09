@@ -340,7 +340,7 @@ public final class EqualsVerifier<T> {
 	private void handleError(Throwable messageContainer, Throwable trueCause) {
 		boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
 		Formatter message = Formatter.of(
-				"%%%%\nFor more information, go to: http://code.google.com/p/equalsverifier/wiki/ErrorMessages",
+				"%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
 				showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
 				messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
 		
