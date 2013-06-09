@@ -90,11 +90,11 @@ public class Instantiator<T> {
 		Enhancer e = new Enhancer() {
 			@Override
 			@SuppressWarnings("rawtypes")
-        	protected void filterConstructors(Class sc, List constructors) {
-        		// Don't filter
-        	}
-        };
-        
+			protected void filterConstructors(Class sc, List constructors) {
+			// Don't filter
+			}
+		};
+		
 		if (superclass.isInterface()) {
 			e.setSuperclass(Object.class);
 			e.setInterfaces(new Class[] { superclass });
