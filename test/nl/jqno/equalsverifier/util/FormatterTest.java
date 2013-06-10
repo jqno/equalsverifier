@@ -103,18 +103,21 @@ public class FormatterTest {
 	public void oneAbstractContainerParameter() {
 		Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
 		AbstractContainer ac = new AbstractContainer(i.instantiate());
+		
 		Formatter f = Formatter.of("AC: %%", ac);
-		assertThat(f.format(), containsString("AC: [AbstractContainer ad=[FormatterTest$AbstractDelegation y=0]-throws AbstractMethodError(null)]-throws AbstractMethodError(null)"));
+		String actual = f.format();
+		// Split up the message, because on some JDKs, AbstractMethodError is sometimes empty while on others, it isn't.
+		assertThat(actual, containsString("AC: [AbstractContainer ad=[FormatterTest$AbstractDelegation y=0]-throws AbstractMethodError"));
+		assertThat(actual, containsString("]-throws AbstractMethodError"));
 	}
 	
 	@Test
 	public void parameterWithMixOfVariousFields() {
-		Instantiator<Abstract> i = Instantiator.of(Abstract.class);
 		Mix mix = new Mix();
-		mix.ab = i.instantiate();
+		mix.throwing = new Throwing(42, "empty");
 		
 		Formatter f = Formatter.of("%%", mix);
-		assertThat(f.format(), containsString("[Mix i=42 s=null t=not null ab=[FormatterTest$Abstract x=0]-throws AbstractMethodError(null)]-throws UnsupportedOperationException(null)"));
+		assertThat(f.format(), containsString("[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]-throws UnsupportedOperationException(null)"));
 	}
 	
 	@Test
@@ -257,7 +260,7 @@ public class FormatterTest {
 		public final int i = 42;
 		public final String s = null;
 		public final String t = "not null";
-		public Abstract ab;
+		public Throwing throwing;
 		
 		@Override
 		public String toString() {
