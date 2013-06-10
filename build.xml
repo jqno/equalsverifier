@@ -142,7 +142,7 @@ limitations under the License.
 				<path refid="test.classpath" />
 				<path refid="ivy.test.path" />
 			</classpath>
-			<formatter type="plain" />
+			<formatter type="plain" usefile="false" />
 			<batchtest todir="${dist.dir}/testreports">
 				<fileset dir="${build.test.dir}">
 					<include name="**/*Test.class" />
