@@ -1,4 +1,3 @@
-#labels Featured
 [http://www.jqno.nl/equalsverifier/documentation/ This page has moved].
 
 Sorry for the inconvenience!
