@@ -16,6 +16,7 @@ limitations under the License.
 -->
 <project name="EqualsVerifier" default="deploy" basedir="."
 		xmlns:ivy="antlib:org.apache.ivy.ant"
+		xmlns:jacoco="antlib:org.jacoco.ant"
 		xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
 	<property name="src.dir" value="${basedir}/src" />
@@ -30,6 +31,7 @@ limitations under the License.
 	<property name="dist.final.dir" value="${dist.dir}/deploy" />
 	<property name="dist.javadoc.dir" value="${dist.dir}/javadoc" />
 	<property name="dist.maven.dir" value="${dist.dir}/maven" />
+	<property name="dist.jacoco.dir" value="${dist.dir}/jacoco" />
 
 	<property name="equalsverifier.jar.name.prefix" value="EqualsVerifier-${version}" />
 	<property name="equalsverifier.jar.name" value="${equalsverifier.jar.name.prefix}.jar" />
@@ -48,6 +50,10 @@ limitations under the License.
 	<property name="ivy.jar.dir" value="${ivy.home}/lib" />
 	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
 	<property name="ivy.jar.url" value="http://repo2.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" />
+	
+	<property name="jacoco.jar.file" value="${ivy.jar.dir}/jacocoant.jar" />
+	<property name="jacoco.exec.file" value="${dist.dir}/jacoco/jacoco.exec" />
+	<property name="coverage.package" value="nl/jqno/equalsverifier/coverage" />
 	
 	<property name="ant-googlecode.jar.file" value="${ivy.jar.dir}/ant-googlecode.jar" />
 	<property name="ant-googlecode.jar.url" value="http://ant-googlecode.googlecode.com/files/ant-googlecode-0.0.2.jar" />
@@ -152,6 +158,48 @@ limitations under the License.
 		<fail message="A test has failed" if="test.has.failed" />
 	</target>
 
+	<target name="coverage" depends="compileTest">
+		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+			<classpath>
+				<path refid="ivy.test.path" />
+			</classpath>
+		</taskdef>
+		<jacoco:coverage destfile="${jacoco.exec.file}">
+			<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed" fork="true" forkmode="once">
+				<classpath>
+					<path refid="test.classpath" />
+					<path refid="ivy.test.path" />
+				</classpath>
+				<formatter type="plain" usefile="false" />
+				<batchtest todir="${dist.dir}/testreports">
+					<fileset dir="${build.test.dir}">
+						<include name="${coverage.package}/*Coverage.class" />
+					</fileset>
+				</batchtest>
+			</junit>
+		</jacoco:coverage>
+		<jacoco:report>
+			<executiondata>
+				<file file="${jacoco.exec.file}" />
+			</executiondata>
+			<structure name="EqualsVerifier JaCoCo Coverage">
+				<classfiles>
+					<fileset dir="${build.test.dir}/${coverage.package}"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${test.dir}/${coverage.package}"/>
+				</sourcefiles>
+			</structure>
+			<check failonviolation="true" violationsproperty="violation">
+				<rule element="BUNDLE">
+					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+				</rule>
+			</check>
+			<html destdir="${dist.jacoco.dir}/html"/>
+		</jacoco:report>
+		<fail message="A coverage test has failed" if="test.has.failed" />
+	</target>
+
 	<target name="javadoc">
 		<mkdir dir="${dist.javadoc.dir}" />
 		<javadoc
@@ -168,7 +216,7 @@ limitations under the License.
 		</javadoc>
 	</target>
 
-	<target name="jar" depends="compile, test">
+	<target name="jar" depends="compile, test, coverage">
 		<tstamp>
 			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
 		</tstamp>
@@ -184,7 +232,7 @@ limitations under the License.
 		</jar>
 	</target>
 
-	<target name="jar-code" depends="compile, test">
+	<target name="jar-code" depends="compile, test, coverage">
 		<tstamp>
 			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
 		</tstamp>
@@ -199,7 +247,7 @@ limitations under the License.
 		</jar>
 	</target>
 
-	<target name="jar-sources" depends="compile, test">
+	<target name="jar-sources" depends="compile, test, coverage">
 		<tstamp>
 			<format property="TODAY" pattern="MMMM dd, yyyy" locale="en" />
 		</tstamp>
