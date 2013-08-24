@@ -51,7 +51,9 @@ public class AbstractEqualsAndHashCodeTest {
 	}
 	
 	abstract static class AbstractBoth {
+		@Override
 		public abstract boolean equals(Object obj);
+		@Override
 		public abstract int hashCode();
 	}
 	
@@ -77,6 +79,7 @@ public class AbstractEqualsAndHashCodeTest {
 	}
 	
 	static abstract class AbstractEqualsButNotHashCode {
+		@Override
 		public abstract boolean equals(Object obj);
 	}
 	
@@ -102,6 +105,7 @@ public class AbstractEqualsAndHashCodeTest {
 	}
 	
 	static abstract class AbstractHashCodeButNotEquals {
+		@Override
 		public abstract int hashCode();
 	}
 	

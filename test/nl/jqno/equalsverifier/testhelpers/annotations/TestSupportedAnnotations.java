@@ -45,6 +45,7 @@ public enum TestSupportedAnnotations implements Annotation {
 		this.descriptors = Arrays.asList(descriptors);
 	}
 	
+	@Override
 	public Iterable<String> descriptors() {
 		return descriptors;
 	}

@@ -66,6 +66,7 @@ public enum SupportedAnnotations implements Annotation {
 		this.descriptors = Arrays.asList(descriptors);
 	}
 	
+	@Override
 	public Iterable<String> descriptors() {
 		return descriptors;
 	}
