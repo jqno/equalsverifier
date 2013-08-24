@@ -55,9 +55,6 @@ limitations under the License.
 	<property name="jacoco.exec.file" value="${dist.dir}/jacoco/jacoco.exec" />
 	<property name="coverage.package" value="nl/jqno/equalsverifier/coverage" />
 	
-	<property name="ant-googlecode.jar.file" value="${ivy.jar.dir}/ant-googlecode.jar" />
-	<property name="ant-googlecode.jar.url" value="http://ant-googlecode.googlecode.com/files/ant-googlecode-0.0.2.jar" />
-	
 	<property name="maven.staging.repository.id" value="sonatype-nexus-staging" />
 	<property name="maven.staging.repository.url" value="https://oss.sonatype.org/service/local/staging/deploy/maven2/" />
 
@@ -65,8 +62,6 @@ limitations under the License.
 	
 	<property name="equalsverifier.pom" value="${basedir}/equalsverifier.pom" />
 	<property name="equalsverifier.maven.pom" value="${dist.maven.dir}/pom.xml" />
-	<property name="credentials.file" value="google.properties" />
-	<property file="${credentials.file}" prefix="google" />
 	<property name="secring.file" value="${user.home}/.gnupg/secring.gpg" />
 	<property name="settingsXml.file" value="${user.home}/.m2/settings.xml" />
 
@@ -355,16 +350,6 @@ limitations under the License.
 		</exec>
 	</target>
 
-	<target name="-credentials">
-		<available property="hasCredentialsFile" file="${credentials.file}" />
-	</target>
-
-	<target name="-checkCredentialsFile" depends="-credentials" unless="hasCredentialsFile">
-		<echo file="${credentials.file}">username=[your google account name without @gmail.com]
-password=[your googlecode password, is NOT your gmail password]</echo>
-		<fail message="Fill in ${credentials.file} to provide your credentials!" />
-	</target>
-
 	<target name="-settingsxml">
 		<available property="hasSettingsXmlFile" file="${settingsXml.file}" />
 	</target>
@@ -381,30 +366,7 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 		<fail message="Make sure you have a GPG secring file to publish to Maven Central!" />
 	</target>
 	
-	<target name="-checkNecessaryFiles" depends="-checkCredentialsFile, -checkSettingsXmlFile, -checkSecringFile" />
-
-	<target name="publish-googlecode" depends="-publish-validate, -checkCredentialsFile, deploy">
-		<get src="${ant-googlecode.jar.url}" dest="${ant-googlecode.jar.file}" usetimestamp="true" />
-		<taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask" classpath="${ant-googlecode.jar.file}" name="gcupload" />
-		<gcupload 
-				username="${google.username}"
-				password="${google.password}"
-				projectname="equalsverifier"
-				filename="${equalsverifier.jar}"
-				targetfilename="${equalsverifier.jar.name}"
-				summary="The EqualsVerifier jar, including source"
-				labels="Featured, Type-Executable, OpSys-All, Recommended"
-				verbose="true" />
-		<gcupload 
-				username="${google.username}"
-				password="${google.password}"
-				projectname="equalsverifier"
-				filename="${equalsverifier.zip}"
-				targetfilename="${equalsverifier.zip.name}"
-				summary="The EqualsVerifier zip, including jar, source, test suite and dependencies"
-				labels="Featured, Type-Archive, OpSys-All"
-				verbose="true" />
-	</target>
+	<target name="-checkNecessaryFiles" depends="-checkSettingsXmlFile, -checkSecringFile" />
 
 	<target name="publish-maven-central" depends="-publish-validate, deploy-maven-central">
 		<copy tofile="${equalsverifier.maven.pom}" file="${equalsverifier.pom}" />
@@ -452,5 +414,5 @@ password=[your googlecode password, is NOT your gmail password]</echo>
 		<echo message="Don't forget to log in to https://oss.sonatype.org/, close the staging repository, and (hopefully) release EqualsVerifier!" />
 	</target>
 
-	<target name="publish" depends="-publish-validate, -checkNecessaryFiles, deploy, -publish-ask, publish-tag, publish-googlecode, publish-maven-central" />
+	<target name="publish" depends="-publish-validate, -checkNecessaryFiles, deploy, -publish-ask, publish-tag, publish-maven-central" />
 </project>
