@@ -3,4 +3,4 @@ dist
 lib
 bin
 google.properties
-
+.DS_Store
