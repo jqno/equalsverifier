@@ -201,7 +201,7 @@ limitations under the License.
 			</structure>
 			<check failonviolation="true" violationsproperty="violation">
 				<rule element="BUNDLE">
-					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.93" />
 				</rule>
 			</check>
 			<html destdir="${dist.jacoco.dir}/internal"/>
