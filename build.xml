@@ -137,30 +137,14 @@ limitations under the License.
 	</target>
 
 	<target name="test" depends="compileTest">
-		<mkdir dir="${dist.dir}/testreports" />
-		<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed" fork="yes" forkmode="once">
-			<classpath>
-				<path refid="test.classpath" />
-				<path refid="ivy.test.path" />
-			</classpath>
-			<formatter type="plain" usefile="false" />
-			<batchtest todir="${dist.dir}/testreports">
-				<fileset dir="${build.test.dir}">
-					<include name="**/*Test.class" />
-				</fileset>
-			</batchtest>
-		</junit>
-		<fail message="A test has failed" if="test.has.failed" />
-	</target>
-
-	<target name="coverage" depends="compileTest">
 		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
 			<classpath>
 				<path refid="ivy.test.path" />
 			</classpath>
 		</taskdef>
+		<mkdir dir="${dist.dir}/testreports" />
 		<jacoco:coverage destfile="${jacoco.exec.file}">
-			<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed" fork="true" forkmode="once">
+			<junit haltonfailure="no" printsummary="on" failureproperty="test.has.failed" fork="yes" forkmode="once">
 				<classpath>
 					<path refid="test.classpath" />
 					<path refid="ivy.test.path" />
@@ -168,16 +152,22 @@ limitations under the License.
 				<formatter type="plain" usefile="false" />
 				<batchtest todir="${dist.dir}/testreports">
 					<fileset dir="${build.test.dir}">
-						<include name="${coverage.package}/*Coverage.class" />
+						<include name="**/*Test.class" />
 					</fileset>
 				</batchtest>
 			</junit>
 		</jacoco:coverage>
+		<fail message="A test has failed" if="test.has.failed" />
+	</target>
+
+	<target name="coverage" depends="externalCoverage, internalCoverage" />
+
+	<target name="externalCoverage" depends="test">
 		<jacoco:report>
 			<executiondata>
 				<file file="${jacoco.exec.file}" />
 			</executiondata>
-			<structure name="EqualsVerifier JaCoCo Coverage">
+			<structure name="EqualsVerifier: external coverage">
 				<classfiles>
 					<fileset dir="${build.test.dir}/${coverage.package}"/>
 				</classfiles>
@@ -190,9 +180,30 @@ limitations under the License.
 					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
 				</rule>
 			</check>
-			<html destdir="${dist.jacoco.dir}/html"/>
+			<html destdir="${dist.jacoco.dir}/external"/>
 		</jacoco:report>
-		<fail message="A coverage test has failed" if="test.has.failed" />
+	</target>
+
+	<target name="internalCoverage" depends="test">
+		<jacoco:report>
+			<executiondata>
+				<file file="${jacoco.exec.file}" />
+			</executiondata>
+			<structure name="EqualsVerifier internal coverage">
+				<classfiles>
+					<fileset dir="${build.src.dir}"/>
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${src.dir}"/>
+				</sourcefiles>
+			</structure>
+			<check failonviolation="true" violationsproperty="violation">
+				<rule element="BUNDLE">
+					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+				</rule>
+			</check>
+			<html destdir="${dist.jacoco.dir}/internal"/>
+		</jacoco:report>
 	</target>
 
 	<target name="javadoc">

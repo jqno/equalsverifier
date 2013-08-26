@@ -28,7 +28,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class Coverage {
+public class CoverageTest {
 	@Parameters
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
@@ -39,7 +39,7 @@ public class Coverage {
 	
 	private final Class<?> type;
 	
-	public Coverage(Class<?> type) {
+	public CoverageTest(Class<?> type) {
 		this.type = type;
 	}
 	
