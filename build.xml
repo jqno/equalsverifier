@@ -136,7 +136,9 @@ limitations under the License.
 		</javac>
 	</target>
 
-	<target name="test" depends="compileTest">
+	<target name="test" depends="runTest, coverage" />
+	
+	<target name="runTest" depends="compileTest">
 		<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
 			<classpath>
 				<path refid="ivy.test.path" />
@@ -162,7 +164,7 @@ limitations under the License.
 
 	<target name="coverage" depends="externalCoverage, internalCoverage" />
 
-	<target name="externalCoverage" depends="test">
+	<target name="externalCoverage" depends="runTest">
 		<jacoco:report>
 			<executiondata>
 				<file file="${jacoco.exec.file}" />
@@ -184,7 +186,7 @@ limitations under the License.
 		</jacoco:report>
 	</target>
 
-	<target name="internalCoverage" depends="test">
+	<target name="internalCoverage" depends="runTest">
 		<jacoco:report>
 			<executiondata>
 				<file file="${jacoco.exec.file}" />
@@ -199,7 +201,7 @@ limitations under the License.
 			</structure>
 			<check failonviolation="true" violationsproperty="violation">
 				<rule element="BUNDLE">
-					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+					<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.93" />
 				</rule>
 			</check>
 			<html destdir="${dist.jacoco.dir}/internal"/>
