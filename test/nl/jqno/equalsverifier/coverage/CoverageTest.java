@@ -33,7 +33,8 @@ public class CoverageTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
 				{ EclipseInstanceOfPoint.class },
-				{ EclipseGetClassPoint.class }
+				{ EclipseGetClassPoint.class },
+				{ NetBeansGetClassPoint.class }
 		});
 	}
 	
