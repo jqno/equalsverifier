@@ -36,6 +36,7 @@ public class CoverageTest {
 				{ EclipseInstanceOfPoint.class },
 				{ IntelliJGetClassPoint.class },
 				{ IntelliJInstanceOfPoint.class },
+				{ LombokInstanceOfPoint.class },
 				{ NetBeansGetClassPoint.class }
 		});
 	}
