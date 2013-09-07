@@ -86,10 +86,10 @@ public class Instantiator<T> {
 		return instance;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
 		Enhancer e = new Enhancer() {
 			@Override
-			@SuppressWarnings("rawtypes")
 			protected void filterConstructors(Class sc, List constructors) {
 			// Don't filter
 			}
