@@ -15,13 +15,10 @@
  */
 package nl.jqno.equalsverifier.coverage;
 
-import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.Collection;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.coverage.LombokCanEqualPointContainer.LombokCanEqualColorPoint;
-import nl.jqno.equalsverifier.coverage.LombokCanEqualPointContainer.LombokCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 
 import org.junit.Test;
@@ -30,20 +27,35 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class CoverageWithInheritanceTest<T, U extends T> {
+public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
 	@Parameters
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
-				{ LombokCanEqualPoint.class, LombokCanEqualColorPoint.class }
+				{ LombokCanEqual.class }
 		});
 	}
 	
 	private final Class<T> superType;
 	private final Class<U> subType;
+	private final Class<V> endpointType;
 	
-	public CoverageWithInheritanceTest(Class<T> superType, Class<U> subType) {
-		this.superType = superType;
-		this.subType = subType;
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public CoverageWithInheritanceTest(Class<?> containerType) {
+		Class[] containingTypes = containerType.getClasses();
+		this.superType = find(containingTypes, "Point");
+		this.subType = find(containingTypes, "ColorPoint");
+		this.endpointType = find(containingTypes, "EndPoint");
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private Class find(Class[] types, String name) {
+		Class result = null;
+		for (Class type : types) {
+			if (type.getSimpleName().equals(name)) {
+				result = type;
+			}
+		}
+		return result;
 	}
 	
 	@Test
@@ -57,18 +69,15 @@ public class CoverageWithInheritanceTest<T, U extends T> {
 	public void testSubCoverage() {
 		EqualsVerifier.forClass(subType)
 				.withRedefinedSuperclass()
+				.withRedefinedSubclass(endpointType)
 				.verify();
 	}
 
 	@Test
-	public void callTheSuperConstructor() throws Exception {
-		Constructor<?> constructor = superType.getConstructor(int.class, int.class);
-		constructor.newInstance(0, 0);
-	}
-	
-	@Test
-	public void callTheSubConstructor() throws Exception {
-		Constructor<?> constructor = subType.getConstructor(int.class, int.class, Color.class);
-		constructor.newInstance(0, 0, Color.INDIGO);
+	public void callTheConstructors() throws Exception {
+		new LombokCanEqual();
+		superType.getConstructor(int.class, int.class).newInstance(0, 0);
+		subType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
+		endpointType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
 	}
 }
