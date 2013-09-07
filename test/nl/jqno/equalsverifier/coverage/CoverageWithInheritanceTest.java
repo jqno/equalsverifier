@@ -31,16 +31,19 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
 	@Parameters
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new Object[][] {
+				{ HandwrittenCanEqual.class },
 				{ LombokCanEqual.class }
 		});
 	}
 	
+	private final Class<?> containerType;
 	private final Class<T> superType;
 	private final Class<U> subType;
 	private final Class<V> endpointType;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public CoverageWithInheritanceTest(Class<?> containerType) {
+		this.containerType = containerType;
 		Class[] containingTypes = containerType.getClasses();
 		this.superType = find(containingTypes, "Point");
 		this.subType = find(containingTypes, "ColorPoint");
@@ -75,7 +78,7 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
 
 	@Test
 	public void callTheConstructors() throws Exception {
-		new LombokCanEqual();
+		containerType.getConstructor().newInstance();
 		superType.getConstructor(int.class, int.class).newInstance(0, 0);
 		subType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
 		endpointType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);

@@ -34,6 +34,8 @@ public class CoverageNoInheritanceTest {
 		return Arrays.asList(new Object[][] {
 				{ EclipseGetClassPoint.class },
 				{ EclipseInstanceOfPoint.class },
+				{ HandwrittenGetClassPoint.class },
+				{ HandwrittenInstanceOfPoint.class },
 				{ IntelliJGetClassPoint.class },
 				{ IntelliJInstanceOfPoint.class },
 				{ LombokInstanceOfPoint.class },
