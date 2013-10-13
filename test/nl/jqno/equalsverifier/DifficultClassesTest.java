@@ -21,6 +21,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -177,15 +178,17 @@ public class DifficultClassesTest {
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
 		private final ArrayList<String> arrayList;
+		private final BitSet bitset;
 		private final UUID uuid;
 		
-		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList, UUID uuid) {
+		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList, BitSet bitset, UUID uuid) {
 			this.calendar = calendar;
 			this.date = date;
 			this.file = file;
 			this.gregorianCalendar = gregorianCalendar;
 			this.pattern = pattern;
 			this.arrayList = arrayList;
+			this.bitset = bitset;
 			this.uuid = uuid;
 		}
 		
@@ -203,6 +206,7 @@ public class DifficultClassesTest {
 			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
 			result &= nullSafeEquals(pattern, other.pattern);
 			result &= nullSafeEquals(arrayList, other.arrayList);
+			result &= nullSafeEquals(bitset, other.bitset);
 			result &= nullSafeEquals(uuid, other.uuid);
 			return result;
 		}
@@ -216,6 +220,7 @@ public class DifficultClassesTest {
 			result += 31 * nullSafeHashCode(gregorianCalendar);
 			result += 31 * nullSafeHashCode(pattern);
 			result += 31 * nullSafeHashCode(arrayList);
+			result += 31 * nullSafeHashCode(bitset);
 			result += 31 * nullSafeHashCode(uuid);
 			return result;
 		}

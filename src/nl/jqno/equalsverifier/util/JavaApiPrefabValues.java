@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -161,6 +162,7 @@ public class JavaApiPrefabValues {
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
 		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
+		prefabValues.put(BitSet.class, BitSet.valueOf(new byte[] {0, 0}), BitSet.valueOf(new byte[] {1, 1}));
 	}
 	
 	@SuppressWarnings("rawtypes")
