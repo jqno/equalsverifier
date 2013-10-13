@@ -162,7 +162,11 @@ public class JavaApiPrefabValues {
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
 		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
-		prefabValues.put(BitSet.class, BitSet.valueOf(new byte[] {0, 0}), BitSet.valueOf(new byte[] {1, 1}));
+		
+		BitSet redBitSet = new BitSet();
+		BitSet blackBitSet = new BitSet();
+		blackBitSet.set(0);
+		prefabValues.put(BitSet.class, redBitSet, blackBitSet);
 	}
 	
 	@SuppressWarnings("rawtypes")
