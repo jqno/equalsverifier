@@ -61,6 +61,14 @@ public class OriginalStateTest {
 		EqualsVerifier.forClass(CorrectEqualsContainerContainer.class).verify();
 		assertEquals(STATIC, CorrectEquals.staticValue);
 	}
+
+	@Test
+	public void staticValueInSuperReturnsToOriginalState() {
+		EqualsVerifier.forClass(SubContainer.class).verify();
+		assertEquals(STATIC, CorrectEquals.staticValue);
+		assertEquals(STATIC, SuperContainer.staticValue);
+		assertEquals(STATIC_FINAL, SuperContainer.staticFinalValue);
+	}
 	
 	@Test
 	public void valuesReturnToOriginalStateAfterException() throws NoSuchFieldException {
@@ -144,6 +152,37 @@ public class OriginalStateTest {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(foo);
+		}
+	}
+	
+	static abstract class SuperContainer {
+		private static final Object staticFinalValue = STATIC_FINAL;
+		private static Object staticValue = STATIC;
+		
+		private final CorrectEquals foo;
+		
+		public SuperContainer(CorrectEquals foo) {
+			this.foo = foo;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SuperContainer)) {
+				return false;
+			}
+			SuperContainer other = (SuperContainer)obj;
+			return nullSafeEquals(foo, other.foo);
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(foo);
+		}
+	}
+
+	static final class SubContainer extends SuperContainer {
+		public SubContainer(CorrectEquals foo) {
+			super(foo);
 		}
 	}
 }
