@@ -40,11 +40,15 @@ class AbstractDelegationChecker<T> implements Checker {
 	public void check() {
 		checkAbstractDelegationInFields();
 
-		T instance = this.<T>getPrefabValue(type);
+		T instance = this.<T>getRedPrefabValue(type);
 		if (instance == null) {
 			instance = classAccessor.getRedObject();
 		}
-		checkAbstractDelegation(instance);
+		T copy = this.<T>getBlackPrefabValue(type);
+		if (copy == null) {
+			copy = classAccessor.getBlackObject();
+		}
+		checkAbstractDelegation(instance, copy);
 
 		checkAbstractDelegationInSuper();
 	}
@@ -52,15 +56,16 @@ class AbstractDelegationChecker<T> implements Checker {
 	private void checkAbstractDelegationInFields() {
 		for (Field field : FieldIterable.of(type)) {
 			Class<?> type = field.getType();
-			Object o = safelyGetInstance(type);
-			if (o != null) {
-				checkAbstractMethods(type, o, true);
+			Object instance = safelyGetInstance(type);
+			Object copy = safelyGetInstance(type);
+			if (instance != null && copy != null) {
+				checkAbstractMethods(type, instance, copy, true);
 			}
 		}
 	}
 	
-	private void checkAbstractDelegation(T instance) {
-		checkAbstractMethods(type, instance, false);
+	private void checkAbstractDelegation(T instance, T copy) {
+		checkAbstractMethods(type, instance, copy, false);
 	}
 	
 	private void checkAbstractDelegationInSuper() {
@@ -76,11 +81,15 @@ class AbstractDelegationChecker<T> implements Checker {
 			return;
 		}
 
-		Object instance = getPrefabValue(superclass);
+		Object instance = getRedPrefabValue(superclass);
 		if (instance == null) {
 			instance = superAccessor.getRedObject();
 		}
-		checkAbstractMethods(superclass, instance, false);
+		Object copy = getBlackPrefabValue(type);
+		if (copy == null) {
+			copy = superAccessor.getBlackObject();
+		}
+		checkAbstractMethods(superclass, instance, copy, false);
 	}
 
 	private Formatter buildAbstractMethodInSuperErrorMessage(Class<?> type, boolean isEqualsAbstract) {
@@ -89,15 +98,23 @@ class AbstractDelegationChecker<T> implements Checker {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <S> S getPrefabValue(Class<?> type) {
+	private <S> S getRedPrefabValue(Class<?> type) {
 		if (prefabValues.contains(type)) {
 			return (S)prefabValues.getRed(type);
 		}
 		return null;
 	}
+
+	@SuppressWarnings("unchecked")
+	private <S> S getBlackPrefabValue(Class<?> type) {
+		if (prefabValues.contains(type)) {
+			return (S)prefabValues.getBlack(type);
+		}
+		return null;
+	}
 	
 	private Object safelyGetInstance(Class<?> type) {
-		Object result = getPrefabValue(type);
+		Object result = getRedPrefabValue(type);
 		if (result != null) {
 			return result;
 		}
@@ -110,9 +127,9 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 	}
 	
-	private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, boolean prefabPossible) {
+	private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
 		try {
-			instance.equals(instance);
+			instance.equals(copy);
 		}
 		catch (AbstractMethodError e) {
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()), e);
