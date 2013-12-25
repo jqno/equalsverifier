@@ -50,11 +50,11 @@ class FieldsChecker<T> implements Checker {
 	public void check() {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
 		
-		inspector.check(new ArrayFieldCheck());
 		inspector.check(new TransitivityFieldCheck());
 		inspector.check(new SignificanceFieldCheck());
 		
 		if (classAccessor.declaresEquals()) {
+			inspector.check(new ArrayFieldCheck());
 			inspector.check(new FloatAndDoubleFieldCheck());
 		}
 		

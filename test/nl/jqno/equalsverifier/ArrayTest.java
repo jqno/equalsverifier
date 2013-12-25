@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,6 +102,11 @@ public class ArrayTest {
 	@Test
 	public void objectWithAnArrayAndAnUnusedFieldShouldWork() {
 		EqualsVerifier.forClass(ArrayAndSomethingUnusedContainer.class).verify();
+	}
+	
+	@Test
+	public void objectWithAnArrayAndNoEquals() {
+		EqualsVerifier.forClass(ArrayAndNoEqualsContainer.class).verify();
 	}
 	
 	static final class PrimitiveArrayContainerWrongEquals {
@@ -390,6 +395,21 @@ public class ArrayTest {
 		@Override
 		public int hashCode() {
 			return Arrays.hashCode(array);
+		}
+	}
+	
+	static final class ArrayAndNoEqualsContainer {
+		@SuppressWarnings("unused")
+		private final int[] ints;
+		@SuppressWarnings("unused")
+		private final Object[] objects;
+		@SuppressWarnings("unused")
+		private final int[][] arrays;
+		
+		public ArrayAndNoEqualsContainer(int[] ints, Object[] objects, int[][] arrays) {
+			this.ints = ints;
+			this.objects = objects;
+			this.arrays = arrays;
 		}
 	}
 }
