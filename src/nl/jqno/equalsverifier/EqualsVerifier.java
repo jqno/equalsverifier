@@ -15,11 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
+import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.util.PrefabValues;
@@ -117,6 +122,7 @@ public final class EqualsVerifier<T> {
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
 	private boolean usingGetClass = false;
 	private boolean allFieldsShouldBeUsed = false;
+	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	
@@ -269,6 +275,32 @@ public final class EqualsVerifier<T> {
 	}
 	
 	/**
+	 * Signals that all non-transient fields are relevant in the {@code equals}
+	 * contract, except for the ones specified. {@code EqualsVerifier} will
+	 * fail if one non-specified, non-transient field does not affect the
+	 * outcome of {@code equals}, or if one specified field does.
+	 * 
+	 * @param fields
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
+		allFieldsShouldBeUsed = true;
+		allFieldsShouldBeUsedExceptions = new HashSet<String>(Arrays.asList(fields));
+		
+		Set<String> actualFieldNames = new HashSet<String>();
+		for (Field field : FieldIterable.of(type)) {
+			actualFieldNames.add(field.getName());
+		}
+		for (String field : allFieldsShouldBeUsedExceptions) {
+			if (!actualFieldNames.contains(field)) {
+				throw new IllegalArgumentException("Class " + type.getSimpleName() + " does not contain field " + field + ".");
+			}
+		}
+		
+		return this;
+	}
+	
+	/**
 	 * Signals that T is part of an inheritance hierarchy where {@code equals}
 	 * is overridden. Call this method if T has overridden {@code equals} and
 	 * {@code hashCode}, and one or more of T's superclasses have as well.
@@ -379,7 +411,7 @@ public final class EqualsVerifier<T> {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(classAccessor, warningsToSuppress, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
-		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed);
+		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
 
 		preconditionChecker.check();
 		examplesChecker.check();

@@ -23,6 +23,7 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
+import java.util.Set;
 
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
@@ -38,12 +39,14 @@ class FieldsChecker<T> implements Checker {
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean allFieldsShouldBeUsed;
+	private final Set<String> allFieldsShouldBeUsedExceptions;
 
-	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed) {
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions) {
 		this.classAccessor = classAccessor;
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
+		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
 	}
 	
 	@Override
@@ -51,7 +54,7 @@ class FieldsChecker<T> implements Checker {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
 		
 		inspector.check(new TransitivityFieldCheck());
-		inspector.check(new SignificanceFieldCheck());
+		inspector.check(new SignificantFieldCheck());
 		
 		if (classAccessor.declaresEquals()) {
 			inspector.check(new ArrayFieldCheck());
@@ -168,11 +171,12 @@ class FieldsChecker<T> implements Checker {
 		}
 	}
 	
-	private class SignificanceFieldCheck implements FieldCheck {
+	private class SignificantFieldCheck implements FieldCheck {
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
+			String fieldName = referenceAccessor.getFieldName();
 			
 			changedAccessor.changeField(prefabValues);
 			
@@ -180,15 +184,18 @@ class FieldsChecker<T> implements Checker {
 			boolean hashCodeChanged = reference.hashCode() != changed.hashCode();
 			
 			if (equalsChanged != hashCodeChanged) {
-				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", referenceAccessor.getFieldName()),
+				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", fieldName),
 						equalsChanged);
-				assertFalse(Formatter.of("Significant fields: hashCode relies on %%, but equals does not.", referenceAccessor.getFieldName()),
+				assertFalse(Formatter.of("Significant fields: hashCode relies on %%, but equals does not.", fieldName),
 						hashCodeChanged);
 			}
 			
+			boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
-				assertTrue(Formatter.of("Significant fields: equals does not use %%.", referenceAccessor.getFieldName()),
-						equalsChanged);
+				assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName),
+						!thisFieldShouldBeUsed || equalsChanged);
+				assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
+						thisFieldShouldBeUsed || !equalsChanged);
 				assertTrue(Formatter.of("Significant fields: all fields should be used, but %% has not defined an equals method.", classAccessor.getType().getSimpleName()),
 						classAccessor.declaresEquals());
 			}
