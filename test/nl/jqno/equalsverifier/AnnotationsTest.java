@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier;
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
@@ -28,9 +29,14 @@ import nl.jqno.equalsverifier.testhelpers.points.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.MutableCanEqualColorPoint;
 import nl.jqno.equalsverifier.util.Instantiator;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AnnotationsTest {
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Test
 	public void immutable() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
@@ -78,8 +84,11 @@ public class AnnotationsTest {
 		Util.assertFailure(ev, "Mutability");
 	}
 	
-	@Test(expected=AssertionError.class)
+	@Test
 	public void entityNonJpaAnnotation() {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage(containsString("Mutability"));
+		
 		EqualsVerifier.forClass(EntityByNonJpaAnnotation.class)
 				.verify();
 	}

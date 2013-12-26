@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012 Jan Ouwens
+ * Copyright 2010, 2012-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class PrefabValuesTest {
 	private static final Class<String> EXISTING_KEY = String.class;
@@ -41,6 +43,10 @@ public class PrefabValuesTest {
 		p = new PrefabValues(null);
 		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	
 	@Test
 	public void happyPath() {
@@ -88,13 +94,18 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, NON_EXISTING_VALUE));
 	}
 	
-	@Test(expected=ReflectionException.class)
+	@Test
 	public void getOtherWhenClassDoesntExist() {
+		thrown.expect(ReflectionException.class);
+		thrown.expectMessage("No prefab values for class java.lang.Object exist.");
+		
 		p.getOther(NON_EXISTING_KEY, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
-	@Test(expected=ReflectionException.class)
+	@Test
 	public void getOtherWhenClassIsNull() {
+		thrown.expect(ReflectionException.class);
+		
 		p.getOther(null, VALUE_FOR_NON_EXISTING_KEY);
 	}
 	
@@ -103,8 +114,11 @@ public class PrefabValuesTest {
 		assertEquals(EXISTING_RED_VALUE, p.getOther(EXISTING_KEY, null));
 	}
 	
-	@Test(expected=ReflectionException.class)
+	@Test
 	public void getOtherWhenClassDoesntMatchValue() {
+		thrown.expect(ReflectionException.class);
+		thrown.expectMessage("Type does not match value.");
+		
 		p.getOther(String.class, 1);
 	}
 	

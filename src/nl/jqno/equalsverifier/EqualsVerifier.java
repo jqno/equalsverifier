@@ -421,7 +421,7 @@ public final class EqualsVerifier<T> {
 	
 	private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
 		if (first == null) {
-			throw new IllegalArgumentException("First example is null");
+			throw new IllegalArgumentException("First example is null.");
 		}
 
 		List<T> result = new ArrayList<T>();
@@ -433,10 +433,10 @@ public final class EqualsVerifier<T> {
 
 	private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
 		if (first == null) {
-			throw new IllegalArgumentException("First example is null");
+			throw new IllegalArgumentException("First example is null.");
 		}
 		if (second == null) {
-			throw new IllegalArgumentException("Second example is null");
+			throw new IllegalArgumentException("Second example is null.");
 		}
 
 		List<T> result = new ArrayList<T>();
@@ -451,7 +451,7 @@ public final class EqualsVerifier<T> {
 		if (more != null) {
 			for (T e : more) {
 				if (e == null) {
-					throw new IllegalArgumentException("One of the examples is null");
+					throw new IllegalArgumentException("One of the examples is null.");
 				}
 				list.add(e);
 			}

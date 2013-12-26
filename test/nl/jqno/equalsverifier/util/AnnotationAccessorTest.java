@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnota
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
@@ -39,13 +40,18 @@ import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class AnnotationAccessorTest {
 	private static final String RUNTIME_RETENTION = "runtimeRetention";
 	private static final String CLASS_RETENTION = "classRetention";
 	private static final String BOTH_RETENTIONS = "bothRetentions";
 	private static final String NO_RETENTION = "noRetention";
+
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	@Test
 	public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
@@ -101,8 +107,11 @@ public class AnnotationAccessorTest {
 		assertFieldHasAnnotation(RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
 	}
 	
-	@Test(expected=ReflectionException.class)
+	@Test
 	public void searchNonExistingField() {
+		thrown.expect(ReflectionException.class);
+		thrown.expectMessage(containsString("does not have field x"));
+		
 		findFieldAnnotationFor(AnnotatedFields.class, "x", FIELD_RUNTIME_RETENTION);
 	}
 	
@@ -118,10 +127,14 @@ public class AnnotationAccessorTest {
 		assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
 	}
 	
-	@Test(expected=ReflectionException.class)
+	@Test
 	public void dynamicClassThrowsException() {
 		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
+
+		thrown.expect(ReflectionException.class);
+		thrown.expectMessage(containsString("Cannot read class file"));
+
 		accessor.typeHas(TYPE_CLASS_RETENTION);
 	}
 	

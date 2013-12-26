@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Jan Ouwens
+ * Copyright 2012-2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,29 +15,43 @@
  */
 package nl.jqno.equalsverifier;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class WithPrefabValuesTest {
-	@Test(expected=NullPointerException.class)
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
+	@Test
 	public void nullPointerExceptionOtherClass() {
+		thrown.expect(NullPointerException.class);
+		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
 				.withPrefabValues(null, "red", "black");
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void nullPointerExceptionRed() {
+		thrown.expect(NullPointerException.class);
+		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
 				.withPrefabValues(String.class, null, "black");
 	}
 
-	@Test(expected=NullPointerException.class)
+	@Test
 	public void nullPointerExceptionBlack() {
+		thrown.expect(NullPointerException.class);
+		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
 				.withPrefabValues(String.class, "red", null);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void illegalArgumentExceptionEqualParameters() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Both values are equal.");
+		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
 				.withPrefabValues(String.class, "red", "red");
 	}

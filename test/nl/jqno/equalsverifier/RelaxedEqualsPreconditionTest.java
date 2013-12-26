@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,9 @@ import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.testhelpers.points.Multiple;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class RelaxedEqualsPreconditionTest {
 	private static final String PRECONDITION = "Precondition";
@@ -39,14 +41,23 @@ public class RelaxedEqualsPreconditionTest {
 		black = new Multiple(2, 1);
 		green = new Multiple(2, 2);
 	}
-
-	@Test(expected=IllegalArgumentException.class)
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
+	@Test
 	public void equalFirstNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("First example is null.");
+		
 		EqualsVerifier.forRelaxedEqualExamples(null, black);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void equalSecondNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Second example is null.");
+		
 		EqualsVerifier.forRelaxedEqualExamples(red, null);
 	}
 	
@@ -57,14 +68,20 @@ public class RelaxedEqualsPreconditionTest {
 				.verify();
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void equalAnyNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("One of the examples is null.");
+		
 		Multiple another = new Multiple(-1, -2);
 		EqualsVerifier.forRelaxedEqualExamples(red, black, another, null);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void unequalFirstNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("First example is null.");
+		
 		EqualsVerifier.forRelaxedEqualExamples(red, black)
 				.andUnequalExample(null);
 	}
@@ -76,8 +93,10 @@ public class RelaxedEqualsPreconditionTest {
 				.verify();
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void unequalAnyNull() {
+		thrown.expect(IllegalArgumentException.class);
+		
 		Multiple another = new Multiple(3, 3);
 		EqualsVerifier.forRelaxedEqualExamples(red, black)
 				.andUnequalExamples(green, another, null);

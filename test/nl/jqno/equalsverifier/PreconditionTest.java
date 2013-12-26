@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2013 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class PreconditionTest {
 	private static final String PRECONDITION = "Precondition";
@@ -34,13 +36,22 @@ public class PreconditionTest {
 		second = new FinalPoint(2, 3);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
+	@Test
 	public void firstNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("First example is null.");
+		
 		EqualsVerifier.forExamples(null, second);
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void secondNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Second example is null.");
+		
 		EqualsVerifier.forExamples(first, null);
 	}
 	
@@ -49,8 +60,11 @@ public class PreconditionTest {
 		EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void anyNull() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("One of the examples is null.");
+		
 		FinalPoint another = new FinalPoint(3, 4);
 		EqualsVerifier.forExamples(first, second, another, null);
 	}

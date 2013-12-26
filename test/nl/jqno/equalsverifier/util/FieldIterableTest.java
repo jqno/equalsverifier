@@ -32,9 +32,14 @@ import nl.jqno.equalsverifier.testhelpers.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Outer;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubEmptySubFieldContainer;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class FieldIterableTest {
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+
 	@Test
 	public void simpleFields() {
 		Set<Field> actual = new HashSet<Field>();
@@ -114,12 +119,14 @@ public class FieldIterableTest {
 		assertFalse(iterable.iterator().hasNext());
 	}
 
-	@Test(expected=NoSuchElementException.class)
+	@Test
 	public void nextAfterLastElement() {
 		Iterator<Field> iterator = FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
 		while (iterator.hasNext()) {
 			iterator.next();
 		}
+		
+		thrown.expect(NoSuchElementException.class);
 		iterator.next();
 	}
 	
