@@ -21,25 +21,19 @@ import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
 import java.util.List;
 
-import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
-	private final ClassAccessor<T> accessor;
-	private final EnumSet<Warning> warningsToSuppress;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public ExamplesChecker(ClassAccessor<T> accessor, EnumSet<Warning> warningsToSuppress, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = accessor.getType();
-		this.accessor = accessor;
-		this.warningsToSuppress = warningsToSuppress;
+	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = type;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}

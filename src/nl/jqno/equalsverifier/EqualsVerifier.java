@@ -409,7 +409,7 @@ public final class EqualsVerifier<T> {
 
 	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
-		Checker examplesChecker = new ExamplesChecker<T>(classAccessor, warningsToSuppress, equalExamples, unequalExamples);
+		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
 		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
 
