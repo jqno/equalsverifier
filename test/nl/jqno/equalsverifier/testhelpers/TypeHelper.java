@@ -66,29 +66,29 @@ public class TypeHelper {
 	public static enum Enum { FIRST, SECOND }
 	
 	public static final class AllTypesContainer {
-		boolean _boolean = false;
-		byte _byte = 0;
-		char _char = '\u0000';
-		double _double = 0.0D;
-		float _float = 0.0F;
-		int _int = 0;
-		long _long = 0L;
-		short _short = 0;
+		public boolean _boolean = false;
+		public byte _byte = 0;
+		public char _char = '\u0000';
+		public double _double = 0.0D;
+		public float _float = 0.0F;
+		public int _int = 0;
+		public long _long = 0L;
+		public short _short = 0;
 
-		Boolean _Boolean = false;
-		Byte _Byte = 0;
-		Character _Char = '\u0000';
-		Double _Double = 0.0D;
-		Float _Float = 0.0F;
-		Integer _Int = 0;
-		Long _Long = 0L;
-		Short _Short = 0;
+		public Boolean _Boolean = false;
+		public Byte _Byte = 0;
+		public Character _Char = '\u0000';
+		public Double _Double = 0.0D;
+		public Float _Float = 0.0F;
+		public Integer _Int = 0;
+		public Long _Long = 0L;
+		public Short _Short = 0;
 		
-		Enum _enum = Enum.FIRST;
-		int[] _array = {1, 2, 3};
-		Object _object = OBJECT;
-		Class<?> _type = Class.class;
-		String _string = "";
+		public Enum _enum = Enum.FIRST;
+		public int[] _array = {1, 2, 3};
+		public Object _object = OBJECT;
+		public Class<?> _type = Class.class;
+		public String _string = "";
 		
 		@Override
 		public boolean equals(Object obj) {

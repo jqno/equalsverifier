@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010,2012 Jan Ouwens
+ * Copyright 2009-2010,2012,2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
@@ -26,6 +28,12 @@ public class ReflexivityTest {
 	public void reflexivity() {
 		EqualsVerifier<ReflexivityBrokenPoint> ev = EqualsVerifier.forClass(ReflexivityBrokenPoint.class);
 		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityBrokenPoint.class.getSimpleName());
+	}
+	
+	@Test
+	public void reflexivityOnMixedUpFieldsInEquals() {
+		EqualsVerifier<ReflexivityBrokenOnMixedUpFieldsInEquals> ev = EqualsVerifier.forClass(ReflexivityBrokenOnMixedUpFieldsInEquals.class);
+		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", ReflexivityBrokenOnMixedUpFieldsInEquals.class.getSimpleName());
 	}
 	
 	@Test
@@ -74,6 +82,42 @@ public class ReflexivityTest {
 				return false;
 			}
 			return super.equals(obj);
+		}
+	}
+	
+	static final class ReflexivityBrokenOnMixedUpFieldsInEquals {
+		private final String one;
+		private final String two;
+		
+		@SuppressWarnings("unused")
+		private final String unused;
+		
+		public ReflexivityBrokenOnMixedUpFieldsInEquals(String one, String two, String unused) {
+			this.one = one;
+			this.two = two;
+			this.unused = unused;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			// EV must also find the error when equals short-circuits.
+			if (obj == this) {
+				return true;
+			}
+			if (!(obj instanceof ReflexivityBrokenOnMixedUpFieldsInEquals)) {
+				return false;
+			}
+			ReflexivityBrokenOnMixedUpFieldsInEquals other = (ReflexivityBrokenOnMixedUpFieldsInEquals)obj;
+			return nullSafeEquals(two, other.one) && nullSafeEquals(two, other.two);
+		}
+		
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = (prime * result) + nullSafeHashCode(one);
+			result = (prime * result) + nullSafeHashCode(two);
+			return result;
 		}
 	}
 	
@@ -142,6 +186,13 @@ public class ReflexivityTest {
 	static class SomethingCompletelyDifferent {}
 	
 	static final class SuperCaller {
+		@SuppressWarnings("unused")
+		private final int unused;
+		
+		public SuperCaller(int unused) {
+			this.unused = unused;
+		}
+		
 		@Override
 		public boolean equals(Object obj) {
 			return super.equals(obj);

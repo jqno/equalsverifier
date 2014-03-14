@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012 Jan Ouwens
+ * Copyright 2010, 2012, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,6 +89,20 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
+	public void isNotPrimitive() {
+		ObjectContainer foo = new ObjectContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertFalse(fieldAccessor.fieldIsPrimitive());
+	}
+	
+	@Test
+	public void isPrimitive() {
+		PrimitiveContainer foo = new PrimitiveContainer();
+		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+		assertTrue(fieldAccessor.fieldIsPrimitive());
+	}
+	
+	@Test
 	public void isNotFinal() {
 		ObjectContainer foo = new ObjectContainer();
 		FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
@@ -169,7 +183,7 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void nullFieldHappyPath() throws NoSuchFieldException {
+	public void defaultFieldOnObjectSetsNull() throws NoSuchFieldException {
 		ObjectContainer foo = new ObjectContainer();
 		foo.field = new Object();
 		nullField(foo, FIELD_NAME);
@@ -177,16 +191,80 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void nullFieldOnPrimitiveIsNoOp() throws NoSuchFieldException {
-		PrimitiveContainer foo = new PrimitiveContainer();
-		foo.field = 10;
-		nullField(foo, FIELD_NAME);
-		assertEquals(10, foo.field);
+	public void defaultFieldOnArraySetsNull() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._array = new int[] { 1, 2, 3 };
+		nullField(foo, "_array");
+		assertNull(foo._array);
+	}
+	
+	@Test
+	public void defaultFieldOnBooleanSetsFalse() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._boolean = true;
+		nullField(foo, "_boolean");
+		assertEquals(false, foo._boolean);
+	}
+	
+	@Test
+	public void defaultFieldOnByteSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._byte = 10;
+		nullField(foo, "_byte");
+		assertEquals(0, foo._byte);
+	}
+	
+	@Test
+	public void defaultFieldOnCharSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._char = 'a';
+		nullField(foo, "_char");
+		assertEquals('\u0000', foo._char);
+	}
+	
+	@Test
+	public void defaultFieldOnDoubleSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._double = 1.1;
+		nullField(foo, "_double");
+		assertEquals(0.0, foo._double, 0.0000001);
+	}
+	
+	@Test
+	public void defaultFieldOnFloatSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._float = 1.1f;
+		nullField(foo, "_float");
+		assertEquals(0.0f, foo._float, 0.0000001);
+	}
+	
+	@Test
+	public void defaultFieldOnIntSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._int = 10;
+		nullField(foo, "_int");
+		assertEquals(0, foo._int);
+	}
+	
+	@Test
+	public void defaultFieldOnLongSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._long = 10;
+		nullField(foo, "_long");
+		assertEquals(0, foo._long);
+	}
+	
+	@Test
+	public void defaultFieldOnShortSetsZero() throws NoSuchFieldException {
+		AllTypesContainer foo = new AllTypesContainer();
+		foo._short = 10;
+		nullField(foo, "_short");
+		assertEquals(0, foo._short);
 	}
 	
 	@SuppressWarnings("static-access")
 	@Test
-	public void nullFieldOnPrimitiveStaticFinalIsNoOp() throws NoSuchFieldException {
+	public void defaultFieldOnPrimitiveStaticFinalIsNoOp() throws NoSuchFieldException {
 		StaticFinalContainer foo = new StaticFinalContainer();
 		nullField(foo, "CONST");
 		assertEquals(42, foo.CONST);
@@ -194,7 +272,7 @@ public class FieldAccessorTest {
 	
 	@SuppressWarnings("static-access")
 	@Test
-	public void nullFieldOnObjectStaticFinalIsNoOp() throws NoSuchFieldException {
+	public void defaultFieldOnObjectStaticFinalIsNoOp() throws NoSuchFieldException {
 		StaticFinalContainer foo = new StaticFinalContainer();
 		Object original = foo.OBJECT;
 		nullField(foo, "OBJECT");
@@ -202,7 +280,7 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void nullFieldOnSyntheticIsNoOp() throws NoSuchFieldException {
+	public void defaultFieldOnSyntheticIsNoOp() throws NoSuchFieldException {
 		Outer outer = new Outer();
 		Inner inner = outer.new Inner();
 		String fieldName = getSyntheticFieldName(inner, "this$");
@@ -211,7 +289,7 @@ public class FieldAccessorTest {
 	}
 	
 	@Test
-	public void nullPrivateField() throws NoSuchFieldException {
+	public void defaultPrivateField() throws NoSuchFieldException {
 		PrivateObjectContainer foo = new PrivateObjectContainer();
 		nullField(foo, FIELD_NAME);
 		assertNull(foo.get());
@@ -370,7 +448,7 @@ public class FieldAccessorTest {
 	}
 
 	private void nullField(Object object, String fieldName) {
-		getAccessorFor(object, fieldName).nullField();
+		getAccessorFor(object, fieldName).defaultField();
 	}
 	
 	private void copyField(Object to, Object from, String fieldName) {

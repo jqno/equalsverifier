@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2012,2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,13 @@ public class FieldAccessor {
 	}
 	
 	/**
+	 * Returns whether the field is of a primitive type.
+	 */
+	public boolean fieldIsPrimitive() {
+		return getFieldType().isPrimitive();
+	}
+	
+	/**
 	 * Returns whether the field is marked with the final modifier.
 	 */
 	public boolean fieldIsFinal() {
@@ -121,8 +128,8 @@ public class FieldAccessor {
 	 * 
 	 * @throws ReflectionException If the operation fails.
 	 */
-	public void nullField() {
-		modify(new FieldNuller());
+	public void defaultField() {
+		modify(new FieldDefaulter());
 	}
 	
 	/**
@@ -205,10 +212,35 @@ public class FieldAccessor {
 		}
 	}
 	
-	private class FieldNuller implements FieldModifier {
+	private class FieldDefaulter implements FieldModifier {
 		@Override
 		public void modify() throws IllegalAccessException {
-			if (!field.getType().isPrimitive()) {
+			Class<?> type = field.getType();
+			if (type == boolean.class){
+				field.setBoolean(object, false);
+			}
+			else if (type == byte.class) {
+				field.setByte(object, (byte)0);
+			}
+			else if (type == char.class) {
+				field.setChar(object, '\u0000');
+			}
+			else if (type == double.class) {
+				field.setDouble(object, 0.0);
+			}
+			else if (type == float.class) {
+				field.setFloat(object, 0.0f);
+			}
+			else if (type == int.class){
+				field.setInt(object, 0);
+			}
+			else if (type == long.class) {
+				field.setLong(object, 0);
+			}
+			else if (type == short.class) {
+				field.setShort(object, (short)0);
+			}
+			else {
 				field.set(object, null);
 			}
 		}

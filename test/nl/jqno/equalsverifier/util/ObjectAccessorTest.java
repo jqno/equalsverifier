@@ -41,7 +41,7 @@ public class ObjectAccessorTest {
 		ObjectAccessor<PointContainer> accessor = ObjectAccessor.of(foo);
 		FieldAccessor fieldAccessor = accessor.fieldAccessorFor(field);
 		
-		fieldAccessor.nullField();
+		fieldAccessor.defaultField();
 		assertNull(foo.getPoint());
 	}
 }

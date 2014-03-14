@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Jan Ouwens
+ * Copyright 2009-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@ class FieldsChecker<T> implements Checker {
 		if (classAccessor.declaresEquals()) {
 			inspector.check(new ArrayFieldCheck());
 			inspector.check(new FloatAndDoubleFieldCheck());
+			inspector.check(new ReflexivityFieldCheck());
 		}
 		
 		if (!ignoreMutability()) {
@@ -74,57 +75,6 @@ class FieldsChecker<T> implements Checker {
 		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
-	}
-	
-	private class ArrayFieldCheck implements FieldCheck {
-		@Override
-		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			Class<?> arrayType = referenceAccessor.getFieldType();
-			if (!arrayType.isArray()) {
-				return;
-			}
-			
-			String fieldName = referenceAccessor.getFieldName();
-			Object reference = referenceAccessor.getObject();
-			Object changed = changedAccessor.getObject();
-
-			if (arrayType == Object[].class) {
-				insertIntArray(referenceAccessor, changedAccessor);
-				assertDeep(fieldName, reference, changed, "Object");
-			}
-			else if (arrayType.getComponentType().isArray()) {
-				changeFields(referenceAccessor, changedAccessor);
-				assertDeep(fieldName, reference, changed, "Multidimensional");
-			}
-			else {
-				changeFields(referenceAccessor, changedAccessor);
-				assertArray(fieldName, reference, changed);
-			}
-		}
-
-		private void insertIntArray(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			Array.set(referenceAccessor.get(), 0, new int[]{0});
-			Array.set(changedAccessor.get(), 0, new int[]{0});
-		}
-		
-		private void changeFields(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			referenceAccessor.changeField(prefabValues);
-			changedAccessor.changeField(prefabValues);
-		}
-
-		private void assertDeep(String fieldName, Object reference, Object changed, String type) {
-			assertEquals(Formatter.of("%% array: == or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", type, fieldName),
-					reference, changed);
-			assertEquals(Formatter.of("%% array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", type, fieldName),
-					reference.hashCode(), changed.hashCode());
-		}
-		
-		private void assertArray(String fieldName, Object reference, Object changed) {
-			assertEquals(Formatter.of("Array: == used instead of Arrays.equals() for field %%.", fieldName),
-					reference, changed);
-			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
-					reference.hashCode(), changed.hashCode());
-		}
 	}
 	
 	private class TransitivityFieldCheck implements FieldCheck {
@@ -204,6 +154,57 @@ class FieldsChecker<T> implements Checker {
 		}
 	}
 	
+	private class ArrayFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Class<?> arrayType = referenceAccessor.getFieldType();
+			if (!arrayType.isArray()) {
+				return;
+			}
+			
+			String fieldName = referenceAccessor.getFieldName();
+			Object reference = referenceAccessor.getObject();
+			Object changed = changedAccessor.getObject();
+
+			if (arrayType == Object[].class) {
+				insertIntArray(referenceAccessor, changedAccessor);
+				assertDeep(fieldName, reference, changed, "Object");
+			}
+			else if (arrayType.getComponentType().isArray()) {
+				changeFields(referenceAccessor, changedAccessor);
+				assertDeep(fieldName, reference, changed, "Multidimensional");
+			}
+			else {
+				changeFields(referenceAccessor, changedAccessor);
+				assertArray(fieldName, reference, changed);
+			}
+		}
+
+		private void insertIntArray(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Array.set(referenceAccessor.get(), 0, new int[]{0});
+			Array.set(changedAccessor.get(), 0, new int[]{0});
+		}
+		
+		private void changeFields(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			referenceAccessor.changeField(prefabValues);
+			changedAccessor.changeField(prefabValues);
+		}
+
+		private void assertDeep(String fieldName, Object reference, Object changed, String type) {
+			assertEquals(Formatter.of("%% array: == or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", type, fieldName),
+					reference, changed);
+			assertEquals(Formatter.of("%% array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", type, fieldName),
+					reference.hashCode(), changed.hashCode());
+		}
+		
+		private void assertArray(String fieldName, Object reference, Object changed) {
+			assertEquals(Formatter.of("Array: == used instead of Arrays.equals() for field %%.", fieldName),
+					reference, changed);
+			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
+					reference.hashCode(), changed.hashCode());
+		}
+	}
+	
 	private class FloatAndDoubleFieldCheck implements FieldCheck {
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
@@ -228,6 +229,43 @@ class FieldsChecker<T> implements Checker {
 		
 		private boolean isDouble(Class<?> type) {
 			return type == double.class || type == Double.class;
+		}
+	}
+	
+	private class ReflexivityFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
+				return;
+			}
+			
+			referenceAccessor.changeField(prefabValues);
+			changedAccessor.changeField(prefabValues);
+			checkReflexivityFor(referenceAccessor, changedAccessor);
+			
+			boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
+			boolean fieldIsNonNull = classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.NONNULL);
+			boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS);
+			if (fieldIsPrimitive || !ignoreNull) {
+				referenceAccessor.defaultField();
+				changedAccessor.defaultField();
+				checkReflexivityFor(referenceAccessor, changedAccessor);
+			}
+		}
+		
+		private void checkReflexivityFor(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object left = referenceAccessor.getObject();
+			Object right = changedAccessor.getObject();
+			
+			if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
+				assertFalse(Formatter.of("Unnecessary suppression: %%. Two identical copies are equal.", Warning.IDENTICAL_COPY.toString()),
+						left.equals(right));
+			}
+			else {
+				Formatter f = Formatter.of("Reflexivity: object does not equal an identical copy of itself:\n  %%" +
+						"\nIf this is intentional, consider suppressing Warning.%%", left, Warning.IDENTICAL_COPY.toString());
+				assertEquals(f, left, right);
+			}
 		}
 	}
 	

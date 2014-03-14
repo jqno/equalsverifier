@@ -58,7 +58,7 @@ class NullChecker<T> implements Checker {
 			final Object reference = referenceAccessor.getObject();
 			final Object changed = changedAccessor.getObject();
 			
-			changedAccessor.nullField();
+			changedAccessor.defaultField();
 			
 			handle("equals", field, new Runnable() {
 				@Override
@@ -81,7 +81,7 @@ class NullChecker<T> implements Checker {
 				}
 			});
 			
-			referenceAccessor.nullField();
+			referenceAccessor.defaultField();
 		}
 		
 		private void handle(String testedMethodName, Field field, Runnable r) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Jan Ouwens
+ * Copyright 2009-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,42 +107,6 @@ class ExamplesChecker<T> implements Checker {
 	private void checkReflexivity(T reference) {
 		assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
 				reference, reference);
-		
-		if (!accessor.isEqualsInheritedFromObject()) {
-			checkReflexivityForNonDefaultValues(reference);
-			checkReflexivityForDefaultValues();
-		}
-	}
-
-	private void checkReflexivityForNonDefaultValues(T reference) {
-		T identicalCopy = ObjectAccessor.of(reference).copy();
-		checkReflexivity(reference, identicalCopy);
-	}
-
-	private void checkReflexivityForDefaultValues() {
-		if (!warningsToSuppress.contains(Warning.NULL_FIELDS)) {
-			T one = accessor.getDefaultValuesObject();
-			T two = ObjectAccessor.of(one).copy();
-			checkReflexivity(one, two);
-		}
-	}
-
-	private void checkReflexivity(T reference, T identicalCopy) {
-		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
-			return;
-		}
-		
-		String identicalCopyName = Warning.IDENTICAL_COPY.toString();
-		
-		if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-			assertFalse(Formatter.of("Unnecessary suppression: %%. Two identical copies are equal.", identicalCopyName),
-					reference.equals(identicalCopy));
-		}
-		else {
-			Formatter f = Formatter.of("Reflexivity: object does not equal an identical copy of itself:\n  %%" +
-					"\nIf this is intentional, consider suppressing Warning.%%", reference, identicalCopyName);
-			assertEquals(f, reference, identicalCopy);
-		}
 	}
 
 	private void checkSymmetryEquals(T reference, T copy) {
