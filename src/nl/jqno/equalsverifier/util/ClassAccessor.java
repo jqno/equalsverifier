@@ -235,7 +235,7 @@ public class ClassAccessor<T> {
 	public T getDefaultValuesObject() {
 		T result = instantiator.instantiate();
 		for (Field field : FieldIterable.of(type)) {
-			if (annotationAccessor.fieldHas(field.getName(), SupportedAnnotations.NONNULL)) {
+			if (fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
 				FieldAccessor accessor = new FieldAccessor(result, field);
 				accessor.changeField(prefabValues);
 			}

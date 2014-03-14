@@ -52,7 +52,7 @@ public class VersionedEntityTest {
 			if (id == 0L) {
 				return super.hashCode();
 			}
-	        return (int)(id ^ (id >>> 32));	
+			return (int)(id ^ (id >>> 32));
 		}
 
 		@Override
