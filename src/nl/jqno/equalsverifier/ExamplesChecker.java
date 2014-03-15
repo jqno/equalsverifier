@@ -47,7 +47,6 @@ class ExamplesChecker<T> implements Checker {
 			for (int j = i + 1; j < equalExamples.size(); j++) {
 				T other = equalExamples.get(j);
 				checkEqualButNotIdentical(reference, other);
-				checkSymmetryEquals(reference, other);
 				checkHashCode(reference, other);
 			}
 			
@@ -80,7 +79,6 @@ class ExamplesChecker<T> implements Checker {
 		final T copy = ObjectAccessor.of(reference, type).copy();
 		
 		checkReflexivity(reference);
-		checkSymmetryEquals(reference, copy);
 		checkNonNullity(reference);
 		checkTypeCheck(reference);
 		checkHashCode(reference, copy);
@@ -88,7 +86,6 @@ class ExamplesChecker<T> implements Checker {
 
 	private void checkDouble(T reference, T other) {
 		checkNotEqual(reference, other);
-		checkSymmetryNotEquals(reference, other);
 	}
 	
 	private void checkNotEqual(T reference, T other) {
@@ -101,16 +98,6 @@ class ExamplesChecker<T> implements Checker {
 	private void checkReflexivity(T reference) {
 		assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
 				reference, reference);
-	}
-
-	private void checkSymmetryEquals(T reference, T copy) {
-		assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", reference, copy),
-				reference.equals(copy) == copy.equals(reference));
-	}
-
-	private void checkSymmetryNotEquals(T reference, T other) {
-		assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", reference, other),
-				reference.equals(other) == other.equals(reference));
 	}
 
 	private void checkNonNullity(T reference) {

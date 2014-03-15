@@ -53,9 +53,6 @@ class FieldsChecker<T> implements Checker {
 	public void check() {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
 		
-		inspector.check(new TransitivityFieldCheck());
-		inspector.check(new SignificantFieldCheck());
-		
 		if (classAccessor.declaresEquals()) {
 			inspector.check(new ArrayFieldCheck());
 			inspector.check(new FloatAndDoubleFieldCheck());
@@ -69,12 +66,36 @@ class FieldsChecker<T> implements Checker {
 		if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
 			inspector.check(new TransientFieldsCheck());
 		}
+		
+		inspector.check(new SignificantFieldCheck());
+		inspector.check(new SymmetryFieldCheck());
+		inspector.check(new TransitivityFieldCheck());
 	}
 
 	private boolean ignoreMutability() {
 		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
+	}
+	
+	private class SymmetryFieldCheck implements FieldCheck {
+		@Override
+		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			checkSymmetry(referenceAccessor, changedAccessor);
+			
+			changedAccessor.changeField(prefabValues);
+			checkSymmetry(referenceAccessor, changedAccessor);
+			
+			referenceAccessor.changeField(prefabValues);
+			checkSymmetry(referenceAccessor, changedAccessor);
+		}
+		
+		private void checkSymmetry(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			Object left = referenceAccessor.getObject();
+			Object right = changedAccessor.getObject();
+			assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", left, right),
+					left.equals(right) == right.equals(left));
+		}
 	}
 	
 	private class TransitivityFieldCheck implements FieldCheck {

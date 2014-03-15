@@ -30,7 +30,7 @@ public class SymmetryTest {
 		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryBrokenPoint.class.getSimpleName());
 	}
 	
-	abstract static class SymmetryBrokenPoint {
+	static final class SymmetryBrokenPoint {
 		public final int x;
 		public final int y;
 
