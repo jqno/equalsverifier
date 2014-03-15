@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Jan Ouwens
+ * Copyright 2009-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -382,6 +382,10 @@ public final class EqualsVerifier<T> {
 	}
 
 	private void performVerification() {
+		if (type.isEnum()) {
+			return;
+		}
+		
 		ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
 		verifyWithoutExamples(classAccessor);
 		ensureUnequalExamples(classAccessor);
