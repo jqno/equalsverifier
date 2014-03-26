@@ -2,6 +2,7 @@ language: java
 before_install: ant init-ivy
 install: ant resolve-dependencies
 jdk:
+  - oraclejdk8
   - openjdk7
   - oraclejdk7
   - openjdk6
