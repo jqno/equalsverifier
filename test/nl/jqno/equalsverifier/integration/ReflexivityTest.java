@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
@@ -25,54 +27,60 @@ import org.junit.Test;
 
 public class ReflexivityTest {
 	@Test
-	public void reflexivity() {
-		EqualsVerifier<ReflexivityBrokenPoint> ev = EqualsVerifier.forClass(ReflexivityBrokenPoint.class);
-		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityBrokenPoint.class.getSimpleName());
+	public void fail_whenReferencesAreNotEqual() {
+		EqualsVerifier<ReflexivityIntentionallyBroken> ev = EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class);
+		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityIntentionallyBroken.class.getSimpleName());
 	}
 	
 	@Test
-	public void reflexivityOnMixedUpFieldsInEquals() {
-		EqualsVerifier<ReflexivityBrokenOnMixedUpFieldsInEquals> ev = EqualsVerifier.forClass(ReflexivityBrokenOnMixedUpFieldsInEquals.class);
-		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", ReflexivityBrokenOnMixedUpFieldsInEquals.class.getSimpleName());
+	public void fail_whenTheWrongFieldsAreComparedInEquals() {
+		EqualsVerifier<FieldsMixedUpInEquals> ev = EqualsVerifier.forClass(FieldsMixedUpInEquals.class);
+		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", FieldsMixedUpInEquals.class.getSimpleName());
 	}
 	
 	@Test
-	public void reflexivityOnNullFields() {
+	public void fail_whenReferencesAreNotEqualWhenFieldsAreNull() {
 		EqualsVerifier<ReflexivityBrokenOnNullFields> ev = EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class);
 		assertFailure(ev, "Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
+	}
 		
+	@Test
+	public void succeed_whenReferencesAreNotEqualWhenFieldsAreNull_butWarningIsSuppressed() {
 		EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class)
 				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
 	@Test
-	public void wrongCast() {
-		EqualsVerifier<WrongCast> ev = EqualsVerifier.forClass(WrongCast.class);
-		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", WrongCast.class.getSimpleName());
+	public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
+		EqualsVerifier<WrongInstanceofCheck> ev = EqualsVerifier.forClass(WrongInstanceofCheck.class);
+		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", WrongInstanceofCheck.class.getSimpleName());
 	}
 	
 	@Test
-	public void suppressIdenticalCopy() {
-		EqualsVerifier<SuperCaller> ev = EqualsVerifier.forClass(SuperCaller.class);
+	public void fail_whenObjectsAreIdentical_butEqualsReturnsFalse() {
+		EqualsVerifier<SuperCallerWithUnusedField> ev = EqualsVerifier.forClass(SuperCallerWithUnusedField.class);
 		assertFailure(ev, "Reflexivity", "identical copy");
-		
-		EqualsVerifier.forClass(SuperCaller.class)
+	}
+	
+	@Test
+	public void succeed_whenObjectsAreIdentical_andEqualsReturnsFalse_butWarningIsSuppressed() {
+		EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
 				.suppress(Warning.IDENTICAL_COPY)
 				.verify();
 	}
 	
 	@Test
-	public void failOnIdenticalCopy() {
+	public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY);
 		assertFailure(ev, "Unnecessary suppression", "IDENTICAL_COPY");
 	}
 	
-	static final class ReflexivityBrokenPoint extends Point {
+	static final class ReflexivityIntentionallyBroken extends Point {
 		// Instantiator.scramble will flip this boolean.
 		private boolean broken = false;
 		
-		public ReflexivityBrokenPoint(int x, int y) {
+		public ReflexivityIntentionallyBroken(int x, int y) {
 			super(x, y);
 		}
 		
@@ -85,14 +93,14 @@ public class ReflexivityTest {
 		}
 	}
 	
-	static final class ReflexivityBrokenOnMixedUpFieldsInEquals {
+	static final class FieldsMixedUpInEquals {
 		private final String one;
 		private final String two;
 		
 		@SuppressWarnings("unused")
 		private final String unused;
 		
-		public ReflexivityBrokenOnMixedUpFieldsInEquals(String one, String two, String unused) {
+		public FieldsMixedUpInEquals(String one, String two, String unused) {
 			this.one = one;
 			this.two = two;
 			this.unused = unused;
@@ -104,10 +112,10 @@ public class ReflexivityTest {
 			if (obj == this) {
 				return true;
 			}
-			if (!(obj instanceof ReflexivityBrokenOnMixedUpFieldsInEquals)) {
+			if (!(obj instanceof FieldsMixedUpInEquals)) {
 				return false;
 			}
-			ReflexivityBrokenOnMixedUpFieldsInEquals other = (ReflexivityBrokenOnMixedUpFieldsInEquals)obj;
+			FieldsMixedUpInEquals other = (FieldsMixedUpInEquals)obj;
 			return nullSafeEquals(two, other.one) && nullSafeEquals(two, other.two);
 		}
 		
@@ -158,10 +166,10 @@ public class ReflexivityTest {
 		}
 	}
 	
-	static final class WrongCast {
+	static final class WrongInstanceofCheck {
 		private final int foo;
 		
-		public WrongCast(int foo) {
+		public WrongInstanceofCheck(int foo) {
 			this.foo = foo;
 		}
 		
@@ -173,7 +181,7 @@ public class ReflexivityTest {
 			if (!(obj instanceof SomethingCompletelyDifferent)) {
 				return false;
 			}
-			WrongCast other = (WrongCast)obj;
+			WrongInstanceofCheck other = (WrongInstanceofCheck)obj;
 			return foo == other.foo;
 		}
 		
@@ -185,11 +193,11 @@ public class ReflexivityTest {
 	
 	static class SomethingCompletelyDifferent {}
 	
-	static final class SuperCaller {
+	static final class SuperCallerWithUnusedField {
 		@SuppressWarnings("unused")
 		private final int unused;
 		
-		public SuperCaller(int unused) {
+		public SuperCallerWithUnusedField(int unused) {
 			this.unused = unused;
 		}
 		

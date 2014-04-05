@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010,2012 Jan Ouwens
+ * Copyright 2009-2010,2012,2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
@@ -25,16 +27,16 @@ public class SymmetryTest {
 	private static final String AND = "and";
 
 	@Test
-	public void symmetryNotEquals() {
-		EqualsVerifier<SymmetryBrokenPoint> ev = EqualsVerifier.forClass(SymmetryBrokenPoint.class);
-		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryBrokenPoint.class.getSimpleName());
+	public void fail_whenEqualsIsNotSymmetrical() {
+		EqualsVerifier<SymmetryIntentionallyBroken> ev = EqualsVerifier.forClass(SymmetryIntentionallyBroken.class);
+		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
 	}
 	
-	static final class SymmetryBrokenPoint {
-		public final int x;
-		public final int y;
+	static final class SymmetryIntentionallyBroken {
+		private final int x;
+		private final int y;
 
-		public SymmetryBrokenPoint(int x, int y) {
+		public SymmetryIntentionallyBroken(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -51,10 +53,10 @@ public class SymmetryTest {
 		}
 
 		public boolean goodEquals(Object obj) {
-			if (!(obj instanceof SymmetryBrokenPoint)) {
+			if (!(obj instanceof SymmetryIntentionallyBroken)) {
 				return false;
 			}
-			SymmetryBrokenPoint p = (SymmetryBrokenPoint)obj;
+			SymmetryIntentionallyBroken p = (SymmetryIntentionallyBroken)obj;
 			return p.x == x && p.y == y;
 		}
 		
