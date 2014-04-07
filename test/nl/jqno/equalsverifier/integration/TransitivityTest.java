@@ -18,9 +18,9 @@ package nl.jqno.equalsverifier.integration;
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class TransitivityTest {
@@ -82,10 +82,12 @@ public class TransitivityTest {
 		assertFailure(ev, "Transitivity");
 	}
 	
+	@Ignore
 	@Test
 	public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
 		// TODO: This class is not transitive, and it should fail. See issue 78.
-		EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class).verify();
+		EqualsVerifier<AtLeast2FieldsAreEqual> ev = EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class);
+		assertFailure(ev, "Transitivity");
 	}
 	
 	static final class TwoFieldsUsingAND {
