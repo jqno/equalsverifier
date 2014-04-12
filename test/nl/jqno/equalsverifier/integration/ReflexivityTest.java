@@ -39,13 +39,13 @@ public class ReflexivityTest {
 	}
 	
 	@Test
-	public void fail_whenReferencesAreNotEqualWhenFieldsAreNull() {
+	public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
 		EqualsVerifier<ReflexivityBrokenOnNullFields> ev = EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class);
 		assertFailure(ev, "Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
 	}
 		
 	@Test
-	public void succeed_whenReferencesAreNotEqualWhenFieldsAreNull_butWarningIsSuppressed() {
+	public void succeed_whenReferencesAreNotEqual_givenFieldsThatAreNullAndWarningIsSuppressed() {
 		EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class)
 				.suppress(Warning.NULL_FIELDS)
 				.verify();
@@ -58,13 +58,13 @@ public class ReflexivityTest {
 	}
 	
 	@Test
-	public void fail_whenObjectsAreIdentical_butEqualsReturnsFalse() {
+	public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
 		EqualsVerifier<SuperCallerWithUnusedField> ev = EqualsVerifier.forClass(SuperCallerWithUnusedField.class);
 		assertFailure(ev, "Reflexivity", "identical copy");
 	}
 	
 	@Test
-	public void succeed_whenObjectsAreIdentical_andEqualsReturnsFalse_butWarningIsSuppressed() {
+	public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
 		EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
 				.suppress(Warning.IDENTICAL_COPY)
 				.verify();

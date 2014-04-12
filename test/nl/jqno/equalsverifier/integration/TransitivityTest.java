@@ -47,7 +47,7 @@ public class TransitivityTest {
 	}
 	
 	@Test
-	public void fail_whenUsingRelaxedEqualExamples_andEqualityForThreeFieldsIsCombinedUsingOR() {
+	public void fail_whenEqualityForThreeFieldsIsCombinedUsingOR_givenRelaxedEqualExamples() {
 		ThreeFieldsUsingOR one = new ThreeFieldsUsingOR("a", "1", "alpha");
 		ThreeFieldsUsingOR two = new ThreeFieldsUsingOR("b", "1", "alpha");
 		ThreeFieldsUsingOR three = new ThreeFieldsUsingOR("c", "1", "alpha");
