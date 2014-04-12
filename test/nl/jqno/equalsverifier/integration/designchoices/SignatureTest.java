@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.designchoices;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
@@ -25,37 +27,37 @@ public class SignatureTest {
 	private static final String SIGNATURE = "public boolean equals(Object obj)";
 
 	@Test
-	public void overloadedWithOwnTypeInParameter() {
-		EqualsVerifier<OverloadedWithOwnTypeInParameter> ev = EqualsVerifier.forClass(OverloadedWithOwnTypeInParameter.class);
-		assertOverloadFailure(ev, "Parameter should be an Object, not " + OverloadedWithOwnTypeInParameter.class.getSimpleName());
+	public void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
+		EqualsVerifier<OverloadedWithOwnType> ev = EqualsVerifier.forClass(OverloadedWithOwnType.class);
+		assertOverloadFailure(ev, "Parameter should be an Object, not " + OverloadedWithOwnType.class.getSimpleName());
 	}
 	
 	@Test
-	public void overloadedWithTwoParameters() {
+	public void fail_whenEqualsIsOverloadedWithTwoParameters() {
 		EqualsVerifier<OverloadedWithTwoParameters> ev = EqualsVerifier.forClass(OverloadedWithTwoParameters.class);
 		assertOverloadFailure(ev, "Too many parameters");
 	}
 	
 	@Test
-	public void overloadedWithNoParameter() {
+	public void fail_whenEqualsIsOverloadedWithNoParameter() {
 		EqualsVerifier<OverloadedWithNoParameter> ev = EqualsVerifier.forClass(OverloadedWithNoParameter.class);
 		assertOverloadFailure(ev, "No parameter");
 	}
 	
 	@Test
-	public void overloadedWithRandomParameters() {
-		EqualsVerifier<OverloadedWithRandomParameter> ev = EqualsVerifier.forClass(OverloadedWithRandomParameter.class);
+	public void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
+		EqualsVerifier<OverloadedWithUnrelatedParameter> ev = EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class);
 		assertOverloadFailure(ev, "Parameter should be an Object");
 	}
 	
 	@Test
-	public void overloadedAndOverridden() {
+	public void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
 		EqualsVerifier<OverloadedAndOverridden> ev = EqualsVerifier.forClass(OverloadedAndOverridden.class);
 		assertOverloadFailure(ev, "More than one equals method found");
 	}
 	
 	@Test
-	public void noEqualsMethodShouldJustWork() {
+	public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded() {
 		EqualsVerifier.forClass(NoEqualsMethod.class).verify();
 	}
 	
@@ -63,14 +65,14 @@ public class SignatureTest {
 		assertFailure(ev, OVERLOADED, SIGNATURE_SHOULD_BE, SIGNATURE, extraMessage);
 	}
 	
-	static final class OverloadedWithOwnTypeInParameter {
+	static final class OverloadedWithOwnType {
 		private final int i;
 		
-		OverloadedWithOwnTypeInParameter(int i) {
+		OverloadedWithOwnType(int i) {
 			this.i = i;
 		}
 		
-		public boolean equals(OverloadedWithOwnTypeInParameter obj) {
+		public boolean equals(OverloadedWithOwnType obj) {
 			if (obj == null) {
 				return false;
 			}
@@ -117,10 +119,10 @@ public class SignatureTest {
 		}
 	}
 	
-	static final class OverloadedWithRandomParameter {
+	static final class OverloadedWithUnrelatedParameter {
 		private final int i;
 		
-		OverloadedWithRandomParameter(int i) {
+		OverloadedWithUnrelatedParameter(int i) {
 			this.i = i;
 		}
 		
