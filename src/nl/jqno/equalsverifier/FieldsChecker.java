@@ -161,8 +161,8 @@ class FieldsChecker<T> implements Checker {
 						hashCodeChanged);
 			}
 			
-			boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
+				boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
 				assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName),
 						!thisFieldShouldBeUsed || equalsChanged);
 				assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
