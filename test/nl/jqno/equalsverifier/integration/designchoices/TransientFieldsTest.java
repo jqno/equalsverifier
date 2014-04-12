@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.designchoices;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 import org.junit.Test;
 
@@ -21,13 +24,13 @@ import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
 public class TransientFieldsTest {
 	@Test
-	public void transientFieldsDontCount() {
+	public void fail_whenTransientFieldsAreUsedInEquals() {
 		EqualsVerifier<TransientFields> ev = EqualsVerifier.forClass(TransientFields.class);
 		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
 	}
 	
 	@Test
-	public void suppressTransienceWarning() {
+	public void succeed_whenTransientFieldsAreUsedInEquals_givenWarningsAreSuppressed() {
 		EqualsVerifier.forClass(TransientFields.class)
 				.suppress(Warning.TRANSIENT_FIELDS)
 				.verify();

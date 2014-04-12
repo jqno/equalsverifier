@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,29 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.designchoices;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
 public class SyntheticFieldsTest {
 	@Test
-	public void nonstaticInnerClassHasSyntheticReferenceToOuterDirect() {
+	public void succeed_whenClassHasASyntheticField() {
 		EqualsVerifier.forClass(Outer.class).verify();
 	}
 	
 	@Test
-	public void nonstaticInnerClassHasSyntheticReferenceToOuterIndirect() {
+	public void succeed_whenClassHasAFieldThatHasASyntheticField() {
 		EqualsVerifier.forClass(OuterContainer.class).verify();
 	}
 	
-	
-	public final class Outer {
+	/* non-static */ final class Outer {
 		private final Inner inner;
 		
-		private class Inner {
+		private /* non-static */ final class Inner {
 			@SuppressWarnings("unused")
 			int foo;
 		}
@@ -59,7 +60,7 @@ public class SyntheticFieldsTest {
 		}
 	}
 	
-	public final class OuterContainer {
+	/* non-static */ final class OuterContainer {
 		private final Outer outer;
 		
 		public OuterContainer() {
