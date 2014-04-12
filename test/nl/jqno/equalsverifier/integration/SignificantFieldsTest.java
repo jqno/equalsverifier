@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2012-2013 Jan Ouwens
+ * Copyright 2009-2010, 2012-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
@@ -28,126 +29,141 @@ import org.junit.rules.ExpectedException;
 public class SignificantFieldsTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
+	
 	@Test
-	public void extraFieldInEquals() {
-		EqualsVerifier<ExtraFieldInEqualsPoint> ev = EqualsVerifier.forClass(ExtraFieldInEqualsPoint.class);
+	public void fail_whenEqualsUsesAFieldAndHashCodeDoesnt() {
+		EqualsVerifier<ExtraFieldInEquals> ev = EqualsVerifier.forClass(ExtraFieldInEquals.class);
 		assertFailure(ev, "Significant fields", "equals relies on", "yNotUsed", "but hashCode does not");
 	}
 	
 	@Test
-	public void extraFieldInHashCode() {
-		EqualsVerifier<ExtraFieldInHashCodePoint> ev = EqualsVerifier.forClass(ExtraFieldInHashCodePoint.class);
+	public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt() {
+		EqualsVerifier<ExtraFieldInHashCode> ev = EqualsVerifier.forClass(ExtraFieldInHashCode.class);
 		assertFailure(ev, "Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
 	}
 	
 	@Test
-	public void allFieldsUsed() {
-		EqualsVerifier.forClass(FinalPoint.class).allFieldsShouldBeUsed().verify();
+	public void succeed_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier.forClass(FinalPoint.class)
+				.allFieldsShouldBeUsed()
+				.verify();
 	}
 	
 	@Test
-	public void oneFieldUnused() {
-		EqualsVerifier.forClass(OneFieldUnusedColorPoint.class).verify();
-		
-		EqualsVerifier<OneFieldUnusedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedColorPoint.class);
+	public void succeed_whenAFieldIsUnused() {
+		EqualsVerifier.forClass(OneFieldUnused.class).verify();
+	}
+	
+	@Test
+	public void fail_whenAFieldIsUnused_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier<OneFieldUnused> ev = EqualsVerifier.forClass(OneFieldUnused.class);
 		ev.allFieldsShouldBeUsed();
 		assertFailure(ev, "Significant fields", "equals does not use", "colorNotUsed");
 	}
 	
 	@Test
-	public void oneTransientFieldUnused() {
-		EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class).allFieldsShouldBeUsed().verify();
+	public void succeed_whenATransientFieldIsUnused_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class)
+				.allFieldsShouldBeUsed()
+				.verify();
 	}
 	
 	@Test
-	public void oneStaticFieldUnused() {
-		EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class).allFieldsShouldBeUsed().verify();
+	public void succeed_whenAStaticFieldIsUnused_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class)
+				.allFieldsShouldBeUsed()
+				.verify();
 	}
 	
 	@Test
-	public void oneFieldUnusedExtended() {
-		EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class).verify();
-		
-		EqualsVerifier<OneFieldUnusedExtendedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedExtendedColorPoint.class);
+	public void succeed_whenAFieldIsUnusedInASubclass() {
+		EqualsVerifier.forClass(OneFieldUnusedExtended.class).verify();
+	}
+	
+	@Test
+	public void fail_whenAFieldIsUnusedInASubclass_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier<OneFieldUnusedExtended> ev = EqualsVerifier.forClass(OneFieldUnusedExtended.class);
 		ev.allFieldsShouldBeUsed();
 		assertFailure(ev, "Significant fields", "equals does not use", "colorNotUsed");
 	}
 	
 	@Test
-	public void noFieldsUsed() {
+	public void succeed_whenNoFieldsAreUsed() {
 		EqualsVerifier.forClass(NoFieldsUsed.class).verify();
-		
+	}
+	
+	@Test
+	public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsed() {
 		EqualsVerifier<NoFieldsUsed> ev = EqualsVerifier.forClass(NoFieldsUsed.class);
 		ev.allFieldsShouldBeUsed();
 		assertFailure(ev, "Significant fields", "all fields should be used", "NoFieldsUsed", "has not defined an equals method");
 	}
 	
 	@Test
-	public void allFieldsUsedExceptOne() {
-		EqualsVerifier.forClass(OneFieldUnusedColorPoint.class)
+	public void succeed_whenAFieldIsUnused_givenAllFieldsShouldBeUsedExceptThatField() {
+		EqualsVerifier.forClass(OneFieldUnused.class)
 				.allFieldsShouldBeUsedExcept("colorNotUsed")
 				.verify();
 	}
 	
 	@Test
-	public void allFieldsUsedExceptTwo() {
+	public void succeed_whenTwoFieldsAreUnused_givenAllFieldsShouldBeUsedExceptThoseTwo() {
 		EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
 				.allFieldsShouldBeUsedExcept("colorNotUsed", "colorAlsoNotUsed")
 				.verify();
 	}
 	
 	@Test
-	public void allFieldsShouldBeUsedExceptOneButAnotherIsAlsoNotUsed() {
+	public void fail_whenTwoFieldsAreUnUsed_givenAllFieldsShouldBeUsedExceptOneOfThemButNotBoth() {
 		EqualsVerifier<TwoFieldsUnusedColorPoint> ev = EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class);
 		ev.allFieldsShouldBeUsedExcept("colorNotUsed");
 		assertFailure(ev, "Significant fields", "equals does not use", "colorAlsoNotUsed");
 	}
 	
 	@Test
-	public void allFieldsShouldBeUsedExceptOneThatIsActuallyUsed() {
+	public void fail_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsedExceptOneThatActuallyIsUsed() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forClass(FinalPoint.class);
 		ev.allFieldsShouldBeUsedExcept("x");
 		assertFailure(ev, "Significant fields", "equals should not use", "x", "but it does");
 	}
 	
 	@Test
-	public void allFieldsShouldBeUsedExceptTwoButOneOfThemIsActuallyUsed() {
-		EqualsVerifier<OneFieldUnusedColorPoint> ev = EqualsVerifier.forClass(OneFieldUnusedColorPoint.class);
+	public void fail_whenOneFieldIsUnused_givenAllFieldsShouldBeUsedExceptTwoFields() {
+		EqualsVerifier<OneFieldUnused> ev = EqualsVerifier.forClass(OneFieldUnused.class);
 		ev.allFieldsShouldBeUsedExcept("x", "colorNotUsed");
 		assertFailure(ev, "Significant fields", "equals should not use", "x", "but it does");
 	}
 	
 	@Test
-	public void allFieldsShouldBeUsedExceptOneThatDoesNotExist() {
+	public void anExceptionIsThrown_whenANonExistingFieldIsExcepted() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forClass(FinalPoint.class);
 		
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Class FinalPoint does not contain field thisFieldDoesNotExist.");
-
+		
 		ev.allFieldsShouldBeUsedExcept("thisFieldDoesNotExist");
 	}
 	
 	@Test
-	public void skipStaticFinalFields() {
+	public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers() {
 		EqualsVerifier.forClass(IndirectStaticFinalContainer.class).verify();
 	}
 	
-	static final class ExtraFieldInEqualsPoint {
+	static final class ExtraFieldInEquals {
 		private final int x;
 		private final int yNotUsed;
 		
-		public ExtraFieldInEqualsPoint(int x, int y) {
+		public ExtraFieldInEquals(int x, int y) {
 			this.x = x;
 			this.yNotUsed = y;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ExtraFieldInEqualsPoint)) {
+			if (!(obj instanceof ExtraFieldInEquals)) {
 				return false;
 			}
-			ExtraFieldInEqualsPoint p = (ExtraFieldInEqualsPoint)obj;
+			ExtraFieldInEquals p = (ExtraFieldInEquals)obj;
 			return p.x == x && p.yNotUsed == yNotUsed;
 		}
 		
@@ -157,21 +173,21 @@ public class SignificantFieldsTest {
 		}
 	}
 	
-	static final class ExtraFieldInHashCodePoint {
+	static final class ExtraFieldInHashCode {
 		private final int x;
 		private final int yNotUsed;
-
-		public ExtraFieldInHashCodePoint(int x, int y) {
+		
+		public ExtraFieldInHashCode(int x, int y) {
 			this.x = x;
 			this.yNotUsed = y;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ExtraFieldInHashCodePoint)) {
+			if (!(obj instanceof ExtraFieldInHashCode)) {
 				return false;
 			}
-			ExtraFieldInHashCodePoint p = (ExtraFieldInHashCodePoint)obj;
+			ExtraFieldInHashCode p = (ExtraFieldInHashCode)obj;
 			return p.x == x;
 		}
 		
@@ -181,13 +197,13 @@ public class SignificantFieldsTest {
 		}
 	}
 	
-	static final class OneFieldUnusedColorPoint {
+	static final class OneFieldUnused {
 		private final int x;
 		private final int y;
 		@SuppressWarnings("unused")
 		private final Color colorNotUsed;
 		
-		public OneFieldUnusedColorPoint(int x, int y, Color color) {
+		public OneFieldUnused(int x, int y, Color color) {
 			this.x = x;
 			this.y = y;
 			this.colorNotUsed = color;
@@ -195,10 +211,10 @@ public class SignificantFieldsTest {
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof OneFieldUnusedColorPoint)) {
+			if (!(obj instanceof OneFieldUnused)) {
 				return false;
 			}
-			OneFieldUnusedColorPoint other = (OneFieldUnusedColorPoint)obj;
+			OneFieldUnused other = (OneFieldUnused)obj;
 			return x == other.x && y == other.y;
 		}
 		
@@ -262,11 +278,11 @@ public class SignificantFieldsTest {
 		}
 	}
 	
-	static final class OneFieldUnusedExtendedColorPoint extends Point {
+	static final class OneFieldUnusedExtended extends Point {
 		@SuppressWarnings("unused")
 		private final Color colorNotUsed;
 		
-		public OneFieldUnusedExtendedColorPoint(int x, int y, Color color) {
+		public OneFieldUnusedExtended(int x, int y, Color color) {
 			super(x, y);
 			this.colorNotUsed = color;
 		}
