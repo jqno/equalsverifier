@@ -1,44 +1,51 @@
 **EqualsVerifier** can be used in Java unit tests to verify whether the contract for the equals and hashCode methods in a class is met.
 
-For full documentation, please see the [project's website](http://www.jqno.nl/equalsverifier).
+For documentation, please see the [project's website](http://www.jqno.nl/equalsverifier).
+
 Pull requests are welcome! If you open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it.
 
 [![Build Status](https://travis-ci.org/jqno/equalsverifier.png)](https://travis-ci.org/jqno/equalsverifier)
 
 
-Quick Start
------------
+Build
+---
 
-Add EqualsVerifier to your `pom`. The `groupId` is `nl.jqno.equalsverifier` and the `artifactId` is `equalsverifier`. Make sure to use the latest version, and put it in the test scope. 
+To build EqualsVerifier, you need [Ant](http://ant.apache.org/). Just call `ant` from the command-line, and you're done. Alternatively, you can use [Eclipse](https://www.eclipse.org/) with [IvyDE](http://ant.apache.org/ivy/ivyde/) installed.
 
-Use, as follows, in your unit test:
 
-    @Test
-    public void equalsContract() {
-        EqualsVerifier.forClass(My.class).verify();
-    }
+Project structure
+---
 
-Or, if you prefer to use a getClass() check instead of an instanceof check in the body of your equals method:
+`src/`
 
-    @Test
-    public void equalsContract() {
-        EqualsVerifier.forClass(My.class)
-                .usingGetClass()
-                .verify();
-    }
+* `nl.jqno.equalsverifier`  
+  Main EqualsVerifier logic
+* `nl.jqno.equalsverifier.util`  
+  Reflection helpers
+* `nl.jqno.equalsverifier.util.exceptions`  
+  Internally used exceptions
 
-With some warnings suppressed:
+`test/`
 
-    @Test
-    public void equalsContract() {
-        EqualsVerifier.forClass(My.class)
-                .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
-                .verify();
-    }
+* `nl.jqno.equalsverifier`  
+  Integration tests
+* `nl.jqno.equalsverifier.coverage`  
+  Code coverage tests, which fail if coverage is less than 100%
+* `nl.jqno.equalsverifier.testhelpers`  
+  Utility classes for use in tests
+* `nl.jqno.equalsverifier.testhelpers.annotations`  
+  Annotations used by unit tests and integration tests
+* `nl.jqno.equalsverifier.testhelpers.annotations.casefolding`  
+  More annotations which would clash with other annotations because of casing
+* `nl.jqno.equalsverifier.points`  
+   Various data classes for use in unit tests and integration tests
+* `nl.jqno.equalsverifier.util`  
+  Unit tests for the reflection helpers
+
 
 Disclaimer
-----------
+---
 
-For license information, see LICENSE.TXT.
+For license information, see `LICENSE.TXT`.
 
-Copyright 2009-2013 Jan Ouwens
+Copyright 2009-2014 Jan Ouwens
