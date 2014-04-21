@@ -33,6 +33,10 @@ Project structure
   Integration tests
 * `nl.jqno.equalsverifier.coverage`  
   Code coverage tests, which fail if coverage is less than 100%
+* `nl.jqno.equalsverifier.basic_contract`  
+  Integration tests that cover the contract as stated in `java.lang.Object`'s javadoc
+* `nl.jqno.equalsverifier.extended_contract`  
+  Integration tests that cover other essential points not covered in the javadoc
 * `nl.jqno.equalsverifier.testhelpers`  
   Utility classes for use in tests
 * `nl.jqno.equalsverifier.testhelpers.annotations`  
