@@ -27,6 +27,8 @@ Project structure
 
 `test/`
 
+* `javax.persistence`  
+  Annotations used by integration tests
 * `nl.jqno.equalsverifier`  
   Integration tests
 * `nl.jqno.equalsverifier.coverage`  
