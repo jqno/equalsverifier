@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,39 +13,41 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 import org.junit.Test;
 
-public class AbstractEqualsAndHashCodeTest {
+public class BalancedAbstractnessTest {
 	private static final String ABSTRACT_DELEGATION = "Abstract delegation";
 	private static final String EQUALS_IS_ABSTRACT = "equals method is abstract";
 	private static final String HASHCODE_IS_ABSTRACT = "hashCode method is abstract";
 	private static final String EQUALS_IS_NOT = "but equals is not";
 	private static final String HASHCODE_IS_NOT = "but hashCode is not";
-
+	
 	@Test
-	public void bothEqualsAndHashCodeAbstractIsValid() {
+	public void succeed_whenBothAreAbstractInSuperclass() {
 		EqualsVerifier.forClass(SubclassOfAbstractBoth.class)
 				.verify();
 	}
 	
 	@Test
-	public void onlyEqualsAbstractIsInvalid() {
+	public void fail_whenOnlyEqualsIsAbstractInSuperclass() {
 		EqualsVerifier<SubclassOfAbstractEqualsButNotHashCode> ev = EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class);
 		assertFailure(ev, ABSTRACT_DELEGATION, EQUALS_IS_ABSTRACT, HASHCODE_IS_NOT);
 	}
 	
 	@Test
-	public void onlyHashCodeAbstractIsInvalid() {
+	public void fail_whenOnlyHashCodeIsAbstractInSuperclass() {
 		EqualsVerifier<SubclassOfAbstractHashCodeButNotEquals> ev = EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class);
 		assertFailure(ev, ABSTRACT_DELEGATION, HASHCODE_IS_ABSTRACT, EQUALS_IS_NOT);
 	}
 	
 	@Test
-	public void extraLevelInClassHierarchyIsValid() {
+	public void succeed_whenBothAreAbstractInSuperclassOfSuperclass() {
 		EqualsVerifier.forClass(SubclassOfSubclassOfAbstractBoth.class)
 				.verify();
 	}
@@ -60,7 +62,7 @@ public class AbstractEqualsAndHashCodeTest {
 	static final class SubclassOfAbstractBoth extends AbstractBoth {
 		private final int foo;
 		
-		SubclassOfAbstractBoth(int foo) {
+		public SubclassOfAbstractBoth(int foo) {
 			this.foo = foo;
 		}
 		
@@ -86,7 +88,7 @@ public class AbstractEqualsAndHashCodeTest {
 	static class SubclassOfAbstractEqualsButNotHashCode extends AbstractEqualsButNotHashCode {
 		private final int foo;
 		
-		SubclassOfAbstractEqualsButNotHashCode(int foo) {
+		public SubclassOfAbstractEqualsButNotHashCode(int foo) {
 			this.foo = foo;
 		}
 		
@@ -112,7 +114,7 @@ public class AbstractEqualsAndHashCodeTest {
 	static class SubclassOfAbstractHashCodeButNotEquals extends AbstractHashCodeButNotEquals {
 		private final int foo;
 		
-		SubclassOfAbstractHashCodeButNotEquals(int foo) {
+		public SubclassOfAbstractHashCodeButNotEquals(int foo) {
 			this.foo = foo;
 		}
 		
@@ -135,7 +137,7 @@ public class AbstractEqualsAndHashCodeTest {
 	static final class SubclassOfSubclassOfAbstractBoth extends IntermediateSubclassOfAbstractBoth {
 		private final int foo;
 		
-		SubclassOfSubclassOfAbstractBoth(int foo) {
+		public SubclassOfSubclassOfAbstractBoth(int foo) {
 			this.foo = foo;
 		}
 		
