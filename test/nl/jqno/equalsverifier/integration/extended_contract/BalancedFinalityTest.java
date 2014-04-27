@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+
 import org.junit.Test;
 
-public class FinalityTest {
+public class BalancedFinalityTest {
 	private static final String BOTH_FINAL_OR_NONFINAL = "Finality: equals and hashCode must both be final or both be non-final";
 
 	@Test
-	public void finalEqualsNonFinalHashCode() {
+	public void fail_whenEqualsIsFinalButHashCodeIsNonFinal() {
 		check(FinalEqualsNonFinalHashCode.class);
 	}
 	
 	@Test
-	public void suppressFinalEqualsNonFinalHashCode() {
+	public void succeed_whenEqualsIsFinalButHashCodeIsNonFinal_givenWarningIsSuppressed() {
 		EqualsVerifier.forClass(FinalEqualsNonFinalHashCode.class)
 				.usingGetClass()
 				.suppress(Warning.STRICT_INHERITANCE)
@@ -36,12 +39,12 @@ public class FinalityTest {
 	}
 	
 	@Test
-	public void nonFinalEqualsFinalHashCode() {
+	public void fail_whenEqualsIsNonFinalButHashCodeIsFinal() {
 		check(NonFinalEqualsFinalHashCode.class);
 	}
 
 	@Test
-	public void suppressNonFinalEqualsFinalHashCode() {
+	public void succeed_whenEqualsIsNonFinalButHashCodeIsFinal_givenWarningsAreSuppressed() {
 		EqualsVerifier.forClass(NonFinalEqualsFinalHashCode.class)
 				.usingGetClass()
 				.suppress(Warning.STRICT_INHERITANCE)
@@ -56,7 +59,7 @@ public class FinalityTest {
 	static class FinalEqualsNonFinalHashCode {
 		private final int i;
 		
-		FinalEqualsNonFinalHashCode(int i) {
+		public FinalEqualsNonFinalHashCode(int i) {
 			this.i = i;
 		}
 		
@@ -78,7 +81,7 @@ public class FinalityTest {
 	static class NonFinalEqualsFinalHashCode {
 		private final int i;
 		
-		NonFinalEqualsFinalHashCode(int i) {
+		public NonFinalEqualsFinalHashCode(int i) {
 			this.i = i;
 		}
 		
