@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 import org.junit.Test;
 
 public class DontOverrideEqualsTest {
 	@Test
-	public void pojosDontOverrideEquals() {
+	public void succeed_whenClassDoesntOverrideEqualsOrHashCode() {
 		EqualsVerifier.forClass(Pojo.class)
 				.suppress(Warning.NONFINAL_FIELDS)
 				.verify();
@@ -27,11 +30,11 @@ public class DontOverrideEqualsTest {
 	
 	public final class Pojo {
 		private String value;
-
+		
 		public void setValue(String value) {
 			this.value = value;
 		}
-
+		
 		public String getValue() {
 			return value;
 		}
