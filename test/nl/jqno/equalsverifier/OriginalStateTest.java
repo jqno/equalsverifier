@@ -20,7 +20,6 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.MutableStateTest.MutableIntContainer;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
@@ -183,6 +182,27 @@ public class OriginalStateTest {
 	static final class SubContainer extends SuperContainer {
 		public SubContainer(CorrectEquals foo) {
 			super(foo);
+		}
+	}
+	
+	static final class MutableIntContainer {
+		private int field;
+		
+		MutableIntContainer(int value) {
+			field = value;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof MutableIntContainer)) {
+				return false;
+			}
+			return field == ((MutableIntContainer)obj).field;
+		}
+		
+		@Override
+		public int hashCode() {
+			return field;
 		}
 	}
 }
