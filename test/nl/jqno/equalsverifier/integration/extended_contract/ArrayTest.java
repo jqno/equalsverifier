@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 import java.util.Arrays;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
@@ -32,97 +35,97 @@ public class ArrayTest {
 	private static final String FIELD_NAME = "array";
 
 	@Test
-	public void primitiveArrayShouldUseArraysEquals() {
-		EqualsVerifier<PrimitiveArrayContainerWrongEquals> ev = EqualsVerifier.forClass(PrimitiveArrayContainerWrongEquals.class);
+	public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
+		EqualsVerifier<PrimitiveArrayRegularEquals> ev = EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class);
 		assertFailure(ev, PRIMITIVE_EQUALS, FIELD_NAME);
 	}
 	
 	@Test
-	public void primitiveArrayShouldUseArraysHashCode() {
-		EqualsVerifier<PrimitiveArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(PrimitiveArrayContainerWrongHashCode.class);
+	public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
+		EqualsVerifier<PrimitiveArrayRegularHashCode> ev = EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class);
 		assertFailure(ev, PRIMITIVE_HASHCODE, FIELD_NAME);
 	}
 	
 	@Test
-	public void primitiveArrayHappyPath() {
-		EqualsVerifier.forClass(PrimitiveArrayContainerCorrect.class).verify();
+	public void succeed_whenCorrectMethodsAreUsed_givenAPrimitiveArray() {
+		EqualsVerifier.forClass(PrimitiveArrayCorrect.class).verify();
 	}
 	
 	@Test
-	public void multidimensionalArrayShouldUseDeepEquals() {
-		EqualsVerifier<MultidimensionalArrayContainerWrongEquals> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerWrongEquals.class);
+	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
+		EqualsVerifier<MultidimensionalArrayArraysEquals> ev = EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class);
 		assertFailure(ev, MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
 	}
 	
 	@Test
-	public void multidimensionalArrayShouldNotUseRegularHashCode() {
-		EqualsVerifier<MultidimensionalArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerWrongHashCode.class);
+	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
+		EqualsVerifier<MultidimensionalArrayRegularHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class);
 		assertFailure(ev, MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
 	}
 	
 	@Test
-	public void multidimensionalArrayShouldUseDeepHashCode() {
-		EqualsVerifier<MultidimensionalArrayContainerNotDeepHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayContainerNotDeepHashCode.class);
+	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
+		EqualsVerifier<MultidimensionalArrayArraysHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class);
 		assertFailure(ev, MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
 	}
 	
 	@Test
-	public void multidimensionalArrayHappyPath() {
-		EqualsVerifier.forClass(MultidimensionalArrayContainerCorrect.class).verify();
+	public void succeed_whenCorrectMethodsAreUsed_givenAMultidimensionalArray() {
+		EqualsVerifier.forClass(MultidimensionalArrayCorrect.class).verify();
 	}
 	
 	@Test
-	public void threeDimensionalArrayHappyPath() {
-		EqualsVerifier.forClass(ThreeDimensionalArrayContainerCorrect.class).verify();
+	public void succeed_whenCorrectMethodsAreUsed_givenAThreedimensionalArray() {
+		EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class).verify();
 	}
 	
 	@Test
-	public void objectArrayShouldUseDeepEquals() {
-		EqualsVerifier<ObjectArrayContainerWrongEquals> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongEquals.class);
+	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAnObjectArray() {
+		EqualsVerifier<ObjectArrayArraysEquals> ev = EqualsVerifier.forClass(ObjectArrayArraysEquals.class);
 		assertFailure(ev, OBJECT_EQUALS, FIELD_NAME);
 	}
 	
 	@Test
-	public void objectArrayShouldNotUseRegularHashCode() {
-		EqualsVerifier<ObjectArrayContainerWrongHashCode> ev = EqualsVerifier.forClass(ObjectArrayContainerWrongHashCode.class);
+	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
+		EqualsVerifier<ObjectArrayRegularHashCode> ev = EqualsVerifier.forClass(ObjectArrayRegularHashCode.class);
 		assertFailure(ev, OBJECT_HASHCODE, FIELD_NAME);
 	}
 	
 	@Test
-	public void objectArrayShouldUseDeepHashCode() {
-		EqualsVerifier<ObjectArrayContainerNotDeepHashCode> ev = EqualsVerifier.forClass(ObjectArrayContainerNotDeepHashCode.class);
+	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
+		EqualsVerifier<ObjectArrayArraysHashCode> ev = EqualsVerifier.forClass(ObjectArrayArraysHashCode.class);
 		assertFailure(ev, OBJECT_HASHCODE, FIELD_NAME);
 	}
 	
 	@Test
-	public void objectArrayHappyPath() {
-		EqualsVerifier.forClass(ObjectArrayContainerCorrect.class).verify();
+	public void succeed_whenCorrectMethodsAreUsed_givenAnObjectArray() {
+		EqualsVerifier.forClass(ObjectArrayCorrect.class).verify();
 	}
 	
 	@Test
-	public void objectWithAnArrayAndAnUnusedFieldShouldWork() {
-		EqualsVerifier.forClass(ArrayAndSomethingUnusedContainer.class).verify();
+	public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
+		EqualsVerifier.forClass(ArrayAndSomethingUnused.class).verify();
 	}
 	
 	@Test
-	public void objectWithAnArrayAndNoEquals() {
-		EqualsVerifier.forClass(ArrayAndNoEqualsContainer.class).verify();
+	public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
+		EqualsVerifier.forClass(ArrayAndNoEquals.class).verify();
 	}
 	
-	static final class PrimitiveArrayContainerWrongEquals {
+	static final class PrimitiveArrayRegularEquals {
 		private final int[] array;
 		
-		PrimitiveArrayContainerWrongEquals(int[] array) {
+		public PrimitiveArrayRegularEquals(int[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof PrimitiveArrayContainerWrongEquals)) {
+			if (!(obj instanceof PrimitiveArrayRegularEquals)) {
 				return false;
 			}
-			PrimitiveArrayContainerWrongEquals other = (PrimitiveArrayContainerWrongEquals)obj;
-			return array == other.array;
+			PrimitiveArrayRegularEquals other = (PrimitiveArrayRegularEquals)obj;
+			return nullSafeEquals(array, other.array);
 		}
 		
 		@Override
@@ -131,19 +134,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class PrimitiveArrayContainerWrongHashCode {
+	static final class PrimitiveArrayRegularHashCode {
 		private final int[] array;
 		
-		PrimitiveArrayContainerWrongHashCode(int[] array) {
+		public PrimitiveArrayRegularHashCode(int[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof PrimitiveArrayContainerWrongHashCode)) {
+			if (!(obj instanceof PrimitiveArrayRegularHashCode)) {
 				return false;
 			}
-			PrimitiveArrayContainerWrongHashCode other = (PrimitiveArrayContainerWrongHashCode)obj;
+			PrimitiveArrayRegularHashCode other = (PrimitiveArrayRegularHashCode)obj;
 			return Arrays.equals(array, other.array);
 		}
 		
@@ -153,19 +156,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class PrimitiveArrayContainerCorrect {
+	static final class PrimitiveArrayCorrect {
 		private final int[] array;
 		
-		PrimitiveArrayContainerCorrect(int[] array) {
+		public PrimitiveArrayCorrect(int[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof PrimitiveArrayContainerCorrect)) {
+			if (!(obj instanceof PrimitiveArrayCorrect)) {
 				return false;
 			}
-			PrimitiveArrayContainerCorrect other = (PrimitiveArrayContainerCorrect)obj;
+			PrimitiveArrayCorrect other = (PrimitiveArrayCorrect)obj;
 			return Arrays.equals(array, other.array);
 		}
 		
@@ -175,19 +178,19 @@ public class ArrayTest {
 		}
 	}
 
-	static final class MultidimensionalArrayContainerWrongEquals {
+	static final class MultidimensionalArrayArraysEquals {
 		private final int[][] array;
 		
-		MultidimensionalArrayContainerWrongEquals(int[][] array) {
+		public MultidimensionalArrayArraysEquals(int[][] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof MultidimensionalArrayContainerWrongEquals)) {
+			if (!(obj instanceof MultidimensionalArrayArraysEquals)) {
 				return false;
 			}
-			MultidimensionalArrayContainerWrongEquals other = (MultidimensionalArrayContainerWrongEquals)obj;
+			MultidimensionalArrayArraysEquals other = (MultidimensionalArrayArraysEquals)obj;
 			return Arrays.equals(array, other.array);
 		}
 		
@@ -197,19 +200,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class MultidimensionalArrayContainerWrongHashCode {
+	static final class MultidimensionalArrayRegularHashCode {
 		private final int[][] array;
 		
-		MultidimensionalArrayContainerWrongHashCode(int[][] array) {
+		public MultidimensionalArrayRegularHashCode(int[][] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof MultidimensionalArrayContainerWrongHashCode)) {
+			if (!(obj instanceof MultidimensionalArrayRegularHashCode)) {
 				return false;
 			}
-			MultidimensionalArrayContainerWrongHashCode other = (MultidimensionalArrayContainerWrongHashCode)obj;
+			MultidimensionalArrayRegularHashCode other = (MultidimensionalArrayRegularHashCode)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -219,41 +222,41 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class MultidimensionalArrayContainerNotDeepHashCode {
+	static final class MultidimensionalArrayArraysHashCode {
 		private final int[][] array;
 		
-		MultidimensionalArrayContainerNotDeepHashCode(int[][] array) {
+		public MultidimensionalArrayArraysHashCode(int[][] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof MultidimensionalArrayContainerNotDeepHashCode)) {
+			if (!(obj instanceof MultidimensionalArrayArraysHashCode)) {
 				return false;
 			}
-			MultidimensionalArrayContainerNotDeepHashCode other = (MultidimensionalArrayContainerNotDeepHashCode)obj;
+			MultidimensionalArrayArraysHashCode other = (MultidimensionalArrayArraysHashCode)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
 		@Override
 		public int hashCode() {
-			return (array == null) ? 0 : array.hashCode();
+			return Arrays.hashCode(array);
 		}
 	}
 	
-	static final class MultidimensionalArrayContainerCorrect {
+	static final class MultidimensionalArrayCorrect {
 		private final int[][] array;
 		
-		MultidimensionalArrayContainerCorrect(int[][] array) {
+		public MultidimensionalArrayCorrect(int[][] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof MultidimensionalArrayContainerCorrect)) {
+			if (!(obj instanceof MultidimensionalArrayCorrect)) {
 				return false;
 			}
-			MultidimensionalArrayContainerCorrect other = (MultidimensionalArrayContainerCorrect)obj;
+			MultidimensionalArrayCorrect other = (MultidimensionalArrayCorrect)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -263,19 +266,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ThreeDimensionalArrayContainerCorrect {
+	static final class ThreeDimensionalArrayCorrect {
 		private final int[][][] array;
 		
-		ThreeDimensionalArrayContainerCorrect(int[][][] array) {
+		public ThreeDimensionalArrayCorrect(int[][][] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ThreeDimensionalArrayContainerCorrect)) {
+			if (!(obj instanceof ThreeDimensionalArrayCorrect)) {
 				return false;
 			}
-			ThreeDimensionalArrayContainerCorrect other = (ThreeDimensionalArrayContainerCorrect)obj;
+			ThreeDimensionalArrayCorrect other = (ThreeDimensionalArrayCorrect)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -285,19 +288,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ObjectArrayContainerWrongEquals {
+	static final class ObjectArrayArraysEquals {
 		private final Object[] array;
 		
-		ObjectArrayContainerWrongEquals(Object[] array) {
+		public ObjectArrayArraysEquals(Object[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayContainerWrongEquals)) {
+			if (!(obj instanceof ObjectArrayArraysEquals)) {
 				return false;
 			}
-			ObjectArrayContainerWrongEquals other = (ObjectArrayContainerWrongEquals)obj;
+			ObjectArrayArraysEquals other = (ObjectArrayArraysEquals)obj;
 			return Arrays.equals(array, other.array);
 		}
 		
@@ -307,19 +310,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ObjectArrayContainerWrongHashCode {
+	static final class ObjectArrayRegularHashCode {
 		private final Object[] array;
 		
-		ObjectArrayContainerWrongHashCode(Object[] array) {
+		public ObjectArrayRegularHashCode(Object[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayContainerWrongHashCode)) {
+			if (!(obj instanceof ObjectArrayRegularHashCode)) {
 				return false;
 			}
-			ObjectArrayContainerWrongHashCode other = (ObjectArrayContainerWrongHashCode)obj;
+			ObjectArrayRegularHashCode other = (ObjectArrayRegularHashCode)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -329,19 +332,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ObjectArrayContainerNotDeepHashCode {
+	static final class ObjectArrayArraysHashCode {
 		private final Object[] array;
 		
-		ObjectArrayContainerNotDeepHashCode(Object[] array) {
+		public ObjectArrayArraysHashCode(Object[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayContainerNotDeepHashCode)) {
+			if (!(obj instanceof ObjectArrayArraysHashCode)) {
 				return false;
 			}
-			ObjectArrayContainerNotDeepHashCode other = (ObjectArrayContainerNotDeepHashCode)obj;
+			ObjectArrayArraysHashCode other = (ObjectArrayArraysHashCode)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -351,19 +354,19 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ObjectArrayContainerCorrect {
+	static final class ObjectArrayCorrect {
 		private final Object[] array;
 		
-		ObjectArrayContainerCorrect(Object[] array) {
+		public ObjectArrayCorrect(Object[] array) {
 			this.array = array;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayContainerCorrect)) {
+			if (!(obj instanceof ObjectArrayCorrect)) {
 				return false;
 			}
-			ObjectArrayContainerCorrect other = (ObjectArrayContainerCorrect)obj;
+			ObjectArrayCorrect other = (ObjectArrayCorrect)obj;
 			return Arrays.deepEquals(array, other.array);
 		}
 		
@@ -373,22 +376,22 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ArrayAndSomethingUnusedContainer {
+	static final class ArrayAndSomethingUnused {
 		private final int[] array;
 		@SuppressWarnings("unused")
 		private final int i;
 		
-		ArrayAndSomethingUnusedContainer(int[] array, int i) {
+		public ArrayAndSomethingUnused(int[] array, int i) {
 			this.array = array;
 			this.i = i;
 		}
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ArrayAndSomethingUnusedContainer)) {
+			if (!(obj instanceof ArrayAndSomethingUnused)) {
 				return false;
 			}
-			ArrayAndSomethingUnusedContainer other = (ArrayAndSomethingUnusedContainer)obj;
+			ArrayAndSomethingUnused other = (ArrayAndSomethingUnused)obj;
 			return Arrays.equals(array, other.array);
 		}
 		
@@ -398,7 +401,7 @@ public class ArrayTest {
 		}
 	}
 	
-	static final class ArrayAndNoEqualsContainer {
+	static final class ArrayAndNoEquals {
 		@SuppressWarnings("unused")
 		private final int[] ints;
 		@SuppressWarnings("unused")
@@ -406,7 +409,7 @@ public class ArrayTest {
 		@SuppressWarnings("unused")
 		private final int[][] arrays;
 		
-		public ArrayAndNoEqualsContainer(int[] ints, Object[] objects, int[][] arrays) {
+		public ArrayAndNoEquals(int[] ints, Object[] objects, int[][] arrays) {
 			this.ints = ints;
 			this.objects = objects;
 			this.arrays = arrays;
