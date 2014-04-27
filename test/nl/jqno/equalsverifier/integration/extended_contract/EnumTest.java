@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
 public class EnumTest {
 	@Test
-	public void enumShouldPass() {
+	public void succeed_whenClassIsAnEnum() {
 		EqualsVerifier.forClass(Enum.class).verify();
 	}
 	
