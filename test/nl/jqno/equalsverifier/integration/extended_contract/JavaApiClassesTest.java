@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2013 Jan Ouwens
+ * Copyright 2009-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
@@ -33,85 +33,32 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+
 import org.junit.Test;
 
-public class DifficultClassesTest {
+public class JavaApiClassesTest {
 	@Test
-	public void objects() {
-		EqualsVerifier.forClass(ObjectsContainer.class).verify();
-	}
-	
-	@Test
-	public void collectionInterfaces() {
+	public void succeed_whenClassContainsACollectionInterface() {
 		EqualsVerifier.forClass(CollectionInterfacesContainer.class).verify();
 	}
 	
 	@Test
-	public void commonClasses() {
+	public void succeed_whenClassContainsACommonJavaApiType() {
 		EqualsVerifier.forClass(CommonClassesContainer.class).verify();
 	}
 	
 	@Test
-	public void abstractClass() {
-		EqualsVerifier.forClass(AbstractContainer.class).verify();
-	}
-	
-	@Test
-	public void compileTimeConstant() {
-		EqualsVerifier<CompileTimeConstant> ev = EqualsVerifier.forClass(CompileTimeConstant.class);
+	public void succeed_whenClassContainsACompileTimeConstantInANonStaticField() {
+		EqualsVerifier<CompileTimeConstantContainer> ev = EqualsVerifier.forClass(CompileTimeConstantContainer.class);
 		assertFailure(ev, "Precondition: two objects are equal to each other");
 	}
 	
 	@Test
-	public void threadLocal() {
+	public void succeed_whenClassContainsAThreadLocalField() {
 		EqualsVerifier.forClass(ThreadLocalContainer.class)
 				.withPrefabValues(ThreadLocal.class, ThreadLocalContainer.RED_INSTANCE, ThreadLocalContainer.BLACK_INSTANCE)
 				.verify();
-	}
-	
-	@Test
-	public void ignoreSingleValueEnum() {
-		EqualsVerifier.forClass(SingleValueEnumContainer.class).verify();
-	}
-	
-	@Test
-	public void useSingleValueEnum() {
-		EqualsVerifier.forClass(SingleValueEnumUser.class).verify();
-	}
-	
-	static final class ObjectsContainer {
-		private final String string;
-		private final Integer integer;
-		private final Class<?> type;
-		
-		ObjectsContainer(String string, Integer integer, Class<?> type) {
-			this.string = string;
-			this.integer = integer;
-			this.type = type;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectsContainer)) {
-				return false;
-			}
-			
-			ObjectsContainer other = (ObjectsContainer)obj;
-			boolean result = true;
-			result &= nullSafeEquals(string, other.string);
-			result &= nullSafeEquals(integer, other.integer);
-			result &= type == other.type;
-			return result;
-		}
-		
-		@Override
-		public int hashCode() {
-			int result = 0;
-			result += 31 * nullSafeHashCode(string);
-			result += 31 * nullSafeHashCode(integer);
-			result += 31 * nullSafeHashCode(type);
-			return result;
-		}
 	}
 	
 	static final class CollectionInterfacesContainer {
@@ -172,6 +119,9 @@ public class DifficultClassesTest {
 	}
 	
 	static final class CommonClassesContainer {
+		private final String string;
+		private final Integer integer;
+		private final Class<?> type;
 		private final Calendar calendar;
 		private final Date date;
 		private final File file;
@@ -181,7 +131,12 @@ public class DifficultClassesTest {
 		private final BitSet bitset;
 		private final UUID uuid;
 		
-		public CommonClassesContainer(Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern, ArrayList<String> arrayList, BitSet bitset, UUID uuid) {
+		public CommonClassesContainer(String string, Integer integer, Class<?> type, Calendar calendar,
+				Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
+				ArrayList<String> arrayList, BitSet bitset, UUID uuid) {
+			this.string = string;
+			this.integer = integer;
+			this.type = type;
 			this.calendar = calendar;
 			this.date = date;
 			this.file = file;
@@ -200,6 +155,9 @@ public class DifficultClassesTest {
 			
 			CommonClassesContainer other = (CommonClassesContainer)obj;
 			boolean result = true;
+			result &= nullSafeEquals(string, other.string);
+			result &= nullSafeEquals(integer, other.integer);
+			result &= nullSafeEquals(type, other.type);
 			result &= nullSafeEquals(calendar, other.calendar);
 			result &= nullSafeEquals(date, other.date);
 			result &= nullSafeEquals(file, other.file);
@@ -214,6 +172,9 @@ public class DifficultClassesTest {
 		@Override
 		public int hashCode() {
 			int result = 0;
+			result += 31 * nullSafeHashCode(string);
+			result += 31 * nullSafeHashCode(integer);
+			result += 31 * nullSafeHashCode(type);
 			result += 31 * nullSafeHashCode(calendar);
 			result += 31 * nullSafeHashCode(date);
 			result += 31 * nullSafeHashCode(file);
@@ -226,57 +187,16 @@ public class DifficultClassesTest {
 		}
 	}
 	
-	static final class AbstractContainer {
-		private final AbstractClass foo;
-		
-		AbstractContainer(AbstractClass ac) {
-			this.foo = ac;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof AbstractContainer)) {
-				return false;
-			}
-			AbstractContainer other = (AbstractContainer)obj;
-			return nullSafeEquals(foo, other.foo);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(foo);
-		}
-	}
-	
-	private static abstract class AbstractClass {
-		private int i;
-		
-		abstract void someMethod();
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof AbstractClass)) {
-				return false;
-			}
-			return i == ((AbstractClass)obj).i;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i;
-		}
-	}
-	
-	static final class CompileTimeConstant {
+	static final class CompileTimeConstantContainer {
 		private final String string = "string";
 		private final int integer = 10;
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof CompileTimeConstant)) {
+			if (!(obj instanceof CompileTimeConstantContainer)) {
 				return false;
 			}
-			CompileTimeConstant other = (CompileTimeConstant)obj;
+			CompileTimeConstantContainer other = (CompileTimeConstantContainer)obj;
 			return string.equals(other.string) && integer == other.integer;
 		}
 		
@@ -322,55 +242,6 @@ public class DifficultClassesTest {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(instance);
-		}
-	}
-	
-	enum SingleValueEnum { INSTANCE }
-	
-	static final class SingleValueEnumContainer {
-		private final int i;
-		
-		@SuppressWarnings("unused")
-		private final SingleValueEnum sve = SingleValueEnum.INSTANCE;
-		
-		public SingleValueEnumContainer(int i) {
-			this.i = i;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof SingleValueEnumContainer)) {
-				return false;
-			}
-			SingleValueEnumContainer other = (SingleValueEnumContainer)obj;
-			return i == other.i;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i;
-		}
-	}
-	
-	static final class SingleValueEnumUser {
-		private final SingleValueEnum sve;
-		
-		public SingleValueEnumUser(SingleValueEnum sve) {
-			this.sve = sve;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof SingleValueEnumUser)) {
-				return false;
-			}
-			SingleValueEnumUser other = (SingleValueEnumUser)obj;
-			return sve == other.sve;
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(sve);
 		}
 	}
 }

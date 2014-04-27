@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,11 @@ public class AbstractDelegationTest {
 	private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
 	private static final String HASHCODE_DELEGATES = "hashCode method delegates to an abstract method";
 	private static final String PREFAB = "Add prefab values for";
+	
+	@Test
+	public void abstractClass() {
+		EqualsVerifier.forClass(AbstractContainer.class).verify();
+	}
 
 	@Test
 	public void equalsDelegatesToAbstractMethod() {
@@ -120,6 +125,47 @@ public class AbstractDelegationTest {
 	public void originalMessageIsIncludedInErrorMessage() {
 		EqualsVerifier<ThrowsAbstractMethodErrorWithMessage> ev = EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class);
 		assertFailure(ev, "This is AbstractMethodError's original message");
+	}
+	
+	private static abstract class AbstractClass {
+		private int i;
+		
+		abstract void someMethod();
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AbstractClass)) {
+				return false;
+			}
+			return i == ((AbstractClass)obj).i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	static final class AbstractContainer {
+		private final AbstractClass foo;
+		
+		AbstractContainer(AbstractClass ac) {
+			this.foo = ac;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof AbstractContainer)) {
+				return false;
+			}
+			AbstractContainer other = (AbstractContainer)obj;
+			return nullSafeEquals(foo, other.foo);
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(foo);
+		}
 	}
 	
 	static abstract class AbstractEqualsDelegator {

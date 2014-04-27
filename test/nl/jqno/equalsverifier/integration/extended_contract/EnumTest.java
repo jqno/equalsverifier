@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
@@ -25,7 +26,66 @@ public class EnumTest {
 		EqualsVerifier.forClass(Enum.class).verify();
 	}
 	
-	private enum Enum {
+	@Test
+	public void ignoreSingleValueEnum() {
+		EqualsVerifier.forClass(SingletonContainer.class).verify();
+	}
+	
+	@Test
+	public void useSingleValueEnum() {
+		EqualsVerifier.forClass(SingletonUser.class).verify();
+	}
+	
+	enum Enum {
 		ONE, TWO, THREE
+	}
+	
+	enum Singleton { INSTANCE }
+	
+	static final class SingletonContainer {
+		private final int i;
+		
+		@SuppressWarnings("unused")
+		private final Singleton singleton = Singleton.INSTANCE;
+		
+		public SingletonContainer(int i) {
+			this.i = i;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SingletonContainer)) {
+				return false;
+			}
+			SingletonContainer other = (SingletonContainer)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	static final class SingletonUser {
+		private final Singleton singleton;
+		
+		public SingletonUser(Singleton singleton) {
+			this.singleton = singleton;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof SingletonUser)) {
+				return false;
+			}
+			SingletonUser other = (SingletonUser)obj;
+			return singleton == other.singleton;
+		}
+		
+		@Override
+		public int hashCode() {
+			return nullSafeHashCode(singleton);
+		}
 	}
 }
