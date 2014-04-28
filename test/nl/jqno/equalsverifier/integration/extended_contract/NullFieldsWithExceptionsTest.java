@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
@@ -28,27 +30,27 @@ public class NullFieldsWithExceptionsTest {
 	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
 	private static final String ILLEGAL_STATE_EXCEPTION = "IllegalStateException";
 	private static final String WHEN_S_IS_NULL = "when field foo is null";
-
+	
 	@Test
-	public void equalsThrowsIllegalArgumentExceptionWhenFieldIsNull() {
+	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
 		EqualsVerifier<EqualsIllegalArgumentThrower> ev = EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class);
 		assertFailure(ev, IllegalArgumentException.class, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
-	public void equalsThrowsIllegalStateExceptionWhenFieldIsNull() {
+	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
 		EqualsVerifier<EqualsIllegalStateThrower> ev = EqualsVerifier.forClass(EqualsIllegalStateThrower.class);
 		assertFailure(ev, IllegalStateException.class, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
-	public void hashCodeThrowsIllegalArgumentExceptionWhenFieldIsNull() {
+	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
 		EqualsVerifier<HashCodeIllegalArgumentThrower> ev = EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class);
 		assertFailure(ev, IllegalArgumentException.class, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
 	}
 	
 	@Test
-	public void hashCodeThrowsIllegalStateExceptionWhenFieldIsNull() {
+	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
 		EqualsVerifier<HashCodeIllegalStateThrower> ev = EqualsVerifier.forClass(HashCodeIllegalStateThrower.class);
 		assertFailure(ev, IllegalStateException.class, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
 	}
@@ -56,9 +58,9 @@ public class NullFieldsWithExceptionsTest {
 	abstract static class EqualsThrower {
 		private final String foo;
 		
-		abstract RuntimeException throwable();
+		protected abstract RuntimeException throwable();
 		
-		EqualsThrower(String foo) {
+		public EqualsThrower(String foo) {
 			this.foo = foo;
 		}
 		
@@ -81,23 +83,23 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class EqualsIllegalArgumentThrower extends EqualsThrower {
-		EqualsIllegalArgumentThrower(String foo) {
+		public EqualsIllegalArgumentThrower(String foo) {
 			super(foo);
 		}
-
+		
 		@Override
-		RuntimeException throwable() {
+		protected RuntimeException throwable() {
 			return new IllegalArgumentException();
 		}
 	}
 	
 	static class EqualsIllegalStateThrower extends EqualsThrower {
-		EqualsIllegalStateThrower(String foo) {
+		public EqualsIllegalStateThrower(String foo) {
 			super(foo);
 		}
 		
 		@Override
-		RuntimeException throwable() {
+		protected RuntimeException throwable() {
 			return new IllegalStateException();
 		}
 	}
@@ -105,7 +107,7 @@ public class NullFieldsWithExceptionsTest {
 	abstract static class HashCodeThrower {
 		private final String foo;
 		
-		abstract RuntimeException throwable();
+		protected abstract RuntimeException throwable();
 		
 		public HashCodeThrower(String foo) {
 			this.foo = foo;
@@ -133,9 +135,9 @@ public class NullFieldsWithExceptionsTest {
 		public HashCodeIllegalArgumentThrower(String foo) {
 			super(foo);
 		}
-
+		
 		@Override
-		RuntimeException throwable() {
+		protected RuntimeException throwable() {
 			return new IllegalArgumentException();
 		}
 	}
@@ -146,7 +148,7 @@ public class NullFieldsWithExceptionsTest {
 		}
 		
 		@Override
-		RuntimeException throwable() {
+		protected RuntimeException throwable() {
 			return new IllegalStateException();
 		}
 	}
