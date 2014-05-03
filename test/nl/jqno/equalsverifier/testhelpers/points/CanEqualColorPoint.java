@@ -19,12 +19,12 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 public final class CanEqualColorPoint extends CanEqualPoint {
 	private final Color color;
-
+	
 	public CanEqualColorPoint(int x, int y, Color color) {
 		super(x, y);
 		this.color = color;
 	}
-
+	
 	@Override
 	public boolean canEqual(Object obj) {
 		return obj instanceof CanEqualColorPoint;

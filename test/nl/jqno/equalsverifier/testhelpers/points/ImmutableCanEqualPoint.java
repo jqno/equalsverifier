@@ -21,7 +21,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 public class ImmutableCanEqualPoint {
 	private int x;
 	private int y;
-
+	
 	public ImmutableCanEqualPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -44,7 +44,7 @@ public class ImmutableCanEqualPoint {
 	public int hashCode() {
 		return x + (31 * y);
 	}
-
+	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + ":" + x + "," + y;

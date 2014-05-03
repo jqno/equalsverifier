@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.testhelpers.points;
 public class CanEqualPoint {
 	private final int x;
 	private final int y;
-
+	
 	public CanEqualPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -41,7 +41,7 @@ public class CanEqualPoint {
 	public int hashCode() {
 		return x + (31 * y);
 	}
-
+	
 	@Override
 	public String toString() {
 		return getClass().getSimpleName() + ":" + x + "," + y;

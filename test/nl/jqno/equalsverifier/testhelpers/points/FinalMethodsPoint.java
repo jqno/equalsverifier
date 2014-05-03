@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.testhelpers.points;
 public class FinalMethodsPoint {
 	private final int x;
 	private final int y;
-
+	
 	public FinalMethodsPoint(int x, int y) {
 		this.x = x;
 		this.y = y;

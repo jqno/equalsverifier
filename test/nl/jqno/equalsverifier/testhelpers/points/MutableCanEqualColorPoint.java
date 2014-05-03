@@ -19,12 +19,12 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 public final class MutableCanEqualColorPoint extends ImmutableCanEqualPoint {
 	private Color color;
-
+	
 	public MutableCanEqualColorPoint(int x, int y, Color color) {
 		super(x, y);
 		this.color = color;
 	}
-
+	
 	@Override
 	public boolean canEqual(Object obj) {
 		return obj instanceof MutableCanEqualColorPoint;

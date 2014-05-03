@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.testhelpers.points;
 public class Multiple {
 	private final int a;
 	private final int b;
-
+	
 	public Multiple(int a, int b) {
 		this.a = a;
 		this.b = b;
