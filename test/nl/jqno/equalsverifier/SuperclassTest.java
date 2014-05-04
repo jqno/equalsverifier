@@ -72,6 +72,14 @@ public class SuperclassTest {
 		assertFailure(ev, "Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
 	}
 	
+	@Test
+	public void invalidWithRedefinedSuperclass() {
+		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class)
+				.withRedefinedSuperclass();
+		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
+				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
+	}
+	
 	static class SymmetryBrokenColorPoint extends Point {
 		private final Color color;
 		

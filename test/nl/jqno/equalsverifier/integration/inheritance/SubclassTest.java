@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011 Jan Ouwens
+ * Copyright 2009-2011, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.inheritance;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
-import nl.jqno.equalsverifier.testhelpers.points.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForBlindlyEqualsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForCanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
@@ -42,71 +42,64 @@ import org.junit.Test;
  */
 public class SubclassTest {
 	@Test
-	public void blindlyEqualsReferenceEqualsSub() {
+	public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
 				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
 		assertFailure(ev, "Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
 	}
 	
 	@Test
-	public void blindlyEqualsSanityEqualsIsValidForSuper() {
+	public void succeed_whenEqualsIsOverridableAndBlindlyEqualsIsPresent_givenACorrectSubclass() {
 		EqualsVerifier.forClass(BlindlyEqualsPoint.class)
 				.withRedefinedSubclass(BlindlyEqualsColorPoint.class)
 				.verify();
 	}
 	
 	@Test
-	public void blindlyEqualsWithRedefinedSuperclass() {
+	public void succeed_whenEqualsIsOverriddenTwiceThroughBlindlyEquals_givenWithRedefinedSuperclass() {
 		EqualsVerifier.forClass(BlindlyEqualsColorPoint.class)
 				.withRedefinedSuperclass()
 				.verify();
 	}
 	
 	@Test
-	public void canEqualReferenceEqualsSub() {
+	public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
 		assertFailure(ev, "Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForCanEqualPoint.class.getSimpleName());
 	}
 	
 	@Test
-	public void canEqualSanityEqualsIsValidForSuper() {
+	public void succeed_whenEqualsIsOverridableAndCanEqualIsPresent_givenACorrectSubclass() {
 		EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(CanEqualColorPoint.class)
 				.verify();
 	}
 	
 	@Test
-	public void canEqualWithRedefinedSuperclass() {
+	public void succeed_whenEqualsIsOverridenTwiceThroughCanEqual_givenWithRedefinedSuperclass() {
 		EqualsVerifier.forClass(CanEqualColorPoint.class)
 				.withRedefinedSuperclass()
 				.verify();
 	}
 	
 	@Test
-	public void invalidWithRedefinedSuperclass() {
-		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class);
-		ev.withRedefinedSuperclass();
-		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
-				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
-	}
-	
-	@Test
-	public void equalsMethodFinalSoNoRedefinedSubclassNecessary() {
-		EqualsVerifier<RedeFinalPoint> ev = EqualsVerifier.forClass(RedeFinalPoint.class)
+	public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
+		EqualsVerifier<FinalEqualsAndHashCode> ev = EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
 				.withRedefinedSubclass(RedeFinalSubPoint.class);
-		assertFailure(ev, "Subclass", RedeFinalPoint.class.getSimpleName(), "has a final equals method", "No need to supply a redefined subclass");
+		assertFailure(ev, "Subclass", FinalEqualsAndHashCode.class.getSimpleName(),
+				"has a final equals method", "No need to supply a redefined subclass");
 	}
 	
 	@Test
-	public void abstractClass() {
+	public void succeed_whenClassIsAbstract_givenACorrectImplementationOfEqualsUnderInheritanceAndARedefinedSubclass() {
 		EqualsVerifier.forClass(AbstractRedefinablePoint.class)
 				.withRedefinedSubclass(SubclassForAbstractRedefinablePoint.class)
 				.verify();
 	}
 	
 	@Test
-	public void weakInheritanceBeforeRedefinedSubclass() {
+	public void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.suppress(Warning.STRICT_INHERITANCE)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
@@ -114,28 +107,28 @@ public class SubclassTest {
 	}
 	
 	@Test
-	public void weakInheritanceAfterRedefinedSubclass() {
+	public void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
 		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
 				.suppress(Warning.STRICT_INHERITANCE);
 		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
 	}
 	
-	static class RedeFinalPoint {
+	static class FinalEqualsAndHashCode {
 		private final int x;
 		private final int y;
-
-		public RedeFinalPoint(int x, int y) {
+		
+		public FinalEqualsAndHashCode(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
-
+		
 		@Override
 		public final boolean equals(Object obj) {
-			if (!(obj instanceof RedeFinalPoint)) {
+			if (!(obj instanceof FinalEqualsAndHashCode)) {
 				return false;
 			}
-			RedeFinalPoint p = (RedeFinalPoint)obj;
+			FinalEqualsAndHashCode p = (FinalEqualsAndHashCode)obj;
 			return x == p.x && y == p.y;
 		}
 		
@@ -150,7 +143,7 @@ public class SubclassTest {
 		}
 	}
 	
-	static final class RedeFinalSubPoint extends RedeFinalPoint {
+	static final class RedeFinalSubPoint extends FinalEqualsAndHashCode {
 		public RedeFinalSubPoint(int x, int y) {
 			super(x, y);
 		}
@@ -182,7 +175,7 @@ public class SubclassTest {
 		public int hashCode() {
 			return x + (31 * y);
 		}
-
+		
 		@Override
 		public String toString() {
 			return getClass().getSimpleName() + ":" + x + "," + y;
@@ -191,8 +184,8 @@ public class SubclassTest {
 	
 	static final class SubclassForAbstractRedefinablePoint extends AbstractRedefinablePoint {
 		private final Color color;
-
-		SubclassForAbstractRedefinablePoint(int x, int y, Color color) {
+		
+		public SubclassForAbstractRedefinablePoint(int x, int y, Color color) {
 			super(x, y);
 			this.color = color;
 		}
