@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,33 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.inheritance;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 
 import org.junit.Test;
 
 public class AbstractHierarchyTest {
 	@Test
-	public void abstractFinalMethods() {
+	public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
 		EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
 	}
 	
 	@Test
-	public void abstractRedefinable() {
+	public void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
 		EqualsVerifier.forClass(AbstractRedefinablePoint.class)
 				.withRedefinedSubclass(FinalRedefinedPoint.class)
 				.verify();
 	}
 	
 	@Test
-	public void abstractNeverNull() {
+	public void succeed_whenEqualsThrowsNull_givenClassIsAbstractAndWarningIsSuppressed() {
 		EqualsVerifier.forClass(NullThrowingColorContainer.class)
 				.suppress(Warning.NULL_FIELDS)
 				.verify();
-		
+	}
+	
+	@Test
+	public void succeed_whenEqualsThrowsNull_givenClassIsAbstract() {
 		EqualsVerifier<NullThrowingColorContainer> ev = EqualsVerifier.forClass(NullThrowingColorContainer.class);
 		assertFailure(ev, NullPointerException.class, "Non-nullity: equals throws NullPointerException");
 	}
@@ -48,7 +53,7 @@ public class AbstractHierarchyTest {
 		private final int x;
 		private final int y;
 		
-		AbstractFinalMethodsPoint(int x, int y) {
+		public AbstractFinalMethodsPoint(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -72,7 +77,7 @@ public class AbstractHierarchyTest {
 		private final int x;
 		private final int y;
 		
-		AbstractRedefinablePoint(int x, int y) {
+		public AbstractRedefinablePoint(int x, int y) {
 			this.x = x;
 			this.y = y;
 		}
@@ -104,7 +109,7 @@ public class AbstractHierarchyTest {
 	static final class FinalRedefinedPoint extends AbstractRedefinablePoint {
 		private final Color color;
 		
-		FinalRedefinedPoint(int x, int y, Color color) {
+		public FinalRedefinedPoint(int x, int y, Color color) {
 			super(x, y);
 			this.color = color;
 		}
