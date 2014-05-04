@@ -26,6 +26,7 @@ import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForBlindlyEqualsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForCanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 
 import org.junit.Test;
 
@@ -41,6 +42,18 @@ import org.junit.Test;
  *    Scala.
  */
 public class SubclassTest {
+	@Test
+	public void succeed_whenClassIsFinal() {
+		EqualsVerifier.forClass(FinalPoint.class).verify();
+	}
+	
+	@Test
+	public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
+		EqualsVerifier<LiskovSubstitutionPrincipleBroken> ev =
+				EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class);
+		assertFailure(ev, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields",	"Consider making the class final.");
+	}
+	
 	@Test
 	public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
 		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
@@ -112,6 +125,32 @@ public class SubclassTest {
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
 				.suppress(Warning.STRICT_INHERITANCE);
 		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
+	}
+	
+	static class LiskovSubstitutionPrincipleBroken {
+		private final int x;
+		
+		public LiskovSubstitutionPrincipleBroken(int x) {
+			this.x = x;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (obj == null || getClass() != obj.getClass()) {
+				return false;
+			}
+			return x == ((LiskovSubstitutionPrincipleBroken)obj).x;
+		}
+		
+		@Override
+		public final int hashCode() {
+			return x;
+		}
+		
+		@Override
+		public String toString() {
+			return getClass().getSimpleName() + ":" + x;
+		}
 	}
 	
 	static class FinalEqualsAndHashCode {
