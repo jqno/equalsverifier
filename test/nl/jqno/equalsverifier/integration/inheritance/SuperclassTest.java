@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.inheritance;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Empty;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
@@ -28,19 +29,19 @@ import org.junit.Test;
 
 public class SuperclassTest {
 	@Test
-	public void happyPath() {
+	public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlso() {
 		EqualsVerifier.forClass(ColorBlindColorPoint.class).verify();
 	}
 	
 	@Test
-	public void symmetry() {
+	public void fail_whenEqualsIsRedefinedSoItBreaksSymmetry_givenSuperHasRedefinedAlso() {
 		EqualsVerifier<SymmetryBrokenColorPoint> ev =
 				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
 		assertFailure(ev, "Symmetry", SymmetryBrokenColorPoint.class.getSimpleName(), "does not equal superclass instance", Point.class.getSimpleName());
 	}
 	
 	@Test
-	public void transitivity() {
+	public void fail_whenEqualsIsRedefinedSoItBreaksTransitivity_givenSuperHasRedefinedAlso() {
 		EqualsVerifier<TransitivityBrokenColorPoint> ev =
 				EqualsVerifier.forClass(TransitivityBrokenColorPoint.class);
 		assertFailure(ev, "Transitivity",
@@ -49,9 +50,9 @@ public class SuperclassTest {
 				"Point:1,1",
 				"which implies they equal each other.");
 	}
-
+	
 	@Test
-	public void referenceAndSuperSameHaveSameHashCode() {
+	public void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
 		EqualsVerifier<HashCodeBrokenPoint> ev =
 				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
 		assertFailure(ev, "Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
@@ -59,21 +60,21 @@ public class SuperclassTest {
 	}
 	
 	@Test
-	public void emptySuperclassesShouldNotFailOnEqualSuperclassInstance() {
+	public void succeed_whenSuperDoesNotRedefineEquals() {
 		EqualsVerifier.forClass(SubclassOfEmpty.class).verify();
 		EqualsVerifier.forClass(SubOfEmptySubOfEmpty.class).verify();
 		EqualsVerifier.forClass(SubOfEmptySubOfAbstract.class).verify();
 	}
 	
 	@Test
-	public void emptySuperclassIsIrrelevantWhenTheresEqualsHigherUp() {
+	public void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
 		EqualsVerifier<BrokenCanEqualColorPointWithEmptySuper> ev =
 				EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class);
 		assertFailure(ev, "Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
 	}
 	
 	@Test
-	public void invalidWithRedefinedSuperclass() {
+	public void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
 		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class)
 				.withRedefinedSuperclass();
 		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
@@ -102,10 +103,10 @@ public class SuperclassTest {
 			return super.toString() + "," + color;
 		}
 	}
-
+	
 	static class TransitivityBrokenColorPoint extends Point {
 		private final Color color;
-
+		
 		public TransitivityBrokenColorPoint(int x, int y, Color color) {
 			super(x, y);
 			this.color = color;
@@ -133,7 +134,7 @@ public class SuperclassTest {
 		public HashCodeBrokenPoint(int x, int y) {
 			super(x, y);
 		}
-
+		
 		@Override
 		public int hashCode() {
 			return super.hashCode() + 1;
