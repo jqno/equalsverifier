@@ -13,21 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extended_contract;
+package nl.jqno.equalsverifier.integration.inheritance;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class BalancedFinalityTest {
+public class FinalityTest {
 	private static final String BOTH_FINAL_OR_NONFINAL = "Finality: equals and hashCode must both be final or both be non-final";
-
+	private static final String SUBCLASS = "Subclass";
+	private static final String SUPPLY_AN_INSTANCE = "Supply an instance of a redefined subclass using withRedefinedSubclass";
+	
 	@Test
 	public void fail_whenEqualsIsFinalButHashCodeIsNonFinal() {
 		check(FinalEqualsNonFinalHashCode.class);
+	}
+
+	@Test
+	public void fail_whenEqualsIsNotFinal_givenAClassThatIsNotFinal() {
+		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
+		assertFailure(ev, SUBCLASS, "equals is not final", SUPPLY_AN_INSTANCE, "if equals cannot be final");
 	}
 	
 	@Test
@@ -39,14 +47,34 @@ public class BalancedFinalityTest {
 	}
 	
 	@Test
+	public void succeed_whenEqualsIsNotFinal_givenAClassThatIsNotFinalAndWarningIsSuppressed() {
+		EqualsVerifier.forClass(Point.class)
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
+	}
+	
+	@Test
 	public void fail_whenEqualsIsNonFinalButHashCodeIsFinal() {
 		check(NonFinalEqualsFinalHashCode.class);
 	}
-
+	
+	@Test
+	public void fail_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinal() {
+		EqualsVerifier<FinalEqualsPoint> ev = EqualsVerifier.forClass(FinalEqualsPoint.class);
+		assertFailure(ev, SUBCLASS, "hashCode is not final", SUPPLY_AN_INSTANCE, "if hashCode cannot be final");
+	}
+	
 	@Test
 	public void succeed_whenEqualsIsNonFinalButHashCodeIsFinal_givenWarningsAreSuppressed() {
 		EqualsVerifier.forClass(NonFinalEqualsFinalHashCode.class)
 				.usingGetClass()
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinalAndWarningIsSuppressed() {
+		EqualsVerifier.forClass(FinalEqualsPoint.class)
 				.suppress(Warning.STRICT_INHERITANCE)
 				.verify();
 	}
@@ -97,6 +125,17 @@ public class BalancedFinalityTest {
 		@Override
 		public final int hashCode() {
 			return i;
+		}
+	}
+
+	static class FinalEqualsPoint extends Point {
+		public FinalEqualsPoint(int x, int y) {
+			super(x, y);
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			return super.equals(obj);
 		}
 	}
 }
