@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,27 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.corner_cases;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
-public class GetClassIdentifiableTest {
+public class GetClassInEqualityComparisonTest {
 	@Test
-	public void identifiable() {
+	public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
 		EqualsVerifier.forClass(Identifiable.class)
 				.usingGetClass()
 				.verify();
 	}
 	
 	@Test
-	public void person() {
+	public void succeed_whenGetClassIsPartOfEqualityComparison_givenAConcreteImplementationAndUsingGetClassIsUsed() {
 		EqualsVerifier.forClass(Person.class)
 				.usingGetClass()
 				.verify();
 	}
 	
 	@Test
-	public void account() {
+	public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnotherConcreteImplementationAndUsingGetClassIsUsed() {
 		EqualsVerifier.forClass(Account.class)
 				.usingGetClass()
 				.verify();
