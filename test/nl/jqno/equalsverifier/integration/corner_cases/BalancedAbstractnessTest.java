@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extended_contract;
+package nl.jqno.equalsverifier.integration.corner_cases;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 
