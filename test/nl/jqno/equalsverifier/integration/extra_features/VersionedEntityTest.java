@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jan Ouwens
+ * Copyright 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,40 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 
 import org.junit.Test;
 
 public class VersionedEntityTest {
 	@Test
-	public void zeroIdDoesNotEqualItselfSoIdenticalCopiesArentAlwaysEqual() {
+	public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
 		EqualsVerifier<VersionedEntity> ev = EqualsVerifier.forClass(VersionedEntity.class);
 		assertFailure(ev, "object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
 	}
 	
 	@Test
-	public void nonZeroIdEqualsItselfSoIdenticalCopiesArentAlwaysUnequalEither() {
+	public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
 		EqualsVerifier<VersionedEntity> ev = EqualsVerifier.forClass(VersionedEntity.class);
 		ev.suppress(Warning.IDENTICAL_COPY);
 		assertFailure(ev, "Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
 	}
 	
 	@Test
-	public void versionedEntityWithIdenticalCopyForVersionedEntitySuppressed() {
+	public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
 		EqualsVerifier.forClass(VersionedEntity.class)
 				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
 				.verify();
 	}
-
+	
 	public static final class VersionedEntity {
 		private final long id;
-
+		
 		public VersionedEntity(long id) {
 			this.id = id;
 		}
-
+		
 		@Override
 		public int hashCode() {
 			if (id == 0L) {
@@ -54,7 +57,7 @@ public class VersionedEntityTest {
 			}
 			return (int)(id ^ (id >>> 32));
 		}
-
+		
 		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof VersionedEntity)) {
@@ -66,7 +69,7 @@ public class VersionedEntityTest {
 			}
 			return id == other.id;
 		}
-
+		
 		@Override
 		public String toString() {
 			return "[VersionedEntity id=" + id + "]";
