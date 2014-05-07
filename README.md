@@ -35,10 +35,10 @@ Project structure
   Code coverage tests, which fail if coverage is less than 100%
 * `nl.jqno.equalsverifier.integration.basic_contract`  
   Integration tests that cover the contract as stated in `java.lang.Object`'s javadoc
-* `nl.jqno.equalsverifier.integration.corner_cases`  
-  Integration tests that cover corner cases, such as specific Java language features
 * `nl.jqno.equalsverifier.integration.extended_contract`  
-  Integration tests that cover other essential points covered in other sources, such as Effective Java, but not in the javadoc
+  Integration tests that cover specific corner cases in the Java language, and other essential points that are discussed in other sources, such as Effective Java, but not in the javadoc
+* `nl.jqno.equalsverifier.integration.extra_features`  
+  Integration tests that cover non-standard situations that EqualsVerifier supports
 * `nl.jqno.equalsverifier.integration.inheritance`  
   Integration tests that cover inheritance in equality relations
 * `nl.jqno.equalsverifier.testhelpers`  
