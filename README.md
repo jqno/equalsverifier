@@ -41,6 +41,8 @@ Project structure
   Integration tests that cover non-standard situations that EqualsVerifier supports
 * `nl.jqno.equalsverifier.integration.inheritance`  
   Integration tests that cover inheritance in equality relations
+* `nl.jqno.equalsverifier.integration.operational`  
+  Integration tests that cover issues that don't pertain to equals or hashCode themselves, but to EqualsVerifier's operation
 * `nl.jqno.equalsverifier.testhelpers`  
   Utility classes for use in tests
 * `nl.jqno.equalsverifier.testhelpers.annotations`  
