@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.Multiple;
 
 import org.junit.Before;
@@ -46,7 +47,7 @@ public class RelaxedEqualsPreconditionTest {
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void equalFirstNull() {
+	public void throw_whenTheFirstExampleIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("First example is null.");
 		
@@ -54,7 +55,7 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void equalSecondNull() {
+	public void throw_whenTheSecondExampleIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Second example is null.");
 		
@@ -62,14 +63,14 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void equalMoreNull() {
+	public void succeed_whenTheVarargArrayIsNull() {
 		EqualsVerifier.forRelaxedEqualExamples(red, black, (Multiple[])null)
 				.andUnequalExample(green)
 				.verify();
 	}
 	
 	@Test
-	public void equalAnyNull() {
+	public void fail_whenAVarargParameterIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("One of the examples is null.");
 		
@@ -78,7 +79,7 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void unequalFirstNull() {
+	public void fail_whenTheUnequalExampleIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("First example is null.");
 		
@@ -87,14 +88,14 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void unequalMoreNull() {
+	public void succeed_whenTheUnequalVarargArrayIsNull() {
 		EqualsVerifier.forRelaxedEqualExamples(red, black)
 				.andUnequalExamples(green, (Multiple[])null)
 				.verify();
 	}
 	
 	@Test
-	public void unequalAnyNull() {
+	public void fail_whenAnUnequalVarargParameterIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		
 		Multiple another = new Multiple(3, 3);
@@ -103,7 +104,7 @@ public class RelaxedEqualsPreconditionTest {
 	}
 
 	@Test
-	public void incompatibleClass() {
+	public void fail_whenEqualExamplesAreOfDifferentRuntimeTypes() {
 		SubMultiple sm = new SubMultiple(1, 2);
 		EqualsVerifier<?> ev = EqualsVerifier.forRelaxedEqualExamples(sm, red)
 				.andUnequalExample(green);
@@ -111,14 +112,14 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void equalAllSame() {
+	public void fail_whenTheSameExampleIsGivenTwice() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(red, red)
 				.andUnequalExample(green);
 		assertFailure(ev, PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
 	}
 	
 	@Test
-	public void equalAllIdentical() {
+	public void fail_whenTwoExamplesAreEqual() {
 		Multiple aa = new Multiple(1, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(red, aa)
 				.andUnequalExample(green);
@@ -126,21 +127,21 @@ public class RelaxedEqualsPreconditionTest {
 	}
 	
 	@Test
-	public void equalAllUnequal() {
+	public void fail_whenAnEqualExampleIsAlsoGivenAsAnUnequalExample() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(red, green)
 				.andUnequalExample(green);
 		assertFailure(ev, PRECONDITION, NOT_ALL_EQUAL, "and", Multiple.class.getSimpleName());
 	}
 
 	@Test
-	public void unequalAllSame() {
+	public void fail_whenTheSameUnequalExampleIsGivenTwice() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(red, black)
 				.andUnequalExamples(green, green);
 		assertFailure(ev, PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
 	}
 	
 	@Test
-	public void unequalAllEqual() {
+	public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
 		Multiple xx = new Multiple(2, 2);
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(red, black)
 				.andUnequalExamples(green, xx);

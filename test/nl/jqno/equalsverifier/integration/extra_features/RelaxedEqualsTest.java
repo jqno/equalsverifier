@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.Multiple;
 
 import org.junit.Before;
@@ -34,27 +35,27 @@ public class RelaxedEqualsTest {
 	}
 
 	@Test
-	public void multipleFails() {
+	public void fail_whenObjectsWithDifferentFieldsAreEqual() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forExamples(a, b);
 		assertFailure(ev, "Precondition", "two objects are equal to each other");
 	}
 	
 	@Test
-	public void multipleSuccess() {
+	public void succeed_whenObjectsWithDifferentFieldsAreEqual_givenTheyAreGivenAsRelaxedEqualExamples() {
 		EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExample(x)
 				.verify();
 	}
 	
 	@Test
-	public void mixUpEqualAndUnequalExamples() {
+	public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
 		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
 				.andUnequalExamples(a);
 		assertFailure(ev, "Precondition", "the same object appears twice", Multiple.class.getSimpleName());
 	}
 	
 	@Test
-	public void individualFieldsOfEqualExamplesMayBeNull() {
+	public void succeed_whenAnUnusedFieldIsNull_givenItIsGivenAsARelaxedEqualExample() {
 		EqualsVerifier.forRelaxedEqualExamples(new NullContainingSubMultiple(1, 2), new NullContainingSubMultiple(2, 1))
 				.andUnequalExample(new NullContainingSubMultiple(2, 2))
 				.verify();
