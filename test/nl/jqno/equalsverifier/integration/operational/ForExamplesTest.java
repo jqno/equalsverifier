@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
@@ -24,14 +25,9 @@ import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class ConstructorsTest {
+public class ForExamplesTest {
 	@Test
-	public void classSuccess() {
-		EqualsVerifier.forClass(FinalPoint.class).verify();
-	}
-	
-	@Test
-	public void examplesSuccess() {
+	public void succeed_whenExamplesAreUnequal() {
 		FinalPoint red = new FinalPoint(1, 2);
 		FinalPoint black = new FinalPoint(2, 3);
 		FinalPoint green = new FinalPoint(3, 2);
@@ -41,7 +37,7 @@ public class ConstructorsTest {
 	}
 	
 	@Test
-	public void examplesFail() {
+	public void fail_whenExamplesAreRedefinable() {
 		Point red = new Point(1, 2);
 		Point black = new Point(2, 3);
 		EqualsVerifier<Point> ev = EqualsVerifier.forExamples(red, black);
@@ -49,7 +45,7 @@ public class ConstructorsTest {
 	}
 	
 	@Test
-	public void examplesContainsSubclasses() {
+	public void succeed_whenExamplesAreOverridable_givenACorrectlyImplementedSubclass() {
 		CanEqualPoint red = new CanEqualPoint(1, 2);
 		CanEqualPoint black = new CanEqualPoint(2, 3);
 		CanEqualColorPoint green = new CanEqualColorPoint(1, 2, Color.INDIGO);
@@ -57,18 +53,5 @@ public class ConstructorsTest {
 		EqualsVerifier.forExamples(red, black, green)
 				.withRedefinedSubclass(CanEqualColorPoint.class)
 				.verify();
-	}
-	
-	@Test
-	public void classWithPrefabExamples() {
-		EqualsVerifier.forClass(FinalPoint.class)
-				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
-				.verify();
-	}
-	
-	@Test
-	public void overwriteExistingPrefabValue() {
-		EqualsVerifier.forClass(FinalPoint.class)
-				.withPrefabValues(Object.class, new Object(), new Object());
 	}
 }

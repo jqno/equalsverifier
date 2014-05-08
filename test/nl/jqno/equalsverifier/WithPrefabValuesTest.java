@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -22,7 +24,20 @@ import org.junit.rules.ExpectedException;
 public class WithPrefabValuesTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
+	
+	@Test
+	public void classWithPrefabExamples() {
+		EqualsVerifier.forClass(FinalPoint.class)
+				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
+				.verify();
+	}
+	
+	@Test
+	public void overwriteExistingPrefabValue() {
+		EqualsVerifier.forClass(FinalPoint.class)
+				.withPrefabValues(Object.class, new Object(), new Object());
+	}
+	
 	@Test
 	public void nullPointerExceptionOtherClass() {
 		thrown.expect(NullPointerException.class);
