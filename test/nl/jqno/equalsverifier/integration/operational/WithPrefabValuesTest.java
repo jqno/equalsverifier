@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2013 Jan Ouwens
+ * Copyright 2012-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 
 import org.junit.Rule;
@@ -26,20 +27,20 @@ public class WithPrefabValuesTest {
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void classWithPrefabExamples() {
+	public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
 		EqualsVerifier.forClass(FinalPoint.class)
 				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
 				.verify();
 	}
 	
 	@Test
-	public void overwriteExistingPrefabValue() {
+	public void succeed_whenTheClassIsAlreadyKnown() {
 		EqualsVerifier.forClass(FinalPoint.class)
 				.withPrefabValues(Object.class, new Object(), new Object());
 	}
 	
 	@Test
-	public void nullPointerExceptionOtherClass() {
+	public void throw_whenTypeIsNull() {
 		thrown.expect(NullPointerException.class);
 		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
@@ -47,7 +48,7 @@ public class WithPrefabValuesTest {
 	}
 
 	@Test
-	public void nullPointerExceptionRed() {
+	public void throw_whenFirstPrefabValueIsNull() {
 		thrown.expect(NullPointerException.class);
 		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
@@ -55,7 +56,7 @@ public class WithPrefabValuesTest {
 	}
 
 	@Test
-	public void nullPointerExceptionBlack() {
+	public void throw_whenSecondPrefabValueIsNull() {
 		thrown.expect(NullPointerException.class);
 		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
@@ -63,11 +64,25 @@ public class WithPrefabValuesTest {
 	}
 	
 	@Test
-	public void illegalArgumentExceptionEqualParameters() {
+	public void throw_whenThePrefabValuesAreTheSame() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Both values are equal.");
 		
+		String red = "red";
+		
 		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(String.class, "red", "red");
+				.withPrefabValues(String.class, red, red);
+	}
+	
+	@Test
+	public void throw_whenThePrefabValuesAreEqual() {
+		thrown.expect(IllegalArgumentException.class);
+		thrown.expectMessage("Both values are equal.");
+		
+		String red1 = new String("red");
+		String red2 = new String("red");
+		
+		EqualsVerifier.forClass(WithPrefabValuesTest.class)
+				.withPrefabValues(String.class, red1, red2);
 	}
 }
