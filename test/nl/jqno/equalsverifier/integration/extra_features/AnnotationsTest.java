@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2013 Jan Ouwens
+ * Copyright 2011, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.matchers.JUnitMatchers.containsString;
-import nl.jqno.equalsverifier.testhelpers.Util;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
@@ -36,56 +37,59 @@ import org.junit.rules.ExpectedException;
 public class AnnotationsTest {
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
+	
 	@Test
-	public void immutable() {
+	public void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
 				.verify();
 	}
 	
 	@Test
-	public void immutableDoesntInherit() {
+	public void succeed_whenRedefinableClassHasNonfinalFields_givenImmutableAnnotationAndAppropriateSubclass() {
 		EqualsVerifier.forClass(ImmutableCanEqualPoint.class)
 				.withRedefinedSubclass(MutableCanEqualColorPoint.class)
 				.verify();
-		
+	}
+	
+	@Test
+	public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
 		EqualsVerifier<MutableCanEqualColorPoint> ev = EqualsVerifier.forClass(MutableCanEqualColorPoint.class)
 				.withRedefinedSuperclass();
 		assertFailure(ev, "Mutability", "equals depends on mutable field", "color");
 	}
 	
 	@Test
-	public void nonnull() {
+	public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {
 		EqualsVerifier.forClass(NonnullByAnnotation.class)
 				.verify();
 	}
 	
 	@Test
-	public void nonnullMissedOne() {
+	public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
 		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
 		assertFailure(ev, NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
 	}
 	
 	@Test
-	public void nonnullInherits() {
+	public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationInSuperclass() {
 		EqualsVerifier.forClass(SubclassNonnullByAnnotation.class)
 				.verify();
 	}
 	
 	@Test
-	public void entityHappyPath() {
+	public void succeed_whenFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
 		EqualsVerifier.forClass(EntityByJpaAnnotation.class)
 				.verify();
 	}
 	
 	@Test
-	public void entityDoesntInherit() {
+	public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
 		EqualsVerifier<SubclassEntityByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class);
-		Util.assertFailure(ev, "Mutability");
+		assertFailure(ev, "Mutability");
 	}
 	
 	@Test
-	public void entityNonJpaAnnotation() {
+	public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
 		thrown.expect(AssertionError.class);
 		thrown.expectMessage(containsString("Mutability"));
 		
@@ -94,32 +98,32 @@ public class AnnotationsTest {
 	}
 	
 	@Test
-	public void jpaTransient() {
+	public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotation() {
 		EqualsVerifier<TransientByJpaAnnotation> ev = EqualsVerifier.forClass(TransientByJpaAnnotation.class);
 		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
 	}
 	
 	@Test
-	public void jpaTransientInherits() {
+	public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotationInSuperclass() {
 		EqualsVerifier<SubclassTransientByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassTransientByJpaAnnotation.class);
 		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
 	}
 	
 	@Test
-	public void ignoreNonJpaTransient() {
+	public void succeed_whenFieldsAreUsedInEquals_givenTransientAnnotationResidesInWrongPackage() {
 		EqualsVerifier.forClass(TransientByNonJpaAnnotation.class)
 				.verify();
 	}
 	
 	@Test
-	public void dynamicClassThrowsAppropriateException() {
+	public void fail_whenReadingAnnotationsFromDynamicClass() {
 		FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
 		EqualsVerifier<? extends FinalMethodsPoint> ev = EqualsVerifier.forClass(dynamic.getClass());
 		assertFailure(ev, "Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
 	}
 	
 	@Test
-	public void dynamicClassWithSuppressedWarning() {
+	public void succeed_whenClassIsDynamic_givenAnnotationWarningIsSuppressed() {
 		FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
 		EqualsVerifier.forClass(dynamic.getClass())
 				.suppress(Warning.ANNOTATION)
@@ -127,7 +131,7 @@ public class AnnotationsTest {
 	}
 	
 	@Test
-	public void regularClassWithSuppressedWarningStillProcessesAnnotation() {
+	public void succeed_whenClassIsNotDynamic_givenAnnotationWarningIsSuppressed() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
 				.suppress(Warning.ANNOTATION)
 				.verify();
@@ -137,7 +141,7 @@ public class AnnotationsTest {
 	public static final class ImmutableByAnnotation {
 		private int i;
 		
-		ImmutableByAnnotation(int i) {
+		public ImmutableByAnnotation(int i) {
 			this.i = i;
 		}
 		
@@ -163,7 +167,7 @@ public class AnnotationsTest {
 		@NotNull
 		private final Object q;
 		
-		NonnullByAnnotation(Object o, Object p, Object q) {
+		public NonnullByAnnotation(Object o, Object p, Object q) {
 			this.o = o;
 			this.p = p;
 			this.q = q;
@@ -189,7 +193,7 @@ public class AnnotationsTest {
 	}
 	
 	static final class SubclassNonnullByAnnotation extends NonnullByAnnotation {
-		SubclassNonnullByAnnotation(Object o, Object p, Object q) {
+		public SubclassNonnullByAnnotation(Object o, Object p, Object q) {
 			super(o, p, q);
 		}
 	}
@@ -202,7 +206,7 @@ public class AnnotationsTest {
 		@Nonnull
 		private final Object q;
 		
-		NonnullByAnnotationMissedOne(Object o, Object p, Object q) {
+		public NonnullByAnnotationMissedOne(Object o, Object p, Object q) {
 			this.o = o;
 			this.noAnnotation = p;
 			this.q = q;
