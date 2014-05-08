@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
@@ -40,7 +41,7 @@ public class PreconditionTest {
 	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
-	public void firstNull() {
+	public void fail_whenFirstExampleIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("First example is null.");
 		
@@ -48,7 +49,7 @@ public class PreconditionTest {
 	}
 	
 	@Test
-	public void secondNull() {
+	public void fail_whenSecondExampleIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("Second example is null.");
 		
@@ -56,12 +57,12 @@ public class PreconditionTest {
 	}
 	
 	@Test
-	public void moreNull() {
+	public void succeed_whenTheVarargsArrayIsNull() {
 		EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
 	}
 	
 	@Test
-	public void anyNull() {
+	public void fail_whenAVarargsParameterIsNull() {
 		thrown.expect(IllegalArgumentException.class);
 		thrown.expectMessage("One of the examples is null.");
 		
@@ -70,19 +71,19 @@ public class PreconditionTest {
 	}
 	
 	@Test
-	public void incompatibleClass() {
+	public void fail_whenExamplesAreOfIncompatibleTypes() {
 		EqualsVerifier<?> ev = EqualsVerifier.forExamples(first, new Point(1, 2));
 		assertFailure(ev, PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
 	}
 	
 	@Test
-	public void allSame() {
+	public void fail_whenExamplesAreTheSame() {
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, first);
 		assertFailure(ev, PRECONDITION, "the same object appears twice", FinalPoint.class.getSimpleName());
 	}
 	
 	@Test
-	public void allEqual() {
+	public void fail_whenExamplesAreNotTheSameButEqual() {
 		FinalPoint firstest = new FinalPoint(1, 2);
 		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, firstest);
 		assertFailure(ev, PRECONDITION, "two objects are equal to each other", FinalPoint.class.getSimpleName());
