@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010 Jan Ouwens
+ * Copyright 2009-2010, 2014 Jan Ouwens
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,11 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,40 +36,46 @@ public class RecursionTest {
 	}
 	
 	@Test
-	public void classRecursiveFail() {
+	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
 		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
 	}
 	
 	@Test
-	public void examplesRecursiveFail() {
+	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsExamples() {
 		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(red, black);
 		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
 	}
 	
 	@Test
-	public void recursiveWithPrefabValues() {
+	public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
 		EqualsVerifier.forClass(Node.class)
 				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
-	public void recursiveWithPrefabValuesForSuper() {
+	public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
 		EqualsVerifier.forClass(SubNode.class)
 				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
-	public void recursiveClassContainerWithPrefabValues() {
+	public void fail_whenFieldIsARecursiveType() {
+		EqualsVerifier<NodeContainer> ev = EqualsVerifier.forClass(NodeContainer.class);
+		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
+	}
+	
+	@Test
+	public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
 		EqualsVerifier.forClass(NodeContainer.class)
 				.withPrefabValues(Node.class, red, black)
 				.verify();
 	}
 	
 	@Test
-	public void recursiveClassContainerWithPrefabValuesForSuper() {
+	public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
 		EqualsVerifier.forClass(SubNodeContainer.class)
 				.withPrefabValues(Node.class, red, black)
 				.verify();
@@ -77,7 +84,7 @@ public class RecursionTest {
 	static class Node {
 		final Node node;
 		
-		Node(Node node) {
+		public Node(Node node) {
 			this.node = node;
 		}
 		
@@ -97,7 +104,7 @@ public class RecursionTest {
 	}
 	
 	static class SubNode extends Node {
-		SubNode(Node node) {
+		public SubNode(Node node) {
 			super(node);
 		}
 	}
@@ -105,7 +112,7 @@ public class RecursionTest {
 	static class NodeContainer {
 		final Node node;
 		
-		NodeContainer(Node node) {
+		public NodeContainer(Node node) {
 			this.node = node;
 		}
 		
