@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 import nl.jqno.equalsverifier.util.Formatter;
@@ -46,49 +47,49 @@ public class OutputTest {
 	private Throwable thrown;
 	
 	@Test
-	public void assertionException() {
+	public void messageIsValidAndExceptionHasNoCause_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
 		testFor(Point.class);
 		
-		assertBasicValidity();
-		assertNoCause();
+		assertMessageIsValid();
+		assertExceptionHasNoCause();
 	}
 	
 	@Test
-	public void assertionExceptionWithCause() {
+	public void messageIsValidAndExceptionHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
 		testFor(AssertionExceptionWithCauseThrower.class);
 		
-		assertBasicValidity();
+		assertMessageIsValid();
 		assertMessageContains(MESSAGE);
 		assertMessageDoesNotContain(NullPointerException.class.getSimpleName());
 		assertCause(NullPointerException.class, null);
 	}
 	
 	@Test
-	public void recursionException() {
-		testFor(Node.class);
+	public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
+		testFor(UnsupportedOperationExceptionWithMessageThrower.class);
 		
-		assertBasicValidity();
-		assertNoCause();
-	}
-
-	@Test
-	public void anyOtherExceptionWithMessage() {
-		testFor(UnsupportedOperationExceptionThrower.class);
-		
-		assertBasicValidity();
+		assertMessageIsValid();
 		assertMessageContains(UnsupportedOperationException.class.getName(), MESSAGE);
 		assertMessageDoesNotContain("null");
 		assertCause(UnsupportedOperationException.class, MESSAGE);
 	}
 	
 	@Test
-	public void anyOtherExceptionWithoutMessage() {
+	public void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
 		testFor(IllegalStateExceptionThrower.class);
 		
-		assertBasicValidity();
+		assertMessageIsValid();
 		assertMessageContains(IllegalStateException.class.getName());
 		assertMessageDoesNotContain("null");
 		assertCause(IllegalStateException.class, null);
+	}
+	
+	@Test
+	public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
+		testFor(Node.class);
+		
+		assertMessageIsValid();
+		assertExceptionHasNoCause();
 	}
 	
 	private void testFor(Class<?> type) {
@@ -101,7 +102,7 @@ public class OutputTest {
 		}
 	}
 	
-	private void assertBasicValidity() {
+	private void assertMessageIsValid() {
 		assertMessageContains(SEE_ALSO, WIKIPAGE_URL);
 		assertMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
 	}
@@ -119,13 +120,13 @@ public class OutputTest {
 			assertFalse("<<" + message + ">> contains + " + s, message.contains(s));
 		}
 	}
-
+	
 	private void assertCause(Class<? extends Throwable> cause, String message) {
 		assertEquals(cause, thrown.getCause().getClass());
 		assertEquals(message, thrown.getCause().getMessage());
 	}
 	
-	private void assertNoCause() {
+	private void assertExceptionHasNoCause() {
 		assertNull(thrown.getCause());
 	}
 	
@@ -137,7 +138,7 @@ public class OutputTest {
 		}
 	}
 	
-	private static class UnsupportedOperationExceptionThrower {
+	private static class UnsupportedOperationExceptionWithMessageThrower {
 		@Override
 		public boolean equals(Object obj) {
 			throw new UnsupportedOperationException(MESSAGE);
