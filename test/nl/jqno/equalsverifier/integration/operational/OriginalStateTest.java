@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Jan Ouwens
+ * Copyright 2012, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
@@ -33,14 +34,14 @@ public class OriginalStateTest {
 	private static final Object STATIC_FINAL = new Object();
 	
 	@Test
-	public void staticValueReturnsToOriginalState() {
+	public void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
 		EqualsVerifier.forClass(CorrectEquals.class).verify();
 		assertEquals(STATIC_FINAL, CorrectEquals.staticFinalValue);
 		assertEquals(STATIC, CorrectEquals.staticValue);
 	}
 	
 	@Test
-	public void instanceValueReturnsToOriginalState() {
+	public void instanceValueReturnsToOriginalState_whenEqualsVerifierIsFinished_givenForExamplesIsUsed() {
 		CorrectEquals one = new CorrectEquals(INSTANCE_1);
 		CorrectEquals two = new CorrectEquals(INSTANCE_2);
 		EqualsVerifier.forExamples(one, two).verify();
@@ -50,19 +51,19 @@ public class OriginalStateTest {
 	}
 	
 	@Test
-	public void staticValueReturnsToOriginalStateRecursively() {
+	public void staticValueReturnsToOriginalStateRecursively_whenEqualsVerifierIsFinished() {
 		EqualsVerifier.forClass(CorrectEqualsContainer.class).verify();
 		assertEquals(STATIC, CorrectEquals.staticValue);
 	}
 	
 	@Test
-	public void staticValueReturnsToOriginalStateDeeplyRecursively() {
+	public void staticValueReturnsToOriginalStateDeeplyRecursively_whenEqualsVerifierIsFinished() {
 		EqualsVerifier.forClass(CorrectEqualsContainerContainer.class).verify();
 		assertEquals(STATIC, CorrectEquals.staticValue);
 	}
-
+	
 	@Test
-	public void staticValueInSuperReturnsToOriginalState() {
+	public void staticValueInSuperReturnsToOriginalState_whenEqualsVerifierIsFinished() {
 		EqualsVerifier.forClass(SubContainer.class).verify();
 		assertEquals(STATIC, CorrectEquals.staticValue);
 		assertEquals(STATIC, SuperContainer.staticValue);
@@ -70,18 +71,18 @@ public class OriginalStateTest {
 	}
 	
 	@Test
-	public void valuesReturnToOriginalStateAfterException() throws NoSuchFieldException {
+	public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
 		MockStaticFieldValueStash stash = new MockStaticFieldValueStash();
-
+		
 		// Mock EqualsVerifier's StaticFieldValueStash
 		ObjectAccessor<EqualsVerifier<MutableIntContainer>> objectAccessor = ObjectAccessor.of(ev);
 		FieldAccessor stashAccessor = objectAccessor.fieldAccessorFor(EqualsVerifier.class.getDeclaredField("stash"));
 		stashAccessor.set(stash);
-
+		
 		// Make sure the exception actually occurs, on a check that actually mutates the fields.
 		assertFailure(ev, "Mutability");
-
+		
 		// Assert
 		assertTrue(stash.restoreCalled);
 	}
@@ -188,7 +189,7 @@ public class OriginalStateTest {
 	static final class MutableIntContainer {
 		private int field;
 		
-		MutableIntContainer(int value) {
+		public MutableIntContainer(int value) {
 			field = value;
 		}
 		
