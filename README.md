@@ -30,7 +30,7 @@ Project structure
 * `javax.persistence`  
   Annotations used by integration tests
 * `nl.jqno.equalsverifier`  
-  Integration tests
+  Unit tests for specific subcomponents of EqualsVerifier
 * `nl.jqno.equalsverifier.coverage`  
   Code coverage tests, which fail if coverage is less than 100%
 * `nl.jqno.equalsverifier.integration.basic_contract`  

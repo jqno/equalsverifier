@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jan Ouwens
+ * Copyright 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ public class FieldInspectorTest {
 	private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
 	
 	@Test
-	public void resetObjectForEachIteration() {
+	public void objectsAreReset_whenEachIterationBegins() {
 		FieldInspector<Point> inspector = new FieldInspector<Point>(accessor);
 		
 		inspector.check(new ResetObjectForEachIterationCheck());
