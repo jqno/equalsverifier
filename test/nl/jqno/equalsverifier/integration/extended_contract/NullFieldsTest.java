@@ -88,7 +88,7 @@ public class NullFieldsTest {
 	static final class EqualsThrowsNpeOnThis {
 		final Color color;
 		
-		EqualsThrowsNpeOnThis(Color color) {
+		public EqualsThrowsNpeOnThis(Color color) {
 			this.color = color;
 		}
 		
@@ -110,7 +110,7 @@ public class NullFieldsTest {
 	static final class EqualsThrowsNpeOnOther {
 		final Color color;
 		
-		EqualsThrowsNpeOnOther(Color color) {
+		public EqualsThrowsNpeOnOther(Color color) {
 			this.color = color;
 		}
 		
@@ -132,7 +132,7 @@ public class NullFieldsTest {
 	static final class HashCodeThrowsNpe {
 		private final Color color;
 		
-		HashCodeThrowsNpe(Color color) {
+		public HashCodeThrowsNpe(Color color) {
 			this.color = color;
 		}
 		
