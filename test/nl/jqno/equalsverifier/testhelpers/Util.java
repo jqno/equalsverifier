@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2010, 2013-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
+
+import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.util.FieldIterable;
 
 public class Util {
 	public static void assertFailure(EqualsVerifier<?> equalsVerifier, String first, String... more) {
@@ -54,6 +58,41 @@ public class Util {
 		if (cause != null) {
 			assertEquals(cause, e.getCause().getClass());
 		}
+	}
+	
+	public static boolean defaultEquals(Object here, Object there) {
+		Class<?> type = here.getClass();
+		if (!here.getClass().isAssignableFrom(type)) {
+			return false;
+		}
+		boolean equals = true;
+		try {
+			for (Field f : FieldIterable.of(type)) {
+				f.setAccessible(true);
+				Object x = f.get(here);
+				Object y = f.get(there);
+				equals &= nullSafeEquals(x, y);
+			}
+		}
+		catch (IllegalAccessException e) {
+			fail(e.toString());
+		}
+		return equals;
+	}
+	
+	public static int defaultHashCode(Object x) {
+		int hash = 59;
+		try {
+			for (Field f : FieldIterable.of(x.getClass())) {
+				f.setAccessible(true);
+				Object val = f.get(x);
+				hash += 59 * nullSafeHashCode(val);
+			}
+		}
+		catch (IllegalAccessException e) {
+			fail(e.toString());
+		}
+		return hash;
 	}
 	
 	public static boolean nullSafeEquals(Object x, Object y) {
