@@ -70,7 +70,7 @@ public class Util {
 			for (Field f : FieldIterable.of(type)) {
 				f.setAccessible(true);
 				Object x = f.get(here);
-				Object y = f.get(there);
+				Object y = there == null ? null : f.get(there);
 				equals &= nullSafeEquals(x, y);
 			}
 		}
