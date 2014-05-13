@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010,2012,2014 Jan Ouwens
+ * Copyright 2009-2010, 2012, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,32 +15,29 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class SymmetryTest {
+public class SymmetryTest extends IntegrationTestBase {
 	private static final String SYMMETRY = "Symmetry";
 	private static final String NOT_SYMMETRIC = "objects are not symmetric";
 	private static final String AND = "and";
 
 	@Test
 	public void fail_whenEqualsIsNotSymmetrical() {
-		EqualsVerifier<SymmetryIntentionallyBroken> ev = EqualsVerifier.forClass(SymmetryIntentionallyBroken.class);
-		assertFailure(ev, SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
+		expectFailure(SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
+		EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify();;
 	}
 	
 	static final class SymmetryIntentionallyBroken {
 		private final int x;
 		private final int y;
-
-		public SymmetryIntentionallyBroken(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
-
+		
+		public SymmetryIntentionallyBroken(int x, int y) { this.x = x; this.y = y; }
+		
 		@Override
 		public boolean equals(Object obj) {
 			if (goodEquals(obj)) {
@@ -51,7 +48,7 @@ public class SymmetryTest {
 			}
 			return hashCode() > obj.hashCode();
 		}
-
+		
 		public boolean goodEquals(Object obj) {
 			if (!(obj instanceof SymmetryIntentionallyBroken)) {
 				return false;
@@ -60,14 +57,6 @@ public class SymmetryTest {
 			return p.x == x && p.y == y;
 		}
 		
-		@Override
-		public int hashCode() {
-			return x + (31 * y);
-		}
-		
-		@Override
-		public String toString() {
-			return getClass().getSimpleName() + ":" + x + "," + y;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

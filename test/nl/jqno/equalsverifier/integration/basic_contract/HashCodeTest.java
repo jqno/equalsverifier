@@ -15,23 +15,21 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class HashCodeTest {
+public class HashCodeTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
-		EqualsVerifier<RandomHashCode> ev = EqualsVerifier.forClass(RandomHashCode.class);
-		assertFailure(ev, "hashCode: hashCodes should be equal", RandomHashCode.class.getSimpleName());
+		expectFailure("hashCode: hashCodes should be equal", RandomHashCode.class.getSimpleName());
+		EqualsVerifier.forClass(RandomHashCode.class).verify();
 	}
 	
 	static class RandomHashCode extends Point {
-		public RandomHashCode(int x, int y) {
-			super(x, y);
-		}
+		public RandomHashCode(int x, int y) { super(x, y); }
 
 		@Override
 		public int hashCode() {

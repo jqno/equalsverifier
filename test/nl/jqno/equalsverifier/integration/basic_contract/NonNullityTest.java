@@ -15,41 +15,39 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class NonNullityTest {
+public class NonNullityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
-		EqualsVerifier<NullPointerExceptionThrower> ev = EqualsVerifier.forClass(NullPointerExceptionThrower.class);
-		assertFailure(ev, "Non-nullity: NullPointerException thrown");
+		expectFailure("Non-nullity: NullPointerException thrown");
+		EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsReturnsTrue_givenNullInput() {
-		EqualsVerifier<NullReturnsTrue> ev = EqualsVerifier.forClass(NullReturnsTrue.class);
-		assertFailure(ev, "Non-nullity: true returned for null value");
+		expectFailure("Non-nullity: true returned for null value");
+		EqualsVerifier.forClass(NullReturnsTrue.class).verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsDoesNotTypeCheck() {
-		EqualsVerifier<NoTypeCheck> ev = EqualsVerifier.forClass(NoTypeCheck.class);
-		assertFailure(ev, ClassCastException.class, "Type-check: equals throws ClassCastException");
+		expectFailureWithCause(ClassCastException.class, "Type-check: equals throws ClassCastException");
+		EqualsVerifier.forClass(NoTypeCheck.class).verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
-		EqualsVerifier<NoTypeCheckButNoClassCastExceptionEither> ev = EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class);
-		assertFailure(ev, IllegalStateException.class, "Type-check: equals throws IllegalStateException");
+		expectFailureWithCause(IllegalStateException.class, "Type-check: equals throws IllegalStateException");
+		EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify();
 	}
 	
 	static final class NullPointerExceptionThrower extends Point {
-		public NullPointerExceptionThrower(int x, int y) {
-			super(x, y);
-		}
+		public NullPointerExceptionThrower(int x, int y) { super(x, y); }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -61,9 +59,7 @@ public class NonNullityTest {
 	}
 	
 	static final class NullReturnsTrue extends Point {
-		public NullReturnsTrue(int x, int y) {
-			super(x, y);
-		}
+		public NullReturnsTrue(int x, int y) { super(x, y); }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -77,9 +73,7 @@ public class NonNullityTest {
 	static final class NoTypeCheck {
 		private int i;
 		
-		public NoTypeCheck(int i) {
-			this.i = i;
-		}
+		public NoTypeCheck(int i) { this.i = i; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -93,9 +87,7 @@ public class NonNullityTest {
 	static final class NoTypeCheckButNoClassCastExceptionEither {
 		private int i;
 		
-		public NoTypeCheckButNoClassCastExceptionEither(int i) {
-			this.i = i;
-		}
+		public NoTypeCheckButNoClassCastExceptionEither(int i) { this.i = i; }
 		
 		@Override
 		public boolean equals(Object obj) {

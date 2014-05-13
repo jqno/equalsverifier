@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010,2012,2014 Jan Ouwens
+ * Copyright 2009-2010, 2012, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,33 +15,33 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class ReflexivityTest {
+public class ReflexivityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenReferencesAreNotEqual() {
-		EqualsVerifier<ReflexivityIntentionallyBroken> ev = EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class);
-		assertFailure(ev, "Reflexivity", "object does not equal itself", ReflexivityIntentionallyBroken.class.getSimpleName());
+		expectFailure("Reflexivity", "object does not equal itself", ReflexivityIntentionallyBroken.class.getSimpleName());
+		EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class).verify();
 	}
 	
 	@Test
 	public void fail_whenTheWrongFieldsAreComparedInEquals() {
-		EqualsVerifier<FieldsMixedUpInEquals> ev = EqualsVerifier.forClass(FieldsMixedUpInEquals.class);
-		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", FieldsMixedUpInEquals.class.getSimpleName());
+		expectFailure("Reflexivity", "object does not equal an identical copy of itself", FieldsMixedUpInEquals.class.getSimpleName());
+		EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify();
 	}
 	
 	@Test
 	public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
-		EqualsVerifier<ReflexivityBrokenOnNullFields> ev = EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class);
-		assertFailure(ev, "Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
+		expectFailure("Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
+		EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify();
 	}
 		
 	@Test
@@ -53,14 +53,14 @@ public class ReflexivityTest {
 	
 	@Test
 	public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
-		EqualsVerifier<WrongInstanceofCheck> ev = EqualsVerifier.forClass(WrongInstanceofCheck.class);
-		assertFailure(ev, "Reflexivity", "object does not equal an identical copy of itself", WrongInstanceofCheck.class.getSimpleName());
+		expectFailure("Reflexivity", "object does not equal an identical copy of itself", WrongInstanceofCheck.class.getSimpleName());
+		EqualsVerifier.forClass(WrongInstanceofCheck.class).verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
-		EqualsVerifier<SuperCallerWithUnusedField> ev = EqualsVerifier.forClass(SuperCallerWithUnusedField.class);
-		assertFailure(ev, "Reflexivity", "identical copy");
+		expectFailure("Reflexivity", "identical copy");
+		EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify();
 	}
 	
 	@Test
@@ -72,17 +72,15 @@ public class ReflexivityTest {
 	
 	@Test
 	public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
-		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY);
-		assertFailure(ev, "Unnecessary suppression", "IDENTICAL_COPY");
+		expectFailure("Unnecessary suppression", "IDENTICAL_COPY");
+		EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY).verify();
 	}
 	
 	static final class ReflexivityIntentionallyBroken extends Point {
 		// Instantiator.scramble will flip this boolean.
 		private boolean broken = false;
 		
-		public ReflexivityIntentionallyBroken(int x, int y) {
-			super(x, y);
-		}
+		public ReflexivityIntentionallyBroken(int x, int y) { super(x, y); }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -100,11 +98,7 @@ public class ReflexivityTest {
 		@SuppressWarnings("unused")
 		private final String unused;
 		
-		public FieldsMixedUpInEquals(String one, String two, String unused) {
-			this.one = one;
-			this.two = two;
-			this.unused = unused;
-		}
+		public FieldsMixedUpInEquals(String one, String two, String unused) { this.one = one; this.two = two; this.unused = unused; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -119,30 +113,13 @@ public class ReflexivityTest {
 			return nullSafeEquals(two, other.one) && nullSafeEquals(two, other.two);
 		}
 		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = (prime * result) + nullSafeHashCode(one);
-			result = (prime * result) + nullSafeHashCode(two);
-			return result;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class ReflexivityBrokenOnNullFields {
 		private final Object a;
 		
-		public ReflexivityBrokenOnNullFields(Object a) {
-			this.a = a;
-		}
-		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((a == null) ? 0 : a.hashCode());
-			return result;
-		}
+		public ReflexivityBrokenOnNullFields(Object a) { this.a = a; } 
 		
 		// This equals method was generated by Eclipse, except for the indicated line.
 		@Override
@@ -164,14 +141,14 @@ public class ReflexivityTest {
 				return false;
 			return true;
 		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class WrongInstanceofCheck {
 		private final int foo;
 		
-		public WrongInstanceofCheck(int foo) {
-			this.foo = foo;
-		}
+		public WrongInstanceofCheck(int foo) { this.foo = foo; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -185,10 +162,7 @@ public class ReflexivityTest {
 			return foo == other.foo;
 		}
 		
-		@Override
-		public int hashCode() {
-			return foo;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class SomethingCompletelyDifferent {}
@@ -197,9 +171,7 @@ public class ReflexivityTest {
 		@SuppressWarnings("unused")
 		private final int unused;
 		
-		public SuperCallerWithUnusedField(int unused) {
-			this.unused = unused;
-		}
+		public SuperCallerWithUnusedField(int unused) { this.unused = unused; }
 		
 		@Override
 		public boolean equals(Object obj) {
