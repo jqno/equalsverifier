@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012,2014 Jan Ouwens
+ * Copyright 2010-2012, 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public class FieldAccessor {
 	 * @param object The object we want to access.
 	 * @param field A field of object.
 	 */
-	FieldAccessor(Object object, Field field) {
+	public FieldAccessor(Object object, Field field) {
 		this.object = object;
 		this.field = field;
 	}
