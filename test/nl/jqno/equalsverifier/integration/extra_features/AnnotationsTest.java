@@ -15,12 +15,13 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
@@ -30,14 +31,10 @@ import nl.jqno.equalsverifier.testhelpers.points.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.points.MutableCanEqualColorPoint;
 import nl.jqno.equalsverifier.util.Instantiator;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-public class AnnotationsTest {
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
+@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+public class AnnotationsTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
 		EqualsVerifier.forClass(ImmutableByAnnotation.class)
@@ -53,9 +50,10 @@ public class AnnotationsTest {
 	
 	@Test
 	public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
-		EqualsVerifier<MutableCanEqualColorPoint> ev = EqualsVerifier.forClass(MutableCanEqualColorPoint.class)
-				.withRedefinedSuperclass();
-		assertFailure(ev, "Mutability", "equals depends on mutable field", "color");
+		expectFailure("Mutability", "equals depends on mutable field", "color");
+		EqualsVerifier.forClass(MutableCanEqualColorPoint.class)
+				.withRedefinedSuperclass()
+				.verify();
 	}
 	
 	@Test
@@ -66,8 +64,9 @@ public class AnnotationsTest {
 	
 	@Test
 	public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
-		EqualsVerifier<NonnullByAnnotationMissedOne> ev = EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class);
-		assertFailure(ev, NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
+		expectFailureWithCause(NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
+		EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class)
+				.verify();
 	}
 	
 	@Test
@@ -84,29 +83,30 @@ public class AnnotationsTest {
 	
 	@Test
 	public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
-		EqualsVerifier<SubclassEntityByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class);
-		assertFailure(ev, "Mutability");
+		expectFailure("Mutability");
+		EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
-		thrown.expect(AssertionError.class);
-		thrown.expectMessage(containsString("Mutability"));
-		
+		expectFailure("Mutability");
 		EqualsVerifier.forClass(EntityByNonJpaAnnotation.class)
 				.verify();
 	}
 	
 	@Test
 	public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotation() {
-		EqualsVerifier<TransientByJpaAnnotation> ev = EqualsVerifier.forClass(TransientByJpaAnnotation.class);
-		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
+		expectFailure("Transient field", "should not be included in equals/hashCode contract");
+		EqualsVerifier.forClass(TransientByJpaAnnotation.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotationInSuperclass() {
-		EqualsVerifier<SubclassTransientByJpaAnnotation> ev = EqualsVerifier.forClass(SubclassTransientByJpaAnnotation.class);
-		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
+		expectFailure("Transient field", "should not be included in equals/hashCode contract");
+		EqualsVerifier.forClass(SubclassTransientByJpaAnnotation.class)
+				.verify();
 	}
 	
 	@Test
@@ -118,8 +118,9 @@ public class AnnotationsTest {
 	@Test
 	public void fail_whenReadingAnnotationsFromDynamicClass() {
 		FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
-		EqualsVerifier<? extends FinalMethodsPoint> ev = EqualsVerifier.forClass(dynamic.getClass());
-		assertFailure(ev, "Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
+		expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
+		EqualsVerifier.forClass(dynamic.getClass())
+				.verify();
 	}
 	
 	@Test
@@ -141,22 +142,10 @@ public class AnnotationsTest {
 	public static final class ImmutableByAnnotation {
 		private int i;
 		
-		public ImmutableByAnnotation(int i) {
-			this.i = i;
-		}
+		public ImmutableByAnnotation(int i) { this.i = i; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof ImmutableByAnnotation)) {
-				return false;
-			}
-			return i == ((ImmutableByAnnotation)obj).i;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i;
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
 	
 	static class NonnullByAnnotation {
@@ -167,11 +156,7 @@ public class AnnotationsTest {
 		@NotNull
 		private final Object q;
 		
-		public NonnullByAnnotation(Object o, Object p, Object q) {
-			this.o = o;
-			this.p = p;
-			this.q = q;
-		}
+		public NonnullByAnnotation(Object o, Object p, Object q) { this.o = o; this.p = p; this.q = q; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -182,20 +167,11 @@ public class AnnotationsTest {
 			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
 		}
 		
-		@Override
-		public final int hashCode() {
-			int result = 0;
-			result += 31 * o.hashCode();
-			result += 31 * p.hashCode();
-			result += 31 * q.hashCode();
-			return result;
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class SubclassNonnullByAnnotation extends NonnullByAnnotation {
-		public SubclassNonnullByAnnotation(Object o, Object p, Object q) {
-			super(o, p, q);
-		}
+		public SubclassNonnullByAnnotation(Object o, Object p, Object q) { super(o, p, q); }
 	}
 
 	static final class NonnullByAnnotationMissedOne {
@@ -206,11 +182,7 @@ public class AnnotationsTest {
 		@Nonnull
 		private final Object q;
 		
-		public NonnullByAnnotationMissedOne(Object o, Object p, Object q) {
-			this.o = o;
-			this.noAnnotation = p;
-			this.q = q;
-		}
+		public NonnullByAnnotationMissedOne(Object o, Object p, Object q) { this.o = o; this.noAnnotation = p; this.q = q; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -221,14 +193,7 @@ public class AnnotationsTest {
 			return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
 		}
 		
-		@Override
-		public int hashCode() {
-			int result = 0;
-			result += 31 * o.hashCode();
-			result += 31 * noAnnotation.hashCode();
-			result += 31 * q.hashCode();
-			return result;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	@javax.persistence.Entity
@@ -253,10 +218,7 @@ public class AnnotationsTest {
 			return i == other.i && nullSafeEquals(s, other.s);
 		}
 		
-		@Override
-		public final int hashCode() {
-			return i + (31 * nullSafeHashCode(s));
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class SubclassEntityByJpaAnnotation extends EntityByJpaAnnotation {}
@@ -283,10 +245,7 @@ public class AnnotationsTest {
 			return i == other.i && nullSafeEquals(s, other.s);
 		}
 		
-		@Override
-		public final int hashCode() {
-			return i + (31 * nullSafeHashCode(s));
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class TransientByJpaAnnotation {
@@ -295,10 +254,7 @@ public class AnnotationsTest {
 		@javax.persistence.Transient
 		private final int j;
 		
-		public TransientByJpaAnnotation(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
+		public TransientByJpaAnnotation(int i, int j) { this.i = i; this.j = j; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -309,16 +265,11 @@ public class AnnotationsTest {
 			return i == other.i && j == other.j;
 		}
 		
-		@Override
-		public final int hashCode() {
-			return i + (31 * j);
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class SubclassTransientByJpaAnnotation extends TransientByJpaAnnotation {
-		public SubclassTransientByJpaAnnotation(int i, int j) {
-			super(i, j);
-		}
+		public SubclassTransientByJpaAnnotation(int i, int j) { super(i, j); }
 	}
 	
 	static final class TransientByNonJpaAnnotation {
@@ -327,23 +278,9 @@ public class AnnotationsTest {
 		@nl.jqno.equalsverifier.testhelpers.annotations.Transient
 		private final int j;
 		
-		public TransientByNonJpaAnnotation(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
+		public TransientByNonJpaAnnotation(int i, int j) { this.i = i; this.j = j; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof TransientByNonJpaAnnotation)) {
-				return false;
-			}
-			TransientByNonJpaAnnotation other = (TransientByNonJpaAnnotation)obj;
-			return i == other.i && j == other.j;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i + (31 * j);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

@@ -15,26 +15,28 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 
 import org.junit.Test;
 
-public class WarningsMixTest {
+public class WarningsMixTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
-		EqualsVerifier<MutablePoint> ev1 = EqualsVerifier.forClass(MutablePoint.class);
-		ev1.suppress(Warning.STRICT_INHERITANCE);
-		assertFailure(ev1, "Mutability:");
+		expectFailure("Mutability:");
+		EqualsVerifier.forClass(MutablePoint.class)
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
-		EqualsVerifier<MutablePoint> ev2 = EqualsVerifier.forClass(MutablePoint.class);
-		ev2.suppress(Warning.NONFINAL_FIELDS);
-		assertFailure(ev2, "Subclass:");
+		expectFailure("Subclass:");
+		EqualsVerifier.forClass(MutablePoint.class)
+				.suppress(Warning.NONFINAL_FIELDS)
+				.verify();
 	}
 	
 	@Test
@@ -46,16 +48,18 @@ public class WarningsMixTest {
 	
 	@Test
 	public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
-		EqualsVerifier<NeverNullColorContainer> ev1 = EqualsVerifier.forClass(NeverNullColorContainer.class);
-		ev1.suppress(Warning.STRICT_INHERITANCE);
-		assertFailure(ev1, NullPointerException.class, "Non-nullity:");
+		expectFailureWithCause(NullPointerException.class, "Non-nullity:");
+		EqualsVerifier.forClass(NeverNullColorContainer.class)
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
-		EqualsVerifier<NeverNullColorContainer> ev2 = EqualsVerifier.forClass(NeverNullColorContainer.class);
-		ev2.suppress(Warning.NULL_FIELDS);
-		assertFailure(ev2, "Subclass:");
+		expectFailure("Subclass:");
+		EqualsVerifier.forClass(NeverNullColorContainer.class)
+				.suppress(Warning.NULL_FIELDS)
+				.verify();
 	}
 	
 	@Test
@@ -67,23 +71,26 @@ public class WarningsMixTest {
 	
 	@Test
 	public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
-		EqualsVerifier<NeverNullAndMutableColorContainer> ev1 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev1.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS);
-		assertFailure(ev1, "Mutability:");
+		expectFailure("Mutability:");
+		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+				.suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
-		EqualsVerifier<NeverNullAndMutableColorContainer> ev2 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev2.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
-		assertFailure(ev2, NullPointerException.class, "Non-nullity:");
+		expectFailureWithCause(NullPointerException.class, "Non-nullity:");
+		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+				.suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
-		EqualsVerifier<NeverNullAndMutableColorContainer> ev3 = EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class);
-		ev3.suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS);
-		assertFailure(ev3, "Subclass:");
+		expectFailure("Subclass:");
+		EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+				.suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
+				.verify();
 	}
 	
 	@Test
@@ -97,13 +104,10 @@ public class WarningsMixTest {
 		private int x;
 		private int y;
 		
-		public MutablePoint(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		public MutablePoint(int x, int y) { this.x = x; this.y = y; }
 		
 		@Override
-		public final boolean equals(Object obj) {
+		public boolean equals(Object obj) {
 			if (!(obj instanceof MutablePoint)) {
 				return false;
 			}
@@ -120,9 +124,7 @@ public class WarningsMixTest {
 	static class NeverNullColorContainer {
 		private final Color color;
 		
-		public NeverNullColorContainer(Color color) {
-			this.color = color;
-		}
+		public NeverNullColorContainer(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -141,9 +143,7 @@ public class WarningsMixTest {
 	static class NeverNullAndMutableColorContainer {
 		private Color color;
 		
-		public NeverNullAndMutableColorContainer(Color color) {
-			this.color = color;
-		}
+		public NeverNullAndMutableColorContainer(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {

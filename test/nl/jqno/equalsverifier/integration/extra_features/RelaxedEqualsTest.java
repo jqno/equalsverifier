@@ -15,14 +15,14 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Multiple;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelaxedEqualsTest {
+public class RelaxedEqualsTest extends IntegrationTestBase {
 	private Multiple a;
 	private Multiple b;
 	private Multiple x;
@@ -36,8 +36,9 @@ public class RelaxedEqualsTest {
 
 	@Test
 	public void fail_whenObjectsWithDifferentFieldsAreEqual() {
-		EqualsVerifier<Multiple> ev = EqualsVerifier.forExamples(a, b);
-		assertFailure(ev, "Precondition", "two objects are equal to each other");
+		expectFailure("Precondition", "two objects are equal to each other");
+		EqualsVerifier.forExamples(a, b)
+				.verify();
 	}
 	
 	@Test
@@ -49,9 +50,10 @@ public class RelaxedEqualsTest {
 	
 	@Test
 	public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
-		EqualsVerifier<Multiple> ev = EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.andUnequalExamples(a);
-		assertFailure(ev, "Precondition", "the same object appears twice", Multiple.class.getSimpleName());
+		expectFailure("Precondition", "the same object appears twice", Multiple.class.getSimpleName());
+		EqualsVerifier.forRelaxedEqualExamples(a, b)
+				.andUnequalExamples(a)
+				.verify();
 	}
 	
 	@Test

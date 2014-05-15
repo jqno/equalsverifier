@@ -15,16 +15,16 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 import nl.jqno.equalsverifier.testhelpers.points.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class GetClassTest {
+public class GetClassTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
 		EqualsVerifier.forClass(GetClassPointHappyPath.class)
@@ -34,16 +34,18 @@ public class GetClassTest {
 	
 	@Test
 	public void fail_whenEqualsUsesGetClassButForgetsToCheckNull_givenUsingGetClassIsUsed() {
-		EqualsVerifier<GetClassPointNull> ev =
-				EqualsVerifier.forClass(GetClassPointNull.class).usingGetClass();
-		assertFailure(ev, NullPointerException.class, "Non-nullity: NullPointerException thrown");
+		expectFailureWithCause(NullPointerException.class, "Non-nullity: NullPointerException thrown");
+		EqualsVerifier.forClass(GetClassPointNull.class)
+				.usingGetClass()
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
-		EqualsVerifier<FinalMethodsPoint> ev =
-			EqualsVerifier.forClass(FinalMethodsPoint.class).usingGetClass();
-		assertFailure(ev, "Subclass", "object is equal to an instance of a trivial subclass with equal fields", "This should not happen when using getClass().");
+		expectFailure("Subclass", "object is equal to an instance of a trivial subclass with equal fields", "This should not happen when using getClass().");
+		EqualsVerifier.forClass(FinalMethodsPoint.class)
+				.usingGetClass()
+				.verify();
 	}
 	
 	@Test
@@ -55,20 +57,18 @@ public class GetClassTest {
 	
 	@Test
 	public void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
-		EqualsVerifier<GetClassColorPointWithEqualSuper> ev =
-				EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class).usingGetClass();
-		assertFailure(ev, "Redefined superclass", GetClassColorPointWithEqualSuper.class.getSimpleName(),
+		expectFailure("Redefined superclass", GetClassColorPointWithEqualSuper.class.getSimpleName(),
 				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
+		EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class)
+				.usingGetClass()
+				.verify();
 	}
 	
 	static class GetClassPointHappyPath {
 		private final int x;
 		private final int y;
 		
-		public GetClassPointHappyPath(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		public GetClassPointHappyPath(int x, int y) { this.x = x; this.y = y; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -79,20 +79,14 @@ public class GetClassTest {
 			return p.x == x && p.y == y;
 		}
 		
-		@Override
-		public int hashCode() {
-			return x + (31 * y);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class GetClassPointNull {
 		private final int x;
 		private final int y;
 		
-		public GetClassPointNull(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		public GetClassPointNull(int x, int y) { this.x = x; this.y = y; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -103,19 +97,13 @@ public class GetClassTest {
 			return p.x == x && p.y == y;
 		}
 		
-		@Override
-		public int hashCode() {
-			return x + (31 * y);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class GetClassColorPoint extends GetClassPointHappyPath {
 		private final Color color;
 		
-		public GetClassColorPoint(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public GetClassColorPoint(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -126,19 +114,13 @@ public class GetClassTest {
 			return false;
 		}
 		
-		@Override
-		public int hashCode() {
-			return super.hashCode() + nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class GetClassColorPointWithEqualSuper extends Point {
 		private final Color color;
 		
-		public GetClassColorPointWithEqualSuper(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public GetClassColorPointWithEqualSuper(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -149,9 +131,6 @@ public class GetClassTest {
 			return super.equals(obj) && color == p.color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return super.hashCode() + (31 * nullSafeHashCode(color));
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

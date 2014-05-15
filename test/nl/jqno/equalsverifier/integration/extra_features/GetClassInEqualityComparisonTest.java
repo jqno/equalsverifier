@@ -16,10 +16,11 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class GetClassInEqualityComparisonTest {
+public class GetClassInEqualityComparisonTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
 		EqualsVerifier.forClass(Identifiable.class)
@@ -44,9 +45,7 @@ public class GetClassInEqualityComparisonTest {
 	static abstract class Identifiable {
 		private final int id;
 		
-		public Identifiable(int id) {
-			this.id = id;
-		}
+		public Identifiable(int id) { this.id = id; }
 		
 		@Override
 		public final boolean equals(Object obj) {

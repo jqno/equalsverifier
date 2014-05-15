@@ -15,25 +15,27 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class VersionedEntityTest {
+public class VersionedEntityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
-		EqualsVerifier<VersionedEntity> ev = EqualsVerifier.forClass(VersionedEntity.class);
-		assertFailure(ev, "object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
+		expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
+		EqualsVerifier.forClass(VersionedEntity.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
-		EqualsVerifier<VersionedEntity> ev = EqualsVerifier.forClass(VersionedEntity.class);
-		ev.suppress(Warning.IDENTICAL_COPY);
-		assertFailure(ev, "Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
+		expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
+		EqualsVerifier.forClass(VersionedEntity.class)
+				.suppress(Warning.IDENTICAL_COPY)
+				.verify();
 	}
 	
 	@Test
@@ -46,17 +48,7 @@ public class VersionedEntityTest {
 	public static final class VersionedEntity {
 		private final long id;
 		
-		public VersionedEntity(long id) {
-			this.id = id;
-		}
-		
-		@Override
-		public int hashCode() {
-			if (id == 0L) {
-				return super.hashCode();
-			}
-			return (int)(id ^ (id >>> 32));
-		}
+		public VersionedEntity(long id) { this.id = id; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -70,9 +62,6 @@ public class VersionedEntityTest {
 			return id == other.id;
 		}
 		
-		@Override
-		public String toString() {
-			return "[VersionedEntity id=" + id + "]";
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }
