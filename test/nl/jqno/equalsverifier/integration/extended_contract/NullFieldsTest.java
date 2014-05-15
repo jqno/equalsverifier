@@ -34,19 +34,22 @@ public class NullFieldsTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenEqualsThrowsNpeOnThissField() {
 		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-		EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify();
+		EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsThrowsNpeOnOthersField() {
 		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-		EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify();
+		EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenHashCodeThrowsNpe() {
 		expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
-		EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify();
+		EqualsVerifier.forClass(HashCodeThrowsNpe.class)
+				.verify();
 	}
 	
 	@Test

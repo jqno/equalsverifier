@@ -29,36 +29,42 @@ public class SignatureTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
 		expectOverloadFailure("Parameter should be an Object, not " + OverloadedWithOwnType.class.getSimpleName());
-		EqualsVerifier.forClass(OverloadedWithOwnType.class).verify();
+		EqualsVerifier.forClass(OverloadedWithOwnType.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsOverloadedWithTwoParameters() {
 		expectOverloadFailure("Too many parameters");
-		EqualsVerifier.forClass(OverloadedWithTwoParameters.class).verify();
+		EqualsVerifier.forClass(OverloadedWithTwoParameters.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsOverloadedWithNoParameter() {
 		expectOverloadFailure("No parameter");
-		EqualsVerifier.forClass(OverloadedWithNoParameter.class).verify();
+		EqualsVerifier.forClass(OverloadedWithNoParameter.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
 		expectOverloadFailure("Parameter should be an Object");
-		EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class).verify();
+		EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
 		expectOverloadFailure("More than one equals method found");
-		EqualsVerifier.forClass(OverloadedAndOverridden.class).verify();
+		EqualsVerifier.forClass(OverloadedAndOverridden.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded() {
-		EqualsVerifier.forClass(NoEqualsMethod.class).verify();
+		EqualsVerifier.forClass(NoEqualsMethod.class)
+				.verify();
 	}
 	
 	private void expectOverloadFailure(String extraMessage) {

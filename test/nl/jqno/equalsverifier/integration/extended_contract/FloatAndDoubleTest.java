@@ -28,13 +28,15 @@ public class FloatAndDoubleTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenFloatsAreComparedByReference() {
 		expectFailure(FLOAT, "f");
-		EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify();
+		EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenObjectFloatsAreComparedByReference() {
 		expectFailure(FLOAT, "f");
-		EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify();
+		EqualsVerifier.forClass(CompareObjectFloatByReference.class)
+				.verify();
 	}
 	
 	@Test
@@ -46,13 +48,15 @@ public class FloatAndDoubleTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenDoublesAreComparedByReference() {
 		expectFailure(DOUBLE, "d");
-		EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify();
+		EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenObjectDoublesAreComparedByReference() {
 		expectFailure(DOUBLE, "d");
-		EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify();
+		EqualsVerifier.forClass(CompareObjectDoubleByReference.class)
+				.verify();
 	}
 	
 	@Test

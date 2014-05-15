@@ -25,25 +25,29 @@ public class NonNullityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
 		expectFailure("Non-nullity: NullPointerException thrown");
-		EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify();
+		EqualsVerifier.forClass(NullPointerExceptionThrower.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsReturnsTrue_givenNullInput() {
 		expectFailure("Non-nullity: true returned for null value");
-		EqualsVerifier.forClass(NullReturnsTrue.class).verify();
+		EqualsVerifier.forClass(NullReturnsTrue.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsDoesNotTypeCheck() {
 		expectFailureWithCause(ClassCastException.class, "Type-check: equals throws ClassCastException");
-		EqualsVerifier.forClass(NoTypeCheck.class).verify();
+		EqualsVerifier.forClass(NoTypeCheck.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
 		expectFailureWithCause(IllegalStateException.class, "Type-check: equals throws IllegalStateException");
-		EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify();
+		EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class)
+				.verify();
 	}
 	
 	static final class NullPointerExceptionThrower extends Point {

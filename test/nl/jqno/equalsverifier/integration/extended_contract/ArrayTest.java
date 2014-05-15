@@ -37,79 +37,93 @@ public class ArrayTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
 		expectFailure(PRIMITIVE_EQUALS, FIELD_NAME);
-		EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify();
+		EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
 		expectFailure(PRIMITIVE_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify();
+		EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAPrimitiveArray() {
-		EqualsVerifier.forClass(PrimitiveArrayCorrect.class).verify();
+		EqualsVerifier.forClass(PrimitiveArrayCorrect.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
 		expectFailure(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
-		EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify();
+		EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
 		expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify();
+		EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
 		expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify();
+		EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAMultidimensionalArray() {
-		EqualsVerifier.forClass(MultidimensionalArrayCorrect.class).verify();
+		EqualsVerifier.forClass(MultidimensionalArrayCorrect.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAThreedimensionalArray() {
-		EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class).verify();
+		EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAnObjectArray() {
 		expectFailure(OBJECT_EQUALS, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectArrayArraysEquals.class).verify();
+		EqualsVerifier.forClass(ObjectArrayArraysEquals.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
 		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify();
+		EqualsVerifier.forClass(ObjectArrayRegularHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
 		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectArrayArraysHashCode.class).verify();
+		EqualsVerifier.forClass(ObjectArrayArraysHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAnObjectArray() {
-		EqualsVerifier.forClass(ObjectArrayCorrect.class).verify();
+		EqualsVerifier.forClass(ObjectArrayCorrect.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
-		EqualsVerifier.forClass(ArrayAndSomethingUnused.class).verify();
+		EqualsVerifier.forClass(ArrayAndSomethingUnused.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
-		EqualsVerifier.forClass(ArrayAndNoEquals.class).verify();
+		EqualsVerifier.forClass(ArrayAndNoEquals.class)
+				.verify();
 	}
 	
 	static final class PrimitiveArrayRegularEquals {

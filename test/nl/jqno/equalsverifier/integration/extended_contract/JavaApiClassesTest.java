@@ -40,18 +40,21 @@ import org.junit.Test;
 public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACollectionInterface() {
-		EqualsVerifier.forClass(CollectionInterfacesContainer.class).verify();
+		EqualsVerifier.forClass(CollectionInterfacesContainer.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenClassContainsACommonJavaApiType() {
-		EqualsVerifier.forClass(CommonClassesContainer.class).verify();
+		EqualsVerifier.forClass(CommonClassesContainer.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassUsesOnlyCompileTimeConstantsInNonStaticFields() {
 		expectFailure("Precondition: two objects are equal to each other");
-		EqualsVerifier.forClass(CompileTimeConstantContainer.class).verify();
+		EqualsVerifier.forClass(CompileTimeConstantContainer.class)
+				.verify();
 	}
 	
 	@Test

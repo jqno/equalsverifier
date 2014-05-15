@@ -34,25 +34,29 @@ public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
 		expectFailureWithCause(IllegalArgumentException.class, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
-		EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class).verify();
+		EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class)
+				.verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
 		expectFailureWithCause(IllegalStateException.class, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
-		EqualsVerifier.forClass(EqualsIllegalStateThrower.class).verify();
+		EqualsVerifier.forClass(EqualsIllegalStateThrower.class)
+				.verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
 		expectFailureWithCause(IllegalArgumentException.class, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
-		EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class).verify();
+		EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class)
+				.verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
 		expectFailureWithCause(IllegalStateException.class, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
-		EqualsVerifier.forClass(HashCodeIllegalStateThrower.class).verify();
+		EqualsVerifier.forClass(HashCodeIllegalStateThrower.class)
+				.verify();
 	}
 	
 	abstract static class EqualsThrower {

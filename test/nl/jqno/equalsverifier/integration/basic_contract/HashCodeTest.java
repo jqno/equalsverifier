@@ -25,7 +25,8 @@ public class HashCodeTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
 		expectFailure("hashCode: hashCodes should be equal", RandomHashCode.class.getSimpleName());
-		EqualsVerifier.forClass(RandomHashCode.class).verify();
+		EqualsVerifier.forClass(RandomHashCode.class)
+				.verify();
 	}
 	
 	static class RandomHashCode extends Point {

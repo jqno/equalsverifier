@@ -24,17 +24,20 @@ import org.junit.Test;
 public class EnumTest {
 	@Test
 	public void succeed_whenClassIsAnEnum() {
-		EqualsVerifier.forClass(Enum.class).verify();
+		EqualsVerifier.forClass(Enum.class)
+				.verify();
 	}
 	
 	@Test
 	public void ignoreSingleValueEnum() {
-		EqualsVerifier.forClass(SingletonContainer.class).verify();
+		EqualsVerifier.forClass(SingletonContainer.class)
+				.verify();
 	}
 	
 	@Test
 	public void useSingleValueEnum() {
-		EqualsVerifier.forClass(SingletonUser.class).verify();
+		EqualsVerifier.forClass(SingletonUser.class)
+				.verify();
 	}
 	
 	enum Enum {

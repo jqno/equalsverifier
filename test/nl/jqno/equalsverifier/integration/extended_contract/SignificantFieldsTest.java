@@ -28,13 +28,15 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenEqualsUsesAFieldAndHashCodeDoesnt() {
 		expectFailure("Significant fields", "equals relies on", "yNotUsed", "but hashCode does not");
-		EqualsVerifier.forClass(ExtraFieldInEquals.class).verify();
+		EqualsVerifier.forClass(ExtraFieldInEquals.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt() {
 		expectFailure("Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
-		EqualsVerifier.forClass(ExtraFieldInHashCode.class).verify();
+		EqualsVerifier.forClass(ExtraFieldInHashCode.class)
+				.verify();
 	}
 	
 	@Test
@@ -46,7 +48,8 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	@Test
 	public void succeed_whenAFieldIsUnused() {
-		EqualsVerifier.forClass(OneFieldUnused.class).verify();
+		EqualsVerifier.forClass(OneFieldUnused.class)
+				.verify();
 	}
 	
 	@Test
@@ -73,7 +76,8 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	@Test
 	public void succeed_whenAFieldIsUnusedInASubclass() {
-		EqualsVerifier.forClass(OneFieldUnusedExtended.class).verify();
+		EqualsVerifier.forClass(OneFieldUnusedExtended.class)
+				.verify();
 	}
 	
 	@Test
@@ -86,7 +90,8 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	@Test
 	public void succeed_whenNoFieldsAreUsed() {
-		EqualsVerifier.forClass(NoFieldsUsed.class).verify();
+		EqualsVerifier.forClass(NoFieldsUsed.class)
+				.verify();
 	}
 	
 	@Test
@@ -144,7 +149,8 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	@Test
 	public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers() {
-		EqualsVerifier.forClass(IndirectStaticFinalContainer.class).verify();
+		EqualsVerifier.forClass(IndirectStaticFinalContainer.class)
+				.verify();
 	}
 	
 	static final class ExtraFieldInEquals {

@@ -26,24 +26,28 @@ import org.junit.Test;
 public class TransitivityTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAND() {
-		EqualsVerifier.forClass(TwoFieldsUsingAND.class).verify();
+		EqualsVerifier.forClass(TwoFieldsUsingAND.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualityForTwoFieldsIsCombinedUsingOR() {
 		expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOR.class.getSimpleName());
-		EqualsVerifier.forClass(TwoFieldsUsingOR.class).verify();
+		EqualsVerifier.forClass(TwoFieldsUsingOR.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenEqualityForThreeFieldsIsCombinedUsingAND() {
-		EqualsVerifier.forClass(ThreeFieldsUsingAND.class).verify();
+		EqualsVerifier.forClass(ThreeFieldsUsingAND.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualityForThreeFieldsIsCombinedUsingOR() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(ThreeFieldsUsingOR.class).verify();
+		EqualsVerifier.forClass(ThreeFieldsUsingOR.class)
+				.verify();
 	}
 	
 	@Test
@@ -62,32 +66,37 @@ public class TransitivityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenEqualityForThreeFieldsIsCombinedUsingANDAndOR() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(ThreeFieldsUsingANDOR.class).verify();
+		EqualsVerifier.forClass(ThreeFieldsUsingANDOR.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualityForThreeFieldsIsCombinedUsingORAndAND() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(ThreeFieldsUsingORAND.class).verify();
+		EqualsVerifier.forClass(ThreeFieldsUsingORAND.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualityForFiveFieldsIsCombinedUsingOR() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(FiveFieldsUsingOR.class).verify();
+		EqualsVerifier.forClass(FiveFieldsUsingOR.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualityForFiveFieldsIsCombinedUsingANDsAndORs() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(FiveFieldsUsingANDsAndORs.class).verify();
+		EqualsVerifier.forClass(FiveFieldsUsingANDsAndORs.class)
+				.verify();
 	}
 	
 	@Ignore("This class is not transitive, and it should fail. See issue 78.")
 	@Test
 	public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
 		expectFailure("Transitivity");
-		EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class).verify();
+		EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class)
+				.verify();
 	}
 	
 	static final class TwoFieldsUsingAND {

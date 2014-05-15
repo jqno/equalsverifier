@@ -29,7 +29,8 @@ public class SymmetryTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenEqualsIsNotSymmetrical() {
 		expectFailure(SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
-		EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify();;
+		EqualsVerifier.forClass(SymmetryIntentionallyBroken.class)
+				.verify();
 	}
 	
 	static final class SymmetryIntentionallyBroken {

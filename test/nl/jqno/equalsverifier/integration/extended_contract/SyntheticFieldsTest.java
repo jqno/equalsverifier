@@ -27,12 +27,14 @@ import org.junit.Test;
 public class SyntheticFieldsTest {
 	@Test
 	public void succeed_whenClassHasASyntheticField() {
-		EqualsVerifier.forClass(Outer.class).verify();
+		EqualsVerifier.forClass(Outer.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenClassHasAFieldThatHasASyntheticField() {
-		EqualsVerifier.forClass(OuterContainer.class).verify();
+		EqualsVerifier.forClass(OuterContainer.class)
+				.verify();
 	}
 	
 	/* non-static */ final class Outer {

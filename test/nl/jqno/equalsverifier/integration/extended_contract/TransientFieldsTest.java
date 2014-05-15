@@ -28,7 +28,8 @@ public class TransientFieldsTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenTransientFieldsAreUsedInEquals() {
 		expectFailure("Transient field", "should not be included in equals/hashCode contract");
-		EqualsVerifier.forClass(TransientFields.class).verify();
+		EqualsVerifier.forClass(TransientFields.class)
+				.verify();
 	}
 	
 	@Test

@@ -29,19 +29,22 @@ public class ReflexivityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenReferencesAreNotEqual() {
 		expectFailure("Reflexivity", "object does not equal itself", ReflexivityIntentionallyBroken.class.getSimpleName());
-		EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class).verify();
+		EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenTheWrongFieldsAreComparedInEquals() {
 		expectFailure("Reflexivity", "object does not equal an identical copy of itself", FieldsMixedUpInEquals.class.getSimpleName());
-		EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify();
+		EqualsVerifier.forClass(FieldsMixedUpInEquals.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
 		expectFailure("Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
-		EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify();
+		EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class)
+				.verify();
 	}
 		
 	@Test
@@ -54,13 +57,15 @@ public class ReflexivityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
 		expectFailure("Reflexivity", "object does not equal an identical copy of itself", WrongInstanceofCheck.class.getSimpleName());
-		EqualsVerifier.forClass(WrongInstanceofCheck.class).verify();
+		EqualsVerifier.forClass(WrongInstanceofCheck.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
 		expectFailure("Reflexivity", "identical copy");
-		EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify();
+		EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
+				.verify();
 	}
 	
 	@Test
@@ -73,7 +78,8 @@ public class ReflexivityTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
 		expectFailure("Unnecessary suppression", "IDENTICAL_COPY");
-		EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY).verify();
+		EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY)
+				.verify();
 	}
 	
 	static final class ReflexivityIntentionallyBroken extends Point {

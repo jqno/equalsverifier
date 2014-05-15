@@ -33,12 +33,14 @@ public class MutableStateTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenClassHasAMutablePrimitiveField() {
 		expectFailure(MUTABILITY, "second");
-		EqualsVerifier.forClass(PrimitiveMutableField.class).verify();
+		EqualsVerifier.forClass(PrimitiveMutableField.class)
+				.verify();
 	}
 	
 	@Test
 	public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
-		EqualsVerifier.forClass(UnusedPrimitiveMutableField.class).verify();
+		EqualsVerifier.forClass(UnusedPrimitiveMutableField.class)
+				.verify();
 	}
 		
 	@Test
@@ -51,7 +53,8 @@ public class MutableStateTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenClassHasAMutableObjectField() {
 		expectFailure(MUTABILITY, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectMutableField.class).verify();
+		EqualsVerifier.forClass(ObjectMutableField.class)
+				.verify();
 	}
 		
 	@Test
@@ -64,7 +67,8 @@ public class MutableStateTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenClassHasAMutableEnumField() {
 		expectFailure(MUTABILITY, FIELD_NAME);
-		EqualsVerifier.forClass(EnumMutableField.class).verify();
+		EqualsVerifier.forClass(EnumMutableField.class)
+				.verify();
 	}
 	
 	@Test
@@ -80,7 +84,8 @@ public class MutableStateTest extends IntegrationTestBase {
 		EnumMutableField black = new EnumMutableField(EnumMutableField.Enum.BLACK);
 		
 		expectFailure(MUTABILITY, FIELD_NAME);
-		EqualsVerifier.forExamples(red, black).verify();
+		EqualsVerifier.forExamples(red, black)
+				.verify();
 	}
 	
 	@Test
@@ -96,7 +101,8 @@ public class MutableStateTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenClassHasAMutableArrayField() {
 		expectFailure(MUTABILITY, FIELD_NAME);
-		EqualsVerifier.forClass(ArrayMutableField.class).verify();
+		EqualsVerifier.forClass(ArrayMutableField.class)
+				.verify();
 	}
 	
 	@Test

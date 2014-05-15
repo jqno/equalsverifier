@@ -39,13 +39,15 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenOnlyEqualsIsAbstractInSuperclass() {
 		expectFailure(ABSTRACT_DELEGATION, EQUALS_IS_ABSTRACT, HASHCODE_IS_NOT);
-		EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class).verify();
+		EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenOnlyHashCodeIsAbstractInSuperclass() {
 		expectFailure(ABSTRACT_DELEGATION, HASHCODE_IS_ABSTRACT, EQUALS_IS_NOT);
-		EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class).verify();
+		EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class)
+				.verify();
 	}
 	
 	@Test
