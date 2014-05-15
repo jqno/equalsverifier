@@ -15,44 +15,44 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class NullFieldsWithExceptionsTest {
+public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
 	private static final String EQUALS = "equals";
 	private static final String HASH_CODE = "hashCode";
 	private static final String THROWS = "throws";
 	private static final String ILLEGAL_ARGUMENT_EXCEPTION = "IllegalArgumentException";
 	private static final String ILLEGAL_STATE_EXCEPTION = "IllegalStateException";
-	private static final String WHEN_S_IS_NULL = "when field foo is null";
+	private static final String WHEN_FOO_IS_NULL = "when field foo is null";
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
-		EqualsVerifier<EqualsIllegalArgumentThrower> ev = EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class);
-		assertFailure(ev, IllegalArgumentException.class, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
+		expectFailureWithCause(IllegalArgumentException.class, EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
+		EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class).verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
-		EqualsVerifier<EqualsIllegalStateThrower> ev = EqualsVerifier.forClass(EqualsIllegalStateThrower.class);
-		assertFailure(ev, IllegalStateException.class, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
+		expectFailureWithCause(IllegalStateException.class, EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
+		EqualsVerifier.forClass(EqualsIllegalStateThrower.class).verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
-		EqualsVerifier<HashCodeIllegalArgumentThrower> ev = EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class);
-		assertFailure(ev, IllegalArgumentException.class, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_S_IS_NULL);
+		expectFailureWithCause(IllegalArgumentException.class, HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
+		EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class).verify();
 	}
 	
 	@Test
 	public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
-		EqualsVerifier<HashCodeIllegalStateThrower> ev = EqualsVerifier.forClass(HashCodeIllegalStateThrower.class);
-		assertFailure(ev, IllegalStateException.class, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_S_IS_NULL);
+		expectFailureWithCause(IllegalStateException.class, HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
+		EqualsVerifier.forClass(HashCodeIllegalStateThrower.class).verify();
 	}
 	
 	abstract static class EqualsThrower {
@@ -60,9 +60,7 @@ public class NullFieldsWithExceptionsTest {
 		
 		protected abstract RuntimeException throwable();
 		
-		public EqualsThrower(String foo) {
-			this.foo = foo;
-		}
+		public EqualsThrower(String foo) { this.foo = foo; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -76,16 +74,11 @@ public class NullFieldsWithExceptionsTest {
 			return nullSafeEquals(foo, other.foo);
 		}
 		
-		@Override
-		public final int hashCode() {
-			return nullSafeHashCode(foo);
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class EqualsIllegalArgumentThrower extends EqualsThrower {
-		public EqualsIllegalArgumentThrower(String foo) {
-			super(foo);
-		}
+		public EqualsIllegalArgumentThrower(String foo) { super(foo); }
 		
 		@Override
 		protected RuntimeException throwable() {
@@ -94,9 +87,7 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class EqualsIllegalStateThrower extends EqualsThrower {
-		public EqualsIllegalStateThrower(String foo) {
-			super(foo);
-		}
+		public EqualsIllegalStateThrower(String foo) { super(foo); }
 		
 		@Override
 		protected RuntimeException throwable() {
@@ -109,18 +100,9 @@ public class NullFieldsWithExceptionsTest {
 		
 		protected abstract RuntimeException throwable();
 		
-		public HashCodeThrower(String foo) {
-			this.foo = foo;
-		}
+		public HashCodeThrower(String foo) { this.foo = foo; }
 		
-		@Override
-		public final boolean equals(Object obj) {
-			if (!(obj instanceof HashCodeThrower)) {
-				return false;
-			}
-			HashCodeThrower other = (HashCodeThrower)obj;
-			return nullSafeEquals(foo, other.foo);
-		}
+		@Override public final boolean equals(Object obj) { return defaultEquals(this, obj); }
 		
 		@Override
 		public final int hashCode() {
@@ -132,9 +114,7 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class HashCodeIllegalArgumentThrower extends HashCodeThrower {
-		public HashCodeIllegalArgumentThrower(String foo) {
-			super(foo);
-		}
+		public HashCodeIllegalArgumentThrower(String foo) { super(foo); }
 		
 		@Override
 		protected RuntimeException throwable() {
@@ -143,9 +123,7 @@ public class NullFieldsWithExceptionsTest {
 	}
 	
 	static class HashCodeIllegalStateThrower extends HashCodeThrower {
-		public HashCodeIllegalStateThrower(String foo) {
-			super(foo);
-		}
+		public HashCodeIllegalStateThrower(String foo) { super(foo); }
 		
 		@Override
 		protected RuntimeException throwable() {

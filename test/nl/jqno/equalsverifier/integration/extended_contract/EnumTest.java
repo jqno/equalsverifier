@@ -15,7 +15,8 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
@@ -48,9 +49,7 @@ public class EnumTest {
 		@SuppressWarnings("unused")
 		private final Singleton singleton = Singleton.INSTANCE;
 		
-		public SingletonContainer(int i) {
-			this.i = i;
-		}
+		public SingletonContainer(int i) { this.i = i; } 
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -67,6 +66,7 @@ public class EnumTest {
 		}
 	}
 	
+	@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 	static final class SingletonUser {
 		private final Singleton singleton;
 		
@@ -74,18 +74,7 @@ public class EnumTest {
 			this.singleton = singleton;
 		}
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof SingletonUser)) {
-				return false;
-			}
-			SingletonUser other = (SingletonUser)obj;
-			return singleton == other.singleton;
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(singleton);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

@@ -15,29 +15,30 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.util.Arrays;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class MutableStateTest {
+public class MutableStateTest extends IntegrationTestBase {
 	private static final String MUTABILITY = "Mutability: equals depends on mutable field";
 	private static final String FIELD_NAME = "field";
 	
 	@Test
-	public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
-		EqualsVerifier.forClass(UnusedPrimitiveMutableField.class).verify();
+	public void fail_whenClassHasAMutablePrimitiveField() {
+		expectFailure(MUTABILITY, "second");
+		EqualsVerifier.forClass(PrimitiveMutableField.class).verify();
 	}
 	
 	@Test
-	public void fail_whenClassHasAMutablePrimitiveField() {
-		EqualsVerifier<PrimitiveMutableField> ev = EqualsVerifier.forClass(PrimitiveMutableField.class);
-		assertFailure(ev, MUTABILITY, "second");
+	public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
+		EqualsVerifier.forClass(UnusedPrimitiveMutableField.class).verify();
 	}
 		
 	@Test
@@ -49,8 +50,8 @@ public class MutableStateTest {
 	
 	@Test
 	public void fail_whenClassHasAMutableObjectField() {
-		EqualsVerifier<ObjectMutableField> ev = EqualsVerifier.forClass(ObjectMutableField.class);
-		assertFailure(ev, MUTABILITY, FIELD_NAME);
+		expectFailure(MUTABILITY, FIELD_NAME);
+		EqualsVerifier.forClass(ObjectMutableField.class).verify();
 	}
 		
 	@Test
@@ -62,8 +63,8 @@ public class MutableStateTest {
 	
 	@Test
 	public void fail_whenClassHasAMutableEnumField() {
-		EqualsVerifier<EnumMutableField> ev = EqualsVerifier.forClass(EnumMutableField.class);
-		assertFailure(ev, MUTABILITY, FIELD_NAME);
+		expectFailure(MUTABILITY, FIELD_NAME);
+		EqualsVerifier.forClass(EnumMutableField.class).verify();
 	}
 	
 	@Test
@@ -77,14 +78,16 @@ public class MutableStateTest {
 	public void fail_whenClassHasAMutableEnumField_givenNullAsAnExample() {
 		EnumMutableField red = new EnumMutableField(null);
 		EnumMutableField black = new EnumMutableField(EnumMutableField.Enum.BLACK);
-		EqualsVerifier<EnumMutableField> ev = EqualsVerifier.forExamples(red, black);
-		assertFailure(ev, MUTABILITY, FIELD_NAME);
+		
+		expectFailure(MUTABILITY, FIELD_NAME);
+		EqualsVerifier.forExamples(red, black).verify();
 	}
 	
 	@Test
 	public void succeed_whenClassHasAMutableEnumField_givenNullAsAnExampleAndWarningIsSuppressed() {
 		EnumMutableField red = new EnumMutableField(null);
 		EnumMutableField black = new EnumMutableField(EnumMutableField.Enum.BLACK);
+		
 		EqualsVerifier.forExamples(red, black)
 				.suppress(Warning.NONFINAL_FIELDS)
 				.verify();
@@ -92,8 +95,8 @@ public class MutableStateTest {
 	
 	@Test
 	public void fail_whenClassHasAMutableArrayField() {
-		EqualsVerifier<ArrayMutableField> ev = EqualsVerifier.forClass(ArrayMutableField.class);
-		assertFailure(ev, MUTABILITY, FIELD_NAME);
+		expectFailure(MUTABILITY, FIELD_NAME);
+		EqualsVerifier.forClass(ArrayMutableField.class).verify();
 	}
 	
 	@Test
@@ -103,38 +106,10 @@ public class MutableStateTest {
 				.verify();
 	}
 	
-	static final class UnusedPrimitiveMutableField {
-		private final int immutable;
-		@SuppressWarnings("unused")
-		private int mutable = 0;
-		
-		public UnusedPrimitiveMutableField(int value) {
-			immutable = value;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof UnusedPrimitiveMutableField)) {
-				return false;
-			}
-			return immutable == ((UnusedPrimitiveMutableField)obj).immutable;
-		}
-		
-		@Override
-		public int hashCode() {
-			return immutable;
-		}
-	}
-	
 	static final class PrimitiveMutableField {
-		@SuppressWarnings("unused")
-		private int first;
 		private int second;
 		
-		PrimitiveMutableField(int first, int second) {
-			this.first = first;
-			this.second = second;
-		}
+		PrimitiveMutableField(int second) { this.second = second; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -150,60 +125,53 @@ public class MutableStateTest {
 		}
 	}
 	
-	static final class ObjectMutableField {
-		private Object field;
+	static final class UnusedPrimitiveMutableField {
+		private final int immutable;
+		@SuppressWarnings("unused")
+		private int mutable = 0;
 		
-		public ObjectMutableField(Object value) {
-			field = value;
-		}
+		public UnusedPrimitiveMutableField(int value) { immutable = value; }
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectMutableField)) {
+			if (!(obj instanceof UnusedPrimitiveMutableField)) {
 				return false;
 			}
-			ObjectMutableField other = (ObjectMutableField)obj;
-			if (field == null) {
-				return other.field == null;
-			}
-			return field.equals(other.field);
+			return immutable == ((UnusedPrimitiveMutableField)obj).immutable;
 		}
 		
 		@Override
 		public int hashCode() {
-			return nullSafeHashCode(field);
+			return immutable;
 		}
 	}
 	
+	@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+	static final class ObjectMutableField {
+		private Object field;
+		
+		public ObjectMutableField(Object value) { field = value; }
+		
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 	static final class EnumMutableField {
 		public enum Enum { RED, BLACK };
 		
 		private Enum field;
 		
-		public EnumMutableField(Enum value) {
-			field = value;
-		}
+		public EnumMutableField(Enum value) { field = value; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof EnumMutableField)) {
-				return false;
-			}
-			return field == ((EnumMutableField)obj).field;
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(field);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class ArrayMutableField {
 		private int[] field;
 		
-		ArrayMutableField(int[] value) {
-			field = value;
-		}
+		ArrayMutableField(int[] value) { field = value; }
 		
 		@Override
 		public boolean equals(Object obj) {

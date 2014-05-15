@@ -15,17 +15,17 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 import java.util.Arrays;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class ArrayTest {
+public class ArrayTest extends IntegrationTestBase {
 	private static final String PRIMITIVE_EQUALS = "Array: == used instead of Arrays.equals() for field";
 	private static final String PRIMITIVE_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
 	private static final String MULTIDIMENSIONAL_EQUALS = "Multidimensional array: == or Arrays.equals() used instead of Arrays.deepEquals() for field";
@@ -36,14 +36,14 @@ public class ArrayTest {
 
 	@Test
 	public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
-		EqualsVerifier<PrimitiveArrayRegularEquals> ev = EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class);
-		assertFailure(ev, PRIMITIVE_EQUALS, FIELD_NAME);
+		expectFailure(PRIMITIVE_EQUALS, FIELD_NAME);
+		EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
-		EqualsVerifier<PrimitiveArrayRegularHashCode> ev = EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class);
-		assertFailure(ev, PRIMITIVE_HASHCODE, FIELD_NAME);
+		expectFailure(PRIMITIVE_HASHCODE, FIELD_NAME);
+		EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify();
 	}
 	
 	@Test
@@ -53,20 +53,20 @@ public class ArrayTest {
 	
 	@Test
 	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
-		EqualsVerifier<MultidimensionalArrayArraysEquals> ev = EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class);
-		assertFailure(ev, MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
+		expectFailure(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
+		EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
-		EqualsVerifier<MultidimensionalArrayRegularHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class);
-		assertFailure(ev, MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+		expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+		EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify();
 	}
 	
 	@Test
 	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
-		EqualsVerifier<MultidimensionalArrayArraysHashCode> ev = EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class);
-		assertFailure(ev, MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+		expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+		EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify();
 	}
 	
 	@Test
@@ -81,20 +81,20 @@ public class ArrayTest {
 	
 	@Test
 	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAnObjectArray() {
-		EqualsVerifier<ObjectArrayArraysEquals> ev = EqualsVerifier.forClass(ObjectArrayArraysEquals.class);
-		assertFailure(ev, OBJECT_EQUALS, FIELD_NAME);
+		expectFailure(OBJECT_EQUALS, FIELD_NAME);
+		EqualsVerifier.forClass(ObjectArrayArraysEquals.class).verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
-		EqualsVerifier<ObjectArrayRegularHashCode> ev = EqualsVerifier.forClass(ObjectArrayRegularHashCode.class);
-		assertFailure(ev, OBJECT_HASHCODE, FIELD_NAME);
+		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
+		EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify();
 	}
 	
 	@Test
 	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
-		EqualsVerifier<ObjectArrayArraysHashCode> ev = EqualsVerifier.forClass(ObjectArrayArraysHashCode.class);
-		assertFailure(ev, OBJECT_HASHCODE, FIELD_NAME);
+		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
+		EqualsVerifier.forClass(ObjectArrayArraysHashCode.class).verify();
 	}
 	
 	@Test
@@ -115,9 +115,7 @@ public class ArrayTest {
 	static final class PrimitiveArrayRegularEquals {
 		private final int[] array;
 		
-		public PrimitiveArrayRegularEquals(int[] array) {
-			this.array = array;
-		}
+		public PrimitiveArrayRegularEquals(int[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -137,9 +135,7 @@ public class ArrayTest {
 	static final class PrimitiveArrayRegularHashCode {
 		private final int[] array;
 		
-		public PrimitiveArrayRegularHashCode(int[] array) {
-			this.array = array;
-		}
+		public PrimitiveArrayRegularHashCode(int[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -159,9 +155,7 @@ public class ArrayTest {
 	static final class PrimitiveArrayCorrect {
 		private final int[] array;
 		
-		public PrimitiveArrayCorrect(int[] array) {
-			this.array = array;
-		}
+		public PrimitiveArrayCorrect(int[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -181,9 +175,7 @@ public class ArrayTest {
 	static final class MultidimensionalArrayArraysEquals {
 		private final int[][] array;
 		
-		public MultidimensionalArrayArraysEquals(int[][] array) {
-			this.array = array;
-		}
+		public MultidimensionalArrayArraysEquals(int[][] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -203,9 +195,7 @@ public class ArrayTest {
 	static final class MultidimensionalArrayRegularHashCode {
 		private final int[][] array;
 		
-		public MultidimensionalArrayRegularHashCode(int[][] array) {
-			this.array = array;
-		}
+		public MultidimensionalArrayRegularHashCode(int[][] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -225,9 +215,7 @@ public class ArrayTest {
 	static final class MultidimensionalArrayArraysHashCode {
 		private final int[][] array;
 		
-		public MultidimensionalArrayArraysHashCode(int[][] array) {
-			this.array = array;
-		}
+		public MultidimensionalArrayArraysHashCode(int[][] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -247,9 +235,7 @@ public class ArrayTest {
 	static final class MultidimensionalArrayCorrect {
 		private final int[][] array;
 		
-		public MultidimensionalArrayCorrect(int[][] array) {
-			this.array = array;
-		}
+		public MultidimensionalArrayCorrect(int[][] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -269,9 +255,7 @@ public class ArrayTest {
 	static final class ThreeDimensionalArrayCorrect {
 		private final int[][][] array;
 		
-		public ThreeDimensionalArrayCorrect(int[][][] array) {
-			this.array = array;
-		}
+		public ThreeDimensionalArrayCorrect(int[][][] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -291,9 +275,7 @@ public class ArrayTest {
 	static final class ObjectArrayArraysEquals {
 		private final Object[] array;
 		
-		public ObjectArrayArraysEquals(Object[] array) {
-			this.array = array;
-		}
+		public ObjectArrayArraysEquals(Object[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -313,9 +295,7 @@ public class ArrayTest {
 	static final class ObjectArrayRegularHashCode {
 		private final Object[] array;
 		
-		public ObjectArrayRegularHashCode(Object[] array) {
-			this.array = array;
-		}
+		public ObjectArrayRegularHashCode(Object[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -335,9 +315,7 @@ public class ArrayTest {
 	static final class ObjectArrayArraysHashCode {
 		private final Object[] array;
 		
-		public ObjectArrayArraysHashCode(Object[] array) {
-			this.array = array;
-		}
+		public ObjectArrayArraysHashCode(Object[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -357,9 +335,7 @@ public class ArrayTest {
 	static final class ObjectArrayCorrect {
 		private final Object[] array;
 		
-		public ObjectArrayCorrect(Object[] array) {
-			this.array = array;
-		}
+		public ObjectArrayCorrect(Object[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -381,10 +357,7 @@ public class ArrayTest {
 		@SuppressWarnings("unused")
 		private final int i;
 		
-		public ArrayAndSomethingUnused(int[] array, int i) {
-			this.array = array;
-			this.i = i;
-		}
+		public ArrayAndSomethingUnused(int[] array, int i) { this.array = array; this.i = i; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -401,18 +374,12 @@ public class ArrayTest {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	static final class ArrayAndNoEquals {
-		@SuppressWarnings("unused")
 		private final int[] ints;
-		@SuppressWarnings("unused")
 		private final Object[] objects;
-		@SuppressWarnings("unused")
 		private final int[][] arrays;
 		
-		public ArrayAndNoEquals(int[] ints, Object[] objects, int[][] arrays) {
-			this.ints = ints;
-			this.objects = objects;
-			this.arrays = arrays;
-		}
+		public ArrayAndNoEquals(int[] ints, Object[] objects, int[][] arrays) { this.ints = ints; this.objects = objects; this.arrays = arrays; }
 	}
 }

@@ -15,13 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
 
+@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
 	@Test
 	public void succeed_whenClassHasASyntheticField() {
@@ -37,27 +39,13 @@ public class SyntheticFieldsTest {
 		private final Inner inner;
 		
 		private /* non-static */ final class Inner {
-			@SuppressWarnings("unused")
 			int foo;
 		}
 		
-		public Outer() {
-			inner = null;
-		}
+		public Outer() { inner = null; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof Outer)) {
-				return false;
-			}
-			Outer other = (Outer)obj;
-			return nullSafeEquals(inner, other.inner);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(inner);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	/* non-static */ final class OuterContainer {

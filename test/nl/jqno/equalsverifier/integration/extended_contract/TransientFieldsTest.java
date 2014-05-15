@@ -15,18 +15,20 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Util;
 
 import org.junit.Test;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-
-public class TransientFieldsTest {
+@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+public class TransientFieldsTest extends IntegrationTestBase {
 	@Test
 	public void fail_whenTransientFieldsAreUsedInEquals() {
-		EqualsVerifier<TransientFields> ev = EqualsVerifier.forClass(TransientFields.class);
-		assertFailure(ev, "Transient field", "should not be included in equals/hashCode contract");
+		expectFailure("Transient field", "should not be included in equals/hashCode contract");
+		EqualsVerifier.forClass(TransientFields.class).verify();
 	}
 	
 	@Test
@@ -40,23 +42,9 @@ public class TransientFieldsTest {
 		private final int i;
 		private final transient int j;
 		
-		public TransientFields(int i, int j) {
-			this.i = i;
-			this.j = j;
-		}
+		public TransientFields(int i, int j) { this.i = i; this.j = j; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof TransientFields)) {
-				return false;
-			}
-			TransientFields other = (TransientFields)obj;
-			return i == other.i && j == other.j;
-		}
-		
-		@Override
-		public int hashCode() {
-			return i + (31 * j);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
 }

@@ -15,16 +15,17 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Color;
 
 import org.junit.Test;
 
-public class NullFieldsTest {
+@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+public class NullFieldsTest extends IntegrationTestBase {
 	private static final String NON_NULLITY = "Non-nullity";
 	private static final String EQUALS = "equals throws NullPointerException";
 	private static final String HASHCODE = "hashCode throws NullPointerException";
@@ -32,20 +33,20 @@ public class NullFieldsTest {
 	
 	@Test
 	public void fail_whenEqualsThrowsNpeOnThissField() {
-		EqualsVerifier<EqualsThrowsNpeOnThis> ev = EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class);
-		assertFailure(ev, NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsThrowsNpeOnOthersField() {
-		EqualsVerifier<EqualsThrowsNpeOnOther> ev = EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class);
-		assertFailure(ev, NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+		EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify();
 	}
 	
 	@Test
 	public void fail_whenHashCodeThrowsNpe() {
-		EqualsVerifier<HashCodeThrowsNpe> ev = EqualsVerifier.forClass(HashCodeThrowsNpe.class);
-		assertFailure(ev, NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
+		expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
+		EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify();
 	}
 	
 	@Test
@@ -86,11 +87,9 @@ public class NullFieldsTest {
 	}
 	
 	static final class EqualsThrowsNpeOnThis {
-		final Color color;
+		private final Color color;
 		
-		public EqualsThrowsNpeOnThis(Color color) {
-			this.color = color;
-		}
+		public EqualsThrowsNpeOnThis(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -101,18 +100,13 @@ public class NullFieldsTest {
 			return color.equals(p.color);
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class EqualsThrowsNpeOnOther {
-		final Color color;
+		private final Color color;
 		
-		public EqualsThrowsNpeOnOther(Color color) {
-			this.color = color;
-		}
+		public EqualsThrowsNpeOnOther(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -123,27 +117,15 @@ public class NullFieldsTest {
 			return p.color.equals(color);
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class HashCodeThrowsNpe {
 		private final Color color;
 		
-		public HashCodeThrowsNpe(Color color) {
-			this.color = color;
-		}
+		public HashCodeThrowsNpe(Color color) { this.color = color; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof HashCodeThrowsNpe)) {
-				return false;
-			}
-			HashCodeThrowsNpe p = (HashCodeThrowsNpe)obj;
-			return p.color == color;
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		
 		@Override
 		public int hashCode() {
@@ -160,23 +142,10 @@ public class NullFieldsTest {
 	static final class CheckedDeepNullA {
 		private final DeepNullB b;
 		
-		public CheckedDeepNullA(DeepNullB b) {
-			this.b = b;
-		}
+		public CheckedDeepNullA(DeepNullB b) { this.b = b; }
 		
-		@Override 
-		public int hashCode() {
-			return nullSafeHashCode(b);
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CheckedDeepNullA)) {
-				return false;
-			}
-			CheckedDeepNullA other = (CheckedDeepNullA)obj;
-			return nullSafeEquals(b, other.b);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class DeepNullA {
@@ -190,15 +159,8 @@ public class NullFieldsTest {
 			this.b = b;
 		}
 		
-		@Override 
-		public int hashCode() {
-			return b.hashCode();
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return (obj instanceof DeepNullA) && ((DeepNullA) obj).b.equals(b);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class DeepNullB {
@@ -212,14 +174,7 @@ public class NullFieldsTest {
 			this.o = o;
 		}
 		
-		@Override
-		public int hashCode() {
-			return o.hashCode();
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			return (obj instanceof DeepNullB) && o.equals(((DeepNullB) obj).o);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

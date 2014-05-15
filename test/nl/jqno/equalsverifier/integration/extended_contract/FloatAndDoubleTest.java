@@ -15,26 +15,26 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class FloatAndDoubleTest {
+public class FloatAndDoubleTest extends IntegrationTestBase {
 	private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
 	private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
-
+	
 	@Test
 	public void fail_whenFloatsAreComparedByReference() {
-		EqualsVerifier<ComparePrimitiveFloatsByReference> ev = EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class);
-		assertFailure(ev, FLOAT, "f");
+		expectFailure(FLOAT, "f");
+		EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify();
 	}
 	
 	@Test
 	public void fail_whenObjectFloatsAreComparedByReference() {
-		EqualsVerifier<CompareObjectFloatByReference> ev = EqualsVerifier.forClass(CompareObjectFloatByReference.class);
-		assertFailure(ev, FLOAT, "f");
+		expectFailure(FLOAT, "f");
+		EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify();
 	}
 	
 	@Test
@@ -45,14 +45,14 @@ public class FloatAndDoubleTest {
 	
 	@Test
 	public void fail_whenDoublesAreComparedByReference() {
-		EqualsVerifier<ComparePrimitiveDoubleByReference> ev = EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class);
-		assertFailure(ev, DOUBLE, "d");
+		expectFailure(DOUBLE, "d");
+		EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify();
 	}
 	
 	@Test
 	public void fail_whenObjectDoublesAreComparedByReference() {
-		EqualsVerifier<CompareObjectDoubleByReference> ev = EqualsVerifier.forClass(CompareObjectDoubleByReference.class);
-		assertFailure(ev, DOUBLE, "d");
+		expectFailure(DOUBLE, "d");
+		EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify();
 	}
 	
 	@Test
@@ -64,9 +64,7 @@ public class FloatAndDoubleTest {
 	static final class ComparePrimitiveFloatsByReference {
 		private final float f;
 		
-		public ComparePrimitiveFloatsByReference(float f) {
-			this.f = f;
-		}
+		public ComparePrimitiveFloatsByReference(float f) { this.f = f; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -76,18 +74,13 @@ public class FloatAndDoubleTest {
 			return f == ((ComparePrimitiveFloatsByReference)obj).f;
 		}
 		
-		@Override
-		public int hashCode() {
-			return Float.floatToIntBits(f);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CompareObjectFloatByReference {
 		private final Float f;
 		
-		public CompareObjectFloatByReference(Float f) {
-			this.f = f;
-		}
+		public CompareObjectFloatByReference(Float f) { this.f = f; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -97,18 +90,13 @@ public class FloatAndDoubleTest {
 			return f == ((CompareObjectFloatByReference)obj).f;
 		}
 		
-		@Override
-		public int hashCode() {
-			return (f == null) ? 0 : Float.floatToIntBits(f);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CompareFloatCorrectly {
 		private final float f;
 		
-		public CompareFloatCorrectly(float f) {
-			this.f = f;
-		}
+		public CompareFloatCorrectly(float f) { this.f = f; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -118,18 +106,13 @@ public class FloatAndDoubleTest {
 			return Float.compare(f, ((CompareFloatCorrectly)obj).f) == 0;
 		}
 		
-		@Override
-		public int hashCode() {
-			return Float.floatToIntBits(f);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class ComparePrimitiveDoubleByReference {
 		private final double d;
 		
-		public ComparePrimitiveDoubleByReference(double d) {
-			this.d = d;
-		}
+		public ComparePrimitiveDoubleByReference(double d) { this.d = d; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -139,19 +122,13 @@ public class FloatAndDoubleTest {
 			return d == ((ComparePrimitiveDoubleByReference)obj).d;
 		}
 		
-		@Override
-		public int hashCode() {
-			long h = Double.doubleToLongBits(d);
-			return (int)(h ^ (h >>> 32));
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CompareObjectDoubleByReference {
 		private final Double d;
 		
-		public CompareObjectDoubleByReference(Double d) {
-			this.d = d;
-		}
+		public CompareObjectDoubleByReference(Double d) { this.d = d; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -161,23 +138,14 @@ public class FloatAndDoubleTest {
 			return d == ((CompareObjectDoubleByReference)obj).d;
 		}
 		
-		@Override
-		public int hashCode() {
-			if (d == null) {
-				return 0;
-			}
-			long h = Double.doubleToLongBits(d);
-			return (int)(h ^ (h >>> 32));
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 
 	static final class CompareDoubleCorrectly {
 		private final double d;
 		
-		public CompareDoubleCorrectly(double d) {
-			this.d = d;
-		}
-		
+		public CompareDoubleCorrectly(double d) { this.d = d; } 
+
 		@Override
 		public boolean equals(Object obj) {
 			if (!(obj instanceof CompareDoubleCorrectly)) {
@@ -186,10 +154,6 @@ public class FloatAndDoubleTest {
 			return Double.compare(d, ((CompareDoubleCorrectly)obj).d) == 0;
 		}
 		
-		@Override
-		public int hashCode() {
-			long h = Double.doubleToLongBits(d);
-			return (int)(h ^ (h >>> 32));
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

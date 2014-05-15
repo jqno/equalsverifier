@@ -15,9 +15,8 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,10 +33,11 @@ import java.util.UUID;
 import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
-public class JavaApiClassesTest {
+public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACollectionInterface() {
 		EqualsVerifier.forClass(CollectionInterfacesContainer.class).verify();
@@ -49,9 +49,9 @@ public class JavaApiClassesTest {
 	}
 	
 	@Test
-	public void succeed_whenClassContainsACompileTimeConstantInANonStaticField() {
-		EqualsVerifier<CompileTimeConstantContainer> ev = EqualsVerifier.forClass(CompileTimeConstantContainer.class);
-		assertFailure(ev, "Precondition: two objects are equal to each other");
+	public void fail_whenClassUsesOnlyCompileTimeConstantsInNonStaticFields() {
+		expectFailure("Precondition: two objects are equal to each other");
+		EqualsVerifier.forClass(CompileTimeConstantContainer.class).verify();
 	}
 	
 	@Test
@@ -68,40 +68,11 @@ public class JavaApiClassesTest {
 		private final Map<String, String> map;
 		private final Queue<String> queue;
 		
-		public CollectionInterfacesContainer(Collection<String> collection, List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue) {
-			this.collection = collection;
-			this.list = list;
-			this.set = set;
-			this.map = map;
-			this.queue = queue;
-		}
+		public CollectionInterfacesContainer(Collection<String> collection, List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue)
+			{ this.collection = collection; this.list = list; this.set = set; this.map = map; this.queue = queue; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CollectionInterfacesContainer)) {
-				return false;
-			}
-			
-			CollectionInterfacesContainer other = (CollectionInterfacesContainer)obj;
-			boolean result = true;
-			result &= nullSafeEquals(collection, other.collection);
-			result &= nullSafeEquals(list, other.list);
-			result &= nullSafeEquals(set, other.set);
-			result &= nullSafeEquals(map, other.map);
-			result &= nullSafeEquals(queue, other.queue);
-			return result;
-		}
-		
-		@Override
-		public int hashCode() {
-			int result = 0;
-			result += 31 * nullSafeHashCode(collection);
-			result += 31 * nullSafeHashCode(list);
-			result += 31 * nullSafeHashCode(set);
-			result += 31 * nullSafeHashCode(map);
-			result += 31 * nullSafeHashCode(queue);
-			return result;
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 
 		@Override
 		public String toString() {
@@ -118,6 +89,7 @@ public class JavaApiClassesTest {
 		}
 	}
 	
+	@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 	static final class CommonClassesContainer {
 		private final String string;
 		private final Integer integer;
@@ -133,58 +105,11 @@ public class JavaApiClassesTest {
 		
 		public CommonClassesContainer(String string, Integer integer, Class<?> type, Calendar calendar,
 				Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-				ArrayList<String> arrayList, BitSet bitset, UUID uuid) {
-			this.string = string;
-			this.integer = integer;
-			this.type = type;
-			this.calendar = calendar;
-			this.date = date;
-			this.file = file;
-			this.gregorianCalendar = gregorianCalendar;
-			this.pattern = pattern;
-			this.arrayList = arrayList;
-			this.bitset = bitset;
-			this.uuid = uuid;
-		}
+				ArrayList<String> arrayList, BitSet bitset, UUID uuid) 
+			{ this.string = string; this.integer = integer; this.type = type; this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern; this.arrayList = arrayList; this.bitset = bitset; this.uuid = uuid; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CommonClassesContainer)) {
-				return false;
-			}
-			
-			CommonClassesContainer other = (CommonClassesContainer)obj;
-			boolean result = true;
-			result &= nullSafeEquals(string, other.string);
-			result &= nullSafeEquals(integer, other.integer);
-			result &= nullSafeEquals(type, other.type);
-			result &= nullSafeEquals(calendar, other.calendar);
-			result &= nullSafeEquals(date, other.date);
-			result &= nullSafeEquals(file, other.file);
-			result &= nullSafeEquals(gregorianCalendar, other.gregorianCalendar);
-			result &= nullSafeEquals(pattern, other.pattern);
-			result &= nullSafeEquals(arrayList, other.arrayList);
-			result &= nullSafeEquals(bitset, other.bitset);
-			result &= nullSafeEquals(uuid, other.uuid);
-			return result;
-		}
-		
-		@Override
-		public int hashCode() {
-			int result = 0;
-			result += 31 * nullSafeHashCode(string);
-			result += 31 * nullSafeHashCode(integer);
-			result += 31 * nullSafeHashCode(type);
-			result += 31 * nullSafeHashCode(calendar);
-			result += 31 * nullSafeHashCode(date);
-			result += 31 * nullSafeHashCode(file);
-			result += 31 * nullSafeHashCode(gregorianCalendar);
-			result += 31 * nullSafeHashCode(pattern);
-			result += 31 * nullSafeHashCode(arrayList);
-			result += 31 * nullSafeHashCode(bitset);
-			result += 31 * nullSafeHashCode(uuid);
-			return result;
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CompileTimeConstantContainer {
@@ -200,10 +125,7 @@ public class JavaApiClassesTest {
 			return string.equals(other.string) && integer == other.integer;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(string) + 31 * integer;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class ThreadLocalContainer {
@@ -239,9 +161,6 @@ public class JavaApiClassesTest {
 			return instance.get().equals(other.instance.get());
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(instance);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }
