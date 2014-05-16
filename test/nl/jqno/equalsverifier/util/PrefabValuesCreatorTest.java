@@ -21,8 +21,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.Node;
@@ -37,7 +35,6 @@ import nl.jqno.equalsverifier.testhelpers.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 import nl.jqno.equalsverifier.util.exceptions.RecursionException;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
@@ -161,29 +158,16 @@ public class PrefabValuesCreatorTest {
 	
 	@Test
 	public void recursiveWithAnotherFieldFirst() {
-		try {
-			prefabValues.putFor(RecursiveWithAnotherFieldFirst.class);
-		}
-		catch (Exception e) {
-			assertThat(e.getMessage(), containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
-			assertThat(e.getMessage(), not(containsString(RecursiveThisIsTheOtherField.class.getSimpleName())));
-			return;
-		}
-		fail("No exception thrown");
+		thrown.expectMessage(containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
+		thrown.expectMessage(not(containsString(RecursiveThisIsTheOtherField.class.getSimpleName())));
+		prefabValues.putFor(RecursiveWithAnotherFieldFirst.class);
 	}
 	
 	@Test
 	public void exceptionMessage() {
-		try {
-			prefabValues.putFor(TwoStepNodeA.class);
-		}
-		catch (RecursionException e) {
-			Util.assertMessageContainsAll(e,
-					TwoStepNodeA.class.getSimpleName(),
-					TwoStepNodeB.class.getSimpleName());
-			return;
-		}
-		fail("No exception thrown");
+		thrown.expectMessage(TwoStepNodeA.class.getSimpleName());
+		thrown.expectMessage(TwoStepNodeB.class.getSimpleName());
+		prefabValues.putFor(TwoStepNodeA.class);
 	}
 	
 	@Test
