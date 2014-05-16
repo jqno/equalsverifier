@@ -18,9 +18,9 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.points.Color;
-import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
 
 import org.junit.Test;
 

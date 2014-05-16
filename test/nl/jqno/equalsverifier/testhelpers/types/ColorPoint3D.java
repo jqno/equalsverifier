@@ -13,33 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public class FinalMethodsPoint {
-	private final int x;
-	private final int y;
+public final class ColorPoint3D extends Point3D {
+	final Color color;
 	
-	public FinalMethodsPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	@Override
-	public final boolean equals(Object obj) {
-		if (!(obj instanceof FinalMethodsPoint)) {
-			return false;
-		}
-		FinalMethodsPoint p = (FinalMethodsPoint)obj;
-		return p.x == x && p.y == y;
-	}
-	
-	@Override
-	public final int hashCode() {
-		return x + (31 * y);
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+	public ColorPoint3D(int x, int y, int z, Color color) {
+		super(x, y, z);
+		this.color = color;
 	}
 }

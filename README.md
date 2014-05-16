@@ -49,7 +49,7 @@ Project structure
   Annotations used by unit tests and integration tests
 * `nl.jqno.equalsverifier.testhelpers.annotations.casefolding`  
   More annotations which would clash with other annotations because of casing
-* `nl.jqno.equalsverifier.points`  
+* `nl.jqno.equalsverifier.testhelpers.types`  
    Various data classes for use in unit tests and integration tests
 * `nl.jqno.equalsverifier.util`  
   Unit tests for the reflection helpers

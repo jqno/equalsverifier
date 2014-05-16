@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.coverage;
 
-import nl.jqno.equalsverifier.testhelpers.points.Color;
+import nl.jqno.equalsverifier.testhelpers.types.Color;
 
 public class LombokCanEqual {
 	/**

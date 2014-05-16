@@ -30,14 +30,14 @@ import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnota
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedFields;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithBoth;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithClass;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AnnotatedWithRuntime;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.LoadedBySystemClassLoader;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithBoth;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithClass;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Rule;

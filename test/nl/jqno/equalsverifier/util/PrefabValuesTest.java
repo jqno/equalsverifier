@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Before;

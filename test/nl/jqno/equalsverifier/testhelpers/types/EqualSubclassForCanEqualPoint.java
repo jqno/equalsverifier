@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2009-2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public class EqualSubclassForBlindlyEqualsPoint extends BlindlyEqualsPoint {
-	public EqualSubclassForBlindlyEqualsPoint(int x, int y) {
+public class EqualSubclassForCanEqualPoint extends CanEqualPoint {
+	public EqualSubclassForCanEqualPoint(int x, int y) {
 		super(x, y);
 	}
 }

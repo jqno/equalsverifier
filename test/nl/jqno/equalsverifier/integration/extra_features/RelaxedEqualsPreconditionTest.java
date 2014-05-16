@@ -17,7 +17,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.points.Multiple;
+import nl.jqno.equalsverifier.testhelpers.types.Multiple;
 
 import org.junit.Before;
 import org.junit.Test;

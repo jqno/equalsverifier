@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.points.Color;
+import nl.jqno.equalsverifier.testhelpers.types.Color;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -26,9 +26,9 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.casefolding.Nonnull;
-import nl.jqno.equalsverifier.testhelpers.points.FinalMethodsPoint;
-import nl.jqno.equalsverifier.testhelpers.points.ImmutableCanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.points.MutableCanEqualColorPoint;
+import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
+import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
 import nl.jqno.equalsverifier.util.Instantiator;
 
 import org.junit.Test;

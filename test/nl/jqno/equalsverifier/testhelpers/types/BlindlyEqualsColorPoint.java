@@ -13,33 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
-public class PointContainer {
-	private final Point point;
+public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
+	private final Color color;
 	
-	public PointContainer(Point point) {
-		this.point = point;
-	}
-	
-	public Point getPoint() {
-		return point;
+	public BlindlyEqualsColorPoint(int x, int y, Color color) {
+		super(x, y);
+		this.color = color;
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof PointContainer)) {
+	protected boolean blindlyEquals(Object o) {
+		if (!(o instanceof BlindlyEqualsColorPoint)) {
 			return false;
 		}
-		PointContainer other = (PointContainer)obj;
-		return nullSafeEquals(point, other.point);
+		BlindlyEqualsColorPoint cp = (BlindlyEqualsColorPoint)o;
+		return (super.blindlyEquals(cp) && 
+				cp.color == this.color);
 	}
 	
 	@Override
 	public int hashCode() {
-		return nullSafeHashCode(point);
+		return nullSafeHashCode(color) + (31 * super.hashCode());
+	}
+	
+	@Override
+	public String toString() {
+		return super.toString() + "," + color;
 	}
 }

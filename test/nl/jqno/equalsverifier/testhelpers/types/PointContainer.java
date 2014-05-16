@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,40 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
-@Immutable
-public class ImmutableCanEqualPoint {
-	private int x;
-	private int y;
+public class PointContainer {
+	private final Point point;
 	
-	public ImmutableCanEqualPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public PointContainer(Point point) {
+		this.point = point;
 	}
 	
-	public boolean canEqual(Object obj) {
-		return obj instanceof ImmutableCanEqualPoint;
+	public Point getPoint() {
+		return point;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof ImmutableCanEqualPoint)) {
+		if (!(obj instanceof PointContainer)) {
 			return false;
 		}
-		ImmutableCanEqualPoint p = (ImmutableCanEqualPoint)obj;
-		return p.canEqual(this) && p.x == x && p.y == y;
+		PointContainer other = (PointContainer)obj;
+		return nullSafeEquals(point, other.point);
 	}
 	
 	@Override
 	public int hashCode() {
-		return x + (31 * y);
-	}
-	
-	@Override
-	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+		return nullSafeHashCode(point);
 	}
 }

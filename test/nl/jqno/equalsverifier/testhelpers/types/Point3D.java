@@ -13,37 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public class BlindlyEqualsPoint {
-	private final int x;
-	private final int y;
+public class Point3D extends Point {
+	public int z;
 	
-	public BlindlyEqualsPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	protected boolean blindlyEquals(Object o) {
-		if (!(o instanceof BlindlyEqualsPoint)) {
-			return false;
-		}
-		BlindlyEqualsPoint p = (BlindlyEqualsPoint)o;
-		return p.x == this.x && p.y == this.y;
+	public Point3D(int x, int y, int z) {
+		super(x, y);
+		this.z = z;
 	}
 	
 	@Override
-	public boolean equals(Object o) {
-		return (this.blindlyEquals(o) && ((BlindlyEqualsPoint)o).blindlyEquals(this));
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Point3D)) {
+			return false;
+		}
+		return super.equals(obj) && ((Point3D)obj).z == z;
 	}
 	
 	@Override
 	public int hashCode() {
-		return x + (31 * y);
+		return super.hashCode() + (31 * z);
 	}
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+		return super.toString() + "," + z;
 	}
 }

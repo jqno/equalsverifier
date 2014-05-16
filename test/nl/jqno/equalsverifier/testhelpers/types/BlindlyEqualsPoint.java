@@ -1,5 +1,5 @@
 /*
- * Copyright 2009 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,24 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public class Point {
-	public final int x;
-	public final int y;
+public class BlindlyEqualsPoint {
+	private final int x;
+	private final int y;
 	
-	public Point(int x, int y) {
+	public BlindlyEqualsPoint(int x, int y) {
 		this.x = x;
 		this.y = y;
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Point)) {
+	protected boolean blindlyEquals(Object o) {
+		if (!(o instanceof BlindlyEqualsPoint)) {
 			return false;
 		}
-		Point p = (Point)obj;
-		return p.x == x && p.y == y;
+		BlindlyEqualsPoint p = (BlindlyEqualsPoint)o;
+		return p.x == this.x && p.y == this.y;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return (this.blindlyEquals(o) && ((BlindlyEqualsPoint)o).blindlyEquals(this));
 	}
 	
 	@Override

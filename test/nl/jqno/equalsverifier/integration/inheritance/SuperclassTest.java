@@ -18,12 +18,12 @@ package nl.jqno.equalsverifier.integration.inheritance;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractEqualsAndHashCode;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.Empty;
-import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Color;
-import nl.jqno.equalsverifier.testhelpers.points.ColorBlindColorPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
 
 import org.junit.Test;
 

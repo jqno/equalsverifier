@@ -13,39 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 
-public final class MutableCanEqualColorPoint extends ImmutableCanEqualPoint {
-	private Color color;
+@Immutable
+public class ImmutableCanEqualPoint {
+	private int x;
+	private int y;
 	
-	public MutableCanEqualColorPoint(int x, int y, Color color) {
-		super(x, y);
-		this.color = color;
+	public ImmutableCanEqualPoint(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
-	@Override
 	public boolean canEqual(Object obj) {
-		return obj instanceof MutableCanEqualColorPoint;
+		return obj instanceof ImmutableCanEqualPoint;
 	}
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof MutableCanEqualColorPoint)) {
+		if (!(obj instanceof ImmutableCanEqualPoint)) {
 			return false;
 		}
-		MutableCanEqualColorPoint p = (MutableCanEqualColorPoint)obj;
-		return p.canEqual(this) && super.equals(p) && color == p.color;
+		ImmutableCanEqualPoint p = (ImmutableCanEqualPoint)obj;
+		return p.canEqual(this) && p.x == x && p.y == y;
 	}
 	
 	@Override
 	public int hashCode() {
-		return nullSafeHashCode(color) + (31 * super.hashCode());
+		return x + (31 * y);
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + "," + color;
+		return getClass().getSimpleName() + ":" + x + "," + y;
 	}
 }

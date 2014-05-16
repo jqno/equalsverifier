@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2009 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,35 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-
-public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
-	private final Color color;
+public final class FinalPoint {
+	private final int x;
+	private final int y;
 	
-	public BlindlyEqualsColorPoint(int x, int y, Color color) {
-		super(x, y);
-		this.color = color;
+	public FinalPoint(int x, int y) {
+		this.x = x;
+		this.y = y;
 	}
 	
 	@Override
-	protected boolean blindlyEquals(Object o) {
-		if (!(o instanceof BlindlyEqualsColorPoint)) {
+	public boolean equals(Object obj) {
+		if (!(obj instanceof FinalPoint)) {
 			return false;
 		}
-		BlindlyEqualsColorPoint cp = (BlindlyEqualsColorPoint)o;
-		return (super.blindlyEquals(cp) && 
-				cp.color == this.color);
+		FinalPoint p = (FinalPoint)obj;
+		return p.x == x && p.y == y;
 	}
 	
 	@Override
 	public int hashCode() {
-		return nullSafeHashCode(color) + (31 * super.hashCode());
+		return x + (31 * y);
 	}
 	
 	@Override
 	public String toString() {
-		return super.toString() + "," + color;
+		return getClass().getSimpleName() + ":" + x + "," + y;
 	}
 }

@@ -13,33 +13,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public final class FinalPoint {
-	private final int x;
-	private final int y;
+public class Multiple {
+	private final int a;
+	private final int b;
 	
-	public FinalPoint(int x, int y) {
-		this.x = x;
-		this.y = y;
+	public Multiple(int a, int b) {
+		this.a = a;
+		this.b = b;
 	}
 	
 	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof FinalPoint)) {
+	public final boolean equals(Object obj) {
+		if (!(obj instanceof Multiple)) {
 			return false;
 		}
-		FinalPoint p = (FinalPoint)obj;
-		return p.x == x && p.y == y;
+		Multiple other = (Multiple)obj;
+		return a * b == other.a * other.b;
 	}
 	
 	@Override
-	public int hashCode() {
-		return x + (31 * y);
+	public final int hashCode() {
+		return a * b;
 	}
 	
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + ":" + x + "," + y;
+		return getClass().getSimpleName() + ":" + a + "*" + b + "=" + (a * b);
 	}
 }

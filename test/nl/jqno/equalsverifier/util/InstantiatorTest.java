@@ -18,12 +18,12 @@ package nl.jqno.equalsverifier.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractClass;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.ArrayContainer;
-import nl.jqno.equalsverifier.testhelpers.TypeHelper.Interface;
-import nl.jqno.equalsverifier.testhelpers.points.ColorBlindColorPoint;
-import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
+import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
+import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClass;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 
 import org.junit.Test;
 

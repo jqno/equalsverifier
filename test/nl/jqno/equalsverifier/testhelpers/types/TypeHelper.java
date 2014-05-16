@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers;
+package nl.jqno.equalsverifier.testhelpers.types;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 
@@ -58,7 +58,6 @@ import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetenti
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationDoesntInherit;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationInherits;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
-import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 public class TypeHelper {
 	private static final Object OBJECT = new Object();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2009 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public final class ColorPoint3D extends Point3D {
-	final Color color;
-	
-	public ColorPoint3D(int x, int y, int z, Color color) {
-		super(x, y, z);
-		this.color = color;
-	}
+public enum Color {
+	YELLOW, BLUE, INDIGO;
 }

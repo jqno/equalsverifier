@@ -19,14 +19,14 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsColorPoint;
-import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsPoint;
-import nl.jqno.equalsverifier.testhelpers.points.CanEqualColorPoint;
-import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.points.Color;
-import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForBlindlyEqualsPoint;
-import nl.jqno.equalsverifier.testhelpers.points.EqualSubclassForCanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
+import nl.jqno.equalsverifier.testhelpers.types.BlindlyEqualsColorPoint;
+import nl.jqno.equalsverifier.testhelpers.types.BlindlyEqualsPoint;
+import nl.jqno.equalsverifier.testhelpers.types.CanEqualColorPoint;
+import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier.testhelpers.types.EqualSubclassForBlindlyEqualsPoint;
+import nl.jqno.equalsverifier.testhelpers.types.EqualSubclassForCanEqualPoint;
+import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 
 import org.junit.Test;
 

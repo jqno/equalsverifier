@@ -1,5 +1,5 @@
 /*
- * Copyright 2009,2012 Jan Ouwens
+ * Copyright 2010 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.points;
+package nl.jqno.equalsverifier.testhelpers.types;
 
-public final class ColorBlindColorPoint extends Point {
-	public final Color color;
-	
-	public ColorBlindColorPoint(int x, int y, Color color) {
+public class EqualSubclassForBlindlyEqualsPoint extends BlindlyEqualsPoint {
+	public EqualSubclassForBlindlyEqualsPoint(int x, int y) {
 		super(x, y);
-		this.color = color;
-	}
-	
-	@Override
-	public final boolean equals(Object obj) {
-		return super.equals(obj);
-	}
-	
-	@Override
-	public final int hashCode() {
-		return super.hashCode();
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "," + color;
 	}
 }
