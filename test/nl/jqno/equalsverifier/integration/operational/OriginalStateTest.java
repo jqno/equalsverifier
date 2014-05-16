@@ -15,19 +15,21 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 import org.junit.Test;
 
-public class OriginalStateTest {
+@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+public class OriginalStateTest extends IntegrationTestBase {
 	private static final Object INSTANCE_1 = new Object();
 	private static final Object INSTANCE_2 = new Object();
 	private static final Object STATIC = new Object();
@@ -81,7 +83,8 @@ public class OriginalStateTest {
 		stashAccessor.set(stash);
 		
 		// Make sure the exception actually occurs, on a check that actually mutates the fields.
-		assertFailure(ev, "Mutability");
+		expectFailure("Mutability");
+		ev.verify();
 		
 		// Assert
 		assertTrue(stash.restoreCalled);
@@ -92,67 +95,28 @@ public class OriginalStateTest {
 		private static Object staticValue = STATIC;
 		private final Object instanceValue;
 		
-		public CorrectEquals(Object instanceValue) {
-			this.instanceValue = instanceValue;
-		}
+		public CorrectEquals(Object instanceValue) { this.instanceValue = instanceValue; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CorrectEquals)) {
-				return false;
-			}
-			CorrectEquals other = (CorrectEquals)obj;
-			return nullSafeEquals(instanceValue, other.instanceValue);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(instanceValue);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CorrectEqualsContainer {
 		private final CorrectEquals foo;
 		
-		public CorrectEqualsContainer(CorrectEquals foo) {
-			this.foo = foo;
-		}
+		public CorrectEqualsContainer(CorrectEquals foo) { this.foo = foo; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CorrectEqualsContainer)) {
-				return false;
-			}
-			CorrectEqualsContainer other = (CorrectEqualsContainer)obj;
-			return nullSafeEquals(foo, other.foo);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(foo);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class CorrectEqualsContainerContainer {
 		private final CorrectEqualsContainer foo;
 		
-		public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) {
-			this.foo = foo;
-		}
+		public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) { this.foo = foo; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CorrectEqualsContainerContainer)) {
-				return false;
-			}
-			CorrectEqualsContainerContainer other = (CorrectEqualsContainerContainer)obj;
-			return nullSafeEquals(foo, other.foo);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(foo);
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static abstract class SuperContainer {
@@ -161,9 +125,7 @@ public class OriginalStateTest {
 		
 		private final CorrectEquals foo;
 		
-		public SuperContainer(CorrectEquals foo) {
-			this.foo = foo;
-		}
+		public SuperContainer(CorrectEquals foo) { this.foo = foo; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -174,10 +136,7 @@ public class OriginalStateTest {
 			return nullSafeEquals(foo, other.foo);
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(foo);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 
 	static final class SubContainer extends SuperContainer {
@@ -189,21 +148,9 @@ public class OriginalStateTest {
 	static final class MutableIntContainer {
 		private int field;
 		
-		public MutableIntContainer(int value) {
-			field = value;
-		}
+		public MutableIntContainer(int value) { field = value; }
 		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof MutableIntContainer)) {
-				return false;
-			}
-			return field == ((MutableIntContainer)obj).field;
-		}
-		
-		@Override
-		public int hashCode() {
-			return field;
-		}
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

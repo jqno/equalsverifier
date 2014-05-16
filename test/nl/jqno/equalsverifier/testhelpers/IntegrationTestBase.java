@@ -50,6 +50,9 @@ public class IntegrationTestBase {
 		@Override
 		public boolean matches(Object item) {
 			Throwable actual = ((Throwable)item).getCause();
+			if (cause == null) {
+				return actual == null;
+			}
 			return cause.isInstance(actual);
 		}
 

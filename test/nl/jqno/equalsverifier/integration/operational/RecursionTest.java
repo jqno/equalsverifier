@@ -14,15 +14,15 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class RecursionTest {
+public class RecursionTest extends IntegrationTestBase {
 	private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
 	private static final String PREFAB = "Add prefab values for one of the following types";
 	
@@ -37,14 +37,16 @@ public class RecursionTest {
 	
 	@Test
 	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
-		EqualsVerifier<Node> ev = EqualsVerifier.forClass(Node.class);
-		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
+		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
+		EqualsVerifier.forClass(Node.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsExamples() {
-		EqualsVerifier<Node> ev = EqualsVerifier.forExamples(red, black);
-		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB);
+		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
+		EqualsVerifier.forExamples(red, black)
+				.verify();
 	}
 	
 	@Test
@@ -63,8 +65,9 @@ public class RecursionTest {
 	
 	@Test
 	public void fail_whenFieldIsARecursiveType() {
-		EqualsVerifier<NodeContainer> ev = EqualsVerifier.forClass(NodeContainer.class);
-		assertFailure(ev, RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
+		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
+		EqualsVerifier.forClass(NodeContainer.class)
+				.verify();
 	}
 	
 	@Test
@@ -84,9 +87,7 @@ public class RecursionTest {
 	static class Node {
 		final Node node;
 		
-		public Node(Node node) {
-			this.node = node;
-		}
+		public Node(Node node) { this.node = node; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -97,10 +98,7 @@ public class RecursionTest {
 			return nullSafeEquals(node, other.node);
 		}
 		
-		@Override
-		public final int hashCode() {
-			return node == null ? 0 : 1 + node.hashCode();
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class SubNode extends Node {
@@ -112,9 +110,7 @@ public class RecursionTest {
 	static class NodeContainer {
 		final Node node;
 		
-		public NodeContainer(Node node) {
-			this.node = node;
-		}
+		public NodeContainer(Node node) { this.node = node; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -125,10 +121,7 @@ public class RecursionTest {
 			return nullSafeEquals(node, other.node);
 		}
 		
-		@Override
-		public final int hashCode() {
-			return nullSafeHashCode(node);
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class SubNodeContainer extends NodeContainer {

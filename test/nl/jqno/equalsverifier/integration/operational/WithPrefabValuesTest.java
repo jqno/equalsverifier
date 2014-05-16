@@ -16,16 +16,12 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-public class WithPrefabValuesTest {
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
+public class WithPrefabValuesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
 		EqualsVerifier.forClass(FinalPoint.class)

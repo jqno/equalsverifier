@@ -15,17 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
-public class PreconditionTest {
+public class PreconditionTest extends IntegrationTestBase {
 	private static final String PRECONDITION = "Precondition";
 	
 	FinalPoint first;
@@ -36,9 +34,6 @@ public class PreconditionTest {
 		first = new FinalPoint(1, 2);
 		second = new FinalPoint(2, 3);
 	}
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
 	
 	@Test
 	public void fail_whenFirstExampleIsNull() {
@@ -72,20 +67,23 @@ public class PreconditionTest {
 	
 	@Test
 	public void fail_whenExamplesAreOfIncompatibleTypes() {
-		EqualsVerifier<?> ev = EqualsVerifier.forExamples(first, new Point(1, 2));
-		assertFailure(ev, PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
+		expectFailure(PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
+		EqualsVerifier.forExamples(first, new Point(1, 2))
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenExamplesAreTheSame() {
-		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, first);
-		assertFailure(ev, PRECONDITION, "the same object appears twice", FinalPoint.class.getSimpleName());
+		expectFailure(PRECONDITION, "the same object appears twice", FinalPoint.class.getSimpleName());
+		EqualsVerifier.forExamples(first, first)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenExamplesAreNotTheSameButEqual() {
-		FinalPoint firstest = new FinalPoint(1, 2);
-		EqualsVerifier<FinalPoint> ev = EqualsVerifier.forExamples(first, firstest);
-		assertFailure(ev, PRECONDITION, "two objects are equal to each other", FinalPoint.class.getSimpleName());
+		FinalPoint equalToFirst = new FinalPoint(1, 2);
+		expectFailure(PRECONDITION, "two objects are equal to each other", FinalPoint.class.getSimpleName());
+		EqualsVerifier.forExamples(first, equalToFirst)
+				.verify();
 	}
 }
