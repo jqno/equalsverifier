@@ -15,10 +15,10 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsColorPoint;
 import nl.jqno.equalsverifier.testhelpers.points.BlindlyEqualsPoint;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualColorPoint;
@@ -41,24 +41,26 @@ import org.junit.Test;
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
  *    Scala.
  */
-public class SubclassTest {
+public class SubclassTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassIsFinal() {
-		EqualsVerifier.forClass(FinalPoint.class).verify();
+		EqualsVerifier.forClass(FinalPoint.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
-		EqualsVerifier<LiskovSubstitutionPrincipleBroken> ev =
-				EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class);
-		assertFailure(ev, "Subclass", "object is not equal to an instance of a trivial subclass with equal fields",	"Consider making the class final.");
+		expectFailure("Subclass", "object is not equal to an instance of a trivial subclass with equal fields",	"Consider making the class final.");
+		EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
-		EqualsVerifier<BlindlyEqualsPoint> ev = EqualsVerifier.forClass(BlindlyEqualsPoint.class)
-				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class);
-		assertFailure(ev, "Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
+		expectFailure("Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
+		EqualsVerifier.forClass(BlindlyEqualsPoint.class)
+				.withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class)
+				.verify();
 	}
 	
 	@Test
@@ -77,9 +79,10 @@ public class SubclassTest {
 	
 	@Test
 	public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
-		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
-				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
-		assertFailure(ev, "Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForCanEqualPoint.class.getSimpleName());
+		expectFailure("Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForCanEqualPoint.class.getSimpleName());
+		EqualsVerifier.forClass(CanEqualPoint.class)
+				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+				.verify();
 	}
 	
 	@Test
@@ -98,10 +101,10 @@ public class SubclassTest {
 	
 	@Test
 	public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
-		EqualsVerifier<FinalEqualsAndHashCode> ev = EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
-				.withRedefinedSubclass(RedeFinalSubPoint.class);
-		assertFailure(ev, "Subclass", FinalEqualsAndHashCode.class.getSimpleName(),
-				"has a final equals method", "No need to supply a redefined subclass");
+		expectFailure("Subclass", FinalEqualsAndHashCode.class.getSimpleName(), "has a final equals method", "No need to supply a redefined subclass");
+		EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
+				.withRedefinedSubclass(RedeFinalSubPoint.class)
+				.verify();
 	}
 	
 	@Test
@@ -113,26 +116,26 @@ public class SubclassTest {
 	
 	@Test
 	public void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
-		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
+		expectFailure("withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
+		EqualsVerifier.forClass(CanEqualPoint.class)
 				.suppress(Warning.STRICT_INHERITANCE)
-				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class);
-		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
+				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
-		EqualsVerifier<CanEqualPoint> ev = EqualsVerifier.forClass(CanEqualPoint.class)
+		expectFailure("withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
+		EqualsVerifier.forClass(CanEqualPoint.class)
 				.withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-				.suppress(Warning.STRICT_INHERITANCE);
-		assertFailure(ev, "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
+				.suppress(Warning.STRICT_INHERITANCE)
+				.verify();
 	}
 	
 	static class LiskovSubstitutionPrincipleBroken {
 		private final int x;
 		
-		public LiskovSubstitutionPrincipleBroken(int x) {
-			this.x = x;
-		}
+		public LiskovSubstitutionPrincipleBroken(int x) { this.x = x; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -142,25 +145,14 @@ public class SubclassTest {
 			return x == ((LiskovSubstitutionPrincipleBroken)obj).x;
 		}
 		
-		@Override
-		public final int hashCode() {
-			return x;
-		}
-		
-		@Override
-		public String toString() {
-			return getClass().getSimpleName() + ":" + x;
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class FinalEqualsAndHashCode {
 		private final int x;
 		private final int y;
 		
-		public FinalEqualsAndHashCode(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		public FinalEqualsAndHashCode(int x, int y) { this.x = x; this.y = y; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -171,15 +163,7 @@ public class SubclassTest {
 			return x == p.x && y == p.y;
 		}
 		
-		@Override
-		public final int hashCode() {
-			return x + (31 * y);
-		}
-		
-		@Override
-		public String toString() {
-			return getClass().getSimpleName() + ":" + x;
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class RedeFinalSubPoint extends FinalEqualsAndHashCode {
@@ -192,10 +176,7 @@ public class SubclassTest {
 		private final int x;
 		private final int y;
 
-		public AbstractRedefinablePoint(int x, int y) {
-			this.x = x;
-			this.y = y;
-		}
+		public AbstractRedefinablePoint(int x, int y) { this.x = x; this.y = y; }
 		
 		public boolean canEqual(Object obj) {
 			return obj instanceof AbstractRedefinablePoint;
@@ -210,24 +191,13 @@ public class SubclassTest {
 			return p.canEqual(this) && p.x == x && p.y == y;
 		}
 		
-		@Override
-		public int hashCode() {
-			return x + (31 * y);
-		}
-		
-		@Override
-		public String toString() {
-			return getClass().getSimpleName() + ":" + x + "," + y;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static final class SubclassForAbstractRedefinablePoint extends AbstractRedefinablePoint {
 		private final Color color;
 		
-		public SubclassForAbstractRedefinablePoint(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public SubclassForAbstractRedefinablePoint(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean canEqual(Object obj) {
@@ -243,14 +213,6 @@ public class SubclassTest {
 			return p.canEqual(this) && super.equals(obj) && color == p.color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color) + (31 * super.hashCode());
-		}
-		
-		@Override
-		public String toString() {
-			return super.toString() + "," + color;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }

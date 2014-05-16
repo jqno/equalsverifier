@@ -15,14 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class FinalityTest {
+public class FinalityTest extends IntegrationTestBase {
 	private static final String BOTH_FINAL_OR_NONFINAL = "Finality: equals and hashCode must both be final or both be non-final";
 	private static final String SUBCLASS = "Subclass";
 	private static final String SUPPLY_AN_INSTANCE = "Supply an instance of a redefined subclass using withRedefinedSubclass";
@@ -34,8 +35,9 @@ public class FinalityTest {
 
 	@Test
 	public void fail_whenEqualsIsNotFinal_givenAClassThatIsNotFinal() {
-		EqualsVerifier<Point> ev = EqualsVerifier.forClass(Point.class);
-		assertFailure(ev, SUBCLASS, "equals is not final", SUPPLY_AN_INSTANCE, "if equals cannot be final");
+		expectFailure(SUBCLASS, "equals is not final", SUPPLY_AN_INSTANCE, "if equals cannot be final");
+		EqualsVerifier.forClass(Point.class)
+				.verify();
 	}
 	
 	@Test
@@ -60,8 +62,9 @@ public class FinalityTest {
 	
 	@Test
 	public void fail_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinal() {
-		EqualsVerifier<FinalEqualsPoint> ev = EqualsVerifier.forClass(FinalEqualsPoint.class);
-		assertFailure(ev, SUBCLASS, "hashCode is not final", SUPPLY_AN_INSTANCE, "if hashCode cannot be final");
+		expectFailure(SUBCLASS, "hashCode is not final", SUPPLY_AN_INSTANCE, "if hashCode cannot be final");
+		EqualsVerifier.forClass(FinalEqualsPoint.class)
+				.verify();
 	}
 	
 	@Test
@@ -80,16 +83,16 @@ public class FinalityTest {
 	}
 	
 	private <T> void check(Class<T> type) {
-		EqualsVerifier<T> ev = EqualsVerifier.forClass(type).usingGetClass();
-		assertFailure(ev, BOTH_FINAL_OR_NONFINAL);
+		expectFailure(BOTH_FINAL_OR_NONFINAL);
+		EqualsVerifier.forClass(type)
+				.usingGetClass()
+				.verify();
 	}
 	
 	static class FinalEqualsNonFinalHashCode {
 		private final int i;
 		
-		public FinalEqualsNonFinalHashCode(int i) {
-			this.i = i;
-		}
+		public FinalEqualsNonFinalHashCode(int i) { this.i = i; }
 		
 		@Override
 		public final boolean equals(Object obj) {
@@ -100,18 +103,13 @@ public class FinalityTest {
 			return other.i == i;
 		}
 		
-		@Override
-		public int hashCode() {
-			return i;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class NonFinalEqualsFinalHashCode {
 		private final int i;
 		
-		public NonFinalEqualsFinalHashCode(int i) {
-			this.i = i;
-		}
+		public NonFinalEqualsFinalHashCode(int i) { this.i = i; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -122,16 +120,11 @@ public class FinalityTest {
 			return other.i == i;
 		}
 		
-		@Override
-		public final int hashCode() {
-			return i;
-		}
+		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
 
 	static class FinalEqualsPoint extends Point {
-		public FinalEqualsPoint(int x, int y) {
-			super(x, y);
-		}
+		public FinalEqualsPoint(int x, int y) { super(x, y); }
 		
 		@Override
 		public final boolean equals(Object obj) {

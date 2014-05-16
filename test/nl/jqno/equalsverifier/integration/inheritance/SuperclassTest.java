@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertFailure;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.TypeHelper.Empty;
 import nl.jqno.equalsverifier.testhelpers.points.CanEqualPoint;
@@ -27,36 +27,35 @@ import nl.jqno.equalsverifier.testhelpers.points.Point;
 
 import org.junit.Test;
 
-public class SuperclassTest {
+public class SuperclassTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlso() {
-		EqualsVerifier.forClass(ColorBlindColorPoint.class).verify();
+		EqualsVerifier.forClass(ColorBlindColorPoint.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsRedefinedSoItBreaksSymmetry_givenSuperHasRedefinedAlso() {
-		EqualsVerifier<SymmetryBrokenColorPoint> ev =
-				EqualsVerifier.forClass(SymmetryBrokenColorPoint.class);
-		assertFailure(ev, "Symmetry", SymmetryBrokenColorPoint.class.getSimpleName(), "does not equal superclass instance", Point.class.getSimpleName());
+		expectFailure("Symmetry", SymmetryBrokenColorPoint.class.getSimpleName(), "does not equal superclass instance", Point.class.getSimpleName());
+		EqualsVerifier.forClass(SymmetryBrokenColorPoint.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenEqualsIsRedefinedSoItBreaksTransitivity_givenSuperHasRedefinedAlso() {
-		EqualsVerifier<TransitivityBrokenColorPoint> ev =
-				EqualsVerifier.forClass(TransitivityBrokenColorPoint.class);
-		assertFailure(ev, "Transitivity",
-				"TransitivityBrokenColorPoint:1,1,YELLOW\nand\n  TransitivityBrokenColorPoint:1,1,BLUE",
-				"both equal superclass instance",
-				"Point:1,1",
+		expectFailure("Transitivity", TransitivityBrokenColorPoint.class.getSimpleName(),
+				"both equal superclass instance", Point.class.getSimpleName(),
 				"which implies they equal each other.");
+		EqualsVerifier.forClass(TransitivityBrokenColorPoint.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
-		EqualsVerifier<HashCodeBrokenPoint> ev =
-				EqualsVerifier.forClass(HashCodeBrokenPoint.class);
-		assertFailure(ev, "Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
+		expectFailure("Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
 				"should be equal to hashCode for superclass instance", Point.class.getSimpleName());
+		EqualsVerifier.forClass(HashCodeBrokenPoint.class)
+				.verify();
 	}
 	
 	@Test
@@ -68,26 +67,24 @@ public class SuperclassTest {
 	
 	@Test
 	public void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
-		EqualsVerifier<BrokenCanEqualColorPointWithEmptySuper> ev =
-				EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class);
-		assertFailure(ev, "Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
+		expectFailure("Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
+		EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class)
+				.verify();
 	}
 	
 	@Test
 	public void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
-		EqualsVerifier<ColorBlindColorPoint> ev = EqualsVerifier.forClass(ColorBlindColorPoint.class)
-				.withRedefinedSuperclass();
-		assertFailure(ev, "Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
+		expectFailure("Redefined superclass", ColorBlindColorPoint.class.getSimpleName(),
 				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
+		EqualsVerifier.forClass(ColorBlindColorPoint.class)
+				.withRedefinedSuperclass()
+				.verify();
 	}
 	
 	static class SymmetryBrokenColorPoint extends Point {
 		private final Color color;
 		
-		public SymmetryBrokenColorPoint(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public SymmetryBrokenColorPoint(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -98,19 +95,13 @@ public class SuperclassTest {
 			return super.equals(obj) && p.color == color;
 		}
 		
-		@Override
-		public String toString() {
-			return super.toString() + "," + color;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class TransitivityBrokenColorPoint extends Point {
 		private final Color color;
 		
-		public TransitivityBrokenColorPoint(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public TransitivityBrokenColorPoint(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -124,16 +115,11 @@ public class SuperclassTest {
 			return super.equals(obj) && p.color == color;
 		}
 		
-		@Override
-		public String toString() {
-			return super.toString() + "," + color;
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class HashCodeBrokenPoint extends Point {
-		public HashCodeBrokenPoint(int x, int y) {
-			super(x, y);
-		}
+		public HashCodeBrokenPoint(int x, int y) { super(x, y); }
 		
 		@Override
 		public int hashCode() {
@@ -144,9 +130,7 @@ public class SuperclassTest {
 	static final class SubclassOfEmpty extends Empty {
 		private final Color color;
 		
-		public SubclassOfEmpty(Color color) {
-			this.color = color;
-		}
+		public SubclassOfEmpty(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -156,10 +140,7 @@ public class SuperclassTest {
 			return color == ((SubclassOfEmpty)obj).color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class EmptySubOfEmpty extends Empty {}
@@ -167,9 +148,7 @@ public class SuperclassTest {
 	static final class SubOfEmptySubOfEmpty extends EmptySubOfEmpty {
 		private final Color color;
 		
-		public SubOfEmptySubOfEmpty(Color color) {
-			this.color = color;
-		}
+		public SubOfEmptySubOfEmpty(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -179,10 +158,7 @@ public class SuperclassTest {
 			return color == ((SubOfEmptySubOfEmpty)obj).color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static abstract class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
@@ -190,9 +166,7 @@ public class SuperclassTest {
 	static final class SubOfEmptySubOfAbstract extends EmptySubOfAbstract {
 		private final Color color;
 		
-		public SubOfEmptySubOfAbstract(Color color) {
-			this.color = color;
-		}
+		public SubOfEmptySubOfAbstract(Color color) { this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -202,10 +176,7 @@ public class SuperclassTest {
 			return color == ((SubOfEmptySubOfAbstract)obj).color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color);
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
 	static class EmptySubOfCanEqualPoint extends CanEqualPoint {
@@ -217,10 +188,7 @@ public class SuperclassTest {
 	static final class BrokenCanEqualColorPointWithEmptySuper extends EmptySubOfCanEqualPoint {
 		private final Color color;
 		
-		public BrokenCanEqualColorPointWithEmptySuper(int x, int y, Color color) {
-			super(x, y);
-			this.color = color;
-		}
+		public BrokenCanEqualColorPointWithEmptySuper(int x, int y, Color color) { super(x, y); this.color = color; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -231,9 +199,6 @@ public class SuperclassTest {
 			return super.equals(p) && color == p.color;
 		}
 		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(color) + (31 * super.hashCode());
-		}
+		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 }
