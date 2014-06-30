@@ -3,23 +3,27 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>nl.jqno.equalsverifier</groupId>
 	<artifactId>equalsverifier</artifactId>
+	<packaging>jar</packaging>
+
 	<name>EqualsVerifier</name>
 	<version>???</version>
 	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
-	<packaging>jar</packaging>
 	<url>http://www.jqno.nl/equalsverifier</url>
+
 	<scm>
 		<url>http://github.com/jqno/equalsverifier</url>
 		<connection>scm:git:https://github.com/jqno/equalsverifier</connection>
 		<developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
 	</scm>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 		</license>
 	</licenses>
- 	<developers>
+
+	<developers>
 		<developer>
 			<id>Jan</id>
 			<name>Jan Ouwens</name>
@@ -28,25 +32,33 @@
 			<timezone>Central European Time</timezone>
 		</developer>
 	</developers>
+
 	<mailingLists>
 		<mailingList>
 			<name>General Discussion</name>
 			<archive>http://groups.google.com/group/equalsverifier</archive>
 		</mailingList>
 	</mailingLists>
+
 	<issueManagement>
 		<url>https://code.google.com/p/equalsverifier/issues</url>
 	</issueManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.objenesis</groupId>
 			<artifactId>objenesis</artifactId>
-			<version>1.1</version>
+			<version>2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-			<version>2.2</version>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.ow2.asm</groupId>
+			<artifactId>asm</artifactId>
+			<version>5.0.3</version>
 		</dependency>
 	</dependencies>
 </project>

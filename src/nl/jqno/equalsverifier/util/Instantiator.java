@@ -68,9 +68,7 @@ public class Instantiator<T> {
 	 * @return An object of type T.
 	 */
 	public T instantiate() {
-		@SuppressWarnings("unchecked")
-		T result = (T)objenesis.newInstance(type);
-		return result;
+		return objenesis.newInstance(type);
 	}
 	
 	/**
@@ -81,9 +79,7 @@ public class Instantiator<T> {
 	 */
 	public T instantiateAnonymousSubclass() {
 		Class<T> proxyClass = createDynamicSubclass(type);
-		@SuppressWarnings("unchecked")
-		T instance = (T)objenesis.newInstance(proxyClass);
-		return instance;
+		return objenesis.newInstance(proxyClass);
 	}
 	
 	@SuppressWarnings("rawtypes")
