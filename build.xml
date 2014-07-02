@@ -105,8 +105,8 @@ limitations under the License.
 		<javac 
 				srcdir="${src.dir}"
 				destdir="${build.src.dir}"
-				source="1.5"
-				target="1.5"
+				source="1.6"
+				target="1.6"
 				debug="on"
 				encoding="utf-8"
 				includeantruntime="false">
@@ -123,8 +123,8 @@ limitations under the License.
 		<javac 
 				srcdir="${test.dir}"
 				destdir="${build.test.dir}"
-				source="1.5"
-				target="1.5"
+				source="1.6"
+				target="1.6"
 				debug="on"
 				encoding="utf-8"
 				includeantruntime="false">
@@ -213,7 +213,7 @@ limitations under the License.
 		<javadoc
 				sourcepath="${src.dir}"
 				destdir="${dist.javadoc.dir}"
-				source="1.5"
+				source="1.6"
 				nodeprecated="true"
 				notree="true"
 				failonerror="true">
