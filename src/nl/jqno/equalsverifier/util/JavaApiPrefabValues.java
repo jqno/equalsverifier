@@ -82,7 +82,7 @@ public class JavaApiPrefabValues {
 	}
 	
 	/**
-	 * Private constructor. Use {@link #create()} instead.
+	 * Private constructor. Use {@link #addTo(PrefabValues)}.
 	 */
 	private JavaApiPrefabValues(PrefabValues prefabValues) {
 		this.prefabValues = prefabValues;
