@@ -26,7 +26,6 @@ import java.util.Set;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.exceptions.InternalException;
 

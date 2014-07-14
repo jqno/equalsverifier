@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -57,6 +57,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 import net.sf.cglib.proxy.NoOp;
+import nl.jqno.equalsverifier.util.PrefabValues;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
