@@ -63,12 +63,15 @@ public class ConditionalInstantiator {
 	 * @param paramValues
 	 *            The values that we want to pass into the constructor.
 	 * @return An instance of the type given in the constructor with the given
-	 *         parameter values.
+	 *         parameter values, or null if the type does not exist.
 	 * @throws ReflectionException If instantiation fails.
 	 */
 	public Object instantiate(Class<?>[] paramTypes, Object[] paramValues) {
 		try {
 			Class<?> type = resolve();
+			if (type == null) {
+				return null;
+			}
 			Constructor<?> c = type.getConstructor(paramTypes);
 			return c.newInstance(paramValues);
 		}
@@ -88,13 +91,16 @@ public class ConditionalInstantiator {
 	 * @param paramValuesa
 	 *            The values that we want to pass into the factory method.
 	 * @return An instance of the type given by the factory method with the
-	 *         given parameter values.
+	 *         given parameter values, or null of the type does not exist.
 	 * @throws ReflectionException
 	 *             If the call to the factory method fails.
 	 */
 	public Object callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
 		try {
 			Class<?> type = resolve();
+			if (type == null) {
+				return null;
+			}
 			Method factory = type.getMethod(factoryMethod, paramTypes);
 			return factory.invoke(null, paramValues);
 		}
@@ -108,13 +114,16 @@ public class ConditionalInstantiator {
 	 * 
 	 * @param constantName
 	 *            The name of the constant.
-	 * @return The value of the constant.
+	 * @return The value of the constant, or null if the type does not exist.
 	 * @throws ReflectionException
 	 *             If resolving the constant fails.
 	 */
 	public Object returnConstant(String constantName) {
 		try {
 			Class<?> type = resolve();
+			if (type == null) {
+				return null;
+			}
 			Field field = type.getField(constantName);
 			return field.get(null);
 		}
