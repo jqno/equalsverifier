@@ -35,6 +35,18 @@ public class PrefabValueBuilder {
 		this.type = ci.resolve();
 	}
 	
+	public PrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
+		validate();
+		instances.add(ci.instantiate(paramTypes, paramValues));
+		return this;
+	}
+	
+	public PrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+		validate();
+		instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+		return this;
+	}
+	
 	public PrefabValueBuilder withConstant(String constantName) {
 		validate();
 		instances.add(ci.returnConstant(constantName));

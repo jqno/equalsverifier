@@ -15,10 +15,13 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
+import java.util.GregorianCalendar;
 
 import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
@@ -34,14 +37,76 @@ public class PrefabValueBuilderTest {
 	
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-
+	
 	@Before
 	public void setUp() {
 		StaticFieldValueStash stash = new StaticFieldValueStash();
 		prefabValues = new PrefabValues(stash);
 		throwingPrefabValues = new PrefabValuesThrowsWhenCalled();
 	}
-
+	
+	@Test
+	public void prefabValuesContainsInstances_whenValidInstantiationParametersAreProvided() {
+		PrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
+				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
+				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1))
+				.addTo(prefabValues);
+		
+		assertThat(prefabValues.getRed(GregorianCalendar.class), is(new GregorianCalendar(1999, 11, 31)));
+		assertThat(prefabValues.getBlack(GregorianCalendar.class), is(new GregorianCalendar(2009, 5, 1)));
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenConstructorParameters() {
+		PrefabValueBuilder.of("this.type.does.not.exist")
+				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
+				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsISE_whenInstantiateIsCalledMoreThanTwice() {
+		PrefabValueBuilder builder = PrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
+				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
+				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1));
+		
+		thrown.expect(ReflectionException.class);
+		builder.instantiate(classes(int.class, int.class, int.class), objects(2014, 6, 16));
+	}
+	
+	@Test
+	public void prefabValuesContainsInstances_whenValidFactoryParametersAreProvided() {
+		PrefabValueBuilder.of(Integer.class.getCanonicalName())
+				.callFactory("valueOf", classes(int.class), objects(42))
+				.callFactory("valueOf", classes(int.class), objects(1337))
+				.addTo(prefabValues);
+		
+		assertThat(prefabValues.getRed(Integer.class), is(Integer.valueOf(42)));
+		assertThat(prefabValues.getBlack(Integer.class), is(1337));
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenFactoryParameters() {
+		PrefabValueBuilder.of("this.type.does.not.exist")
+				.callFactory("valueOf", classes(int.class), objects(42))
+				.callFactory("valueOf", classes(int.class), objects(1337))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsISE_whenCallFactoryIsCalledMoreThanTwice() {
+		PrefabValueBuilder builder = PrefabValueBuilder.of(Integer.class.getCanonicalName())
+				.callFactory("valueOf", classes(int.class), objects(42))
+				.callFactory("valueOf", classes(int.class), objects(1337));
+		
+		thrown.expect(ReflectionException.class);
+		builder.callFactory("valueOf", classes(int.class), objects(-1));
+	}
+	
 	@Test
 	public void prefabValuesContainsInstances_whenValidConstantsAreProvided() {
 		PrefabValueBuilder.of(BigDecimal.class.getCanonicalName())
@@ -54,7 +119,7 @@ public class PrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void nothingHappens_whenTypeDoesNotExist() {
+	public void nothingHappens_whenTypeDoesNotExist_givenValidConstants() {
 		PrefabValueBuilder.of("this.type.does.not.exist")
 				.withConstant("ONE")
 				.withConstant("TEN")
