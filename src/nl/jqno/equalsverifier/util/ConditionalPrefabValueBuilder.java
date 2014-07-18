@@ -20,34 +20,34 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
-public class PrefabValueBuilder {
+public class ConditionalPrefabValueBuilder {
 	private final ConditionalInstantiator ci;
 	private final Class<?> type;
 	
 	private List<Object> instances = new ArrayList<Object>();
 	
-	public static PrefabValueBuilder of(String fullyQualifiedClassName) {
-		return new PrefabValueBuilder(fullyQualifiedClassName);
+	public static ConditionalPrefabValueBuilder of(String fullyQualifiedClassName) {
+		return new ConditionalPrefabValueBuilder(fullyQualifiedClassName);
 	}
 	
-	private PrefabValueBuilder(String fullyQualifiedClassName) {
+	private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
 		this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
 		this.type = ci.resolve();
 	}
 	
-	public PrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
+	public ConditionalPrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
 		validate();
 		instances.add(ci.instantiate(paramTypes, paramValues));
 		return this;
 	}
 	
-	public PrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+	public ConditionalPrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
 		validate();
 		instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
 		return this;
 	}
 	
-	public PrefabValueBuilder withConstant(String constantName) {
+	public ConditionalPrefabValueBuilder withConstant(String constantName) {
 		validate();
 		instances.add(ci.returnConstant(constantName));
 		return this;
