@@ -32,6 +32,7 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.util.ConditionalInstantiator;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -97,13 +98,7 @@ public class Java8ClassTest {
 	}
 	
 	private boolean java8IsAvailable() {
-		try {
-			Class.forName("java.util.Optional");
-			return true;
-		}
-		catch (ClassNotFoundException e) {
-			return false;
-		}
+		return new ConditionalInstantiator("java.util.Optional").resolve() != null;
 	}
 	
 	private File writeJava8ClassToFile() throws IOException {
