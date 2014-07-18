@@ -38,6 +38,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+/**
+ * Tests that EqualsVerifier can handle a Java 8 class with streams.
+ * 
+ * Since we want to maintain compatibility with Java 6 and 7, we need to
+ * detect whether a Java 8 runtime is present and if so, compile and load
+ * the class at run-time and then pass it to EqualsVerifier.
+ */
 public class Java8ClassTest {
 	private static final String JAVA_8_CLASS =
 			"\nimport java.util.List;" +
@@ -98,7 +105,7 @@ public class Java8ClassTest {
 			return false;
 		}
 	}
-
+	
 	private File writeJava8ClassToFile() throws IOException {
 		File sourceFile = new File(tempFileLocation, "Java8Class.java");
 		FileWriter writer = new FileWriter(sourceFile);
@@ -150,11 +157,16 @@ public class Java8ClassTest {
 	 * so we'll have to call it reflectively in order to maintain Java 1.6 compatibility.
 	 */
 	private void closeClassLoader(URLClassLoader cl) throws Exception {
-		Class<?> type = URLClassLoader.class;
-		Method close = type.getDeclaredMethod("close");
-		close.invoke(cl);
+		try {
+			Class<?> type = URLClassLoader.class;
+			Method close = type.getDeclaredMethod("close");
+			close.invoke(cl);
+		}
+		catch (NoSuchMethodException ignored) {
+			// Java 6: do nothing; this code won't be reached anyway.
+		}
 	}
-
+	
 	private URLClassLoader createClassLoader() throws MalformedURLException {
 		URL[] urls = { tempFileLocation.toURI().toURL() };
 		return new URLClassLoader(urls);
