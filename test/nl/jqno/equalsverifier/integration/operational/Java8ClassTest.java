@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -78,7 +79,7 @@ public class Java8ClassTest {
 	}
 	
 	@Test
-	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws IOException, ClassNotFoundException {
+	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
 		if (!java8IsAvailable()) {
 			return;
 		}
@@ -128,7 +129,7 @@ public class Java8ClassTest {
 		}
 	}
 	
-	private void verifyEqualsVerifierCanHandleJava8Class() throws IOException, ClassNotFoundException {
+	private void verifyEqualsVerifierCanHandleJava8Class() throws Exception {
 		URLClassLoader cl = null;
 		try {
 			cl = createClassLoader();
@@ -139,9 +140,19 @@ public class Java8ClassTest {
 		}
 		finally {
 			if (cl != null) {
-				cl.close();
+				closeClassLoader(cl);
 			}
 		}
+	}
+	
+	/*
+	 * URLClassLoader#close exists since Java 1.7,
+	 * so we'll have to call it reflectively in order to maintain Java 1.6 compatibility.
+	 */
+	private void closeClassLoader(URLClassLoader cl) throws Exception {
+		Class<?> type = URLClassLoader.class;
+		Method close = type.getDeclaredMethod("close");
+		close.invoke(cl);
 	}
 
 	private URLClassLoader createClassLoader() throws MalformedURLException {
