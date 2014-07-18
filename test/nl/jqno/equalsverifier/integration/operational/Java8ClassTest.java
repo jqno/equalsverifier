@@ -107,12 +107,19 @@ public class Java8ClassTest {
 	}
 	
 	private File writeJava8ClassToFile() throws IOException {
-		File sourceFile = new File(tempFileLocation, "Java8Class.java");
-		FileWriter writer = new FileWriter(sourceFile);
-		writer.write(JAVA_8_CLASS);
-		writer.close();
-		sourceFile.deleteOnExit();
-		return sourceFile;
+		FileWriter writer = null;
+		try {
+			File sourceFile = new File(tempFileLocation, "Java8Class.java");
+			writer = new FileWriter(sourceFile);
+			writer.write(JAVA_8_CLASS);
+			sourceFile.deleteOnExit();
+			return sourceFile;
+		}
+		finally {
+			if (writer != null) {
+				writer.close();
+			}
+		}
 	}
 	
 	private void compileJava8Class(File sourceFile) throws IOException {
@@ -152,6 +159,11 @@ public class Java8ClassTest {
 		}
 	}
 	
+	private URLClassLoader createClassLoader() throws MalformedURLException {
+		URL[] urls = { tempFileLocation.toURI().toURL() };
+		return new URLClassLoader(urls);
+	}
+	
 	/*
 	 * URLClassLoader#close exists since Java 1.7,
 	 * so we'll have to call it reflectively in order to maintain Java 1.6 compatibility.
@@ -165,10 +177,5 @@ public class Java8ClassTest {
 		catch (NoSuchMethodException ignored) {
 			// Java 6: do nothing; this code won't be reached anyway.
 		}
-	}
-	
-	private URLClassLoader createClassLoader() throws MalformedURLException {
-		URL[] urls = { tempFileLocation.toURI().toURL() };
-		return new URLClassLoader(urls);
 	}
 }
