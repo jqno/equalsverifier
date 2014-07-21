@@ -20,7 +20,7 @@ import java.io.IOException;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
-import nl.jqno.equalsverifier.util.ConditionalInstantiator;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -34,7 +34,7 @@ import org.junit.rules.TemporaryFolder;
  * detect whether a Java 8 runtime is present and if so, compile and load
  * the class at run-time and then pass it to EqualsVerifier.
  */
-public class Java8ClassTest {
+public class Java8ClassTest extends IntegrationTestBase {
 	private static final String JAVA_8_CLASS_NAME = "Java8Class";
 	private static final String JAVA_8_CLASS =
 			"\nimport java.util.List;" +
@@ -77,7 +77,7 @@ public class Java8ClassTest {
 	
 	@Test
 	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
-		if (!java8IsAvailable()) {
+		if (!isTypeAvailable("java.util.Optional")) {
 			return;
 		}
 		
@@ -90,9 +90,5 @@ public class Java8ClassTest {
 		finally {
 			c.close();
 		}
-	}
-	
-	private boolean java8IsAvailable() {
-		return new ConditionalInstantiator("java.util.Optional").resolve() != null;
 	}
 }
