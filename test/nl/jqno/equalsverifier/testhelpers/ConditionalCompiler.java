@@ -83,10 +83,10 @@ public class ConditionalCompiler implements Closeable {
 			return classLoader.loadClass(className);
 		}
 		catch (ClassNotFoundException e) {
-			throw new AssertionError("Failed to load newly compiled class", e);
+			throw new AssertionError("Failed to load newly compiled class:\n" + e.toString());
 		}
 		catch (IOException e) {
-			throw new AssertionError("Failed to write file", e);
+			throw new AssertionError("Failed to write file:\n" + e.toString());
 		}
 	}
 	
