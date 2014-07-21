@@ -98,22 +98,22 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 		private final String string;
 		private final Integer integer;
 		private final Class<?> type;
+		private final ArrayList<String> arrayList;
+		private final BitSet bitset;
 		private final Calendar calendar;
 		private final Date date;
 		private final File file;
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
-		private final ArrayList<String> arrayList;
-		private final BitSet bitset;
-		private final UUID uuid;
 		private final SimpleDateFormat simpleDateFormat;
+		private final UUID uuid;
 		
-		public CommonClassesContainer(String string, Integer integer, Class<?> type, Calendar calendar,
-				Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-				ArrayList<String> arrayList, BitSet bitset, UUID uuid, SimpleDateFormat simpleDateFormat) {
-			this.string = string; this.integer = integer; this.type = type; this.calendar = calendar; this.date = date;
-			this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern; this.arrayList = arrayList;
-			this.bitset = bitset; this.uuid = uuid; this.simpleDateFormat = simpleDateFormat;
+		public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
+				Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
+				SimpleDateFormat simpleDateFormat, UUID uuid) {
+			this.string = string; this.integer = integer; this.type = type; this.arrayList = arrayList; this.bitset = bitset;
+			this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
+			this.simpleDateFormat = simpleDateFormat; this.uuid = uuid;
 		}
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
