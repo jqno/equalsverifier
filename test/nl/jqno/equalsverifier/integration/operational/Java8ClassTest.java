@@ -16,22 +16,10 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.Arrays;
-
-import javax.tools.JavaCompiler;
-import javax.tools.JavaCompiler.CompilationTask;
-import javax.tools.JavaFileObject;
-import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.util.ConditionalInstantiator;
 
 import org.junit.Before;
@@ -47,6 +35,7 @@ import org.junit.rules.TemporaryFolder;
  * the class at run-time and then pass it to EqualsVerifier.
  */
 public class Java8ClassTest {
+	private static final String JAVA_8_CLASS_NAME = "Java8Class";
 	private static final String JAVA_8_CLASS =
 			"\nimport java.util.List;" +
 			"\nimport java.util.Objects;" +
@@ -92,85 +81,18 @@ public class Java8ClassTest {
 			return;
 		}
 		
-		File sourceFile = writeJava8ClassToFile();
-		compileJava8Class(sourceFile);
-		verifyEqualsVerifierCanHandleJava8Class();
+		ConditionalCompiler c = new ConditionalCompiler(tempFileLocation);
+		try {
+			Class<?> java8Class = c.compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
+			EqualsVerifier.forClass(java8Class)
+					.verify();
+		}
+		finally {
+			c.close();
+		}
 	}
 	
 	private boolean java8IsAvailable() {
 		return new ConditionalInstantiator("java.util.Optional").resolve() != null;
-	}
-	
-	private File writeJava8ClassToFile() throws IOException {
-		FileWriter writer = null;
-		try {
-			File sourceFile = new File(tempFileLocation, "Java8Class.java");
-			writer = new FileWriter(sourceFile);
-			writer.write(JAVA_8_CLASS);
-			sourceFile.deleteOnExit();
-			return sourceFile;
-		}
-		finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-	
-	private void compileJava8Class(File sourceFile) throws IOException {
-		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		StandardJavaFileManager fileManager = null;
-		try {
-			fileManager = compiler.getStandardFileManager(null, null, null);
-			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(tempFileLocation));
-			Iterable<? extends JavaFileObject> javaFileObjects = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
-			CompilationTask task = compiler.getTask(null, fileManager, null, null, null, javaFileObjects);
-			
-			boolean success = task.call();
-			if (!success) {
-				throw new AssertionError("Could not compile Java 8 class");
-			}
-		}
-		finally {
-			if (fileManager != null) {
-				fileManager.close();
-			}
-		}
-	}
-	
-	private void verifyEqualsVerifierCanHandleJava8Class() throws Exception {
-		URLClassLoader cl = null;
-		try {
-			cl = createClassLoader();
-			Class<?> type = cl.loadClass("Java8Class");
-			
-			EqualsVerifier.forClass(type)
-					.verify();
-		}
-		finally {
-			if (cl != null) {
-				closeClassLoader(cl);
-			}
-		}
-	}
-	
-	private URLClassLoader createClassLoader() throws MalformedURLException {
-		URL[] urls = { tempFileLocation.toURI().toURL() };
-		return new URLClassLoader(urls);
-	}
-	
-	/*
-	 * URLClassLoader#close exists since Java 1.7,
-	 * so we'll have to call it reflectively in order to maintain Java 1.6 compatibility.
-	 */
-	private void closeClassLoader(URLClassLoader cl) throws Exception {
-		try {
-			Class<?> type = URLClassLoader.class;
-			Method close = type.getDeclaredMethod("close");
-			close.invoke(cl);
-		}
-		catch (NoSuchMethodException ignored) {
-			// Java 6: do nothing; this code won't be reached anyway.
-		}
 	}
 }
