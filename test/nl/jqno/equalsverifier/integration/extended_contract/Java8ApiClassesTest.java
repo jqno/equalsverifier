@@ -44,13 +44,27 @@ public class Java8ApiClassesTest extends IntegrationTestBase {
 	private static final String CLASS =
 			"\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
 			"\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+			"\n" +
+			"\nimport java.time.ZonedDateTime;" +
 			"\nimport java.time.ZoneId;" +
+			"\nimport java.time.format.DateTimeFormatter;" +
+			"\nimport java.util.concurrent.CompletableFuture;" +
+			"\nimport java.util.concurrent.locks.StampedLock;" +
 			"\n" +
 			"\npublic final class Java8ApiClassesContainer {" +
+			"\n    private final ZonedDateTime zonedDateTime;" +
 			"\n    private final ZoneId zoneId;" +
+			"\n    private final DateTimeFormatter dateTimeFormatter;" +
+			"\n    private final CompletableFuture completableFuture;" +
+			"\n    private final StampedLock stampedLock;" +
 			"\n    " +
-			"\n    public Java8ApiClassesContainer(ZoneId zoneId) {" +
+			"\n    public Java8ApiClassesContainer(ZonedDateTime zonedDateTime, ZoneId zoneId, DateTimeFormatter dateTimeFormatter," +
+			"\n            CompletableFuture completableFuture, StampedLock stampedLock) {" +
+			"\n        this.zonedDateTime = zonedDateTime;" +
 			"\n        this.zoneId = zoneId;" +
+			"\n        this.dateTimeFormatter = dateTimeFormatter;" +
+			"\n        this.completableFuture = completableFuture;" +
+			"\n        this.stampedLock = stampedLock;" +
 			"\n    }" +
 			"\n    " +
 			"\n    @Override" +

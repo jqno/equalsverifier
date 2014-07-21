@@ -184,7 +184,6 @@ public class JavaApiPrefabValues {
 		prefabValues.put(LinkedBlockingQueue.class, new LinkedBlockingQueue(), new LinkedBlockingQueue());
 		prefabValues.put(PriorityBlockingQueue.class, new PriorityBlockingQueue(), new PriorityBlockingQueue());
 		prefabValues.put(SynchronousQueue.class, new SynchronousQueue(), new SynchronousQueue());
-		
 	}
 	
 	private void addJava8ApiClasses() {
@@ -192,8 +191,20 @@ public class JavaApiPrefabValues {
 				.callFactory("of", classes(String.class), objects("+1"))
 				.callFactory("of", classes(String.class), objects("-10"))
 				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("java.time.format.DateTimeFormatter")
+				.withConstant("ISO_TIME")
+				.withConstant("ISO_DATE")
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("java.util.concurrent.CompletableFuture")
+				.instantiate(classes(), objects())
+				.instantiate(classes(), objects())
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("java.util.concurrent.locks.StampedLock")
+				.instantiate(classes(), objects())
+				.instantiate(classes(), objects())
+				.addTo(prefabValues);
 	}
-
+	
 	private void addClassesNecessaryForCgLib() {
 		prefabValues.put(NoOp.class, new NoOp(){}, new NoOp(){});
 	}
