@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
+
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -57,6 +60,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 import net.sf.cglib.proxy.NoOp;
+import nl.jqno.equalsverifier.util.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 /**
@@ -97,6 +101,7 @@ public class JavaApiPrefabValues {
 		addMaps();
 		addSets();
 		addQueues();
+		addJava8ApiClasses();
 		addClassesNecessaryForCgLib();
 	}
 	
@@ -180,6 +185,13 @@ public class JavaApiPrefabValues {
 		prefabValues.put(PriorityBlockingQueue.class, new PriorityBlockingQueue(), new PriorityBlockingQueue());
 		prefabValues.put(SynchronousQueue.class, new SynchronousQueue(), new SynchronousQueue());
 		
+	}
+	
+	private void addJava8ApiClasses() {
+		ConditionalPrefabValueBuilder.of("java.time.ZoneId")
+				.callFactory("of", classes(String.class), objects("+1"))
+				.callFactory("of", classes(String.class), objects("-10"))
+				.addTo(prefabValues);
 	}
 
 	private void addClassesNecessaryForCgLib() {
