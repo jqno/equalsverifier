@@ -54,6 +54,12 @@ public class PrefabValuesTest {
 	}
 	
 	@Test
+	public void putEqualValues() {
+		thrown.expect(IllegalArgumentException.class);
+		p.put(String.class, "a", "a");
+	}
+	
+	@Test
 	public void putAll() {
 		PrefabValues q = new PrefabValues(null);
 		q.putAll(p);

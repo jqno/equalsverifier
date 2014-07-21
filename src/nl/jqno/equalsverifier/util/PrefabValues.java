@@ -46,8 +46,12 @@ public class PrefabValues {
 	 * @param type The class of the values.
 	 * @param red A value of type T.
 	 * @param black Another value of type T.
+	 * @throws IllegalArgumentException if red and black are equal.
 	 */
 	public <T> void put(Class<T> type, T red, T black) {
+		if (red.equals(black)) {
+			throw new IllegalArgumentException("red equals black");
+		}
 		values.put(type, new Tuple<T>(red, black));
 	}
 	
