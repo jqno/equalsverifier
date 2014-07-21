@@ -22,6 +22,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Calendar;
@@ -130,6 +131,7 @@ public class JavaApiPrefabValues {
 		prefabValues.put(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
 		prefabValues.put(Locale.class, new Locale("nl"), new Locale("hu"));
 		prefabValues.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
+		prefabValues.put(SimpleDateFormat.class, new SimpleDateFormat("YMd"), new SimpleDateFormat("dMY"));
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
 		prefabValues.put(Throwable.class, new Throwable(), new Throwable());

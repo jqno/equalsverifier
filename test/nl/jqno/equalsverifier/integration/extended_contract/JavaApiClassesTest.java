@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Calendar;
@@ -105,11 +106,15 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 		private final ArrayList<String> arrayList;
 		private final BitSet bitset;
 		private final UUID uuid;
+		private final SimpleDateFormat simpleDateFormat;
 		
 		public CommonClassesContainer(String string, Integer integer, Class<?> type, Calendar calendar,
 				Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-				ArrayList<String> arrayList, BitSet bitset, UUID uuid) 
-			{ this.string = string; this.integer = integer; this.type = type; this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern; this.arrayList = arrayList; this.bitset = bitset; this.uuid = uuid; }
+				ArrayList<String> arrayList, BitSet bitset, UUID uuid, SimpleDateFormat simpleDateFormat) {
+			this.string = string; this.integer = integer; this.type = type; this.calendar = calendar; this.date = date;
+			this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern; this.arrayList = arrayList;
+			this.bitset = bitset; this.uuid = uuid; this.simpleDateFormat = simpleDateFormat;
+		}
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return defaultHashCode(this); }
