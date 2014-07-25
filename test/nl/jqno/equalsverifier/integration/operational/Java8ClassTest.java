@@ -22,6 +22,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -65,14 +66,20 @@ public class Java8ClassTest extends IntegrationTestBase {
 			"\n    }" +
 			"\n}";
 			
-	private File tempFileLocation;
+	private ConditionalCompiler compiler;
 	
 	@Rule
 	public TemporaryFolder tempFolder = new TemporaryFolder();
 	
 	@Before
 	public void setUp() throws IOException {
-		tempFileLocation = tempFolder.newFolder();
+		File tempFileLocation = tempFolder.newFolder();
+		compiler = new ConditionalCompiler(tempFileLocation);
+	}
+	
+	@After
+	public void tearDown() {
+		compiler.close();
 	}
 	
 	@Test
@@ -81,14 +88,8 @@ public class Java8ClassTest extends IntegrationTestBase {
 			return;
 		}
 		
-		ConditionalCompiler c = new ConditionalCompiler(tempFileLocation);
-		try {
-			Class<?> java8Class = c.compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
-			EqualsVerifier.forClass(java8Class)
-					.verify();
-		}
-		finally {
-			c.close();
-		}
+		Class<?> java8Class = compiler.compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
+		EqualsVerifier.forClass(java8Class)
+				.verify();
 	}
 }
