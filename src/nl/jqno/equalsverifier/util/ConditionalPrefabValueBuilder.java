@@ -21,9 +21,9 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 public class ConditionalPrefabValueBuilder {
-	private final ConditionalInstantiator ci;
 	private final Class<?> type;
-	
+	private boolean stop = false;
+	private ConditionalInstantiator ci;
 	private List<Object> instances = new ArrayList<Object>();
 	
 	public static ConditionalPrefabValueBuilder of(String fullyQualifiedClassName) {
@@ -33,29 +33,54 @@ public class ConditionalPrefabValueBuilder {
 	private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
 		this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
 		this.type = ci.resolve();
+		if (type == null) {
+			stop = true;
+		}
+	}
+	
+	public ConditionalPrefabValueBuilder withConcreteClass(String fullyQualifiedClassName) {
+		if (stop) {
+			return this;
+		}
+		ci = new ConditionalInstantiator(fullyQualifiedClassName);
+		Class<?> concreteType = ci.resolve();
+		if (concreteType == null) {
+			stop = true;
+			return this;
+		}
+		if (!type.isAssignableFrom(concreteType)) {
+			throw new ReflectionException("");
+		}
+		return this;
 	}
 	
 	public ConditionalPrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
-		validate();
-		instances.add(ci.instantiate(paramTypes, paramValues));
+		if (!stop) {
+			validate();
+			instances.add(ci.instantiate(paramTypes, paramValues));
+		}
 		return this;
 	}
 	
 	public ConditionalPrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
-		validate();
-		instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+		if (!stop) {
+			validate();
+			instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+		}
 		return this;
 	}
 	
 	public ConditionalPrefabValueBuilder withConstant(String constantName) {
-		validate();
-		instances.add(ci.returnConstant(constantName));
+		if (!stop) {
+			validate();
+			instances.add(ci.returnConstant(constantName));
+		}
 		return this;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addTo(PrefabValues prefabValues) {
-		if (type != null) {
+		if (!stop) {
 			prefabValues.put((Class)type, instances.get(0), instances.get(1));
 		}
 	}

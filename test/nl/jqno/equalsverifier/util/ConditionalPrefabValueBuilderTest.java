@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
 import static org.hamcrest.CoreMatchers.is;
@@ -138,6 +140,49 @@ public class ConditionalPrefabValueBuilderTest {
 		builder.withConstant("ZERO");
 	}
 	
+	@Test
+	public void prefabValuesContainsInstances_whenTypeIsInterface_givenAConcreteImplementation() {
+		ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.util.ConditionalInterface")
+				.withConcreteClass("nl.jqno.equalsverifier.util.ConditionalConcreteClass")
+				.instantiate(classes(int.class), objects(42))
+				.instantiate(classes(int.class), objects(1337))
+				.addTo(prefabValues);
+		
+		assertThat(prefabValues.getRed(ConditionalInterface.class), is((ConditionalInterface)new ConditionalConcreteClass(42)));
+		assertThat(prefabValues.getBlack(ConditionalInterface.class), is((ConditionalInterface)new ConditionalConcreteClass(1337)));
+	}
+	
+	@Test
+	public void prefabValuesContainsInstances_whenTypeIsAbstract_givenAConcreteImplementation() {
+		ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.util.ConditionalAbstractClass")
+				.withConcreteClass("nl.jqno.equalsverifier.util.ConditionalConcreteClass")
+				.instantiate(classes(int.class), objects(42))
+				.instantiate(classes(int.class), objects(1337))
+				.addTo(prefabValues);
+		
+		assertThat(prefabValues.getRed(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(42)));
+		assertThat(prefabValues.getBlack(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(1337)));
+	}
+	
+	@Test
+	public void nothingHappens_whenConcreteClassDoesNotExist() {
+		ConditionalPrefabValueBuilder.of("java.util.List")
+				.withConcreteClass("this.type.does.not.exist")
+				.instantiate(classes(), objects())
+				.instantiate(classes(), objects())
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsISE_whenConcreteClassIsNotASubclassOfType() {
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(BigDecimal.class.getCanonicalName());
+		
+		thrown.expect(ReflectionException.class);
+		builder.withConcreteClass(String.class.getCanonicalName());
+	}
+	
 	private static class PrefabValuesThrowsWhenCalled extends PrefabValues {
 		private boolean putIsCalled = false;
 		
@@ -154,4 +199,13 @@ public class ConditionalPrefabValueBuilderTest {
 			}
 		}
 	}
+}
+	
+interface ConditionalInterface {}
+abstract class ConditionalAbstractClass implements ConditionalInterface {}
+final class ConditionalConcreteClass extends ConditionalAbstractClass {
+	@SuppressWarnings("unused") private final int i;
+	public ConditionalConcreteClass(int i) { this.i = i; }
+	@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+	@Override public int hashCode() { return defaultHashCode(this); }
 }
