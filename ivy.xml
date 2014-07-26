@@ -28,6 +28,7 @@ limitations under the License.
 		<dependency org="org.jacoco" name="org.jacoco.ant" rev="0.7.0.201403182114" conf="test->default"/>
 		<dependency org="org.apache.maven" name="maven-ant-tasks" rev="2.1.3" conf="deploy->default" />
 		
+		<dependency org="joda-time" name="joda-time" rev="2.3" conf="test->default" />
 		<dependency org="com.google.guava" name="guava" rev="17.0" conf="test->default" />
 	</dependencies>
 </ivy-module>

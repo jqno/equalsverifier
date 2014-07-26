@@ -104,6 +104,7 @@ public class JavaApiPrefabValues {
 		addQueues();
 		addJava8ApiClasses();
 		addGoogleGuavaClasses();
+		addJodaTimeClasses();
 		addClassesNecessaryForCgLib();
 	}
 	
@@ -260,6 +261,31 @@ public class JavaApiPrefabValues {
 		ConditionalPrefabValueBuilder.of("com.google.common.base.Optional")
 				.callFactory("of", classes(Object.class), objects("red"))
 				.callFactory("of", classes(Object.class), objects("black"))
+				.addTo(prefabValues);
+	}
+	
+	private void addJodaTimeClasses() {
+		ConditionalPrefabValueBuilder.of("org.joda.time.Chronology")
+				.withConcreteClass("org.joda.time.chrono.GregorianChronology")
+				.callFactory("getInstanceUTC", classes(), objects())
+				.withConcreteClass("org.joda.time.chrono.ISOChronology")
+				.callFactory("getInstanceUTC", classes(), objects())
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("org.joda.time.DateTimeZone")
+				.callFactory("forOffsetHours", classes(int.class), objects(+1))
+				.callFactory("forOffsetHours", classes(int.class), objects(-10))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("org.joda.time.PeriodType")
+				.callFactory("days", classes(), objects())
+				.callFactory("hours", classes(), objects())
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("org.joda.time.YearMonth")
+				.instantiate(classes(int.class, int.class), objects(2009, 6))
+				.instantiate(classes(int.class, int.class), objects(2014, 7))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("org.joda.time.MonthDay")
+				.instantiate(classes(int.class, int.class), objects(6, 1))
+				.instantiate(classes(int.class, int.class), objects(7, 26))
 				.addTo(prefabValues);
 	}
 	
