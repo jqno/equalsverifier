@@ -103,6 +103,7 @@ public class JavaApiPrefabValues {
 		addSets();
 		addQueues();
 		addJava8ApiClasses();
+		addGoogleGuavaClasses();
 		addClassesNecessaryForCgLib();
 	}
 	
@@ -204,6 +205,61 @@ public class JavaApiPrefabValues {
 		ConditionalPrefabValueBuilder.of("java.util.concurrent.locks.StampedLock")
 				.instantiate(classes(), objects())
 				.instantiate(classes(), objects())
+				.addTo(prefabValues);
+	}
+	
+	private void addGoogleGuavaClasses() {
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableList")
+				.callFactory("of", classes(Object.class), objects("red"))
+				.callFactory("of", classes(Object.class), objects("black"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableMap")
+				.callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
+				.callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSet")
+				.callFactory("of", classes(Object.class), objects("red"))
+				.callFactory("of", classes(Object.class), objects("black"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMap")
+				.callFactory("of", classes(Comparable.class, Object.class), objects("red", "value"))
+				.callFactory("of", classes(Comparable.class, Object.class), objects("black", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedSet")
+				.callFactory("of", classes(Comparable.class), objects("red"))
+				.callFactory("of", classes(Comparable.class), objects("black"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableMultiset")
+				.callFactory("of", classes(Object.class), objects("red"))
+				.callFactory("of", classes(Object.class), objects("black"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
+				.callFactory("of", classes(Comparable.class), objects("red"))
+				.callFactory("of", classes(Comparable.class), objects("black"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableListMultimap")
+				.callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
+				.callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSetMultimap")
+				.callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
+				.callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableBiMap")
+				.callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
+				.callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
+				.callFactory("of", classes(Object.class, Object.class, Object.class), objects("red", "X", "value"))
+				.callFactory("of", classes(Object.class, Object.class, Object.class), objects("black", "X", "value"))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.collect.Range")
+				.callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2))
+				.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4))
+				.addTo(prefabValues);
+		ConditionalPrefabValueBuilder.of("com.google.common.base.Optional")
+				.callFactory("of", classes(Object.class), objects("red"))
+				.callFactory("of", classes(Object.class), objects("black"))
 				.addTo(prefabValues);
 	}
 	
