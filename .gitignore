@@ -3,3 +3,7 @@ dist
 lib
 bin
 .DS_Store
+
+# IntelliJ files
+.idea
+*.iml
