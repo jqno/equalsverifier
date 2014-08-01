@@ -186,17 +186,16 @@ class FieldsChecker<T> implements Checker {
 			String fieldName = referenceAccessor.getFieldName();
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
+			replaceInnermostArrayValue(changedAccessor);
 
 			if (arrayType == Object[].class) {
 				insertIntArray(referenceAccessor, changedAccessor);
 				assertDeep(fieldName, reference, changed, "Object");
 			}
 			else if (arrayType.getComponentType().isArray()) {
-				changeFields(referenceAccessor, changedAccessor);
 				assertDeep(fieldName, reference, changed, "Multidimensional");
 			}
 			else {
-				changeFields(referenceAccessor, changedAccessor);
 				assertArray(fieldName, reference, changed);
 			}
 		}
@@ -205,10 +204,22 @@ class FieldsChecker<T> implements Checker {
 			Array.set(referenceAccessor.get(), 0, new int[]{0});
 			Array.set(changedAccessor.get(), 0, new int[]{0});
 		}
-		
-		private void changeFields(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			referenceAccessor.changeField(prefabValues);
-			changedAccessor.changeField(prefabValues);
+
+		private void replaceInnermostArrayValue(FieldAccessor accessor) {
+			Object newArray = arrayCopy(accessor.get());
+			accessor.set(newArray);
+		}
+
+		private Object arrayCopy(Object array) {
+			Class<?> componentType = array.getClass().getComponentType();
+			Object result = Array.newInstance(componentType, 1);
+			if (componentType.isArray()) {
+				Array.set(result, 0, arrayCopy(Array.get(array, 0)));
+			}
+			else {
+				Array.set(result, 0, Array.get(array, 0));
+			}
+			return result;
 		}
 
 		private void assertDeep(String fieldName, Object reference, Object changed, String type) {

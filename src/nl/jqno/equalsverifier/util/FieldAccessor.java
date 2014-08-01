@@ -269,92 +269,40 @@ public class FieldAccessor {
 		@Override
 		public void modify() throws IllegalAccessException {
 			Class<?> type = field.getType();
-			if (type == boolean.class) {
-				field.setBoolean(object, !field.getBoolean(object));
-			}
-			else if (type == byte.class) {
-				field.setByte(object, (byte)(field.getByte(object) + 1));
-			}
-			else if (type == char.class) {
-				field.setChar(object, (char)(field.getChar(object) + 1));
-			}
-			else if (type == double.class) {
-				field.setDouble(object, field.getDouble(object) + 1.0D);
-			}
-			else if (type == float.class) {
-				field.setFloat(object, field.getFloat(object) + 1.0F);
-			}
-			else if (type == int.class) {
-				field.setInt(object, field.getInt(object) + 1);
-			}
-			else if (type == long.class) {
-				field.setLong(object, field.getLong(object) + 1);
-			}
-			else if (type == short.class) {
-				field.setShort(object, (short)(field.getShort(object) + 1));
-			}
-			else if (prefabValues.contains(type)) {
+//			if (type == boolean.class) {
+//				field.setBoolean(object, !field.getBoolean(object));
+//			}
+//			else if (type == byte.class) {
+//				field.setByte(object, (byte)(field.getByte(object) + 1));
+//			}
+//			else if (type == char.class) {
+//				field.setChar(object, (char)(field.getChar(object) + 1));
+//			}
+//			else if (type == double.class) {
+//				field.setDouble(object, field.getDouble(object) + 1.0D);
+//			}
+//			else if (type == float.class) {
+//				field.setFloat(object, field.getFloat(object) + 1.0F);
+//			}
+//			else if (type == int.class) {
+//				field.setInt(object, field.getInt(object) + 1);
+//			}
+//			else if (type == long.class) {
+//				field.setLong(object, field.getLong(object) + 1);
+//			}
+//			else if (type == short.class) {
+//				field.setShort(object, (short)(field.getShort(object) + 1));
+//			}
+//			else
+			if (prefabValues.contains(type)) {
 				Object newValue = prefabValues.getOther(type, field.get(object));
 				field.set(object, newValue);
-			}
-			else if (type.isArray()) {
-				Object array = field.get(object);
-				if (array == null) {
-					array = Array.newInstance(type.getComponentType(), 1);
-				}
-				modifyArrayElement(array, 0, prefabValues);
-				field.set(object, array);
 			}
 			else {
 				createPrefabValues(prefabValues, type);
 				Object newValue = prefabValues.getOther(type, field.get(object));
 				field.set(object, newValue);
 			}
-		}
-	}
-	
-	private static void modifyArrayElement(Object array, int index, PrefabValues prefabValues) {
-		Class<?> type = array.getClass().getComponentType();
-		if (type == boolean.class) {
-			Array.setBoolean(array, index, !Array.getBoolean(array, index));
-		}
-		else if (type == byte.class) {
-			Array.setByte(array, index, (byte)(Array.getByte(array, index) + 1));
-		}
-		else if (type == char.class) {
-			Array.setChar(array, index, (char)(Array.getChar(array, index) + 1));
-		}
-		else if (type == double.class) {
-			Array.setDouble(array, index, Array.getDouble(array, index) + 1.0D);
-		}
-		else if (type == float.class) {
-			Array.setFloat(array, index, Array.getFloat(array, index) + 1.0F);
-		}
-		else if (type == int.class) {
-			Array.setInt(array, index, Array.getInt(array, index) + 1);
-		}
-		else if (type == long.class) {
-			Array.setLong(array, index, Array.getLong(array, index) + 1);
-		}
-		else if (type == short.class) {
-			Array.setShort(array, index, (short)(Array.getShort(array, index) + 1));
-		}
-		else if (prefabValues.contains(type)) {
-			Object newValue = prefabValues.getOther(type, Array.get(array, index));
-			Array.set(array, index, newValue);
-		}
-		else if (type.isArray()) {
-			Object nestedArray = Array.get(array, index);
-			if (nestedArray == null) {
-				nestedArray = Array.newInstance(type.getComponentType(), 1);
-			}
-			modifyArrayElement(nestedArray, index, prefabValues);
-			Array.set(array, index, nestedArray);
-		}
-		else {
-			createPrefabValues(prefabValues, type);
-			Object newValue = prefabValues.getOther(type, Array.get(array, index));
-			Array.set(array, index, newValue);
 		}
 	}
 }

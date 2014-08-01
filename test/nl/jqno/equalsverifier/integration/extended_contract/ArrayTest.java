@@ -15,15 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-
 import java.util.Arrays;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static org.junit.internal.matchers.StringContains.containsString;
 
 public class ArrayTest extends IntegrationTestBase {
 	private static final String PRIMITIVE_EQUALS = "Array: == used instead of Arrays.equals() for field";
@@ -67,33 +67,47 @@ public class ArrayTest extends IntegrationTestBase {
 		EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class)
 				.verify();
 	}
-	
+
 	@Test
 	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
 		expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
 		EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class)
 				.verify();
 	}
-	
+
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAMultidimensionalArray() {
 		EqualsVerifier.forClass(MultidimensionalArrayCorrect.class)
 				.verify();
 	}
-	
+
+	@Test
+	public void failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
+		expectFailure("second", MULTIDIMENSIONAL_HASHCODE);
+		EqualsVerifier.forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class)
+				.verify();
+	}
+
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAThreedimensionalArray() {
 		EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class)
 				.verify();
 	}
-	
+	@Test
+	public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
+		thrown.expect(AssertionError.class);
+		thrown.expectMessage(containsString("Recursive datastructure"));
+		EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class)
+				.verify();
+	}
+
 	@Test
 	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAnObjectArray() {
 		expectFailure(OBJECT_EQUALS, FIELD_NAME);
 		EqualsVerifier.forClass(ObjectArrayArraysEquals.class)
 				.verify();
 	}
-	
+
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
 		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
@@ -225,7 +239,7 @@ public class ArrayTest extends IntegrationTestBase {
 			return (array == null) ? 0 : array.hashCode();
 		}
 	}
-	
+
 	static final class MultidimensionalArrayArraysHashCode {
 		private final int[][] array;
 		
@@ -245,7 +259,7 @@ public class ArrayTest extends IntegrationTestBase {
 			return Arrays.hashCode(array);
 		}
 	}
-	
+
 	static final class MultidimensionalArrayCorrect {
 		private final int[][] array;
 		
@@ -265,7 +279,35 @@ public class ArrayTest extends IntegrationTestBase {
 			return (array == null) ? 0 : Arrays.deepHashCode(array);
 		}
 	}
-	
+
+	final static class TwoMultidimensionalArraysShallowHashCodeForSecond {
+		private final Object[][] first;
+		private final Object[][] second;
+
+		public TwoMultidimensionalArraysShallowHashCodeForSecond(Object[][] first, Object[][] second) {
+			this.first = first;
+			this.second = second;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof TwoMultidimensionalArraysShallowHashCodeForSecond)) {
+				return false;
+			}
+			TwoMultidimensionalArraysShallowHashCodeForSecond other = (TwoMultidimensionalArraysShallowHashCodeForSecond) obj;
+			return Arrays.deepEquals(first, other.first) && Arrays.deepEquals(second, other.second);
+		}
+
+		@Override
+		public int hashCode() {
+			int prime = 31;
+			int result = 1;
+			result = (result * prime) + Arrays.deepHashCode(first);
+			result = (result * prime) + Arrays.hashCode(second);
+			return result;
+		}
+	}
+
 	static final class ThreeDimensionalArrayCorrect {
 		private final int[][][] array;
 		
@@ -285,7 +327,21 @@ public class ArrayTest extends IntegrationTestBase {
 			return (array == null) ? 0 : Arrays.deepHashCode(array);
 		}
 	}
-	
+
+	@SuppressWarnings("unused")
+	static final class MultiDimensionalArrayAndRecursion {
+		static final class Board {
+			private final Object[][] grid;
+			private BoardManipulator manipulator = new BoardManipulator(this);
+			public Board(Object[][] grid) { this.grid = grid; }
+		}
+
+		static final class BoardManipulator {
+			private final Board board;
+			public BoardManipulator(Board board) { this.board = board; }
+		}
+	}
+
 	static final class ObjectArrayArraysEquals {
 		private final Object[] array;
 		

@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.matchers.JUnitMatchers.containsString;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
+import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
@@ -54,7 +55,7 @@ public class PrefabValuesCreatorTest {
 	@Before
 	public void setup() {
 		stash = new MockStaticFieldValueStash();
-		prefabValues = new PrefabValues(stash);
+		prefabValues = PrefabValuesFactory.withPrimitives(stash);
 	}
 	
 	@Test

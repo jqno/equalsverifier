@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier;
 
 import static junit.framework.Assert.assertEquals;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
+import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
@@ -26,7 +27,7 @@ import nl.jqno.equalsverifier.util.PrefabValues;
 import org.junit.Test;
 
 public class FieldInspectorTest {
-	private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+	private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitives(new StaticFieldValueStash());
 	private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
 	
 	@Test

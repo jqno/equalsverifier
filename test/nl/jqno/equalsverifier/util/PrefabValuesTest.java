@@ -127,13 +127,19 @@ public class PrefabValuesTest {
 		
 		p.getOther(String.class, 1);
 	}
+
+	@Test
+	public void getOtherWhenValueIsPrimitive() {
+		p.put(int.class, 1, 2);
+		assertEquals(2, p.getOther(int.class, 1));
+	}
 	
 	@Test
 	public void getOtherWhenValueIsSubclassOfSpecifiedClass() {
 		p.put(Interface.class, new Interface(){}, new Interface(){});
 		assertPrefabValues(p, Interface.class);
 	}
-	
+
 	private static void assertPrefabValues(PrefabValues p, Class<?> type) {
 		Object red = p.getOther(type, null);
 		assertNotNull(red);

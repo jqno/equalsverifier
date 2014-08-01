@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012-2013 Jan Ouwens
+ * Copyright 2010, 2012-2014 Jan Ouwens
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,10 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -114,7 +116,7 @@ public class PrefabValues {
 			throw new ReflectionException("Type is null.");
 		}
 		
-		if (value != null && !type.isAssignableFrom(value.getClass())) {
+		if (value != null && !type.isAssignableFrom(value.getClass()) && !wraps(type, value.getClass())) {
 			throw new ReflectionException("Type does not match value.");
 		}
 		
@@ -122,14 +124,34 @@ public class PrefabValues {
 		if (tuple == null) {
 			throw new ReflectionException("No prefab values for " + type + " exist.");
 		}
-		
-		if (tuple.red.equals(value)) {
+
+		if (type.isArray() && arraysAreDeeplyEqual(tuple.red, value)) {
+			return tuple.black;
+		}
+		if (!type.isArray() && tuple.red.equals(value)) {
 			return tuple.black;
 		}
 		
 		return tuple.red;
 	}
-	
+
+	private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
+		return
+				(expectedClass.equals(boolean.class) && actualClass.equals(Boolean.class)) ||
+				(expectedClass.equals(byte.class) && actualClass.equals(Byte.class)) ||
+				(expectedClass.equals(char.class) && actualClass.equals(Character.class)) ||
+				(expectedClass.equals(double.class) && actualClass.equals(Double.class)) ||
+				(expectedClass.equals(float.class) && actualClass.equals(Float.class)) ||
+				(expectedClass.equals(int.class) && actualClass.equals(Integer.class)) ||
+				(expectedClass.equals(long.class) && actualClass.equals(Long.class)) ||
+				(expectedClass.equals(short.class) && actualClass.equals(Short.class));
+	}
+
+	private boolean arraysAreDeeplyEqual(Object x, Object y) {
+		// Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
+		return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
+	}
+
 	/**
 	 * Creates instances for the specified type, and for the types of the
 	 * fields contained within the specified type, recursively, and adds them.
@@ -153,15 +175,17 @@ public class PrefabValues {
 		}
 		
 		stash.backup(type);
-		
+		@SuppressWarnings("unchecked")
+		LinkedHashSet<Class<?>> clone = (LinkedHashSet<Class<?>>)typeStack.clone();
+		clone.add(type);
+
 		if (type.isEnum()) {
 			putEnumInstances(type);
 		}
+		else if (type.isArray()) {
+			putArrayInstances(type, clone);
+		}
 		else {
-			@SuppressWarnings("unchecked")
-			LinkedHashSet<Class<?>> clone = (LinkedHashSet<Class<?>>)typeStack.clone();
-			clone.add(type);
-			
 			traverseFields(type, clone);
 			createAndPutInstances(type);
 		}
@@ -185,19 +209,24 @@ public class PrefabValues {
 			break;
 		}
 	}
+
+	@SuppressWarnings("unchecked")
+	private <T> void putArrayInstances(Class<T> type, LinkedHashSet<Class<?>> typeStack) {
+		Class<?> componentType = type.getComponentType();
+		putFor(componentType, typeStack);
+		T red = (T)Array.newInstance(componentType, 1);
+		Array.set(red, 0, getRed(componentType));
+		T black = (T)Array.newInstance(componentType, 1);
+		Array.set(black, 0, getBlack(componentType));
+		put(type, red, black);
+	}
 	
 	private void traverseFields(Class<?> type, LinkedHashSet<Class<?>> typeStack) {
 		for (Field field : FieldIterable.of(type)) {
 			int modifiers = field.getModifiers();
 			boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
 			if (!isStaticAndFinal) {
-				Class<?> fieldType = field.getType();
-				if (fieldType.isArray()) {
-					putFor(fieldType.getComponentType(), typeStack);
-				}
-				else {
-					putFor(fieldType, typeStack);
-				}
+				putFor(field.getType(), typeStack);
 			}
 		}
 	}

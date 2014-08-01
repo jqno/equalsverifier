@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012 Jan Ouwens
+ * Copyright 2010-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,15 @@ public class JavaApiPrefabValues {
 	}
 	
 	private void addPrimitiveClasses() {
+		prefabValues.put(boolean.class, true, false);
+		prefabValues.put(byte.class, (byte)1, (byte)2);
+		prefabValues.put(char.class, 'a', 'b');
+		prefabValues.put(double.class, 0.5D, 1.0D);
+		prefabValues.put(float.class, 0.5F, 1.0F);
+		prefabValues.put(int.class, 1, 2);
+		prefabValues.put(long.class, 1L, 2L);
+		prefabValues.put(short.class, (short)1, (short)2);
+
 		prefabValues.put(Boolean.class, true, false);
 		prefabValues.put(Byte.class, (byte)1, (byte)2);
 		prefabValues.put(Character.class, 'a', 'b');
@@ -117,6 +126,7 @@ public class JavaApiPrefabValues {
 		prefabValues.put(Integer.class, 1, 2);
 		prefabValues.put(Long.class, 1L, 2L);
 		prefabValues.put(Short.class, (short)1, (short)2);
+
 		prefabValues.put(Object.class, new Object(), new Object());
 		prefabValues.put(Class.class, Class.class, Object.class);
 		prefabValues.put(String.class, "one", "two");
