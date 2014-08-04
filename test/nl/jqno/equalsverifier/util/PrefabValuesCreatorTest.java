@@ -134,7 +134,8 @@ public class PrefabValuesCreatorTest {
 		prefabValues.put(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
 		prefabValues.putFor(TwoStepNodeA.class);
 	}
-	
+
+	@Test
 	public void dontAddTwoStepRecursiveType() {
 		thrown.expect(RecursionException.class);
 		prefabValues.putFor(TwoStepNodeA.class);
