@@ -26,24 +26,22 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.junit.internal.matchers.StringContains.containsString;
 
 public class ArrayTest extends IntegrationTestBase {
-	private static final String PRIMITIVE_EQUALS = "Array: == used instead of Arrays.equals() for field";
-	private static final String PRIMITIVE_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
-	private static final String MULTIDIMENSIONAL_EQUALS = "Multidimensional array: == or Arrays.equals() used instead of Arrays.deepEquals() for field";
+	private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
+	private static final String REGULAR_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
+	private static final String MULTIDIMENSIONAL_EQUALS = "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
 	private static final String MULTIDIMENSIONAL_HASHCODE = "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
-	private static final String OBJECT_EQUALS = "Object array: == or Arrays.equals() used instead of Arrays.deepEquals() for field";
-	private static final String OBJECT_HASHCODE = "Object array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
 	private static final String FIELD_NAME = "array";
 
 	@Test
 	public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
-		expectFailure(PRIMITIVE_EQUALS, FIELD_NAME);
+		expectFailure(REGULAR_EQUALS, FIELD_NAME);
 		EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class)
 				.verify();
 	}
 	
 	@Test
 	public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
-		expectFailure(PRIMITIVE_HASHCODE, FIELD_NAME);
+		expectFailure(REGULAR_HASHCODE, FIELD_NAME);
 		EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class)
 				.verify();
 	}
@@ -102,26 +100,19 @@ public class ArrayTest extends IntegrationTestBase {
 	}
 
 	@Test
-	public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAnObjectArray() {
-		expectFailure(OBJECT_EQUALS, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectArrayArraysEquals.class)
+	public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAnObjectArray() {
+		expectFailure(REGULAR_EQUALS, FIELD_NAME);
+		EqualsVerifier.forClass(ObjectArrayRegularEquals.class)
 				.verify();
 	}
 
 	@Test
-	public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
-		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
+	public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAnObjectArray() {
+		expectFailure(REGULAR_HASHCODE, FIELD_NAME);
 		EqualsVerifier.forClass(ObjectArrayRegularHashCode.class)
 				.verify();
 	}
-	
-	@Test
-	public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAnObjectArray() {
-		expectFailure(OBJECT_HASHCODE, FIELD_NAME);
-		EqualsVerifier.forClass(ObjectArrayArraysHashCode.class)
-				.verify();
-	}
-	
+
 	@Test
 	public void succeed_whenCorrectMethodsAreUsed_givenAnObjectArray() {
 		EqualsVerifier.forClass(ObjectArrayCorrect.class)
@@ -342,23 +333,23 @@ public class ArrayTest extends IntegrationTestBase {
 		}
 	}
 
-	static final class ObjectArrayArraysEquals {
+	static final class ObjectArrayRegularEquals {
 		private final Object[] array;
 		
-		public ObjectArrayArraysEquals(Object[] array) { this.array = array; }
+		public ObjectArrayRegularEquals(Object[] array) { this.array = array; }
 		
 		@Override
 		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayArraysEquals)) {
+			if (!(obj instanceof ObjectArrayRegularEquals)) {
 				return false;
 			}
-			ObjectArrayArraysEquals other = (ObjectArrayArraysEquals)obj;
-			return Arrays.equals(array, other.array);
+			ObjectArrayRegularEquals other = (ObjectArrayRegularEquals)obj;
+			return nullSafeEquals(array, other.array);
 		}
 		
 		@Override
 		public int hashCode() {
-			return (array == null) ? 0 : Arrays.deepHashCode(array);
+			return (array == null) ? 0 : Arrays.hashCode(array);
 		}
 	}
 	
@@ -373,35 +364,15 @@ public class ArrayTest extends IntegrationTestBase {
 				return false;
 			}
 			ObjectArrayRegularHashCode other = (ObjectArrayRegularHashCode)obj;
-			return Arrays.deepEquals(array, other.array);
+			return Arrays.equals(array, other.array);
 		}
 		
 		@Override
 		public int hashCode() {
-			return (array == null) ? 0 : array.hashCode();
+			return nullSafeHashCode(array);
 		}
 	}
-	
-	static final class ObjectArrayArraysHashCode {
-		private final Object[] array;
-		
-		public ObjectArrayArraysHashCode(Object[] array) { this.array = array; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof ObjectArrayArraysHashCode)) {
-				return false;
-			}
-			ObjectArrayArraysHashCode other = (ObjectArrayArraysHashCode)obj;
-			return Arrays.deepEquals(array, other.array);
-		}
-		
-		@Override
-		public int hashCode() {
-			return (array == null) ? 0 : Arrays.hashCode(array);
-		}
-	}
-	
+
 	static final class ObjectArrayCorrect {
 		private final Object[] array;
 		
@@ -413,12 +384,12 @@ public class ArrayTest extends IntegrationTestBase {
 				return false;
 			}
 			ObjectArrayCorrect other = (ObjectArrayCorrect)obj;
-			return Arrays.deepEquals(array, other.array);
+			return Arrays.equals(array, other.array);
 		}
 		
 		@Override
 		public int hashCode() {
-			return (array == null) ? 0 : Arrays.deepHashCode(array);
+			return (array == null) ? 0 : Arrays.hashCode(array);
 		}
 	}
 	

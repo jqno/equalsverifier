@@ -188,21 +188,12 @@ class FieldsChecker<T> implements Checker {
 			Object changed = changedAccessor.getObject();
 			replaceInnermostArrayValue(changedAccessor);
 
-			if (arrayType == Object[].class) {
-				insertIntArray(referenceAccessor, changedAccessor);
-				assertDeep(fieldName, reference, changed, "Object");
-			}
-			else if (arrayType.getComponentType().isArray()) {
-				assertDeep(fieldName, reference, changed, "Multidimensional");
+			if (arrayType.getComponentType().isArray()) {
+				assertDeep(fieldName, reference, changed);
 			}
 			else {
 				assertArray(fieldName, reference, changed);
 			}
-		}
-
-		private void insertIntArray(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			Array.set(referenceAccessor.get(), 0, new int[]{0});
-			Array.set(changedAccessor.get(), 0, new int[]{0});
 		}
 
 		private void replaceInnermostArrayValue(FieldAccessor accessor) {
@@ -222,15 +213,15 @@ class FieldsChecker<T> implements Checker {
 			return result;
 		}
 
-		private void assertDeep(String fieldName, Object reference, Object changed, String type) {
-			assertEquals(Formatter.of("%% array: == or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", type, fieldName),
+		private void assertDeep(String fieldName, Object reference, Object changed) {
+			assertEquals(Formatter.of("Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", fieldName),
 					reference, changed);
-			assertEquals(Formatter.of("%% array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", type, fieldName),
+			assertEquals(Formatter.of("Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", fieldName),
 					reference.hashCode(), changed.hashCode());
 		}
 		
 		private void assertArray(String fieldName, Object reference, Object changed) {
-			assertEquals(Formatter.of("Array: == used instead of Arrays.equals() for field %%.", fieldName),
+			assertEquals(Formatter.of("Array: == or regular equals() used instead of Arrays.equals() for field %%.", fieldName),
 					reference, changed);
 			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
 					reference.hashCode(), changed.hashCode());
