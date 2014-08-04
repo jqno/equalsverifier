@@ -38,6 +38,8 @@ class AbstractDelegationChecker<T> implements Checker {
 
 	@Override
 	public void check() {
+		checkAbstractEqualsAndHashCode();
+
 		checkAbstractDelegationInFields();
 
 		T instance = this.<T>getRedPrefabValue(type);
@@ -51,6 +53,22 @@ class AbstractDelegationChecker<T> implements Checker {
 		checkAbstractDelegation(instance, copy);
 
 		checkAbstractDelegationInSuper();
+	}
+
+	private void checkAbstractEqualsAndHashCode() {
+		boolean equalsIsAbstract = classAccessor.isEqualsAbstract();
+		boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
+
+		if (equalsIsAbstract && hashCodeIsAbstract) {
+			fail(Formatter.of("Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
+					type.getSimpleName()));
+		}
+		else if (equalsIsAbstract) {
+			fail(buildSingleAbstractMethodErrorMessage(type, true, true));
+		}
+		else if (hashCodeIsAbstract) {
+			fail(buildSingleAbstractMethodErrorMessage(type, false, true));
+		}
 	}
 	
 	private void checkAbstractDelegationInFields() {
@@ -75,7 +93,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		boolean equalsIsAbstract = superAccessor.isEqualsAbstract();
 		boolean hashCodeIsAbstract = superAccessor.isHashCodeAbstract();
 		if (equalsIsAbstract != hashCodeIsAbstract) {
-			fail(buildAbstractMethodInSuperErrorMessage(superclass, equalsIsAbstract));
+			fail(buildSingleAbstractMethodErrorMessage(superclass, equalsIsAbstract, false));
 		}
 		if (equalsIsAbstract && hashCodeIsAbstract) {
 			return;
@@ -92,9 +110,12 @@ class AbstractDelegationChecker<T> implements Checker {
 		checkAbstractMethods(superclass, instance, copy, false);
 	}
 
-	private Formatter buildAbstractMethodInSuperErrorMessage(Class<?> type, boolean isEqualsAbstract) {
-		return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\nBoth should be either abstract or concrete.",
-				type.getSimpleName(), (isEqualsAbstract ? "equals" : "hashCode"), (isEqualsAbstract ? "hashCode" : "equals"));
+	private Formatter buildSingleAbstractMethodErrorMessage(Class<?> type, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
+		return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
+				type.getSimpleName(),
+				(isEqualsAbstract ? "equals" : "hashCode"),
+				(isEqualsAbstract ? "hashCode" : "equals"),
+				(bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete."));
 	}
 	
 	@SuppressWarnings("unchecked")
