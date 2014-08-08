@@ -97,7 +97,22 @@ public class ClassAccessor<T> {
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
 		return annotationAccessor.fieldHas(field.getName(), annotation);
 	}
-	
+
+	/**
+	 * Determines whether T declares a field.  This does not include inherited fields.
+	 *
+	 * @return True if T declares the field.
+	 */
+	public boolean declaresField(Field field) {
+		try {
+			type.getDeclaredField(field.getName());
+			return true;
+		}
+		catch (NoSuchFieldException e) {
+			return false;
+		}
+	}
+
 	/**
 	 * Determines whether T has an {@code equals} method.
 	 * 

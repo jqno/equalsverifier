@@ -167,8 +167,10 @@ class FieldsChecker<T> implements Checker {
 						!thisFieldShouldBeUsed || equalsChanged);
 				assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
 						thisFieldShouldBeUsed || !equalsChanged);
-				assertTrue(Formatter.of("Significant fields: all fields should be used, but %% has not defined an equals method.", classAccessor.getType().getSimpleName()),
-						classAccessor.declaresEquals());
+				if (classAccessor.declaresField(referenceAccessor.getField())) {
+					assertTrue(Formatter.of("Significant fields: all fields should be used, but %% has not defined an equals method.", classAccessor.getType().getSimpleName()),
+					classAccessor.declaresEquals());
+				}
 			}
 			
 			referenceAccessor.changeField(prefabValues);
