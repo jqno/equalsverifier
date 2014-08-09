@@ -93,6 +93,13 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 		EqualsVerifier.forClass(NoFieldsUsed.class)
 				.verify();
 	}
+
+	@Test
+	public void succeed_whenNoFieldsAreAdded_givenAllFieldsShouldBeUsed() {
+		EqualsVerifier.forClass(NoFieldsAdded.class)
+				.allFieldsShouldBeUsed()
+				.verify();
+	}
 	
 	@Test
 	public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsed() {
@@ -277,7 +284,13 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 		
 		public NoFieldsUsed(Color color) { this.color = color; }
 	}
-	
+
+	static final class NoFieldsAdded extends Point {
+		public NoFieldsAdded(int x, int y) {
+			super(x, y);
+		}
+	}
+
 	static final class TwoFieldsUnusedColorPoint {
 		private final int x;
 		private final int y;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Jan Ouwens
+ * Copyright 2010-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -97,7 +97,22 @@ public class ClassAccessor<T> {
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
 		return annotationAccessor.fieldHas(field.getName(), annotation);
 	}
-	
+
+	/**
+	 * Determines whether T declares a field.  This does not include inherited fields.
+	 *
+	 * @return True if T declares the field.
+	 */
+	public boolean declaresField(Field field) {
+		try {
+			type.getDeclaredField(field.getName());
+			return true;
+		}
+		catch (NoSuchFieldException e) {
+			return false;
+		}
+	}
+
 	/**
 	 * Determines whether T has an {@code equals} method.
 	 * 
