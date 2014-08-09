@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Jan Ouwens
+ * Copyright 2010-2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,6 +85,19 @@ public class ClassAccessorTest {
 		Field field = AnnotatedFields.class.getField("runtimeRetention");
 		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
 		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
+	}
+	
+	@Test
+	public void declaresField() throws Exception {
+		Field field = PointContainer.class.getDeclaredField("point");
+		assertTrue(pointContainerAccessor.declaresField(field));
+	}
+	
+	@Test
+	public void doesNotDeclareField() throws Exception {
+		ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
+		Field field = Point3D.class.getDeclaredField("z");
+		assertFalse(accessor.declaresField(field));
 	}
 	
 	@Test
