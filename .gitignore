@@ -2,6 +2,7 @@ build
 dist
 lib
 bin
+target
 .DS_Store
 
 # IntelliJ files
