@@ -19,8 +19,8 @@ limitations under the License.
 		xmlns:jacoco="antlib:org.jacoco.ant"
 		xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-	<property name="src.dir" value="${basedir}/src" />
-	<property name="test.dir" value="${basedir}/test" />
+	<property name="src.dir" value="${basedir}/src/main/java" />
+	<property name="test.dir" value="${basedir}/src/test/java" />
 
 	<property name="build.src.dir" value="${basedir}/build/src" />
 	<property name="build.test.dir" value="${basedir}/build/test" />
