@@ -42,7 +42,17 @@
 
 	<issueManagement>
 		<url>https://code.google.com/p/equalsverifier/issues</url>
-	</issueManagement>
+  </issueManagement>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
+
+  <properties>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <encoding>UTF-8</encoding>
+  </properties>
 
 	<dependencies>
 		<dependency>
