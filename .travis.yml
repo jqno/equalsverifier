@@ -1,4 +1,6 @@
 language: java
+before_install: mvn dependency:resolve dependency:resolve-plugins
+install: mvn verify
 jdk:
   - oraclejdk8
   - openjdk7
