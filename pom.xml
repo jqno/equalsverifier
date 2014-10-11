@@ -42,17 +42,18 @@
 
 	<issueManagement>
 		<url>https://code.google.com/p/equalsverifier/issues</url>
-  </issueManagement>
+	</issueManagement>
 
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
+	<prerequisites>
+		<maven>3.0.4</maven>
+	</prerequisites>
 
-  <properties>
-    <maven.compiler.source>1.6</maven.compiler.source>
-    <maven.compiler.target>1.6</maven.compiler.target>
-    <encoding>UTF-8</encoding>
-  </properties>
+	<properties>
+		<maven.compiler.source>1.6</maven.compiler.source>
+		<maven.compiler.target>1.6</maven.compiler.target>
+		<encoding>UTF-8</encoding>
+		<jacoco.version>0.7.0.201403182114</jacoco.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -105,6 +106,86 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>default-report</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
+								<report>
+									<executiondata>
+										<file file="${project.build.directory}/jacoco.exec" />
+									</executiondata>
+									<structure name="EqualsVerifier: external coverage">
+										<classfiles>
+											<fileset dir="${project.build.directory}/test-classes/nl/jqno/equalsverifier/coverage"/>
+										</classfiles>
+										<sourcefiles encoding="UTF-8">
+											<fileset dir="src/test/java"/>
+										</sourcefiles>
+									</structure>
+									<check failonviolation="true" violationsproperty="violation">
+										<rule element="BUNDLE">
+											<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+										</rule>
+									</check>
+									<html destdir="${project.build.directory}/jacoco-external"/>
+								</report>
+								<report>
+									<executiondata>
+										<file file="${project.build.directory}/jacoco.exec" />
+									</executiondata>
+									<structure name="EqualsVerifier: internal coverage">
+										<classfiles>
+											<fileset dir="${project.build.directory}/classes"/>
+										</classfiles>
+										<sourcefiles encoding="UTF-8">
+											<fileset dir="src/main/java"/>
+										</sourcefiles>
+									</structure>
+									<check failonviolation="true" violationsproperty="violation">
+										<rule element="BUNDLE">
+											<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.95" />
+										</rule>
+									</check>
+									<html destdir="${project.build.directory}/jacoco-internal"/>
+								</report>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.jacoco</groupId>
+						<artifactId>org.jacoco.ant</artifactId>
+						<version>${jacoco.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 </project>
+
