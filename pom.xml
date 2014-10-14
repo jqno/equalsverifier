@@ -33,6 +33,11 @@
 		</developer>
 	</developers>
 
+	<ciManagement>
+		<system>Travis CI</system>
+		<url>https://travis-ci.org/jqno/equalsverifier</url>
+	</ciManagement>
+
 	<mailingLists>
 		<mailingList>
 			<name>General Discussion</name>
