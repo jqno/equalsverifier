@@ -10,6 +10,12 @@
 	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
 	<url>http://www.jqno.nl/equalsverifier</url>
 
+	<parent>
+		<groupId>org.sonatype.oss</groupId>
+		<artifactId>oss-parent</artifactId>
+		<version>9</version>
+	</parent>
+
 	<scm>
 		<url>http://github.com/jqno/equalsverifier</url>
 		<connection>scm:git:https://github.com/jqno/equalsverifier</connection>
