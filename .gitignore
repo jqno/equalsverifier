@@ -1,9 +1,6 @@
 .project
 .classpath
 .settings
-build
-dist
-lib
 bin
 target
 .DS_Store
