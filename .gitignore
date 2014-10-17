@@ -1,3 +1,6 @@
+.project
+.classpath
+.settings
 build
 dist
 lib
