@@ -25,7 +25,11 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
@@ -94,14 +98,15 @@ public class ConditionalCompiler implements Closeable {
 	private void compileClass(JavaFileObject sourceFile) throws IOException {
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		StandardJavaFileManager fileManager = null;
+		DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<JavaFileObject>();
 		try {
-			fileManager = compiler.getStandardFileManager(null, null, null);
+			fileManager = compiler.getStandardFileManager(collector, Locale.ROOT, null);
 			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(tempFolder));
-			CompilationTask task = compiler.getTask(null, fileManager, null, null, null, Arrays.asList(sourceFile));
+			CompilationTask task = compiler.getTask(null, fileManager, collector, null, null, Arrays.asList(sourceFile));
 			
 			boolean success = task.call();
 			if (!success) {
-				throw new AssertionError("Could not compile the class");
+				throw new AssertionError(buildErrorMessage(sourceFile, collector));
 			}
 		}
 		finally {
@@ -109,6 +114,16 @@ public class ConditionalCompiler implements Closeable {
 				fileManager.close();
 			}
 		}
+	}
+
+	private String buildErrorMessage(JavaFileObject sourceFile, DiagnosticCollector<JavaFileObject> collector) {
+		String result = "Could not compile class " + sourceFile.getName() + ":";
+		List<Diagnostic<? extends JavaFileObject>> diagnostics = collector.getDiagnostics();
+		for (Diagnostic<? extends JavaFileObject> diag : diagnostics) {
+			result += "\n" + diag.getKind() + " at " + diag.getLineNumber() + "," + diag.getColumnNumber() +
+					": " + diag.getMessage(Locale.ROOT);
+		}
+		return result;
 	}
 	
 	@Override
