@@ -17,11 +17,11 @@ package nl.jqno.equalsverifier.testhelpers;
 
 import java.io.Closeable;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
@@ -29,6 +29,7 @@ import java.util.Arrays;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaCompiler.CompilationTask;
 import javax.tools.JavaFileObject;
+import javax.tools.SimpleJavaFileObject;
 import javax.tools.StandardJavaFileManager;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
@@ -78,7 +79,7 @@ public class ConditionalCompiler implements Closeable {
 	 */
 	public Class<?> compile(String className, String code) {
 		try {
-			File sourceFile = writeSourceToFile(className, code);
+			JavaFileObject sourceFile = new StringJavaFileObject(className, code);
 			compileClass(sourceFile);
 			return classLoader.loadClass(className);
 		}
@@ -90,29 +91,13 @@ public class ConditionalCompiler implements Closeable {
 		}
 	}
 	
-	private File writeSourceToFile(String className, String code) throws IOException {
-		FileWriter writer = null;
-		try {
-			File sourceFile = new File(tempFolder, className + ".java");
-			writer = new FileWriter(sourceFile);
-			writer.write(code);
-			return sourceFile;
-		}
-		finally {
-			if (writer != null) {
-				writer.close();
-			}
-		}
-	}
-	
-	private void compileClass(File sourceFile) throws IOException {
+	private void compileClass(JavaFileObject sourceFile) throws IOException {
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		StandardJavaFileManager fileManager = null;
 		try {
 			fileManager = compiler.getStandardFileManager(null, null, null);
 			fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(tempFolder));
-			Iterable<? extends JavaFileObject> javaFileObjects = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(sourceFile));
-			CompilationTask task = compiler.getTask(null, fileManager, null, null, null, javaFileObjects);
+			CompilationTask task = compiler.getTask(null, fileManager, null, null, null, Arrays.asList(sourceFile));
 			
 			boolean success = task.call();
 			if (!success) {
@@ -143,6 +128,20 @@ public class ConditionalCompiler implements Closeable {
 		}
 		catch (InvocationTargetException e) {
 			throw new AssertionError(e);
+		}
+	}
+	
+	private static class StringJavaFileObject extends SimpleJavaFileObject {
+		private final String code;
+		
+		protected StringJavaFileObject(String className, String code) {
+			super(URI.create("string:///" + className + Kind.SOURCE.extension), Kind.SOURCE);
+			this.code = code;
+		}
+		
+		@Override
+		public CharSequence getCharContent(boolean ignoreEncodingErrors) throws IOException {
+			return code;
 		}
 	}
 }
