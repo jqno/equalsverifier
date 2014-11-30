@@ -69,6 +69,16 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
+	public void nothingHappens_whenNonExistingConstructorOverloadIsCalled() {
+		ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
+				.instantiate(classes(int.class, String.class, int.class), objects(1999, "11", 31))
+				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
 	public void throwsISE_whenInstantiateIsCalledMoreThanTwice() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
 				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
@@ -100,6 +110,26 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
+	public void nothingHappens_whenFactoryMethodDoesNotExist() {
+		ConditionalPrefabValueBuilder.of(Integer.class.getCanonicalName())
+				.callFactory("thisFactoryMethodDoesNotExist", classes(int.class), objects(42))
+				.callFactory("valueOf", classes(int.class), objects(1337))
+				.addTo(prefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void nothingHappens_whenNonExistingFactoryOverloadIsCalled() {
+		ConditionalPrefabValueBuilder.of(Integer.class.getCanonicalName())
+				.callFactory("valueOf", classes(int.class), objects(42))
+				.callFactory("valueOf", classes(String.class), objects("hi"))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
 	public void throwsISE_whenCallFactoryIsCalledMoreThanTwice() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(Integer.class.getCanonicalName())
 				.callFactory("valueOf", classes(int.class), objects(42))
@@ -125,6 +155,16 @@ public class ConditionalPrefabValueBuilderTest {
 		ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
 				.withConstant("ONE")
 				.withConstant("TEN")
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void nothingHappens_whenConstantDoesNotExist() {
+		ConditionalPrefabValueBuilder.of(BigDecimal.class.getCanonicalName())
+				.withConstant("ONE")
+				.withConstant("ELEVENTY_TWELVE")
 				.addTo(throwingPrefabValues);
 		
 		throwingPrefabValues.verify();

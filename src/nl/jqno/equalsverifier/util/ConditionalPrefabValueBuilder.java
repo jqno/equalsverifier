@@ -57,7 +57,12 @@ public class ConditionalPrefabValueBuilder {
 	public ConditionalPrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
 		if (!stop) {
 			validate();
-			instances.add(ci.instantiate(paramTypes, paramValues));
+			try {
+				instances.add(ci.instantiate(paramTypes, paramValues));
+			}
+			catch (ReflectionException e) {
+				stop = true;
+			}
 		}
 		return this;
 	}
@@ -65,7 +70,12 @@ public class ConditionalPrefabValueBuilder {
 	public ConditionalPrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
 		if (!stop) {
 			validate();
-			instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+			try {
+				instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+			}
+			catch (ReflectionException e) {
+				stop = true;
+			}
 		}
 		return this;
 	}
@@ -73,7 +83,12 @@ public class ConditionalPrefabValueBuilder {
 	public ConditionalPrefabValueBuilder withConstant(String constantName) {
 		if (!stop) {
 			validate();
-			instances.add(ci.returnConstant(constantName));
+			try {
+				instances.add(ci.returnConstant(constantName));
+			}
+			catch (ReflectionException e) {
+				stop = true;
+			}
 		}
 		return this;
 	}
