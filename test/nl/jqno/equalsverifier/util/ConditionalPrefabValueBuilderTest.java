@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
 import nl.jqno.equalsverifier.StaticFieldValueStash;
+import nl.jqno.equalsverifier.util.exceptions.EqualsVerifierBugException;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -47,15 +48,15 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void throwsISE_whenNoInstancesAreCreated() {
-		thrown.expect(IllegalStateException.class);
+	public void throwsBug_whenNoInstancesAreCreated() {
+		thrown.expect(EqualsVerifierBugException.class);
 		ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
 				.addTo(prefabValues);
 	}
 	
 	@Test
-	public void throwsISE_whenOnlyOneInstanceIsCreated() {
-		thrown.expect(IllegalStateException.class);
+	public void throwsBug_whenOnlyOneInstanceIsCreated() {
+		thrown.expect(EqualsVerifierBugException.class);
 		ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
 				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
 				.addTo(prefabValues);
@@ -93,12 +94,12 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void throwsISE_whenInstantiateIsCalledMoreThanTwice() {
+	public void throwsBug_whenInstantiateIsCalledMoreThanTwice() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
 				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
 				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1));
 		
-		thrown.expect(IllegalStateException.class);
+		thrown.expect(EqualsVerifierBugException.class);
 		builder.instantiate(classes(int.class, int.class, int.class), objects(2014, 6, 16));
 	}
 	
@@ -144,12 +145,12 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void throwsISE_whenCallFactoryIsCalledMoreThanTwice() {
+	public void throwsBug_whenCallFactoryIsCalledMoreThanTwice() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(Integer.class.getCanonicalName())
 				.callFactory("valueOf", classes(int.class), objects(42))
 				.callFactory("valueOf", classes(int.class), objects(1337));
 		
-		thrown.expect(IllegalStateException.class);
+		thrown.expect(EqualsVerifierBugException.class);
 		builder.callFactory("valueOf", classes(int.class), objects(-1));
 	}
 	
@@ -185,12 +186,12 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void throwsISE_whenWithConstantIsCalledMoreThanTwice() {
+	public void throwsBug_whenWithConstantIsCalledMoreThanTwice() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(BigDecimal.class.getCanonicalName())
 				.withConstant("ONE")
 				.withConstant("TEN");
 		
-		thrown.expect(IllegalStateException.class);
+		thrown.expect(EqualsVerifierBugException.class);
 		builder.withConstant("ZERO");
 	}
 	
@@ -230,10 +231,10 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
-	public void throwsISE_whenConcreteClassIsNotASubclassOfType() {
+	public void throwsBug_whenConcreteClassIsNotASubclassOfType() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(BigDecimal.class.getCanonicalName());
 		
-		thrown.expect(IllegalStateException.class);
+		thrown.expect(EqualsVerifierBugException.class);
 		builder.withConcreteClass(String.class.getCanonicalName());
 	}
 	

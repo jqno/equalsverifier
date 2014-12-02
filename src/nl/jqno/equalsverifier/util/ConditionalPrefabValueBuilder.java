@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import nl.jqno.equalsverifier.util.exceptions.EqualsVerifierBugException;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 /**
@@ -83,7 +84,7 @@ public class ConditionalPrefabValueBuilder {
 			return this;
 		}
 		if (!type.isAssignableFrom(concreteType)) {
-			throw new IllegalStateException("Concrete class " + fullyQualifiedClassName + " is not an " + type.getCanonicalName());
+			throw new EqualsVerifierBugException("Concrete class " + fullyQualifiedClassName + " is not an " + type.getCanonicalName());
 		}
 		return this;
 	}
@@ -171,7 +172,7 @@ public class ConditionalPrefabValueBuilder {
 	public void addTo(PrefabValues prefabValues) {
 		if (!stop) {
 			if (instances.size() < 2) {
-				throw new IllegalStateException("Not enough instances");
+				throw new EqualsVerifierBugException("Not enough instances");
 			}
 			prefabValues.put((Class)type, instances.get(0), instances.get(1));
 		}
@@ -179,7 +180,7 @@ public class ConditionalPrefabValueBuilder {
 	
 	private void validate() {
 		if (instances.size() >= 2) {
-			throw new IllegalStateException("Too many instances");
+			throw new EqualsVerifierBugException("Too many instances");
 		}
 	}
 }
