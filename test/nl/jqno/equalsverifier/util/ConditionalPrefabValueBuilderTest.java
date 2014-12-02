@@ -26,7 +26,6 @@ import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
 import nl.jqno.equalsverifier.StaticFieldValueStash;
-import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,6 +44,21 @@ public class ConditionalPrefabValueBuilderTest {
 		StaticFieldValueStash stash = new StaticFieldValueStash();
 		prefabValues = new PrefabValues(stash);
 		throwingPrefabValues = new PrefabValuesThrowsWhenCalled();
+	}
+	
+	@Test
+	public void throwsISE_whenNoInstancesAreCreated() {
+		thrown.expect(IllegalStateException.class);
+		ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
+				.addTo(prefabValues);
+	}
+	
+	@Test
+	public void throwsISE_whenOnlyOneInstanceIsCreated() {
+		thrown.expect(IllegalStateException.class);
+		ConditionalPrefabValueBuilder.of(GregorianCalendar.class.getCanonicalName())
+				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
+				.addTo(prefabValues);
 	}
 	
 	@Test
@@ -84,7 +98,7 @@ public class ConditionalPrefabValueBuilderTest {
 				.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31))
 				.instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1));
 		
-		thrown.expect(ReflectionException.class);
+		thrown.expect(IllegalStateException.class);
 		builder.instantiate(classes(int.class, int.class, int.class), objects(2014, 6, 16));
 	}
 	
@@ -135,7 +149,7 @@ public class ConditionalPrefabValueBuilderTest {
 				.callFactory("valueOf", classes(int.class), objects(42))
 				.callFactory("valueOf", classes(int.class), objects(1337));
 		
-		thrown.expect(ReflectionException.class);
+		thrown.expect(IllegalStateException.class);
 		builder.callFactory("valueOf", classes(int.class), objects(-1));
 	}
 	
@@ -176,7 +190,7 @@ public class ConditionalPrefabValueBuilderTest {
 				.withConstant("ONE")
 				.withConstant("TEN");
 		
-		thrown.expect(ReflectionException.class);
+		thrown.expect(IllegalStateException.class);
 		builder.withConstant("ZERO");
 	}
 	
@@ -219,7 +233,7 @@ public class ConditionalPrefabValueBuilderTest {
 	public void throwsISE_whenConcreteClassIsNotASubclassOfType() {
 		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(BigDecimal.class.getCanonicalName());
 		
-		thrown.expect(ReflectionException.class);
+		thrown.expect(IllegalStateException.class);
 		builder.withConcreteClass(String.class.getCanonicalName());
 	}
 	

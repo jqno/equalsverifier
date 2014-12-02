@@ -83,7 +83,7 @@ public class ConditionalPrefabValueBuilder {
 			return this;
 		}
 		if (!type.isAssignableFrom(concreteType)) {
-			throw new ReflectionException("");
+			throw new IllegalStateException("Concrete class " + fullyQualifiedClassName + " is not an " + type.getCanonicalName());
 		}
 		return this;
 	}
@@ -170,13 +170,16 @@ public class ConditionalPrefabValueBuilder {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void addTo(PrefabValues prefabValues) {
 		if (!stop) {
+			if (instances.size() < 2) {
+				throw new IllegalStateException("Not enough instances");
+			}
 			prefabValues.put((Class)type, instances.get(0), instances.get(1));
 		}
 	}
 	
 	private void validate() {
 		if (instances.size() >= 2) {
-			throw new ReflectionException("Too many instances");
+			throw new IllegalStateException("Too many instances");
 		}
 	}
 }
