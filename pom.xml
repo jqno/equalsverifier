@@ -108,6 +108,12 @@ limitations under the License.
 			<version>4.10</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.code.findbugs</groupId>
+			<artifactId>jsr305</artifactId>
+			<version>3.0.0</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- conditional test dependencies -->
 		<dependency>
