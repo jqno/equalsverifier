@@ -59,25 +59,6 @@ public class AnnotationsTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {
-		EqualsVerifier.forClass(NonnullByAnnotation.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
-		expectFailureWithCause(NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
-		EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationInSuperclass() {
-		EqualsVerifier.forClass(SubclassNonnullByAnnotation.class)
-				.verify();
-	}
-	
-	@Test
 	public void succeed_whenFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
 		EqualsVerifier.forClass(EntityByJpaAnnotation.class)
 				.verify();
@@ -149,54 +130,7 @@ public class AnnotationsTest extends IntegrationTestBase {
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
-	
-	static class NonnullByAnnotation {
-		@Nonnull
-		private final Object o;
-		@NonNull
-		private final Object p;
-		@NotNull
-		private final Object q;
-		
-		public NonnullByAnnotation(Object o, Object p, Object q) { this.o = o; this.p = p; this.q = q; }
-		
-		@Override
-		public final boolean equals(Object obj) {
-			if (!(obj instanceof NonnullByAnnotation)) {
-				return false;
-			}
-			NonnullByAnnotation other = (NonnullByAnnotation)obj;
-			return o.equals(other.o) && p.equals(other.p) && q.equals(other.q);
-		}
-		
-		@Override public final int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class SubclassNonnullByAnnotation extends NonnullByAnnotation {
-		public SubclassNonnullByAnnotation(Object o, Object p, Object q) { super(o, p, q); }
-	}
 
-	static final class NonnullByAnnotationMissedOne {
-		@Nonnull
-		private final Object o;
-		// No annotation
-		private final Object noAnnotation;
-		@Nonnull
-		private final Object q;
-		
-		public NonnullByAnnotationMissedOne(Object o, Object p, Object q) { this.o = o; this.noAnnotation = p; this.q = q; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof NonnullByAnnotationMissedOne)) {
-				return false;
-			}
-			NonnullByAnnotationMissedOne other = (NonnullByAnnotationMissedOne)obj;
-			return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
-		}
-		
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
 	
 	@javax.persistence.Entity
 	static class EntityByJpaAnnotation {
