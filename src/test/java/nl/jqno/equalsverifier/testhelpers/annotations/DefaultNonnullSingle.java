@@ -1,5 +1,5 @@
 /*
- * Copyright 2011,2014 Jan Ouwens
+ * Copyright 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,16 @@
  */
 package nl.jqno.equalsverifier.testhelpers.annotations;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
-@Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+import javax.annotation.Nonnull;
+import javax.annotation.meta.TypeQualifierDefault;
+
+@Documented
+@Nonnull
+@TypeQualifierDefault(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface NotNull {}
+public @interface DefaultNonnullSingle {}

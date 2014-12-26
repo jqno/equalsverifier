@@ -1,5 +1,5 @@
 /*
- * Copyright 2011,2014 Jan Ouwens
+ * Copyright 2014 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.annotations;
+@DefaultCustomNonnull
+package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.custom_nonnull;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-@Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.CLASS)
-public @interface NotNull {}
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultCustomNonnull;

@@ -20,10 +20,19 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import javax.annotation.Nonnull;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.custom_nonnull.Jsr305DefaultCustomNonnullOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.inapplicable.Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.multi.Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.single.Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultCustomNonnull;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullInapplicable;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullMulti;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullSingle;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class AnnotationNonnullTest extends IntegrationTestBase {
@@ -46,6 +55,56 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithCustomNonnullAnnotationOnClass() {
+		EqualsVerifier.forClass(Jsr305DefaultCustomNonnullOnClass.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithSingleTypeQualifierDefaultOnClass() {
+		EqualsVerifier.forClass(Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithMultipleTypeQualifierDefaultOnClass() {
+		EqualsVerifier.forClass(Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnClass() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
+		EqualsVerifier.forClass(Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithCustomNonnullAnnotationOnPackage() {
+		EqualsVerifier.forClass(Jsr305DefaultCustomNonnullOnPackage.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithSingleTypeQualifierDefaultOnPackage() {
+		EqualsVerifier.forClass(Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithMultipleTypeQualifierDefaultOnPackage() {
+		EqualsVerifier.forClass(Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnPackage() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
+		EqualsVerifier.forClass(Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnPackage.class)
+				.verify();
+	}
+
 	static class NonnullByAnnotation {
 		@Nonnull
 		private final Object o;
@@ -89,6 +148,78 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 			}
 			NonnullByAnnotationMissedOne other = (NonnullByAnnotationMissedOne)obj;
 			return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultCustomNonnull
+	static final class Jsr305DefaultCustomNonnullOnClass {
+		private final Object o;
+		
+		public Jsr305DefaultCustomNonnullOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Jsr305DefaultCustomNonnullOnClass)) {
+				return false;
+			}
+			Jsr305DefaultCustomNonnullOnClass other = (Jsr305DefaultCustomNonnullOnClass)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+
+	@DefaultNonnullSingle
+	static final class Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass {
+		private final Object o;
+		
+		public Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass)) {
+				return false;
+			}
+			Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass other = (Jsr305DefaultNonnullSingleTypeQualifierDefaultOnClass)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultNonnullMulti
+	static final class Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass {
+		private final Object o;
+		
+		public Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass)) {
+				return false;
+			}
+			Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass other = (Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnClass)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultNonnullInapplicable
+	static final class Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass {
+		private final Object o;
+		
+		public Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass)) {
+				return false;
+			}
+			Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass other = (Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnClass)obj;
+			return o.equals(other.o);
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
