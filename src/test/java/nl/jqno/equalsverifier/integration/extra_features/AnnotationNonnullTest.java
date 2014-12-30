@@ -35,6 +35,9 @@ import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+
+@SuppressWarnings("deprecation")
 public class AnnotationNonnullTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {
@@ -46,6 +49,18 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
 		expectFailureWithCause(NullPointerException.class, "Non-nullity", "equals throws NullPointerException", "on field noAnnotation");
 		EqualsVerifier.forClass(NonnullByAnnotationMissedOne.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithFindbugsNonnullAnnotationOnClass() {
+		EqualsVerifier.forClass(Findbugs1xDefaultAnnotationNonnullOnClass.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithCustomNonnullAnnotationOnClass() {
+		EqualsVerifier.forClass(Findbugs1xDefaultAnnotationCustomNonnullOnClass.class)
 				.verify();
 	}
 	
@@ -148,6 +163,42 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 			}
 			NonnullByAnnotationMissedOne other = (NonnullByAnnotationMissedOne)obj;
 			return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultAnnotation(Nonnull.class)
+	static final class Findbugs1xDefaultAnnotationNonnullOnClass {
+		private final Object o;
+		
+		public Findbugs1xDefaultAnnotationNonnullOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Findbugs1xDefaultAnnotationNonnullOnClass)) {
+				return false;
+			}
+			Findbugs1xDefaultAnnotationNonnullOnClass other = (Findbugs1xDefaultAnnotationNonnullOnClass)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultAnnotation(NotNull.class)
+	static final class Findbugs1xDefaultAnnotationCustomNonnullOnClass {
+		private final Object o;
+		
+		public Findbugs1xDefaultAnnotationCustomNonnullOnClass(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Findbugs1xDefaultAnnotationCustomNonnullOnClass)) {
+				return false;
+			}
+			Findbugs1xDefaultAnnotationCustomNonnullOnClass other = (Findbugs1xDefaultAnnotationCustomNonnullOnClass)obj;
+			return o.equals(other.o);
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
