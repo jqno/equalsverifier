@@ -13,7 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@DefaultNonnullMulti
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.multi;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullMulti;
+public class NonnullJsr305CustomOnPackage {
+	private final Object o;
+	
+	public NonnullJsr305CustomOnPackage(Object o) { this.o = o; }
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof NonnullJsr305CustomOnPackage)) {
+			return false;
+		}
+		NonnullJsr305CustomOnPackage other = (NonnullJsr305CustomOnPackage)obj;
+		return o.equals(other.o);
+	}
+	
+	@Override public int hashCode() { return o.hashCode(); }
+}

@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@DefaultNonnullInapplicable
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.inapplicable;
+@edu.umd.cs.findbugs.annotations.DefaultAnnotation(NonNull.class)
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs.custom;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullInapplicable;
+import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
+

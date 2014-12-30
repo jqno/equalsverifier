@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.findbugs_nonnull.custom_nonnull;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs.custom;
 
-public class Findbugs1xDefaultAnnotationCustomNonnullOnPackage {
+public class NonnullFindbugs1xCustomOnPackage {
 	private final Object o;
 	
-	public Findbugs1xDefaultAnnotationCustomNonnullOnPackage(Object o) { this.o = o; }
+	public NonnullFindbugs1xCustomOnPackage(Object o) { this.o = o; }
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Findbugs1xDefaultAnnotationCustomNonnullOnPackage)) {
+		if (!(obj instanceof NonnullFindbugs1xCustomOnPackage)) {
 			return false;
 		}
-		Findbugs1xDefaultAnnotationCustomNonnullOnPackage other = (Findbugs1xDefaultAnnotationCustomNonnullOnPackage)obj;
+		NonnullFindbugs1xCustomOnPackage other = (NonnullFindbugs1xCustomOnPackage)obj;
 		return o.equals(other.o);
 	}
 	

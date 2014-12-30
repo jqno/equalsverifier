@@ -13,18 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.annotations;
+@DefaultNonnullCustom
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-
-import javax.annotation.Nonnull;
-import javax.annotation.meta.TypeQualifierDefault;
-
-@Documented
-@Nonnull
-@TypeQualifierDefault({ ElementType.FIELD, ElementType.TYPE })
-@Retention(RetentionPolicy.CLASS)
-public @interface DefaultNonnullMulti {}
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullCustom;

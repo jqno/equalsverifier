@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.multi;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax;
 
-public class Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage {
+public class NonnullFindbugs1xJavaxOnPackage {
 	private final Object o;
 	
-	public Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage(Object o) { this.o = o; }
+	public NonnullFindbugs1xJavaxOnPackage(Object o) { this.o = o; }
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage)) {
+		if (!(obj instanceof NonnullFindbugs1xJavaxOnPackage)) {
 			return false;
 		}
-		Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage other = (Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage)obj;
+		NonnullFindbugs1xJavaxOnPackage other = (NonnullFindbugs1xJavaxOnPackage)obj;
 		return o.equals(other.o);
 	}
 	

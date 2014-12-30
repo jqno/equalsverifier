@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
-package nl.jqno.equalsverifier.integration.extra_features.findbugs_nonnull.findbugs;
+@DefaultNonnullInapplicable
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable;
 
-import javax.annotation.Nonnull;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullInapplicable;

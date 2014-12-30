@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@DefaultNonnullSingle
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.single;
+@DefaultNonnullJavax
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullSingle;
+import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;

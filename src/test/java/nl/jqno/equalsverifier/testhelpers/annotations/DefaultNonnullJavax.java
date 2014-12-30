@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.findbugs_nonnull.findbugs;
+package nl.jqno.equalsverifier.testhelpers.annotations;
 
-public class Findbugs1xDefaultAnnotationNonnullOnPackage {
-	private final Object o;
-	
-	public Findbugs1xDefaultAnnotationNonnullOnPackage(Object o) { this.o = o; }
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Findbugs1xDefaultAnnotationNonnullOnPackage)) {
-			return false;
-		}
-		Findbugs1xDefaultAnnotationNonnullOnPackage other = (Findbugs1xDefaultAnnotationNonnullOnPackage)obj;
-		return o.equals(other.o);
-	}
-	
-	@Override public int hashCode() { return o.hashCode(); }
-}
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.annotation.Nonnull;
+import javax.annotation.meta.TypeQualifierDefault;
+
+@Documented
+@Nonnull
+@TypeQualifierDefault({ ElementType.FIELD, ElementType.TYPE })
+@Retention(RetentionPolicy.CLASS)
+public @interface DefaultNonnullJavax {}

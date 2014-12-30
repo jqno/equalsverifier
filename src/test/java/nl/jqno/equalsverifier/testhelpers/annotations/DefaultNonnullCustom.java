@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.custom_nonnull;
+package nl.jqno.equalsverifier.testhelpers.annotations;
 
-public class Jsr305DefaultCustomNonnullOnPackage {
-	private final Object o;
-	
-	public Jsr305DefaultCustomNonnullOnPackage(Object o) { this.o = o; }
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Jsr305DefaultCustomNonnullOnPackage)) {
-			return false;
-		}
-		Jsr305DefaultCustomNonnullOnPackage other = (Jsr305DefaultCustomNonnullOnPackage)obj;
-		return o.equals(other.o);
-	}
-	
-	@Override public int hashCode() { return o.hashCode(); }
-}
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import javax.annotation.meta.TypeQualifierDefault;
+
+@Documented
+@NotNull
+@TypeQualifierDefault(ElementType.FIELD)
+@Retention(RetentionPolicy.CLASS)
+public @interface DefaultNonnullCustom {}

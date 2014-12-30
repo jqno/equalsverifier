@@ -13,19 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.single;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable;
 
-public class Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage {
+public class NonnullJsr305InapplicableOnPackage {
 	private final Object o;
 	
-	public Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage(Object o) { this.o = o; }
+	public NonnullJsr305InapplicableOnPackage(Object o) { this.o = o; }
 	
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage)) {
+		if (!(obj instanceof NonnullJsr305InapplicableOnPackage)) {
 			return false;
 		}
-		Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage other = (Jsr305DefaultNonnullSingleTypeQualifierDefaultOnPackage)obj;
+		NonnullJsr305InapplicableOnPackage other = (NonnullJsr305InapplicableOnPackage)obj;
 		return o.equals(other.o);
 	}
 	
