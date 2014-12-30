@@ -20,6 +20,8 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import javax.annotation.Nonnull;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.integration.extra_features.findbugs_nonnull.custom_nonnull.Findbugs1xDefaultAnnotationCustomNonnullOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.findbugs_nonnull.findbugs.Findbugs1xDefaultAnnotationNonnullOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.custom_nonnull.Jsr305DefaultCustomNonnullOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.inapplicable.Jsr305DefaultNonnullInapplicableTypeQualifierDefaultOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.jsr305_nonnull.multi.Jsr305DefaultNonnullMultipleTypeQualifierDefaultOnPackage;
@@ -61,6 +63,18 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	@Test@Ignore("Pending Issue 50")
 	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithCustomNonnullAnnotationOnClass() {
 		EqualsVerifier.forClass(Findbugs1xDefaultAnnotationCustomNonnullOnClass.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithFindbugsNonnullAnnotationOnPackage() {
+		EqualsVerifier.forClass(Findbugs1xDefaultAnnotationNonnullOnPackage.class)
+				.verify();
+	}
+	
+	@Test@Ignore("Pending Issue 50")
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithCustomNonnullAnnotationOnPackage() {
+		EqualsVerifier.forClass(Findbugs1xDefaultAnnotationCustomNonnullOnPackage.class)
 				.verify();
 	}
 	
