@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 @edu.umd.cs.findbugs.annotations.DefaultAnnotation(NonNull.class)
-package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs.custom;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom;
 
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 

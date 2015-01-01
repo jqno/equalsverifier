@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs.custom;
+package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom;
 
 public class NonnullFindbugs1xCustomOnPackage {
 	private final Object o;
