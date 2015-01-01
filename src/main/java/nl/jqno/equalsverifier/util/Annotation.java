@@ -52,5 +52,12 @@ public interface Annotation {
 	 */
 	public boolean inherits();
 	
+	/**
+	 * Validates the annotation based on its member values.
+	 * 
+	 * @param annotations A map containing of the member value's name to its
+	 * 			 elements, if it's an array value.
+	 * @return True if the annotation is valid and can be used as intended.
+	 */
 	public boolean validateAnnotations(Map<String, Set<String>> annotations);
 }

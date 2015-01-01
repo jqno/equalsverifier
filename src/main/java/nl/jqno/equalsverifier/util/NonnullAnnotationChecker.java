@@ -17,7 +17,19 @@ package nl.jqno.equalsverifier.util;
 
 import java.lang.reflect.Field;
 
+/**
+ * Utility class that checks whether a field is marked with an Nonnull
+ * annotation of some sort.
+ */
 public class NonnullAnnotationChecker {
+	/**
+	 * Checks whether the given field is marked with an Nonnull annotation,
+	 * whether directly, or through some default annotation mechanism.
+	 * 
+	 * @param classAccessor An accessor for the class that contains the field.
+	 * @param field The field to be checked.
+	 * @return True if the field is to be treated as Nonnull.
+	 */
 	public static boolean fieldIsNonnull(ClassAccessor<?> classAccessor, Field field) {
 		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
 			return true;

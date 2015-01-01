@@ -59,6 +59,15 @@ public enum SupportedAnnotations implements Annotation {
 	 */
 	TRANSIENT(true, "javax.persistence.Transient"),
 	
+	/**
+	 * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
+	 * {@link EqualsVerifier} will not complain about potential
+	 * {@link NullPointerException}s being thrown if any of the fields in that
+	 * class or package are null.
+	 * 
+	 * Note that @DefaultAnnotation is deprectated. Nevertheless, EqualsVerifier
+	 * still supports it.
+	 */
 	DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation") {
 		@Override
 		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
