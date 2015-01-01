@@ -31,6 +31,16 @@ import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnota
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
+
+import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
+import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
@@ -136,6 +146,19 @@ public class AnnotationAccessorTest {
 	}
 	
 	@Test
+	public void annotationsArrayParametersAreFoundOnClass() {
+		AnnotationWithClassValuesDescriptor annotation = new AnnotationWithClassValuesDescriptor();
+		AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { annotation }, AnnotationWithClassValuesContainer.class, false);
+		
+		boolean annotationPresent = accessor.typeHas(annotation);
+		
+		assertTrue(annotationPresent);
+		Set<String> annotations = annotation.annotations.get("annotations");
+		assertTrue(annotations.contains("Ljavax/annotation/Nonnull;"));
+		assertTrue(annotations.contains("Lnl/jqno/equalsverifier/testhelpers/annotations/NotNull;"));
+	}
+	
+	@Test
 	public void dynamicClassThrowsException() {
 		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
@@ -192,4 +215,27 @@ public class AnnotationAccessorTest {
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
 		return accessor.fieldHas(fieldName, annotation);
 	}
+	
+	private static class AnnotationWithClassValuesDescriptor implements Annotation {
+		private Map<String, Set<String>> annotations = new HashMap<String, Set<String>>();
+		
+		@Override
+		public Iterable<String> descriptors() {
+			return Arrays.asList(AnnotationWithClassValues.class.getSimpleName());
+		}
+		
+		@Override
+		public boolean inherits() {
+			return false;
+		}
+		
+		@Override
+		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
+			this.annotations = annotations;
+			return true;
+		}
+	}
+	
+	@AnnotationWithClassValues(annotations={ Nonnull.class, NotNull.class }, strings={ "x", "y" })
+	private static class AnnotationWithClassValuesContainer {}
 }

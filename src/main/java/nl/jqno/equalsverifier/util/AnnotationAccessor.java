@@ -157,7 +157,7 @@ class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			return new MyAnnotationVisitor(classAnnotations, descriptor, inheriting);
+			return new MyAnnotationVisitor(descriptor, classAnnotations, inheriting, true);
 		}
 		
 		@Override
@@ -180,22 +180,36 @@ class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			return new MyAnnotationVisitor(fieldAnnotations, descriptor, inheriting);
+			return new MyAnnotationVisitor(descriptor, fieldAnnotations, inheriting, false);
 		}
 	}
 	
 	private class MyAnnotationVisitor extends AnnotationVisitor {
-		private final Set<Annotation> annotations;
 		private final String annotationDescriptor;
+		private final Set<Annotation> annotations;
 		private final boolean inheriting;
+		private boolean inspectAnnotation;
 		
-		private final Set<String> nestedAnnotations = new HashSet<String>();
+		private final Map<String, Set<String>> containedAnnotations = new HashMap<String, Set<String>>();
 		
-		public MyAnnotationVisitor(Set<Annotation> annotations, String annotationDescriptor, boolean inheriting) {
+		public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting, boolean inspectAnnotation) {
 			super(Opcodes.ASM4);
-			this.annotations = annotations;
 			this.annotationDescriptor = annotationDescriptor;
+			this.annotations = annotations;
 			this.inheriting = inheriting;
+			this.inspectAnnotation = inspectAnnotation;
+		}
+		
+		@Override
+		public AnnotationVisitor visitArray(String name) {
+			System.out.println("yeah:" + name);
+			if (!inspectAnnotation) {
+				return null;
+			}
+			
+			Set<String> annotations = new HashSet<String>();
+			containedAnnotations.put(name, annotations);
+			return new AnnotationArrayValueVisitor(annotations);
 		}
 		
 		@Override
@@ -204,11 +218,29 @@ class AnnotationAccessor {
 				if (!inheriting || annotation.inherits()) {
 					for (String descriptor : annotation.descriptors()) {
 						String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
-						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validateAnnotations(nestedAnnotations)) {
+						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validateAnnotations(containedAnnotations)) {
 							annotations.add(annotation);
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	private class AnnotationArrayValueVisitor extends AnnotationVisitor {
+		private final Set<String> annotations;
+		
+		public AnnotationArrayValueVisitor(Set<String> annotations) {
+			super(Opcodes.ASM4);
+			this.annotations = annotations;
+		}
+		
+		@Override
+		public void visit(String name, Object value) {
+			if (value instanceof Type) {
+				Type type = (Type)value;
+				System.out.println(type.getDescriptor());
+				annotations.add(type.getDescriptor());
 			}
 		}
 	}

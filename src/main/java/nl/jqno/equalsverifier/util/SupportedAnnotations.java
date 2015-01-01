@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -57,6 +58,24 @@ public enum SupportedAnnotations implements Annotation {
 	 * transient modifier. {@link EqualsVerifier} will treat these the same.
 	 */
 	TRANSIENT(true, "javax.persistence.Transient"),
+	
+	DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation") {
+		@Override
+		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
+			Set<String> values = annotations.get("value");
+			if (values == null) {
+				return false;
+			}
+			for (String value : values) {
+				for (String descriptor : NONNULL.descriptors()) {
+					if (value.contains(descriptor)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	},
 	;
 	
 	private final boolean inherits;
@@ -78,7 +97,7 @@ public enum SupportedAnnotations implements Annotation {
 	}
 	
 	@Override
-	public boolean validateAnnotations(Set<String> names) {
+	public boolean validateAnnotations(Map<String, Set<String>> annotations) {
 		return true;
 	}
 }

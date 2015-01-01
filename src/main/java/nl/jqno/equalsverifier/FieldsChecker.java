@@ -30,6 +30,7 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
+import nl.jqno.equalsverifier.util.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 import nl.jqno.equalsverifier.util.SupportedAnnotations;
@@ -269,7 +270,7 @@ class FieldsChecker<T> implements Checker {
 			checkReflexivityFor(referenceAccessor, changedAccessor);
 			
 			boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
-			boolean fieldIsNonNull = classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.NONNULL);
+			boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField());
 			boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS);
 			if (fieldIsPrimitive || !ignoreNull) {
 				referenceAccessor.defaultField();

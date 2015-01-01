@@ -24,7 +24,7 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.SupportedAnnotations;
+import nl.jqno.equalsverifier.util.NonnullAnnotationChecker;
 
 class NullChecker<T> implements Checker {
 	private ClassAccessor<T> classAccessor;
@@ -52,7 +52,7 @@ class NullChecker<T> implements Checker {
 			if (field.getType().isPrimitive()) {
 				return;
 			}
-			if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
+			if (NonnullAnnotationChecker.fieldIsNonnull(classAccessor, field)) {
 				return;
 			}
 			final Object reference = referenceAccessor.getObject();

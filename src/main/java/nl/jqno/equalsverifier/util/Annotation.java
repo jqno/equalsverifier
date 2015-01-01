@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -51,5 +52,5 @@ public interface Annotation {
 	 */
 	public boolean inherits();
 	
-	public boolean validateAnnotations(Set<String> names);
+	public boolean validateAnnotations(Map<String, Set<String>> annotations);
 }

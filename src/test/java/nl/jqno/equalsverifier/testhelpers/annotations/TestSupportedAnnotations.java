@@ -16,6 +16,7 @@ package nl.jqno.equalsverifier.testhelpers.annotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.util.Annotation;
@@ -39,7 +40,7 @@ public enum TestSupportedAnnotations implements Annotation {
 	
 	INAPPLICABLE(false, "Inapplicable") {
 		@Override
-		public boolean validateAnnotations(Set<String> names) {
+		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
 			return false;
 		}
 	},
@@ -64,7 +65,7 @@ public enum TestSupportedAnnotations implements Annotation {
 	}
 	
 	@Override
-	public boolean validateAnnotations(Set<String> names) {
+	public boolean validateAnnotations(Map<String, Set<String>> annotations) {
 		return true;
 	}
 }
