@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Because there's no standard Nonnull/NonNull/NotNull annotation, we define our
+ * own so that EqualsVerifier can work with any non-null annotation.
+ */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
 public @interface NonNull {}
