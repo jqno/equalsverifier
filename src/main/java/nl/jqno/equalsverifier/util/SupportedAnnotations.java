@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.util;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -74,5 +75,10 @@ public enum SupportedAnnotations implements Annotation {
 	@Override
 	public boolean inherits() {
 		return inherits;
+	}
+	
+	@Override
+	public boolean validateAnnotations(Set<String> names) {
+		return true;
 	}
 }

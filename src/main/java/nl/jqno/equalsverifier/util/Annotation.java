@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.util;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
+import java.util.Set;
 
 /**
  * Describes an annotation that can be recognised by EqualsVerifier.
@@ -49,4 +50,6 @@ public interface Annotation {
 	 * 			in which the annotation appears.
 	 */
 	public boolean inherits();
+	
+	public boolean validateAnnotations(Set<String> names);
 }

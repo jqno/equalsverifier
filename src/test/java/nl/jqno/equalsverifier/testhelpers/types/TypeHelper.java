@@ -54,6 +54,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetent
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationDoesntInherit;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationInherits;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
+import nl.jqno.equalsverifier.testhelpers.annotations.Inapplicable;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationDoesntInherit;
 import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationInherits;
@@ -363,6 +364,12 @@ public class TypeHelper {
 	}
 	
 	public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}
+	
+	@Inapplicable
+	public static class InapplicableAnnotations {
+		@Inapplicable
+		public int inapplicable;
+	}
 
 	public static abstract class AbstractEqualsAndHashCode {
 		@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2013 Jan Ouwens
+ * Copyright 2011, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnota
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.INAPPLICABLE;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_CLASS_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_DOESNT_INHERIT;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_INHERITS;
@@ -36,6 +37,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithBoth;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithClass;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InapplicableAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
@@ -128,13 +130,19 @@ public class AnnotationAccessorTest {
 	}
 	
 	@Test
+	public void inapplicableAnnotationsAreNotFound() {
+		assertTypeDoesNotHaveAnnotation(InapplicableAnnotations.class, INAPPLICABLE);
+		assertFieldDoesNotHaveAnnotation(InapplicableAnnotations.class, "inapplicable", INAPPLICABLE);
+	}
+	
+	@Test
 	public void dynamicClassThrowsException() {
 		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
-
+		
 		thrown.expect(ReflectionException.class);
 		thrown.expectMessage(containsString("Cannot read class file"));
-
+		
 		accessor.typeHas(TYPE_CLASS_RETENTION);
 	}
 	

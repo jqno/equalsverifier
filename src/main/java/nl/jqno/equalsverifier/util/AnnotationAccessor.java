@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Jan Ouwens
+ * Copyright 2011, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import java.util.Set;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
@@ -139,7 +138,7 @@ class AnnotationAccessor {
 			}
 		}
 	}
-
+	
 	private ClassLoader getClassLoaderFor(Class<?> type) {
 		ClassLoader result = type.getClassLoader();
 		if (result == null) {
@@ -147,10 +146,10 @@ class AnnotationAccessor {
 		}
 		return result;
 	}
-
+	
 	private class Visitor extends ClassVisitor {
 		private final boolean inheriting;
-
+		
 		public Visitor(boolean inheriting) {
 			super(Opcodes.ASM4);
 			this.inheriting = inheriting;
@@ -158,8 +157,7 @@ class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			add(classAnnotations, descriptor, inheriting);
-			return null;
+			return new MyAnnotationVisitor(classAnnotations, descriptor, inheriting);
 		}
 		
 		@Override
@@ -170,40 +168,45 @@ class AnnotationAccessor {
 		}
 	}
 	
-	public class MyFieldVisitor extends FieldVisitor {
+	private class MyFieldVisitor extends FieldVisitor {
 		private final Set<Annotation> fieldAnnotations;
 		private final boolean inheriting;
 		
 		public MyFieldVisitor(Set<Annotation> fieldAnnotations, boolean inheriting) {
-		  super(Opcodes.ASM4);
+			super(Opcodes.ASM4);
 			this.fieldAnnotations = fieldAnnotations;
 			this.inheriting = inheriting;
 		}
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			add(fieldAnnotations, descriptor, inheriting);
-			return null;
-		}
-
-		@Override
-		public void visitAttribute(Attribute attr) {
-			// Deliberately empty
-		}
-
-		@Override
-		public void visitEnd() {
-			// Deliberately empty
+			return new MyAnnotationVisitor(fieldAnnotations, descriptor, inheriting);
 		}
 	}
-
-	private void add(Set<Annotation> annotations, String annotationDescriptor, boolean inheriting) {
-		for (Annotation annotation : supportedAnnotations) {
-			if (!inheriting || annotation.inherits()) {
-				for (String descriptor : annotation.descriptors()) {
-					String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
-					if (annotationDescriptor.contains(asBytecodeIdentifier)) {
-						annotations.add(annotation);
+	
+	private class MyAnnotationVisitor extends AnnotationVisitor {
+		private final Set<Annotation> annotations;
+		private final String annotationDescriptor;
+		private final boolean inheriting;
+		
+		private final Set<String> nestedAnnotations = new HashSet<String>();
+		
+		public MyAnnotationVisitor(Set<Annotation> annotations, String annotationDescriptor, boolean inheriting) {
+			super(Opcodes.ASM4);
+			this.annotations = annotations;
+			this.annotationDescriptor = annotationDescriptor;
+			this.inheriting = inheriting;
+		}
+		
+		@Override
+		public void visitEnd() {
+			for (Annotation annotation : supportedAnnotations) {
+				if (!inheriting || annotation.inherits()) {
+					for (String descriptor : annotation.descriptors()) {
+						String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
+						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validateAnnotations(nestedAnnotations)) {
+							annotations.add(annotation);
+						}
 					}
 				}
 			}
