@@ -33,8 +33,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.matchers.JUnitMatchers.containsString;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
@@ -51,11 +50,13 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InapplicableAnnotatio
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
 import nl.jqno.equalsverifier.util.annotations.Annotation;
+import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.objectweb.asm.Type;
 
 public class AnnotationAccessorTest {
 	private static final String RUNTIME_RETENTION = "runtimeRetention";
@@ -154,9 +155,18 @@ public class AnnotationAccessorTest {
 		boolean annotationPresent = accessor.typeHas(annotation);
 		
 		assertTrue(annotationPresent);
-		Set<String> annotations = annotation.annotations.get("annotations");
+		Set<String> annotations = mapGetDescriptor(annotation);
 		assertTrue(annotations.contains("Ljavax/annotation/Nonnull;"));
 		assertTrue(annotations.contains("Lnl/jqno/equalsverifier/testhelpers/annotations/NotNull;"));
+	}
+
+	private Set<String> mapGetDescriptor(AnnotationWithClassValuesDescriptor annotation) {
+		Set<String> result = new HashSet<String>();
+		for (Object o : annotation.properties.getArrayValues("annotations")) {
+			Type type = (Type)o;
+			result.add(type.getDescriptor());
+		}
+		return result;
 	}
 	
 	@Test
@@ -218,7 +228,7 @@ public class AnnotationAccessorTest {
 	}
 	
 	private static class AnnotationWithClassValuesDescriptor implements Annotation {
-		private Map<String, Set<String>> annotations = new HashMap<String, Set<String>>();
+		private AnnotationProperties properties;
 		
 		@Override
 		public Iterable<String> descriptors() {
@@ -231,8 +241,8 @@ public class AnnotationAccessorTest {
 		}
 		
 		@Override
-		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
-			this.annotations = annotations;
+		public boolean validate(AnnotationProperties descriptor) {
+			this.properties = descriptor;
 			return true;
 		}
 	}

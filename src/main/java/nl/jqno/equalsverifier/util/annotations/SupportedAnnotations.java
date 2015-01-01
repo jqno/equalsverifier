@@ -17,8 +17,9 @@ package nl.jqno.equalsverifier.util.annotations;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+
+import org.objectweb.asm.Type;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 
@@ -70,14 +71,15 @@ public enum SupportedAnnotations implements Annotation {
 	 */
 	DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation") {
 		@Override
-		public boolean validateAnnotations(Map<String, Set<String>> annotations) {
-			Set<String> values = annotations.get("value");
+		public boolean validate(AnnotationProperties properties) {
+			Set<Object> values = properties.getArrayValues("value");
 			if (values == null) {
 				return false;
 			}
-			for (String value : values) {
+			for (Object value : values) {
 				for (String descriptor : NONNULL.descriptors()) {
-					if (value.contains(descriptor)) {
+					Type type = (Type)value;
+					if (type.getDescriptor().contains(descriptor)) {
 						return true;
 					}
 				}
@@ -106,7 +108,7 @@ public enum SupportedAnnotations implements Annotation {
 	}
 	
 	@Override
-	public boolean validateAnnotations(Map<String, Set<String>> annotations) {
+	public boolean validate(AnnotationProperties properties) {
 		return true;
 	}
 }

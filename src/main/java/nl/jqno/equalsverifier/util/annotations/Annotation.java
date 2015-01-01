@@ -17,8 +17,6 @@ package nl.jqno.equalsverifier.util.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.RetentionPolicy;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Describes an annotation that can be recognised by EqualsVerifier.
@@ -53,11 +51,10 @@ public interface Annotation {
 	public boolean inherits();
 	
 	/**
-	 * Validates the annotation based on its member values.
+	 * Validates the annotation based on its properties.
 	 * 
-	 * @param annotations A map containing of the member value's name to its
-	 * 			 elements, if it's an array value.
+	 * @param properties An object that contains information about the annotation.
 	 * @return True if the annotation is valid and can be used as intended.
 	 */
-	public boolean validateAnnotations(Map<String, Set<String>> annotations);
+	public boolean validate(AnnotationProperties properties);
 }

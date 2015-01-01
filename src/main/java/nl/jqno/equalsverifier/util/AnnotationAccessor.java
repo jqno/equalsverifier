@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.util.annotations.Annotation;
+import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -189,9 +190,9 @@ class AnnotationAccessor {
 		private final String annotationDescriptor;
 		private final Set<Annotation> annotations;
 		private final boolean inheriting;
-		private boolean inspectAnnotation;
+		private final boolean inspectAnnotation;
 		
-		private final Map<String, Set<String>> containedAnnotations = new HashMap<String, Set<String>>();
+		private final AnnotationProperties properties;
 		
 		public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting, boolean inspectAnnotation) {
 			super(Opcodes.ASM4);
@@ -199,17 +200,17 @@ class AnnotationAccessor {
 			this.annotations = annotations;
 			this.inheriting = inheriting;
 			this.inspectAnnotation = inspectAnnotation;
+			properties = new AnnotationProperties(annotationDescriptor);
 		}
 		
 		@Override
 		public AnnotationVisitor visitArray(String name) {
-			System.out.println("yeah:" + name);
 			if (!inspectAnnotation) {
 				return null;
 			}
 			
-			Set<String> annotations = new HashSet<String>();
-			containedAnnotations.put(name, annotations);
+			Set<Object> annotations = new HashSet<Object>();
+			properties.putArrayValues(name, annotations);
 			return new AnnotationArrayValueVisitor(annotations);
 		}
 		
@@ -219,7 +220,7 @@ class AnnotationAccessor {
 				if (!inheriting || annotation.inherits()) {
 					for (String descriptor : annotation.descriptors()) {
 						String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
-						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validateAnnotations(containedAnnotations)) {
+						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validate(properties)) {
 							annotations.add(annotation);
 						}
 					}
@@ -229,20 +230,16 @@ class AnnotationAccessor {
 	}
 	
 	private class AnnotationArrayValueVisitor extends AnnotationVisitor {
-		private final Set<String> annotations;
+		private final Set<Object> annotations;
 		
-		public AnnotationArrayValueVisitor(Set<String> annotations) {
+		public AnnotationArrayValueVisitor(Set<Object> annotations) {
 			super(Opcodes.ASM4);
 			this.annotations = annotations;
 		}
 		
 		@Override
 		public void visit(String name, Object value) {
-			if (value instanceof Type) {
-				Type type = (Type)value;
-				System.out.println(type.getDescriptor());
-				annotations.add(type.getDescriptor());
-			}
+			annotations.add(value);
 		}
 	}
 }
