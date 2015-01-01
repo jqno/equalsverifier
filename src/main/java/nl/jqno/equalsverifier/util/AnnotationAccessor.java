@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nl.jqno.equalsverifier.util.annotations.Annotation;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.objectweb.asm.AnnotationVisitor;

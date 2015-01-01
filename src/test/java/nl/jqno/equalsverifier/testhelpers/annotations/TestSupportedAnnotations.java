@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.util.Annotation;
+import nl.jqno.equalsverifier.util.annotations.Annotation;
 
 public enum TestSupportedAnnotations implements Annotation {
 	TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention;"),

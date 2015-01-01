@@ -50,6 +50,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InapplicableAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
+import nl.jqno.equalsverifier.util.annotations.Annotation;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Rule;

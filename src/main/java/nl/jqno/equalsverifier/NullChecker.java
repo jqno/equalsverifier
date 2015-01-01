@@ -24,7 +24,7 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 
 class NullChecker<T> implements Checker {
 	private ClassAccessor<T> classAccessor;

@@ -30,10 +30,10 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
-import nl.jqno.equalsverifier.util.SupportedAnnotations;
+import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.util.annotations.SupportedAnnotations;
 
 class FieldsChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
