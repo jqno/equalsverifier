@@ -19,9 +19,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import org.objectweb.asm.Type;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
+
+import org.objectweb.asm.Type;
 
 /**
  * Descriptions of the annotations that {@link EqualsVerifier} supports.
@@ -69,7 +69,7 @@ public enum SupportedAnnotations implements Annotation {
 	 * Note that @DefaultAnnotation is deprectated. Nevertheless, EqualsVerifier
 	 * still supports it.
 	 */
-	DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation") {
+	FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation") {
 		@Override
 		public boolean validate(AnnotationProperties properties) {
 			Set<Object> values = properties.getArrayValues("value");
@@ -85,6 +85,33 @@ public enum SupportedAnnotations implements Annotation {
 				}
 			}
 			return false;
+		}
+	},
+	
+	JSR305_DEFAULT_ANNOTATION_NONNULL(false, "") {
+		@Override
+		public boolean validate(AnnotationProperties properties) {
+			try {
+				Type t = Type.getType(properties.getDescriptor());
+				Class<?> type = Class.forName(t.getClassName());
+				AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, type, false);
+				boolean hasNonnullAnnotation = accessor.typeHas(NONNULL);
+				boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
+				return hasNonnullAnnotation && hasValidTypeQualifierDefault;
+			}
+			catch (ClassNotFoundException ignored) {
+				return false;
+			}
+			catch (UnsupportedClassVersionError ignored) {
+				return false;
+			}
+		}
+	},
+	
+	JSR305_TYPE_QUALIFIER_DEFAULT(false, "javax.annotation.meta.TypeQualifierDefault") {
+		@Override
+		public boolean validate(AnnotationProperties properties) {
+			return properties.getArrayValues("value").contains("FIELD");
 		}
 	},
 	;

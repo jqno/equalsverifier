@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.util.annotations;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_CLASS_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_DOESNT_INHERIT;
@@ -49,8 +49,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InapplicableAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
-import nl.jqno.equalsverifier.util.annotations.Annotation;
-import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
+import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Rule;

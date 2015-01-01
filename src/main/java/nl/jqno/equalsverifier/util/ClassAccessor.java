@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.util.annotations.Annotation;
+import nl.jqno.equalsverifier.util.annotations.AnnotationAccessor;
 import nl.jqno.equalsverifier.util.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 

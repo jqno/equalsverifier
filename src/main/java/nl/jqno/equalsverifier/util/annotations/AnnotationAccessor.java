@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.util;
+package nl.jqno.equalsverifier.util.annotations;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,8 +22,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.util.annotations.Annotation;
-import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.objectweb.asm.AnnotationVisitor;
@@ -39,7 +37,7 @@ import org.objectweb.asm.Type;
  * 
  * @author Jan Ouwens
  */
-class AnnotationAccessor {
+public class AnnotationAccessor {
 	private final Annotation[] supportedAnnotations;
 	private final Class<?> type;
 	private final boolean ignoreFailure;
@@ -230,16 +228,21 @@ class AnnotationAccessor {
 	}
 	
 	private class AnnotationArrayValueVisitor extends AnnotationVisitor {
-		private final Set<Object> annotations;
+		private final Set<Object> objects;
 		
 		public AnnotationArrayValueVisitor(Set<Object> annotations) {
 			super(Opcodes.ASM4);
-			this.annotations = annotations;
+			this.objects = annotations;
 		}
 		
 		@Override
 		public void visit(String name, Object value) {
-			annotations.add(value);
+			objects.add(value);
+		}
+		
+		@Override
+		public void visitEnum(String name, String desc, String value) {
+			objects.add(value);
 		}
 	}
 }

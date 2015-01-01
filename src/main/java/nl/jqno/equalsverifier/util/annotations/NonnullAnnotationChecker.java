@@ -36,7 +36,10 @@ public class NonnullAnnotationChecker {
 		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
 			return true;
 		}
-		if (classAccessor.hasAnnotation(SupportedAnnotations.DEFAULT_ANNOTATION_NONNULL)) {
+		if (classAccessor.hasAnnotation(SupportedAnnotations.FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
+			return true;
+		}
+		if (classAccessor.hasAnnotation(SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL)) {
 			return true;
 		}
 		return false;

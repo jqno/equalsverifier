@@ -82,13 +82,13 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithJavaxNonnullAnnotationOnClass() {
 		EqualsVerifier.forClass(NonnullJsr305JavaxOnClass.class)
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithCustomNonnullAnnotationOnClass() {
 		EqualsVerifier.forClass(NonnullJsr305CustomOnClass.class)
 				.verify();
