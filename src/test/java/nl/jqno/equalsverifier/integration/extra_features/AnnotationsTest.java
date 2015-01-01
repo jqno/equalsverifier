@@ -130,7 +130,6 @@ public class AnnotationsTest extends IntegrationTestBase {
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
-
 	
 	@javax.persistence.Entity
 	static class EntityByJpaAnnotation {
