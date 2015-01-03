@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 Jan Ouwens
+ * Copyright 2010-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ public class ClassAccessor<T> {
 	private final Class<T> type;
 	private final Instantiator<T> instantiator;
 	private final PrefabValues prefabValues;
+	private final Annotation[] supportedAnnotations;
 	private final boolean ignoreAnnotationFailure;
 	private final AnnotationAccessor annotationAccessor;
 
@@ -61,6 +62,7 @@ public class ClassAccessor<T> {
 		this.type = type;
 		this.instantiator = Instantiator.of(type);
 		this.prefabValues = prefabValues;
+		this.supportedAnnotations = supportedAnnotations;
 		this.ignoreAnnotationFailure = ignoreAnnotationFailure;
 		this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
 	}
@@ -100,7 +102,25 @@ public class ClassAccessor<T> {
 	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
 		return annotationAccessor.fieldHas(field.getName(), annotation);
 	}
-
+	
+	/**
+	 * Determines whether the package in which T resides has a particular annotation.
+	 * 
+	 * @param annotation The annotation we want to find.
+	 * @return True if the package in which T resides has the specified annotation.
+	 */
+	public boolean packageHasAnnotation(Annotation annotation) {
+		try {
+			String className = type.getPackage().getName() + ".package-info";
+			Class<?> packageType = Class.forName(className);
+			AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoreAnnotationFailure);
+			return accessor.typeHas(annotation);
+		}
+		catch (ClassNotFoundException e) {
+			return false;
+		}
+	}
+	
 	/**
 	 * Determines whether T declares a field.  This does not include inherited fields.
 	 *
@@ -115,7 +135,7 @@ public class ClassAccessor<T> {
 			return false;
 		}
 	}
-
+	
 	/**
 	 * Determines whether T has an {@code equals} method.
 	 * 

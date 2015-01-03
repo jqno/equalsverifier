@@ -37,6 +37,7 @@ public enum TestSupportedAnnotations implements Annotation {
 	FIELD_INHERITS(true, "FieldAnnotationInherits"),
 	FIELD_DOESNT_INHERIT(false, "FieldAnnotationDoesntInherit"),
 	
+	PACKAGE_ANNOTATION(false, "PackageAnnotation"),
 	INAPPLICABLE(false, "Inapplicable") {
 		@Override
 		public boolean validate(AnnotationProperties properties) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 Jan Ouwens
+ * Copyright 2010-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@ package nl.jqno.equalsverifier.util;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_CLASS_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.INAPPLICABLE;
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.PACKAGE_ANNOTATION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_CLASS_RETENTION;
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION;
 import static org.junit.Assert.assertEquals;
@@ -45,6 +47,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFieldsSubWithFields;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.RecursiveApiClassesContainer;
+import nl.jqno.equalsverifier.util.packageannotation.AnnotatedPackage;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -85,6 +88,19 @@ public class ClassAccessorTest {
 		Field field = AnnotatedFields.class.getField("runtimeRetention");
 		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
 		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
+	}
+	
+	@Test
+	public void packageHasAnnotation() {
+		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedPackage>(AnnotatedPackage.class, prefabValues, TestSupportedAnnotations.values(), false);
+		assertTrue(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+		assertFalse(accessor.packageHasAnnotation(INAPPLICABLE));
+	}
+	
+	@Test
+	public void packageInfoDoesNotExist() {
+		ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
+		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
 	}
 	
 	@Test

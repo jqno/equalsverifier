@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom;
 
-public class NonnullFindbugs1xCustomOnPackage {
+public final class NonnullFindbugs1xCustomOnPackage {
 	private final Object o;
 	
 	public NonnullFindbugs1xCustomOnPackage(Object o) { this.o = o; }

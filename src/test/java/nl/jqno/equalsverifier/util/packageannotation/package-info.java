@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,21 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax;
+@PackageAnnotation
+package nl.jqno.equalsverifier.util.packageannotation;
 
-public final class NonnullFindbugs1xJavaxOnPackage {
-	private final Object o;
-	
-	public NonnullFindbugs1xJavaxOnPackage(Object o) { this.o = o; }
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof NonnullFindbugs1xJavaxOnPackage)) {
-			return false;
-		}
-		NonnullFindbugs1xJavaxOnPackage other = (NonnullFindbugs1xJavaxOnPackage)obj;
-		return o.equals(other.o);
-	}
-	
-	@Override public int hashCode() { return o.hashCode(); }
-}
+import nl.jqno.equalsverifier.testhelpers.annotations.PackageAnnotation;

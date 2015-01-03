@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
@@ -70,13 +69,13 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithJavaxNonnullAnnotationOnPackage() {
 		EqualsVerifier.forClass(NonnullFindbugs1xJavaxOnPackage.class)
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithCustomNonnullAnnotationOnPackage() {
 		EqualsVerifier.forClass(NonnullFindbugs1xCustomOnPackage.class)
 				.verify();
@@ -101,13 +100,13 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithJavaxNonnullAnnotationOnPackage() {
 		EqualsVerifier.forClass(NonnullJsr305JavaxOnPackage.class)
 				.verify();
 	}
 	
-	@Test@Ignore("Pending Issue 50")
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithCustomNonnullAnnotationOnPackage() {
 		EqualsVerifier.forClass(NonnullJsr305CustomOnPackage.class)
 				.verify();

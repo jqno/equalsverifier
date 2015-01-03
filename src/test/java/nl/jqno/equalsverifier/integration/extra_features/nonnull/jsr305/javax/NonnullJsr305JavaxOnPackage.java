@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax;
 
-public class NonnullJsr305JavaxOnPackage {
+public final class NonnullJsr305JavaxOnPackage {
 	private final Object o;
 	
 	public NonnullJsr305JavaxOnPackage(Object o) { this.o = o; }

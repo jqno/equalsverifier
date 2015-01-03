@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier.util.annotations;
 
+import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL;
+import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL;
+
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
@@ -36,10 +39,10 @@ public class NonnullAnnotationChecker {
 		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
 			return true;
 		}
-		if (classAccessor.hasAnnotation(SupportedAnnotations.FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
+		if (classAccessor.hasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) || classAccessor.packageHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
 			return true;
 		}
-		if (classAccessor.hasAnnotation(SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL)) {
+		if (classAccessor.hasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) || classAccessor.packageHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL)) {
 			return true;
 		}
 		return false;

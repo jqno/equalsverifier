@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom;
 
-public class NonnullJsr305CustomOnPackage {
+public final class NonnullJsr305CustomOnPackage {
 	private final Object o;
 	
 	public NonnullJsr305CustomOnPackage(Object o) { this.o = o; }

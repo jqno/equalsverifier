@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable;
 
-public class NonnullJsr305InapplicableOnPackage {
+public final class NonnullJsr305InapplicableOnPackage {
 	private final Object o;
 	
 	public NonnullJsr305InapplicableOnPackage(Object o) { this.o = o; }

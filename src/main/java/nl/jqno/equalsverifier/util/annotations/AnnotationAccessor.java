@@ -98,7 +98,7 @@ public class AnnotationAccessor {
 		}
 		return annotations.contains(annotation);
 	}
-
+	
 	private void process() {
 		if (processed) {
 			return;
