@@ -27,10 +27,13 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.StaticFieldValueStash;
+import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
@@ -50,12 +53,17 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.RecursiveApiClassesCo
 import nl.jqno.equalsverifier.util.packageannotation.AnnotatedPackage;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 public class ClassAccessorTest {
 	private PrefabValues prefabValues;
 	private ClassAccessor<PointContainer> pointContainerAccessor;
 	private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
+	
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 	
 	@Before
 	public void setup() {
@@ -101,6 +109,23 @@ public class ClassAccessorTest {
 	public void packageInfoDoesNotExist() {
 		ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
 		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+	}
+	
+	@Test
+	public void classInDefaultPackageDoesntThrowNPE() throws IOException {
+		File tempFileLocation = tempFolder.newFolder();
+		ConditionalCompiler compiler = null;
+		try {
+			compiler = new ConditionalCompiler(tempFileLocation);
+			Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
+			ClassAccessor<?> accessor = ClassAccessor.of(defaultPackage, prefabValues, false);
+			accessor.packageHasAnnotation(PACKAGE_ANNOTATION);
+		}
+		finally {
+			if (compiler != null) {
+				compiler.close();
+			}
+		}
 	}
 	
 	@Test
@@ -264,4 +289,28 @@ public class ClassAccessorTest {
 		String s;
 		@NonNull String t;
 	}
+	
+	// Generated at runtime, so we don't actually have to put a class in the default package.
+	private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
+	private static final String DEFAULT_PACKAGE =
+			"\npublic final class DefaultPackage {" +
+			"\n    private final int i;" +
+			"\n    " +
+			"\n    public DefaultPackage(int i) {" +
+			"\n        this.i = i;" +
+			"\n    }" +
+			"\n    " +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof DefaultPackage)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        return i == ((DefaultPackage)obj).i;" +
+			"\n    }" +
+			"\n    " +
+			"\n    @Override" +
+			"\n    public int hashCode() {" +
+			"\n        return i;" +
+			"\n    }" +
+			"\n}";
 }

@@ -111,7 +111,12 @@ public class ClassAccessor<T> {
 	 */
 	public boolean packageHasAnnotation(Annotation annotation) {
 		try {
-			String className = type.getPackage().getName() + ".package-info";
+			Package pkg = type.getPackage();
+			if (pkg == null) {
+				return false;
+			}
+			
+			String className = pkg.getName() + ".package-info";
 			Class<?> packageType = Class.forName(className);
 			AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoreAnnotationFailure);
 			return accessor.typeHas(annotation);
