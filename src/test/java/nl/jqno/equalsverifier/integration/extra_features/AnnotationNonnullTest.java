@@ -35,6 +35,8 @@ import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import org.junit.Test;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields;
+import edu.umd.cs.findbugs.annotations.DefaultAnnotationForParameters;
 
 @SuppressWarnings("deprecation")
 public class AnnotationNonnullTest extends IntegrationTestBase {
@@ -78,6 +80,19 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithCustomNonnullAnnotationOnPackage() {
 		EqualsVerifier.forClass(NonnullFindbugs1xCustomOnPackage.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForFields() {
+		EqualsVerifier.forClass(NonnullFindbugs1xForFields.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForParameters() {
+		expectFailure("Non-nullity");
+		EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class)
 				.verify();
 	}
 	
@@ -197,6 +212,42 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 				return false;
 			}
 			NonnullFindbugs1xCustomOnClass other = (NonnullFindbugs1xCustomOnClass)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultAnnotationForFields(NotNull.class)
+	static final class NonnullFindbugs1xForFields {
+		private final Object o;
+		
+		public NonnullFindbugs1xForFields(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullFindbugs1xForFields)) {
+				return false;
+			}
+			NonnullFindbugs1xForFields other = (NonnullFindbugs1xForFields)obj;
+			return o.equals(other.o);
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultAnnotationForParameters(NotNull.class)
+	static final class NonnullFindbugs1xForParameters {
+		private final Object o;
+		
+		public NonnullFindbugs1xForParameters(Object o) { this.o = o; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullFindbugs1xForParameters)) {
+				return false;
+			}
+			NonnullFindbugs1xForParameters other = (NonnullFindbugs1xForParameters)obj;
 			return o.equals(other.o);
 		}
 		

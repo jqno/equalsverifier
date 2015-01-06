@@ -217,8 +217,8 @@ public class AnnotationAccessor {
 			for (Annotation annotation : supportedAnnotations) {
 				if (!inheriting || annotation.inherits()) {
 					for (String descriptor : annotation.descriptors()) {
-						String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/");
-						if (annotationDescriptor.contains(asBytecodeIdentifier) && annotation.validate(properties)) {
+						String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
+						if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties)) {
 							annotations.add(annotation);
 						}
 					}
