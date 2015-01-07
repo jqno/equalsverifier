@@ -114,6 +114,8 @@ public enum SupportedAnnotations implements Annotation {
 			return properties.getArrayValues("value").contains("FIELD");
 		}
 	},
+	
+	NULLABLE(false, "Nullable", "CheckForNull"),
 	;
 	
 	private final boolean inherits;

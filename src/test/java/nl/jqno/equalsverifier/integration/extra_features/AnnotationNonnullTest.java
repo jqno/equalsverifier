@@ -17,14 +17,20 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xCustomOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xWithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax.NonnullFindbugs1xJavaxOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax.NonnullFindbugs1xWithNullableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom.NonnullJsr305CustomOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom.NonnullJsr305WithNullableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable.NonnullJsr305InapplicableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305JavaxOnPackage;
+import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullCustom;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullInapplicable;
@@ -91,8 +97,36 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForParameters() {
-		expectFailure("Non-nullity");
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
 		EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnClass() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnClass() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnPackage() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnPackage.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnPackage() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class)
 				.verify();
 	}
 	
@@ -133,7 +167,35 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		EqualsVerifier.forClass(NonnullJsr305InapplicableOnPackage.class)
 				.verify();
 	}
-
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClass() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnPackage() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnPackage() {
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
+		EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnPackage.class)
+				.verify();
+	}
+	
 	static class NonnullManual {
 		@Nonnull
 		private final Object o;
@@ -254,6 +316,48 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	
+	@DefaultAnnotation(Nonnull.class)
+	static final class NonnullFindbugs1xWithNullableOnClass {
+		private final Object o;
+		@Nullable
+		private final Object p;
+		
+		public NonnullFindbugs1xWithNullableOnClass(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullFindbugs1xWithNullableOnClass)) {
+				return false;
+			}
+			NonnullFindbugs1xWithNullableOnClass other = (NonnullFindbugs1xWithNullableOnClass)obj;
+			return o.equals(other.o) && p.equals(other.p);
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultAnnotation(Nonnull.class)
+	static final class NonnullFindbugs1xWithCheckForNullOnClass {
+		private final Object o;
+		@CheckForNull
+		private final Object p;
+		
+		public NonnullFindbugs1xWithCheckForNullOnClass(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullFindbugs1xWithCheckForNullOnClass)) {
+				return false;
+			}
+			NonnullFindbugs1xWithCheckForNullOnClass other = (NonnullFindbugs1xWithCheckForNullOnClass)obj;
+			return o.equals(other.o) && p.equals(other.p);
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
+	
 	@DefaultNonnullJavax
 	static final class NonnullJsr305JavaxOnClass {
 		private final Object o;
@@ -307,4 +411,47 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
 	}
+	
+	@DefaultNonnullJavax
+	static final class NonnullJsr305WithNullableOnClass {
+		private final Object o;
+		@Nullable
+		private final Object p;
+		
+		public NonnullJsr305WithNullableOnClass(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullJsr305WithNullableOnClass)) {
+				return false;
+			}
+			NonnullJsr305WithNullableOnClass other = (NonnullJsr305WithNullableOnClass)obj;
+			return o.equals(other.o) && p.equals(other.p);
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultNonnullJavax
+	static final class NonnullJsr305WithCheckForNullOnClass {
+		private final Object o;
+		@CheckForNull
+		private final Object p;
+		
+		public NonnullJsr305WithCheckForNullOnClass(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullJsr305WithCheckForNullOnClass)) {
+				return false;
+			}
+			NonnullJsr305WithCheckForNullOnClass other = (NonnullJsr305WithCheckForNullOnClass)obj;
+			return o.equals(other.o) && p.equals(other.p);
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
+	
 }
