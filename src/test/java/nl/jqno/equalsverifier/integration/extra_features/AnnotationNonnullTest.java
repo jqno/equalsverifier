@@ -22,6 +22,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xCustomOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xWithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax.NonnullFindbugs1xJavaxOnPackage;
@@ -131,6 +132,19 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	}
 	
 	@Test
+	public void succeed_whenEqualsDoenstCheckForNull_givenJsr305DefaultAndCheckForNullOnPackageAndWarningSuppressed() {
+		EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class)
+				.suppress(Warning.NULL_FIELDS)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClassAndNullCheckInEquals() {
+		EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals.class)
+				.verify();
+	}
+	
+	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithJavaxNonnullAnnotationOnClass() {
 		EqualsVerifier.forClass(NonnullJsr305JavaxOnClass.class)
 				.verify();
@@ -193,6 +207,19 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnPackage() {
 		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
 		EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnPackage.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoenstCheckForNull_givenJsr305DefaultAndNullableOnPackageAndWarningSuppressed() {
+		EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class)
+				.suppress(Warning.NULL_FIELDS)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClassAndNullCheckInEquals() {
+		EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals.class)
 				.verify();
 	}
 	
@@ -358,6 +385,28 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		public int hashCode() { return defaultHashCode(this); }
 	}
 	
+	@DefaultAnnotation(Nonnull.class)
+	static final class NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals {
+		private final Object o;
+		@Nullable
+		private final Object p;
+		
+		public NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals)) {
+				return false;
+			}
+			NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals other = (NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals)obj;
+			return o.equals(other.o) && 
+					(p == null ? other.p == null : p.equals(other.p));
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
+	
 	@DefaultNonnullJavax
 	static final class NonnullJsr305JavaxOnClass {
 		private final Object o;
@@ -454,4 +503,25 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		public int hashCode() { return defaultHashCode(this); }
 	}
 	
+	@DefaultNonnullJavax
+	static final class NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals {
+		private final Object o;
+		@CheckForNull
+		private final Object p;
+		
+		public NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals(Object o, Object p) { this.o = o; this.p = p; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals)) {
+				return false;
+			}
+			NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals other = (NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals)obj;
+			return o.equals(other.o) &&
+					(p == null ? other.p == null : p.equals(other.p));
+		}
+		
+		@Override
+		public int hashCode() { return defaultHashCode(this); }
+	}
 }

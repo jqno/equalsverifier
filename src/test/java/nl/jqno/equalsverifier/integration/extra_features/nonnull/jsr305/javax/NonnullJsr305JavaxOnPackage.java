@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 public final class NonnullJsr305JavaxOnPackage {
 	private final Object o;
 	
@@ -29,5 +31,5 @@ public final class NonnullJsr305JavaxOnPackage {
 		return o.equals(other.o);
 	}
 	
-	@Override public int hashCode() { return o.hashCode(); }
+	@Override public int hashCode() { return defaultHashCode(this); }
 }
