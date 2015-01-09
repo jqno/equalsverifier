@@ -22,6 +22,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
+
 import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Attribute;
 import org.objectweb.asm.ClassReader;
@@ -29,7 +31,6 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 /**
  * Provides access to the annotations that are defined on a class

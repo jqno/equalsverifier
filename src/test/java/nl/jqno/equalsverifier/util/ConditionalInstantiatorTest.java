@@ -26,7 +26,6 @@ import static org.junit.Assert.assertThat;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
-import nl.jqno.equalsverifier.util.ConditionalInstantiator;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 import org.junit.Rule;

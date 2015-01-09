@@ -20,7 +20,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 import static org.junit.matchers.JUnitMatchers.containsString;
-import nl.jqno.equalsverifier.util.exceptions.EqualsVerifierBugException;
 
 import org.junit.Test;
 

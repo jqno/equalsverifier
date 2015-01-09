@@ -36,13 +36,13 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.FinalContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PointArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrivateObjectContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TransientContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
 
 import org.junit.Before;
 import org.junit.Test;

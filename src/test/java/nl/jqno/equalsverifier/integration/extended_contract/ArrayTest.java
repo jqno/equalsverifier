@@ -15,15 +15,16 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import static org.junit.internal.matchers.StringContains.containsString;
+
 import java.util.Arrays;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import org.junit.Test;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-import static org.junit.internal.matchers.StringContains.containsString;
+import org.junit.Test;
 
 public class ArrayTest extends IntegrationTestBase {
 	private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
