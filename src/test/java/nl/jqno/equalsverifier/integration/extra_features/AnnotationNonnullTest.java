@@ -23,6 +23,10 @@ import javax.annotation.Nullable;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.integration.extra_features.AnnotationNonnullTest.NonnullFindbugs1xOuter.NonnullFindbugs1xInner;
+import nl.jqno.equalsverifier.integration.extra_features.AnnotationNonnullTest.NonnullFindbugs1xOuter.NonnullFindbugs1xMiddle.NonnullFindbugs1xInnerInner;
+import nl.jqno.equalsverifier.integration.extra_features.AnnotationNonnullTest.NonnullJsr305Outer.NonnullJsr305Inner;
+import nl.jqno.equalsverifier.integration.extra_features.AnnotationNonnullTest.NonnullJsr305Outer.NonnullJsr305Middle.NonnullJsr305InnerInner;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xCustomOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xWithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax.NonnullFindbugs1xJavaxOnPackage;
@@ -100,6 +104,18 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForParameters() {
 		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
 		EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationOnOuterClass() {
+		EqualsVerifier.forClass(NonnullFindbugs1xInner.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationOnNestedOuterClass() {
+		EqualsVerifier.forClass(NonnullFindbugs1xInnerInner.class)
 				.verify();
 	}
 	
@@ -186,6 +202,18 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
 		expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
 		EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationOnOuterClass() {
+		EqualsVerifier.forClass(NonnullJsr305Inner.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationOnNestedOuterClass() {
+		EqualsVerifier.forClass(NonnullJsr305InnerInner.class)
 				.verify();
 	}
 	
@@ -344,6 +372,45 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	}
 	
 	@DefaultAnnotation(Nonnull.class)
+	static class NonnullFindbugs1xOuter {
+		static final class NonnullFindbugs1xInner {
+			private final Object o;
+			
+			public NonnullFindbugs1xInner(Object o) { this.o = o; }
+			
+			@Override
+			public boolean equals(Object obj) {
+				if (!(obj instanceof NonnullFindbugs1xInner)) {
+					return false;
+				}
+				NonnullFindbugs1xInner other = (NonnullFindbugs1xInner)obj;
+				return o.equals(other.o);
+			}
+			
+			@Override public int hashCode() { return defaultHashCode(this); }
+		}
+		
+		static class NonnullFindbugs1xMiddle {
+			static final class NonnullFindbugs1xInnerInner {
+				private final Object o;
+				
+				public NonnullFindbugs1xInnerInner(Object o) { this.o = o; }
+				
+				@Override
+				public boolean equals(Object obj) {
+					if (!(obj instanceof NonnullFindbugs1xInnerInner)) {
+						return false;
+					}
+					NonnullFindbugs1xInnerInner other = (NonnullFindbugs1xInnerInner)obj;
+					return o.equals(other.o);
+				}
+				
+				@Override public int hashCode() { return defaultHashCode(this); }
+			}
+		}
+	}
+	
+	@DefaultAnnotation(Nonnull.class)
 	static final class NonnullFindbugs1xWithNullableOnClass {
 		private final Object o;
 		@Nullable
@@ -459,6 +526,45 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	@DefaultNonnullJavax
+	static class NonnullJsr305Outer {
+		static final class NonnullJsr305Inner {
+			private final Object o;
+			
+			public NonnullJsr305Inner(Object o) { this.o = o; }
+			
+			@Override
+			public boolean equals(Object obj) {
+				if (!(obj instanceof NonnullJsr305Inner)) {
+					return false;
+				}
+				NonnullJsr305Inner other = (NonnullJsr305Inner)obj;
+				return o.equals(other.o);
+			}
+			
+			@Override public int hashCode() { return defaultHashCode(this); }
+		}
+		
+		static class NonnullJsr305Middle {
+			static final class NonnullJsr305InnerInner {
+				private final Object o;
+				
+				public NonnullJsr305InnerInner(Object o) { this.o = o; }
+				
+				@Override
+				public boolean equals(Object obj) {
+					if (!(obj instanceof NonnullJsr305InnerInner)) {
+						return false;
+					}
+					NonnullJsr305InnerInner other = (NonnullJsr305InnerInner)obj;
+					return o.equals(other.o);
+				}
+				
+				@Override public int hashCode() { return defaultHashCode(this); }
+			}
+		}
 	}
 	
 	@DefaultNonnullJavax

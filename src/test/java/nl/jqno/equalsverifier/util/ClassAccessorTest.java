@@ -39,12 +39,15 @@ import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClassContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllRecursiveCollectionImplementationsContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle.AnnotatedInner;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
@@ -91,11 +94,23 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
-	public void fieldHasAnnotation() throws NoSuchFieldException {
-		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
-		Field field = AnnotatedFields.class.getField("runtimeRetention");
-		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
-		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
+	public void outerClassHasAnnotation() {
+		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedMiddle>(AnnotatedMiddle.class, prefabValues, TestSupportedAnnotations.values(), false);
+		assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
+		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
+	}
+	
+	@Test
+	public void nestedOuterClassHasAnnotation() {
+		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedInner>(AnnotatedInner.class, prefabValues, TestSupportedAnnotations.values(), false);
+		assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
+		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
+	}
+	
+	@Test
+	public void classIsAlreadyOuter() {
+		ClassAccessor<?> accessor = new ClassAccessor<TypeHelper>(TypeHelper.class, prefabValues, TestSupportedAnnotations.values(), false);
+		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
 	}
 	
 	@Test
@@ -109,6 +124,14 @@ public class ClassAccessorTest {
 	public void packageInfoDoesNotExist() {
 		ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
 		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+	}
+	
+	@Test
+	public void fieldHasAnnotation() throws NoSuchFieldException {
+		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
+		Field field = AnnotatedFields.class.getField("runtimeRetention");
+		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
+		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
 	}
 	
 	@Test

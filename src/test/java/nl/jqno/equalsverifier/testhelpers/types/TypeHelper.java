@@ -339,6 +339,13 @@ public class TypeHelper {
 	@TypeAnnotationClassRetention
 	public static class AnnotatedWithBoth {}
 	
+	@TypeAnnotationClassRetention
+	public static class AnnotatedOuter {
+		public static class AnnotatedMiddle {
+			public static class AnnotatedInner {}
+		}
+	}
+	
 	public static class AnnotatedFields {
 		@FieldAnnotationRuntimeRetention
 		public int runtimeRetention;

@@ -92,15 +92,21 @@ public class ClassAccessor<T> {
 	}
 	
 	/**
-	 * Determines whether a particular field in T has a particular annotation.
+	 * Determines whether any of T's outer classes, if they exist, have a particular annotation.
 	 * 
-	 * @param field The field for which we want to know if it has the specified
-	 * 			annotation.
 	 * @param annotation The annotation we want to find.
-	 * @return True if the specified field in T has the specified annotation.
+	 * @return True if T has an outer class with the specified annotation.
 	 */
-	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
-		return annotationAccessor.fieldHas(field.getName(), annotation);
+	public boolean outerClassHasAnnotation(Annotation annotation) {
+		Class<?> outer = type.getDeclaringClass();
+		while (outer != null) {
+			AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, outer, ignoreAnnotationFailure);
+			if (accessor.typeHas(annotation)) {
+				return true;
+			}
+			outer = outer.getDeclaringClass();
+		}
+		return false;
 	}
 	
 	/**
@@ -124,6 +130,18 @@ public class ClassAccessor<T> {
 		catch (ClassNotFoundException e) {
 			return false;
 		}
+	}
+	
+	/**
+	 * Determines whether a particular field in T has a particular annotation.
+	 * 
+	 * @param field The field for which we want to know if it has the specified
+	 * 			annotation.
+	 * @param annotation The annotation we want to find.
+	 * @return True if the specified field in T has the specified annotation.
+	 */
+	public boolean fieldHasAnnotation(Field field, Annotation annotation) {
+		return annotationAccessor.fieldHas(field.getName(), annotation);
 	}
 	
 	/**

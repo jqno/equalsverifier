@@ -42,10 +42,14 @@ public class NonnullAnnotationChecker {
 		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NULLABLE)) {
 			return false;
 		}
-		if (classAccessor.hasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) || classAccessor.packageHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
+		if (classAccessor.hasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
+				classAccessor.outerClassHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
+				classAccessor.packageHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
 			return true;
 		}
-		if (classAccessor.hasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) || classAccessor.packageHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL)) {
+		if (classAccessor.hasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) ||
+				classAccessor.outerClassHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) ||
+				classAccessor.packageHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL)) {
 			return true;
 		}
 		return false;
