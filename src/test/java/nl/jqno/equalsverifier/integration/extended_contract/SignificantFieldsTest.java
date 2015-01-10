@@ -15,12 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Stateless;
 
 import org.junit.Test;
 
@@ -157,6 +160,18 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers() {
 		EqualsVerifier.forClass(IndirectStaticFinalContainer.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenUnusedFieldIsStateless() {
+		EqualsVerifier.forClass(UnusedStatelessContainer.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenUsedFieldIsStateless() {
+		EqualsVerifier.forClass(UsedStatelessContainer.class)
 				.verify();
 	}
 	
@@ -338,5 +353,45 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 		public int hashCode() {
 			return nullSafeHashCode(x);
 		}
+	}
+	
+	static final class UnusedStatelessContainer {
+		private final int i;
+		@SuppressWarnings("unused")
+		private final Stateless stateless;
+		
+		public UnusedStatelessContainer(int i, Stateless stateless) { this.i = i; this.stateless = stateless; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof UnusedStatelessContainer)) {
+				return false;
+			}
+			UnusedStatelessContainer other = (UnusedStatelessContainer)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
+		}
+	}
+	
+	static final class UsedStatelessContainer {
+		private final int i;
+		private final Stateless stateless;
+		
+		public UsedStatelessContainer(int i, Stateless stateless) { this.i = i; this.stateless = stateless; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof UsedStatelessContainer)) {
+				return false;
+			}
+			UsedStatelessContainer other = (UsedStatelessContainer)obj;
+			return i == other.i && nullSafeEquals(stateless, other.stateless);
+		}
+		
+		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
 }

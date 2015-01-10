@@ -54,8 +54,7 @@ public class PrefabValuesTest {
 	}
 	
 	@Test
-	public void putEqualValues() {
-		thrown.expect(IllegalArgumentException.class);
+	public void putEqualValuesIsAllowedForSingletonFields() {
 		p.put(String.class, "a", "a");
 	}
 	

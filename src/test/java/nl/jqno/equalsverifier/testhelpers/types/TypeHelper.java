@@ -325,6 +325,18 @@ public class TypeHelper {
 	
 	public static enum EmptyEnum {}
 	
+	public static final class Stateless {
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof Stateless;
+		}
+		
+		@Override
+		public int hashCode() {
+			return 42;
+		}
+	}
+	
 	public static final class PointArrayContainer {
 		public Point[] points = { new Point(1, 2) };
 	}
