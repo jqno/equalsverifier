@@ -247,11 +247,11 @@ public class FieldAccessor {
 	
 	private class FieldCopier implements FieldModifier {
 		private final Object to;
-
+		
 		public FieldCopier(Object to) {
 			this.to = to;
 		}
-
+		
 		@Override
 		public void modify() throws IllegalAccessException {
 			field.set(to, field.get(object));
@@ -260,7 +260,7 @@ public class FieldAccessor {
 	
 	private class FieldChanger implements FieldModifier {
 		private final PrefabValues prefabValues;
-
+		
 		public FieldChanger(PrefabValues prefabValues) {
 			this.prefabValues = prefabValues;
 		}
@@ -268,31 +268,6 @@ public class FieldAccessor {
 		@Override
 		public void modify() throws IllegalAccessException {
 			Class<?> type = field.getType();
-//			if (type == boolean.class) {
-//				field.setBoolean(object, !field.getBoolean(object));
-//			}
-//			else if (type == byte.class) {
-//				field.setByte(object, (byte)(field.getByte(object) + 1));
-//			}
-//			else if (type == char.class) {
-//				field.setChar(object, (char)(field.getChar(object) + 1));
-//			}
-//			else if (type == double.class) {
-//				field.setDouble(object, field.getDouble(object) + 1.0D);
-//			}
-//			else if (type == float.class) {
-//				field.setFloat(object, field.getFloat(object) + 1.0F);
-//			}
-//			else if (type == int.class) {
-//				field.setInt(object, field.getInt(object) + 1);
-//			}
-//			else if (type == long.class) {
-//				field.setLong(object, field.getLong(object) + 1);
-//			}
-//			else if (type == short.class) {
-//				field.setShort(object, (short)(field.getShort(object) + 1));
-//			}
-//			else
 			if (prefabValues.contains(type)) {
 				Object newValue = prefabValues.getOther(type, field.get(object));
 				field.set(object, newValue);
