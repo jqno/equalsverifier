@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Jan Ouwens
+ * Copyright 2009-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,6 +155,10 @@ public final class EqualsVerifier<T> {
 		List<T> equalExamples = new ArrayList<T>();
 		List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
 		
+		if (listContainsDuplicates(unequalExamples)) {
+			throw new IllegalArgumentException("Two objects are equal to each other.");
+		}
+		
 		@SuppressWarnings("unchecked")
 		Class<T> type = (Class<T>)first.getClass();
 		
@@ -171,7 +175,7 @@ public final class EqualsVerifier<T> {
 	 * 
 	 * This could happen, for example, in a Rational class that doesn't
 	 * normalize: new Rational(1, 2).equals(new Rational(2, 4)) would return
-	 * true. 
+	 * true.
 	 * 
 	 * Using this factory method requires that
 	 * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
@@ -409,13 +413,13 @@ public final class EqualsVerifier<T> {
 		unequalExamples.add(classAccessor.getRedObject());
 		unequalExamples.add(classAccessor.getBlackObject());
 	}
-
+	
 	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
 		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
-
+		
 		preconditionChecker.check();
 		examplesChecker.check();
 		hierarchyChecker.check();
@@ -426,14 +430,14 @@ public final class EqualsVerifier<T> {
 		if (first == null) {
 			throw new IllegalArgumentException("First example is null.");
 		}
-
+		
 		List<T> result = new ArrayList<T>();
 		result.add(first);
 		addArrayElementsToList(result, more);
 		
 		return result;
 	}
-
+	
 	private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
 		if (first == null) {
 			throw new IllegalArgumentException("First example is null.");
@@ -441,7 +445,7 @@ public final class EqualsVerifier<T> {
 		if (second == null) {
 			throw new IllegalArgumentException("Second example is null.");
 		}
-
+		
 		List<T> result = new ArrayList<T>();
 		result.add(first);
 		result.add(second);
@@ -460,7 +464,11 @@ public final class EqualsVerifier<T> {
 			}
 		}
 	}
-
+	
+	private static <T> boolean listContainsDuplicates(List<T> list) {
+		return list.size() != new HashSet<T>(list).size();
+	}
+	
 	/**
 	 * Helper class for
 	 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
@@ -491,9 +499,9 @@ public final class EqualsVerifier<T> {
 		 * 			supplied equal examples.
 		 * @return An instance of {@link EqualsVerifier}.
 		 */
+		@SuppressWarnings("unchecked")
 		public EqualsVerifier<T> andUnequalExample(T example) {
-			List<T> unequalExamples = buildListOfAtLeastOne(example, (T[])null);
-			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+			return andUnequalExamples(example);
 		}
 
 		/**
@@ -510,6 +518,14 @@ public final class EqualsVerifier<T> {
 		 */
 		public EqualsVerifier<T> andUnequalExamples(T first, T... more) {
 			List<T> unequalExamples = buildListOfAtLeastOne(first, more);
+			if (listContainsDuplicates(unequalExamples)) {
+				throw new IllegalArgumentException("Two objects are equal to each other.");
+			}
+			for (T example : unequalExamples) {
+				if (equalExamples.contains(example)) {
+					throw new IllegalArgumentException("An equal example also appears as unequal example.");
+				}
+			}
 			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 		}
 	}

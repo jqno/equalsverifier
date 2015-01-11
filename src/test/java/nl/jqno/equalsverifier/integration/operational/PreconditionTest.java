@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013-2014 Jan Ouwens
+ * Copyright 2009-2010, 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,16 +74,14 @@ public class PreconditionTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenExamplesAreTheSame() {
-		expectFailure(PRECONDITION, "the same object appears twice", FinalPoint.class.getSimpleName());
-		EqualsVerifier.forExamples(first, first)
-				.verify();
+		expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
+		EqualsVerifier.forExamples(first, first);
 	}
 	
 	@Test
 	public void fail_whenExamplesAreNotTheSameButEqual() {
 		FinalPoint equalToFirst = new FinalPoint(1, 2);
-		expectFailure(PRECONDITION, "two objects are equal to each other", FinalPoint.class.getSimpleName());
-		EqualsVerifier.forExamples(first, equalToFirst)
-				.verify();
+		expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
+		EqualsVerifier.forExamples(first, equalToFirst);
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013-2014 Jan Ouwens
+ * Copyright 2009-2010, 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,9 +36,8 @@ public class RelaxedEqualsTest extends IntegrationTestBase {
 
 	@Test
 	public void fail_whenObjectsWithDifferentFieldsAreEqual() {
-		expectFailure("Precondition", "two objects are equal to each other");
-		EqualsVerifier.forExamples(a, b)
-				.verify();
+		expectException(IllegalArgumentException.class, "Two objects are equal to each other");
+		EqualsVerifier.forExamples(a, b);
 	}
 	
 	@Test
@@ -50,10 +49,9 @@ public class RelaxedEqualsTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
-		expectFailure("Precondition", "the same object appears twice", Multiple.class.getSimpleName());
+		expectException(IllegalArgumentException.class, "An equal example also appears as unequal example.");
 		EqualsVerifier.forRelaxedEqualExamples(a, b)
-				.andUnequalExamples(a)
-				.verify();
+				.andUnequalExamples(a);
 	}
 	
 	@Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Jan Ouwens
+ * Copyright 2009-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,20 +49,11 @@ class ExamplesChecker<T> implements Checker {
 				checkEqualButNotIdentical(reference, other);
 				checkHashCode(reference, other);
 			}
-			
-			for (T other : unequalExamples) {
-				checkDouble(reference, other);
-			}
 		}
 		
 		for (int i = 0; i < unequalExamples.size(); i++) {
 			T reference = unequalExamples.get(i);
 			checkSingle(reference);
-			
-			for (int j = i + 1; j < unequalExamples.size(); j++) {
-				T other = unequalExamples.get(j);
-				checkDouble(reference, other);
-			}
 		}
 	}
 	
@@ -82,17 +73,6 @@ class ExamplesChecker<T> implements Checker {
 		checkNonNullity(reference);
 		checkTypeCheck(reference);
 		checkHashCode(reference, copy);
-	}
-
-	private void checkDouble(T reference, T other) {
-		checkNotEqual(reference, other);
-	}
-	
-	private void checkNotEqual(T reference, T other) {
-		assertFalse(Formatter.of("Precondition: the same object appears twice:\n  %%", reference),
-				reference == other);
-		assertFalse(Formatter.of("Precondition: two objects are equal to each other:\n  %%", reference),
-				reference.equals(other));
 	}
 	
 	private void checkReflexivity(T reference) {

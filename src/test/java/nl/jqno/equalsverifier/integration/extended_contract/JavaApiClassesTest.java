@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Jan Ouwens
+ * Copyright 2009-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,13 +48,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACommonJavaApiType() {
 		EqualsVerifier.forClass(CommonClassesContainer.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenClassUsesOnlyCompileTimeConstantsInNonStaticFields() {
-		expectFailure("Precondition: two objects are equal to each other");
-		EqualsVerifier.forClass(CompileTimeConstantContainer.class)
 				.verify();
 	}
 	
@@ -117,22 +110,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 		}
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class CompileTimeConstantContainer {
-		private final String string = "string";
-		private final int integer = 10;
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof CompileTimeConstantContainer)) {
-				return false;
-			}
-			CompileTimeConstantContainer other = (CompileTimeConstantContainer)obj;
-			return string.equals(other.string) && integer == other.integer;
-		}
-		
 		@Override public int hashCode() { return defaultHashCode(this); }
 	}
 	

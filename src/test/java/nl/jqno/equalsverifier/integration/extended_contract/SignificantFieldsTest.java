@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2012-2014 Jan Ouwens
+ * Copyright 2009-2010, 2012-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Stateless;
 
 import org.junit.Test;
 
@@ -173,6 +172,11 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	public void succeed_whenUsedFieldIsStateless() {
 		EqualsVerifier.forClass(UsedStatelessContainer.class)
 				.verify();
+	}
+	
+	@Test
+	public void succeed_whenClassIsStateless() {
+		EqualsVerifier.forClass(Stateless.class).verify();
 	}
 	
 	static final class ExtraFieldInEquals {
@@ -352,6 +356,23 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(x);
+		}
+	}
+	
+	static final class Stateless {
+		@SuppressWarnings("unused")
+		private final int irrelevant;
+		
+		public Stateless(int i) { this.irrelevant = i; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof Stateless;
+		}
+		
+		@Override
+		public int hashCode() {
+			return 42;
 		}
 	}
 	
