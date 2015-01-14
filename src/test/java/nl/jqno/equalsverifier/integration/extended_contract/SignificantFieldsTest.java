@@ -105,9 +105,18 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsed() {
-		expectFailure("Significant fields", "all fields should be used", "NoFieldsUsed", "has not defined an equals method");
+		expectFailure("Significant fields", "equals does not use", "color");
 		EqualsVerifier.forClass(NoFieldsUsed.class)
 				.allFieldsShouldBeUsed()
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsedAndUsingGetClass() {
+		expectFailure("Significant fields", "equals does not use", "color");
+		EqualsVerifier.forClass(NoFieldsUsed.class)
+				.allFieldsShouldBeUsed()
+				.usingGetClass()
 				.verify();
 	}
 	

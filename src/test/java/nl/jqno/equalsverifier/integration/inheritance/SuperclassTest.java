@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013-2014 Jan Ouwens
+ * Copyright 2009-2010, 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.Test;
 
 public class SuperclassTest extends IntegrationTestBase {
@@ -78,6 +80,21 @@ public class SuperclassTest extends IntegrationTestBase {
 				"should not equal superclass instance", Point.class.getSimpleName(), "but it does");
 		EqualsVerifier.forClass(ColorBlindColorPoint.class)
 				.withRedefinedSuperclass()
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectly() {
+		EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
+				.withRedefinedSuperclass()
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectlyAndAllFieldsShouldBeUsed() {
+		EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
+				.withRedefinedSuperclass()
+				.allFieldsShouldBeUsed()
 				.verify();
 	}
 	
@@ -200,5 +217,28 @@ public class SuperclassTest extends IntegrationTestBase {
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	public static abstract class AbstractEqualsDefiner {
+		@Override
+		public final boolean equals(Object obj) {
+			return EqualsBuilder.reflectionEquals(this, obj);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return HashCodeBuilder.reflectionHashCode(this);
+		}
+	}
+	
+	@SuppressWarnings("unused")
+	public static class ConcreteEqualsInheriter extends AbstractEqualsDefiner {
+		private final int a;
+		private final int b;
+		
+		public ConcreteEqualsInheriter(int a, int b) {
+			this.a = a;
+			this.b = b;
+		}
 	}
 }

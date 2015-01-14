@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2014 Jan Ouwens
+ * Copyright 2009-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,6 +150,8 @@ class FieldsChecker<T> implements Checker {
 			Object changed = changedAccessor.getObject();
 			String fieldName = referenceAccessor.getFieldName();
 			
+			boolean equalToItself = reference.equals(changed);
+			
 			changedAccessor.changeField(prefabValues);
 			
 			boolean equalsChanged = !reference.equals(changed);
@@ -163,15 +165,13 @@ class FieldsChecker<T> implements Checker {
 			}
 			
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
+				assertTrue(Formatter.of("Significant fields: equals does not use %%", fieldName), equalToItself);
+				
 				boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
 				assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName),
 						!thisFieldShouldBeUsed || equalsChanged);
 				assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
 						thisFieldShouldBeUsed || !equalsChanged);
-				if (classAccessor.declaresField(referenceAccessor.getField())) {
-					assertTrue(Formatter.of("Significant fields: all fields should be used, but %% has not defined an equals method.", classAccessor.getType().getSimpleName()),
-					classAccessor.declaresEquals());
-				}
 			}
 			
 			referenceAccessor.changeField(prefabValues);
