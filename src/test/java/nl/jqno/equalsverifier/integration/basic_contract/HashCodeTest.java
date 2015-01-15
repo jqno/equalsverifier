@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2014 Jan Ouwens
+ * Copyright 2009-2010, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,24 +17,43 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
 
 import org.junit.Test;
 
 public class HashCodeTest extends IntegrationTestBase {
 	@Test
-	public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
-		expectFailure("hashCode: hashCodes should be equal", RandomHashCode.class.getSimpleName());
+	public void fail_whenHashCodesAreInconsistent() {
+		expectFailure("hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());
 		EqualsVerifier.forClass(RandomHashCode.class)
 				.verify();
 	}
 	
-	static class RandomHashCode extends Point {
-		public RandomHashCode(int x, int y) { super(x, y); }
-
+	@Test
+	public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
+		expectFailure("hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
+		EqualsVerifier.forClass(NoHashCode.class)
+				.verify();
+	}
+	
+	static final class RandomHashCode {
 		@Override
 		public int hashCode() {
+			// Generate a new hashCode on every invocation.
 			return new Object().hashCode();
+		}
+	}
+	
+	static class NoHashCode {
+		private final int i;
+		
+		public NoHashCode(int i) { this.i = i; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof NoHashCode)) {
+				return false;
+			}
+			return i == ((NoHashCode)obj).i;
 		}
 	}
 }

@@ -105,6 +105,9 @@ class ExamplesChecker<T> implements Checker {
 	}
 
 	private void checkHashCode(T reference, T copy) {
+		assertEquals(Formatter.of("hashCode: hashCode should be consistent:\n  %% (%%)", reference, reference.hashCode()),
+				reference.hashCode(), reference.hashCode());
+		
 		if (!reference.equals(copy)) {
 			return;
 		}
