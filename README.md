@@ -11,7 +11,7 @@ Pull requests are welcome! If you open one, please also [register an issue](http
 Build
 ---
 
-To build EqualsVerifier, you need [Ant](http://ant.apache.org/). Just call `ant` from the command-line, and you're done. Alternatively, you can use [Eclipse](https://www.eclipse.org/) with [IvyDE](http://ant.apache.org/ivy/ivyde/) installed.
+To build EqualsVerifier, you need [Maven](http://maven.apache.org/). Just call `mvn clean verify` from the command-line, and you're done. Alternatively, you can use any IDE with Maven support.
 
 
 Project structure
