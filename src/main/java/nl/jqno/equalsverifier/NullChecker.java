@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.util.CachedHashCodeInitializer.getInitializedHashCode;
 
 import java.lang.reflect.Field;
 import java.util.EnumSet;
@@ -77,7 +78,7 @@ class NullChecker<T> implements Checker {
 			handle("hashCode", field, new Runnable() {
 				@Override
 				public void run() {
-					changed.hashCode();
+					getInitializedHashCode(changed);
 				}
 			});
 			

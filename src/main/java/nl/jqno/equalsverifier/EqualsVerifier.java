@@ -27,6 +27,7 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.util.exceptions.InternalException;
 
 /**
@@ -120,7 +121,7 @@ public final class EqualsVerifier<T> {
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
-	
+
 	/**
 	 * Factory method. For general use.
 	 * 
@@ -206,6 +207,7 @@ public final class EqualsVerifier<T> {
 		this.stash = new StaticFieldValueStash();
 		this.prefabValues = new PrefabValues(stash);
 		JavaApiPrefabValues.addTo(prefabValues);
+		CachedHashCodeInitializer.setInitializer(null);
 	}
 	
 	/**
@@ -333,6 +335,22 @@ public final class EqualsVerifier<T> {
 		this.redefinedSubclass = redefinedSubclass;
 		return this;
 	}
+
+	/**
+	 * Signals that the {@code hashCode()} method of the object returns a
+	 * cached hash code which it stores in the given field, and that
+	 * {@link EqualsVerifier} should call the given method to recompute
+	 * and update the cached hash code prior to calling the
+	 * {@code hashCode()} method.
+	 *
+	 * @param cachedHashCodeField The name of the field which stores the cached hash code
+	 * @param calculateHashCodeMethod The name of the method which recomputes the hash code
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod) {
+		CachedHashCodeInitializer.setInitializer(new CachedHashCodeInitializer(type, cachedHashCodeField, calculateHashCodeMethod));
+		return this;
+	}
 	
 	/**
 	 * @deprecated No longer needed. The stack trace that this method printed,
@@ -365,6 +383,7 @@ public final class EqualsVerifier<T> {
 		}
 		finally {
 			stash.restoreAll();
+			CachedHashCodeInitializer.setInitializer(null);
 		}
 	}
 

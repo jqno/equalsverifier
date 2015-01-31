@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.util.CachedHashCodeInitializer.getInitializedHashCode;
 
 import java.lang.reflect.Field;
 
@@ -161,7 +162,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 		
 		try {
-			instance.hashCode();
+			getInitializedHashCode(instance);
 		}
 		catch (AbstractMethodError e) {
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);

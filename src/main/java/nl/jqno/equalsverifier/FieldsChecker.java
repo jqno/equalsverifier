@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.util.CachedHashCodeInitializer.getInitializedHashCode;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -155,7 +156,7 @@ class FieldsChecker<T> implements Checker {
 			changedAccessor.changeField(prefabValues);
 			
 			boolean equalsChanged = !reference.equals(changed);
-			boolean hashCodeChanged = reference.hashCode() != changed.hashCode();
+			boolean hashCodeChanged = getInitializedHashCode(reference) != getInitializedHashCode(changed);
 			
 			if (equalsChanged != hashCodeChanged) {
 				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", fieldName),
@@ -220,14 +221,14 @@ class FieldsChecker<T> implements Checker {
 			assertEquals(Formatter.of("Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", fieldName),
 					reference, changed);
 			assertEquals(Formatter.of("Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", fieldName),
-					reference.hashCode(), changed.hashCode());
+					getInitializedHashCode(reference), getInitializedHashCode(changed));
 		}
 		
 		private void assertArray(String fieldName, Object reference, Object changed) {
 			assertEquals(Formatter.of("Array: == or regular equals() used instead of Arrays.equals() for field %%.", fieldName),
 					reference, changed);
 			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
-					reference.hashCode(), changed.hashCode());
+					getInitializedHashCode(reference), getInitializedHashCode(changed));
 		}
 	}
 	

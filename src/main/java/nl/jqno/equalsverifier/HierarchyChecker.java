@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.util.CachedHashCodeInitializer.getInitializedHashCode;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -89,8 +90,8 @@ class HierarchyChecker<T> implements Checker {
 			assertTrue(Formatter.of("Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.", reference, shallow, equalSuper),
 					reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
 			
-			assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, reference.hashCode(), equalSuper, equalSuper.hashCode()),
-					reference.hashCode() == equalSuper.hashCode());
+			assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, getInitializedHashCode(reference), equalSuper, getInitializedHashCode(equalSuper)),
+					getInitializedHashCode(reference) == getInitializedHashCode(equalSuper));
 		}
 	}
 	
