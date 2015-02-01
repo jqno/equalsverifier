@@ -25,12 +25,20 @@ import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Queue;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.UUID;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -62,27 +70,53 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 		private final Collection<String> collection;
 		private final List<String> list;
 		private final Set<String> set;
-		private final Map<String, String> map;
+		private final SortedSet<String> sortedSet;
+		private final NavigableSet<String> navigableSet;
 		private final Queue<String> queue;
+		private final BlockingQueue<String> blockingQueue;
+		private final Deque<String> deque;
+		private final BlockingDeque<String> blockingDeque;
+		private final Map<String, String> map;
+		private final SortedMap<String, String> sortedMap;
+		private final NavigableMap<String, String> navigableMap;
+		private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
 		
-		public CollectionInterfacesContainer(Collection<String> collection, List<String> list, Set<String> set, Map<String, String> map, Queue<String> queue)
-			{ this.collection = collection; this.list = list; this.set = set; this.map = map; this.queue = queue; }
+		public CollectionInterfacesContainer(Collection<String> collection, List<String> list,
+				Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
+				Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
+				Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap, ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
+			this.collection = collection; this.list = list;
+			this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
+			this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
+			this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap; this.concurrentNavigableMap = concurrentNavigableMap;
+		}
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-
+		
 		@Override
-		public String toString() {
+		public int hashCode() {
 			callAbstractMethodsOnInterface();
-			return super.toString();
+			return defaultHashCode(this);
 		}
 		
 		private void callAbstractMethodsOnInterface() {
-			if (collection != null) collection.iterator();
-			if (list != null) list.iterator();
-			if (set != null) set.iterator();
-			if (map != null) map.keySet();
-			if (queue != null) queue.iterator();
+			callIterator(collection);
+			callIterator(list);
+			callIterator(set, sortedSet, navigableSet);
+			callIterator(queue, blockingQueue, deque, blockingDeque);
+			callKeySet(map, sortedMap, navigableMap, concurrentNavigableMap);
+		}
+		
+		private void callIterator(Collection<?>... collections) {
+			for (Collection<?> c : collections) {
+				if (c != null) c.iterator();
+			}
+		}
+		
+		private void callKeySet(Map<?, ?>... maps) {
+			for (Map<?, ?> m : maps) {
+				if (m != null) m.keySet();
+			}
 		}
 	}
 	

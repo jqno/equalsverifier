@@ -23,11 +23,13 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Deque;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Formatter;
@@ -40,21 +42,30 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.NavigableMap;
+import java.util.NavigableSet;
 import java.util.Properties;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TimeZone;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingDeque;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.DelayQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
@@ -166,6 +177,9 @@ public class JavaApiPrefabValues {
 	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addMaps() {
 		addMap(Map.class, new HashMap(), new HashMap());
+		addMap(SortedMap.class, new TreeMap(), new TreeMap());
+		addMap(NavigableMap.class, new TreeMap(), new TreeMap());
+		addMap(ConcurrentNavigableMap.class, new ConcurrentSkipListMap(), new ConcurrentSkipListMap());
 		prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
 		addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
 		addMap(HashMap.class, new HashMap(), new HashMap());
@@ -179,6 +193,8 @@ public class JavaApiPrefabValues {
 	@SuppressWarnings({"unchecked","rawtypes"})
 	private void addSets() {
 		addCollection(Set.class, new HashSet(), new HashSet());
+		addCollection(SortedSet.class, new TreeSet(), new TreeSet());
+		addCollection(NavigableSet.class, new TreeSet(), new TreeSet());
 		addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
 		addCollection(TreeSet.class, new TreeSet(), new TreeSet());
 		prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
@@ -192,6 +208,9 @@ public class JavaApiPrefabValues {
 	@SuppressWarnings("rawtypes")
 	private void addQueues() {
 		prefabValues.put(Queue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
+		prefabValues.put(BlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
+		prefabValues.put(Deque.class, new ArrayDeque(1), new ArrayDeque(1));
+		prefabValues.put(BlockingDeque.class, new LinkedBlockingDeque(1), new LinkedBlockingDeque(1));
 		prefabValues.put(ArrayBlockingQueue.class, new ArrayBlockingQueue(1), new ArrayBlockingQueue(1));
 		prefabValues.put(ConcurrentLinkedQueue.class, new ConcurrentLinkedQueue(), new ConcurrentLinkedQueue());
 		prefabValues.put(DelayQueue.class, new DelayQueue(), new DelayQueue());
