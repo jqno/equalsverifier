@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
@@ -32,11 +31,13 @@ class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
+	private final CachedHashCodeInitializer cachedHashCodeInitializer;
 
-	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples, CachedHashCodeInitializer cachedHashCodeInitializer) {
 		this.type = type;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 	
 	@Override
@@ -106,15 +107,17 @@ class ExamplesChecker<T> implements Checker {
 	}
 
 	private void checkHashCode(T reference, T copy) {
-		assertEquals(Formatter.of("hashCode: hashCode should be consistent:\n  %% (%%)", reference, getInitializedHashCode(reference)),
-				getInitializedHashCode(reference), getInitializedHashCode(reference));
+		int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
+		assertEquals(Formatter.of("hashCode: hashCode should be consistent:\n  %% (%%)", reference, referenceHashCode),
+				referenceHashCode, cachedHashCodeInitializer.getInitializedHashCode(reference));
 		
 		if (!reference.equals(copy)) {
 			return;
 		}
 		
-		Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)", reference, getInitializedHashCode(reference), copy, getInitializedHashCode(copy));
-		assertEquals(f, getInitializedHashCode(reference), getInitializedHashCode(copy));
+		int copyHashCode = cachedHashCodeInitializer.getInitializedHashCode(copy);
+		Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)", reference, referenceHashCode, copy, copyHashCode);
+		assertEquals(f, referenceHashCode, copyHashCode);
 	}
 	
 	private boolean isIdentical(T reference, T other) {

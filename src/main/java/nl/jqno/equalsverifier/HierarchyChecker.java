@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2011, 2013 Jan Ouwens
+ * Copyright 2009-2011, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
@@ -39,8 +38,9 @@ class HierarchyChecker<T> implements Checker {
 	private final ObjectAccessor<T> referenceAccessor;
 	private final T reference;
 	private final boolean typeIsFinal;
+	private final CachedHashCodeInitializer cachedHashCodeInitializer;
 
-	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer cachedHashCodeInitializer) {
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
 		}
@@ -54,6 +54,7 @@ class HierarchyChecker<T> implements Checker {
 		this.referenceAccessor = classAccessor.getRedAccessor();
 		this.reference = referenceAccessor.get();
 		this.typeIsFinal = Modifier.isFinal(type.getModifiers());
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 	
 	@Override
@@ -90,8 +91,10 @@ class HierarchyChecker<T> implements Checker {
 			assertTrue(Formatter.of("Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.", reference, shallow, equalSuper),
 					reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
 			
-			assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, getInitializedHashCode(reference), equalSuper, getInitializedHashCode(equalSuper)),
-					getInitializedHashCode(reference) == getInitializedHashCode(equalSuper));
+			int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
+			int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
+			assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, referenceHashCode, equalSuper, equalSuperHashCode),
+					referenceHashCode == equalSuperHashCode);
 		}
 	}
 	

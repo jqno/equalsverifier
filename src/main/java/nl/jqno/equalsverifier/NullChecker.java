@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011, 2013 Jan Ouwens
+ * Copyright 2010-2011, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
@@ -28,12 +27,14 @@ import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 
 class NullChecker<T> implements Checker {
-	private ClassAccessor<T> classAccessor;
-	private EnumSet<Warning> warningsToSuppress;
+	private final ClassAccessor<T> classAccessor;
+	private final EnumSet<Warning> warningsToSuppress;
+	private final CachedHashCodeInitializer cachedHashCodeInitializer;
 
-	public NullChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress) {
+	public NullChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer cachedHashCodeInitializer) {
 		this.classAccessor = classAccessor;
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 
 	@Override
@@ -78,7 +79,7 @@ class NullChecker<T> implements Checker {
 			handle("hashCode", field, new Runnable() {
 				@Override
 				public void run() {
-					getInitializedHashCode(changed);
+					cachedHashCodeInitializer.getInitializedHashCode(changed);
 				}
 			});
 			

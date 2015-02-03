@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
@@ -42,13 +41,15 @@ class FieldsChecker<T> implements Checker {
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean allFieldsShouldBeUsed;
 	private final Set<String> allFieldsShouldBeUsedExceptions;
+	private final CachedHashCodeInitializer cachedHashCodeInitializer;
 
-	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions) {
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer cachedHashCodeInitializer) {
 		this.classAccessor = classAccessor;
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
 		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 	
 	@Override
@@ -156,7 +157,7 @@ class FieldsChecker<T> implements Checker {
 			changedAccessor.changeField(prefabValues);
 			
 			boolean equalsChanged = !reference.equals(changed);
-			boolean hashCodeChanged = getInitializedHashCode(reference) != getInitializedHashCode(changed);
+			boolean hashCodeChanged = cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
 			
 			if (equalsChanged != hashCodeChanged) {
 				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", fieldName),
@@ -221,14 +222,14 @@ class FieldsChecker<T> implements Checker {
 			assertEquals(Formatter.of("Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", fieldName),
 					reference, changed);
 			assertEquals(Formatter.of("Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", fieldName),
-					getInitializedHashCode(reference), getInitializedHashCode(changed));
+					cachedHashCodeInitializer.getInitializedHashCode(reference), cachedHashCodeInitializer.getInitializedHashCode(changed));
 		}
 		
 		private void assertArray(String fieldName, Object reference, Object changed) {
 			assertEquals(Formatter.of("Array: == or regular equals() used instead of Arrays.equals() for field %%.", fieldName),
 					reference, changed);
 			assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
-					getInitializedHashCode(reference), getInitializedHashCode(changed));
+					cachedHashCodeInitializer.getInitializedHashCode(reference), cachedHashCodeInitializer.getInitializedHashCode(changed));
 		}
 	}
 	

@@ -120,7 +120,8 @@ public final class EqualsVerifier<T> {
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
-
+	private CachedHashCodeInitializer cachedHashCodeInitializer = CachedHashCodeInitializer.PASSTHROUGH;
+	
 	/**
 	 * Factory method. For general use.
 	 * 
@@ -130,7 +131,7 @@ public final class EqualsVerifier<T> {
 	public static <T> EqualsVerifier<T> forClass(Class<T> type) {
 		List<T> equalExamples = new ArrayList<T>();
 		List<T> unequalExamples = new ArrayList<T>();
-
+		
 		return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
 	}
 	
@@ -206,7 +207,6 @@ public final class EqualsVerifier<T> {
 		this.stash = new StaticFieldValueStash();
 		this.prefabValues = new PrefabValues(stash);
 		JavaApiPrefabValues.addTo(prefabValues);
-		CachedHashCodeInitializer.setInitializer(null);
 	}
 	
 	/**
@@ -347,7 +347,7 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod) {
-		CachedHashCodeInitializer.setInitializer(new CachedHashCodeInitializer(type, cachedHashCodeField, calculateHashCodeMethod));
+		cachedHashCodeInitializer = new CachedHashCodeInitializer(type, cachedHashCodeField, calculateHashCodeMethod);
 		return this;
 	}
 	
@@ -382,7 +382,6 @@ public final class EqualsVerifier<T> {
 		}
 		finally {
 			stash.restoreAll();
-			CachedHashCodeInitializer.setInitializer(null);
 		}
 	}
 
@@ -411,8 +410,8 @@ public final class EqualsVerifier<T> {
 
 	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
 		Checker signatureChecker = new SignatureChecker<T>(type);
-		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor);
-		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress);
+		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
+		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress, cachedHashCodeInitializer);
 		
 		signatureChecker.check();
 		abstractDelegationChecker.check();
@@ -430,9 +429,9 @@ public final class EqualsVerifier<T> {
 	
 	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
 		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
-		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
-		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
+		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples, cachedHashCodeInitializer);
+		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
+		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
 		
 		preconditionChecker.check();
 		examplesChecker.check();

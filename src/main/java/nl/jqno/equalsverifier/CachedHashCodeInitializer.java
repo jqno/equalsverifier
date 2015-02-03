@@ -25,7 +25,7 @@ import nl.jqno.equalsverifier.util.FieldIterable;
  * method), if any, for the object to be verified.
  * 
  * EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to
- * obtain the hash code, call the {@link #getInitializedHashCode(Object)} method
+ * obtain the hash code, call the {@link #deprecated_getInitializedHashCode(Object)} method
  * in this class:
  * 
  * * If this class has recorded a cached hash code initializer for the object,
@@ -39,45 +39,32 @@ import nl.jqno.equalsverifier.util.FieldIterable;
  * @author Niall Gallagher
  */
 public class CachedHashCodeInitializer {
-	static ThreadLocal<CachedHashCodeInitializer> THREAD_LOCAL = new ThreadLocal<CachedHashCodeInitializer>();
+	public static final CachedHashCodeInitializer PASSTHROUGH = new CachedHashCodeInitializer();
 	
-	/**
-	 * Records details of the cached hash code (field name and recompute method)
-	 * for the object to be verified. If the object does not have a cached hash
-	 * code, supply null.
-	 *
-	 * @param cachedHashCodeInitializer
-	 *            details of the cached hash code in the object to be verified,
-	 *            or null if the object does not have a cached hash code
-	 */
-	public static void setInitializer(CachedHashCodeInitializer cachedHashCodeInitializer) {
-		THREAD_LOCAL.set(cachedHashCodeInitializer);
-	}
-	
-	/**
-	 * Returns the hash code of the given object, first recomputing the cached
-	 * hash code in the object if necessary.
-	 *
-	 * @param object The object for which the hash code is required
-	 * @return The hash code of the object, recomputed automatically if it was cached
-	 */
-	public static int getInitializedHashCode(Object object) {
-		CachedHashCodeInitializer cachedHashCodeInitializer = THREAD_LOCAL.get();
-		if (cachedHashCodeInitializer != null) {
-			cachedHashCodeInitializer.recomputeCachedHashCode(object);
-		}
-		return object.hashCode();
-	}
-	
+	private final boolean passthrough;
 	private final Field cachedHashCodeField;
 	private final Method calculateMethod;
 	
+	private CachedHashCodeInitializer() {
+		this.passthrough = true;
+		this.cachedHashCodeField = null;
+		this.calculateMethod = null;
+	}
+	
 	public CachedHashCodeInitializer(Class<?> type, String cachedHashCodeField, String calculateHashCodeMethod) {
+		this.passthrough = false;
 		this.cachedHashCodeField = findCachedHashCodeField(type, cachedHashCodeField);
 		this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod);
 	}
 	
-	public void recomputeCachedHashCode(Object object) {
+	public int getInitializedHashCode(Object object) {
+		if (!passthrough) {
+			recomputeCachedHashCode(object);
+		}
+		return object.hashCode();
+	}
+	
+	private void recomputeCachedHashCode(Object object) {
 		try {
 			cachedHashCodeField.set(object, 0); // zero the field first, in case calculateMethod checks it
 			Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);

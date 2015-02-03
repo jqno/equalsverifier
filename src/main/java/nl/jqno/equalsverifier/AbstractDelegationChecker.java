@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2011, 2013 Jan Ouwens
+ * Copyright 2010-2011, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
@@ -30,11 +29,13 @@ class AbstractDelegationChecker<T> implements Checker {
 	private final Class<T> type;
 	private final PrefabValues prefabValues;
 	private final ClassAccessor<T> classAccessor;
+	private final CachedHashCodeInitializer cachedHashCodeInitializer;
 
-	public AbstractDelegationChecker(ClassAccessor<T> classAccessor) {
+	public AbstractDelegationChecker(ClassAccessor<T> classAccessor, CachedHashCodeInitializer cachedHashCodeInitializer) {
 		this.type = classAccessor.getType();
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.classAccessor = classAccessor;
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 
 	@Override
@@ -162,7 +163,7 @@ class AbstractDelegationChecker<T> implements Checker {
 		}
 		
 		try {
-			getInitializedHashCode(instance);
+			cachedHashCodeInitializer.getInitializedHashCode(instance);
 		}
 		catch (AbstractMethodError e) {
 			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);
