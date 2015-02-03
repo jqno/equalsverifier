@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
+import static nl.jqno.equalsverifier.CachedHashCodeInitializer.getInitializedHashCode;
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.util.Assert.assertTrue;
 import static nl.jqno.equalsverifier.util.Assert.fail;
-import static nl.jqno.equalsverifier.util.CachedHashCodeInitializer.getInitializedHashCode;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
