@@ -82,7 +82,7 @@ public class CachedHashCodeInitializer {
 				return candidateField;
 			}
 		}
-		throw new IllegalStateException("Could not find cached hash code field: " + cachedHashCodeFieldName);
+		throw new IllegalArgumentException("Could not find cachedHashCodeField: " + cachedHashCodeFieldName);
 	}
 	
 	private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
@@ -97,6 +97,6 @@ public class CachedHashCodeInitializer {
 				currentClass = currentClass.getSuperclass();
 			}
 		}
-		throw new IllegalStateException("Could not find calculate hash code method: " + calculateHashCodeMethodName);
+		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: " + calculateHashCodeMethodName);
 	}
 }

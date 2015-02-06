@@ -48,6 +48,20 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test
+	public void fail_whenCachedHashCodeFieldDoesNotExist() {
+		expectException(IllegalArgumentException.class, "Could not find cachedHashCodeField", "doesNotExist");
+		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
+				.withCachedHashCode("doesNotExist", "calcHashCode");
+	}
+	
+	@Test
+	public void fail_whenCalculateHashCodeMethodDoesNotExist() {
+		expectException(IllegalArgumentException.class, "Could not find calculateHashCodeMethod", "doesNotExist");
+		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "doesNotExist");
+	}
+	
 	static class ObjectWithValidCachedHashCode {
 		@Nonnull private final String name;
 		private final int cachedHashCode;
