@@ -43,6 +43,13 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@Test
+	public void succeed_whenCachedHashCodeIsValidAndLocatedInSuperclass_givenWithCachedHashCodeIsUsed() {
+		EqualsVerifier.forClass(Subclass.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode")
+				.verify();
+	}
+	
+	@Test
 	public void fail_whenCachedHashCodeIsInvalid_givenWithCachedHashCodeIsUsed() {
 		expectFailure("Significant fields", "equals relies on", "name", "but hashCode does not");
 		EqualsVerifier.forClass(ObjectWithInvalidCachedHashCode.class)
@@ -148,5 +155,9 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		public int notPrivate() { return -1; }
 		private String notAnInt() { return "wrong"; }
 		private int takesParameters(int x) { return x; }
+	}
+	
+	static final class Subclass extends ObjectWithValidCachedHashCode {
+		public Subclass(String name) { super(name); }
 	}
 }
