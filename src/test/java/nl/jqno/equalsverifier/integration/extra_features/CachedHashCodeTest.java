@@ -26,8 +26,9 @@ import javax.annotation.Nonnull;
  * @author Niall Gallagher, Jan Ouwens
  */
 public class CachedHashCodeTest extends IntegrationTestBase {
-	private static final String MALFORMED_CALCULATEHASHCODEMETHOD = "Could not find calculateHashCodeMethod: must be private int";
-
+	private static final String MALFORMED_CALCULATEHASHCODEMETHOD = "Could not find calculateHashCodeMethod: must be 'private int";
+	private static final String MALFORMED_CACHEDHASHCODEFIELD = "Could not find cachedHashCodeField: must be 'private int";
+	
 	@Test
 	public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsNotUsed() {
 		expectFailure("Significant fields", "equals relies on", "name", "but hashCode does not");
@@ -69,6 +70,20 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		expectException(IllegalArgumentException.class, "Could not find calculateHashCodeMethod", "doesNotExist");
 		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
 				.withCachedHashCode("cachedHashCode", "doesNotExist");
+	}
+	
+	@Test
+	public void fail_whenCachedHashCodeFieldIsNotPrivate() {
+		expectException(IllegalArgumentException.class, MALFORMED_CACHEDHASHCODEFIELD, "notPrivate");
+		EqualsVerifier.forClass(InvalidCachedHashCodeFieldContainer.class)
+				.withCachedHashCode("notPrivate", "calculateHashCode");
+	}
+	
+	@Test
+	public void fail_whenCachedHashCodeFieldIsNotAnInt() {
+		expectException(IllegalArgumentException.class, MALFORMED_CACHEDHASHCODEFIELD, "notAnInt");
+		EqualsVerifier.forClass(InvalidCachedHashCodeFieldContainer.class)
+				.withCachedHashCode("notAnInt", "calculateHashCode");
 	}
 	
 	@Test
@@ -120,6 +135,10 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		}
 	}
 	
+	static final class Subclass extends ObjectWithValidCachedHashCode {
+		public Subclass(String name) { super(name); }
+	}
+	
 	static class ObjectWithInvalidCachedHashCode {
 		@Nonnull private final String name;
 		private final int cachedHashCode;
@@ -149,15 +168,19 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@SuppressWarnings("unused")
+	static class InvalidCachedHashCodeFieldContainer {
+		public int notPrivate;
+		private String notAnInt;
+		
+		private int calculateHashCode() { return -1; }
+	}
+	
+	@SuppressWarnings("unused")
 	static class InvalidCalculateHashCodeMethodsContainer {
 		private int cachedHashCode;
 		
 		public int notPrivate() { return -1; }
 		private String notAnInt() { return "wrong"; }
 		private int takesParameters(int x) { return x; }
-	}
-	
-	static final class Subclass extends ObjectWithValidCachedHashCode {
-		public Subclass(String name) { super(name); }
 	}
 }

@@ -78,12 +78,14 @@ public class CachedHashCodeInitializer {
 	
 	private Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
 		for (Field candidateField : FieldIterable.of(type)) {
-			if (candidateField.getName().equals(cachedHashCodeFieldName) && candidateField.getType().equals(int.class)) {
-				candidateField.setAccessible(true);
-				return candidateField;
+			if (candidateField.getName().equals(cachedHashCodeFieldName)) {
+				if (Modifier.isPrivate(candidateField.getModifiers()) && candidateField.getType().equals(int.class)) {
+					candidateField.setAccessible(true);
+					return candidateField;
+				}
 			}
 		}
-		throw new IllegalArgumentException("Could not find cachedHashCodeField: " + cachedHashCodeFieldName);
+		throw new IllegalArgumentException("Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
 	}
 	
 	private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
@@ -91,7 +93,7 @@ public class CachedHashCodeInitializer {
 		while (!currentClass.equals(Object.class)) {
 			try {
 				Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
-				if (Modifier.isPrivate(method.getModifiers()) && method.getReturnType() == int.class) {
+				if (Modifier.isPrivate(method.getModifiers()) && method.getReturnType().equals(int.class)) {
 					method.setAccessible(true);
 					return method;
 				}
@@ -99,6 +101,6 @@ public class CachedHashCodeInitializer {
 			catch (NoSuchMethodException ignore) {}
 			currentClass = currentClass.getSuperclass();
 		}
-		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: must be private int " + calculateHashCodeMethodName + "()");
+		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
 	}
 }
