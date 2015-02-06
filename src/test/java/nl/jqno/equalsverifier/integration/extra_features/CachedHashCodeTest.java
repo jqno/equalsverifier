@@ -22,7 +22,7 @@ import org.junit.Test;
 import javax.annotation.Nonnull;
 
 /**
- * @author Niall Gallagher
+ * @author Niall Gallagher, Jan Ouwens
  */
 public class CachedHashCodeTest extends IntegrationTestBase {
 	

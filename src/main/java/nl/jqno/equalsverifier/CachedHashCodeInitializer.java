@@ -36,7 +36,7 @@ import nl.jqno.equalsverifier.util.FieldIterable;
  * object, it will simply return the value of <code>Object.hashCode()</code> as
  * normal instead.
  *
- * @author Niall Gallagher
+ * @author Niall Gallagher, Jan Ouwens
  */
 public class CachedHashCodeInitializer {
 	public static final CachedHashCodeInitializer PASSTHROUGH = new CachedHashCodeInitializer();
