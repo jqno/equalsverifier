@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
@@ -25,7 +26,8 @@ import javax.annotation.Nonnull;
  * @author Niall Gallagher, Jan Ouwens
  */
 public class CachedHashCodeTest extends IntegrationTestBase {
-	
+	private static final String MALFORMED_CALCULATEHASHCODEMETHOD = "Could not find calculateHashCodeMethod: must be private int";
+
 	@Test
 	public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsNotUsed() {
 		expectFailure("Significant fields", "equals relies on", "name", "but hashCode does not");
@@ -60,6 +62,27 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		expectException(IllegalArgumentException.class, "Could not find calculateHashCodeMethod", "doesNotExist");
 		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
 				.withCachedHashCode("cachedHashCode", "doesNotExist");
+	}
+	
+	@Test
+	public void fail_whenCalculateHashCodeMethodIsNotPrivate() {
+		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "notPrivate");
+		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
+				.withCachedHashCode("cachedHashCode", "notPrivate");
+	}
+	
+	@Test
+	public void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
+		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "notAnInt");
+		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
+				.withCachedHashCode("cachedHashCode", "notAnInt");
+	}
+	
+	@Test
+	public void fail_whenCalculateHashCodeMethodTakesParamters() {
+		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "takesParameters");
+		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
+				.withCachedHashCode("cachedHashCode", "takesParameters");
 	}
 	
 	static class ObjectWithValidCachedHashCode {
@@ -116,5 +139,14 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		private int calcHashCode() {
 			return 3;
 		}
+	}
+	
+	@SuppressWarnings("unused")
+	static class InvalidCalculateHashCodeMethodsContainer {
+		private int cachedHashCode;
+		
+		public int notPrivate() { return -1; }
+		private String notAnInt() { return "wrong"; }
+		private int takesParameters(int x) { return x; }
 	}
 }

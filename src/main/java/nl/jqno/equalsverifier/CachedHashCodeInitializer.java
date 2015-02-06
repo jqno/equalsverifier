@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
 
@@ -90,13 +91,14 @@ public class CachedHashCodeInitializer {
 		while (!currentClass.equals(Object.class)) {
 			try {
 				Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
-				method.setAccessible(true);
-				return method;
+				if (Modifier.isPrivate(method.getModifiers()) && method.getReturnType() == int.class) {
+					method.setAccessible(true);
+					return method;
+				}
 			}
-			catch (NoSuchMethodException ignore) {
-				currentClass = currentClass.getSuperclass();
-			}
+			catch (NoSuchMethodException ignore) {}
+			currentClass = currentClass.getSuperclass();
 		}
-		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: " + calculateHashCodeMethodName);
+		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: must be private int " + calculateHashCodeMethodName + "()");
 	}
 }
