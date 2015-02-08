@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
+import static nl.jqno.equalsverifier.util.Assert.assertFalse;
 import nl.jqno.equalsverifier.util.Formatter;
 
 public class CachedHashCodeChecker<T> implements Checker {
@@ -33,6 +34,9 @@ public class CachedHashCodeChecker<T> implements Checker {
 		
 		T reference = cachedHashCodeInitializer.getExample();
 		int actualHashCode = reference.hashCode();
+		assertFalse(Formatter.of("example.hashCode() cannot be zero. Please choose a different example."),
+				actualHashCode == 0);
+		
 		int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
 		assertEquals(Formatter.of("cachedHashCode is not properly initialized."), actualHashCode, recomputedHashCode);
 	}

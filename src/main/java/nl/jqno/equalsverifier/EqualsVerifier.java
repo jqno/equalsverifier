@@ -347,6 +347,9 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
+		if (example == null) {
+			throw new NullPointerException("example");
+		}
 		cachedHashCodeInitializer = new CachedHashCodeInitializer<T>(type, cachedHashCodeField, calculateHashCodeMethod, example);
 		return this;
 	}

@@ -116,6 +116,21 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test
+	public void fail_whenExampleIsNull() {
+		expectException(NullPointerException.class, "example");
+		EqualsVerifier.forClass(ObjectWithUninitializedCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", null);
+	}
+	
+	@Test
+	public void fail_whenHashCodeIsZero() {
+		expectFailure("example.hashCode() cannot be zero. Please choose a different example.");
+		EqualsVerifier.forClass(ObjectWithLegitimatelyZeroHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLegitimatelyZeroHashCode(1))
+				.verify();
+	}
+	
 	static class ObjectWithValidCachedHashCode {
 		@Nonnull private final String name;
 		private final int cachedHashCode;
@@ -219,6 +234,34 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		@SuppressWarnings("unused")
 		private int calcHashCode() {
 			return name.hashCode();
+		}
+	}
+	
+	static class ObjectWithLegitimatelyZeroHashCode {
+		@Nonnull private final int number;
+		private final int cachedHashCode;
+		
+		public ObjectWithLegitimatelyZeroHashCode(int number) {
+			this.number = number;
+			this.cachedHashCode = calcHashCode();
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof ObjectWithLegitimatelyZeroHashCode)) {
+				return false;
+			}
+			ObjectWithLegitimatelyZeroHashCode that = (ObjectWithLegitimatelyZeroHashCode) obj;
+			return number == that.number;
+		}
+		
+		@Override
+		public final int hashCode() {
+			return cachedHashCode;
+		}
+		
+		private int calcHashCode() {
+			return number - 1;
 		}
 	}
 }
