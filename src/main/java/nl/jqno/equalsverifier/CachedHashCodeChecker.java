@@ -17,19 +17,28 @@ package nl.jqno.equalsverifier;
 
 import static nl.jqno.equalsverifier.util.Assert.assertEquals;
 import static nl.jqno.equalsverifier.util.Assert.assertFalse;
+import static nl.jqno.equalsverifier.util.Assert.fail;
+
+import java.util.EnumSet;
+
 import nl.jqno.equalsverifier.util.Formatter;
 
 public class CachedHashCodeChecker<T> implements Checker {
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+	private final EnumSet<Warning> warningsToSuppress;
 	
-	public CachedHashCodeChecker(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	public CachedHashCodeChecker(CachedHashCodeInitializer<T> cachedHashCodeInitializer, EnumSet<Warning> warningsToSuppress) {
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+		this.warningsToSuppress = warningsToSuppress;
 	}
 	
 	@Override
 	public void check() {
 		if (cachedHashCodeInitializer.isPassthrough()) {
 			return;
+		}
+		if (warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
+			fail(Formatter.of("EqualsVerifier can only check cached hashCodes for immutable classes."));
 		}
 		
 		T reference = cachedHashCodeInitializer.getExample();

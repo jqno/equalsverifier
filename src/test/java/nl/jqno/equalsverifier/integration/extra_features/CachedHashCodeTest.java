@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
@@ -128,6 +129,15 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		expectFailure("example.hashCode() cannot be zero. Please choose a different example.");
 		EqualsVerifier.forClass(ObjectWithLegitimatelyZeroHashCode.class)
 				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLegitimatelyZeroHashCode(1))
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsedAndWarningNonfinalFieldsIsSuppressed() {
+		expectFailure("EqualsVerifier can only check cached hashCodes for immutable classes.");
+		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithValidCachedHashCode(SOME_NAME))
+				.suppress(Warning.NONFINAL_FIELDS)
 				.verify();
 	}
 	

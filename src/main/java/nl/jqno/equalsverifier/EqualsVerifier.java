@@ -415,7 +415,7 @@ public final class EqualsVerifier<T> {
 		Checker signatureChecker = new SignatureChecker<T>(type);
 		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
 		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress, cachedHashCodeInitializer);
-		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(cachedHashCodeInitializer);
+		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(cachedHashCodeInitializer, warningsToSuppress);
 		
 		signatureChecker.check();
 		abstractDelegationChecker.check();
