@@ -38,9 +38,9 @@ class HierarchyChecker<T> implements Checker {
 	private final ObjectAccessor<T> referenceAccessor;
 	private final T reference;
 	private final boolean typeIsFinal;
-	private final CachedHashCodeInitializer cachedHashCodeInitializer;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer cachedHashCodeInitializer) {
+	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
 		}

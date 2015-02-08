@@ -120,7 +120,7 @@ public final class EqualsVerifier<T> {
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
-	private CachedHashCodeInitializer cachedHashCodeInitializer = CachedHashCodeInitializer.PASSTHROUGH;
+	private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
 	
 	/**
 	 * Factory method. For general use.
@@ -346,8 +346,8 @@ public final class EqualsVerifier<T> {
 	 * @param calculateHashCodeMethod The name of the method which recomputes the hash code
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod) {
-		cachedHashCodeInitializer = new CachedHashCodeInitializer(type, cachedHashCodeField, calculateHashCodeMethod);
+	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
+		cachedHashCodeInitializer = new CachedHashCodeInitializer<T>(type, cachedHashCodeField, calculateHashCodeMethod, example);
 		return this;
 	}
 	
@@ -396,7 +396,7 @@ public final class EqualsVerifier<T> {
 		error.initCause(trueCause);
 		throw error;
 	}
-
+	
 	private void performVerification() {
 		if (type.isEnum()) {
 			return;
@@ -407,15 +407,17 @@ public final class EqualsVerifier<T> {
 		ensureUnequalExamples(classAccessor);
 		verifyWithExamples(classAccessor);
 	}
-
+	
 	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
 		Checker signatureChecker = new SignatureChecker<T>(type);
 		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
 		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress, cachedHashCodeInitializer);
+		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(cachedHashCodeInitializer);
 		
 		signatureChecker.check();
 		abstractDelegationChecker.check();
 		nullChecker.check();
+		cachedHashCodeChecker.check();
 	}
 	
 	private void ensureUnequalExamples(ClassAccessor<T> classAccessor) {

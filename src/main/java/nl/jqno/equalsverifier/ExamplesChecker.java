@@ -31,9 +31,9 @@ class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
-	private final CachedHashCodeInitializer cachedHashCodeInitializer;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples, CachedHashCodeInitializer cachedHashCodeInitializer) {
+	public ExamplesChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.type = type;
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;

@@ -41,9 +41,9 @@ class FieldsChecker<T> implements Checker {
 	private final EnumSet<Warning> warningsToSuppress;
 	private final boolean allFieldsShouldBeUsed;
 	private final Set<String> allFieldsShouldBeUsedExceptions;
-	private final CachedHashCodeInitializer cachedHashCodeInitializer;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer cachedHashCodeInitializer) {
+	public FieldsChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.classAccessor = classAccessor;
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);

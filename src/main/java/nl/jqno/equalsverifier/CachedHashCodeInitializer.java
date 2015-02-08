@@ -39,23 +39,36 @@ import nl.jqno.equalsverifier.util.FieldIterable;
  *
  * @author Niall Gallagher, Jan Ouwens
  */
-public class CachedHashCodeInitializer {
-	public static final CachedHashCodeInitializer PASSTHROUGH = new CachedHashCodeInitializer();
-	
+public class CachedHashCodeInitializer<T> {
 	private final boolean passthrough;
 	private final Field cachedHashCodeField;
 	private final Method calculateMethod;
+	private final T example;
 	
 	private CachedHashCodeInitializer() {
 		this.passthrough = true;
 		this.cachedHashCodeField = null;
 		this.calculateMethod = null;
+		this.example = null;
 	}
 	
-	public CachedHashCodeInitializer(Class<?> type, String cachedHashCodeField, String calculateHashCodeMethod) {
+	public CachedHashCodeInitializer(Class<?> type, String cachedHashCodeField, String calculateHashCodeMethod, T example) {
 		this.passthrough = false;
 		this.cachedHashCodeField = findCachedHashCodeField(type, cachedHashCodeField);
 		this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod);
+		this.example = example;
+	}
+	
+	public static <T> CachedHashCodeInitializer<T> passthrough() {
+		return new CachedHashCodeInitializer<T>();
+	}
+	
+	public boolean isPassthrough() {
+		return passthrough;
+	}
+	
+	public T getExample() {
+		return example;
 	}
 	
 	public int getInitializedHashCode(Object object) {

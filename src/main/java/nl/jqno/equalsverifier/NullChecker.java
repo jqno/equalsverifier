@@ -29,9 +29,9 @@ import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 class NullChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
 	private final EnumSet<Warning> warningsToSuppress;
-	private final CachedHashCodeInitializer cachedHashCodeInitializer;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public NullChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer cachedHashCodeInitializer) {
+	public NullChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.classAccessor = classAccessor;
 		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;

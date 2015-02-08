@@ -29,9 +29,9 @@ class AbstractDelegationChecker<T> implements Checker {
 	private final Class<T> type;
 	private final PrefabValues prefabValues;
 	private final ClassAccessor<T> classAccessor;
-	private final CachedHashCodeInitializer cachedHashCodeInitializer;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public AbstractDelegationChecker(ClassAccessor<T> classAccessor, CachedHashCodeInitializer cachedHashCodeInitializer) {
+	public AbstractDelegationChecker(ClassAccessor<T> classAccessor, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.type = classAccessor.getType();
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.classAccessor = classAccessor;
