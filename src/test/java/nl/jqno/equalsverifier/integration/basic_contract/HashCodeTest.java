@@ -35,6 +35,12 @@ public class HashCodeTest extends IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test
+	public void succeed_whenEqualsShortCircuitsOnHashCode() {
+		EqualsVerifier.forClass(ShortCircuitOnHashCode.class)
+				.verify();
+	}
+	
 	static final class RandomHashCode {
 		@Override
 		public int hashCode() {
@@ -54,6 +60,29 @@ public class HashCodeTest extends IntegrationTestBase {
 				return false;
 			}
 			return i == ((NoHashCode)obj).i;
+		}
+	}
+	
+	static final class ShortCircuitOnHashCode {
+		private final int i;
+		
+		public ShortCircuitOnHashCode(int i) { this.i = i; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof ShortCircuitOnHashCode)) {
+				return false;
+			}
+			if (hashCode() != obj.hashCode()) {
+				return false;
+			}
+			ShortCircuitOnHashCode other = (ShortCircuitOnHashCode)obj;
+			return i == other.i;
+		}
+		
+		@Override
+		public int hashCode() {
+			return i;
 		}
 	}
 }
