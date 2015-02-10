@@ -43,10 +43,10 @@ public class CachedHashCodeChecker<T> implements Checker {
 		
 		T reference = cachedHashCodeInitializer.getExample();
 		int actualHashCode = reference.hashCode();
+		int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
+		
+		assertEquals(Formatter.of("cachedHashCode is not properly initialized."), actualHashCode, recomputedHashCode);
 		assertFalse(Formatter.of("example.hashCode() cannot be zero. Please choose a different example."),
 				actualHashCode == 0);
-		
-		int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
-		assertEquals(Formatter.of("cachedHashCode is not properly initialized."), actualHashCode, recomputedHashCode);
 	}
 }

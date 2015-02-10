@@ -141,6 +141,13 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test
+	public void succeed_whenCachedHashCodeIsLazilyInitialized_givenItIsValid() {
+		EqualsVerifier.forClass(ObjectWithLazilyInitializedCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLazilyInitializedCachedHashCode(SOME_NAME))
+				.verify();
+	}
+	
 	static class ObjectWithValidCachedHashCode {
 		@Nonnull private final String name;
 		private final int cachedHashCode;
@@ -224,7 +231,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		
 		public ObjectWithUninitializedCachedHashCode(String name) {
 			this.name = name;
-			this.cachedHashCode = 42;
+			this.cachedHashCode = 0;
 		}
 		
 		@Override
@@ -272,6 +279,36 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		
 		private int calcHashCode() {
 			return number - 1;
+		}
+	}
+	
+	static class ObjectWithLazilyInitializedCachedHashCode {
+		@Nonnull private final String name;
+		private int cachedHashCode;
+		
+		public ObjectWithLazilyInitializedCachedHashCode(String name) {
+			this.name = name;
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof ObjectWithLazilyInitializedCachedHashCode)) {
+				return false;
+			}
+			ObjectWithLazilyInitializedCachedHashCode that = (ObjectWithLazilyInitializedCachedHashCode) obj;
+			return name.equals(that.name);
+		}
+		
+		@Override
+		public final int hashCode() {
+			if (cachedHashCode == 0) {
+				cachedHashCode = calcHashCode();
+			}
+			return cachedHashCode;
+		}
+		
+		private int calcHashCode() {
+			return name.hashCode();
 		}
 	}
 }
