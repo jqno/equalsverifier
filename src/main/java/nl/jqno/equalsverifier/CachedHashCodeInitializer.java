@@ -70,6 +70,13 @@ public class CachedHashCodeInitializer<T> {
 	public T getExample() {
 		return example;
 	}
+
+	public String getCachedHashCodeFieldName() {
+		if (isPassthrough()) {
+			return null;
+		}
+		return cachedHashCodeField.getName();
+	}
 	
 	public int getInitializedHashCode(Object object) {
 		if (!passthrough) {

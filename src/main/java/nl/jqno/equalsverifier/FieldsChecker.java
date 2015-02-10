@@ -74,11 +74,15 @@ class FieldsChecker<T> implements Checker {
 		inspector.check(new SymmetryFieldCheck());
 		inspector.check(new TransitivityFieldCheck());
 	}
-
+	
 	private boolean ignoreMutability() {
 		return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
 				classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
+	}
+	
+	private boolean isCachedHashCodeField(FieldAccessor accessor) {
+		return accessor.getFieldName().equals(cachedHashCodeInitializer.getCachedHashCodeFieldName());
 	}
 	
 	private class SymmetryFieldCheck implements FieldCheck {
@@ -148,6 +152,10 @@ class FieldsChecker<T> implements Checker {
 	private class SignificantFieldCheck implements FieldCheck {
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			if (isCachedHashCodeField(referenceAccessor)) {
+				return;
+			}
+			
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
 			String fieldName = referenceAccessor.getFieldName();
@@ -326,13 +334,17 @@ class FieldsChecker<T> implements Checker {
 	private class MutableStateFieldCheck implements FieldCheck {
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+			if (isCachedHashCodeField(referenceAccessor)) {
+				return;
+			}
+			
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
 			
 			changedAccessor.changeField(prefabValues);
-
+			
 			boolean equalsChanged = !reference.equals(changed);
-
+			
 			if (equalsChanged && !referenceAccessor.fieldIsFinal()) {
 				fail(Formatter.of("Mutability: equals depends on mutable field %%.", referenceAccessor.getFieldName()));
 			}
