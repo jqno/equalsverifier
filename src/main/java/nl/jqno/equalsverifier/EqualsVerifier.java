@@ -334,16 +334,35 @@ public final class EqualsVerifier<T> {
 		this.redefinedSubclass = redefinedSubclass;
 		return this;
 	}
-
+	
 	/**
-	 * Signals that the {@code hashCode()} method of the object returns a
-	 * cached hash code which it stores in the given field, and that
-	 * {@link EqualsVerifier} should call the given method to recompute
-	 * and update the cached hash code prior to calling the
-	 * {@code hashCode()} method.
+	 * Signals that T caches its hashCode, instead of re-calculating it each
+	 * time the {@code hashCode()} method is called.
+	 * 
+	 * There are 3 conditions to verify cached hashCodes:
+	 * 
+	 * First, the class under test must have a private int field that contains
+	 * the cached hashCode.
+	 * 
+	 * Second, the class under test must have a private method that calculates
+	 * the hashCode. The method must return an int and may not take any
+	 * parameters. It should be used by the constructor or the hashCode method
+	 * of the class under test to initialize the cached hashCode. This may lead
+	 * to slightly awkward production code, but unfortunately, it is necessary
+	 * for EqualsVerifier to verify that the hashCode is correct.
+	 * 
+	 * Finally, only immutable objects can be verified. In other words,
+	 * {@code withCachedHashCode} can not be used when
+	 * {@link Warning#NONFINAL_FIELDS} is suppressed.
 	 *
-	 * @param cachedHashCodeField The name of the field which stores the cached hash code
-	 * @param calculateHashCodeMethod The name of the method which recomputes the hash code
+	 * @param cachedHashCodeField
+	 *            The name of the field which stores the cached hash code.
+	 * @param calculateHashCodeMethod
+	 *            The name of the method which recomputes the hash code. It
+	 *            should return an int and take no parameters.
+	 * @param example
+	 *            An instance of the class under test, to verify that the
+	 *            hashCode has been initialized properly.
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
