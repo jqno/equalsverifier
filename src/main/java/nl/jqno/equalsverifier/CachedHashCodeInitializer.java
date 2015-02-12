@@ -20,6 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.util.FieldIterable;
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
 /**
  * Records an initializer for a cached hash code (field name and recompute
@@ -92,7 +93,7 @@ public class CachedHashCodeInitializer<T> {
 			cachedHashCodeField.set(object, recomputedHashCode);
 		}
 		catch (Exception e) {
-			throw new IllegalStateException("Cached hashCode: Failed to recompute hashCode", e);
+			throw new ReflectionException(e);
 		}
 	}
 	
