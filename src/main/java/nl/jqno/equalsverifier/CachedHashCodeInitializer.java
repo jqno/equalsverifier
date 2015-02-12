@@ -92,7 +92,7 @@ public class CachedHashCodeInitializer<T> {
 			cachedHashCodeField.set(object, recomputedHashCode);
 		}
 		catch (Exception e) {
-			throw new IllegalStateException("Failed to recompute cached hash code", e);
+			throw new IllegalStateException("Cached hashCode: Failed to recompute hashCode", e);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class CachedHashCodeInitializer<T> {
 				}
 			}
 		}
-		throw new IllegalArgumentException("Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
+		throw new IllegalArgumentException("Cached hashCode: Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
 	}
 	
 	private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
@@ -121,6 +121,6 @@ public class CachedHashCodeInitializer<T> {
 			catch (NoSuchMethodException ignore) {}
 			currentClass = currentClass.getSuperclass();
 		}
-		throw new IllegalArgumentException("Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
+		throw new IllegalArgumentException("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
 	}
 }

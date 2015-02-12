@@ -28,6 +28,7 @@ import javax.annotation.Nonnull;
  */
 public class CachedHashCodeTest extends IntegrationTestBase {
 	private static final String SOME_NAME = "some name";
+	private static final String CACHED_HASHCODE = "Cached hashCode:";
 	private static final String MALFORMED_CALCULATEHASHCODEMETHOD = "Could not find calculateHashCodeMethod: must be 'private int";
 	private static final String MALFORMED_CACHEDHASHCODEFIELD = "Could not find cachedHashCodeField: must be 'private int";
 	
@@ -62,59 +63,51 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenCachedHashCodeFieldDoesNotExist() {
-		expectException(IllegalArgumentException.class, "Could not find cachedHashCodeField", "doesNotExist");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "doesNotExist");
 		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
 				.withCachedHashCode("doesNotExist", "calcHashCode", new ObjectWithValidCachedHashCode(SOME_NAME));
 	}
 	
 	@Test
-	public void fail_whenCalculateHashCodeMethodDoesNotExist() {
-		expectException(IllegalArgumentException.class, "Could not find calculateHashCodeMethod", "doesNotExist");
-		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
-				.withCachedHashCode("cachedHashCode", "doesNotExist", new ObjectWithValidCachedHashCode(SOME_NAME));
-	}
-	
-	@Test
 	public void fail_whenCachedHashCodeFieldIsNotPrivate() {
-		expectException(IllegalArgumentException.class, MALFORMED_CACHEDHASHCODEFIELD, "notPrivate");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "notPrivate");
 		EqualsVerifier.forClass(InvalidCachedHashCodeFieldContainer.class)
 				.withCachedHashCode("notPrivate", "calculateHashCode", new InvalidCachedHashCodeFieldContainer());
 	}
 	
 	@Test
 	public void fail_whenCachedHashCodeFieldIsNotAnInt() {
-		expectException(IllegalArgumentException.class, MALFORMED_CACHEDHASHCODEFIELD, "notAnInt");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "notAnInt");
 		EqualsVerifier.forClass(InvalidCachedHashCodeFieldContainer.class)
 				.withCachedHashCode("notAnInt", "calculateHashCode", new InvalidCachedHashCodeFieldContainer());
 	}
 	
 	@Test
+	public void fail_whenCalculateHashCodeMethodDoesNotExist() {
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "doesNotExist");
+		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "doesNotExist", new ObjectWithValidCachedHashCode(SOME_NAME));
+	}
+	
+	@Test
 	public void fail_whenCalculateHashCodeMethodIsNotPrivate() {
-		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "notPrivate");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "notPrivate");
 		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
 				.withCachedHashCode("cachedHashCode", "notPrivate", new InvalidCalculateHashCodeMethodsContainer());
 	}
 	
 	@Test
 	public void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
-		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "notAnInt");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "notAnInt");
 		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
 				.withCachedHashCode("cachedHashCode", "notAnInt", new InvalidCalculateHashCodeMethodsContainer());
 	}
 	
 	@Test
 	public void fail_whenCalculateHashCodeMethodTakesParamters() {
-		expectException(IllegalArgumentException.class, MALFORMED_CALCULATEHASHCODEMETHOD, "takesParameters");
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "takesParameters");
 		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
 				.withCachedHashCode("cachedHashCode", "takesParameters", new InvalidCalculateHashCodeMethodsContainer());
-	}
-	
-	@Test
-	public void fail_whenCachedHashCodeFieldIsNotInitialized() {
-		expectFailure("cachedHashCode is not properly initialized.");
-		EqualsVerifier.forClass(ObjectWithUninitializedCachedHashCode.class)
-				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithUninitializedCachedHashCode(SOME_NAME))
-				.verify();
 	}
 	
 	@Test
@@ -125,8 +118,16 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@Test
+	public void fail_whenCachedHashCodeFieldIsNotInitialized() {
+		expectFailure(CACHED_HASHCODE, "hashCode is not properly initialized.");
+		EqualsVerifier.forClass(ObjectWithUninitializedCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithUninitializedCachedHashCode(SOME_NAME))
+				.verify();
+	}
+	
+	@Test
 	public void fail_whenHashCodeIsZero() {
-		expectFailure("example.hashCode() cannot be zero. Please choose a different example.");
+		expectFailure(CACHED_HASHCODE, "example.hashCode() cannot be zero. Please choose a different example.");
 		EqualsVerifier.forClass(ObjectWithLegitimatelyZeroHashCode.class)
 				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLegitimatelyZeroHashCode(1))
 				.verify();
@@ -134,7 +135,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsedAndWarningNonfinalFieldsIsSuppressed() {
-		expectFailure("EqualsVerifier can only check cached hashCodes for immutable classes.");
+		expectFailure(CACHED_HASHCODE, "EqualsVerifier can only check cached hashCodes for immutable classes.");
 		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
 				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithValidCachedHashCode(SOME_NAME))
 				.suppress(Warning.NONFINAL_FIELDS)

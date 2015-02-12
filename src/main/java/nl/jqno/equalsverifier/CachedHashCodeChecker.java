@@ -38,15 +38,15 @@ public class CachedHashCodeChecker<T> implements Checker {
 			return;
 		}
 		if (warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
-			fail(Formatter.of("EqualsVerifier can only check cached hashCodes for immutable classes."));
+			fail(Formatter.of("Cached hashCode: EqualsVerifier can only check cached hashCodes for immutable classes."));
 		}
 		
 		T reference = cachedHashCodeInitializer.getExample();
 		int actualHashCode = reference.hashCode();
 		int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
 		
-		assertEquals(Formatter.of("cachedHashCode is not properly initialized."), actualHashCode, recomputedHashCode);
-		assertFalse(Formatter.of("example.hashCode() cannot be zero. Please choose a different example."),
+		assertEquals(Formatter.of("Cached hashCode: hashCode is not properly initialized."), actualHashCode, recomputedHashCode);
+		assertFalse(Formatter.of("Cached hashCode: example.hashCode() cannot be zero. Please choose a different example."),
 				actualHashCode == 0);
 	}
 }
