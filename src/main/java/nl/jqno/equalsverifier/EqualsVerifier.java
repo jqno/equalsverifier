@@ -67,7 +67,7 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
  * 
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
- *     .useGetClass()
+ *     .usingGetClass()
  *     .verify();
  * }</pre>
  * 
@@ -98,12 +98,8 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
  * - That transient fields not be included in the {@code equals} contract for
  * the class. (Optional)
  * <p>
- * Dependencies:<br>
- * - objenesis 1.1: http://code.google.com/p/objenesis/<br>
- * - cglib-nodep 2.2: http://cglib.sourceforge.net/
- * <p>
  * For more information, see the documentation at
- * http://equalsverifier.googlecode.com/
+ * http://www.jqno.nl/equalsverifier/
  * 
  * @param <T> The class under test.
  * 
