@@ -347,6 +347,9 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	
 	static final class X {
 		public static final X x = new X();
+		
+		@Override public boolean equals(Object obj) { return obj instanceof X; }
+		@Override public int hashCode() { return 42; }
 	}
 	
 	static final class IndirectStaticFinalContainer {
@@ -359,7 +362,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 			if (!(obj instanceof IndirectStaticFinalContainer)) {
 				return false;
 			}
-			return ((IndirectStaticFinalContainer)obj).x == x;
+			return nullSafeEquals(x, ((IndirectStaticFinalContainer)obj).x);
 		}
 		
 		@Override

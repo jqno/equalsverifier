@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Jan Ouwens
+ * Copyright 2010-2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@ public enum Warning {
 	 * Suppressing this warning has no effect when the bytecode can be read.
 	 */
 	ANNOTATION,
+	
+	DOUBLE_EQUAL_SIGN,
 	
 	/**
 	 * Disables the check, when the {@code equals} method is overridden in the

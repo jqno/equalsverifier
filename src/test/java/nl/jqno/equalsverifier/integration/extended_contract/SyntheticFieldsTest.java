@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2014 Jan Ouwens
+ * Copyright 2010, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,9 @@ public class SyntheticFieldsTest {
 		
 		private /* non-static */ final class Inner {
 			int foo;
+			
+			@Override public boolean equals(Object obj) { return obj instanceof Inner; }
+			@Override public int hashCode() { return 42; }
 		}
 		
 		public Outer() { inner = null; }

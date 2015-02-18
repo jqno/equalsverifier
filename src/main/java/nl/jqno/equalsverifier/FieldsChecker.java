@@ -269,6 +269,15 @@ class FieldsChecker<T> implements Checker {
 			changedAccessor.changeField(prefabValues);
 			checkReflexivityFor(referenceAccessor, changedAccessor);
 			
+			Class<?> fieldType = changedAccessor.getFieldType();
+			if (!warningsToSuppress.contains(Warning.DOUBLE_EQUAL_SIGN) && !fieldType.equals(Object.class) &&
+					!fieldType.isPrimitive() && !fieldType.isEnum() && !fieldType.isArray()) {
+				Object x = changedAccessor.get();
+				Object y = ObjectAccessor.of(x).copy();
+				changedAccessor.set(y);
+				checkReflexivityFor(referenceAccessor, changedAccessor);
+			}
+			
 			boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
 			boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField());
 			boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS);

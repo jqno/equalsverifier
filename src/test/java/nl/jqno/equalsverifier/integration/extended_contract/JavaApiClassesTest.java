@@ -42,6 +42,7 @@ import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.regex.Pattern;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
@@ -50,12 +51,14 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACollectionInterface() {
 		EqualsVerifier.forClass(CollectionInterfacesContainer.class)
+				.suppress(Warning.DOUBLE_EQUAL_SIGN)
 				.verify();
 	}
 	
 	@Test
 	public void succeed_whenClassContainsACommonJavaApiType() {
 		EqualsVerifier.forClass(CommonClassesContainer.class)
+				.suppress(Warning.DOUBLE_EQUAL_SIGN)
 				.verify();
 	}
 	

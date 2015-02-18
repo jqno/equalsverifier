@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013-2014 Jan Ouwens
+ * Copyright 2010, 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Util;
 
 import org.junit.Test;
 
@@ -67,7 +68,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualsCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
 		EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class)
-				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(), new AbstractDelegatorImpl())
+				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
 				.verify();
 	}
 	
@@ -81,7 +82,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenHashCodeCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
 		EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
-				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(), new AbstractDelegatorImpl())
+				.withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
 				.verify();
 	}
 	
@@ -278,9 +279,19 @@ public class AbstractDelegationTest extends IntegrationTestBase {
 	
 	static abstract class AbstractDelegator {
 		abstract void abstractDelegation();
+		
+		private int i;
+		public AbstractDelegator(int i) { this.i = i; }
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override
+		public int hashCode() {
+			return Util.defaultHashCode(this);
+		}
 	}
 	
 	static final class AbstractDelegatorImpl extends AbstractDelegator {
+		public AbstractDelegatorImpl(int i) { super(i); }
+		
 		@Override
 		public void abstractDelegation() {}
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class Java8ClassTest extends IntegrationTestBase {
 			"\n        if (!(obj instanceof Java8Class)) {" +
 			"\n            return false;" +
 			"\n        }" +
-			"\n        return objects == ((Java8Class)obj).objects;" +
+			"\n        return Objects.equals(objects, ((Java8Class)obj).objects);" +
 			"\n    }" +
 			"\n    " +
 			"\n    @Override" +
