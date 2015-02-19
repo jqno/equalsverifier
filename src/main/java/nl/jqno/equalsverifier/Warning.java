@@ -34,7 +34,21 @@ public enum Warning {
 	 */
 	ANNOTATION,
 	
-	DOUBLE_EQUAL_SIGN,
+	/**
+	 * Disables the check for reference equality on fields.
+	 * <p>
+	 * EqualsVerifier will check if the {@code equals} method calls equals on
+	 * the object fields of the class under test, instead of the {@code ==}
+	 * operator, since normally this signifies a mistake (e.g. comparing string
+	 * fields with {@code ==}).
+	 * <p>
+	 * However, sometimes {@code ==} is used intentionally, or the field in
+	 * question doesn't implement {@code equals} itself, so a call to the
+	 * {@code equals} method of that field is essentially a reference equality
+	 * check instead of a value equality check. In these cases, this warning can
+	 * be suppressed.
+	 */
+	REFERENCE_EQUALITY,
 	
 	/**
 	 * Disables the check, when the {@code equals} method is overridden in the

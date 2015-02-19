@@ -51,14 +51,14 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACollectionInterface() {
 		EqualsVerifier.forClass(CollectionInterfacesContainer.class)
-				.suppress(Warning.DOUBLE_EQUAL_SIGN)
+				.suppress(Warning.REFERENCE_EQUALITY)
 				.verify();
 	}
 	
 	@Test
 	public void succeed_whenClassContainsACommonJavaApiType() {
 		EqualsVerifier.forClass(CommonClassesContainer.class)
-				.suppress(Warning.DOUBLE_EQUAL_SIGN)
+				.suppress(Warning.REFERENCE_EQUALITY)
 				.verify();
 	}
 	

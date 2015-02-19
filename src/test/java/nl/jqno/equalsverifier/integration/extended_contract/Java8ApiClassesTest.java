@@ -54,7 +54,7 @@ public class Java8ApiClassesTest extends IntegrationTestBase {
 		
 		Class<?> java8Class = compiler.compile(CLASS_NAME, CLASS);
 		EqualsVerifier.forClass(java8Class)
-				.suppress(Warning.DOUBLE_EQUAL_SIGN)
+				.suppress(Warning.REFERENCE_EQUALITY)
 				.verify();
 	}
 	

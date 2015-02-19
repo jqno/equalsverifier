@@ -278,7 +278,7 @@ class FieldsChecker<T> implements Checker {
 		
 		private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Class<?> fieldType = changedAccessor.getFieldType();
-			if (warningsToSuppress.contains(Warning.DOUBLE_EQUAL_SIGN) || fieldType.equals(Object.class) ||
+			if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY) || fieldType.equals(Object.class) ||
 					fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
 				return;
 			}
@@ -288,7 +288,7 @@ class FieldsChecker<T> implements Checker {
 			changedAccessor.set(copy);
 			
 			Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
-					"\nIf this is intentional, consider suppressing Warning.%%", changedAccessor.getFieldName(), Warning.DOUBLE_EQUAL_SIGN.toString());
+					"\nIf this is intentional, consider suppressing Warning.%%", changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
 			Object left = referenceAccessor.getObject();
 			Object right = changedAccessor.getObject();
 			assertEquals(f, left, right);

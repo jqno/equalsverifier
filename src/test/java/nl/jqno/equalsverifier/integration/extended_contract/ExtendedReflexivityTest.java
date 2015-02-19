@@ -41,7 +41,7 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
 		EqualsVerifier.forClass(UsesDoubleEqualSign.class)
-				.suppress(Warning.DOUBLE_EQUAL_SIGN)
+				.suppress(Warning.REFERENCE_EQUALITY)
 				.verify();
 	}
 	
