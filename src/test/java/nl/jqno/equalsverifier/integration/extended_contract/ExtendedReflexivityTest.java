@@ -33,7 +33,7 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenEqualsUsesDoubleEqualSignForObjects() {
-		expectFailure("Reflexivity");
+		expectFailure("Reflexivity", "== used instead of .equals()", "stringField");
 		EqualsVerifier.forClass(UsesDoubleEqualSign.class)
 				.verify();
 	}
@@ -63,9 +63,9 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 	}
 	
 	static final class UsesDoubleEqualSign {
-		private final String s;
+		private final String stringField;
 		
-		public UsesDoubleEqualSign(String s) { this.s = s; }
+		public UsesDoubleEqualSign(String s) { this.stringField = s; }
 		
 		@Override
 		public boolean equals(Object obj) {
@@ -73,7 +73,7 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 				return false;
 			}
 			UsesDoubleEqualSign other = (UsesDoubleEqualSign)obj;
-			return s == other.s;
+			return stringField == other.stringField;
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }

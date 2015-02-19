@@ -265,19 +265,36 @@ class FieldsChecker<T> implements Checker {
 				return;
 			}
 			
+			checkReferenceReflexivity(referenceAccessor, changedAccessor);
+			checkValueReflexivity(referenceAccessor, changedAccessor);
+			checkNullReflexivity(referenceAccessor, changedAccessor);
+		}
+		
+		private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			referenceAccessor.changeField(prefabValues);
 			changedAccessor.changeField(prefabValues);
 			checkReflexivityFor(referenceAccessor, changedAccessor);
-			
+		}
+		
+		private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Class<?> fieldType = changedAccessor.getFieldType();
-			if (!warningsToSuppress.contains(Warning.DOUBLE_EQUAL_SIGN) && !fieldType.equals(Object.class) &&
-					!fieldType.isPrimitive() && !fieldType.isEnum() && !fieldType.isArray()) {
-				Object x = changedAccessor.get();
-				Object y = ObjectAccessor.of(x).copy();
-				changedAccessor.set(y);
-				checkReflexivityFor(referenceAccessor, changedAccessor);
+			if (warningsToSuppress.contains(Warning.DOUBLE_EQUAL_SIGN) || fieldType.equals(Object.class) ||
+					fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
+				return;
 			}
 			
+			Object value = changedAccessor.get();
+			Object copy = ObjectAccessor.of(value).copy();
+			changedAccessor.set(copy);
+			
+			Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
+					"\nIf this is intentional, consider suppressing Warning.%%", changedAccessor.getFieldName(), Warning.DOUBLE_EQUAL_SIGN.toString());
+			Object left = referenceAccessor.getObject();
+			Object right = changedAccessor.getObject();
+			assertEquals(f, left, right);
+		}
+		
+		private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
 			boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField());
 			boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS);
