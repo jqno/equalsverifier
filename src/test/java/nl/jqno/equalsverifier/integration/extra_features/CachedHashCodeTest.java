@@ -90,13 +90,6 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void fail_whenCalculateHashCodeMethodIsNotPrivate() {
-		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "notPrivate");
-		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
-				.withCachedHashCode("cachedHashCode", "notPrivate", new InvalidCalculateHashCodeMethodsContainer());
-	}
-	
-	@Test
 	public void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
 		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "notAnInt");
 		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
@@ -108,6 +101,25 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "takesParameters");
 		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
 				.withCachedHashCode("cachedHashCode", "takesParameters", new InvalidCalculateHashCodeMethodsContainer());
+	}
+	
+	@Test
+	public void fail_whenCalculateHashCodeMethodIsPublic() {
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "visible");
+		EqualsVerifier.forClass(InvalidCalculateHashCodeMethodsContainer.class)
+				.withCachedHashCode("cachedHashCode", "visible", new InvalidCalculateHashCodeMethodsContainer());
+	}
+	
+	@Test
+	public void succeed_whenCalculateHashCodeMethodIsProtected() {
+		EqualsVerifier.forClass(ObjectWithProtectedCalculateHashCodeMethod.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithProtectedCalculateHashCodeMethod(SOME_NAME));
+	}
+	
+	@Test
+	public void succeed_whenCalculateHashCodeMethodHasDefaultVisibility() {
+		EqualsVerifier.forClass(ObjectWithDefaultVisibilityCalculateHashCodeMethod.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithDefaultVisibilityCalculateHashCodeMethod(SOME_NAME));
 	}
 	
 	@Test
@@ -235,9 +247,65 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	static class InvalidCalculateHashCodeMethodsContainer {
 		private int cachedHashCode;
 		
-		public int notPrivate() { return -1; }
+		public int visible() { return -1; }
 		private String notAnInt() { return "wrong"; }
 		private int takesParameters(int x) { return x; }
+	}
+	
+	static class ObjectWithProtectedCalculateHashCodeMethod {
+		@Nonnull private final String name;
+		private final int cachedHashCode;
+		
+		public ObjectWithProtectedCalculateHashCodeMethod(String name) {
+			this.name = name;
+			this.cachedHashCode = calcHashCode();
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof ObjectWithProtectedCalculateHashCodeMethod)) {
+				return false;
+			}
+			ObjectWithProtectedCalculateHashCodeMethod that = (ObjectWithProtectedCalculateHashCodeMethod) obj;
+			return name.equals(that.name);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return cachedHashCode;
+		}
+		
+		protected int calcHashCode() {
+			return name.hashCode();
+		}
+	}
+	
+	static class ObjectWithDefaultVisibilityCalculateHashCodeMethod {
+		@Nonnull private final String name;
+		private final int cachedHashCode;
+		
+		public ObjectWithDefaultVisibilityCalculateHashCodeMethod(String name) {
+			this.name = name;
+			this.cachedHashCode = calcHashCode();
+		}
+		
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof ObjectWithDefaultVisibilityCalculateHashCodeMethod)) {
+				return false;
+			}
+			ObjectWithDefaultVisibilityCalculateHashCodeMethod that = (ObjectWithDefaultVisibilityCalculateHashCodeMethod) obj;
+			return name.equals(that.name);
+		}
+		
+		@Override
+		public final int hashCode() {
+			return cachedHashCode;
+		}
+		
+		int calcHashCode() {
+			return name.hashCode();
+		}
 	}
 	
 	static class ObjectWithUninitializedCachedHashCode {

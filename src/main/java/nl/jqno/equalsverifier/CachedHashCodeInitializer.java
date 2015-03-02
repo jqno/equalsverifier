@@ -114,7 +114,7 @@ public class CachedHashCodeInitializer<T> {
 		while (!currentClass.equals(Object.class)) {
 			try {
 				Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
-				if (Modifier.isPrivate(method.getModifiers()) && method.getReturnType().equals(int.class)) {
+				if (!Modifier.isPublic(method.getModifiers()) && method.getReturnType().equals(int.class)) {
 					method.setAccessible(true);
 					return method;
 				}
