@@ -124,9 +124,10 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	
 	@Test
 	public void fail_whenExampleIsNull() {
-		expectException(NullPointerException.class, "example");
+		expectFailure(CACHED_HASHCODE, "example cannot be null.");
 		EqualsVerifier.forClass(ObjectWithUninitializedCachedHashCode.class)
-				.withCachedHashCode("cachedHashCode", "calcHashCode", null);
+				.withCachedHashCode("cachedHashCode", "calcHashCode", null)
+				.verify();
 	}
 	
 	@Test
@@ -142,6 +143,23 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		expectFailure(CACHED_HASHCODE, "example.hashCode() cannot be zero. Please choose a different example.");
 		EqualsVerifier.forClass(ObjectWithLegitimatelyZeroHashCode.class)
 				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLegitimatelyZeroHashCode(1))
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenCachedHashCodeFieldIsNotInitialized_givenExampleIsNullAndNoExampleForCachedHashCodeIsSuppressed() {
+		EqualsVerifier.forClass(ObjectWithUninitializedCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", null)
+				.suppress(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)
+				.verify();
+	}
+	
+	@Test
+	public void fail_whenNoExampleForCachedHashCodeIsSuppressedAndExampleIsNotNull() {
+		expectFailure(CACHED_HASHCODE, "example must be null if " + Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE + " is suppressed");
+		EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithValidCachedHashCode(SOME_NAME))
+				.suppress(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)
 				.verify();
 	}
 	

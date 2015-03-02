@@ -95,6 +95,18 @@ public enum Warning {
 	IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 	
 	/**
+	 * Disables the example check for cached hashCode.
+	 * <p>
+	 * The example check verifies that the cached hashCode is properly
+	 * initialized. You can use this, if creating an example object is too
+	 * cumbersome. In this case, null can be passed as an example.
+	 * <p>
+	 * Note that suppressing this warning can be dangerous and should only be
+	 * done in unusual circumstances.
+	 */
+	NO_EXAMPLE_FOR_CACHED_HASHCODE,
+	
+	/**
 	 * Disables checks for non-final fields on which {@code equals} and
 	 * {@code hashCode} depend.
 	 * <p>
@@ -103,10 +115,9 @@ public enum Warning {
 	 * classes that depend on non-final fields in these methods cannot reliably
 	 * be used in collections.
 	 * <p>
-	 * However, sometimes an external library requires that fields be
-	 * non-final. An example of this are Java Beans. In such a case, suppress
-	 * this warning to prevent {@link EqualsVerifier} from checking for
-	 * non-final fields.
+	 * However, sometimes an external library requires that fields be non-final.
+	 * An example of this are Java Beans. In such a case, suppress this warning
+	 * to prevent {@link EqualsVerifier} from checking for non-final fields.
 	 */
 	NONFINAL_FIELDS,
 	
@@ -114,10 +125,10 @@ public enum Warning {
 	 * Disables checks for {@link NullPointerException} within {@code equals},
 	 * {@code hashCode} and {@code toString} methods.
 	 * <p>
-	 * Sometimes the constructor of a class makes sure no field can be null.
-	 * If this is the case, and if the fields cannot be made null later in the
-	 * lifecycle of the class by setters or other methods, suppress this
-	 * warning to disable the check for {@link NullPointerException}.
+	 * Sometimes the constructor of a class makes sure no field can be null. If
+	 * this is the case, and if the fields cannot be made null later in the
+	 * lifecycle of the class by setters or other methods, suppress this warning
+	 * to disable the check for {@link NullPointerException}.
 	 */
 	NULL_FIELDS,
 	
@@ -126,9 +137,9 @@ public enum Warning {
 	 * <p>
 	 * {@link EqualsVerifier}'s standard behaviour, if T is not final and
 	 * neither are its {@code equals} and {@code hashCode} methods, is to
-	 * require a reference to a subclass of T for which no instance can be
-	 * equal to any instance of T, to make sure that subclasses that can
-	 * redefine {@code equals} or {@code hashCode} don't break the contract.
+	 * require a reference to a subclass of T for which no instance can be equal
+	 * to any instance of T, to make sure that subclasses that can redefine
+	 * {@code equals} or {@code hashCode} don't break the contract.
 	 * <p>
 	 * Some may find that too strict for their liking; suppressing this warning
 	 * disables that test.

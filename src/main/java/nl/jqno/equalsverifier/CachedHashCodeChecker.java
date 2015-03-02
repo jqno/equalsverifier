@@ -42,11 +42,21 @@ public class CachedHashCodeChecker<T> implements Checker {
 		}
 		
 		T reference = cachedHashCodeInitializer.getExample();
-		int actualHashCode = reference.hashCode();
-		int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
-		
-		assertEquals(Formatter.of("Cached hashCode: hashCode is not properly initialized."), actualHashCode, recomputedHashCode);
-		assertFalse(Formatter.of("Cached hashCode: example.hashCode() cannot be zero. Please choose a different example."),
-				actualHashCode == 0);
+		if (warningsToSuppress.contains(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)) {
+			if (reference != null) {
+				fail(Formatter.of("Cached hashCode: example must be null if %% is suppressed", Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE.name()));
+			}
+		}
+		else {
+			if (reference == null) {
+				fail(Formatter.of("Cached hashCode: example cannot be null."));
+			}
+			int actualHashCode = reference.hashCode();
+			int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
+			
+			assertEquals(Formatter.of("Cached hashCode: hashCode is not properly initialized."), actualHashCode, recomputedHashCode);
+			assertFalse(Formatter.of("Cached hashCode: example.hashCode() cannot be zero. Please choose a different example."),
+					actualHashCode == 0);
+		}
 	}
 }
