@@ -88,7 +88,7 @@ public class ConditionalInstantiator {
 	 * @param paramTypes
 	 *            The types of the parameters of the specific overload of the
 	 *            factory method we want to call.
-	 * @param paramValuesa
+	 * @param paramValues
 	 *            The values that we want to pass into the factory method.
 	 * @return An instance of the type given by the factory method with the
 	 *         given parameter values, or null of the type does not exist.
