@@ -288,8 +288,14 @@ class FieldsChecker<T> implements Checker {
 		
 		private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			Class<?> fieldType = changedAccessor.getFieldType();
-			if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY) || fieldType.equals(Object.class) ||
-					fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
+			if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
+				return;
+			}
+			if (fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
+				return;
+			}
+			ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
+			if (fieldType.equals(Object.class) || !fieldTypeAccessor.declaresEquals()) {
 				return;
 			}
 			

@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -42,6 +41,18 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 	public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
 		EqualsVerifier.forClass(UsesDoubleEqualSign.class)
 				.suppress(Warning.REFERENCE_EQUALITY)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectDoesntDeclareEquals() {
+		EqualsVerifier.forClass(FieldHasNoEquals.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterface() {
+		EqualsVerifier.forClass(FieldIsInterface.class)
 				.verify();
 	}
 	
@@ -77,5 +88,43 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	static final class FieldHasNoEquals {
+		private final NoEquals field;
+		
+		public FieldHasNoEquals(NoEquals field) { this.field = field; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FieldHasNoEquals)) {
+				return false;
+			}
+			FieldHasNoEquals other = (FieldHasNoEquals)obj;
+			return field == other.field;
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+		
+		static final class NoEquals {}
+	}
+	
+	static final class FieldIsInterface {
+		private final Interface field;
+		
+		public FieldIsInterface(Interface field) { this.field = field; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof FieldIsInterface)) {
+				return false;
+			}
+			FieldIsInterface other = (FieldIsInterface)obj;
+			return field == other.field;
+		}
+		
+		@Override public int hashCode() { return defaultHashCode(this); }
+		
+		static interface Interface {}
 	}
 }
