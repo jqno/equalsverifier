@@ -48,7 +48,7 @@ public class Java8ApiClassesTest extends IntegrationTestBase {
 	
 	@Test
 	public void successfullyInstantiatesAJava8Class_whenJava8IsAvailable() throws Exception {
-		if (!isTypeAvailable("java.util.Optional")) {
+		if (!isJava8Available()) {
 			return;
 		}
 		

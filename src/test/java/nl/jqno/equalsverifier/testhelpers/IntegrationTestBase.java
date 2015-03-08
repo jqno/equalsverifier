@@ -64,7 +64,11 @@ public class IntegrationTestBase {
 		}
 	}
 	
-	public boolean isTypeAvailable(String fullyQualifiedTypeName) {
+	public boolean isJava8Available() {
+		return isTypeAvailable("java.util.Optional");
+	}
+	
+	private boolean isTypeAvailable(String fullyQualifiedTypeName) {
 		return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
 	}
 }

@@ -84,7 +84,7 @@ public class Java8ClassTest extends IntegrationTestBase {
 	
 	@Test
 	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
-		if (!isTypeAvailable("java.util.Optional")) {
+		if (!isJava8Available()) {
 			return;
 		}
 		
