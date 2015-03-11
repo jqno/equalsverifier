@@ -300,6 +300,11 @@ class FieldsChecker<T> implements Checker {
 			}
 			
 			Object value = changedAccessor.get();
+			if (value.getClass().isSynthetic()) {
+				// Sometimes not the fieldType, but its content, is synthetic.
+				return;
+			}
+			
 			Object copy = ObjectAccessor.of(value).copy();
 			changedAccessor.set(copy);
 			

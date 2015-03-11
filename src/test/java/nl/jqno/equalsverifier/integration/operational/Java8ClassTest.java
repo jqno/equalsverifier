@@ -65,6 +65,35 @@ public class Java8ClassTest extends IntegrationTestBase {
 			"\n        return Objects.hash(objects);" +
 			"\n    }" +
 			"\n}";
+	
+	private static final String JAVA_8_CLASS_WITH_SYNTHETIC_FIELD_NAME = "Java8ClassWithSyntheticField";
+	private static final String JAVA_8_CLASS_WITH_SYNTHETIC_FIELD =
+			"\nimport java.util.Comparator;" +
+			"\nimport java.util.Objects;" +
+			"\n" +
+			"\npublic final class Java8ClassWithSyntheticField {" +
+			"\n    private static final Comparator<Java8ClassWithSyntheticField> COMPARATOR =" +
+			"\n            (c1, c2) -> 0;   // A lambda is a synthetic class" +
+			"\n" +
+			"\n    private final String s;" +
+			"\n    " +
+			"\n    public Java8ClassWithSyntheticField(String s) {" +
+			"\n        this.s = s;" +
+			"\n    }" +
+			"\n    " +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof Java8ClassWithSyntheticField)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        return Objects.equals(s, ((Java8ClassWithSyntheticField)obj).s);" +
+			"\n    }" +
+			"\n    " +
+			"\n    @Override" +
+			"\n    public int hashCode() {" +
+			"\n        return Objects.hash(s);" +
+			"\n    }" +
+			"\n}";
 			
 	private ConditionalCompiler compiler;
 	
@@ -90,6 +119,17 @@ public class Java8ClassTest extends IntegrationTestBase {
 		
 		Class<?> java8Class = compiler.compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
 		EqualsVerifier.forClass(java8Class)
+				.verify();
+	}
+	
+	@Test
+	public void equalsverifierSucceeds_whenOneOfTheFieldsIsSynthetic() {
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> java8ClassWithSyntheticField = compiler.compile(JAVA_8_CLASS_WITH_SYNTHETIC_FIELD_NAME, JAVA_8_CLASS_WITH_SYNTHETIC_FIELD);
+		EqualsVerifier.forClass(java8ClassWithSyntheticField)
 				.verify();
 	}
 }
