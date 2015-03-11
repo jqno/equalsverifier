@@ -20,7 +20,7 @@ limitations under the License.
 	<packaging>jar</packaging>
 
 	<name>EqualsVerifier</name>
-	<version>1.7.1-SNAPSHOT</version>
+	<version>1.7.1</version>
 	<description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
 	<url>http://www.jqno.nl/equalsverifier</url>
 
