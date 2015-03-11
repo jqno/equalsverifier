@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -91,38 +92,22 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 	}
 	
 	static final class FieldHasNoEquals {
+		@SuppressWarnings("unused")
 		private final NoEquals field;
 		
 		public FieldHasNoEquals(NoEquals field) { this.field = field; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof FieldHasNoEquals)) {
-				return false;
-			}
-			FieldHasNoEquals other = (FieldHasNoEquals)obj;
-			return field == other.field;
-		}
-		
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return defaultHashCode(this); }
 		
 		static final class NoEquals {}
 	}
 	
 	static final class FieldIsInterface {
+		@SuppressWarnings("unused")
 		private final Interface field;
 		
 		public FieldIsInterface(Interface field) { this.field = field; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof FieldIsInterface)) {
-				return false;
-			}
-			FieldIsInterface other = (FieldIsInterface)obj;
-			return field == other.field;
-		}
-		
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); } 
 		@Override public int hashCode() { return defaultHashCode(this); }
 		
 		static interface Interface {}
