@@ -249,7 +249,7 @@ public class TypeHelper {
 		public long field = 0;
 	}
 
-	public static interface Interface {}
+	public interface Interface {}
 	
 	public static abstract class AbstractClass {
 		int field;
