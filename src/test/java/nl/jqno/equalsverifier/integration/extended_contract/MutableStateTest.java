@@ -164,8 +164,8 @@ public class MutableStateTest extends IntegrationTestBase {
 	
 	@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 	static final class EnumMutableField {
-		public enum Enum { RED, BLACK };
-		
+		public enum Enum { RED, BLACK }
+
 		private Enum field;
 		
 		public EnumMutableField(Enum value) { field = value; }
