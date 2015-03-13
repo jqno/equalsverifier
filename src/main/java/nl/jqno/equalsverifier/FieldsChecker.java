@@ -195,12 +195,15 @@ class FieldsChecker<T> implements Checker {
 			if (!arrayType.isArray()) {
 				return;
 			}
+			if (!referenceAccessor.canBeModifiedReflectively()) {
+				return;
+			}
 			
 			String fieldName = referenceAccessor.getFieldName();
 			Object reference = referenceAccessor.getObject();
 			Object changed = changedAccessor.getObject();
 			replaceInnermostArrayValue(changedAccessor);
-
+			
 			if (arrayType.getComponentType().isArray()) {
 				assertDeep(fieldName, reference, changed);
 			}
@@ -208,12 +211,12 @@ class FieldsChecker<T> implements Checker {
 				assertArray(fieldName, reference, changed);
 			}
 		}
-
+		
 		private void replaceInnermostArrayValue(FieldAccessor accessor) {
 			Object newArray = arrayCopy(accessor.get());
 			accessor.set(newArray);
 		}
-
+		
 		private Object arrayCopy(Object array) {
 			Class<?> componentType = array.getClass().getComponentType();
 			Object result = Array.newInstance(componentType, 1);
@@ -225,7 +228,7 @@ class FieldsChecker<T> implements Checker {
 			}
 			return result;
 		}
-
+		
 		private void assertDeep(String fieldName, Object reference, Object changed) {
 			assertEquals(Formatter.of("Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", fieldName),
 					reference, changed);

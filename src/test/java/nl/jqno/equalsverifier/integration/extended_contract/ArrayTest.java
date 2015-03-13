@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013-2014 Jan Ouwens
+ * Copyright 2009-2010, 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Util;
 
 import org.junit.Test;
 
@@ -129,6 +130,12 @@ public class ArrayTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
 		EqualsVerifier.forClass(ArrayAndNoEquals.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenStaticFinalArrayIsEmpty() {
+		EqualsVerifier.forClass(EmptyStaticFinalArrayContainer.class)
 				.verify();
 	}
 	
@@ -423,5 +430,12 @@ public class ArrayTest extends IntegrationTestBase {
 		private final int[][] arrays;
 		
 		public ArrayAndNoEquals(int[] ints, Object[] objects, int[][] arrays) { this.ints = ints; this.objects = objects; this.arrays = arrays; }
+	}
+	
+	static final class EmptyStaticFinalArrayContainer {
+		public static final EmptyStaticFinalArrayContainer[] EMPTY = {};
+		
+		@Override public boolean equals(Object obj) { return Util.defaultEquals(this, obj); }
+		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
 }
