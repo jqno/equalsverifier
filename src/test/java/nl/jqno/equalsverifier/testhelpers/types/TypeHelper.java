@@ -63,7 +63,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeReten
 public class TypeHelper {
 	private static final Object OBJECT = new Object();
 	
-	public static enum Enum { FIRST, SECOND }
+	public enum Enum { FIRST, SECOND }
 	
 	public static final class AllTypesContainer {
 		public boolean _boolean = false;
@@ -249,7 +249,7 @@ public class TypeHelper {
 		public long field = 0;
 	}
 
-	public static interface Interface {}
+	public interface Interface {}
 	
 	public static abstract class AbstractClass {
 		int field;
@@ -321,9 +321,9 @@ public class TypeHelper {
 		public Object field;
 	}
 	
-	public static enum OneElementEnum { ONE }
+	public enum OneElementEnum { ONE }
 	
-	public static enum EmptyEnum {}
+	public enum EmptyEnum {}
 	
 	public static final class PointArrayContainer {
 		public Point[] points = { new Point(1, 2) };

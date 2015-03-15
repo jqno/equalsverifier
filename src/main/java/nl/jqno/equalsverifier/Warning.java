@@ -160,5 +160,5 @@ public enum Warning {
 	 * If measures are taken that this will never happen, this warning can be
 	 * suppressed to disable {@link EqualsVerifier}'s transience test.
 	 */
-	TRANSIENT_FIELDS;
+	TRANSIENT_FIELDS
 }

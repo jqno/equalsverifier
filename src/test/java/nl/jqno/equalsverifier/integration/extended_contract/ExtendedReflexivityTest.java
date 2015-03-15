@@ -110,6 +110,6 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); } 
 		@Override public int hashCode() { return defaultHashCode(this); }
 		
-		static interface Interface {}
+		interface Interface {}
 	}
 }

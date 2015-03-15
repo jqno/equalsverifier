@@ -44,11 +44,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
 		checkAbstractDelegationInFields();
 
-		T instance = this.<T>getRedPrefabValue(type);
+		T instance = this.getRedPrefabValue(type);
 		if (instance == null) {
 			instance = classAccessor.getRedObject();
 		}
-		T copy = this.<T>getBlackPrefabValue(type);
+		T copy = this.getBlackPrefabValue(type);
 		if (copy == null) {
 			copy = classAccessor.getBlackObject();
 		}
