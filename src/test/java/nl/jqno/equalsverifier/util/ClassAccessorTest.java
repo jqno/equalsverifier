@@ -127,6 +127,14 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
+	public void packageDoesNotExist() {
+		Class<?> type = Instantiator.of(Object.class).instantiateAnonymousSubclass().getClass();
+		@SuppressWarnings({ "unchecked", "rawtypes" })
+		ClassAccessor<?> accessor = new ClassAccessor(type, prefabValues, TestSupportedAnnotations.values(), false);
+		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+	}
+	
+	@Test
 	public void fieldHasAnnotation() throws NoSuchFieldException {
 		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
 		Field field = AnnotatedFields.class.getField("runtimeRetention");

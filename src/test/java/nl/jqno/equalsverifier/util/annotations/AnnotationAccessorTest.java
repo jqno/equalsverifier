@@ -184,6 +184,10 @@ public class AnnotationAccessorTest {
 		Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
 		AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, true);
 		assertFalse(accessor.typeHas(TYPE_CLASS_RETENTION));
+		
+		// Checks if the short circuit works
+		assertFalse(accessor.typeHas(TYPE_CLASS_RETENTION));
+		assertFalse(accessor.fieldHas("x", FIELD_CLASS_RETENTION));
 	}
 	
 	@Test

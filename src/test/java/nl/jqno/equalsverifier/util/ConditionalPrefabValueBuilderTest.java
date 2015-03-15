@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -217,6 +217,17 @@ public class ConditionalPrefabValueBuilderTest {
 		
 		assertThat(prefabValues.getRed(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(42)));
 		assertThat(prefabValues.getBlack(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(1337)));
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenAConcreteImplementation() {
+		ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
+				.withConcreteClass("java.lang.String")
+				.instantiate(classes(String.class), objects("1"))
+				.instantiate(classes(String.class), objects("2"))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
 	}
 	
 	@Test
