@@ -157,7 +157,7 @@ public class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			return new MyAnnotationVisitor(descriptor, classAnnotations, inheriting, true);
+			return new MyAnnotationVisitor(descriptor, classAnnotations, inheriting);
 		}
 		
 		@Override
@@ -180,7 +180,7 @@ public class AnnotationAccessor {
 		
 		@Override
 		public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-			return new MyAnnotationVisitor(descriptor, fieldAnnotations, inheriting, false);
+			return new MyAnnotationVisitor(descriptor, fieldAnnotations, inheriting);
 		}
 	}
 	
@@ -188,25 +188,19 @@ public class AnnotationAccessor {
 		private final String annotationDescriptor;
 		private final Set<Annotation> annotations;
 		private final boolean inheriting;
-		private final boolean inspectAnnotation;
 		
 		private final AnnotationProperties properties;
 		
-		public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting, boolean inspectAnnotation) {
+		public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting) {
 			super(Opcodes.ASM4);
 			this.annotationDescriptor = annotationDescriptor;
 			this.annotations = annotations;
 			this.inheriting = inheriting;
-			this.inspectAnnotation = inspectAnnotation;
 			properties = new AnnotationProperties(annotationDescriptor);
 		}
 		
 		@Override
 		public AnnotationVisitor visitArray(String name) {
-			if (!inspectAnnotation) {
-				return null;
-			}
-			
 			Set<Object> foundAnnotations = new HashSet<Object>();
 			properties.putArrayValues(name, foundAnnotations);
 			return new AnnotationArrayValueVisitor(foundAnnotations);
