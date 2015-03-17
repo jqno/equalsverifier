@@ -207,9 +207,9 @@ public class AnnotationAccessor {
 				return null;
 			}
 			
-			Set<Object> annotations = new HashSet<Object>();
-			properties.putArrayValues(name, annotations);
-			return new AnnotationArrayValueVisitor(annotations);
+			Set<Object> foundAnnotations = new HashSet<Object>();
+			properties.putArrayValues(name, foundAnnotations);
+			return new AnnotationArrayValueVisitor(foundAnnotations);
 		}
 		
 		@Override
@@ -228,21 +228,21 @@ public class AnnotationAccessor {
 	}
 	
 	private class AnnotationArrayValueVisitor extends AnnotationVisitor {
-		private final Set<Object> objects;
+		private final Set<Object> foundAnnotations;
 		
-		public AnnotationArrayValueVisitor(Set<Object> annotations) {
+		public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
 			super(Opcodes.ASM4);
-			this.objects = annotations;
+			this.foundAnnotations = foundAnnotations;
 		}
 		
 		@Override
 		public void visit(String name, Object value) {
-			objects.add(value);
+			foundAnnotations.add(value);
 		}
 		
 		@Override
 		public void visitEnum(String name, String desc, String value) {
-			objects.add(value);
+			foundAnnotations.add(value);
 		}
 	}
 }
