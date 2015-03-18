@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
