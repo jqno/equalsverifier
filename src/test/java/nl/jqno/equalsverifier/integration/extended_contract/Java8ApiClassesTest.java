@@ -15,44 +15,20 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import java.io.File;
-import java.io.IOException;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
-public class Java8ApiClassesTest extends IntegrationTestBase {
-	private ConditionalCompiler compiler;
-	
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
-	
-	@Before
-	public void setUp() throws IOException {
-		File tempFileLocation = tempFolder.newFolder();
-		compiler = new ConditionalCompiler(tempFileLocation);
-	}
-	
-	@After
-	public void tearDown() {
-		compiler.close();
-	}
-	
+public class Java8ApiClassesTest extends Java8IntegrationTestBase {
 	@Test
 	public void successfullyInstantiatesAJava8Class_whenJava8IsAvailable() throws Exception {
 		if (!isJava8Available()) {
 			return;
 		}
 		
-		Class<?> java8Class = compiler.compile(CLASS_NAME, CLASS);
+		Class<?> java8Class = compile(CLASS_NAME, CLASS);
 		EqualsVerifier.forClass(java8Class)
 				.suppress(Warning.REFERENCE_EQUALITY)
 				.verify();

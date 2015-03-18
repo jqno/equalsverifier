@@ -15,8 +15,6 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.util.ConditionalInstantiator;
-
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
@@ -62,13 +60,5 @@ public class IntegrationTestBase {
 		public void describeTo(Description description) {
 			description.appendText("unexpected exception");
 		}
-	}
-	
-	public boolean isJava8Available() {
-		return isTypeAvailable("java.util.Optional");
-	}
-	
-	private boolean isTypeAvailable(String fullyQualifiedTypeName) {
-		return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
 	}
 }

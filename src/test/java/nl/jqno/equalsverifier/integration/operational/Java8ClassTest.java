@@ -15,18 +15,10 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import java.io.File;
-import java.io.IOException;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
 
 /**
  * Tests that EqualsVerifier can handle a Java 8 class with streams.
@@ -35,7 +27,7 @@ import org.junit.rules.TemporaryFolder;
  * detect whether a Java 8 runtime is present and if so, compile and load
  * the class at run-time and then pass it to EqualsVerifier.
  */
-public class Java8ClassTest extends IntegrationTestBase {
+public class Java8ClassTest extends Java8IntegrationTestBase {
 	private static final String JAVA_8_CLASS_NAME = "Java8Class";
 	private static final String JAVA_8_CLASS =
 			"\nimport java.util.List;" +
@@ -94,22 +86,6 @@ public class Java8ClassTest extends IntegrationTestBase {
 			"\n        return Objects.hash(s);" +
 			"\n    }" +
 			"\n}";
-			
-	private ConditionalCompiler compiler;
-	
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
-	
-	@Before
-	public void setUp() throws IOException {
-		File tempFileLocation = tempFolder.newFolder();
-		compiler = new ConditionalCompiler(tempFileLocation);
-	}
-	
-	@After
-	public void tearDown() {
-		compiler.close();
-	}
 	
 	@Test
 	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
@@ -117,7 +93,7 @@ public class Java8ClassTest extends IntegrationTestBase {
 			return;
 		}
 		
-		Class<?> java8Class = compiler.compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
+		Class<?> java8Class = compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
 		EqualsVerifier.forClass(java8Class)
 				.verify();
 	}
@@ -128,7 +104,7 @@ public class Java8ClassTest extends IntegrationTestBase {
 			return;
 		}
 		
-		Class<?> java8ClassWithSyntheticField = compiler.compile(JAVA_8_CLASS_WITH_SYNTHETIC_FIELD_NAME, JAVA_8_CLASS_WITH_SYNTHETIC_FIELD);
+		Class<?> java8ClassWithSyntheticField = compile(JAVA_8_CLASS_WITH_SYNTHETIC_FIELD_NAME, JAVA_8_CLASS_WITH_SYNTHETIC_FIELD);
 		EqualsVerifier.forClass(java8ClassWithSyntheticField)
 				.verify();
 	}
