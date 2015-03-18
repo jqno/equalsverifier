@@ -30,6 +30,7 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
+import org.objectweb.asm.TypePath;
 
 /**
  * Provides access to the annotations that are defined on a class
@@ -151,7 +152,7 @@ public class AnnotationAccessor {
 		private final boolean inheriting;
 		
 		public Visitor(boolean inheriting) {
-			super(Opcodes.ASM4);
+			super(Opcodes.ASM5);
 			this.inheriting = inheriting;
 		}
 		
@@ -173,9 +174,14 @@ public class AnnotationAccessor {
 		private final boolean inheriting;
 		
 		public MyFieldVisitor(Set<Annotation> fieldAnnotations, boolean inheriting) {
-			super(Opcodes.ASM4);
+			super(Opcodes.ASM5);
 			this.fieldAnnotations = fieldAnnotations;
 			this.inheriting = inheriting;
+		}
+		
+		@Override
+		public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
+			return new MyAnnotationVisitor(descriptor, fieldAnnotations, inheriting);
 		}
 		
 		@Override
@@ -192,7 +198,7 @@ public class AnnotationAccessor {
 		private final AnnotationProperties properties;
 		
 		public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting) {
-			super(Opcodes.ASM4);
+			super(Opcodes.ASM5);
 			this.annotationDescriptor = annotationDescriptor;
 			this.annotations = annotations;
 			this.inheriting = inheriting;
@@ -225,7 +231,7 @@ public class AnnotationAccessor {
 		private final Set<Object> foundAnnotations;
 		
 		public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
-			super(Opcodes.ASM4);
+			super(Opcodes.ASM5);
 			this.foundAnnotations = foundAnnotations;
 		}
 		
