@@ -17,7 +17,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
-import static org.junit.internal.matchers.StringContains.containsString;
+import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Arrays;
 
