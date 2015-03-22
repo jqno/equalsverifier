@@ -115,6 +115,8 @@ public enum SupportedAnnotations implements Annotation {
 		}
 	},
 	
+	ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault"),
+	
 	NULLABLE(false, "Nullable", "CheckForNull"),
 	;
 	

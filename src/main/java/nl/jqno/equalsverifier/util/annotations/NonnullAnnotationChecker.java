@@ -15,8 +15,11 @@
  */
 package nl.jqno.equalsverifier.util.annotations;
 
+import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.ECLIPSE_DEFAULT_ANNOTATION_NONNULL;
 import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL;
 import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL;
+import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.NONNULL;
+import static nl.jqno.equalsverifier.util.annotations.SupportedAnnotations.NULLABLE;
 
 import java.lang.reflect.Field;
 
@@ -36,22 +39,20 @@ public class NonnullAnnotationChecker {
 	 * @return True if the field is to be treated as Nonnull.
 	 */
 	public static boolean fieldIsNonnull(ClassAccessor<?> classAccessor, Field field) {
-		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
+		if (classAccessor.fieldHasAnnotation(field, NONNULL)) {
 			return true;
 		}
-		if (classAccessor.fieldHasAnnotation(field, SupportedAnnotations.NULLABLE)) {
+		if (classAccessor.fieldHasAnnotation(field, NULLABLE)) {
 			return false;
 		}
-		if (classAccessor.hasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
-				classAccessor.outerClassHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
-				classAccessor.packageHasAnnotation(FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)) {
-			return true;
-		}
-		if (classAccessor.hasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) ||
-				classAccessor.outerClassHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL) ||
-				classAccessor.packageHasAnnotation(JSR305_DEFAULT_ANNOTATION_NONNULL)) {
-			return true;
-		}
-		return false;
+		return annotationIsInScope(classAccessor, FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
+				annotationIsInScope(classAccessor, JSR305_DEFAULT_ANNOTATION_NONNULL) ||
+				annotationIsInScope(classAccessor, ECLIPSE_DEFAULT_ANNOTATION_NONNULL);
+	}
+	
+	private static boolean annotationIsInScope(ClassAccessor<?> classAccessor, Annotation annotation) {
+		return classAccessor.hasAnnotation(annotation) ||
+				classAccessor.outerClassHasAnnotation(annotation) ||
+				classAccessor.packageHasAnnotation(annotation);
 	}
 }

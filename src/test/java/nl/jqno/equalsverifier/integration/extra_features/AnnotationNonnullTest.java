@@ -169,7 +169,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnClass() {
+	public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnClass() {
 		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
 		EqualsVerifier.forClass(NonnullJsr305InapplicableOnClass.class)
 				.verify();
