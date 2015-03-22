@@ -13,7 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@NonNullByDefault
-package nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;
+package nl.jqno.equalsverifier.testhelpers.annotations.org.eclipse.jdt.annotation;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.org.eclipse.jdt.annotation.NonNullByDefault;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Documented
+@Retention(RetentionPolicy.CLASS)
+@Target({ ElementType.PACKAGE, ElementType.TYPE })
+public @interface NonNullByDefault {}
