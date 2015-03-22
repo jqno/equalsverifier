@@ -15,13 +15,10 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.junit.Test;
 
 public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
@@ -38,25 +35,48 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 	
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
-		EqualsVerifier.forClass(NonnullEclipseOnClass.class)
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> type = compile(NONNULL_ECLIPSE_ON_CLASS_NAME, NONNULL_ECLIPSE_ON_CLASS);
+		EqualsVerifier.forClass(type)
 				.verify();
 	}
 	
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
-		EqualsVerifier.forClass(NonnullEclipseOnPackage.class)
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> type = compile(NONNULL_ECLIPSE_ON_PACKAGE_NAME, NONNULL_ECLIPSE_ON_PACKAGE);
+		EqualsVerifier.forClass(type)
 				.verify();
 	}
 	
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
-		EqualsVerifier.forClass(NonnullEclipseOuter.FInner.class)
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> outer = compile(NONNULL_ECLIPSE_OUTER_NAME, NONNULL_ECLIPSE_OUTER);
+		Class<?> fInner = findInnerClass(outer, "FInner");
+		EqualsVerifier.forClass(fInner)
 				.verify();
 	}
 	
 	@Test
 	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
-		EqualsVerifier.forClass(NonnullEclipseOuter.FMiddle.FInnerInner.class)
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> outer = compile(NONNULL_ECLIPSE_OUTER_NAME, NONNULL_ECLIPSE_OUTER);
+		Class<?> fMiddle = findInnerClass(outer, "FMiddle");
+		Class<?> fInnerInner = findInnerClass(fMiddle, "FInnerInner");
+		EqualsVerifier.forClass(fInnerInner)
 				.verify();
 	}
 	
@@ -119,6 +139,15 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 				.verify();
 	}
 	
+	private Class<?> findInnerClass(Class<?> outer, String name) {
+		for (Class<?> inner : outer.getDeclaredClasses()) {
+			if (inner.getName().endsWith(name)) {
+				return inner;
+			}
+		}
+		throw new IllegalStateException("Inner class not found");
+	}
+	
 	private static final String NONNULL_MANUAL_NAME = "NonnullManual";
 	private static final String NONNULL_MANUAL =
 			"\nimport java.util.Objects;" +
@@ -141,63 +170,96 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 			"\n    @Override public final int hashCode() { return Objects.hash(o); }" +
 			"\n}";
 	
-	@NonNullByDefault
-	static final class NonnullEclipseOnClass {
-		private final Object o;
-		
-		public NonnullEclipseOnClass(Object o) { this.o = o; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof NonnullEclipseOnClass)) {
-				return false;
-			}
-			NonnullEclipseOnClass other = (NonnullEclipseOnClass)obj;
-			return o.equals(other.o);
-		}
-		
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
+	private static final String NONNULL_ECLIPSE_ON_CLASS_NAME = "NonnullEclipseOnClass";
+	private static final String NONNULL_ECLIPSE_ON_CLASS =
+			"\nimport java.util.Objects;" +
+			"\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
+			"\n" +
+			"\n@NonNullByDefault" +
+			"\nfinal class NonnullEclipseOnClass {" +
+			"\n    private final Object o;" +
+			"\n" +
+			"\n    public NonnullEclipseOnClass(Object o) { this.o = o; }" +
+			"\n" +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof NonnullEclipseOnClass)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        NonnullEclipseOnClass other = (NonnullEclipseOnClass)obj;" +
+			"\n        return o.equals(other.o);" +
+			"\n    }" +
+			"\n" +
+			"\n    @Override public int hashCode() { return Objects.hash(o); }" +
+			"\n}";
 	
-	@NonNullByDefault
-	static class NonnullEclipseOuter {
-		static final class FInner {
-			private final Object o;
-			
-			public FInner(Object o) { this.o = o; }
-			
-			@Override
-			public boolean equals(Object obj) {
-				if (!(obj instanceof FInner)) {
-					return false;
-				}
-				FInner other = (FInner)obj;
-				return o.equals(other.o);
-			}
-			
-			@Override public int hashCode() { return defaultHashCode(this); }
-		}
-		
-		static class FMiddle {
-			static final class FInnerInner {
-				private final Object o;
-				
-				public FInnerInner(Object o) { this.o = o; }
-				
-				@Override
-				public boolean equals(Object obj) {
-					if (!(obj instanceof FInnerInner)) {
-						return false;
-					}
-					FInnerInner other = (FInnerInner)obj;
-					return o.equals(other.o);
-				}
-				
-				@Override public int hashCode() { return defaultHashCode(this); }
-			}
-		}
-	}
+	private static final String NONNULL_ECLIPSE_ON_PACKAGE_NAME = "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage";
+	private static final String NONNULL_ECLIPSE_ON_PACKAGE =
+			"\npackage nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;" +
+			"\n" +
+			"\nimport java.util.Objects;" +
+			"\n" +
+			"\nfinal class NonnullEclipseOnPackage {" +
+			"\n    private final Object o;" +
+			"\n    " +
+			"\n    public NonnullEclipseOnPackage(Object o) { this.o = o; }" +
+			"\n    " +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof NonnullEclipseOnPackage)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        NonnullEclipseOnPackage other = (NonnullEclipseOnPackage)obj;" +
+			"\n        return o.equals(other.o);" +
+			"\n    }" +
+			"\n    " +
+			"\n    @Override public int hashCode() { return Objects.hash(o); }" +
+			"\n}";
 	
+	private static final String NONNULL_ECLIPSE_OUTER_NAME = "NonnullEclipseOuter";
+	private static final String NONNULL_ECLIPSE_OUTER =
+			"\nimport java.util.Objects;" +
+			"\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
+			"\n" +
+			"\n@NonNullByDefault" +
+			"\nclass NonnullEclipseOuter {" +
+			"\n    static final class FInner {" +
+			"\n        private final Object o;" +
+			"\n" +
+			"\n        public FInner(Object o) { this.o = o; }" +
+			"\n" +
+			"\n        @Override" +
+			"\n        public boolean equals(Object obj) {" +
+			"\n            if (!(obj instanceof FInner)) {" +
+			"\n                return false;" +
+			"\n            }" +
+			"\n            FInner other = (FInner)obj;" +
+			"\n            return o.equals(other.o);" +
+			"\n        }" +
+			"\n" +
+			"\n        @Override public int hashCode() { return Objects.hash(o); }" +
+			"\n    }" +
+			"\n" +
+			"\n    static class FMiddle {" +
+			"\n        static final class FInnerInner {" +
+			"\n            private final Object o;" +
+			"\n" +
+			"\n            public FInnerInner(Object o) { this.o = o; }" +
+			"\n" +
+			"\n            @Override" +
+			"\n            public boolean equals(Object obj) {" +
+			"\n                if (!(obj instanceof FInnerInner)) {" +
+			"\n                    return false;" +
+			"\n                }" +
+			"\n                FInnerInner other = (FInnerInner)obj;" +
+			"\n                return o.equals(other.o);" +
+			"\n            }" +
+			"\n" +
+			"\n            @Override public int hashCode() { return Objects.hash(o); }" +
+			"\n        }" +
+			"\n    }" +
+			"\n}";
+
 	private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME = "NonnullEclipseWithNullableOnClass";
 	private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS =
 			"\nimport java.util.Objects;" +
