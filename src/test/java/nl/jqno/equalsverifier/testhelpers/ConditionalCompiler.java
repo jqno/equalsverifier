@@ -150,7 +150,7 @@ public class ConditionalCompiler implements Closeable {
 		private final String code;
 		
 		protected StringJavaFileObject(String className, String code) {
-			super(URI.create("string:///" + className + Kind.SOURCE.extension), Kind.SOURCE);
+			super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
 			this.code = code;
 		}
 		
