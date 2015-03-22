@@ -127,7 +127,7 @@ public class AnnotationsTest extends IntegrationTestBase {
 		@Override public int hashCode() { return Util.defaultHashCode(this); }
 	}
 	
-	@javax.persistence.Entity
+	@nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity
 	static class EntityByJpaAnnotation {
 		private int i;
 		private String s;
@@ -182,7 +182,7 @@ public class AnnotationsTest extends IntegrationTestBase {
 	static class TransientByJpaAnnotation {
 		private final int i;
 		
-		@javax.persistence.Transient
+		@nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient
 		private final int j;
 		
 		public TransientByJpaAnnotation(int i, int j) { this.i = i; this.j = j; }
