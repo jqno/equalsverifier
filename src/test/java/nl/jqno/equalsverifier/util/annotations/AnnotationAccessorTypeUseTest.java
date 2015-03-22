@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 
 import org.junit.Test;
 
-public class AnnotationAccessorTypeAnnotationTest extends Java8IntegrationTestBase {
+public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
 	private static final String JAVA_8_CLASS_NAME = "Java8Class";
 	private static final String JAVA_8_CLASS =
 			"\nimport org.eclipse.jdt.annotation.NonNull;" +
