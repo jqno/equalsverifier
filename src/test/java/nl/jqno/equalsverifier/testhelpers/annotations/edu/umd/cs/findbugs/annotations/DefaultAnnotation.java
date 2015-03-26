@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.testhelpers.annotations.org.eclipse.jdt.annotation;
+package nl.jqno.equalsverifier.testhelpers.annotations.edu.umd.cs.findbugs.annotations;
 
-import java.lang.annotation.Documented;
+import java.lang.annotation.Annotation;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation serves as a placeholder for the real
- * {@link org.eclipse.jdt.annotation.NonNullByDefault} annotation. However,
- * since that annotation is compiled for Java 8, and this code base must support
- * Java 6, we use this copy instead.
+ * This annotation serves as a paceholder for the real
+ * {@link edu.umd.cs.findbugs.annotations.DefaultAnnotation}, which is
+ * deprecated. We use this annotation to avoid warnings in places where we can't
+ * suppress the warning.
  */
-@Documented
+@Target(ElementType.PACKAGE)
 @Retention(RetentionPolicy.CLASS)
-@Target({ ElementType.PACKAGE, ElementType.TYPE })
-public @interface NonNullByDefault {
+public @interface DefaultAnnotation {
+	Class<? extends Annotation>[] value();
 }
