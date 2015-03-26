@@ -115,7 +115,21 @@ public enum SupportedAnnotations implements Annotation {
 		}
 	},
 	
-	ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault"),
+	ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
+		@Override
+		public boolean validate(AnnotationProperties properties) {
+			Set<Object> values = properties.getArrayValues("value");
+			if (values == null) {
+				return true;
+			}
+			for (Object value : values) {
+				if ("FIELD".equals(value)) {
+					return true;
+				}
+			}
+			return false;
+		}
+	},
 	
 	NULLABLE(false, "Nullable", "CheckForNull"),
 	;

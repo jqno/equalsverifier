@@ -139,6 +139,29 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 				.verify();
 	}
 	
+	@Test
+	public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> type = compile(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
+		expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
+		EqualsVerifier.forClass(type)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationWithApplicableLocationOnClass() {
+		if (!isJava8Available()) {
+			return;
+		}
+		
+		Class<?> type = compile(NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS);
+		EqualsVerifier.forClass(type)
+				.verify();
+	}
+	
 	private Class<?> findInnerClass(Class<?> outer, String name) {
 		for (Class<?> inner : outer.getDeclaredClasses()) {
 			if (inner.getName().endsWith(name)) {
@@ -330,5 +353,53 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 			"\n    }" +
 			"\n" +
 			"\n    @Override public final int hashCode() { return Objects.hash(o); }" +
+			"\n}";
+	
+	private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithInapplicableLocationOnClass";
+	private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS =
+			"\nimport java.util.Objects;" +
+			"\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
+			"\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
+			"\n" +
+			"\n@NonNullByDefault({ DefaultLocation.PARAMETER, DefaultLocation.RETURN_TYPE })" +
+			"\nfinal class NonnullEclipseWithInapplicableLocationOnClass {" +
+			"\n    private final Object o;" +
+			"\n" +
+			"\n    public NonnullEclipseWithInapplicableLocationOnClass(Object o) { this.o = o; }" +
+			"\n" +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof NonnullEclipseWithInapplicableLocationOnClass)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        NonnullEclipseWithInapplicableLocationOnClass other = (NonnullEclipseWithInapplicableLocationOnClass)obj;" +
+			"\n        return o.equals(other.o);" +
+			"\n    }" +
+			"\n" +
+			"\n    @Override public int hashCode() { return Objects.hash(o); }" +
+			"\n}";
+	
+	private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithApplicableLocationOnClass";
+	private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS =
+			"\nimport java.util.Objects;" +
+			"\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
+			"\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
+			"\n" +
+			"\n@NonNullByDefault({ DefaultLocation.FIELD, DefaultLocation.RETURN_TYPE })" +
+			"\nfinal class NonnullEclipseWithApplicableLocationOnClass {" +
+			"\n    private final Object o;" +
+			"\n" +
+			"\n    public NonnullEclipseWithApplicableLocationOnClass(Object o) { this.o = o; }" +
+			"\n" +
+			"\n    @Override" +
+			"\n    public boolean equals(Object obj) {" +
+			"\n        if (!(obj instanceof NonnullEclipseWithApplicableLocationOnClass)) {" +
+			"\n            return false;" +
+			"\n        }" +
+			"\n        NonnullEclipseWithApplicableLocationOnClass other = (NonnullEclipseWithApplicableLocationOnClass)obj;" +
+			"\n        return o.equals(other.o);" +
+			"\n    }" +
+			"\n" +
+			"\n    @Override public int hashCode() { return Objects.hash(o); }" +
 			"\n}";
 }
