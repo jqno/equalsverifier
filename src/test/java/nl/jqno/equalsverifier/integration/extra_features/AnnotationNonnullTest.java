@@ -151,7 +151,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClassAndNullCheckInEquals() {
+	public void succeed_whenEqualsChecksForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
 		EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals.class)
 				.verify();
 	}
@@ -242,7 +242,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClassAndNullCheckInEquals() {
+	public void succeed_whenEqualsChecksForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClass() {
 		EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals.class)
 				.verify();
 	}

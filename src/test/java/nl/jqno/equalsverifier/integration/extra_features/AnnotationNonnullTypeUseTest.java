@@ -105,7 +105,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndNullCheckInEquals() {
+	public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
 		if (!isJava8Available()) {
 			return;
 		}
