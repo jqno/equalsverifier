@@ -61,4 +61,4 @@ Disclaimer
 
 For license information, see `LICENSE.TXT`.
 
-Copyright 2009-2014 Jan Ouwens
+Copyright 2009-2015 Jan Ouwens
