@@ -40,7 +40,7 @@ import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
  *
  * @author Niall Gallagher, Jan Ouwens
  */
-public class CachedHashCodeInitializer<T> {
+class CachedHashCodeInitializer<T> {
 	private final boolean passthrough;
 	private final Field cachedHashCodeField;
 	private final Method calculateMethod;

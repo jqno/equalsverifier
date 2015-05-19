@@ -23,7 +23,7 @@ import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.util.Formatter;
 
-public class CachedHashCodeChecker<T> implements Checker {
+class CachedHashCodeChecker<T> implements Checker {
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	private final EnumSet<Warning> warningsToSuppress;
 	
