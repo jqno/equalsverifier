@@ -25,8 +25,8 @@ import nl.jqno.equalsverifier.util.Formatter;
 class SignatureChecker<T> implements Checker {
 	private final Class<T> type;
 
-	public SignatureChecker(Class<T> type) {
-		this.type = type;
+	public SignatureChecker(Configuration<T> config) {
+		this.type = config.getType();
 	}
 	
 	@Override

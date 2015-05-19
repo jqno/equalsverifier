@@ -26,8 +26,8 @@ class PreconditionChecker<T> implements Checker {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public PreconditionChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = type;
+	public PreconditionChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = config.getType();
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}

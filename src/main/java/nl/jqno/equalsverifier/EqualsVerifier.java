@@ -108,13 +108,13 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
  * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
-	private final Class<T> type;
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
 	private final StaticFieldValueStash stash;
-	
 	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+	
+	private Configuration<T> config;
 	private boolean usingGetClass = false;
 	private boolean allFieldsShouldBeUsed = false;
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
@@ -200,7 +200,7 @@ public final class EqualsVerifier<T> {
 	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
 	 */
 	private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = type;
+		this.config = Configuration.of(type);
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 		
@@ -288,12 +288,12 @@ public final class EqualsVerifier<T> {
 		allFieldsShouldBeUsedExceptions = new HashSet<String>(Arrays.asList(fields));
 		
 		Set<String> actualFieldNames = new HashSet<String>();
-		for (Field field : FieldIterable.of(type)) {
+		for (Field field : FieldIterable.of(config.getType())) {
 			actualFieldNames.add(field.getName());
 		}
 		for (String field : allFieldsShouldBeUsedExceptions) {
 			if (!actualFieldNames.contains(field)) {
-				throw new IllegalArgumentException("Class " + type.getSimpleName() + " does not contain field " + field + ".");
+				throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
 			}
 		}
 		
@@ -366,7 +366,7 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
-		cachedHashCodeInitializer = new CachedHashCodeInitializer<T>(type, cachedHashCodeField, calculateHashCodeMethod, example);
+		cachedHashCodeInitializer = new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
 		return this;
 	}
 	
@@ -390,7 +390,7 @@ public final class EqualsVerifier<T> {
 	 */
 	public void verify() {
 		try {
-			stash.backup(type);
+			stash.backup(config.getType());
 			performVerification();
 		}
 		catch (InternalException e) {
@@ -417,18 +417,18 @@ public final class EqualsVerifier<T> {
 	}
 	
 	private void performVerification() {
-		if (type.isEnum()) {
+		if (config.getType().isEnum()) {
 			return;
 		}
 		
-		ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
+		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
 		verifyWithoutExamples(classAccessor);
 		ensureUnequalExamples(classAccessor);
 		verifyWithExamples(classAccessor);
 	}
 	
 	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
-		Checker signatureChecker = new SignatureChecker<T>(type);
+		Checker signatureChecker = new SignatureChecker<T>(config);
 		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
 		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress, cachedHashCodeInitializer);
 		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(cachedHashCodeInitializer, warningsToSuppress);
@@ -449,8 +449,8 @@ public final class EqualsVerifier<T> {
 	}
 	
 	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
-		Checker preconditionChecker = new PreconditionChecker<T>(type, equalExamples, unequalExamples);
-		Checker examplesChecker = new ExamplesChecker<T>(type, equalExamples, unequalExamples, cachedHashCodeInitializer);
+		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
+		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples, cachedHashCodeInitializer);
 		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
 		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
 		
