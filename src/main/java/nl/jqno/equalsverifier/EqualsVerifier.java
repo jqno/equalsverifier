@@ -112,7 +112,6 @@ public final class EqualsVerifier<T> {
 	private final List<T> unequalExamples;
 	private final PrefabValues prefabValues;
 	private final StaticFieldValueStash stash;
-	private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
 	
 	private Configuration<T> config;
 	private boolean usingGetClass = false;
@@ -218,9 +217,11 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> suppress(Warning... warnings) {
+		EnumSet<Warning> ws = config.getWarningsToSuppress();
 		for (Warning warning : warnings) {
-			this.warningsToSuppress.add(warning);
+			ws.add(warning);
 		}
+		config = config.withWarningsToSuppress(ws);
 		return this;
 	}
 	
@@ -421,7 +422,7 @@ public final class EqualsVerifier<T> {
 			return;
 		}
 		
-		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
+		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), prefabValues, config.getWarningsToSuppress().contains(Warning.ANNOTATION));
 		verifyWithoutExamples(classAccessor);
 		ensureUnequalExamples(classAccessor);
 		verifyWithExamples(classAccessor);
@@ -430,8 +431,8 @@ public final class EqualsVerifier<T> {
 	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
 		Checker signatureChecker = new SignatureChecker<T>(config);
 		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
-		Checker nullChecker = new NullChecker<T>(classAccessor, warningsToSuppress, cachedHashCodeInitializer);
-		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(cachedHashCodeInitializer, warningsToSuppress);
+		Checker nullChecker = new NullChecker<T>(config, classAccessor, cachedHashCodeInitializer);
+		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config, cachedHashCodeInitializer);
 		
 		signatureChecker.check();
 		abstractDelegationChecker.check();
@@ -451,8 +452,8 @@ public final class EqualsVerifier<T> {
 	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples, cachedHashCodeInitializer);
-		Checker hierarchyChecker = new HierarchyChecker<T>(classAccessor, warningsToSuppress, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
-		Checker fieldsChecker = new FieldsChecker<T>(classAccessor, warningsToSuppress, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config, classAccessor, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
+		Checker fieldsChecker = new FieldsChecker<T>(config, classAccessor, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
 		
 		preconditionChecker.check();
 		examplesChecker.check();

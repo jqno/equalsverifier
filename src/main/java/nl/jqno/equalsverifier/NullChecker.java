@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier;
 import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Field;
-import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.util.ClassAccessor;
@@ -27,19 +26,19 @@ import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 
 class NullChecker<T> implements Checker {
+	private final Configuration<T> config;
 	private final ClassAccessor<T> classAccessor;
-	private final EnumSet<Warning> warningsToSuppress;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public NullChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	public NullChecker(Configuration<T> config, ClassAccessor<T> classAccessor, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+		this.config = config;
 		this.classAccessor = classAccessor;
-		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 
 	@Override
 	public void check() {
-		if (warningsToSuppress.contains(Warning.NULL_FIELDS)) {
+		if (config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
 			return;
 		}
 		

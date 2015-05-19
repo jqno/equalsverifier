@@ -27,9 +27,9 @@ class CachedHashCodeChecker<T> implements Checker {
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	private final EnumSet<Warning> warningsToSuppress;
 	
-	public CachedHashCodeChecker(CachedHashCodeInitializer<T> cachedHashCodeInitializer, EnumSet<Warning> warningsToSuppress) {
+	public CachedHashCodeChecker(Configuration<T> config, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
-		this.warningsToSuppress = warningsToSuppress;
+		this.warningsToSuppress = config.getWarningsToSuppress();
 	}
 	
 	@Override

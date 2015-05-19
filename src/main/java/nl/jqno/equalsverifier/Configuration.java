@@ -15,18 +15,30 @@
  */
 package nl.jqno.equalsverifier;
 
+import java.util.EnumSet;
+
 class Configuration<T> {
 	private final Class<T> type;
+	private final EnumSet<Warning> warningsToSuppress;
 	
-	private Configuration(Class<T> type) {
+	private Configuration(Class<T> type, EnumSet<Warning> warningsToSuppress) {
 		this.type = type;
+		this.warningsToSuppress = warningsToSuppress;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type);
+		return new Configuration<T>(type, EnumSet.noneOf(Warning.class));
 	}
 	
 	public Class<T> getType() {
 		return type;
+	}
+	
+	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
+		return new Configuration<T>(type, value);
+	}
+	
+	public EnumSet<Warning> getWarningsToSuppress() {
+		return EnumSet.copyOf(warningsToSuppress);
 	}
 }
