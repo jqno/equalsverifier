@@ -110,8 +110,6 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
 public final class EqualsVerifier<T> {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
-	private final PrefabValues prefabValues;
-	private final StaticFieldValueStash stash;
 	
 	private Configuration<T> config;
 	private boolean usingGetClass = false;
@@ -203,9 +201,7 @@ public final class EqualsVerifier<T> {
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 		
-		this.stash = new StaticFieldValueStash();
-		this.prefabValues = new PrefabValues(stash);
-		JavaApiPrefabValues.addTo(prefabValues);
+		JavaApiPrefabValues.addTo(config.getPrefabValues());
 	}
 	
 	/**
@@ -248,7 +244,7 @@ public final class EqualsVerifier<T> {
 		if (red.equals(black)) {
 			throw new IllegalArgumentException("Both values are equal.");
 		}
-		prefabValues.put(otherType, red, black);
+		config.getPrefabValues().put(otherType, red, black);
 		return this;
 	}
 	
@@ -390,8 +386,9 @@ public final class EqualsVerifier<T> {
 	 * 				{@link EqualsVerifier}'s preconditions do not hold.
 	 */
 	public void verify() {
+		PrefabValues prefabValues = config.getPrefabValues();
 		try {
-			stash.backup(config.getType());
+			prefabValues.backupToStash(config.getType());
 			performVerification();
 		}
 		catch (InternalException e) {
@@ -401,7 +398,7 @@ public final class EqualsVerifier<T> {
 			handleError(e, e);
 		}
 		finally {
-			stash.restoreAll();
+			prefabValues.restoreFromStash();
 		}
 	}
 
@@ -422,7 +419,7 @@ public final class EqualsVerifier<T> {
 			return;
 		}
 		
-		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), prefabValues, config.getWarningsToSuppress().contains(Warning.ANNOTATION));
+		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), config.getPrefabValues(), config.getWarningsToSuppress().contains(Warning.ANNOTATION));
 		verifyWithoutExamples(classAccessor);
 		ensureUnequalExamples(classAccessor);
 		verifyWithExamples(classAccessor);

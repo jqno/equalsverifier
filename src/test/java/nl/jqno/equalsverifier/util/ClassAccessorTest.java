@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;

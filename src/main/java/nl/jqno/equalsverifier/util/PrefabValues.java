@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012-2014 Jan Ouwens
+ * Copyright 2010, 2012-2015 Jan Ouwens
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.util.exceptions.RecursionException;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
@@ -36,8 +35,20 @@ public class PrefabValues {
 	private final StaticFieldValueStash stash;
 	private final Map<Class<?>, Tuple<?>> values = new HashMap<Class<?>, Tuple<?>>();
 	
+	public PrefabValues() {
+		this(new StaticFieldValueStash());
+	}
+	
 	public PrefabValues(StaticFieldValueStash stash) {
 		this.stash = stash;
+	}
+	
+	public void backupToStash(Class<?> type) {
+		stash.backup(type);
+	}
+	
+	public void restoreFromStash() {
+		stash.restoreAll();
 	}
 	
 	/**

@@ -23,6 +23,7 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.util.StaticFieldValueStash;
 
 import org.junit.Test;
 

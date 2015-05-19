@@ -25,7 +25,6 @@ import static org.junit.Assert.assertThat;
 import java.math.BigDecimal;
 import java.util.GregorianCalendar;
 
-import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.util.exceptions.EqualsVerifierBugException;
 
 import org.junit.Before;

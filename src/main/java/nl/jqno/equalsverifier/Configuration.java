@@ -17,25 +17,33 @@ package nl.jqno.equalsverifier;
 
 import java.util.EnumSet;
 
-class Configuration<T> {
+import nl.jqno.equalsverifier.util.PrefabValues;
+
+public class Configuration<T> {
 	private final Class<T> type;
+	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
 	
-	private Configuration(Class<T> type, EnumSet<Warning> warningsToSuppress) {
+	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress) {
 		this.type = type;
+		this.prefabValues = prefabValues;
 		this.warningsToSuppress = warningsToSuppress;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type, EnumSet.noneOf(Warning.class));
+		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class));
 	}
 	
 	public Class<T> getType() {
 		return type;
 	}
 	
+	public PrefabValues getPrefabValues() {
+		return prefabValues;
+	}
+	
 	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-		return new Configuration<T>(type, value);
+		return new Configuration<T>(type, prefabValues, value);
 	}
 	
 	public EnumSet<Warning> getWarningsToSuppress() {

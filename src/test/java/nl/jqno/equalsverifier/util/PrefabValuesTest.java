@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012-2013 Jan Ouwens
+ * Copyright 2010, 2012-2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
@@ -36,11 +37,13 @@ public class PrefabValuesTest {
 	private static final Class<Object> NON_EXISTING_KEY = Object.class;
 	private static final Object VALUE_FOR_NON_EXISTING_KEY = new Object();
 	
+	private MockStaticFieldValueStash stash;
 	private PrefabValues p;
 	
 	@Before
 	public void setup() {
-		p = new PrefabValues(null);
+		stash = new MockStaticFieldValueStash();
+		p = new PrefabValues(stash);
 		p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
 	}
 	
@@ -51,6 +54,18 @@ public class PrefabValuesTest {
 	@Test
 	public void happyPath() {
 		assertPrefabValues(p, EXISTING_KEY);
+	}
+	
+	@Test
+	public void backupDelegatesToStash() {
+		p.backupToStash(String.class);
+		assertEquals(String.class, stash.lastBackuppedType);
+	}
+	
+	@Test
+	public void restoreDelegatesToStash() {
+		p.restoreFromStash();
+		assertTrue(stash.restoreCalled);
 	}
 	
 	@Test
