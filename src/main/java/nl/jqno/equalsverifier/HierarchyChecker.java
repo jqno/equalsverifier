@@ -38,10 +38,10 @@ class HierarchyChecker<T> implements Checker {
 	private final T reference;
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
-
-	public HierarchyChecker(Configuration<T> config, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	
+	public HierarchyChecker(Configuration<T> config, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		this.config = config;
-
+		
 		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
 			fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
 		}
@@ -54,7 +54,7 @@ class HierarchyChecker<T> implements Checker {
 		this.referenceAccessor = classAccessor.getRedAccessor();
 		this.reference = referenceAccessor.get();
 		this.typeIsFinal = Modifier.isFinal(type.getModifiers());
-		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+		this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
 	}
 	
 	@Override

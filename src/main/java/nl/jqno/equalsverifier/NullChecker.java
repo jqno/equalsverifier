@@ -28,12 +28,10 @@ import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 class NullChecker<T> implements Checker {
 	private final Configuration<T> config;
 	private final ClassAccessor<T> classAccessor;
-	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public NullChecker(Configuration<T> config, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	public NullChecker(Configuration<T> config) {
 		this.config = config;
 		this.classAccessor = config.createClassAccessor();
-		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 
 	@Override
@@ -78,7 +76,7 @@ class NullChecker<T> implements Checker {
 			handle("hashCode", field, new Runnable() {
 				@Override
 				public void run() {
-					cachedHashCodeInitializer.getInitializedHashCode(changed);
+					config.getCachedHashCodeInitializer().getInitializedHashCode(changed);
 				}
 			});
 			

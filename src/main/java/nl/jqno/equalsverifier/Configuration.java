@@ -24,15 +24,17 @@ public class Configuration<T> {
 	private final Class<T> type;
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	
-	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress) {
+	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.type = type;
 		this.prefabValues = prefabValues;
 		this.warningsToSuppress = warningsToSuppress;
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class));
+		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class), CachedHashCodeInitializer.<T>passthrough());
 	}
 	
 	public Class<T> getType() {
@@ -44,11 +46,19 @@ public class Configuration<T> {
 	}
 	
 	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-		return new Configuration<T>(type, prefabValues, value);
+		return new Configuration<T>(type, prefabValues, value, cachedHashCodeInitializer);
 	}
 	
 	public EnumSet<Warning> getWarningsToSuppress() {
 		return EnumSet.copyOf(warningsToSuppress);
+	}
+	
+	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
+		return new Configuration<T>(type, prefabValues, warningsToSuppress, value);
+	}
+	
+	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
+		return cachedHashCodeInitializer;
 	}
 	
 	public ClassAccessor<T> createClassAccessor() {

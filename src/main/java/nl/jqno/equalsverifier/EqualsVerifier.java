@@ -117,7 +117,6 @@ public final class EqualsVerifier<T> {
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
-	private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
 	
 	/**
 	 * Factory method. For general use.
@@ -363,7 +362,9 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
-		cachedHashCodeInitializer = new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
+		CachedHashCodeInitializer<T> cachedHashCodeInitializer =
+				new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
+		config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
 		return this;
 	}
 	
@@ -426,9 +427,9 @@ public final class EqualsVerifier<T> {
 	
 	private void verifyWithoutExamples() {
 		Checker signatureChecker = new SignatureChecker<T>(config);
-		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config, cachedHashCodeInitializer);
-		Checker nullChecker = new NullChecker<T>(config, cachedHashCodeInitializer);
-		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config, cachedHashCodeInitializer);
+		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config);
+		Checker nullChecker = new NullChecker<T>(config);
+		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config);
 		
 		signatureChecker.check();
 		abstractDelegationChecker.check();
@@ -448,9 +449,9 @@ public final class EqualsVerifier<T> {
 	
 	private void verifyWithExamples() {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
-		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples, cachedHashCodeInitializer);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
-		Checker fieldsChecker = new FieldsChecker<T>(config, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
+		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
+		Checker fieldsChecker = new FieldsChecker<T>(config, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
 		
 		preconditionChecker.check();
 		examplesChecker.check();
