@@ -112,7 +112,6 @@ public final class EqualsVerifier<T> {
 	private final List<T> unequalExamples;
 	
 	private Configuration<T> config;
-	private boolean usingGetClass = false;
 	private boolean allFieldsShouldBeUsed = false;
 	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
@@ -254,7 +253,7 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> usingGetClass() {
-		usingGetClass = true;
+		config = config.withUsingGetClass();
 		return this;
 	}
 	
@@ -450,7 +449,7 @@ public final class EqualsVerifier<T> {
 	private void verifyWithExamples() {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config, usingGetClass, hasRedefinedSubclass, redefinedSubclass);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config, hasRedefinedSubclass, redefinedSubclass);
 		Checker fieldsChecker = new FieldsChecker<T>(config, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
 		
 		preconditionChecker.check();

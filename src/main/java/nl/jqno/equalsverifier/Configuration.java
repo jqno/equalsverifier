@@ -25,16 +25,20 @@ public class Configuration<T> {
 	private final PrefabValues prefabValues;
 	private final EnumSet<Warning> warningsToSuppress;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+	private final boolean usingGetClass;
 	
-	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress,
+			CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean usingGetClass) {
+		
 		this.type = type;
 		this.prefabValues = prefabValues;
 		this.warningsToSuppress = warningsToSuppress;
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+		this.usingGetClass = usingGetClass;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class), CachedHashCodeInitializer.<T>passthrough());
+		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class), CachedHashCodeInitializer.<T>passthrough(), false);
 	}
 	
 	public Class<T> getType() {
@@ -46,7 +50,7 @@ public class Configuration<T> {
 	}
 	
 	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-		return new Configuration<T>(type, prefabValues, value, cachedHashCodeInitializer);
+		return new Configuration<T>(type, prefabValues, value, cachedHashCodeInitializer, usingGetClass);
 	}
 	
 	public EnumSet<Warning> getWarningsToSuppress() {
@@ -54,11 +58,19 @@ public class Configuration<T> {
 	}
 	
 	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
-		return new Configuration<T>(type, prefabValues, warningsToSuppress, value);
+		return new Configuration<T>(type, prefabValues, warningsToSuppress, value, usingGetClass);
 	}
 	
 	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
 		return cachedHashCodeInitializer;
+	}
+	
+	public Configuration<T> withUsingGetClass() {
+		return new Configuration<T>(type, prefabValues, warningsToSuppress, cachedHashCodeInitializer, true);
+	}
+	
+	public boolean isUsingGetClass() {
+		return usingGetClass;
 	}
 	
 	public ClassAccessor<T> createClassAccessor() {

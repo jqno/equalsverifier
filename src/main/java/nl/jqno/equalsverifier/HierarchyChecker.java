@@ -31,7 +31,6 @@ class HierarchyChecker<T> implements Checker {
 	private final Configuration<T> config;
 	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
-	private final boolean usingGetClass;
 	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final ObjectAccessor<T> referenceAccessor;
@@ -39,7 +38,7 @@ class HierarchyChecker<T> implements Checker {
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	
-	public HierarchyChecker(Configuration<T> config, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(Configuration<T> config, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
 		this.config = config;
 		
 		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
@@ -48,7 +47,6 @@ class HierarchyChecker<T> implements Checker {
 		
 		this.type = config.getType();
 		this.classAccessor = config.createClassAccessor();
-		this.usingGetClass = usingGetClass;
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.redefinedSubclass = redefinedSubclass;
 		this.referenceAccessor = classAccessor.getRedAccessor();
@@ -77,7 +75,7 @@ class HierarchyChecker<T> implements Checker {
 
 		Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
 		
-		if (hasRedefinedSuperclass || usingGetClass) {
+		if (hasRedefinedSuperclass || config.isUsingGetClass()) {
 			assertFalse(Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.", reference, equalSuper),
 					reference.equals(equalSuper) || equalSuper.equals(reference));
 		}
@@ -105,7 +103,7 @@ class HierarchyChecker<T> implements Checker {
 		
 		T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 		
-		if (usingGetClass) {
+		if (config.isUsingGetClass()) {
 			assertFalse(Formatter.of("Subclass: object is equal to an instance of a trivial subclass with equal fields:\n  %%\nThis should not happen when using getClass().", reference),
 					reference.equals(equalSub));
 		}
@@ -137,7 +135,7 @@ class HierarchyChecker<T> implements Checker {
 		boolean equalsIsFinal = methodIsFinal("equals", Object.class);
 		boolean hashCodeIsFinal = methodIsFinal("hashCode");
 		
-		if (usingGetClass) {
+		if (config.isUsingGetClass()) {
 			assertEquals(Formatter.of("Finality: equals and hashCode must both be final or both be non-final."),
 					equalsIsFinal, hashCodeIsFinal);
 		}
