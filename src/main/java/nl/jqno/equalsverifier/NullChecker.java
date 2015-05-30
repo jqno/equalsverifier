@@ -30,9 +30,9 @@ class NullChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public NullChecker(Configuration<T> config, ClassAccessor<T> classAccessor, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	public NullChecker(Configuration<T> config, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.config = config;
-		this.classAccessor = classAccessor;
+		this.classAccessor = config.createClassAccessor();
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 

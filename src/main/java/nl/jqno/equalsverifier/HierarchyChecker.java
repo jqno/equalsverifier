@@ -39,7 +39,7 @@ class HierarchyChecker<T> implements Checker {
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public HierarchyChecker(Configuration<T> config, ClassAccessor<T> classAccessor, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+	public HierarchyChecker(Configuration<T> config, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
 		this.config = config;
 
 		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
@@ -47,7 +47,7 @@ class HierarchyChecker<T> implements Checker {
 		}
 		
 		this.type = config.getType();
-		this.classAccessor = classAccessor;
+		this.classAccessor = config.createClassAccessor();
 		this.usingGetClass = usingGetClass;
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.redefinedSubclass = redefinedSubclass;

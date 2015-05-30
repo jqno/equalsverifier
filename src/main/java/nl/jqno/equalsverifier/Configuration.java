@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier;
 
 import java.util.EnumSet;
 
+import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class Configuration<T> {
@@ -48,5 +49,9 @@ public class Configuration<T> {
 	
 	public EnumSet<Warning> getWarningsToSuppress() {
 		return EnumSet.copyOf(warningsToSuppress);
+	}
+	
+	public ClassAccessor<T> createClassAccessor() {
+		return ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
 	}
 }

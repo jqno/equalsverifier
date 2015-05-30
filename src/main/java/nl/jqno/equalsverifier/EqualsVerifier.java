@@ -419,16 +419,15 @@ public final class EqualsVerifier<T> {
 			return;
 		}
 		
-		ClassAccessor<T> classAccessor = ClassAccessor.of(config.getType(), config.getPrefabValues(), config.getWarningsToSuppress().contains(Warning.ANNOTATION));
-		verifyWithoutExamples(classAccessor);
-		ensureUnequalExamples(classAccessor);
-		verifyWithExamples(classAccessor);
+		verifyWithoutExamples();
+		ensureUnequalExamples();
+		verifyWithExamples();
 	}
 	
-	private void verifyWithoutExamples(ClassAccessor<T> classAccessor) {
+	private void verifyWithoutExamples() {
 		Checker signatureChecker = new SignatureChecker<T>(config);
-		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(classAccessor, cachedHashCodeInitializer);
-		Checker nullChecker = new NullChecker<T>(config, classAccessor, cachedHashCodeInitializer);
+		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config, cachedHashCodeInitializer);
+		Checker nullChecker = new NullChecker<T>(config, cachedHashCodeInitializer);
 		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config, cachedHashCodeInitializer);
 		
 		signatureChecker.check();
@@ -437,20 +436,21 @@ public final class EqualsVerifier<T> {
 		cachedHashCodeChecker.check();
 	}
 	
-	private void ensureUnequalExamples(ClassAccessor<T> classAccessor) {
+	private void ensureUnequalExamples() {
 		if (unequalExamples.size() > 0) {
 			return;
 		}
 		
+		ClassAccessor<T> classAccessor = config.createClassAccessor();
 		unequalExamples.add(classAccessor.getRedObject());
 		unequalExamples.add(classAccessor.getBlackObject());
 	}
 	
-	private void verifyWithExamples(ClassAccessor<T> classAccessor) {
+	private void verifyWithExamples() {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples, cachedHashCodeInitializer);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config, classAccessor, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
-		Checker fieldsChecker = new FieldsChecker<T>(config, classAccessor, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config, usingGetClass, hasRedefinedSubclass, redefinedSubclass, cachedHashCodeInitializer);
+		Checker fieldsChecker = new FieldsChecker<T>(config, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, cachedHashCodeInitializer);
 		
 		preconditionChecker.check();
 		examplesChecker.check();

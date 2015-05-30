@@ -31,10 +31,10 @@ class AbstractDelegationChecker<T> implements Checker {
 	private final ClassAccessor<T> classAccessor;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public AbstractDelegationChecker(ClassAccessor<T> classAccessor, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
-		this.type = classAccessor.getType();
-		this.prefabValues = classAccessor.getPrefabValues();
-		this.classAccessor = classAccessor;
+	public AbstractDelegationChecker(Configuration<T> config, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+		this.type = config.getType();
+		this.prefabValues = config.getPrefabValues();
+		this.classAccessor = config.createClassAccessor();
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 	}
 
