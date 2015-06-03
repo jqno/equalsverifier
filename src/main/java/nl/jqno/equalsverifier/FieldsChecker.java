@@ -43,12 +43,12 @@ class FieldsChecker<T> implements Checker {
 	private final Set<String> allFieldsShouldBeUsedExceptions;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public FieldsChecker(Configuration<T> config, boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions) {
+	public FieldsChecker(Configuration<T> config) {
 		this.classAccessor = config.createClassAccessor();
 		this.prefabValues = classAccessor.getPrefabValues();
 		this.warningsToSuppress = config.getWarningsToSuppress();
-		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
-		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
+		this.allFieldsShouldBeUsed = config.isAllFieldsShouldBeUsed();
+		this.allFieldsShouldBeUsedExceptions = config.getAllFieldsShouldBeUsedExceptions();
 		this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
 	}
 	

@@ -112,8 +112,6 @@ public final class EqualsVerifier<T> {
 	private final List<T> unequalExamples;
 	
 	private Configuration<T> config;
-	private boolean allFieldsShouldBeUsed = false;
-	private Set<String> allFieldsShouldBeUsedExceptions = new HashSet<String>();
 	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	
@@ -265,7 +263,7 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> allFieldsShouldBeUsed() {
-		allFieldsShouldBeUsed = true;
+		config = config.withAllFieldsShouldBeUsed();
 		return this;
 	}
 	
@@ -279,14 +277,14 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-		allFieldsShouldBeUsed = true;
-		allFieldsShouldBeUsedExceptions = new HashSet<String>(Arrays.asList(fields));
-		
+		config = config.withAllFieldsShouldBeUsed();
+		config = config.withAllFieldsShouldBeUsedExceptions(fields);
+
 		Set<String> actualFieldNames = new HashSet<String>();
 		for (Field field : FieldIterable.of(config.getType())) {
 			actualFieldNames.add(field.getName());
 		}
-		for (String field : allFieldsShouldBeUsedExceptions) {
+		for (String field : config.getAllFieldsShouldBeUsedExceptions()) {
 			if (!actualFieldNames.contains(field)) {
 				throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
 			}
@@ -450,7 +448,7 @@ public final class EqualsVerifier<T> {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
 		Checker hierarchyChecker = new HierarchyChecker<T>(config, hasRedefinedSubclass, redefinedSubclass);
-		Checker fieldsChecker = new FieldsChecker<T>(config, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
+		Checker fieldsChecker = new FieldsChecker<T>(config);
 		
 		preconditionChecker.check();
 		examplesChecker.check();
