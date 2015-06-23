@@ -112,7 +112,6 @@ public final class EqualsVerifier<T> {
 	private final List<T> unequalExamples;
 	
 	private Configuration<T> config;
-	private boolean hasRedefinedSubclass = false;
 	private Class<? extends T> redefinedSubclass = null;
 	
 	/**
@@ -304,7 +303,7 @@ public final class EqualsVerifier<T> {
 	 * @return {@code this}, for easy method chaining.
 	 */
 	public EqualsVerifier<T> withRedefinedSuperclass() {
-		hasRedefinedSubclass = true;
+		config = config.withRedefinedSuperclass();
 		return this;
 	}
 	
@@ -447,7 +446,7 @@ public final class EqualsVerifier<T> {
 	private void verifyWithExamples() {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config, hasRedefinedSubclass, redefinedSubclass);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config, redefinedSubclass);
 		Checker fieldsChecker = new FieldsChecker<T>(config);
 		
 		preconditionChecker.check();

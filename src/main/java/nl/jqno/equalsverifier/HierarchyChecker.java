@@ -31,14 +31,13 @@ class HierarchyChecker<T> implements Checker {
 	private final Configuration<T> config;
 	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
-	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final ObjectAccessor<T> referenceAccessor;
 	private final T reference;
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	
-	public HierarchyChecker(Configuration<T> config, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(Configuration<T> config, Class<? extends T> redefinedSubclass) {
 		this.config = config;
 		
 		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
@@ -47,7 +46,6 @@ class HierarchyChecker<T> implements Checker {
 		
 		this.type = config.getType();
 		this.classAccessor = config.createClassAccessor();
-		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
 		this.redefinedSubclass = redefinedSubclass;
 		this.referenceAccessor = classAccessor.getRedAccessor();
 		this.reference = referenceAccessor.get();
@@ -75,7 +73,7 @@ class HierarchyChecker<T> implements Checker {
 
 		Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
 		
-		if (hasRedefinedSuperclass || config.isUsingGetClass()) {
+		if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
 			assertFalse(Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.", reference, equalSuper),
 					reference.equals(equalSuper) || equalSuper.equals(reference));
 		}
