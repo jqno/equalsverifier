@@ -27,28 +27,29 @@ import nl.jqno.equalsverifier.util.PrefabValues;
 public class Configuration<T> {
 	private final Class<T> type;
 	private final PrefabValues prefabValues;
-	private final EnumSet<Warning> warningsToSuppress;
-	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
-	private final boolean usingGetClass;
+
 	private final boolean allFieldsShouldBeUsed;
 	private final Set<String> allFieldsShouldBeUsedExceptions;
-	
-	private Configuration(Class<T> type, PrefabValues prefabValues, EnumSet<Warning> warningsToSuppress,
-			CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean usingGetClass,
-			boolean allFieldsShouldBeUsed, Set<String> allFieldsShouldBeUsedExceptions) {
+	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+	private final boolean usingGetClass;
+	private final EnumSet<Warning> warningsToSuppress;
+
+	private Configuration(Class<T> type, PrefabValues prefabValues, boolean allFieldsShouldBeUsed,
+	                      Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
+	                      boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
 		
 		this.type = type;
 		this.prefabValues = prefabValues;
-		this.warningsToSuppress = warningsToSuppress;
-		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
-		this.usingGetClass = usingGetClass;
 		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
 		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
+		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+		this.usingGetClass = usingGetClass;
+		this.warningsToSuppress = warningsToSuppress;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type, new PrefabValues(), EnumSet.noneOf(Warning.class),
-				CachedHashCodeInitializer.<T>passthrough(), false, false, new HashSet<String>());
+		return new Configuration<T>(type, new PrefabValues(), false, new HashSet<String>(),
+				CachedHashCodeInitializer.<T>passthrough(), false, EnumSet.noneOf(Warning.class));
 	}
 	
 	public Class<T> getType() {
@@ -58,37 +59,10 @@ public class Configuration<T> {
 	public PrefabValues getPrefabValues() {
 		return prefabValues;
 	}
-	
-	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-		return new Configuration<T>(type, prefabValues, value, cachedHashCodeInitializer, usingGetClass,
-				allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
-	}
-	
-	public EnumSet<Warning> getWarningsToSuppress() {
-		return EnumSet.copyOf(warningsToSuppress);
-	}
-	
-	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
-		return new Configuration<T>(type, prefabValues, warningsToSuppress, value, usingGetClass,
-				allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
-	}
-	
-	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
-		return cachedHashCodeInitializer;
-	}
-	
-	public Configuration<T> withUsingGetClass() {
-		return new Configuration<T>(type, prefabValues, warningsToSuppress, cachedHashCodeInitializer, true,
-				allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions);
-	}
-
-	public boolean isUsingGetClass() {
-		return usingGetClass;
-	}
 
 	public Configuration<T> withAllFieldsShouldBeUsed() {
-		return new Configuration<T>(type, prefabValues, warningsToSuppress, cachedHashCodeInitializer, usingGetClass,
-				true, allFieldsShouldBeUsedExceptions);
+		return new Configuration<T>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
+				cachedHashCodeInitializer, usingGetClass, warningsToSuppress);
 	}
 
 	public boolean isAllFieldsShouldBeUsed() {
@@ -96,12 +70,39 @@ public class Configuration<T> {
 	}
 
 	public Configuration<T> withAllFieldsShouldBeUsedExceptions(String[] value) {
-		return new Configuration<T>(type, prefabValues, warningsToSuppress, cachedHashCodeInitializer, usingGetClass,
-				allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)));
+		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)),
+				cachedHashCodeInitializer, usingGetClass, warningsToSuppress);
 	}
 
 	public Set<String> getAllFieldsShouldBeUsedExceptions() {
 		return Collections.unmodifiableSet(allFieldsShouldBeUsedExceptions);
+	}
+
+	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
+		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
+				usingGetClass, warningsToSuppress);
+	}
+	
+	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
+		return cachedHashCodeInitializer;
+	}
+	
+	public Configuration<T> withUsingGetClass() {
+		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+				cachedHashCodeInitializer, true, warningsToSuppress);
+	}
+
+	public boolean isUsingGetClass() {
+		return usingGetClass;
+	}
+
+	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
+		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+				cachedHashCodeInitializer, usingGetClass, value);
+	}
+
+	public EnumSet<Warning> getWarningsToSuppress() {
+		return EnumSet.copyOf(warningsToSuppress);
 	}
 
 	public ClassAccessor<T> createClassAccessor() {
