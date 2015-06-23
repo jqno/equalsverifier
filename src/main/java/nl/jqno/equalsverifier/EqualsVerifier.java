@@ -110,10 +110,8 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
 public final class EqualsVerifier<T> {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
-	
 	private Configuration<T> config;
-	private Class<? extends T> redefinedSubclass = null;
-	
+
 	/**
 	 * Factory method. For general use.
 	 * 
@@ -323,7 +321,7 @@ public final class EqualsVerifier<T> {
 	 * @see Warning#STRICT_INHERITANCE
 	 */
 	public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
-		this.redefinedSubclass = redefinedSubclass;
+		config = config.withRedefinedSubclass(redefinedSubclass);
 		return this;
 	}
 	
@@ -446,7 +444,7 @@ public final class EqualsVerifier<T> {
 	private void verifyWithExamples() {
 		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
 		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config, redefinedSubclass);
+		Checker hierarchyChecker = new HierarchyChecker<T>(config);
 		Checker fieldsChecker = new FieldsChecker<T>(config);
 		
 		preconditionChecker.check();

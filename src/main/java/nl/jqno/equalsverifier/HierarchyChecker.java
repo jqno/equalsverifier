@@ -37,16 +37,17 @@ class HierarchyChecker<T> implements Checker {
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	
-	public HierarchyChecker(Configuration<T> config, Class<? extends T> redefinedSubclass) {
+	public HierarchyChecker(Configuration<T> config) {
 		this.config = config;
 		
-		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
+		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) &&
+				config.getRedefinedSubclass() != null) {
 			fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
 		}
 		
 		this.type = config.getType();
 		this.classAccessor = config.createClassAccessor();
-		this.redefinedSubclass = redefinedSubclass;
+		this.redefinedSubclass = config.getRedefinedSubclass();
 		this.referenceAccessor = classAccessor.getRedAccessor();
 		this.reference = referenceAccessor.get();
 		this.typeIsFinal = Modifier.isFinal(type.getModifiers());

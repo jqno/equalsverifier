@@ -32,12 +32,14 @@ public class Configuration<T> {
 	private final Set<String> allFieldsShouldBeUsedExceptions;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 	private final boolean hasRedefinedSuperclass;
+	private final Class<? extends T> redefinedSubclass;
 	private final boolean usingGetClass;
 	private final EnumSet<Warning> warningsToSuppress;
 
 	private Configuration(Class<T> type, PrefabValues prefabValues, boolean allFieldsShouldBeUsed,
 	                      Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
-	                      boolean hasRedefinedSuperclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
+	                      boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
+	                      EnumSet<Warning> warningsToSuppress) {
 		
 		this.type = type;
 		this.prefabValues = prefabValues;
@@ -45,13 +47,14 @@ public class Configuration<T> {
 		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
 		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
 		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
+		this.redefinedSubclass = redefinedSubclass;
 		this.usingGetClass = usingGetClass;
 		this.warningsToSuppress = warningsToSuppress;
 	}
 	
 	public static <T> Configuration<T> of(Class<T> type) {
 		return new Configuration<T>(type, new PrefabValues(), false, new HashSet<String>(),
-				CachedHashCodeInitializer.<T>passthrough(), false, false, EnumSet.noneOf(Warning.class));
+				CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
 	}
 	
 	public Class<T> getType() {
@@ -64,7 +67,7 @@ public class Configuration<T> {
 
 	public Configuration<T> withAllFieldsShouldBeUsed() {
 		return new Configuration<T>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, usingGetClass, warningsToSuppress);
+				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
 	}
 
 	public boolean isAllFieldsShouldBeUsed() {
@@ -73,7 +76,7 @@ public class Configuration<T> {
 
 	public Configuration<T> withAllFieldsShouldBeUsedExceptions(String[] value) {
 		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)),
-				cachedHashCodeInitializer, hasRedefinedSuperclass, usingGetClass, warningsToSuppress);
+				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
 	}
 
 	public Set<String> getAllFieldsShouldBeUsedExceptions() {
@@ -82,7 +85,7 @@ public class Configuration<T> {
 
 	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
 		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
-				hasRedefinedSuperclass, usingGetClass, warningsToSuppress);
+				hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
 	}
 	
 	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
@@ -91,16 +94,25 @@ public class Configuration<T> {
 
 	public Configuration<T> withRedefinedSuperclass() {
 		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, true, usingGetClass, warningsToSuppress);
+				cachedHashCodeInitializer, true, redefinedSubclass, usingGetClass, warningsToSuppress);
 	}
 
 	public boolean hasRedefinedSuperclass() {
 		return hasRedefinedSuperclass;
 	}
+
+	public Configuration<T> withRedefinedSubclass(Class<? extends T> value) {
+		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+				cachedHashCodeInitializer, hasRedefinedSuperclass, value, usingGetClass, warningsToSuppress);
+	}
+
+	public Class<? extends T> getRedefinedSubclass() {
+		return redefinedSubclass;
+	}
 	
 	public Configuration<T> withUsingGetClass() {
 		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, true, warningsToSuppress);
+				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, true, warningsToSuppress);
 	}
 
 	public boolean isUsingGetClass() {
@@ -109,7 +121,7 @@ public class Configuration<T> {
 
 	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
 		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, usingGetClass, value);
+				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, value);
 	}
 
 	public EnumSet<Warning> getWarningsToSuppress() {
