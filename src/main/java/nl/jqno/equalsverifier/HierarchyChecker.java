@@ -22,39 +22,36 @@ import static nl.jqno.equalsverifier.util.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.EnumSet;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class HierarchyChecker<T> implements Checker {
+	private final Configuration<T> config;
 	private final Class<T> type;
 	private final ClassAccessor<T> classAccessor;
-	private final EnumSet<Warning> warningsToSuppress;
-	private final boolean usingGetClass;
-	private final boolean hasRedefinedSuperclass;
 	private final Class<? extends T> redefinedSubclass;
 	private final ObjectAccessor<T> referenceAccessor;
 	private final T reference;
 	private final boolean typeIsFinal;
 	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
-
-	public HierarchyChecker(ClassAccessor<T> classAccessor, EnumSet<Warning> warningsToSuppress, boolean usingGetClass, boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
-		if (warningsToSuppress.contains(Warning.STRICT_INHERITANCE) && redefinedSubclass != null) {
+	
+	public HierarchyChecker(Configuration<T> config) {
+		this.config = config;
+		
+		if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) &&
+				config.getRedefinedSubclass() != null) {
 			fail(Formatter.of("withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
 		}
 		
-		this.type = classAccessor.getType();
-		this.classAccessor = classAccessor;
-		this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
-		this.usingGetClass = usingGetClass;
-		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
-		this.redefinedSubclass = redefinedSubclass;
+		this.type = config.getType();
+		this.classAccessor = config.createClassAccessor();
+		this.redefinedSubclass = config.getRedefinedSubclass();
 		this.referenceAccessor = classAccessor.getRedAccessor();
 		this.reference = referenceAccessor.get();
 		this.typeIsFinal = Modifier.isFinal(type.getModifiers());
-		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+		this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
 	}
 	
 	@Override
@@ -63,7 +60,7 @@ class HierarchyChecker<T> implements Checker {
 		checkSubclass();
 		
 		checkRedefinedSubclass();
-		if (!warningsToSuppress.contains(Warning.STRICT_INHERITANCE)) {
+		if (!config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
 			checkFinalEqualsMethod();
 		}
 	}
@@ -77,7 +74,7 @@ class HierarchyChecker<T> implements Checker {
 
 		Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
 		
-		if (hasRedefinedSuperclass || usingGetClass) {
+		if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
 			assertFalse(Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.", reference, equalSuper),
 					reference.equals(equalSuper) || equalSuper.equals(reference));
 		}
@@ -105,7 +102,7 @@ class HierarchyChecker<T> implements Checker {
 		
 		T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 		
-		if (usingGetClass) {
+		if (config.isUsingGetClass()) {
 			assertFalse(Formatter.of("Subclass: object is equal to an instance of a trivial subclass with equal fields:\n  %%\nThis should not happen when using getClass().", reference),
 					reference.equals(equalSub));
 		}
@@ -137,7 +134,7 @@ class HierarchyChecker<T> implements Checker {
 		boolean equalsIsFinal = methodIsFinal("equals", Object.class);
 		boolean hashCodeIsFinal = methodIsFinal("hashCode");
 		
-		if (usingGetClass) {
+		if (config.isUsingGetClass()) {
 			assertEquals(Formatter.of("Finality: equals and hashCode must both be final or both be non-final."),
 					equalsIsFinal, hashCodeIsFinal);
 		}

@@ -25,7 +25,6 @@ import static org.junit.Assert.assertTrue;
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.StaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractAndInterfaceArrayContainer;

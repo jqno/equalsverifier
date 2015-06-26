@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ class PreconditionChecker<T> implements Checker {
 	private final List<T> equalExamples;
 	private final List<T> unequalExamples;
 
-	public PreconditionChecker(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = type;
+	public PreconditionChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
+		this.type = config.getType();
 		this.equalExamples = equalExamples;
 		this.unequalExamples = unequalExamples;
 	}

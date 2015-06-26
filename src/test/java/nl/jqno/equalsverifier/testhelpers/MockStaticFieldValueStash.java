@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.StaticFieldValueStash;
+import nl.jqno.equalsverifier.util.StaticFieldValueStash;
 
 public class MockStaticFieldValueStash extends StaticFieldValueStash {
 	public Class<?> lastBackuppedType = null;

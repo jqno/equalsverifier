@@ -1,5 +1,5 @@
 /*
- * Copyright 2012, 2014 Jan Ouwens
+ * Copyright 2012, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,14 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import nl.jqno.equalsverifier.Configuration;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
+import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
+import nl.jqno.equalsverifier.util.PrefabValues;
 
 import org.junit.Test;
 
@@ -75,19 +78,22 @@ public class OriginalStateTest extends IntegrationTestBase {
 	@Test
 	public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
 		EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-		MockStaticFieldValueStash stash = new MockStaticFieldValueStash();
+		MockStaticFieldValueStash mockStash = new MockStaticFieldValueStash();
+		PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitives(mockStash);
 		
 		// Mock EqualsVerifier's StaticFieldValueStash
-		ObjectAccessor<EqualsVerifier<MutableIntContainer>> objectAccessor = ObjectAccessor.of(ev);
-		FieldAccessor stashAccessor = objectAccessor.fieldAccessorFor(EqualsVerifier.class.getDeclaredField("stash"));
-		stashAccessor.set(stash);
+		ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);
+		FieldAccessor configFieldAccessor = objectAccessor.fieldAccessorFor(EqualsVerifier.class.getDeclaredField("config"));
+		ObjectAccessor<?> configAccessor = ObjectAccessor.of(configFieldAccessor.get());
+		FieldAccessor prefabValuesAccessor = configAccessor.fieldAccessorFor(Configuration.class.getDeclaredField("prefabValues"));
+		prefabValuesAccessor.set(mockPrefabValues);
 		
 		// Make sure the exception actually occurs, on a check that actually mutates the fields.
 		expectFailure("Mutability");
 		ev.verify();
 		
 		// Assert
-		assertTrue(stash.restoreCalled);
+		assertTrue(mockStash.restoreCalled);
 	}
 	
 	static final class CorrectEquals {

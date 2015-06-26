@@ -1,5 +1,5 @@
 /*
- * Copyright 2010 Jan Ouwens
+ * Copyright 2010, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import nl.jqno.equalsverifier.util.Formatter;
 class SignatureChecker<T> implements Checker {
 	private final Class<T> type;
 
-	public SignatureChecker(Class<T> type) {
-		this.type = type;
+	public SignatureChecker(Configuration<T> config) {
+		this.type = config.getType();
 	}
 	
 	@Override
