@@ -88,6 +88,12 @@ public class NullFieldsTest extends IntegrationTestBase {
 				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
+
+	@Test
+	public void succeed_whenConstantFieldIsNull() {
+		EqualsVerifier.forClass(ConstantFieldIsNull.class)
+				.verify();
+	}
 	
 	static final class EqualsThrowsNpeOnThis {
 		private final Color color;
@@ -168,7 +174,7 @@ public class NullFieldsTest extends IntegrationTestBase {
 	
 	static final class DeepNullB {
 		private final Object o;
-		
+
 		public DeepNullB(Object o) {
 			if (o == null) {
 				throw new NullPointerException("o");
@@ -177,6 +183,18 @@ public class NullFieldsTest extends IntegrationTestBase {
 			this.o = o;
 		}
 		
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+
+	static final class ConstantFieldIsNull {
+		private final Object o;
+		private static final String nullConstant = null;
+
+		public ConstantFieldIsNull(Object o) {
+			this.o = o;
+		}
+
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return defaultHashCode(this); }
 	}

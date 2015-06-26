@@ -297,6 +297,9 @@ class FieldsChecker<T> implements Checker {
 			if (fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
 				return;
 			}
+			if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
+				return;
+			}
 			ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
 			if (fieldType.equals(Object.class) || !fieldTypeAccessor.declaresEquals()) {
 				return;
