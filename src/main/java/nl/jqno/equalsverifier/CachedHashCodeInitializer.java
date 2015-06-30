@@ -100,7 +100,7 @@ class CachedHashCodeInitializer<T> {
 	private Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
 		for (Field candidateField : FieldIterable.of(type)) {
 			if (candidateField.getName().equals(cachedHashCodeFieldName)) {
-				if (Modifier.isPrivate(candidateField.getModifiers()) && candidateField.getType().equals(int.class)) {
+				if (!Modifier.isPublic(candidateField.getModifiers()) && candidateField.getType().equals(int.class)) {
 					candidateField.setAccessible(true);
 					return candidateField;
 				}

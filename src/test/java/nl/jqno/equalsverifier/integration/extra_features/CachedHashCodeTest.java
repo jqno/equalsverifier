@@ -69,12 +69,12 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void fail_whenCachedHashCodeFieldIsNotPrivate() {
-		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "notPrivate");
+	public void fail_whenCachedHashCodeFieldIsPublic() {
+		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "publicField");
 		EqualsVerifier.forClass(InvalidCachedHashCodeFieldContainer.class)
-				.withCachedHashCode("notPrivate", "calculateHashCode", new InvalidCachedHashCodeFieldContainer());
+				.withCachedHashCode("publicField", "calculateHashCode", new InvalidCachedHashCodeFieldContainer());
 	}
-	
+
 	@Test
 	public void fail_whenCachedHashCodeFieldIsNotAnInt() {
 		expectException(IllegalArgumentException.class, CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "notAnInt");
@@ -111,15 +111,17 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	}
 	
 	@Test
-	public void succeed_whenCalculateHashCodeMethodIsProtected() {
-		EqualsVerifier.forClass(ObjectWithProtectedCalculateHashCodeMethod.class)
-				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithProtectedCalculateHashCodeMethod(SOME_NAME));
+	public void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldAreProtected() {
+		EqualsVerifier.forClass(ObjectWithProtectedCalculateHashCodeMembers.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithProtectedCalculateHashCodeMembers(SOME_NAME))
+				.verify();
 	}
 	
 	@Test
-	public void succeed_whenCalculateHashCodeMethodHasDefaultVisibility() {
-		EqualsVerifier.forClass(ObjectWithDefaultVisibilityCalculateHashCodeMethod.class)
-				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithDefaultVisibilityCalculateHashCodeMethod(SOME_NAME));
+	public void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldHaveDefaultVisibility() {
+		EqualsVerifier.forClass(ObjectWithDefaultVisibilityCalculateHashCodeMembers.class)
+				.withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithDefaultVisibilityCalculateHashCodeMembers(SOME_NAME))
+				.verify();
 	}
 	
 	@Test
@@ -255,12 +257,12 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 	
 	@SuppressWarnings("unused")
 	static class InvalidCachedHashCodeFieldContainer {
-		public int notPrivate;
+		public int publicField;
 		private String notAnInt;
 		
 		private int calculateHashCode() { return -1; }
 	}
-	
+
 	@SuppressWarnings("unused")
 	static class InvalidCalculateHashCodeMethodsContainer {
 		private int cachedHashCode;
@@ -270,21 +272,21 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		private int takesParameters(int x) { return x; }
 	}
 	
-	static class ObjectWithProtectedCalculateHashCodeMethod {
+	static class ObjectWithProtectedCalculateHashCodeMembers {
 		@Nonnull private final String name;
-		private final int cachedHashCode;
+		protected final int cachedHashCode;
 		
-		public ObjectWithProtectedCalculateHashCodeMethod(String name) {
+		public ObjectWithProtectedCalculateHashCodeMembers(String name) {
 			this.name = name;
 			this.cachedHashCode = calcHashCode();
 		}
 		
 		@Override
 		public final boolean equals(Object obj) {
-			if (!(obj instanceof ObjectWithProtectedCalculateHashCodeMethod)) {
+			if (!(obj instanceof ObjectWithProtectedCalculateHashCodeMembers)) {
 				return false;
 			}
-			ObjectWithProtectedCalculateHashCodeMethod that = (ObjectWithProtectedCalculateHashCodeMethod) obj;
+			ObjectWithProtectedCalculateHashCodeMembers that = (ObjectWithProtectedCalculateHashCodeMembers) obj;
 			return name.equals(that.name);
 		}
 		
@@ -298,21 +300,21 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 		}
 	}
 	
-	static class ObjectWithDefaultVisibilityCalculateHashCodeMethod {
+	static class ObjectWithDefaultVisibilityCalculateHashCodeMembers {
 		@Nonnull private final String name;
-		private final int cachedHashCode;
+		final int cachedHashCode;
 		
-		public ObjectWithDefaultVisibilityCalculateHashCodeMethod(String name) {
+		public ObjectWithDefaultVisibilityCalculateHashCodeMembers(String name) {
 			this.name = name;
 			this.cachedHashCode = calcHashCode();
 		}
 		
 		@Override
 		public final boolean equals(Object obj) {
-			if (!(obj instanceof ObjectWithDefaultVisibilityCalculateHashCodeMethod)) {
+			if (!(obj instanceof ObjectWithDefaultVisibilityCalculateHashCodeMembers)) {
 				return false;
 			}
-			ObjectWithDefaultVisibilityCalculateHashCodeMethod that = (ObjectWithDefaultVisibilityCalculateHashCodeMethod) obj;
+			ObjectWithDefaultVisibilityCalculateHashCodeMembers that = (ObjectWithDefaultVisibilityCalculateHashCodeMembers) obj;
 			return name.equals(that.name);
 		}
 		
@@ -321,7 +323,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 			return cachedHashCode;
 		}
 		
-		int calcHashCode() {
+		/* default */ int calcHashCode() {
 			return name.hashCode();
 		}
 	}
