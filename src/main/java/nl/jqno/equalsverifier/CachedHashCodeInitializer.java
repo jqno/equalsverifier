@@ -27,7 +27,7 @@ import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
  * method), if any, for the object to be verified.
  * 
  * EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to
- * obtain the hash code, call the {@link #deprecated_getInitializedHashCode(Object)} method
+ * obtain the hash code, call the {@link #getInitializedHashCode(Object)} method
  * in this class:
  * 
  * * If this class has recorded a cached hash code initializer for the object,
