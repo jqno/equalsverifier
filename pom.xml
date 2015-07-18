@@ -220,7 +220,7 @@ limitations under the License.
 									</structure>
 									<check failonviolation="true" violationsproperty="violation">
 										<rule element="BUNDLE">
-											<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.94" />
+											<limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.95" />
 										</rule>
 									</check>
 									<html destdir="${project.build.directory}/jacoco-internal" />
