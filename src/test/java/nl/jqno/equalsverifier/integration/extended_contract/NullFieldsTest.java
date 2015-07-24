@@ -26,176 +26,176 @@ import org.junit.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class NullFieldsTest extends IntegrationTestBase {
-	private static final String NON_NULLITY = "Non-nullity";
-	private static final String EQUALS = "equals throws NullPointerException";
-	private static final String HASHCODE = "hashCode throws NullPointerException";
-	private static final String ON_FIELD = "on field";
-	
-	@Test
-	public void fail_whenEqualsThrowsNpeOnThissField() {
-		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-		EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsThrowsNpeOnOthersField() {
-		expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-		EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenHashCodeThrowsNpe() {
-		expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
-		EqualsVerifier.forClass(HashCodeThrowsNpe.class)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenEqualsThrowsNpeOnThissField_givenExamples() {
-		EqualsThrowsNpeOnThis blue = new EqualsThrowsNpeOnThis(Color.BLUE);
-		EqualsThrowsNpeOnThis yellow = new EqualsThrowsNpeOnThis(Color.YELLOW);
-		
-		EqualsVerifier.forExamples(blue, yellow)
-				.suppress(Warning.NULL_FIELDS)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
-		EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
-				.suppress(Warning.NULL_FIELDS)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenEqualsTestFieldWhichThrowsNpe() {
-		EqualsVerifier.forClass(CheckedDeepNullA.class)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenEqualsThrowsNpeOnFieldWhichAlsoThrowsNpe_givenWarningIsSuppressed() {
-		EqualsVerifier.forClass(DeepNullA.class)
-				.suppress(Warning.NULL_FIELDS)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
-		EqualsVerifier.forClass(DeepNullB.class)
-				.suppress(Warning.NULL_FIELDS)
-				.verify();
-	}
+    private static final String NON_NULLITY = "Non-nullity";
+    private static final String EQUALS = "equals throws NullPointerException";
+    private static final String HASHCODE = "hashCode throws NullPointerException";
+    private static final String ON_FIELD = "on field";
 
-	@Test
-	public void succeed_whenConstantFieldIsNull() {
-		EqualsVerifier.forClass(ConstantFieldIsNull.class)
-				.verify();
-	}
-	
-	static final class EqualsThrowsNpeOnThis {
-		private final Color color;
-		
-		public EqualsThrowsNpeOnThis(Color color) { this.color = color; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof EqualsThrowsNpeOnThis)) {
-				return false;
-			}
-			EqualsThrowsNpeOnThis p = (EqualsThrowsNpeOnThis)obj;
-			return color.equals(p.color);
-		}
-		
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class EqualsThrowsNpeOnOther {
-		private final Color color;
-		
-		public EqualsThrowsNpeOnOther(Color color) { this.color = color; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof EqualsThrowsNpeOnOther)) {
-				return false;
-			}
-			EqualsThrowsNpeOnOther p = (EqualsThrowsNpeOnOther)obj;
-			return p.color.equals(color);
-		}
-		
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class HashCodeThrowsNpe {
-		private final Color color;
-		
-		public HashCodeThrowsNpe(Color color) { this.color = color; }
-		
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		
-		@Override
-		public int hashCode() {
-			return color.hashCode();
-		}
-		
-		@Override
-		public String toString() {
-			//Object.toString calls hashCode()
-			return "";
-		}
-	}
-	
-	static final class CheckedDeepNullA {
-		private final DeepNullB b;
-		
-		public CheckedDeepNullA(DeepNullB b) { this.b = b; }
-		
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class DeepNullA {
-		private final DeepNullB b;
-		
-		public DeepNullA(DeepNullB b) {
-			if (b == null) {
-				throw new NullPointerException("b");
-			}
-			
-			this.b = b;
-		}
-		
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static final class DeepNullB {
-		private final Object o;
+    @Test
+    public void fail_whenEqualsThrowsNpeOnThissField() {
+        expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
+                .verify();
+    }
 
-		public DeepNullB(Object o) {
-			if (o == null) {
-				throw new NullPointerException("o");
-			}
-			
-			this.o = o;
-		}
-		
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
+    @Test
+    public void fail_whenEqualsThrowsNpeOnOthersField() {
+        expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+        EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class)
+                .verify();
+    }
 
-	static final class ConstantFieldIsNull {
-		private final Object o;
-		private static final String nullConstant = null;
+    @Test
+    public void fail_whenHashCodeThrowsNpe() {
+        expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
+        EqualsVerifier.forClass(HashCodeThrowsNpe.class)
+                .verify();
+    }
 
-		public ConstantFieldIsNull(Object o) {
-			this.o = o;
-		}
+    @Test
+    public void succeed_whenEqualsThrowsNpeOnThissField_givenExamples() {
+        EqualsThrowsNpeOnThis blue = new EqualsThrowsNpeOnThis(Color.BLUE);
+        EqualsThrowsNpeOnThis yellow = new EqualsThrowsNpeOnThis(Color.YELLOW);
 
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
+        EqualsVerifier.forExamples(blue, yellow)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsTestFieldWhichThrowsNpe() {
+        EqualsVerifier.forClass(CheckedDeepNullA.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsThrowsNpeOnFieldWhichAlsoThrowsNpe_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(DeepNullA.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(DeepNullB.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenConstantFieldIsNull() {
+        EqualsVerifier.forClass(ConstantFieldIsNull.class)
+                .verify();
+    }
+
+    static final class EqualsThrowsNpeOnThis {
+        private final Color color;
+
+        public EqualsThrowsNpeOnThis(Color color) { this.color = color; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EqualsThrowsNpeOnThis)) {
+                return false;
+            }
+            EqualsThrowsNpeOnThis p = (EqualsThrowsNpeOnThis)obj;
+            return color.equals(p.color);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class EqualsThrowsNpeOnOther {
+        private final Color color;
+
+        public EqualsThrowsNpeOnOther(Color color) { this.color = color; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EqualsThrowsNpeOnOther)) {
+                return false;
+            }
+            EqualsThrowsNpeOnOther p = (EqualsThrowsNpeOnOther)obj;
+            return p.color.equals(color);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class HashCodeThrowsNpe {
+        private final Color color;
+
+        public HashCodeThrowsNpe(Color color) { this.color = color; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+
+        @Override
+        public int hashCode() {
+            return color.hashCode();
+        }
+
+        @Override
+        public String toString() {
+            //Object.toString calls hashCode()
+            return "";
+        }
+    }
+
+    static final class CheckedDeepNullA {
+        private final DeepNullB b;
+
+        public CheckedDeepNullA(DeepNullB b) { this.b = b; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class DeepNullA {
+        private final DeepNullB b;
+
+        public DeepNullA(DeepNullB b) {
+            if (b == null) {
+                throw new NullPointerException("b");
+            }
+
+            this.b = b;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class DeepNullB {
+        private final Object o;
+
+        public DeepNullB(Object o) {
+            if (o == null) {
+                throw new NullPointerException("o");
+            }
+
+            this.o = o;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class ConstantFieldIsNull {
+        private final Object o;
+        private static final String nullConstant = null;
+
+        public ConstantFieldIsNull(Object o) {
+            this.o = o;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
 }

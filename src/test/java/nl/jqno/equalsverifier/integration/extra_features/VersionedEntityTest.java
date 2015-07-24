@@ -23,45 +23,45 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Test;
 
 public class VersionedEntityTest extends IntegrationTestBase {
-	@Test
-	public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
-		expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
-		EqualsVerifier.forClass(VersionedEntity.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
-		expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
-		EqualsVerifier.forClass(VersionedEntity.class)
-				.suppress(Warning.IDENTICAL_COPY)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
-		EqualsVerifier.forClass(VersionedEntity.class)
-				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-				.verify();
-	}
-	
-	public static final class VersionedEntity {
-		private final long id;
-		
-		public VersionedEntity(long id) { this.id = id; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof VersionedEntity)) {
-				return false;
-			}
-			VersionedEntity other = (VersionedEntity) obj;
-			if (id == 0L && other.id == 0L) {
-				return super.equals(obj);
-			}
-			return id == other.id;
-		}
-		
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
+    @Test
+    public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
+        expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
+        EqualsVerifier.forClass(VersionedEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
+        expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
+        EqualsVerifier.forClass(VersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier.forClass(VersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    public static final class VersionedEntity {
+        private final long id;
+
+        public VersionedEntity(long id) { this.id = id; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof VersionedEntity)) {
+                return false;
+            }
+            VersionedEntity other = (VersionedEntity) obj;
+            if (id == 0L && other.id == 0L) {
+                return super.equals(obj);
+            }
+            return id == other.id;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
 }

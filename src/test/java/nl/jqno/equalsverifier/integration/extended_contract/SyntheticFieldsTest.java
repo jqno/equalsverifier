@@ -25,53 +25,53 @@ import org.junit.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
-	@Test
-	public void succeed_whenClassHasASyntheticField() {
-		EqualsVerifier.forClass(Outer.class)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenClassHasAFieldThatHasASyntheticField() {
-		EqualsVerifier.forClass(OuterContainer.class)
-				.verify();
-	}
-	
-	/* non-static */ final class Outer {
-		private final Inner inner;
-		
-		private /* non-static */ final class Inner {
-			int foo;
-			
-			@Override public boolean equals(Object obj) { return obj instanceof Inner; }
-			@Override public int hashCode() { return 42; }
-		}
-		
-		public Outer() { inner = null; }
-		
-		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-		@Override public int hashCode() { return defaultHashCode(this); }
-	}
-	
-	/* non-static */ final class OuterContainer {
-		private final Outer outer;
-		
-		public OuterContainer() {
-			outer = null;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!(obj instanceof OuterContainer)) {
-				return false;
-			}
-			OuterContainer other = (OuterContainer)obj;
-			return nullSafeEquals(outer, other.outer);
-		}
-		
-		@Override
-		public int hashCode() {
-			return nullSafeHashCode(outer);
-		}
-	}
+    @Test
+    public void succeed_whenClassHasASyntheticField() {
+        EqualsVerifier.forClass(Outer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasAFieldThatHasASyntheticField() {
+        EqualsVerifier.forClass(OuterContainer.class)
+                .verify();
+    }
+
+    /* non-static */ final class Outer {
+        private final Inner inner;
+
+        private /* non-static */ final class Inner {
+            int foo;
+
+            @Override public boolean equals(Object obj) { return obj instanceof Inner; }
+            @Override public int hashCode() { return 42; }
+        }
+
+        public Outer() { inner = null; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    /* non-static */ final class OuterContainer {
+        private final Outer outer;
+
+        public OuterContainer() {
+            outer = null;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof OuterContainer)) {
+                return false;
+            }
+            OuterContainer other = (OuterContainer)obj;
+            return nullSafeEquals(outer, other.outer);
+        }
+
+        @Override
+        public int hashCode() {
+            return nullSafeHashCode(outer);
+        }
+    }
 }

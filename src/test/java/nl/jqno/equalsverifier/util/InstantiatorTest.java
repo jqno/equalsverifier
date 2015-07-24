@@ -28,48 +28,48 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.Test;
 
 public class InstantiatorTest {
-	@Test
-	public void instantiateClass() {
-		Instantiator<Point> instantiator = Instantiator.of(Point.class);
-		Point p = instantiator.instantiate();
-		assertEquals(Point.class, p.getClass());
-	}
-	
-	@Test
-	public void fieldsOfInstantiatedObjectHaveDefaultValues() {
-		ColorBlindColorPoint p = Instantiator.of(ColorBlindColorPoint.class).instantiate();
-		assertEquals(0, p.x);
-		assertEquals(null, p.color);
-	}
-	
-	public void instantiateInterface() {
-		Instantiator<Interface> instantiator = Instantiator.of(Interface.class);
-		Interface i = instantiator.instantiate();
-		assertTrue(Interface.class.isAssignableFrom(i.getClass()));
-	}
-	
-	@Test
-	public void instantiateFinalClass() {
-		Instantiator.of(FinalPoint.class);
-	}
-	
-	@Test
-	public void instantiateArrayContainer() {
-		Instantiator.of(ArrayContainer.class);
-	}
-	
-	@Test
-	public void instantiateAbstractClass() {
-		Instantiator<AbstractClass> instantiator = Instantiator.of(AbstractClass.class);
-		AbstractClass ac = instantiator.instantiate();
-		assertTrue(AbstractClass.class.isAssignableFrom(ac.getClass()));
-	}
-	
-	@Test
-	public void instantiateSubclass() {
-		Instantiator<Point> instantiator = Instantiator.of(Point.class);
-		Point p = instantiator.instantiateAnonymousSubclass();
-		assertFalse(p.getClass() == Point.class);
-		assertTrue(Point.class.isAssignableFrom(p.getClass()));
-	}
+    @Test
+    public void instantiateClass() {
+        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Point p = instantiator.instantiate();
+        assertEquals(Point.class, p.getClass());
+    }
+
+    @Test
+    public void fieldsOfInstantiatedObjectHaveDefaultValues() {
+        ColorBlindColorPoint p = Instantiator.of(ColorBlindColorPoint.class).instantiate();
+        assertEquals(0, p.x);
+        assertEquals(null, p.color);
+    }
+
+    public void instantiateInterface() {
+        Instantiator<Interface> instantiator = Instantiator.of(Interface.class);
+        Interface i = instantiator.instantiate();
+        assertTrue(Interface.class.isAssignableFrom(i.getClass()));
+    }
+
+    @Test
+    public void instantiateFinalClass() {
+        Instantiator.of(FinalPoint.class);
+    }
+
+    @Test
+    public void instantiateArrayContainer() {
+        Instantiator.of(ArrayContainer.class);
+    }
+
+    @Test
+    public void instantiateAbstractClass() {
+        Instantiator<AbstractClass> instantiator = Instantiator.of(AbstractClass.class);
+        AbstractClass ac = instantiator.instantiate();
+        assertTrue(AbstractClass.class.isAssignableFrom(ac.getClass()));
+    }
+
+    @Test
+    public void instantiateSubclass() {
+        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Point p = instantiator.instantiateAnonymousSubclass();
+        assertFalse(p.getClass() == Point.class);
+        assertTrue(Point.class.isAssignableFrom(p.getClass()));
+    }
 }

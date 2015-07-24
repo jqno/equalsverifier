@@ -19,27 +19,27 @@ import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 public class PointContainer {
-	private final Point point;
-	
-	public PointContainer(Point point) {
-		this.point = point;
-	}
-	
-	public Point getPoint() {
-		return point;
-	}
-	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof PointContainer)) {
-			return false;
-		}
-		PointContainer other = (PointContainer)obj;
-		return nullSafeEquals(point, other.point);
-	}
-	
-	@Override
-	public int hashCode() {
-		return nullSafeHashCode(point);
-	}
+    private final Point point;
+
+    public PointContainer(Point point) {
+        this.point = point;
+    }
+
+    public Point getPoint() {
+        return point;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof PointContainer)) {
+            return false;
+        }
+        PointContainer other = (PointContainer)obj;
+        return nullSafeEquals(point, other.point);
+    }
+
+    @Override
+    public int hashCode() {
+        return nullSafeHashCode(point);
+    }
 }

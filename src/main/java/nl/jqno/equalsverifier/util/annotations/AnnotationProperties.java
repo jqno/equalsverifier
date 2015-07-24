@@ -27,42 +27,42 @@ import java.util.Set;
  * that are actually used by EqualsVerifier.
  */
 public class AnnotationProperties {
-	private final String descriptor;
-	private Map<String, Set<Object>> arrayValues = new HashMap<String, Set<Object>>();
-	
-	/**
-	 * Constructor.
-	 * 
-	 * @param descriptor The annotation's descriptor string.
-	 */
-	public AnnotationProperties(String descriptor) {
-		this.descriptor = descriptor;
-	}
-	
-	/**
-	 * Getter.
-	 */
-	public String getDescriptor() {
-		return descriptor;
-	}
-	
-	/**
-	 * Adds the content of an array value property.
-	 * 
-	 * @param name The name of the array value property.
-	 * @param values The content of the array value property.
-	 */
-	public void putArrayValues(String name, Set<Object> values) {
-		arrayValues.put(name, values);
-	}
-	
-	/**
-	 * Retrieves the content of an array value property.
-	 * 
-	 * @param name The name of the array value property.
-	 * @return The content of the array value property.
-	 */
-	public Set<Object> getArrayValues(String name) {
-		return arrayValues.get(name);
-	}
+    private final String descriptor;
+    private Map<String, Set<Object>> arrayValues = new HashMap<String, Set<Object>>();
+
+    /**
+     * Constructor.
+     *
+     * @param descriptor The annotation's descriptor string.
+     */
+    public AnnotationProperties(String descriptor) {
+        this.descriptor = descriptor;
+    }
+
+    /**
+     * Getter.
+     */
+    public String getDescriptor() {
+        return descriptor;
+    }
+
+    /**
+     * Adds the content of an array value property.
+     *
+     * @param name The name of the array value property.
+     * @param values The content of the array value property.
+     */
+    public void putArrayValues(String name, Set<Object> values) {
+        arrayValues.put(name, values);
+    }
+
+    /**
+     * Retrieves the content of an array value property.
+     *
+     * @param name The name of the array value property.
+     * @return The content of the array value property.
+     */
+    public Set<Object> getArrayValues(String name) {
+        return arrayValues.get(name);
+    }
 }

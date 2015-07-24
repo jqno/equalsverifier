@@ -20,32 +20,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StaticFieldValueStash {
-	private final Map<Class<?>, Map<Field, Object>> stash = new HashMap<Class<?>, Map<Field, Object>>();
-	
-	public <T> void backup(Class<T> type) {
-		if (stash.containsKey(type)) {
-			return;
-		}
-		
-		stash.put(type, new HashMap<Field, Object>());
-		ObjectAccessor<T> objectAccessor = ObjectAccessor.of(null, type);
-		for (Field field : FieldIterable.of(type)) {
-			FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
-			if (accessor.fieldIsStatic()) {
-				stash.get(type).put(field, accessor.get());
-			}
-		}
-	}
-	
-	public void restoreAll() {
-		for (Class<?> type : stash.keySet()) {
-			ObjectAccessor<?> objectAccessor = ObjectAccessor.of(null, type);
-			for (Field field : FieldIterable.of(type)) {
-				FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
-				if (accessor.fieldIsStatic()) {
-					accessor.set(stash.get(type).get(field));
-				}
-			}
-		}
-	}
+    private final Map<Class<?>, Map<Field, Object>> stash = new HashMap<Class<?>, Map<Field, Object>>();
+
+    public <T> void backup(Class<T> type) {
+        if (stash.containsKey(type)) {
+            return;
+        }
+
+        stash.put(type, new HashMap<Field, Object>());
+        ObjectAccessor<T> objectAccessor = ObjectAccessor.of(null, type);
+        for (Field field : FieldIterable.of(type)) {
+            FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
+            if (accessor.fieldIsStatic()) {
+                stash.get(type).put(field, accessor.get());
+            }
+        }
+    }
+
+    public void restoreAll() {
+        for (Class<?> type : stash.keySet()) {
+            ObjectAccessor<?> objectAccessor = ObjectAccessor.of(null, type);
+            for (Field field : FieldIterable.of(type)) {
+                FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
+                if (accessor.fieldIsStatic()) {
+                    accessor.set(stash.get(type).get(field));
+                }
+            }
+        }
+    }
 }

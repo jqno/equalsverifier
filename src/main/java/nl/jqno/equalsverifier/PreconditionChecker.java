@@ -22,26 +22,26 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.Formatter;
 
 class PreconditionChecker<T> implements Checker {
-	private final Class<T> type;
-	private final List<T> equalExamples;
-	private final List<T> unequalExamples;
+    private final Class<T> type;
+    private final List<T> equalExamples;
+    private final List<T> unequalExamples;
 
-	public PreconditionChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
-		this.type = config.getType();
-		this.equalExamples = equalExamples;
-		this.unequalExamples = unequalExamples;
-	}
-	
-	@Override
-	public void check() {
-		assertTrue(Formatter.of("Precondition: no examples."), unequalExamples.size() > 0);
-		for (T example : equalExamples) {
-			assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
-					type.isAssignableFrom(example.getClass()));
-		}
-		for (T example : unequalExamples) {
-			assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", unequalExamples.get(0), example),
-					type.isAssignableFrom(example.getClass()));
-		}
-	}
+    public PreconditionChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
+        this.type = config.getType();
+        this.equalExamples = equalExamples;
+        this.unequalExamples = unequalExamples;
+    }
+
+    @Override
+    public void check() {
+        assertTrue(Formatter.of("Precondition: no examples."), unequalExamples.size() > 0);
+        for (T example : equalExamples) {
+            assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
+                    type.isAssignableFrom(example.getClass()));
+        }
+        for (T example : unequalExamples) {
+            assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", unequalExamples.get(0), example),
+                    type.isAssignableFrom(example.getClass()));
+        }
+    }
 }

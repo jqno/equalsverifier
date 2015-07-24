@@ -36,39 +36,39 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  * }
  */
 public final class LombokInstanceOfPoint {
-	private final int x;
-	private final int y;
-	private final Color color;
-	
-	public LombokInstanceOfPoint(int x, int y, Color color) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public boolean equals(final java.lang.Object o) {
-		if (o == this) return true;
-		if (!(o instanceof LombokInstanceOfPoint)) return false;
-		final LombokInstanceOfPoint other = (LombokInstanceOfPoint)o;
-		if (this.x != other.x) return false;
-		if (this.y != other.y) return false;
-		final java.lang.Object this$color = this.color;
-		final java.lang.Object other$color = other.color;
-		if (this$color == null ? other$color != null : !this$color.equals(other$color)) return false;
-		return true;
-	}
-	
-	@java.lang.Override
-	@java.lang.SuppressWarnings("all")
-	public int hashCode() {
-		final int PRIME = 31;
-		int result = 1;
-		result = result * PRIME + this.x;
-		result = result * PRIME + this.y;
-		final java.lang.Object $color = this.color;
-		result = result * PRIME + ($color == null ? 0 : $color.hashCode());
-		return result;
-	}
+    private final int x;
+    private final int y;
+    private final Color color;
+
+    public LombokInstanceOfPoint(int x, int y, Color color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+    }
+
+    @java.lang.Override
+    @java.lang.SuppressWarnings("all")
+    public boolean equals(final java.lang.Object o) {
+        if (o == this) return true;
+        if (!(o instanceof LombokInstanceOfPoint)) return false;
+        final LombokInstanceOfPoint other = (LombokInstanceOfPoint)o;
+        if (this.x != other.x) return false;
+        if (this.y != other.y) return false;
+        final java.lang.Object this$color = this.color;
+        final java.lang.Object other$color = other.color;
+        if (this$color == null ? other$color != null : !this$color.equals(other$color)) return false;
+        return true;
+    }
+
+    @java.lang.Override
+    @java.lang.SuppressWarnings("all")
+    public int hashCode() {
+        final int PRIME = 31;
+        int result = 1;
+        result = result * PRIME + this.x;
+        result = result * PRIME + this.y;
+        final java.lang.Object $color = this.color;
+        result = result * PRIME + ($color == null ? 0 : $color.hashCode());
+        return result;
+    }
 }

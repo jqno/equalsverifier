@@ -22,53 +22,53 @@ import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 import org.junit.Test;
 
 public class Java8ApiClassesTest extends Java8IntegrationTestBase {
-	@Test
-	public void successfullyInstantiatesAJava8Class_whenJava8IsAvailable() throws Exception {
-		if (!isJava8Available()) {
-			return;
-		}
-		
-		Class<?> java8Class = compile(CLASS_NAME, CLASS);
-		EqualsVerifier.forClass(java8Class)
-				.suppress(Warning.REFERENCE_EQUALITY)
-				.verify();
-	}
-	
-	private static final String CLASS_NAME = "Java8ApiClassesContainer";
-	private static final String CLASS =
-			"\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
-			"\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
-			"\n" +
-			"\nimport java.time.ZonedDateTime;" +
-			"\nimport java.time.ZoneId;" +
-			"\nimport java.time.format.DateTimeFormatter;" +
-			"\nimport java.util.concurrent.CompletableFuture;" +
-			"\nimport java.util.concurrent.locks.StampedLock;" +
-			"\n" +
-			"\npublic final class Java8ApiClassesContainer {" +
-			"\n    private final ZonedDateTime zonedDateTime;" +
-			"\n    private final ZoneId zoneId;" +
-			"\n    private final DateTimeFormatter dateTimeFormatter;" +
-			"\n    private final CompletableFuture completableFuture;" +
-			"\n    private final StampedLock stampedLock;" +
-			"\n    " +
-			"\n    public Java8ApiClassesContainer(ZonedDateTime zonedDateTime, ZoneId zoneId, DateTimeFormatter dateTimeFormatter," +
-			"\n            CompletableFuture completableFuture, StampedLock stampedLock) {" +
-			"\n        this.zonedDateTime = zonedDateTime;" +
-			"\n        this.zoneId = zoneId;" +
-			"\n        this.dateTimeFormatter = dateTimeFormatter;" +
-			"\n        this.completableFuture = completableFuture;" +
-			"\n        this.stampedLock = stampedLock;" +
-			"\n    }" +
-			"\n    " +
-			"\n    @Override" +
-			"\n    public boolean equals(Object obj) {" +
-			"\n        return defaultEquals(this, obj);" +
-			"\n    }" +
-			"\n    " +
-			"\n    @Override" +
-			"\n    public int hashCode() {" +
-			"\n        return defaultHashCode(this);" +
-			"\n    }" +
-			"\n}";
+    @Test
+    public void successfullyInstantiatesAJava8Class_whenJava8IsAvailable() throws Exception {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> java8Class = compile(CLASS_NAME, CLASS);
+        EqualsVerifier.forClass(java8Class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
+    }
+
+    private static final String CLASS_NAME = "Java8ApiClassesContainer";
+    private static final String CLASS =
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\n" +
+            "\nimport java.time.ZonedDateTime;" +
+            "\nimport java.time.ZoneId;" +
+            "\nimport java.time.format.DateTimeFormatter;" +
+            "\nimport java.util.concurrent.CompletableFuture;" +
+            "\nimport java.util.concurrent.locks.StampedLock;" +
+            "\n" +
+            "\npublic final class Java8ApiClassesContainer {" +
+            "\n    private final ZonedDateTime zonedDateTime;" +
+            "\n    private final ZoneId zoneId;" +
+            "\n    private final DateTimeFormatter dateTimeFormatter;" +
+            "\n    private final CompletableFuture completableFuture;" +
+            "\n    private final StampedLock stampedLock;" +
+            "\n    " +
+            "\n    public Java8ApiClassesContainer(ZonedDateTime zonedDateTime, ZoneId zoneId, DateTimeFormatter dateTimeFormatter," +
+            "\n            CompletableFuture completableFuture, StampedLock stampedLock) {" +
+            "\n        this.zonedDateTime = zonedDateTime;" +
+            "\n        this.zoneId = zoneId;" +
+            "\n        this.dateTimeFormatter = dateTimeFormatter;" +
+            "\n        this.completableFuture = completableFuture;" +
+            "\n        this.stampedLock = stampedLock;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        return defaultEquals(this, obj);" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
 }

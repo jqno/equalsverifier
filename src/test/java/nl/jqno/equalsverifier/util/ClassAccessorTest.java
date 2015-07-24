@@ -60,287 +60,287 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
 public class ClassAccessorTest {
-	private PrefabValues prefabValues;
-	private ClassAccessor<PointContainer> pointContainerAccessor;
-	private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
-	
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
-	
-	@Before
-	public void setup() {
-		prefabValues = new PrefabValues(new StaticFieldValueStash());
-		JavaApiPrefabValues.addTo(prefabValues);
-		pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
-		abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, false);
-	}
-	
-	@Test
-	public void getType() {
-		assertSame(PointContainer.class, pointContainerAccessor.getType());
-	}
-	
-	@Test
-	public void getPrefabValues() {
-		assertSame(prefabValues, pointContainerAccessor.getPrefabValues());
-	}
-	
-	@Test
-	public void hasAnnotation() {
-		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));
-		assertFalse(accessor.hasAnnotation(TYPE_CLASS_RETENTION));
-	}
-	
-	@Test
-	public void outerClassHasAnnotation() {
-		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedMiddle>(AnnotatedMiddle.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
-		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
-	}
-	
-	@Test
-	public void nestedOuterClassHasAnnotation() {
-		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedInner>(AnnotatedInner.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
-		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
-	}
-	
-	@Test
-	public void classIsAlreadyOuter() {
-		ClassAccessor<?> accessor = new ClassAccessor<TypeHelper>(TypeHelper.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
-	}
-	
-	@Test
-	public void packageHasAnnotation() {
-		ClassAccessor<?> accessor = new ClassAccessor<AnnotatedPackage>(AnnotatedPackage.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertTrue(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
-		assertFalse(accessor.packageHasAnnotation(INAPPLICABLE));
-	}
-	
-	@Test
-	public void packageInfoDoesNotExist() {
-		ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
-		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
-	}
-	
-	@Test
-	public void packageDoesNotExist() {
-		Class<?> type = Instantiator.of(Object.class).instantiateAnonymousSubclass().getClass();
-		@SuppressWarnings({ "unchecked", "rawtypes" })
-		ClassAccessor<?> accessor = new ClassAccessor(type, prefabValues, TestSupportedAnnotations.values(), false);
-		assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
-	}
-	
-	@Test
-	public void fieldHasAnnotation() throws NoSuchFieldException {
-		ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
-		Field field = AnnotatedFields.class.getField("runtimeRetention");
-		assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
-		assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
-	}
-	
-	@Test
-	public void classInDefaultPackageDoesntThrowNPE() throws IOException {
-		File tempFileLocation = tempFolder.newFolder();
-		ConditionalCompiler compiler = null;
-		try {
-			compiler = new ConditionalCompiler(tempFileLocation);
-			Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
-			ClassAccessor<?> accessor = ClassAccessor.of(defaultPackage, prefabValues, false);
-			accessor.packageHasAnnotation(PACKAGE_ANNOTATION);
-		}
-		finally {
-			if (compiler != null) {
-				compiler.close();
-			}
-		}
-	}
-	
-	@Test
-	public void declaresField() throws Exception {
-		Field field = PointContainer.class.getDeclaredField("point");
-		assertTrue(pointContainerAccessor.declaresField(field));
-	}
-	
-	@Test
-	public void doesNotDeclareField() throws Exception {
-		ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
-		Field field = Point3D.class.getDeclaredField("z");
-		assertFalse(accessor.declaresField(field));
-	}
-	
-	@Test
-	public void declaresEquals() {
-		assertTrue(pointContainerAccessor.declaresEquals());
-		assertTrue(abstractEqualsAndHashCodeAccessor.declaresEquals());
-	}
-	
-	@Test
-	public void doesNotDeclareEquals() {
-		ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
-		assertFalse(accessor.declaresEquals());
-	}
-	
-	@Test
-	public void declaresHashCode() {
-		assertTrue(pointContainerAccessor.declaresHashCode());
-		assertTrue(abstractEqualsAndHashCodeAccessor.declaresHashCode());
-	}
-	
-	@Test
-	public void doesNotDeclareHashCode() {
-		ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
-		assertFalse(accessor.declaresHashCode());
-	}
-	
-	@Test
-	public void equalsIsNotAbstract() {
-		assertFalse(pointContainerAccessor.isEqualsAbstract());
-	}
-	
-	@Test
-	public void equalsIsAbstract() {
-		assertTrue(abstractEqualsAndHashCodeAccessor.isEqualsAbstract());
-	}
-	
-	@Test
-	public void hashCodeIsNotAbstract() {
-		assertFalse(pointContainerAccessor.isHashCodeAbstract());
-	}
-	
-	@Test
-	public void hashCodeIsAbstract() {
-		assertTrue(abstractEqualsAndHashCodeAccessor.isHashCodeAbstract());
-	}
-	
-	@Test
-	public void equalsIsInheritedFromObject() {
-		ClassAccessor<NoFieldsSubWithFields> accessor = ClassAccessor.of(NoFieldsSubWithFields.class, prefabValues, true);
-		assertTrue(accessor.isEqualsInheritedFromObject());
-	}
-	
-	@Test
-	public void equalsIsNotInheritedFromObject() {
-		assertFalse(pointContainerAccessor.isEqualsInheritedFromObject());
-	}
-	
-	@Test
-	public void getSuperAccessorForPojo() {
-		ClassAccessor<? super PointContainer> superAccessor = pointContainerAccessor.getSuperAccessor();
-		assertEquals(Object.class, superAccessor.getType());
-	}
-	
-	@Test
-	public void getSuperAccessorInHierarchy() {
-		ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
-		ClassAccessor<? super ColorPoint3D> superAccessor = accessor.getSuperAccessor();
-		assertEquals(Point3D.class, superAccessor.getType());
-	}
-	
-	@Test
-	public void getRedObject() {
-		assertObjectHasNoNullFields(pointContainerAccessor.getRedObject());
-	}
-	
-	@Test
-	public void getRedAccessor() {
-		PointContainer foo = pointContainerAccessor.getRedObject();
-		ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor();
-		assertEquals(foo, objectAccessor.get());
-	}
-	
-	@Test
-	public void getBlackObject() {
-		assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject());
-	}
+    private PrefabValues prefabValues;
+    private ClassAccessor<PointContainer> pointContainerAccessor;
+    private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
 
-	@Test
-	public void getBlackAccessor() {
-		PointContainer foo = pointContainerAccessor.getBlackObject();
-		ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor();
-		assertEquals(foo, objectAccessor.get());
-	}
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
-	@Test
-	public void redAndBlackNotEqual() {
-		PointContainer red = pointContainerAccessor.getRedObject();
-		PointContainer black = pointContainerAccessor.getBlackObject();
-		assertFalse(red.equals(black));
-	}
-	
-	@Test
-	public void getDefaultValuesObject() {
-		ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
-		DefaultValues foo = accessor.getDefaultValuesObject();
-		assertEquals(0, foo.i);
-		assertEquals(null, foo.s);
-		assertFalse(foo.t == null);
-	}
-	
-	@Test
-	public void instantiateAllTypes() {
-		ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	@Test
-	public void instantiateArrayTypes() {
-		ClassAccessor.of(AllArrayTypesContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	@Test
-	public void instantiateRecursiveApiTypes() {
-		ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	@Test
-	public void instantiateCollectionImplementations() {
-		ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	@Test
-	public void instantiateInterfaceField() {
-		ClassAccessor.of(InterfaceContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	@Test
-	public void instantiateAbstractClassField() {
-		ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject();
-	}
-	
-	private void assertObjectHasNoNullFields(PointContainer foo) {
-		assertNotNull(foo);
-		assertNotNull(foo.getPoint());
-	}
-	
-	static class DefaultValues {
-		int i;
-		String s;
-		@NonNull String t;
-	}
-	
-	// Generated at runtime, so we don't actually have to put a class in the default package.
-	private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
-	private static final String DEFAULT_PACKAGE =
-			"\npublic final class DefaultPackage {" +
-			"\n    private final int i;" +
-			"\n    " +
-			"\n    public DefaultPackage(int i) {" +
-			"\n        this.i = i;" +
-			"\n    }" +
-			"\n    " +
-			"\n    @Override" +
-			"\n    public boolean equals(Object obj) {" +
-			"\n        if (!(obj instanceof DefaultPackage)) {" +
-			"\n            return false;" +
-			"\n        }" +
-			"\n        return i == ((DefaultPackage)obj).i;" +
-			"\n    }" +
-			"\n    " +
-			"\n    @Override" +
-			"\n    public int hashCode() {" +
-			"\n        return i;" +
-			"\n    }" +
-			"\n}";
+    @Before
+    public void setup() {
+        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        JavaApiPrefabValues.addTo(prefabValues);
+        pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
+        abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, false);
+    }
+
+    @Test
+    public void getType() {
+        assertSame(PointContainer.class, pointContainerAccessor.getType());
+    }
+
+    @Test
+    public void getPrefabValues() {
+        assertSame(prefabValues, pointContainerAccessor.getPrefabValues());
+    }
+
+    @Test
+    public void hasAnnotation() {
+        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));
+        assertFalse(accessor.hasAnnotation(TYPE_CLASS_RETENTION));
+    }
+
+    @Test
+    public void outerClassHasAnnotation() {
+        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedMiddle>(AnnotatedMiddle.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
+        assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
+    }
+
+    @Test
+    public void nestedOuterClassHasAnnotation() {
+        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedInner>(AnnotatedInner.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
+        assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
+    }
+
+    @Test
+    public void classIsAlreadyOuter() {
+        ClassAccessor<?> accessor = new ClassAccessor<TypeHelper>(TypeHelper.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
+    }
+
+    @Test
+    public void packageHasAnnotation() {
+        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedPackage>(AnnotatedPackage.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertTrue(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+        assertFalse(accessor.packageHasAnnotation(INAPPLICABLE));
+    }
+
+    @Test
+    public void packageInfoDoesNotExist() {
+        ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
+        assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+    }
+
+    @Test
+    public void packageDoesNotExist() {
+        Class<?> type = Instantiator.of(Object.class).instantiateAnonymousSubclass().getClass();
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        ClassAccessor<?> accessor = new ClassAccessor(type, prefabValues, TestSupportedAnnotations.values(), false);
+        assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
+    }
+
+    @Test
+    public void fieldHasAnnotation() throws NoSuchFieldException {
+        ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
+        Field field = AnnotatedFields.class.getField("runtimeRetention");
+        assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
+        assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));
+    }
+
+    @Test
+    public void classInDefaultPackageDoesntThrowNPE() throws IOException {
+        File tempFileLocation = tempFolder.newFolder();
+        ConditionalCompiler compiler = null;
+        try {
+            compiler = new ConditionalCompiler(tempFileLocation);
+            Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
+            ClassAccessor<?> accessor = ClassAccessor.of(defaultPackage, prefabValues, false);
+            accessor.packageHasAnnotation(PACKAGE_ANNOTATION);
+        }
+        finally {
+            if (compiler != null) {
+                compiler.close();
+            }
+        }
+    }
+
+    @Test
+    public void declaresField() throws Exception {
+        Field field = PointContainer.class.getDeclaredField("point");
+        assertTrue(pointContainerAccessor.declaresField(field));
+    }
+
+    @Test
+    public void doesNotDeclareField() throws Exception {
+        ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
+        Field field = Point3D.class.getDeclaredField("z");
+        assertFalse(accessor.declaresField(field));
+    }
+
+    @Test
+    public void declaresEquals() {
+        assertTrue(pointContainerAccessor.declaresEquals());
+        assertTrue(abstractEqualsAndHashCodeAccessor.declaresEquals());
+    }
+
+    @Test
+    public void doesNotDeclareEquals() {
+        ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
+        assertFalse(accessor.declaresEquals());
+    }
+
+    @Test
+    public void declaresHashCode() {
+        assertTrue(pointContainerAccessor.declaresHashCode());
+        assertTrue(abstractEqualsAndHashCodeAccessor.declaresHashCode());
+    }
+
+    @Test
+    public void doesNotDeclareHashCode() {
+        ClassAccessor<?> accessor = ClassAccessor.of(Empty.class, prefabValues, false);
+        assertFalse(accessor.declaresHashCode());
+    }
+
+    @Test
+    public void equalsIsNotAbstract() {
+        assertFalse(pointContainerAccessor.isEqualsAbstract());
+    }
+
+    @Test
+    public void equalsIsAbstract() {
+        assertTrue(abstractEqualsAndHashCodeAccessor.isEqualsAbstract());
+    }
+
+    @Test
+    public void hashCodeIsNotAbstract() {
+        assertFalse(pointContainerAccessor.isHashCodeAbstract());
+    }
+
+    @Test
+    public void hashCodeIsAbstract() {
+        assertTrue(abstractEqualsAndHashCodeAccessor.isHashCodeAbstract());
+    }
+
+    @Test
+    public void equalsIsInheritedFromObject() {
+        ClassAccessor<NoFieldsSubWithFields> accessor = ClassAccessor.of(NoFieldsSubWithFields.class, prefabValues, true);
+        assertTrue(accessor.isEqualsInheritedFromObject());
+    }
+
+    @Test
+    public void equalsIsNotInheritedFromObject() {
+        assertFalse(pointContainerAccessor.isEqualsInheritedFromObject());
+    }
+
+    @Test
+    public void getSuperAccessorForPojo() {
+        ClassAccessor<? super PointContainer> superAccessor = pointContainerAccessor.getSuperAccessor();
+        assertEquals(Object.class, superAccessor.getType());
+    }
+
+    @Test
+    public void getSuperAccessorInHierarchy() {
+        ClassAccessor<ColorPoint3D> accessor = ClassAccessor.of(ColorPoint3D.class, prefabValues, false);
+        ClassAccessor<? super ColorPoint3D> superAccessor = accessor.getSuperAccessor();
+        assertEquals(Point3D.class, superAccessor.getType());
+    }
+
+    @Test
+    public void getRedObject() {
+        assertObjectHasNoNullFields(pointContainerAccessor.getRedObject());
+    }
+
+    @Test
+    public void getRedAccessor() {
+        PointContainer foo = pointContainerAccessor.getRedObject();
+        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor();
+        assertEquals(foo, objectAccessor.get());
+    }
+
+    @Test
+    public void getBlackObject() {
+        assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject());
+    }
+
+    @Test
+    public void getBlackAccessor() {
+        PointContainer foo = pointContainerAccessor.getBlackObject();
+        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor();
+        assertEquals(foo, objectAccessor.get());
+    }
+
+    @Test
+    public void redAndBlackNotEqual() {
+        PointContainer red = pointContainerAccessor.getRedObject();
+        PointContainer black = pointContainerAccessor.getBlackObject();
+        assertFalse(red.equals(black));
+    }
+
+    @Test
+    public void getDefaultValuesObject() {
+        ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
+        DefaultValues foo = accessor.getDefaultValuesObject();
+        assertEquals(0, foo.i);
+        assertEquals(null, foo.s);
+        assertFalse(foo.t == null);
+    }
+
+    @Test
+    public void instantiateAllTypes() {
+        ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject();
+    }
+
+    @Test
+    public void instantiateArrayTypes() {
+        ClassAccessor.of(AllArrayTypesContainer.class, prefabValues, false).getRedObject();
+    }
+
+    @Test
+    public void instantiateRecursiveApiTypes() {
+        ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, false).getRedObject();
+    }
+
+    @Test
+    public void instantiateCollectionImplementations() {
+        ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, false).getRedObject();
+    }
+
+    @Test
+    public void instantiateInterfaceField() {
+        ClassAccessor.of(InterfaceContainer.class, prefabValues, false).getRedObject();
+    }
+
+    @Test
+    public void instantiateAbstractClassField() {
+        ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject();
+    }
+
+    private void assertObjectHasNoNullFields(PointContainer foo) {
+        assertNotNull(foo);
+        assertNotNull(foo.getPoint());
+    }
+
+    static class DefaultValues {
+        int i;
+        String s;
+        @NonNull String t;
+    }
+
+    // Generated at runtime, so we don't actually have to put a class in the default package.
+    private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
+    private static final String DEFAULT_PACKAGE =
+            "\npublic final class DefaultPackage {" +
+            "\n    private final int i;" +
+            "\n    " +
+            "\n    public DefaultPackage(int i) {" +
+            "\n        this.i = i;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof DefaultPackage)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        return i == ((DefaultPackage)obj).i;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return i;" +
+            "\n    }" +
+            "\n}";
 }

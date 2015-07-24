@@ -25,110 +25,110 @@ import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class Configuration<T> {
-	private final Class<T> type;
-	private final PrefabValues prefabValues;
+    private final Class<T> type;
+    private final PrefabValues prefabValues;
 
-	private final boolean allFieldsShouldBeUsed;
-	private final Set<String> allFieldsShouldBeUsedExceptions;
-	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
-	private final boolean hasRedefinedSuperclass;
-	private final Class<? extends T> redefinedSubclass;
-	private final boolean usingGetClass;
-	private final EnumSet<Warning> warningsToSuppress;
+    private final boolean allFieldsShouldBeUsed;
+    private final Set<String> allFieldsShouldBeUsedExceptions;
+    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final boolean hasRedefinedSuperclass;
+    private final Class<? extends T> redefinedSubclass;
+    private final boolean usingGetClass;
+    private final EnumSet<Warning> warningsToSuppress;
 
-	private Configuration(Class<T> type, PrefabValues prefabValues, boolean allFieldsShouldBeUsed,
-	                      Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
-	                      boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
-	                      EnumSet<Warning> warningsToSuppress) {
-		
-		this.type = type;
-		this.prefabValues = prefabValues;
-		this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
-		this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
-		this.cachedHashCodeInitializer = cachedHashCodeInitializer;
-		this.hasRedefinedSuperclass = hasRedefinedSuperclass;
-		this.redefinedSubclass = redefinedSubclass;
-		this.usingGetClass = usingGetClass;
-		this.warningsToSuppress = warningsToSuppress;
-	}
-	
-	public static <T> Configuration<T> of(Class<T> type) {
-		return new Configuration<T>(type, new PrefabValues(), false, new HashSet<String>(),
-				CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
-	}
-	
-	public Class<T> getType() {
-		return type;
-	}
-	
-	public PrefabValues getPrefabValues() {
-		return prefabValues;
-	}
+    private Configuration(Class<T> type, PrefabValues prefabValues, boolean allFieldsShouldBeUsed,
+                          Set<String> allFieldsShouldBeUsedExceptions, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
+                          boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
+                          EnumSet<Warning> warningsToSuppress) {
 
-	public Configuration<T> withAllFieldsShouldBeUsed() {
-		return new Configuration<T>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
-	}
+        this.type = type;
+        this.prefabValues = prefabValues;
+        this.allFieldsShouldBeUsed = allFieldsShouldBeUsed;
+        this.allFieldsShouldBeUsedExceptions = allFieldsShouldBeUsedExceptions;
+        this.cachedHashCodeInitializer = cachedHashCodeInitializer;
+        this.hasRedefinedSuperclass = hasRedefinedSuperclass;
+        this.redefinedSubclass = redefinedSubclass;
+        this.usingGetClass = usingGetClass;
+        this.warningsToSuppress = warningsToSuppress;
+    }
 
-	public boolean isAllFieldsShouldBeUsed() {
-		return allFieldsShouldBeUsed;
-	}
+    public static <T> Configuration<T> of(Class<T> type) {
+        return new Configuration<T>(type, new PrefabValues(), false, new HashSet<String>(),
+                CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
+    }
 
-	public Configuration<T> withAllFieldsShouldBeUsedExceptions(String[] value) {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)),
-				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
-	}
+    public Class<T> getType() {
+        return type;
+    }
 
-	public Set<String> getAllFieldsShouldBeUsedExceptions() {
-		return Collections.unmodifiableSet(allFieldsShouldBeUsedExceptions);
-	}
+    public PrefabValues getPrefabValues() {
+        return prefabValues;
+    }
 
-	public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
-				hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
-	}
-	
-	public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
-		return cachedHashCodeInitializer;
-	}
+    public Configuration<T> withAllFieldsShouldBeUsed() {
+        return new Configuration<T>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
 
-	public Configuration<T> withRedefinedSuperclass() {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, true, redefinedSubclass, usingGetClass, warningsToSuppress);
-	}
+    public boolean isAllFieldsShouldBeUsed() {
+        return allFieldsShouldBeUsed;
+    }
 
-	public boolean hasRedefinedSuperclass() {
-		return hasRedefinedSuperclass;
-	}
+    public Configuration<T> withAllFieldsShouldBeUsedExceptions(String[] value) {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)),
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
 
-	public Configuration<T> withRedefinedSubclass(Class<? extends T> value) {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, value, usingGetClass, warningsToSuppress);
-	}
+    public Set<String> getAllFieldsShouldBeUsedExceptions() {
+        return Collections.unmodifiableSet(allFieldsShouldBeUsedExceptions);
+    }
 
-	public Class<? extends T> getRedefinedSubclass() {
-		return redefinedSubclass;
-	}
-	
-	public Configuration<T> withUsingGetClass() {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, true, warningsToSuppress);
-	}
+    public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
+                hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
 
-	public boolean isUsingGetClass() {
-		return usingGetClass;
-	}
+    public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
+        return cachedHashCodeInitializer;
+    }
 
-	public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-		return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
-				cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, value);
-	}
+    public Configuration<T> withRedefinedSuperclass() {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+                cachedHashCodeInitializer, true, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
 
-	public EnumSet<Warning> getWarningsToSuppress() {
-		return EnumSet.copyOf(warningsToSuppress);
-	}
+    public boolean hasRedefinedSuperclass() {
+        return hasRedefinedSuperclass;
+    }
 
-	public ClassAccessor<T> createClassAccessor() {
-		return ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
-	}
+    public Configuration<T> withRedefinedSubclass(Class<? extends T> value) {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, value, usingGetClass, warningsToSuppress);
+    }
+
+    public Class<? extends T> getRedefinedSubclass() {
+        return redefinedSubclass;
+    }
+
+    public Configuration<T> withUsingGetClass() {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, true, warningsToSuppress);
+    }
+
+    public boolean isUsingGetClass() {
+        return usingGetClass;
+    }
+
+    public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
+        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, value);
+    }
+
+    public EnumSet<Warning> getWarningsToSuppress() {
+        return EnumSet.copyOf(warningsToSuppress);
+    }
+
+    public ClassAccessor<T> createClassAccessor() {
+        return ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
+    }
 }

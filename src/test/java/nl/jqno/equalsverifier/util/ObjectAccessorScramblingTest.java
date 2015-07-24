@@ -27,107 +27,107 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class ObjectAccessorScramblingTest {
-	private PrefabValues prefabValues;
-	
-	@Before
-	public void setup() {
-		prefabValues = new PrefabValues(new StaticFieldValueStash());
-		JavaApiPrefabValues.addTo(prefabValues);
-	}
-	
-	@Test
-	public void scramble() {
-		Point original = new Point(2, 3);
-		Point copy = copy(original);
-		
-		assertTrue(original.equals(copy));
-		scramble(copy);
-		assertFalse(original.equals(copy));
-	}
-	
-	@Test
-	public void deepScramble() {
-		Point3D modified = new Point3D(2, 3, 4);
-		Point3D reference = copy(modified);
-		
-		scramble(modified);
-		
-		assertFalse(modified.equals(reference));
-		modified.z = 4;
-		assertFalse(modified.equals(reference));
-	}
-	
-	@Test
-	public void shallowScramble() {
-		Point3D modified = new Point3D(2, 3, 4);
-		Point3D reference = copy(modified);
-		
-		ObjectAccessor.of(modified).shallowScramble(prefabValues);
-		
-		assertFalse(modified.equals(reference));
-		modified.z = 4;
-		assertTrue(modified.equals(reference));
-	}
-	
-	@SuppressWarnings("static-access")
-	@Test
-	public void scrambleStaticFinal() {
-		StaticFinalContainer foo = new StaticFinalContainer();
-		int originalInt = StaticFinalContainer.CONST;
-		Object originalObject = StaticFinalContainer.OBJECT;
-		
-		scramble(foo);
-		
-		assertEquals(originalInt, foo.CONST);
-		assertEquals(originalObject, foo.OBJECT);
-	}
-	
-	@Test
-	public void scrambleString() {
-		StringContainer foo = new StringContainer();
-		String before = foo.s;
-		scramble(foo);
-		assertFalse(before.equals(foo.s));
-	}
+    private PrefabValues prefabValues;
+    
+    @Before
+    public void setup() {
+        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        JavaApiPrefabValues.addTo(prefabValues);
+    }
 
-	@Test
-	public void privateFinalStringCannotBeScrambled() {
-		FinalAssignedStringContainer foo = new FinalAssignedStringContainer();
-		String before = foo.s;
-		
-		scramble(foo);
-		
-		assertEquals(before, foo.s);
-	}
-	
-	@Test
-	public void scramblePrivateFinalPoint() {
-		prefabValues.put(Point.class, new Point(1, 2), new Point(2, 3));
-		FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
-		Point before = foo.p;
-		
-		assertTrue(before.equals(foo.p));
-		scramble(foo);
-		assertFalse(before.equals(foo.p));
-	}
+    @Test
+    public void scramble() {
+        Point original = new Point(2, 3);
+        Point copy = copy(original);
 
-	private <T> T copy(T object) {
-		return ObjectAccessor.of(object).copy();
-	}
-	
-	private void scramble(Object object) {
-		ObjectAccessor.of(object).scramble(prefabValues);
-	}
-	
-	static final class StringContainer {
-		private String s = "x";
-	}
-	
-	static final class FinalAssignedStringContainer {
-		private final String s = "x";
-	}
+        assertTrue(original.equals(copy));
+        scramble(copy);
+        assertFalse(original.equals(copy));
+    }
 
-	static final class FinalAssignedPointContainer {
-		private final Point p = new Point(2, 3);
-	}
+    @Test
+    public void deepScramble() {
+        Point3D modified = new Point3D(2, 3, 4);
+        Point3D reference = copy(modified);
+
+        scramble(modified);
+
+        assertFalse(modified.equals(reference));
+        modified.z = 4;
+        assertFalse(modified.equals(reference));
+    }
+
+    @Test
+    public void shallowScramble() {
+        Point3D modified = new Point3D(2, 3, 4);
+        Point3D reference = copy(modified);
+
+        ObjectAccessor.of(modified).shallowScramble(prefabValues);
+
+        assertFalse(modified.equals(reference));
+        modified.z = 4;
+        assertTrue(modified.equals(reference));
+    }
+
+    @SuppressWarnings("static-access")
+    @Test
+    public void scrambleStaticFinal() {
+        StaticFinalContainer foo = new StaticFinalContainer();
+        int originalInt = StaticFinalContainer.CONST;
+        Object originalObject = StaticFinalContainer.OBJECT;
+
+        scramble(foo);
+
+        assertEquals(originalInt, foo.CONST);
+        assertEquals(originalObject, foo.OBJECT);
+    }
+
+    @Test
+    public void scrambleString() {
+        StringContainer foo = new StringContainer();
+        String before = foo.s;
+        scramble(foo);
+        assertFalse(before.equals(foo.s));
+    }
+
+    @Test
+    public void privateFinalStringCannotBeScrambled() {
+        FinalAssignedStringContainer foo = new FinalAssignedStringContainer();
+        String before = foo.s;
+
+        scramble(foo);
+
+        assertEquals(before, foo.s);
+    }
+
+    @Test
+    public void scramblePrivateFinalPoint() {
+        prefabValues.put(Point.class, new Point(1, 2), new Point(2, 3));
+        FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
+        Point before = foo.p;
+
+        assertTrue(before.equals(foo.p));
+        scramble(foo);
+        assertFalse(before.equals(foo.p));
+    }
+
+    private <T> T copy(T object) {
+        return ObjectAccessor.of(object).copy();
+    }
+
+    private void scramble(Object object) {
+        ObjectAccessor.of(object).scramble(prefabValues);
+    }
+
+    static final class StringContainer {
+        private String s = "x";
+    }
+
+    static final class FinalAssignedStringContainer {
+        private final String s = "x";
+    }
+
+    static final class FinalAssignedPointContainer {
+        private final Point p = new Point(2, 3);
+    }
 }

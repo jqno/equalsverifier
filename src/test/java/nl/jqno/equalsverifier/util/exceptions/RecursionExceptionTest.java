@@ -24,17 +24,17 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 public class RecursionExceptionTest {
-	@Test
-	public void messageContainsAllTypes() {
-		LinkedHashSet<Class<?>> stack = new LinkedHashSet<Class<?>>();
-		stack.add(String.class);
-		stack.add(Point.class);
-		stack.add(Object.class);
-		
-		String message = new RecursionException(stack).getMessage();
-		
-		for (Class<?> type : stack) {
-			assertTrue(message.contains(type.getName()));
-		}
-	}
+    @Test
+    public void messageContainsAllTypes() {
+        LinkedHashSet<Class<?>> stack = new LinkedHashSet<Class<?>>();
+        stack.add(String.class);
+        stack.add(Point.class);
+        stack.add(Object.class);
+
+        String message = new RecursionException(stack).getMessage();
+
+        for (Class<?> type : stack) {
+            assertTrue(message.contains(type.getName()));
+        }
+    }
 }

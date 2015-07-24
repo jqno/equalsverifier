@@ -23,22 +23,22 @@ import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
 
 class FieldInspector<T> {
-	private final ClassAccessor<T> classAccessor;
+    private final ClassAccessor<T> classAccessor;
 
-	public FieldInspector(ClassAccessor<T> classAccessor) {
-		this.classAccessor = classAccessor;
-	}
-	
-	public void check(FieldCheck check) {
-		for (Field field : FieldIterable.of(classAccessor.getType())) {
-			ObjectAccessor<T> reference = classAccessor.getRedAccessor();
-			ObjectAccessor<T> changed = classAccessor.getRedAccessor();
-			
-			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
-		}
-	}
-	
-	public interface FieldCheck {
-		void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
-	}
+    public FieldInspector(ClassAccessor<T> classAccessor) {
+        this.classAccessor = classAccessor;
+    }
+
+    public void check(FieldCheck check) {
+        for (Field field : FieldIterable.of(classAccessor.getType())) {
+            ObjectAccessor<T> reference = classAccessor.getRedAccessor();
+            ObjectAccessor<T> changed = classAccessor.getRedAccessor();
+
+            check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
+        }
+    }
+
+    public interface FieldCheck {
+        void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
+    }
 }

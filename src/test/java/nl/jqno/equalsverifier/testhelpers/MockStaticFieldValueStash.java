@@ -18,18 +18,18 @@ package nl.jqno.equalsverifier.testhelpers;
 import nl.jqno.equalsverifier.util.StaticFieldValueStash;
 
 public class MockStaticFieldValueStash extends StaticFieldValueStash {
-	public Class<?> lastBackuppedType = null;
-	public boolean restoreCalled = false;
-	
-	@Override
-	public <T> void backup(Class<T> type) {
-		lastBackuppedType = type;
-		super.backup(type);
-	}
-	
-	@Override
-	public void restoreAll() {
-		restoreCalled  = true;
-		super.restoreAll();
-	}
+    public Class<?> lastBackuppedType = null;
+    public boolean restoreCalled = false;
+
+    @Override
+    public <T> void backup(Class<T> type) {
+        lastBackuppedType = type;
+        super.backup(type);
+    }
+
+    @Override
+    public void restoreAll() {
+        restoreCalled  = true;
+        super.restoreAll();
+    }
 }

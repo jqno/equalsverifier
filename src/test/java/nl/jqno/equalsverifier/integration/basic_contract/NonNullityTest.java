@@ -22,88 +22,88 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 public class NonNullityTest extends IntegrationTestBase {
-	@Test
-	public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
-		expectFailure("Non-nullity: NullPointerException thrown");
-		EqualsVerifier.forClass(NullPointerExceptionThrower.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsReturnsTrue_givenNullInput() {
-		expectFailure("Non-nullity: true returned for null value");
-		EqualsVerifier.forClass(NullReturnsTrue.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsDoesNotTypeCheck() {
-		expectFailureWithCause(ClassCastException.class, "Type-check: equals throws ClassCastException");
-		EqualsVerifier.forClass(NoTypeCheck.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
-		expectFailureWithCause(IllegalStateException.class, "Type-check: equals throws IllegalStateException");
-		EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class)
-				.verify();
-	}
-	
-	static final class NullPointerExceptionThrower extends Point {
-		public NullPointerExceptionThrower(int x, int y) { super(x, y); }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (!obj.getClass().equals(getClass())) {
-				return false;
-			}
-			return super.equals(obj);
-		}
-	}
-	
-	static final class NullReturnsTrue extends Point {
-		public NullReturnsTrue(int x, int y) { super(x, y); }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null) {
-				return true;
-			}
-			return super.equals(obj);
-		}
-	}
-	
-	static final class NoTypeCheck {
-		private int i;
-		
-		public NoTypeCheck(int i) { this.i = i; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null) {
-				return false;
-			}
-			return i == ((NoTypeCheck)obj).i;
-		}
-	}
-	
-	static final class NoTypeCheckButNoClassCastExceptionEither {
-		private int i;
-		
-		public NoTypeCheckButNoClassCastExceptionEither(int i) { this.i = i; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			try {
-				if (obj == null) {
-					return false;
-				}
-				return i == ((NoTypeCheckButNoClassCastExceptionEither)obj).i;
-			}
-			catch (ClassCastException e) {
-				throw new IllegalStateException(e);
-			}
-		}
-	}
+    @Test
+    public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
+        expectFailure("Non-nullity: NullPointerException thrown");
+        EqualsVerifier.forClass(NullPointerExceptionThrower.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsReturnsTrue_givenNullInput() {
+        expectFailure("Non-nullity: true returned for null value");
+        EqualsVerifier.forClass(NullReturnsTrue.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsDoesNotTypeCheck() {
+        expectFailureWithCause(ClassCastException.class, "Type-check: equals throws ClassCastException");
+        EqualsVerifier.forClass(NoTypeCheck.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
+        expectFailureWithCause(IllegalStateException.class, "Type-check: equals throws IllegalStateException");
+        EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class)
+                .verify();
+    }
+
+    static final class NullPointerExceptionThrower extends Point {
+        public NullPointerExceptionThrower(int x, int y) { super(x, y); }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!obj.getClass().equals(getClass())) {
+                return false;
+            }
+            return super.equals(obj);
+        }
+    }
+
+    static final class NullReturnsTrue extends Point {
+        public NullReturnsTrue(int x, int y) { super(x, y); }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return true;
+            }
+            return super.equals(obj);
+        }
+    }
+
+    static final class NoTypeCheck {
+        private int i;
+
+        public NoTypeCheck(int i) { this.i = i; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+            return i == ((NoTypeCheck)obj).i;
+        }
+    }
+
+    static final class NoTypeCheckButNoClassCastExceptionEither {
+        private int i;
+
+        public NoTypeCheckButNoClassCastExceptionEither(int i) { this.i = i; }
+
+        @Override
+        public boolean equals(Object obj) {
+            try {
+                if (obj == null) {
+                    return false;
+                }
+                return i == ((NoTypeCheckButNoClassCastExceptionEither)obj).i;
+            }
+            catch (ClassCastException e) {
+                throw new IllegalStateException(e);
+            }
+        }
+    }
 }

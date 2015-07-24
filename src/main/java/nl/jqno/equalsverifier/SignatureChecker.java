@@ -23,54 +23,54 @@ import nl.jqno.equalsverifier.util.Assert;
 import nl.jqno.equalsverifier.util.Formatter;
 
 class SignatureChecker<T> implements Checker {
-	private final Class<T> type;
+    private final Class<T> type;
 
-	public SignatureChecker(Configuration<T> config) {
-		this.type = config.getType();
-	}
-	
-	@Override
-	public void check() {
-		List<Method> equalsMethods = getEqualsMethods();
-		if (equalsMethods.size() > 1) {
-			fail("More than one equals method found");
-		}
-		if (equalsMethods.size() == 0) {
-			return;
-		}
-		checkEquals(equalsMethods.get(0));
-	}
-	
-	private List<Method> getEqualsMethods() {
-		List<Method> result = new ArrayList<Method>();
-		
-		for (Method method : type.getDeclaredMethods()) {
-			if (method.getName().equals("equals")) {
-				result.add(method);
-			}
-		}
-		
-		return result;
-	}
-	
-	private void checkEquals(Method equals) {
-		Class<?>[] parameterTypes = equals.getParameterTypes();
-		if (parameterTypes.length > 1) {
-			fail("Too many parameters");
-		}
-		if (parameterTypes.length == 0) {
-			fail("No parameter");
-		}
-		Class<?> parameterType = parameterTypes[0];
-		if (parameterType == type) {
-			fail("Parameter should be an Object, not " + type.getSimpleName());
-		}
-		if (parameterType != Object.class) {
-			fail("Parameter should be an Object");
-		}
-	}
+    public SignatureChecker(Configuration<T> config) {
+        this.type = config.getType();
+    }
 
-	private void fail(String message) {
-		Assert.fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
-	}
+    @Override
+    public void check() {
+        List<Method> equalsMethods = getEqualsMethods();
+        if (equalsMethods.size() > 1) {
+            fail("More than one equals method found");
+        }
+        if (equalsMethods.size() == 0) {
+            return;
+        }
+        checkEquals(equalsMethods.get(0));
+    }
+
+    private List<Method> getEqualsMethods() {
+        List<Method> result = new ArrayList<Method>();
+
+        for (Method method : type.getDeclaredMethods()) {
+            if (method.getName().equals("equals")) {
+                result.add(method);
+            }
+        }
+
+        return result;
+    }
+
+    private void checkEquals(Method equals) {
+        Class<?>[] parameterTypes = equals.getParameterTypes();
+        if (parameterTypes.length > 1) {
+            fail("Too many parameters");
+        }
+        if (parameterTypes.length == 0) {
+            fail("No parameter");
+        }
+        Class<?> parameterType = parameterTypes[0];
+        if (parameterType == type) {
+            fail("Parameter should be an Object, not " + type.getSimpleName());
+        }
+        if (parameterType != Object.class) {
+            fail("Parameter should be an Object");
+        }
+    }
+
+    private void fail(String message) {
+        Assert.fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
+    }
 }

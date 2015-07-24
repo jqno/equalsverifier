@@ -21,51 +21,51 @@ import nl.jqno.equalsverifier.util.annotations.Annotation;
 import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
 
 public enum TestSupportedAnnotations implements Annotation {
-	TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention"), // closing ; is added by AnnotationAccessor
-	TYPE_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationClassRetention"),
-	FIELD_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationRuntimeRetention"),
-	FIELD_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationClassRetention"),
-	
-	TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeAnnotationRuntimeRetention"),
-	TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
-	
-	FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "FieldAnnotationRuntimeRetention"),
-	FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
-	
-	TYPE_INHERITS(true, "TypeAnnotationInherits"),
-	TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
-	FIELD_INHERITS(true, "FieldAnnotationInherits"),
-	FIELD_DOESNT_INHERIT(false, "FieldAnnotationDoesntInherit"),
-	
-	PACKAGE_ANNOTATION(false, "PackageAnnotation"),
-	INAPPLICABLE(false, "Inapplicable") {
-		@Override
-		public boolean validate(AnnotationProperties properties) {
-			return false;
-		}
-	},
-	;
-	
-	private final boolean inherits;
-	private final List<String> descriptors;
+    TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention"), // closing ; is added by AnnotationAccessor
+    TYPE_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationClassRetention"),
+    FIELD_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationRuntimeRetention"),
+    FIELD_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationClassRetention"),
 
-	private TestSupportedAnnotations(boolean inherits, String... descriptors) {
-		this.inherits = inherits;
-		this.descriptors = Arrays.asList(descriptors);
-	}
-	
-	@Override
-	public Iterable<String> descriptors() {
-		return descriptors;
-	}
-	
-	@Override
-	public boolean inherits() {
-		return inherits;
-	}
-	
-	@Override
-	public boolean validate(AnnotationProperties properties) {
-		return true;
-	}
+    TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeAnnotationRuntimeRetention"),
+    TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
+
+    FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "FieldAnnotationRuntimeRetention"),
+    FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
+
+    TYPE_INHERITS(true, "TypeAnnotationInherits"),
+    TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
+    FIELD_INHERITS(true, "FieldAnnotationInherits"),
+    FIELD_DOESNT_INHERIT(false, "FieldAnnotationDoesntInherit"),
+
+    PACKAGE_ANNOTATION(false, "PackageAnnotation"),
+    INAPPLICABLE(false, "Inapplicable") {
+        @Override
+        public boolean validate(AnnotationProperties properties) {
+            return false;
+        }
+    },
+    ;
+
+    private final boolean inherits;
+    private final List<String> descriptors;
+
+    private TestSupportedAnnotations(boolean inherits, String... descriptors) {
+        this.inherits = inherits;
+        this.descriptors = Arrays.asList(descriptors);
+    }
+
+    @Override
+    public Iterable<String> descriptors() {
+        return descriptors;
+    }
+
+    @Override
+    public boolean inherits() {
+        return inherits;
+    }
+
+    @Override
+    public boolean validate(AnnotationProperties properties) {
+        return true;
+    }
 }

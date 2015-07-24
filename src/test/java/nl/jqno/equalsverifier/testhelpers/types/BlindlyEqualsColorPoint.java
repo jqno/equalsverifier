@@ -18,30 +18,30 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 
 public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
-	private final Color color;
-	
-	public BlindlyEqualsColorPoint(int x, int y, Color color) {
-		super(x, y);
-		this.color = color;
-	}
-	
-	@Override
-	protected boolean blindlyEquals(Object o) {
-		if (!(o instanceof BlindlyEqualsColorPoint)) {
-			return false;
-		}
-		BlindlyEqualsColorPoint cp = (BlindlyEqualsColorPoint)o;
-		return (super.blindlyEquals(cp) && 
-				cp.color == this.color);
-	}
-	
-	@Override
-	public int hashCode() {
-		return nullSafeHashCode(color) + (31 * super.hashCode());
-	}
-	
-	@Override
-	public String toString() {
-		return super.toString() + "," + color;
-	}
+    private final Color color;
+
+    public BlindlyEqualsColorPoint(int x, int y, Color color) {
+        super(x, y);
+        this.color = color;
+    }
+
+    @Override
+    protected boolean blindlyEquals(Object o) {
+        if (!(o instanceof BlindlyEqualsColorPoint)) {
+            return false;
+        }
+        BlindlyEqualsColorPoint cp = (BlindlyEqualsColorPoint)o;
+        return (super.blindlyEquals(cp) &&
+                cp.color == this.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return nullSafeHashCode(color) + (31 * super.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + "," + color;
+    }
 }

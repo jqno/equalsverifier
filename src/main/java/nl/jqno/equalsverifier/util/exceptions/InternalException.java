@@ -27,19 +27,19 @@ package nl.jqno.equalsverifier.util.exceptions;
  */
 @SuppressWarnings("serial")
 public abstract class InternalException extends RuntimeException {
-	public InternalException() {
-		super();
-	}
-	
-	public InternalException(String message) {
-		super(message);
-	}
-	
-	public InternalException(Throwable cause) {
-		super(cause);
-	}
-	
-	public InternalException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public InternalException() {
+        super();
+    }
+
+    public InternalException(String message) {
+        super(message);
+    }
+
+    public InternalException(Throwable cause) {
+        super(cause);
+    }
+
+    public InternalException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

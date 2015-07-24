@@ -33,106 +33,106 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class ConditionalInstantiatorTest {
-	private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
-	
-	private ConditionalInstantiator ci;
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
-	@Test
-	public void resolveReturnsClass_whenTypeExists() {
-		ci = new ConditionalInstantiator("java.util.GregorianCalendar");
-		
-		Class<?> actual = ci.resolve();
-		assertEquals(actual, GregorianCalendar.class);
-	}
-	
-	@Test
-	public void resolveReturnsNull_whenTypeDoesntExist() {
-		ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
-		
-		Class<?> actual = ci.resolve();
-		assertNull(actual);
-	}
-	
-	@Test
-	public void objectIsInstantiatedCorrectly_whenValidConstructorParametersAreProvided() {
-		ci = new ConditionalInstantiator("java.util.GregorianCalendar");
-		Object expected = new GregorianCalendar(1999, 11, 31);
-		
-		Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
-		assertThat(actual, is(expected));
-	}
-	
-	@Test
-	public void nullIsReturned_whenInstantiateIsCalled_givenTypeDoesNotExist() {
-		ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
-		Object actual = ci.instantiate(classes(String.class), objects("nope"));
-		assertThat(actual, is(nullValue()));
-	}
-	
-	@Test
-	public void throwsISE_whenInvalidConstructorParametersAreProvided() {
-		ci = new ConditionalInstantiator("java.util.GregorianCalendar");
-		
-		thrown.expect(ReflectionException.class);
-		ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
-	}
-	
-	@Test
-	public void objectIsInstantiatedCorrectly_whenValidFactoryMethodAndParametersAreProvided() {
-		ci = new ConditionalInstantiator("java.lang.Integer");
-		Object expected = Integer.valueOf(42);
-		
-		Object actual = ci.callFactory("valueOf", classes(int.class), objects(42));
-		assertThat(actual, is(expected));
-	}
-	
-	@Test
-	public void nullIsReturned_whenFactoryIsCalled_givenTypeDoesNotExist() {
-		ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
-		Object actual = ci.callFactory("factory", classes(String.class), objects("nope"));
-		assertThat(actual, is(nullValue()));
-	}
-	
-	@Test
-	public void throwsISE_whenInvalidMethodNameIsProvided() {
-		ci = new ConditionalInstantiator("java.lang.Integer");
-		
-		thrown.expect(ReflectionException.class);
-		ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42));
-	}
-	
-	@Test
-	public void throwsISE_whenInvalidFactoryMethodParametersAreProvided() {
-		ci = new ConditionalInstantiator("java.lang.Integer");
-		
-		thrown.expect(ReflectionException.class);
-		ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
-	}
-	
-	@Test
-	public void nullIsReturned_whenReturnConstantIsCalled_givenTypeDoesNotExist() {
-		ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
-		Object actual = ci.returnConstant("NOPE");
-		assertThat(actual, is(nullValue()));
-	}
-	
-	@Test
-	public void objectIsReturned_whenValidConstantIsProvided() {
-		ci = new ConditionalInstantiator("java.math.BigDecimal");
-		Object expected = BigDecimal.TEN;
-		
-		Object actual = ci.returnConstant("TEN");
-		assertThat(actual, is(expected));
-	}
-	
-	@Test
-	public void throwsISE_whenConstantDoesNotExist() {
-		ci = new ConditionalInstantiator("java.math.BigDecimal");
-		
-		thrown.expect(ReflectionException.class);
-		ci.returnConstant("FORTY-TWO");
-	}
+    private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
+
+    private ConditionalInstantiator ci;
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void resolveReturnsClass_whenTypeExists() {
+        ci = new ConditionalInstantiator("java.util.GregorianCalendar");
+
+        Class<?> actual = ci.resolve();
+        assertEquals(actual, GregorianCalendar.class);
+    }
+
+    @Test
+    public void resolveReturnsNull_whenTypeDoesntExist() {
+        ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+
+        Class<?> actual = ci.resolve();
+        assertNull(actual);
+    }
+
+    @Test
+    public void objectIsInstantiatedCorrectly_whenValidConstructorParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.util.GregorianCalendar");
+        Object expected = new GregorianCalendar(1999, 11, 31);
+
+        Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void nullIsReturned_whenInstantiateIsCalled_givenTypeDoesNotExist() {
+        ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+        Object actual = ci.instantiate(classes(String.class), objects("nope"));
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
+    public void throwsISE_whenInvalidConstructorParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.util.GregorianCalendar");
+
+        thrown.expect(ReflectionException.class);
+        ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
+    }
+
+    @Test
+    public void objectIsInstantiatedCorrectly_whenValidFactoryMethodAndParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.lang.Integer");
+        Object expected = Integer.valueOf(42);
+
+        Object actual = ci.callFactory("valueOf", classes(int.class), objects(42));
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void nullIsReturned_whenFactoryIsCalled_givenTypeDoesNotExist() {
+        ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+        Object actual = ci.callFactory("factory", classes(String.class), objects("nope"));
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
+    public void throwsISE_whenInvalidMethodNameIsProvided() {
+        ci = new ConditionalInstantiator("java.lang.Integer");
+
+        thrown.expect(ReflectionException.class);
+        ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42));
+    }
+
+    @Test
+    public void throwsISE_whenInvalidFactoryMethodParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.lang.Integer");
+
+        thrown.expect(ReflectionException.class);
+        ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+    }
+
+    @Test
+    public void nullIsReturned_whenReturnConstantIsCalled_givenTypeDoesNotExist() {
+        ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+        Object actual = ci.returnConstant("NOPE");
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
+    public void objectIsReturned_whenValidConstantIsProvided() {
+        ci = new ConditionalInstantiator("java.math.BigDecimal");
+        Object expected = BigDecimal.TEN;
+
+        Object actual = ci.returnConstant("TEN");
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void throwsISE_whenConstantDoesNotExist() {
+        ci = new ConditionalInstantiator("java.math.BigDecimal");
+
+        thrown.expect(ReflectionException.class);
+        ci.returnConstant("FORTY-TWO");
+    }
 }

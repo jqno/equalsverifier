@@ -26,34 +26,34 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 public class ForExamplesTest extends IntegrationTestBase {
-	@Test
-	public void succeed_whenExamplesAreUnequal() {
-		FinalPoint red = new FinalPoint(1, 2);
-		FinalPoint black = new FinalPoint(2, 3);
-		FinalPoint green = new FinalPoint(3, 2);
-		FinalPoint blue = new FinalPoint(2, 1);
-		
-		EqualsVerifier.forExamples(red, black, green, blue)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenExamplesAreRedefinable() {
-		Point red = new Point(1, 2);
-		Point black = new Point(2, 3);
-		expectFailure("Subclass:");
-		EqualsVerifier.forExamples(red, black)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenExamplesAreOverridable_givenACorrectlyImplementedSubclass() {
-		CanEqualPoint red = new CanEqualPoint(1, 2);
-		CanEqualPoint black = new CanEqualPoint(2, 3);
-		CanEqualColorPoint green = new CanEqualColorPoint(1, 2, Color.INDIGO);
-		
-		EqualsVerifier.forExamples(red, black, green)
-				.withRedefinedSubclass(CanEqualColorPoint.class)
-				.verify();
-	}
+    @Test
+    public void succeed_whenExamplesAreUnequal() {
+        FinalPoint red = new FinalPoint(1, 2);
+        FinalPoint black = new FinalPoint(2, 3);
+        FinalPoint green = new FinalPoint(3, 2);
+        FinalPoint blue = new FinalPoint(2, 1);
+
+        EqualsVerifier.forExamples(red, black, green, blue)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenExamplesAreRedefinable() {
+        Point red = new Point(1, 2);
+        Point black = new Point(2, 3);
+        expectFailure("Subclass:");
+        EqualsVerifier.forExamples(red, black)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenExamplesAreOverridable_givenACorrectlyImplementedSubclass() {
+        CanEqualPoint red = new CanEqualPoint(1, 2);
+        CanEqualPoint black = new CanEqualPoint(2, 3);
+        CanEqualColorPoint green = new CanEqualColorPoint(1, 2, Color.INDIGO);
+
+        EqualsVerifier.forExamples(red, black, green)
+                .withRedefinedSubclass(CanEqualColorPoint.class)
+                .verify();
+    }
 }

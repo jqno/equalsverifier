@@ -26,158 +26,158 @@ import nl.jqno.equalsverifier.util.Instantiator;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 class AbstractDelegationChecker<T> implements Checker {
-	private final Class<T> type;
-	private final PrefabValues prefabValues;
-	private final ClassAccessor<T> classAccessor;
-	private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final Class<T> type;
+    private final PrefabValues prefabValues;
+    private final ClassAccessor<T> classAccessor;
+    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-	public AbstractDelegationChecker(Configuration<T> config) {
-		this.type = config.getType();
-		this.prefabValues = config.getPrefabValues();
-		this.classAccessor = config.createClassAccessor();
-		this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
-	}
+    public AbstractDelegationChecker(Configuration<T> config) {
+        this.type = config.getType();
+        this.prefabValues = config.getPrefabValues();
+        this.classAccessor = config.createClassAccessor();
+        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+    }
 
-	@Override
-	public void check() {
-		checkAbstractEqualsAndHashCode();
+    @Override
+    public void check() {
+        checkAbstractEqualsAndHashCode();
 
-		checkAbstractDelegationInFields();
+        checkAbstractDelegationInFields();
 
-		T instance = this.getRedPrefabValue(type);
-		if (instance == null) {
-			instance = classAccessor.getRedObject();
-		}
-		T copy = this.getBlackPrefabValue(type);
-		if (copy == null) {
-			copy = classAccessor.getBlackObject();
-		}
-		checkAbstractDelegation(instance, copy);
+        T instance = this.getRedPrefabValue(type);
+        if (instance == null) {
+            instance = classAccessor.getRedObject();
+        }
+        T copy = this.getBlackPrefabValue(type);
+        if (copy == null) {
+            copy = classAccessor.getBlackObject();
+        }
+        checkAbstractDelegation(instance, copy);
 
-		checkAbstractDelegationInSuper();
-	}
+        checkAbstractDelegationInSuper();
+    }
 
-	private void checkAbstractEqualsAndHashCode() {
-		boolean equalsIsAbstract = classAccessor.isEqualsAbstract();
-		boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
+    private void checkAbstractEqualsAndHashCode() {
+        boolean equalsIsAbstract = classAccessor.isEqualsAbstract();
+        boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
 
-		if (equalsIsAbstract && hashCodeIsAbstract) {
-			fail(Formatter.of("Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
-					type.getSimpleName()));
-		}
-		else if (equalsIsAbstract) {
-			fail(buildSingleAbstractMethodErrorMessage(type, true, true));
-		}
-		else if (hashCodeIsAbstract) {
-			fail(buildSingleAbstractMethodErrorMessage(type, false, true));
-		}
-	}
-	
-	private void checkAbstractDelegationInFields() {
-		for (Field field : FieldIterable.of(type)) {
-			Class<?> type = field.getType();
-			Object instance = safelyGetInstance(type);
-			Object copy = safelyGetInstance(type);
-			if (instance != null && copy != null) {
-				checkAbstractMethods(type, instance, copy, true);
-			}
-		}
-	}
-	
-	private void checkAbstractDelegation(T instance, T copy) {
-		checkAbstractMethods(type, instance, copy, false);
-	}
-	
-	private void checkAbstractDelegationInSuper() {
-		Class<? super T> superclass = type.getSuperclass();
-		ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-		
-		boolean equalsIsAbstract = superAccessor.isEqualsAbstract();
-		boolean hashCodeIsAbstract = superAccessor.isHashCodeAbstract();
-		if (equalsIsAbstract != hashCodeIsAbstract) {
-			fail(buildSingleAbstractMethodErrorMessage(superclass, equalsIsAbstract, false));
-		}
-		if (equalsIsAbstract && hashCodeIsAbstract) {
-			return;
-		}
+        if (equalsIsAbstract && hashCodeIsAbstract) {
+            fail(Formatter.of("Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
+                    type.getSimpleName()));
+        }
+        else if (equalsIsAbstract) {
+            fail(buildSingleAbstractMethodErrorMessage(type, true, true));
+        }
+        else if (hashCodeIsAbstract) {
+            fail(buildSingleAbstractMethodErrorMessage(type, false, true));
+        }
+    }
 
-		Object instance = getRedPrefabValue(superclass);
-		if (instance == null) {
-			instance = superAccessor.getRedObject();
-		}
-		Object copy = getBlackPrefabValue(type);
-		if (copy == null) {
-			copy = superAccessor.getBlackObject();
-		}
-		checkAbstractMethods(superclass, instance, copy, false);
-	}
+    private void checkAbstractDelegationInFields() {
+        for (Field field : FieldIterable.of(type)) {
+            Class<?> type = field.getType();
+            Object instance = safelyGetInstance(type);
+            Object copy = safelyGetInstance(type);
+            if (instance != null && copy != null) {
+                checkAbstractMethods(type, instance, copy, true);
+            }
+        }
+    }
 
-	private Formatter buildSingleAbstractMethodErrorMessage(Class<?> type, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
-		return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
-				type.getSimpleName(),
-				(isEqualsAbstract ? "equals" : "hashCode"),
-				(isEqualsAbstract ? "hashCode" : "equals"),
-				(bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete."));
-	}
-	
-	@SuppressWarnings("unchecked")
-	private <S> S getRedPrefabValue(Class<?> type) {
-		if (prefabValues.contains(type)) {
-			return (S)prefabValues.getRed(type);
-		}
-		return null;
-	}
+    private void checkAbstractDelegation(T instance, T copy) {
+        checkAbstractMethods(type, instance, copy, false);
+    }
 
-	@SuppressWarnings("unchecked")
-	private <S> S getBlackPrefabValue(Class<?> type) {
-		if (prefabValues.contains(type)) {
-			return (S)prefabValues.getBlack(type);
-		}
-		return null;
-	}
-	
-	private Object safelyGetInstance(Class<?> type) {
-		Object result = getRedPrefabValue(type);
-		if (result != null) {
-			return result;
-		}
-		try {
-			return Instantiator.of(type).instantiate();
-		}
-		catch (Exception ignored) {
-			// If it fails for some reason, any reason, just return null.
-			return null;
-		}
-	}
-	
-	private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
-		try {
-			instance.equals(copy);
-		}
-		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()), e);
-		}
-		catch (Exception ignored) {
-			// Skip. We only care about AbstractMethodError at this point;
-			// other errors will be handled later.
-		}
-		
-		try {
-			cachedHashCodeInitializer.getInitializedHashCode(instance);
-		}
-		catch (AbstractMethodError e) {
-			fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);
-		}
-		catch (Exception ignored) {
-			// Skip. We only care about AbstractMethodError at this point;
-			// other errors will be handled later.
-		}
-	}
-	
-	private Formatter buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
-		Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", type.getName());
-		
-		return Formatter.of("Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
-				type.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
-	}
+    private void checkAbstractDelegationInSuper() {
+        Class<? super T> superclass = type.getSuperclass();
+        ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
+
+        boolean equalsIsAbstract = superAccessor.isEqualsAbstract();
+        boolean hashCodeIsAbstract = superAccessor.isHashCodeAbstract();
+        if (equalsIsAbstract != hashCodeIsAbstract) {
+            fail(buildSingleAbstractMethodErrorMessage(superclass, equalsIsAbstract, false));
+        }
+        if (equalsIsAbstract && hashCodeIsAbstract) {
+            return;
+        }
+
+        Object instance = getRedPrefabValue(superclass);
+        if (instance == null) {
+            instance = superAccessor.getRedObject();
+        }
+        Object copy = getBlackPrefabValue(type);
+        if (copy == null) {
+            copy = superAccessor.getBlackObject();
+        }
+        checkAbstractMethods(superclass, instance, copy, false);
+    }
+
+    private Formatter buildSingleAbstractMethodErrorMessage(Class<?> type, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
+        return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
+                type.getSimpleName(),
+                (isEqualsAbstract ? "equals" : "hashCode"),
+                (isEqualsAbstract ? "hashCode" : "equals"),
+                (bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete."));
+    }
+
+    @SuppressWarnings("unchecked")
+    private <S> S getRedPrefabValue(Class<?> type) {
+        if (prefabValues.contains(type)) {
+            return (S)prefabValues.getRed(type);
+        }
+        return null;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <S> S getBlackPrefabValue(Class<?> type) {
+        if (prefabValues.contains(type)) {
+            return (S)prefabValues.getBlack(type);
+        }
+        return null;
+    }
+
+    private Object safelyGetInstance(Class<?> type) {
+        Object result = getRedPrefabValue(type);
+        if (result != null) {
+            return result;
+        }
+        try {
+            return Instantiator.of(type).instantiate();
+        }
+        catch (Exception ignored) {
+            // If it fails for some reason, any reason, just return null.
+            return null;
+        }
+    }
+
+    private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
+        try {
+            instance.equals(copy);
+        }
+        catch (AbstractMethodError e) {
+            fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()), e);
+        }
+        catch (Exception ignored) {
+            // Skip. We only care about AbstractMethodError at this point;
+            // other errors will be handled later.
+        }
+
+        try {
+            cachedHashCodeInitializer.getInitializedHashCode(instance);
+        }
+        catch (AbstractMethodError e) {
+            fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);
+        }
+        catch (Exception ignored) {
+            // Skip. We only care about AbstractMethodError at this point;
+            // other errors will be handled later.
+        }
+    }
+
+    private Formatter buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
+        Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", type.getName());
+
+        return Formatter.of("Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
+                type.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
+    }
 }

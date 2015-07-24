@@ -27,33 +27,33 @@ import java.util.LinkedHashSet;
  */
 @SuppressWarnings("serial")
 public class RecursionException extends InternalException {
-	private final LinkedHashSet<Class<?>> typeStack;
+    private final LinkedHashSet<Class<?>> typeStack;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param typeStack A collection of types that have been encountered prior
-	 * 			to detecting the recursion.
-	 */
-	public RecursionException(LinkedHashSet<Class<?>> typeStack) {
-		super();
-		this.typeStack = typeStack;
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public String getMessage() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("Recursive datastructure.\nAdd prefab values for one of the following types: ");
-		Iterator<Class<?>> i = typeStack.iterator();
-		sb.append(i.next().getName());
-		while(i.hasNext()) {
-			sb.append(", ");
-			sb.append(i.next().getName());
-		}
-		sb.append(".");
-		return sb.toString();
-	}
+    /**
+     * Constructor.
+     *
+     * @param typeStack A collection of types that have been encountered prior
+     * 			to detecting the recursion.
+     */
+    public RecursionException(LinkedHashSet<Class<?>> typeStack) {
+        super();
+        this.typeStack = typeStack;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Recursive datastructure.\nAdd prefab values for one of the following types: ");
+        Iterator<Class<?>> i = typeStack.iterator();
+        sb.append(i.next().getName());
+        while(i.hasNext()) {
+            sb.append(", ");
+            sb.append(i.next().getName());
+        }
+        sb.append(".");
+        return sb.toString();
+    }
 }

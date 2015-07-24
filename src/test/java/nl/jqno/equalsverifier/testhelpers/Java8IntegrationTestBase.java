@@ -26,31 +26,31 @@ import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
 public class Java8IntegrationTestBase extends IntegrationTestBase {
-	private ConditionalCompiler compiler;
-	
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
-	
-	@Before
-	public void setUp() throws IOException {
-		File tempFileLocation = tempFolder.newFolder();
-		compiler = new ConditionalCompiler(tempFileLocation);
-	}
-	
-	@After
-	public void tearDown() {
-		compiler.close();
-	}
-	
-	public Class<?> compile(String className, String code) {
-		return compiler.compile(className, code);
-	}
-	
-	public boolean isJava8Available() {
-		return isTypeAvailable("java.util.Optional");
-	}
-	
-	private boolean isTypeAvailable(String fullyQualifiedTypeName) {
-		return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
-	}
+    private ConditionalCompiler compiler;
+
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    @Before
+    public void setUp() throws IOException {
+        File tempFileLocation = tempFolder.newFolder();
+        compiler = new ConditionalCompiler(tempFileLocation);
+    }
+
+    @After
+    public void tearDown() {
+        compiler.close();
+    }
+
+    public Class<?> compile(String className, String code) {
+        return compiler.compile(className, code);
+    }
+
+    public boolean isJava8Available() {
+        return isTypeAvailable("java.util.Optional");
+    }
+
+    private boolean isTypeAvailable(String fullyQualifiedTypeName) {
+        return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
+    }
 }

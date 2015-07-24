@@ -29,34 +29,34 @@ import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class CoverageNoInheritanceTest {
-	@Parameters
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-				{ EclipseGetClassPoint.class },
-				{ EclipseInstanceOfPoint.class },
-				{ HandwrittenGetClassPoint.class },
-				{ HandwrittenInstanceOfPoint.class },
-				{ IntelliJGetClassPoint.class },
-				{ IntelliJInstanceOfPoint.class },
-				{ LombokInstanceOfPoint.class },
-				{ NetBeansGetClassPoint.class }
-		});
-	}
-	
-	private final Class<?> type;
-	
-	public CoverageNoInheritanceTest(Class<?> type) {
-		this.type = type;
-	}
-	
-	@Test
-	public void testCoverage() {
-		EqualsVerifier.forClass(type).verify();
-	}
-	
-	@Test
-	public void callTheConstructor() throws Exception {
-		Constructor<?> constructor = type.getConstructor(int.class, int.class, Color.class);
-		constructor.newInstance(0, 0, Color.INDIGO);
-	}
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                { EclipseGetClassPoint.class },
+                { EclipseInstanceOfPoint.class },
+                { HandwrittenGetClassPoint.class },
+                { HandwrittenInstanceOfPoint.class },
+                { IntelliJGetClassPoint.class },
+                { IntelliJInstanceOfPoint.class },
+                { LombokInstanceOfPoint.class },
+                { NetBeansGetClassPoint.class }
+        });
+    }
+
+    private final Class<?> type;
+
+    public CoverageNoInheritanceTest(Class<?> type) {
+        this.type = type;
+    }
+
+    @Test
+    public void testCoverage() {
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
+    public void callTheConstructor() throws Exception {
+        Constructor<?> constructor = type.getConstructor(int.class, int.class, Color.class);
+        constructor.newInstance(0, 0, Color.INDIGO);
+    }
 }

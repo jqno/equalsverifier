@@ -19,16 +19,16 @@ import nl.jqno.equalsverifier.util.StaticFieldValueStash;
 import nl.jqno.equalsverifier.util.PrefabValues;
 
 public class PrefabValuesFactory {
-	public static PrefabValues withPrimitives(StaticFieldValueStash stash) {
-		PrefabValues result = new PrefabValues(stash);
-		result.put(boolean.class, true, false);
-		result.put(byte.class, (byte)1, (byte)2);
-		result.put(char.class, 'a', 'b');
-		result.put(double.class, 0.5D, 1.0D);
-		result.put(float.class, 0.5F, 1.0F);
-		result.put(int.class, 1, 2);
-		result.put(long.class, 1L, 2L);
-		result.put(short.class, (short)1, (short)2);
-		return result;
-	}
+    public static PrefabValues withPrimitives(StaticFieldValueStash stash) {
+        PrefabValues result = new PrefabValues(stash);
+        result.put(boolean.class, true, false);
+        result.put(byte.class, (byte)1, (byte)2);
+        result.put(char.class, 'a', 'b');
+        result.put(double.class, 0.5D, 1.0D);
+        result.put(float.class, 0.5F, 1.0F);
+        result.put(int.class, 1, 2);
+        result.put(long.class, 1L, 2L);
+        result.put(short.class, (short)1, (short)2);
+        return result;
+    }
 }

@@ -27,77 +27,77 @@ import java.util.List;
  * @author Jan Ouwens
  */
 public class FieldIterable implements Iterable<Field> {
-	private final Class<?> type;
-	private final boolean includeSuperclasses;
-	
-	/**
-	 * Factory method for a FieldIterator that iterates over all declared
-	 * fields of {@code type} and over the declared fields of all of its
-	 * superclasses.
-	 * 
-	 * @param type The class that contains the fields over which to iterate.
-	 * @return A FieldIterator.
-	 */
-	public static FieldIterable of(Class<?> type) {
-		return new FieldIterable(type, true);
-	}
-	
-	/**
-	 * Factory method for a FieldIterator that iterates over all declared
-	 * fields of {@code type}, but that ignores the declared fields of its
-	 * superclasses.
-	 * 
-	 * @param type The class that contains the fields over which to iterate.
-	 * @return A FieldIterator.
-	 */
-	public static FieldIterable ofIgnoringSuper(Class<?> type) {
-		return new FieldIterable(type, false);
-	}
-	
-	/**
-	 * Private constructor. Call {@link #of(Class)} or
-	 * {@link #ofIgnoringSuper(Class)} instead.
-	 */
-	private FieldIterable(Class<?> type, boolean includeSuperclasses) {
-		this.type = type;
-		this.includeSuperclasses = includeSuperclasses;
-	}
+    private final Class<?> type;
+    private final boolean includeSuperclasses;
 
-	/**
-	 * Returns an iterator over all declared fields of the class and all of its
-	 * superclasses.
-	 * 
-	 * @return An iterator over all declared fields of the class and all of its
-	 * 			superclasses.
-	 */
-	@Override
-	public Iterator<Field> iterator() {
-		return createFieldList().iterator();
-	}
+    /**
+     * Factory method for a FieldIterator that iterates over all declared
+     * fields of {@code type} and over the declared fields of all of its
+     * superclasses.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterator.
+     */
+    public static FieldIterable of(Class<?> type) {
+        return new FieldIterable(type, true);
+    }
 
-	private List<Field> createFieldList() {
-		List<Field> result = new ArrayList<Field>();
-		
-		result.addAll(addFieldsFor(type));
-		
-		Class<?> i = type.getSuperclass();
-		while (includeSuperclasses && i != null && i != Object.class) {
-			result.addAll(addFieldsFor(i));
-			i = i.getSuperclass();
-		}
-		
-		return result;
-	}
+    /**
+     * Factory method for a FieldIterator that iterates over all declared
+     * fields of {@code type}, but that ignores the declared fields of its
+     * superclasses.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterator.
+     */
+    public static FieldIterable ofIgnoringSuper(Class<?> type) {
+        return new FieldIterable(type, false);
+    }
 
-	private List<Field> addFieldsFor(Class<?> type) {
-		List<Field> result = new ArrayList<Field>();
-		
-		for (Field field : type.getDeclaredFields()) {
-			if (!field.isSynthetic()) {
-				result.add(field);
-			}
-		}
-		
-		return result;
-	}
+    /**
+     * Private constructor. Call {@link #of(Class)} or
+     * {@link #ofIgnoringSuper(Class)} instead.
+     */
+    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
+        this.type = type;
+        this.includeSuperclasses = includeSuperclasses;
+    }
+
+    /**
+     * Returns an iterator over all declared fields of the class and all of its
+     * superclasses.
+     *
+     * @return An iterator over all declared fields of the class and all of its
+     * 			superclasses.
+     */
+    @Override
+    public Iterator<Field> iterator() {
+        return createFieldList().iterator();
+    }
+
+    private List<Field> createFieldList() {
+        List<Field> result = new ArrayList<Field>();
+
+        result.addAll(addFieldsFor(type));
+
+        Class<?> i = type.getSuperclass();
+        while (includeSuperclasses && i != null && i != Object.class) {
+            result.addAll(addFieldsFor(i));
+            i = i.getSuperclass();
+        }
+
+        return result;
+    }
+
+    private List<Field> addFieldsFor(Class<?> type) {
+        List<Field> result = new ArrayList<Field>();
+
+        for (Field field : type.getDeclaredFields()) {
+            if (!field.isSynthetic()) {
+                result.add(field);
+            }
+        }
+
+        return result;
+    }
 }

@@ -21,23 +21,23 @@ import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 import org.junit.Test;
 
 public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
-	private static final String JAVA_8_CLASS_NAME = "Java8Class";
-	private static final String JAVA_8_CLASS =
-			"\nimport org.eclipse.jdt.annotation.NonNull;" +
-			"\n" +
-			"\npublic final class Java8Class {" +
-			"\n    private @NonNull String s;" +
-			"\n}";
-	
-	@Test
-	public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
-		if (!isJava8Available()) {
-			return;
-		}
-		
-		Class<?> java8Class = compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
-		AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, false);
-		assertTrue(accessor.fieldHas("s", SupportedAnnotations.NONNULL));
-	}
+    private static final String JAVA_8_CLASS_NAME = "Java8Class";
+    private static final String JAVA_8_CLASS =
+            "\nimport org.eclipse.jdt.annotation.NonNull;" +
+            "\n" +
+            "\npublic final class Java8Class {" +
+            "\n    private @NonNull String s;" +
+            "\n}";
+
+    @Test
+    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> java8Class = compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
+        AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, false);
+        assertTrue(accessor.fieldHas("s", SupportedAnnotations.NONNULL));
+    }
 
 }

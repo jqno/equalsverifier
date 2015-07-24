@@ -23,55 +23,55 @@ import nl.jqno.equalsverifier.util.FieldAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
 
 public class Util {
-	public static boolean defaultEquals(Object here, Object there) {
-		Class<?> type = here.getClass();
-		if (there == null || !there.getClass().isAssignableFrom(type)) {
-			return false;
-		}
-		boolean equals = true;
-		try {
-			for (Field f : FieldIterable.of(type)) {
-				if (isRelevant(here, f)) {
-					f.setAccessible(true);
-					Object x = f.get(here);
-					Object y = there == null ? null : f.get(there);
-					equals &= nullSafeEquals(x, y);
-				}
-			}
-		}
-		catch (IllegalAccessException e) {
-			fail(e.toString());
-		}
-		return equals;
-	}
-	
-	public static int defaultHashCode(Object x) {
-		int hash = 59;
-		try {
-			for (Field f : FieldIterable.of(x.getClass())) {
-				if (isRelevant(x, f)) {
-					f.setAccessible(true);
-					Object val = f.get(x);
-					hash += 59 * nullSafeHashCode(val);
-				}
-			}
-		}
-		catch (IllegalAccessException e) {
-			fail(e.toString());
-		}
-		return hash;
-	}
+    public static boolean defaultEquals(Object here, Object there) {
+        Class<?> type = here.getClass();
+        if (there == null || !there.getClass().isAssignableFrom(type)) {
+            return false;
+        }
+        boolean equals = true;
+        try {
+            for (Field f : FieldIterable.of(type)) {
+                if (isRelevant(here, f)) {
+                    f.setAccessible(true);
+                    Object x = f.get(here);
+                    Object y = there == null ? null : f.get(there);
+                    equals &= nullSafeEquals(x, y);
+                }
+            }
+        }
+        catch (IllegalAccessException e) {
+            fail(e.toString());
+        }
+        return equals;
+    }
 
-	private static boolean isRelevant(Object x, Field f) {
-		FieldAccessor acc = new FieldAccessor(x, f);
-		return acc.canBeModifiedReflectively();
-	}
-	
-	public static boolean nullSafeEquals(Object x, Object y) {
-		return x == null ? y == null : x.equals(y);
-	}
-	
-	public static int nullSafeHashCode(Object x) {
-		return x == null ? 0 : x.hashCode();
-	}
+    public static int defaultHashCode(Object x) {
+        int hash = 59;
+        try {
+            for (Field f : FieldIterable.of(x.getClass())) {
+                if (isRelevant(x, f)) {
+                    f.setAccessible(true);
+                    Object val = f.get(x);
+                    hash += 59 * nullSafeHashCode(val);
+                }
+            }
+        }
+        catch (IllegalAccessException e) {
+            fail(e.toString());
+        }
+        return hash;
+    }
+
+    private static boolean isRelevant(Object x, Field f) {
+        FieldAccessor acc = new FieldAccessor(x, f);
+        return acc.canBeModifiedReflectively();
+    }
+
+    public static boolean nullSafeEquals(Object x, Object y) {
+        return x == null ? y == null : x.equals(y);
+    }
+
+    public static int nullSafeHashCode(Object x) {
+        return x == null ? 0 : x.hashCode();
+    }
 }

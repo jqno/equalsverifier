@@ -24,11 +24,11 @@ import nl.jqno.equalsverifier.util.Formatter;
  */
 @SuppressWarnings("serial")
 public class AssertionException extends InternalException {
-	public AssertionException(Formatter message) {
-		super(message.format());
-	}
-	
-	public AssertionException(Formatter message, Throwable cause) {
-		super(message.format(), cause);
-	}
+    public AssertionException(Formatter message) {
+        super(message.format());
+    }
+
+    public AssertionException(Formatter message, Throwable cause) {
+        super(message.format(), cause);
+    }
 }

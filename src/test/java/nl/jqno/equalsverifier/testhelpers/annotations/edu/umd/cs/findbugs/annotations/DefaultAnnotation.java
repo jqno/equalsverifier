@@ -30,5 +30,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.PACKAGE)
 @Retention(RetentionPolicy.CLASS)
 public @interface DefaultAnnotation {
-	Class<? extends Annotation>[] value();
+    Class<? extends Annotation>[] value();
 }

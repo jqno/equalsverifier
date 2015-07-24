@@ -22,11 +22,11 @@ package nl.jqno.equalsverifier.util.exceptions;
  */
 @SuppressWarnings("serial")
 public class ReflectionException extends InternalException {
-	public ReflectionException(String message) {
-		super(message);
-	}
-	
-	public ReflectionException(Throwable cause) {
-		super(cause);
-	}
+    public ReflectionException(String message) {
+        super(message);
+    }
+
+    public ReflectionException(Throwable cause) {
+        super(cause);
+    }
 }

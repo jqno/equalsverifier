@@ -24,64 +24,64 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class PreconditionTest extends IntegrationTestBase {
-	private static final String PRECONDITION = "Precondition";
-	
-	FinalPoint first;
-	FinalPoint second;
-	
-	@Before
-	public void setup() {
-		first = new FinalPoint(1, 2);
-		second = new FinalPoint(2, 3);
-	}
-	
-	@Test
-	public void fail_whenFirstExampleIsNull() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("First example is null.");
-		
-		EqualsVerifier.forExamples(null, second);
-	}
-	
-	@Test
-	public void fail_whenSecondExampleIsNull() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Second example is null.");
-		
-		EqualsVerifier.forExamples(first, null);
-	}
-	
-	@Test
-	public void succeed_whenTheVarargsArrayIsNull() {
-		EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
-	}
-	
-	@Test
-	public void fail_whenAVarargsParameterIsNull() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("One of the examples is null.");
-		
-		FinalPoint another = new FinalPoint(3, 4);
-		EqualsVerifier.forExamples(first, second, another, null);
-	}
-	
-	@Test
-	public void fail_whenExamplesAreOfIncompatibleTypes() {
-		expectFailure(PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
-		EqualsVerifier.forExamples(first, new Point(1, 2))
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenExamplesAreTheSame() {
-		expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
-		EqualsVerifier.forExamples(first, first);
-	}
-	
-	@Test
-	public void fail_whenExamplesAreNotTheSameButEqual() {
-		FinalPoint equalToFirst = new FinalPoint(1, 2);
-		expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
-		EqualsVerifier.forExamples(first, equalToFirst);
-	}
+    private static final String PRECONDITION = "Precondition";
+
+    FinalPoint first;
+    FinalPoint second;
+
+    @Before
+    public void setup() {
+        first = new FinalPoint(1, 2);
+        second = new FinalPoint(2, 3);
+    }
+
+    @Test
+    public void fail_whenFirstExampleIsNull() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("First example is null.");
+
+        EqualsVerifier.forExamples(null, second);
+    }
+
+    @Test
+    public void fail_whenSecondExampleIsNull() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Second example is null.");
+
+        EqualsVerifier.forExamples(first, null);
+    }
+
+    @Test
+    public void succeed_whenTheVarargsArrayIsNull() {
+        EqualsVerifier.forExamples(first, second, (FinalPoint[])null).verify();
+    }
+
+    @Test
+    public void fail_whenAVarargsParameterIsNull() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("One of the examples is null.");
+
+        FinalPoint another = new FinalPoint(3, 4);
+        EqualsVerifier.forExamples(first, second, another, null);
+    }
+
+    @Test
+    public void fail_whenExamplesAreOfIncompatibleTypes() {
+        expectFailure(PRECONDITION, "are of different classes", FinalPoint.class.getSimpleName(), Point.class.getSimpleName());
+        EqualsVerifier.forExamples(first, new Point(1, 2))
+                .verify();
+    }
+
+    @Test
+    public void fail_whenExamplesAreTheSame() {
+        expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
+        EqualsVerifier.forExamples(first, first);
+    }
+
+    @Test
+    public void fail_whenExamplesAreNotTheSameButEqual() {
+        FinalPoint equalToFirst = new FinalPoint(1, 2);
+        expectException(IllegalArgumentException.class, "Two objects are equal to each other.");
+        EqualsVerifier.forExamples(first, equalToFirst);
+    }
 }

@@ -107,452 +107,452 @@ import nl.jqno.equalsverifier.util.exceptions.InternalException;
  * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
-	private final List<T> equalExamples;
-	private final List<T> unequalExamples;
-	private Configuration<T> config;
+    private final List<T> equalExamples;
+    private final List<T> unequalExamples;
+    private Configuration<T> config;
 
-	/**
-	 * Factory method. For general use.
-	 * 
-	 * @param type The class for which the {@code equals} method should be
-	 * 				tested.
-	 */
-	public static <T> EqualsVerifier<T> forClass(Class<T> type) {
-		List<T> equalExamples = new ArrayList<T>();
-		List<T> unequalExamples = new ArrayList<T>();
-		
-		return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
-	}
-	
-	/**
-	 * Factory method. Use when it is necessary or desired to give explicit
-	 * examples of instances of T. It's theoretically possible that
-	 * {@link #forClass(Class)} doesn't generate the examples that expose a
-	 * certain weakness in the {@code equals} implementation. In such cases,
-	 * this method can be used.
-	 * 
-	 * @param first An instance of T.
-	 * @param second Another instance of T, which is unequal to {@code first}.
-	 * @param more More instances of T, all of which are unequal to one
-	 *		 		another and to {@code first} and {@code second}. May also
-	 *				contain instances of subclasses of T.
-	 */
-	public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
-		List<T> equalExamples = new ArrayList<T>();
-		List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
-		
-		if (listContainsDuplicates(unequalExamples)) {
-			throw new IllegalArgumentException("Two objects are equal to each other.");
-		}
-		
-		@SuppressWarnings("unchecked")
-		Class<T> type = (Class<T>)first.getClass();
-		
-		return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
-	}
-	
-	/**
-	 * Factory method. Asks for a list of equal, but not identical, instances
-	 * of T.
-	 * 
-	 * For use when T is a class which has relaxed equality
-	 * rules. This happens when two instances of T are equal even though the
-	 * its internal state is different.
-	 * 
-	 * This could happen, for example, in a Rational class that doesn't
-	 * normalize: new Rational(1, 2).equals(new Rational(2, 4)) would return
-	 * true.
-	 * 
-	 * Using this factory method requires that
-	 * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
-	 * be called to supply a list of unequal instances of T.
-	 * 
-	 * @param first An instance of T.
-	 * @param second Another instance of T, which is equal, but not identical,
-	 * 				to {@code first}.
-	 * @param more More instances of T, all of which are equal, but not
-	 * 				identical, to one another and to {@code first} and
-	 * 				{@code second}.
-	 */
-	public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... more) {
-		List<T> examples = buildListOfAtLeastTwo(first, second, more);
-		
-		@SuppressWarnings("unchecked")
-		Class<T> type = (Class<T>)first.getClass();
-		
-		return new RelaxedEqualsVerifierHelper<T>(type, examples);
-	}
+    /**
+     * Factory method. For general use.
+     *
+     * @param type The class for which the {@code equals} method should be
+     * 				tested.
+     */
+    public static <T> EqualsVerifier<T> forClass(Class<T> type) {
+        List<T> equalExamples = new ArrayList<T>();
+        List<T> unequalExamples = new ArrayList<T>();
 
-	/**
-	 * Private constructor. Call {@link #forClass(Class)},
-	 * {@link #forExamples(Object, Object, Object...)} or
-	 * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
-	 */
-	private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-		this.config = Configuration.of(type);
-		this.equalExamples = equalExamples;
-		this.unequalExamples = unequalExamples;
-		
-		JavaApiPrefabValues.addTo(config.getPrefabValues());
-	}
-	
-	/**
-	 * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning}
-	 * to see what warnings can be suppressed.
-	 * 
-	 * @param warnings A list of warnings to suppress in
-	 * 			{@code EqualsVerifier}.
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> suppress(Warning... warnings) {
-		EnumSet<Warning> ws = config.getWarningsToSuppress();
-		for (Warning warning : warnings) {
-			ws.add(warning);
-		}
-		config = config.withWarningsToSuppress(ws);
-		return this;
-	}
-	
-	/**
-	 * Adds prefabricated values for instance fields of classes that
-	 * EqualsVerifier cannot instantiate by itself.
-	 * 
-	 * @param <S> The class of the prefabricated values.
-	 * @param otherType The class of the prefabricated values.
-	 * @param red An instance of {@code S}.
-	 * @param black Another instance of {@code S}.
-	 * @return {@code this}, for easy method chaining.
-	 * @throws NullPointerException If either {@code otherType}, {@code red}
-	 * 				or {@code black} is null.
-	 * @throws IllegalArgumentException If {@code red} equals {@code black}.
-	 */
-	public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
-		if (otherType == null) {
-			throw new NullPointerException("Type is null");
-		}
-		if (red == null || black == null) {
-			throw new NullPointerException("One or both values are null.");
-		}
-		if (red.equals(black)) {
-			throw new IllegalArgumentException("Both values are equal.");
-		}
-		config.getPrefabValues().put(otherType, red, black);
-		return this;
-	}
-	
-	/**
-	 * Signals that {@code getClass} is used in the implementation of the
-	 * {@code equals} method, instead of an {@code instanceof} check.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> usingGetClass() {
-		config = config.withUsingGetClass();
-		return this;
-	}
-	
-	/**
-	 * Signals that all non-transient fields are relevant in the {@code equals}
-	 * contract. {@code EqualsVerifier} will fail if one non-transient field
-	 * does not affect the outcome of {@code equals}.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> allFieldsShouldBeUsed() {
-		config = config.withAllFieldsShouldBeUsed();
-		return this;
-	}
-	
-	/**
-	 * Signals that all non-transient fields are relevant in the {@code equals}
-	 * contract, except for the ones specified. {@code EqualsVerifier} will
-	 * fail if one non-specified, non-transient field does not affect the
-	 * outcome of {@code equals}, or if one specified field does.
-	 * 
-	 * @param fields
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-		config = config.withAllFieldsShouldBeUsed();
-		config = config.withAllFieldsShouldBeUsedExceptions(fields);
+        return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+    }
 
-		Set<String> actualFieldNames = new HashSet<String>();
-		for (Field field : FieldIterable.of(config.getType())) {
-			actualFieldNames.add(field.getName());
-		}
-		for (String field : config.getAllFieldsShouldBeUsedExceptions()) {
-			if (!actualFieldNames.contains(field)) {
-				throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
-			}
-		}
-		
-		return this;
-	}
-	
-	/**
-	 * Signals that T is part of an inheritance hierarchy where {@code equals}
-	 * is overridden. Call this method if T has overridden {@code equals} and
-	 * {@code hashCode}, and one or more of T's superclasses have as well.
-	 * <p>
-	 * T itself does not necessarily have to have subclasses that redefine
-	 * {@code equals} and {@code hashCode}.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> withRedefinedSuperclass() {
-		config = config.withRedefinedSuperclass();
-		return this;
-	}
-	
-	/**
-	 * Supplies a reference to a subclass of T in which {@code equals} is
-	 * overridden. Calling this method is mandatory if {@code equals} is not
-	 * final and a strong verification is performed.
-	 * 
-	 * Note that, for each subclass that overrides {@code equals},
-	 * {@link EqualsVerifier} should be used as well to verify its
-	 * adherence to the contracts.
-	 * 
-	 * @param redefinedSubclass A subclass of T for which no instance can be
-	 * 				equal to any instance of T.
-	 * @return {@code this}, for easy method chaining.
-	 * 
-	 * @see Warning#STRICT_INHERITANCE
-	 */
-	public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
-		config = config.withRedefinedSubclass(redefinedSubclass);
-		return this;
-	}
-	
-	/**
-	 * Signals that T caches its hashCode, instead of re-calculating it each
-	 * time the {@code hashCode()} method is called.
-	 * 
-	 * There are 3 conditions to verify cached hashCodes:
-	 * 
-	 * First, the class under test must have a private int field that contains
-	 * the cached hashCode.
-	 * 
-	 * Second, the class under test must have a private method that calculates
-	 * the hashCode. The method must return an int and may not take any
-	 * parameters. It should be used by the constructor or the hashCode method
-	 * of the class under test to initialize the cached hashCode. This may lead
-	 * to slightly awkward production code, but unfortunately, it is necessary
-	 * for EqualsVerifier to verify that the hashCode is correct.
-	 * 
-	 * Finally, only immutable objects can be verified. In other words,
-	 * {@code withCachedHashCode} can not be used when
-	 * {@link Warning#NONFINAL_FIELDS} is suppressed.
-	 *
-	 * @param cachedHashCodeField
-	 *            The name of the field which stores the cached hash code.
-	 * @param calculateHashCodeMethod
-	 *            The name of the method which recomputes the hash code. It
-	 *            should return an int and take no parameters.
-	 * @param example
-	 *            An instance of the class under test, to verify that the
-	 *            hashCode has been initialized properly.
-	 * @return {@code this}, for easy method chaining.
-	 */
-	public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
-		CachedHashCodeInitializer<T> cachedHashCodeInitializer =
-				new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
-		config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
-		return this;
-	}
-	
-	/**
-	 * @deprecated No longer needed. The stack trace that this method printed,
-	 * 				is now included as the cause of the {@code AssertionError}.
-	 * 
-	 * @return {@code this}, for easy method chaining.
-	 */
-	@Deprecated
-	public EqualsVerifier<T> debug() {
-		return this;
-	}
-	
-	/**
-	 * Performs the verification of the contracts for {@code equals} and
-	 * {@code hashCode}.
-	 * 
-	 * @throws AssertionError If the contract is not met, or if
-	 * 				{@link EqualsVerifier}'s preconditions do not hold.
-	 */
-	public void verify() {
-		PrefabValues prefabValues = config.getPrefabValues();
-		try {
-			prefabValues.backupToStash(config.getType());
-			performVerification();
-		}
-		catch (InternalException e) {
-			handleError(e, e.getCause());
-		}
-		catch (Throwable e) {
-			handleError(e, e);
-		}
-		finally {
-			prefabValues.restoreFromStash();
-		}
-	}
+    /**
+     * Factory method. Use when it is necessary or desired to give explicit
+     * examples of instances of T. It's theoretically possible that
+     * {@link #forClass(Class)} doesn't generate the examples that expose a
+     * certain weakness in the {@code equals} implementation. In such cases,
+     * this method can be used.
+     *
+     * @param first An instance of T.
+     * @param second Another instance of T, which is unequal to {@code first}.
+     * @param more More instances of T, all of which are unequal to one
+     *		 		another and to {@code first} and {@code second}. May also
+     *				contain instances of subclasses of T.
+     */
+    public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
+        List<T> equalExamples = new ArrayList<T>();
+        List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
 
-	private void handleError(Throwable messageContainer, Throwable trueCause) {
-		boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
-		Formatter message = Formatter.of(
-				"%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-				showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
-				messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
-		
-		AssertionError error = new AssertionError(message.format());
-		error.initCause(trueCause);
-		throw error;
-	}
-	
-	private void performVerification() {
-		if (config.getType().isEnum()) {
-			return;
-		}
-		
-		verifyWithoutExamples();
-		ensureUnequalExamples();
-		verifyWithExamples();
-	}
-	
-	private void verifyWithoutExamples() {
-		Checker signatureChecker = new SignatureChecker<T>(config);
-		Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config);
-		Checker nullChecker = new NullChecker<T>(config);
-		Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config);
-		
-		signatureChecker.check();
-		abstractDelegationChecker.check();
-		nullChecker.check();
-		cachedHashCodeChecker.check();
-	}
-	
-	private void ensureUnequalExamples() {
-		if (unequalExamples.size() > 0) {
-			return;
-		}
-		
-		ClassAccessor<T> classAccessor = config.createClassAccessor();
-		unequalExamples.add(classAccessor.getRedObject());
-		unequalExamples.add(classAccessor.getBlackObject());
-	}
-	
-	private void verifyWithExamples() {
-		Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
-		Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
-		Checker hierarchyChecker = new HierarchyChecker<T>(config);
-		Checker fieldsChecker = new FieldsChecker<T>(config);
-		
-		preconditionChecker.check();
-		examplesChecker.check();
-		hierarchyChecker.check();
-		fieldsChecker.check();
-	}
-	
-	private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
-		if (first == null) {
-			throw new IllegalArgumentException("First example is null.");
-		}
-		
-		List<T> result = new ArrayList<T>();
-		result.add(first);
-		addArrayElementsToList(result, more);
-		
-		return result;
-	}
-	
-	private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
-		if (first == null) {
-			throw new IllegalArgumentException("First example is null.");
-		}
-		if (second == null) {
-			throw new IllegalArgumentException("Second example is null.");
-		}
-		
-		List<T> result = new ArrayList<T>();
-		result.add(first);
-		result.add(second);
-		addArrayElementsToList(result, more);
-		
-		return result;
-	}
-	
-	private static <T> void addArrayElementsToList(List<T> list, T... more) {
-		if (more != null) {
-			for (T e : more) {
-				if (e == null) {
-					throw new IllegalArgumentException("One of the examples is null.");
-				}
-				list.add(e);
-			}
-		}
-	}
-	
-	private static <T> boolean listContainsDuplicates(List<T> list) {
-		return list.size() != new HashSet<T>(list).size();
-	}
-	
-	/**
-	 * Helper class for
-	 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
-	 * Its purpose is to make sure, at compile time, that a list of unequal
-	 * examples is given, as well as the list of equal examples that are
-	 * supplied to the aforementioned method.
-	 * 
-	 * @author Jan Ouwens
-	 */
-	public static class RelaxedEqualsVerifierHelper<T> {
-		private final Class<T> type;
-		private final List<T> equalExamples;
+        if (listContainsDuplicates(unequalExamples)) {
+            throw new IllegalArgumentException("Two objects are equal to each other.");
+        }
 
-		/**
-		 * Private constructor, only to be called by
-		 * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
-		 */
-		private RelaxedEqualsVerifierHelper(Class<T> type, List<T> examples) {
-			this.type = type;
-			this.equalExamples = examples;
-		}
-		
-		/**
-		 * Asks for an unequal instance of T and subsequently returns a fully
-		 * constructed instance of {@link EqualsVerifier}.
-		 * 
-		 * @param example An instance of T that is unequal to the previously
-		 * 			supplied equal examples.
-		 * @return An instance of {@link EqualsVerifier}.
-		 */
-		@SuppressWarnings("unchecked")
-		public EqualsVerifier<T> andUnequalExample(T example) {
-			return andUnequalExamples(example);
-		}
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)first.getClass();
 
-		/**
-		 * Asks for a list of unequal instances of T and subsequently returns a
-		 * fully constructed instance of {@link EqualsVerifier}.
-		 * 
-		 * @param first An instance of T that is unequal to the previously
-		 * 			supplied equal examples.
-		 * @param more More instances of T, all of which are unequal to
-		 * 			one	another, to {@code first}, and to the previously
-		 * 			supplied equal examples. May also contain instances of
-		 * 			subclasses of T.
-		 * @return An instance of {@link EqualsVerifier}.
-		 */
-		public EqualsVerifier<T> andUnequalExamples(T first, T... more) {
-			List<T> unequalExamples = buildListOfAtLeastOne(first, more);
-			if (listContainsDuplicates(unequalExamples)) {
-				throw new IllegalArgumentException("Two objects are equal to each other.");
-			}
-			for (T example : unequalExamples) {
-				if (equalExamples.contains(example)) {
-					throw new IllegalArgumentException("An equal example also appears as unequal example.");
-				}
-			}
-			return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
-		}
-	}
+        return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+    }
+
+    /**
+     * Factory method. Asks for a list of equal, but not identical, instances
+     * of T.
+     *
+     * For use when T is a class which has relaxed equality
+     * rules. This happens when two instances of T are equal even though the
+     * its internal state is different.
+     *
+     * This could happen, for example, in a Rational class that doesn't
+     * normalize: new Rational(1, 2).equals(new Rational(2, 4)) would return
+     * true.
+     *
+     * Using this factory method requires that
+     * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
+     * be called to supply a list of unequal instances of T.
+     *
+     * @param first An instance of T.
+     * @param second Another instance of T, which is equal, but not identical,
+     * 				to {@code first}.
+     * @param more More instances of T, all of which are equal, but not
+     * 				identical, to one another and to {@code first} and
+     * 				{@code second}.
+     */
+    public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... more) {
+        List<T> examples = buildListOfAtLeastTwo(first, second, more);
+
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)first.getClass();
+
+        return new RelaxedEqualsVerifierHelper<T>(type, examples);
+    }
+
+    /**
+     * Private constructor. Call {@link #forClass(Class)},
+     * {@link #forExamples(Object, Object, Object...)} or
+     * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
+     */
+    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+        this.config = Configuration.of(type);
+        this.equalExamples = equalExamples;
+        this.unequalExamples = unequalExamples;
+
+        JavaApiPrefabValues.addTo(config.getPrefabValues());
+    }
+
+    /**
+     * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning}
+     * to see what warnings can be suppressed.
+     *
+     * @param warnings A list of warnings to suppress in
+     * 			{@code EqualsVerifier}.
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> suppress(Warning... warnings) {
+        EnumSet<Warning> ws = config.getWarningsToSuppress();
+        for (Warning warning : warnings) {
+            ws.add(warning);
+        }
+        config = config.withWarningsToSuppress(ws);
+        return this;
+    }
+
+    /**
+     * Adds prefabricated values for instance fields of classes that
+     * EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S> The class of the prefabricated values.
+     * @param otherType The class of the prefabricated values.
+     * @param red An instance of {@code S}.
+     * @param black Another instance of {@code S}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException If either {@code otherType}, {@code red}
+     * 				or {@code black} is null.
+     * @throws IllegalArgumentException If {@code red} equals {@code black}.
+     */
+    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
+        if (otherType == null) {
+            throw new NullPointerException("Type is null");
+        }
+        if (red == null || black == null) {
+            throw new NullPointerException("One or both values are null.");
+        }
+        if (red.equals(black)) {
+            throw new IllegalArgumentException("Both values are equal.");
+        }
+        config.getPrefabValues().put(otherType, red, black);
+        return this;
+    }
+
+    /**
+     * Signals that {@code getClass} is used in the implementation of the
+     * {@code equals} method, instead of an {@code instanceof} check.
+     *
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> usingGetClass() {
+        config = config.withUsingGetClass();
+        return this;
+    }
+
+    /**
+     * Signals that all non-transient fields are relevant in the {@code equals}
+     * contract. {@code EqualsVerifier} will fail if one non-transient field
+     * does not affect the outcome of {@code equals}.
+     *
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> allFieldsShouldBeUsed() {
+        config = config.withAllFieldsShouldBeUsed();
+        return this;
+    }
+
+    /**
+     * Signals that all non-transient fields are relevant in the {@code equals}
+     * contract, except for the ones specified. {@code EqualsVerifier} will
+     * fail if one non-specified, non-transient field does not affect the
+     * outcome of {@code equals}, or if one specified field does.
+     *
+     * @param fields
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
+        config = config.withAllFieldsShouldBeUsed();
+        config = config.withAllFieldsShouldBeUsedExceptions(fields);
+
+        Set<String> actualFieldNames = new HashSet<String>();
+        for (Field field : FieldIterable.of(config.getType())) {
+            actualFieldNames.add(field.getName());
+        }
+        for (String field : config.getAllFieldsShouldBeUsedExceptions()) {
+            if (!actualFieldNames.contains(field)) {
+                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
+
+        return this;
+    }
+
+    /**
+     * Signals that T is part of an inheritance hierarchy where {@code equals}
+     * is overridden. Call this method if T has overridden {@code equals} and
+     * {@code hashCode}, and one or more of T's superclasses have as well.
+     * <p>
+     * T itself does not necessarily have to have subclasses that redefine
+     * {@code equals} and {@code hashCode}.
+     *
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> withRedefinedSuperclass() {
+        config = config.withRedefinedSuperclass();
+        return this;
+    }
+
+    /**
+     * Supplies a reference to a subclass of T in which {@code equals} is
+     * overridden. Calling this method is mandatory if {@code equals} is not
+     * final and a strong verification is performed.
+     *
+     * Note that, for each subclass that overrides {@code equals},
+     * {@link EqualsVerifier} should be used as well to verify its
+     * adherence to the contracts.
+     *
+     * @param redefinedSubclass A subclass of T for which no instance can be
+     * 				equal to any instance of T.
+     * @return {@code this}, for easy method chaining.
+     *
+     * @see Warning#STRICT_INHERITANCE
+     */
+    public EqualsVerifier<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
+        config = config.withRedefinedSubclass(redefinedSubclass);
+        return this;
+    }
+
+    /**
+     * Signals that T caches its hashCode, instead of re-calculating it each
+     * time the {@code hashCode()} method is called.
+     *
+     * There are 3 conditions to verify cached hashCodes:
+     *
+     * First, the class under test must have a private int field that contains
+     * the cached hashCode.
+     *
+     * Second, the class under test must have a private method that calculates
+     * the hashCode. The method must return an int and may not take any
+     * parameters. It should be used by the constructor or the hashCode method
+     * of the class under test to initialize the cached hashCode. This may lead
+     * to slightly awkward production code, but unfortunately, it is necessary
+     * for EqualsVerifier to verify that the hashCode is correct.
+     *
+     * Finally, only immutable objects can be verified. In other words,
+     * {@code withCachedHashCode} can not be used when
+     * {@link Warning#NONFINAL_FIELDS} is suppressed.
+     *
+     * @param cachedHashCodeField
+     *            The name of the field which stores the cached hash code.
+     * @param calculateHashCodeMethod
+     *            The name of the method which recomputes the hash code. It
+     *            should return an int and take no parameters.
+     * @param example
+     *            An instance of the class under test, to verify that the
+     *            hashCode has been initialized properly.
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
+        CachedHashCodeInitializer<T> cachedHashCodeInitializer =
+                new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
+        config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
+        return this;
+    }
+
+    /**
+     * @deprecated No longer needed. The stack trace that this method printed,
+     * 				is now included as the cause of the {@code AssertionError}.
+     *
+     * @return {@code this}, for easy method chaining.
+     */
+    @Deprecated
+    public EqualsVerifier<T> debug() {
+        return this;
+    }
+
+    /**
+     * Performs the verification of the contracts for {@code equals} and
+     * {@code hashCode}.
+     *
+     * @throws AssertionError If the contract is not met, or if
+     * 				{@link EqualsVerifier}'s preconditions do not hold.
+     */
+    public void verify() {
+        PrefabValues prefabValues = config.getPrefabValues();
+        try {
+            prefabValues.backupToStash(config.getType());
+            performVerification();
+        }
+        catch (InternalException e) {
+            handleError(e, e.getCause());
+        }
+        catch (Throwable e) {
+            handleError(e, e);
+        }
+        finally {
+            prefabValues.restoreFromStash();
+        }
+    }
+
+    private void handleError(Throwable messageContainer, Throwable trueCause) {
+        boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
+        Formatter message = Formatter.of(
+                "%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+                showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
+                messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
+
+        AssertionError error = new AssertionError(message.format());
+        error.initCause(trueCause);
+        throw error;
+    }
+
+    private void performVerification() {
+        if (config.getType().isEnum()) {
+            return;
+        }
+
+        verifyWithoutExamples();
+        ensureUnequalExamples();
+        verifyWithExamples();
+    }
+
+    private void verifyWithoutExamples() {
+        Checker signatureChecker = new SignatureChecker<T>(config);
+        Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config);
+        Checker nullChecker = new NullChecker<T>(config);
+        Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config);
+
+        signatureChecker.check();
+        abstractDelegationChecker.check();
+        nullChecker.check();
+        cachedHashCodeChecker.check();
+    }
+
+    private void ensureUnequalExamples() {
+        if (unequalExamples.size() > 0) {
+            return;
+        }
+
+        ClassAccessor<T> classAccessor = config.createClassAccessor();
+        unequalExamples.add(classAccessor.getRedObject());
+        unequalExamples.add(classAccessor.getBlackObject());
+    }
+
+    private void verifyWithExamples() {
+        Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
+        Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
+        Checker hierarchyChecker = new HierarchyChecker<T>(config);
+        Checker fieldsChecker = new FieldsChecker<T>(config);
+
+        preconditionChecker.check();
+        examplesChecker.check();
+        hierarchyChecker.check();
+        fieldsChecker.check();
+    }
+
+    private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
+        if (first == null) {
+            throw new IllegalArgumentException("First example is null.");
+        }
+
+        List<T> result = new ArrayList<T>();
+        result.add(first);
+        addArrayElementsToList(result, more);
+
+        return result;
+    }
+
+    private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
+        if (first == null) {
+            throw new IllegalArgumentException("First example is null.");
+        }
+        if (second == null) {
+            throw new IllegalArgumentException("Second example is null.");
+        }
+
+        List<T> result = new ArrayList<T>();
+        result.add(first);
+        result.add(second);
+        addArrayElementsToList(result, more);
+
+        return result;
+    }
+
+    private static <T> void addArrayElementsToList(List<T> list, T... more) {
+        if (more != null) {
+            for (T e : more) {
+                if (e == null) {
+                    throw new IllegalArgumentException("One of the examples is null.");
+                }
+                list.add(e);
+            }
+        }
+    }
+
+    private static <T> boolean listContainsDuplicates(List<T> list) {
+        return list.size() != new HashSet<T>(list).size();
+    }
+
+    /**
+     * Helper class for
+     * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
+     * Its purpose is to make sure, at compile time, that a list of unequal
+     * examples is given, as well as the list of equal examples that are
+     * supplied to the aforementioned method.
+     *
+     * @author Jan Ouwens
+     */
+    public static class RelaxedEqualsVerifierHelper<T> {
+        private final Class<T> type;
+        private final List<T> equalExamples;
+
+        /**
+         * Private constructor, only to be called by
+         * {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}.
+         */
+        private RelaxedEqualsVerifierHelper(Class<T> type, List<T> examples) {
+            this.type = type;
+            this.equalExamples = examples;
+        }
+
+        /**
+         * Asks for an unequal instance of T and subsequently returns a fully
+         * constructed instance of {@link EqualsVerifier}.
+         *
+         * @param example An instance of T that is unequal to the previously
+         * 			supplied equal examples.
+         * @return An instance of {@link EqualsVerifier}.
+         */
+        @SuppressWarnings("unchecked")
+        public EqualsVerifier<T> andUnequalExample(T example) {
+            return andUnequalExamples(example);
+        }
+
+        /**
+         * Asks for a list of unequal instances of T and subsequently returns a
+         * fully constructed instance of {@link EqualsVerifier}.
+         *
+         * @param first An instance of T that is unequal to the previously
+         * 			supplied equal examples.
+         * @param more More instances of T, all of which are unequal to
+         * 			one	another, to {@code first}, and to the previously
+         * 			supplied equal examples. May also contain instances of
+         * 			subclasses of T.
+         * @return An instance of {@link EqualsVerifier}.
+         */
+        public EqualsVerifier<T> andUnequalExamples(T first, T... more) {
+            List<T> unequalExamples = buildListOfAtLeastOne(first, more);
+            if (listContainsDuplicates(unequalExamples)) {
+                throw new IllegalArgumentException("Two objects are equal to each other.");
+            }
+            for (T example : unequalExamples) {
+                if (equalExamples.contains(example)) {
+                    throw new IllegalArgumentException("An equal example also appears as unequal example.");
+                }
+            }
+            return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+        }
+    }
 }

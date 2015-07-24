@@ -22,63 +22,63 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import org.junit.Test;
 
 public class WithPrefabValuesTest extends IntegrationTestBase {
-	@Test
-	public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
-		EqualsVerifier.forClass(FinalPoint.class)
-				.withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenTheClassIsAlreadyKnown() {
-		EqualsVerifier.forClass(FinalPoint.class)
-				.withPrefabValues(Object.class, new Object(), new Object());
-	}
-	
-	@Test
-	public void throw_whenTypeIsNull() {
-		thrown.expect(NullPointerException.class);
-		
-		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(null, "red", "black");
-	}
+    @Test
+    public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
+                .verify();
+    }
 
-	@Test
-	public void throw_whenFirstPrefabValueIsNull() {
-		thrown.expect(NullPointerException.class);
-		
-		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(String.class, null, "black");
-	}
+    @Test
+    public void succeed_whenTheClassIsAlreadyKnown() {
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withPrefabValues(Object.class, new Object(), new Object());
+    }
 
-	@Test
-	public void throw_whenSecondPrefabValueIsNull() {
-		thrown.expect(NullPointerException.class);
-		
-		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(String.class, "red", null);
-	}
-	
-	@Test
-	public void throw_whenThePrefabValuesAreTheSame() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Both values are equal.");
-		
-		String red = "red";
-		
-		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(String.class, red, red);
-	}
-	
-	@Test
-	public void throw_whenThePrefabValuesAreEqual() {
-		thrown.expect(IllegalArgumentException.class);
-		thrown.expectMessage("Both values are equal.");
-		
-		String red1 = new String("red");
-		String red2 = new String("red");
-		
-		EqualsVerifier.forClass(WithPrefabValuesTest.class)
-				.withPrefabValues(String.class, red1, red2);
-	}
+    @Test
+    public void throw_whenTypeIsNull() {
+        thrown.expect(NullPointerException.class);
+
+        EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                .withPrefabValues(null, "red", "black");
+    }
+
+    @Test
+    public void throw_whenFirstPrefabValueIsNull() {
+        thrown.expect(NullPointerException.class);
+
+        EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                .withPrefabValues(String.class, null, "black");
+    }
+
+    @Test
+    public void throw_whenSecondPrefabValueIsNull() {
+        thrown.expect(NullPointerException.class);
+
+        EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                .withPrefabValues(String.class, "red", null);
+    }
+
+    @Test
+    public void throw_whenThePrefabValuesAreTheSame() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Both values are equal.");
+
+        String red = "red";
+
+        EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                .withPrefabValues(String.class, red, red);
+    }
+
+    @Test
+    public void throw_whenThePrefabValuesAreEqual() {
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Both values are equal.");
+
+        String red1 = new String("red");
+        String red2 = new String("red");
+
+        EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                .withPrefabValues(String.class, red1, red2);
+    }
 }

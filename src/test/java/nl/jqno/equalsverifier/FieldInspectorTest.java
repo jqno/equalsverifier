@@ -28,33 +28,33 @@ import nl.jqno.equalsverifier.util.StaticFieldValueStash;
 import org.junit.Test;
 
 public class FieldInspectorTest {
-	private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitives(new StaticFieldValueStash());
-	private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
-	
-	@Test
-	public void objectsAreReset_whenEachIterationBegins() {
-		FieldInspector<Point> inspector = new FieldInspector<Point>(accessor);
-		
-		inspector.check(new ResetObjectForEachIterationCheck());
-	}
-	
-	private final class ResetObjectForEachIterationCheck implements FieldCheck {
-		private Object originalReference;
-		private Object originalChanged;
-		
-		@Override
-		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-			if (originalReference == null) {
-				originalReference = ObjectAccessor.of(referenceAccessor.getObject()).copy();
-				originalChanged = ObjectAccessor.of(changedAccessor.getObject()).copy();
-			}
-			else {
-				assertEquals(originalReference, referenceAccessor.getObject());
-				assertEquals(originalChanged, changedAccessor.getObject());
-			}
-			
-			referenceAccessor.changeField(prefabValues);
-			changedAccessor.changeField(prefabValues);
-		}
-	}
+    private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitives(new StaticFieldValueStash());
+    private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
+
+    @Test
+    public void objectsAreReset_whenEachIterationBegins() {
+        FieldInspector<Point> inspector = new FieldInspector<Point>(accessor);
+
+        inspector.check(new ResetObjectForEachIterationCheck());
+    }
+
+    private final class ResetObjectForEachIterationCheck implements FieldCheck {
+        private Object originalReference;
+        private Object originalChanged;
+
+        @Override
+        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+            if (originalReference == null) {
+                originalReference = ObjectAccessor.of(referenceAccessor.getObject()).copy();
+                originalChanged = ObjectAccessor.of(changedAccessor.getObject()).copy();
+            }
+            else {
+                assertEquals(originalReference, referenceAccessor.getObject());
+                assertEquals(originalChanged, changedAccessor.getObject());
+            }
+
+            referenceAccessor.changeField(prefabValues);
+            changedAccessor.changeField(prefabValues);
+        }
+    }
 }
