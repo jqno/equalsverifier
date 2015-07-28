@@ -28,7 +28,7 @@ import java.util.Set;
  */
 public class AnnotationProperties {
     private final String descriptor;
-    private Map<String, Set<Object>> arrayValues = new HashMap<String, Set<Object>>();
+    private Map<String, Set<Object>> arrayValues = new HashMap<>();
 
     /**
      * Constructor.

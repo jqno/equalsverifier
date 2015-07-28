@@ -39,7 +39,7 @@ public class ObjectAccessor<T> {
     public static <T> ObjectAccessor<T> of(T object) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)object.getClass();
-        return new ObjectAccessor<T>(object, type);
+        return new ObjectAccessor<>(object, type);
     }
 
     /**

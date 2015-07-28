@@ -76,7 +76,7 @@ public class FieldIterable implements Iterable<Field> {
     }
 
     private List<Field> createFieldList() {
-        List<Field> result = new ArrayList<Field>();
+        List<Field> result = new ArrayList<>();
 
         result.addAll(addFieldsFor(type));
 
@@ -90,7 +90,7 @@ public class FieldIterable implements Iterable<Field> {
     }
 
     private List<Field> addFieldsFor(Class<?> type) {
-        List<Field> result = new ArrayList<Field>();
+        List<Field> result = new ArrayList<>();
 
         for (Field field : type.getDeclaredFields()) {
             if (!field.isSynthetic()) {

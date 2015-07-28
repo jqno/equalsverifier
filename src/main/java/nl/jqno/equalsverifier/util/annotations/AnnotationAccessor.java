@@ -42,8 +42,8 @@ public class AnnotationAccessor {
     private final Annotation[] supportedAnnotations;
     private final Class<?> type;
     private final boolean ignoreFailure;
-    private final Set<Annotation> classAnnotations = new HashSet<Annotation>();
-    private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<String, Set<Annotation>>();
+    private final Set<Annotation> classAnnotations = new HashSet<>();
+    private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<>();
 
     private boolean processed = false;
     private boolean shortCircuit = false;
@@ -163,7 +163,7 @@ public class AnnotationAccessor {
 
         @Override
         public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-            HashSet<Annotation> annotations = new HashSet<Annotation>();
+            HashSet<Annotation> annotations = new HashSet<>();
             fieldAnnotations.put(name, annotations);
             return new MyFieldVisitor(annotations, inheriting);
         }
@@ -207,7 +207,7 @@ public class AnnotationAccessor {
 
         @Override
         public AnnotationVisitor visitArray(String name) {
-            Set<Object> foundAnnotations = new HashSet<Object>();
+            Set<Object> foundAnnotations = new HashSet<>();
             properties.putArrayValues(name, foundAnnotations);
             return new AnnotationArrayValueVisitor(foundAnnotations);
         }

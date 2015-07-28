@@ -33,7 +33,7 @@ import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
  */
 public class PrefabValues {
     private final StaticFieldValueStash stash;
-    private final Map<Class<?>, Tuple<?>> values = new HashMap<Class<?>, Tuple<?>>();
+    private final Map<Class<?>, Tuple<?>> values = new HashMap<>();
 
     public PrefabValues() {
         this(new StaticFieldValueStash());

@@ -39,7 +39,7 @@ public class ConditionalPrefabValueBuilder {
     private final Class<?> type;
     private boolean stop = false;
     private ConditionalInstantiator ci;
-    private List<Object> instances = new ArrayList<Object>();
+    private List<Object> instances = new ArrayList<>();
 
     /**
      * Factory method.

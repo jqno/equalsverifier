@@ -67,8 +67,8 @@ public class Formatter {
      */
     public String format() {
         String result = message;
-        for (int i = 0; i < objects.length; i++) {
-            String s = result.replaceFirst("%%", Matcher.quoteReplacement(stringify(objects[i])));
+        for (Object object : objects) {
+            String s = result.replaceFirst("%%", Matcher.quoteReplacement(stringify(object)));
             if (result.equals(s)) {
                 throw new IllegalStateException("Too many parameters");
             }
@@ -88,14 +88,7 @@ public class Formatter {
             return obj.toString();
         }
         catch (Throwable e) {
-            StringBuilder result = new StringBuilder();
-            result.append(stringifyByReflection(obj));
-            result.append("-throws ");
-            result.append(e.getClass().getSimpleName());
-            result.append("(");
-            result.append(e.getMessage());
-            result.append(")");
-            return result.toString();
+            return stringifyByReflection(obj) + "-throws " + e.getClass().getSimpleName() + "(" + e.getMessage() + ")";
         }
     }
 

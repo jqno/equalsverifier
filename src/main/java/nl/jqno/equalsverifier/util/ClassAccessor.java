@@ -52,7 +52,7 @@ public class ClassAccessor<T> {
      * @return A {@link ClassAccessor} for T.
      */
     public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues, boolean ignoreAnnotationFailure) {
-        return new ClassAccessor<T>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
+        return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
     }
 
     /**

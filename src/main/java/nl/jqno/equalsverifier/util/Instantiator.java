@@ -46,9 +46,9 @@ public class Instantiator<T> {
      */
     public static <T> Instantiator<T> of(Class<T> type) {
         if (Modifier.isAbstract(type.getModifiers())) {
-            return new Instantiator<T>(createDynamicSubclass(type));
+            return new Instantiator<>(createDynamicSubclass(type));
         }
-        return new Instantiator<T>(type);
+        return new Instantiator<>(type);
     }
 
     /**
