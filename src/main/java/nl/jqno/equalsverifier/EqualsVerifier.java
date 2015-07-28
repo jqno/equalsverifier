@@ -358,17 +358,6 @@ public final class EqualsVerifier<T> {
     }
 
     /**
-     * @deprecated No longer needed. The stack trace that this method printed,
-     * 				is now included as the cause of the {@code AssertionError}.
-     *
-     * @return {@code this}, for easy method chaining.
-     */
-    @Deprecated
-    public EqualsVerifier<T> debug() {
-        return this;
-    }
-
-    /**
      * Performs the verification of the contracts for {@code equals} and
      * {@code hashCode}.
      *
