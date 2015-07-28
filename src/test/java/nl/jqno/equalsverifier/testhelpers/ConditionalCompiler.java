@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -98,11 +99,11 @@ public class ConditionalCompiler implements Closeable {
     private void compileClass(JavaFileObject sourceFile) throws IOException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         StandardJavaFileManager fileManager = null;
-        DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<JavaFileObject>();
+        DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<>();
         try {
             fileManager = compiler.getStandardFileManager(collector, Locale.ROOT, null);
-            fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Arrays.asList(tempFolder));
-            CompilationTask task = compiler.getTask(null, fileManager, collector, null, null, Arrays.asList(sourceFile));
+            fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singletonList(tempFolder));
+            CompilationTask task = compiler.getTask(null, fileManager, collector, null, null, Collections.singletonList(sourceFile));
 
             boolean success = task.call();
             if (!success) {
@@ -138,10 +139,7 @@ public class ConditionalCompiler implements Closeable {
         catch (NoSuchMethodException ignored) {
             // Java 6: do nothing; this code won't be reached anyway.
         }
-        catch (IllegalAccessException e) {
-            throw new AssertionError(e);
-        }
-        catch (InvocationTargetException e) {
+        catch (IllegalAccessException | InvocationTargetException e) {
             throw new AssertionError(e);
         }
     }

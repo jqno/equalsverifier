@@ -87,41 +87,41 @@ public class ClassAccessorTest {
 
     @Test
     public void hasAnnotation() {
-        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedWithRuntime>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));
         assertFalse(accessor.hasAnnotation(TYPE_CLASS_RETENTION));
     }
 
     @Test
     public void outerClassHasAnnotation() {
-        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedMiddle>(AnnotatedMiddle.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(AnnotatedMiddle.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
         assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
     }
 
     @Test
     public void nestedOuterClassHasAnnotation() {
-        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedInner>(AnnotatedInner.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(AnnotatedInner.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertTrue(accessor.outerClassHasAnnotation(TYPE_CLASS_RETENTION));
         assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
     }
 
     @Test
     public void classIsAlreadyOuter() {
-        ClassAccessor<?> accessor = new ClassAccessor<TypeHelper>(TypeHelper.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(TypeHelper.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertFalse(accessor.outerClassHasAnnotation(INAPPLICABLE));
     }
 
     @Test
     public void packageHasAnnotation() {
-        ClassAccessor<?> accessor = new ClassAccessor<AnnotatedPackage>(AnnotatedPackage.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(AnnotatedPackage.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertTrue(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
         assertFalse(accessor.packageHasAnnotation(INAPPLICABLE));
     }
 
     @Test
     public void packageInfoDoesNotExist() {
-        ClassAccessor<?> accessor = new ClassAccessor<ClassAccessorTest>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> accessor = new ClassAccessor<>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
     }
 
@@ -135,7 +135,7 @@ public class ClassAccessorTest {
 
     @Test
     public void fieldHasAnnotation() throws NoSuchFieldException {
-        ClassAccessor<?> classAccessor = new ClassAccessor<AnnotatedFields>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
+        ClassAccessor<?> classAccessor = new ClassAccessor<>(AnnotatedFields.class, prefabValues, TestSupportedAnnotations.values(), false);
         Field field = AnnotatedFields.class.getField("runtimeRetention");
         assertTrue(classAccessor.fieldHasAnnotation(field, FIELD_RUNTIME_RETENTION));
         assertFalse(classAccessor.fieldHasAnnotation(field, FIELD_CLASS_RETENTION));

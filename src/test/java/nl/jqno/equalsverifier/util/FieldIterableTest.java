@@ -42,7 +42,7 @@ public class FieldIterableTest {
 
     @Test
     public void simpleFields() {
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
             actual.add(field);
         }
@@ -52,7 +52,7 @@ public class FieldIterableTest {
 
     @Test
     public void subAndSuperClassFields() {
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(field);
         }
@@ -62,7 +62,7 @@ public class FieldIterableTest {
 
     @Test
     public void onlySubClassFields() {
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(field);
         }
@@ -78,10 +78,10 @@ public class FieldIterableTest {
 
     @Test
     public void superHasNoFields() throws NoSuchFieldException {
-        Set<Field> expected = new HashSet<Field>();
+        Set<Field> expected = new HashSet<>();
         expected.add(NoFieldsSubWithFields.class.getField("field"));
 
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.of(NoFieldsSubWithFields.class)) {
             actual.add(field);
         }
@@ -91,7 +91,7 @@ public class FieldIterableTest {
 
     @Test
     public void subHasNoFields() {
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.of(EmptySubFieldContainer.class)) {
             actual.add(field);
         }
@@ -101,11 +101,11 @@ public class FieldIterableTest {
 
     @Test
     public void classInTheMiddleHasNoFields() throws NoSuchFieldException {
-        Set<Field> expected = new HashSet<Field>();
+        Set<Field> expected = new HashSet<>();
         expected.addAll(FIELD_CONTAINER_FIELDS);
         expected.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 
-        Set<Field> actual = new HashSet<Field>();
+        Set<Field> actual = new HashSet<>();
         for (Field field : FieldIterable.of(SubEmptySubFieldContainer.class)) {
             actual.add(field);
         }
