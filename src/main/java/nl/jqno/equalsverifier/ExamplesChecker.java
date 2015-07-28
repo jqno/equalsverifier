@@ -53,8 +53,7 @@ class ExamplesChecker<T> implements Checker {
             }
         }
 
-        for (int i = 0; i < unequalExamples.size(); i++) {
-            T reference = unequalExamples.get(i);
+        for (T reference : unequalExamples) {
             checkSingle(reference);
         }
     }

@@ -53,7 +53,7 @@ public class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<T>(type, new PrefabValues(), false, new HashSet<String>(),
+        return new Configuration<>(type, new PrefabValues(), false, new HashSet<String>(),
                 CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
     }
 
@@ -66,7 +66,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withAllFieldsShouldBeUsed() {
-        return new Configuration<T>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -75,7 +75,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withAllFieldsShouldBeUsedExceptions(String[] value) {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<String>(Arrays.asList(value)),
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, new HashSet<>(Arrays.asList(value)),
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -84,7 +84,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions, value,
                 hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -93,7 +93,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withRedefinedSuperclass() {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, true, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -102,7 +102,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withRedefinedSubclass(Class<? extends T> value) {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, value, usingGetClass, warningsToSuppress);
     }
 
@@ -111,7 +111,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withUsingGetClass() {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, true, warningsToSuppress);
     }
 
@@ -120,7 +120,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-        return new Configuration<T>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, allFieldsShouldBeUsed, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, value);
     }
 

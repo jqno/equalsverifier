@@ -16,11 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import nl.jqno.equalsverifier.util.ClassAccessor;
 import nl.jqno.equalsverifier.util.FieldIterable;
@@ -118,10 +114,10 @@ public final class EqualsVerifier<T> {
      * 				tested.
      */
     public static <T> EqualsVerifier<T> forClass(Class<T> type) {
-        List<T> equalExamples = new ArrayList<T>();
-        List<T> unequalExamples = new ArrayList<T>();
+        List<T> equalExamples = new ArrayList<>();
+        List<T> unequalExamples = new ArrayList<>();
 
-        return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
     }
 
     /**
@@ -137,8 +133,9 @@ public final class EqualsVerifier<T> {
      *		 		another and to {@code first} and {@code second}. May also
      *				contain instances of subclasses of T.
      */
+    @SafeVarargs
     public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
-        List<T> equalExamples = new ArrayList<T>();
+        List<T> equalExamples = new ArrayList<>();
         List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
 
         if (listContainsDuplicates(unequalExamples)) {
@@ -148,7 +145,7 @@ public final class EqualsVerifier<T> {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)first.getClass();
 
-        return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
     }
 
     /**
@@ -174,13 +171,14 @@ public final class EqualsVerifier<T> {
      * 				identical, to one another and to {@code first} and
      * 				{@code second}.
      */
+    @SafeVarargs
     public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... more) {
         List<T> examples = buildListOfAtLeastTwo(first, second, more);
 
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)first.getClass();
 
-        return new RelaxedEqualsVerifierHelper<T>(type, examples);
+        return new RelaxedEqualsVerifierHelper<>(type, examples);
     }
 
     /**
@@ -206,9 +204,7 @@ public final class EqualsVerifier<T> {
      */
     public EqualsVerifier<T> suppress(Warning... warnings) {
         EnumSet<Warning> ws = config.getWarningsToSuppress();
-        for (Warning warning : warnings) {
-            ws.add(warning);
-        }
+        Collections.addAll(ws, warnings);
         config = config.withWarningsToSuppress(ws);
         return this;
     }
@@ -276,7 +272,7 @@ public final class EqualsVerifier<T> {
         config = config.withAllFieldsShouldBeUsed();
         config = config.withAllFieldsShouldBeUsedExceptions(fields);
 
-        Set<String> actualFieldNames = new HashSet<String>();
+        Set<String> actualFieldNames = new HashSet<>();
         for (Field field : FieldIterable.of(config.getType())) {
             actualFieldNames.add(field.getName());
         }
@@ -356,7 +352,7 @@ public final class EqualsVerifier<T> {
      */
     public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
         CachedHashCodeInitializer<T> cachedHashCodeInitializer =
-                new CachedHashCodeInitializer<T>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
+                new CachedHashCodeInitializer<>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
         config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
         return this;
     }
@@ -419,10 +415,10 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithoutExamples() {
-        Checker signatureChecker = new SignatureChecker<T>(config);
-        Checker abstractDelegationChecker = new AbstractDelegationChecker<T>(config);
-        Checker nullChecker = new NullChecker<T>(config);
-        Checker cachedHashCodeChecker = new CachedHashCodeChecker<T>(config);
+        Checker signatureChecker = new SignatureChecker<>(config);
+        Checker abstractDelegationChecker = new AbstractDelegationChecker<>(config);
+        Checker nullChecker = new NullChecker<>(config);
+        Checker cachedHashCodeChecker = new CachedHashCodeChecker<>(config);
 
         signatureChecker.check();
         abstractDelegationChecker.check();
@@ -441,10 +437,10 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithExamples() {
-        Checker preconditionChecker = new PreconditionChecker<T>(config, equalExamples, unequalExamples);
-        Checker examplesChecker = new ExamplesChecker<T>(config, equalExamples, unequalExamples);
-        Checker hierarchyChecker = new HierarchyChecker<T>(config);
-        Checker fieldsChecker = new FieldsChecker<T>(config);
+        Checker preconditionChecker = new PreconditionChecker<>(config, equalExamples, unequalExamples);
+        Checker examplesChecker = new ExamplesChecker<>(config, equalExamples, unequalExamples);
+        Checker hierarchyChecker = new HierarchyChecker<>(config);
+        Checker fieldsChecker = new FieldsChecker<>(config);
 
         preconditionChecker.check();
         examplesChecker.check();
@@ -457,7 +453,7 @@ public final class EqualsVerifier<T> {
             throw new IllegalArgumentException("First example is null.");
         }
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         result.add(first);
         addArrayElementsToList(result, more);
 
@@ -472,7 +468,7 @@ public final class EqualsVerifier<T> {
             throw new IllegalArgumentException("Second example is null.");
         }
 
-        List<T> result = new ArrayList<T>();
+        List<T> result = new ArrayList<>();
         result.add(first);
         result.add(second);
         addArrayElementsToList(result, more);
@@ -492,7 +488,7 @@ public final class EqualsVerifier<T> {
     }
 
     private static <T> boolean listContainsDuplicates(List<T> list) {
-        return list.size() != new HashSet<T>(list).size();
+        return list.size() != new HashSet<>(list).size();
     }
 
     /**
@@ -552,7 +548,7 @@ public final class EqualsVerifier<T> {
                     throw new IllegalArgumentException("An equal example also appears as unequal example.");
                 }
             }
-            return new EqualsVerifier<T>(type, equalExamples, unequalExamples);
+            return new EqualsVerifier<>(type, equalExamples, unequalExamples);
         }
     }
 }

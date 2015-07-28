@@ -61,7 +61,7 @@ class CachedHashCodeInitializer<T> {
     }
 
     public static <T> CachedHashCodeInitializer<T> passthrough() {
-        return new CachedHashCodeInitializer<T>();
+        return new CachedHashCodeInitializer<>();
     }
 
     public boolean isPassthrough() {
