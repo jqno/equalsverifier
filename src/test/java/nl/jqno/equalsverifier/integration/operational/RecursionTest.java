@@ -23,110 +23,110 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RecursionTest extends IntegrationTestBase {
-	private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
-	private static final String PREFAB = "Add prefab values for one of the following types";
-	
-	private Node red;
-	private Node black;
-	
-	@Before
-	public void createSomeNodes() {
-		red = new Node(null);
-		black = new Node(new Node(null));
-	}
-	
-	@Test
-	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
-		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-		EqualsVerifier.forClass(Node.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsExamples() {
-		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-		EqualsVerifier.forExamples(red, black)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
-		EqualsVerifier.forClass(Node.class)
-				.withPrefabValues(Node.class, red, black)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
-		EqualsVerifier.forClass(SubNode.class)
-				.withPrefabValues(Node.class, red, black)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenFieldIsARecursiveType() {
-		expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
-		EqualsVerifier.forClass(NodeContainer.class)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
-		EqualsVerifier.forClass(NodeContainer.class)
-				.withPrefabValues(Node.class, red, black)
-				.verify();
-	}
-	
-	@Test
-	public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
-		EqualsVerifier.forClass(SubNodeContainer.class)
-				.withPrefabValues(Node.class, red, black)
-				.verify();
-	}
-	
-	static class Node {
-		final Node node;
-		
-		public Node(Node node) { this.node = node; }
-		
-		@Override
-		public final boolean equals(Object obj) {
-			if (!(obj instanceof Node)) {
-				return false;
-			}
-			Node other = (Node)obj;
-			return nullSafeEquals(node, other.node);
-		}
-		
-		@Override public final int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static class SubNode extends Node {
-		public SubNode(Node node) {
-			super(node);
-		}
-	}
-	
-	static class NodeContainer {
-		final Node node;
-		
-		public NodeContainer(Node node) { this.node = node; }
-		
-		@Override
-		public final boolean equals(Object obj) {
-			if (!(obj instanceof NodeContainer)) {
-				return false;
-			}
-			NodeContainer other = (NodeContainer)obj;
-			return nullSafeEquals(node, other.node);
-		}
-		
-		@Override public final int hashCode() { return defaultHashCode(this); }
-	}
-	
-	static class SubNodeContainer extends NodeContainer {
-		public SubNodeContainer(Node node) {
-			super(node);
-		}
-	}
+    private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
+    private static final String PREFAB = "Add prefab values for one of the following types";
+
+    private Node red;
+    private Node black;
+
+    @Before
+    public void createSomeNodes() {
+        red = new Node(null);
+        black = new Node(new Node(null));
+    }
+
+    @Test
+    public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
+        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
+        EqualsVerifier.forClass(Node.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsExamples() {
+        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
+        EqualsVerifier.forExamples(red, black)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
+        EqualsVerifier.forClass(Node.class)
+                .withPrefabValues(Node.class, red, black)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
+        EqualsVerifier.forClass(SubNode.class)
+                .withPrefabValues(Node.class, red, black)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenFieldIsARecursiveType() {
+        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
+        EqualsVerifier.forClass(NodeContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
+        EqualsVerifier.forClass(NodeContainer.class)
+                .withPrefabValues(Node.class, red, black)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
+        EqualsVerifier.forClass(SubNodeContainer.class)
+                .withPrefabValues(Node.class, red, black)
+                .verify();
+    }
+
+    static class Node {
+        final Node node;
+
+        public Node(Node node) { this.node = node; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof Node)) {
+                return false;
+            }
+            Node other = (Node)obj;
+            return nullSafeEquals(node, other.node);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    static class SubNode extends Node {
+        public SubNode(Node node) {
+            super(node);
+        }
+    }
+
+    static class NodeContainer {
+        final Node node;
+
+        public NodeContainer(Node node) { this.node = node; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof NodeContainer)) {
+                return false;
+            }
+            NodeContainer other = (NodeContainer)obj;
+            return nullSafeEquals(node, other.node);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    static class SubNodeContainer extends NodeContainer {
+        public SubNodeContainer(Node node) {
+            super(node);
+        }
+    }
 }
