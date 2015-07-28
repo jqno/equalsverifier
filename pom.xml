@@ -77,8 +77,8 @@ limitations under the License.
     </prerequisites>
 
     <properties>
-        <maven.compiler.source>1.6</maven.compiler.source>
-        <maven.compiler.target>1.6</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <jacoco.version>0.7.4.201502262128</jacoco.version>
     </properties>
