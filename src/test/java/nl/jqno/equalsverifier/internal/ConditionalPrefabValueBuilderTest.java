@@ -196,8 +196,8 @@ public class ConditionalPrefabValueBuilderTest {
 
     @Test
     public void prefabValuesContainsInstances_whenTypeIsInterface_givenAConcreteImplementation() {
-        ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.util.ConditionalInterface")
-                .withConcreteClass("nl.jqno.equalsverifier.util.ConditionalConcreteClass")
+        ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.internal.ConditionalInterface")
+                .withConcreteClass("nl.jqno.equalsverifier.internal.ConditionalConcreteClass")
                 .instantiate(classes(int.class), objects(42))
                 .instantiate(classes(int.class), objects(1337))
                 .addTo(prefabValues);
@@ -208,8 +208,8 @@ public class ConditionalPrefabValueBuilderTest {
 
     @Test
     public void prefabValuesContainsInstances_whenTypeIsAbstract_givenAConcreteImplementation() {
-        ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.util.ConditionalAbstractClass")
-                .withConcreteClass("nl.jqno.equalsverifier.util.ConditionalConcreteClass")
+        ConditionalPrefabValueBuilder.of("nl.jqno.equalsverifier.internal.ConditionalAbstractClass")
+                .withConcreteClass("nl.jqno.equalsverifier.internal.ConditionalConcreteClass")
                 .instantiate(classes(int.class), objects(42))
                 .instantiate(classes(int.class), objects(1337))
                 .addTo(prefabValues);
