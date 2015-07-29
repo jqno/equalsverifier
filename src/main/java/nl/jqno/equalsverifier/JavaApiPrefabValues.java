@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -72,8 +72,8 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
 import net.sf.cglib.proxy.NoOp;
-import nl.jqno.equalsverifier.util.ConditionalPrefabValueBuilder;
-import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.

@@ -17,10 +17,10 @@ package nl.jqno.equalsverifier;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.FieldIterable;
-import nl.jqno.equalsverifier.util.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
 
 class FieldInspector<T> {
     private final ClassAccessor<T> classAccessor;

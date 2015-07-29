@@ -21,8 +21,8 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
 public class Configuration<T> {
     private final Class<T> type;

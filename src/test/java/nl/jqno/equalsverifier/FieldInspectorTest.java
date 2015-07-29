@@ -19,11 +19,11 @@ import static org.junit.Assert.assertEquals;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.ObjectAccessor;
-import nl.jqno.equalsverifier.util.PrefabValues;
-import nl.jqno.equalsverifier.util.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.PrefabValues;
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 
 import org.junit.Test;
 

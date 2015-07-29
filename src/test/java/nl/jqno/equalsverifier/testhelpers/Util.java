@@ -19,8 +19,8 @@ import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.FieldIterable;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.FieldIterable;
 
 public class Util {
     public static boolean defaultEquals(Object here, Object there) {

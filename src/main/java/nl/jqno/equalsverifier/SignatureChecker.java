@@ -19,8 +19,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.jqno.equalsverifier.util.Assert;
-import nl.jqno.equalsverifier.util.Formatter;
+import nl.jqno.equalsverifier.internal.Assert;
+import nl.jqno.equalsverifier.internal.Formatter;
 
 class SignatureChecker<T> implements Checker {
     private final Class<T> type;

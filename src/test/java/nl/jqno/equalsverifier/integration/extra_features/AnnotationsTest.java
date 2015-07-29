@@ -27,7 +27,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
-import nl.jqno.equalsverifier.util.Instantiator;
+import nl.jqno.equalsverifier.internal.Instantiator;
 
 import org.junit.Test;
 

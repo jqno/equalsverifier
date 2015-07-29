@@ -25,9 +25,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
-import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.ObjectAccessor;
-import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
 import org.junit.Test;
 

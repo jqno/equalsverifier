@@ -20,11 +20,11 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.exceptions.AssertionException;
-import nl.jqno.equalsverifier.util.exceptions.InternalException;
-import nl.jqno.equalsverifier.util.exceptions.RecursionException;
-import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
+import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import org.junit.Test;
 

@@ -15,15 +15,15 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 import java.lang.reflect.Field;
 
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
-import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.FieldAccessor;
-import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
 
 class NullChecker<T> implements Checker {
     private final Configuration<T> config;

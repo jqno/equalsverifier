@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.testhelpers;
 import java.io.File;
 import java.io.IOException;
 
-import nl.jqno.equalsverifier.util.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 
 import org.junit.After;
 import org.junit.Before;

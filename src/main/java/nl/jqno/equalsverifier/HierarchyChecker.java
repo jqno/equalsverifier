@@ -15,17 +15,17 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.util.Assert.assertEquals;
-import static nl.jqno.equalsverifier.util.Assert.assertFalse;
-import static nl.jqno.equalsverifier.util.Assert.assertTrue;
-import static nl.jqno.equalsverifier.util.Assert.fail;
+import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
+import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
+import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import nl.jqno.equalsverifier.util.ClassAccessor;
-import nl.jqno.equalsverifier.util.Formatter;
-import nl.jqno.equalsverifier.util.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
 
 class HierarchyChecker<T> implements Checker {
     private final Configuration<T> config;

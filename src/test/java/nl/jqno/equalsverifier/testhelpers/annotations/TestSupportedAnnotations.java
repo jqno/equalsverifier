@@ -17,8 +17,8 @@ package nl.jqno.equalsverifier.testhelpers.annotations;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.jqno.equalsverifier.util.annotations.Annotation;
-import nl.jqno.equalsverifier.util.annotations.AnnotationProperties;
+import nl.jqno.equalsverifier.internal.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.annotations.AnnotationProperties;
 
 public enum TestSupportedAnnotations implements Annotation {
     TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention"), // closing ; is added by AnnotationAccessor

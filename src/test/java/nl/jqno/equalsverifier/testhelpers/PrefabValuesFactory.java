@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.util.StaticFieldValueStash;
-import nl.jqno.equalsverifier.util.PrefabValues;
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
 public class PrefabValuesFactory {
     public static PrefabValues withPrimitives(StaticFieldValueStash stash) {
