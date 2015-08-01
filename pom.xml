@@ -22,9 +22,7 @@ limitations under the License.
 
     <name>EqualsVerifier</name>
     <version>1.7.4-SNAPSHOT</version>
-    <description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and
-        hashCode methods is met.
-    </description>
+    <description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
     <url>http://www.jqno.nl/equalsverifier</url>
 
     <parent>
@@ -262,15 +260,15 @@ limitations under the License.
                             <rules>
                                 <rule>
                                     <pattern>org.objectweb.asm.**</pattern>
-                                    <result>nl.jqno.equalsverifier.internal.asm.@1</result>
+                                    <result>nl.jqno.equalsverifier.internal.lib.asm.@1</result>
                                 </rule>
                                 <rule>
                                     <pattern>net.sf.cglib.**</pattern>
-                                    <result>nl.jqno.equalsverifier.internal.cglib.@1</result>
+                                    <result>nl.jqno.equalsverifier.internal.lib.cglib.@1</result>
                                 </rule>
                                 <rule>
                                     <pattern>org.objenesis.**</pattern>
-                                    <result>nl.jqno.equalsverifier.internal.objenesis.@1</result>
+                                    <result>nl.jqno.equalsverifier.internal.lib.objenesis.@1</result>
                                 </rule>
                             </rules>
                         </configuration>
