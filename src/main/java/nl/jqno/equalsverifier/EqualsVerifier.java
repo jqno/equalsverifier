@@ -437,6 +437,7 @@ public final class EqualsVerifier<T> {
         fieldsChecker.check();
     }
 
+    @SafeVarargs
     private static <T> List<T> buildListOfAtLeastOne(T first, T... more) {
         if (first == null) {
             throw new IllegalArgumentException("First example is null.");
@@ -449,6 +450,7 @@ public final class EqualsVerifier<T> {
         return result;
     }
 
+    @SafeVarargs
     private static <T> List<T> buildListOfAtLeastTwo(T first, T second, T... more) {
         if (first == null) {
             throw new IllegalArgumentException("First example is null.");
@@ -465,6 +467,7 @@ public final class EqualsVerifier<T> {
         return result;
     }
 
+    @SafeVarargs
     private static <T> void addArrayElementsToList(List<T> list, T... more) {
         if (more != null) {
             for (T e : more) {
@@ -527,7 +530,8 @@ public final class EqualsVerifier<T> {
          * 			subclasses of T.
          * @return An instance of {@link EqualsVerifier}.
          */
-        public EqualsVerifier<T> andUnequalExamples(T first, T... more) {
+        @SafeVarargs
+        public final EqualsVerifier<T> andUnequalExamples(T first, T... more) {
             List<T> unequalExamples = buildListOfAtLeastOne(first, more);
             if (listContainsDuplicates(unequalExamples)) {
                 throw new IllegalArgumentException("Two objects are equal to each other.");
