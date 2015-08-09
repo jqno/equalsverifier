@@ -34,7 +34,6 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
  */
 public class ClassAccessor<T> {
     private final Class<T> type;
-    private final Instantiator<T> instantiator;
     private final PrefabValues prefabValues;
     private final Annotation[] supportedAnnotations;
     private final boolean ignoreAnnotationFailure;
@@ -60,7 +59,6 @@ public class ClassAccessor<T> {
      */
     ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
         this.type = type;
-        this.instantiator = Instantiator.of(type);
         this.prefabValues = prefabValues;
         this.supportedAnnotations = supportedAnnotations;
         this.ignoreAnnotationFailure = ignoreAnnotationFailure;
@@ -294,7 +292,7 @@ public class ClassAccessor<T> {
      * 			default values.
      */
     public T getDefaultValuesObject() {
-        T result = instantiator.instantiate();
+        T result = Instantiator.of(type).instantiate();
         for (Field field : FieldIterable.of(type)) {
             if (fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
                 FieldAccessor accessor = new FieldAccessor(result, field);
@@ -305,7 +303,7 @@ public class ClassAccessor<T> {
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {
-        T object = instantiator.instantiate();
+        T object = Instantiator.of(type).instantiate();
         return ObjectAccessor.of(object);
     }
 }
