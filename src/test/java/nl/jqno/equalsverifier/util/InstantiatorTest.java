@@ -41,7 +41,8 @@ public class InstantiatorTest {
 		assertEquals(0, p.x);
 		assertEquals(null, p.color);
 	}
-	
+
+	@Test
 	public void instantiateInterface() {
 		Instantiator<Interface> instantiator = Instantiator.of(Interface.class);
 		Interface i = instantiator.instantiate();
