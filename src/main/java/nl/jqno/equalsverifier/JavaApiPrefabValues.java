@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 Jan Ouwens
+ * Copyright 2010-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@ import java.util.regex.Pattern;
 import net.sf.cglib.proxy.NoOp;
 import nl.jqno.equalsverifier.util.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.util.PrefabValues;
+
+import javax.naming.Reference;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
@@ -154,6 +156,7 @@ public class JavaApiPrefabValues {
 		prefabValues.put(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
 		prefabValues.put(Locale.class, new Locale("nl"), new Locale("hu"));
 		prefabValues.put(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
+		prefabValues.put(Reference.class, new Reference("one"), new Reference("two"));
 		prefabValues.put(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"));
 		prefabValues.put(Scanner.class, new Scanner("one"), new Scanner("two"));
 		prefabValues.put(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));

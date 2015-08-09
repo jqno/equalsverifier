@@ -47,6 +47,8 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
 
+import javax.naming.Reference;
+
 public class JavaApiClassesTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassContainsACollectionInterface() {
@@ -135,15 +137,16 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 		private final File file;
 		private final GregorianCalendar gregorianCalendar;
 		private final Pattern pattern;
+		private final Reference ref;
 		private final SimpleDateFormat simpleDateFormat;
 		private final UUID uuid;
 		
 		public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
 				Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-				SimpleDateFormat simpleDateFormat, UUID uuid) {
+				Reference ref, SimpleDateFormat simpleDateFormat, UUID uuid) {
 			this.string = string; this.integer = integer; this.type = type; this.arrayList = arrayList; this.bitset = bitset;
 			this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-			this.simpleDateFormat = simpleDateFormat; this.uuid = uuid;
+			this.ref = ref; this.simpleDateFormat = simpleDateFormat; this.uuid = uuid;
 		}
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
