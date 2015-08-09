@@ -15,22 +15,20 @@
  */
 package nl.jqno.equalsverifier.util;
 
+import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-
-import java.math.BigDecimal;
-import java.util.GregorianCalendar;
-
-import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.Assert.*;
 
 public class ConditionalInstantiatorTest {
 	private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
@@ -110,6 +108,46 @@ public class ConditionalInstantiatorTest {
 		
 		thrown.expect(ReflectionException.class);
 		ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+	}
+	
+	@Test
+	public void objectIsInstantiatedCorrectly_whenValidExternalFactoryMethodAndParametersAreProvided() {
+		ci = new ConditionalInstantiator("java.util.List");
+		Object expected = Collections.emptyList();
+		
+		Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
+		assertThat(actual, is(expected));
+	}
+	
+	@Test
+	public void nullIsReturned_whenExternalFactoryIsCalled_givenTypeDoesNotExist() {
+		ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+		Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
+		assertThat(actual, is(nullValue()));
+	}
+	
+	@Test
+	public void nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist() {
+		ci = new ConditionalInstantiator("java.util.List");
+		
+		thrown.expect(ReflectionException.class);
+		ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+	}
+	
+	@Test
+	public void throwsISE_whenInvalidExternalFactoryMethodNameIsProvided() {
+		ci = new ConditionalInstantiator("java.util.List");
+		
+		thrown.expect(ReflectionException.class);
+		ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
+	}
+	
+	@Test
+	public void throwsISE_whenInvalidExternalFactoryMethodParametersAreProvided() {
+		ci = new ConditionalInstantiator("java.util.List");
+		
+		thrown.expect(ReflectionException.class);
+		ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
 	}
 	
 	@Test

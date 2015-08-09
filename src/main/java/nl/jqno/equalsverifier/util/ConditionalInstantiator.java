@@ -96,15 +96,36 @@ public class ConditionalInstantiator {
 	 *             If the call to the factory method fails.
 	 */
 	public Object callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+		return callFactory(fullyQualifiedClassName, factoryMethod, paramTypes, paramValues);
+	}
+	
+	/**
+	 * Attempts to call a static factory method on a type.
+	 *
+	 * @param factoryTypeName
+	 *            The type that contains the factory method.
+	 * @param factoryMethod
+	 *            The name of the factory method.
+	 * @param paramTypes
+	 *            The types of the parameters of the specific overload of the
+	 *            factory method we want to call.
+	 * @param paramValues
+	 *            The values that we want to pass into the factory method.
+	 * @return An instance of the type given by the factory method with the
+	 *         given parameter values, or null of the type does not exist.
+	 * @throws ReflectionException
+	 *             If the call to the factory method fails.
+	 */
+	public Object callFactory(String factoryTypeName, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
 		try {
 			Class<?> type = resolve();
 			if (type == null) {
 				return null;
 			}
-			Method factory = type.getMethod(factoryMethod, paramTypes);
+			Class<?> factoryType = Class.forName(factoryTypeName);
+			Method factory = factoryType.getMethod(factoryMethod, paramTypes);
 			return factory.invoke(null, paramValues);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new ReflectionException(e);
 		}
 	}
