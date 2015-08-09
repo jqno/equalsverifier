@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -110,6 +111,46 @@ public class ConditionalInstantiatorTest {
 
         thrown.expect(ReflectionException.class);
         ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+    }
+
+    @Test
+    public void objectIsInstantiatedCorrectly_whenValidExternalFactoryMethodAndParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.util.List");
+        Object expected = Collections.emptyList();
+
+        Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
+        assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void nullIsReturned_whenExternalFactoryIsCalled_givenTypeDoesNotExist() {
+        ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
+        Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
+    public void nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist() {
+        ci = new ConditionalInstantiator("java.util.List");
+
+        thrown.expect(ReflectionException.class);
+        ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+    }
+
+    @Test
+    public void throwsISE_whenInvalidExternalFactoryMethodNameIsProvided() {
+        ci = new ConditionalInstantiator("java.util.List");
+
+        thrown.expect(ReflectionException.class);
+        ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
+    }
+
+    @Test
+    public void throwsISE_whenInvalidExternalFactoryMethodParametersAreProvided() {
+        ci = new ConditionalInstantiator("java.util.List");
+
+        thrown.expect(ReflectionException.class);
+        ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
     }
 
     @Test
