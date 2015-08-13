@@ -23,7 +23,9 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 
@@ -151,6 +153,67 @@ public class ConditionalPrefabValueBuilderTest {
 
         thrown.expect(EqualsVerifierBugException.class);
         builder.callFactory("valueOf", classes(int.class), objects(-1));
+    }
+
+    @Test
+    public void prefabValuesContainsInstances_whenValidExternalFactoryParametersAreProvided() {
+        ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+                .callFactory("java.util.Collections", "emptyList", classes(), objects())
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+                .addTo(prefabValues);
+
+        assertThat(prefabValues.getRed(List.class), is((List) Collections.emptyList()));
+        assertThat(prefabValues.getBlack(List.class), is((List) Collections.singletonList(1)));
+    }
+
+    @Test
+    public void nothingHappens_whenTypeDoesNotExist_givenExternalFactoryParameters() {
+        ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
+                .callFactory("java.util.Collections", "emptyList", classes(), objects())
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+                .addTo(throwingPrefabValues);
+
+        throwingPrefabValues.verify();
+    }
+
+    @Test
+    public void nothingHappens_whenExternalFactoryClassDoesNotExist() {
+        ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+                .callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects())
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+                .addTo(prefabValues);
+
+        throwingPrefabValues.verify();
+    }
+
+    @Test
+    public void nothingHappens_whenExternalFactoryMethodDoesNotExist() {
+        ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+                .callFactory("java.util.Collections", "thisFactoryMethodDoesNotExist", classes(), objects())
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+                .addTo(prefabValues);
+
+        throwingPrefabValues.verify();
+    }
+
+    @Test
+    public void nothingHappens_whenNonExistingExternalFactoryOverloadIsCalled() {
+        ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+                .callFactory("java.util.Collections", "emptyList", classes(Object.class), objects(1))
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+                .addTo(throwingPrefabValues);
+
+        throwingPrefabValues.verify();
+    }
+
+    @Test
+    public void throwsBug_whenCallExternalFactoryIsCalledMoreThanTwice() {
+        ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+                .callFactory("java.util.Collections", "emptyList", classes(), objects())
+                .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1));
+
+        thrown.expect(EqualsVerifierBugException.class);
+        builder.callFactory("java.util.Collections", "emptyList", classes(), objects());
     }
 
     @Test

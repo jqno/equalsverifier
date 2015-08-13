@@ -141,6 +141,35 @@ public class ConditionalPrefabValueBuilder {
     }
 
     /**
+     * Attempts to instantiate the given type by calling a factory method. If
+     * this fails, it will short-circuit any further calls.
+     *
+     * @param factoryType
+     *            The type that contains the factory method.
+     * @param factoryMethod
+     *            The name of the factory method.
+     * @param paramTypes
+     *            A list of types that identifies the factory method's overload
+     *            to be called.
+     * @param paramValues
+     *            A list of values to pass to the constructor. Their types must
+     *            match the {@code paramTypes}.
+     * @return {@code this}, for easy method chaining.
+     */
+    public ConditionalPrefabValueBuilder callFactory(String factoryType, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+        if (!stop) {
+            validate();
+            try {
+                instances.add(ci.callFactory(factoryType, factoryMethod, paramTypes, paramValues));
+            }
+            catch (ReflectionException e) {
+                stop = true;
+            }
+        }
+        return this;
+    }
+
+    /**
      * Attempts to obtain a reference to the given type by calling a public
      * static final constant defined within the type. If this fails, it will
      * short-circuit any further calls.
