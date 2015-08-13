@@ -100,16 +100,13 @@ public class ConditionalPrefabValueBuilder {
      *            match the {@code paramTypes}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
-        if (!stop) {
-            validate();
-            try {
-                instances.add(ci.instantiate(paramTypes, paramValues));
+    public ConditionalPrefabValueBuilder instantiate(final Class<?>[] paramTypes, final Object[] paramValues) {
+        add(new Supplier() {
+            @Override
+            public Object get() {
+                return ci.instantiate(paramTypes, paramValues);
             }
-            catch (ReflectionException e) {
-                stop = true;
-            }
-        }
+        });
         return this;
     }
 
@@ -127,16 +124,13 @@ public class ConditionalPrefabValueBuilder {
      *            match the {@code paramTypes}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
-        if (!stop) {
-            validate();
-            try {
-                instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+    public ConditionalPrefabValueBuilder callFactory(final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+        add(new Supplier() {
+            @Override
+            public Object get() {
+                return ci.callFactory(factoryMethod, paramTypes, paramValues);
             }
-            catch (ReflectionException e) {
-                stop = true;
-            }
-        }
+        });
         return this;
     }
 
@@ -156,16 +150,13 @@ public class ConditionalPrefabValueBuilder {
      *            match the {@code paramTypes}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder callFactory(String factoryType, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
-        if (!stop) {
-            validate();
-            try {
-                instances.add(ci.callFactory(factoryType, factoryMethod, paramTypes, paramValues));
+    public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+        add(new Supplier() {
+            @Override
+            public Object get() {
+                return ci.callFactory(factoryType, factoryMethod, paramTypes, paramValues);
             }
-            catch (ReflectionException e) {
-                stop = true;
-            }
-        }
+        });
         return this;
     }
 
@@ -178,16 +169,13 @@ public class ConditionalPrefabValueBuilder {
      *            The name of the constant.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder withConstant(String constantName) {
-        if (!stop) {
-            validate();
-            try {
-                instances.add(ci.returnConstant(constantName));
+    public ConditionalPrefabValueBuilder withConstant(final String constantName) {
+        add(new Supplier() {
+            @Override
+            public Object get() {
+                return ci.returnConstant(constantName);
             }
-            catch (ReflectionException e) {
-                stop = true;
-            }
-        }
+        });
         return this;
     }
 
@@ -203,7 +191,7 @@ public class ConditionalPrefabValueBuilder {
             if (instances.size() < 2) {
                 throw new EqualsVerifierBugException("Not enough instances");
             }
-            prefabValues.put((Class)type, instances.get(0), instances.get(1));
+            prefabValues.put((Class) type, instances.get(0), instances.get(1));
         }
     }
 
@@ -211,5 +199,23 @@ public class ConditionalPrefabValueBuilder {
         if (instances.size() >= 2) {
             throw new EqualsVerifierBugException("Too many instances");
         }
+    }
+
+    private void add(Supplier obtainer) {
+        if (!stop) {
+            if (instances.size() >= 2) {
+                throw new EqualsVerifierBugException("Too many instances");
+            }
+            try {
+                instances.add(obtainer.get());
+            }
+            catch (ReflectionException e) {
+                stop = true;
+            }
+        }
+    }
+
+    private interface Supplier {
+        public Object get();
     }
 }
