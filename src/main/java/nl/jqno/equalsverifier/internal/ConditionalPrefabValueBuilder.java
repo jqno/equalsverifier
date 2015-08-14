@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,6 +105,38 @@ public class ConditionalPrefabValueBuilder {
             @Override
             public Object get() {
                 return ci.instantiate(paramTypes, paramValues);
+            }
+        });
+        return this;
+    }
+
+    /**
+     * Attempts to instantiate the given type by calling its constructor. If
+     * this fails, it will short-circuit any further calls.
+     *
+     * @param paramTypes
+     *            A list of types that identifies the constructor to be called.
+     * @param prefabValues
+     *            The {@link PrefabValues} to draw values from.
+     * @return {@code this}, for easy method chaining.
+     */
+    public ConditionalPrefabValueBuilder instantiate(final Class<?>[] paramTypes, final PrefabValues prefabValues) {
+        add(new Supplier() {
+            @Override
+            public Object get() {
+                List<Object> objects = new ArrayList<Object>();
+                for (Class<?> type : paramTypes) {
+                    if (!prefabValues.contains(type)) {
+                        throw new EqualsVerifierBugException("No prefab values available for type " + type.getCanonicalName());
+                    }
+                    if (instances.size() == 0) {
+                        objects.add(prefabValues.getRed(type));
+                    }
+                    else {
+                        objects.add(prefabValues.getBlack(type));
+                    }
+                }
+                return ci.instantiate(paramTypes, objects.toArray());
             }
         });
         return this;
