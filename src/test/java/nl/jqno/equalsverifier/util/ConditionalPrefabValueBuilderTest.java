@@ -30,7 +30,10 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
+import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 public class ConditionalPrefabValueBuilderTest {
@@ -101,6 +104,65 @@ public class ConditionalPrefabValueBuilderTest {
 		
 		thrown.expect(EqualsVerifierBugException.class);
 		builder.instantiate(classes(int.class, int.class, int.class), objects(2014, 6, 16));
+	}
+	
+	@Test
+	public void prefabValuesContainsInstances_whenPrefabValuesAreProvided() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.addTo(prefabValues);
+		
+		StringsContainer red = prefabValues.getRed(StringsContainer.class);
+		StringsContainer black = prefabValues.getBlack(StringsContainer.class);
+		assertNotNull(red);
+		assertNotNull(black);
+		assertNotEquals(red, black);
+	}
+	
+	@Test
+	public void throwsBug_whenRequiredPrefabValuesAreNotAvailable() {
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName());
+		
+		thrown.expect(EqualsVerifierBugException.class);
+		builder.instantiate(classes(String.class, String.class), prefabValues);
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenConstructorWithPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	@Test
+	public void nothingHappens_whenNonExistingConstructorOverloadIsCalled_givenPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class), prefabValues)
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsBug_whenInstantiateIsCalledMoreThanTwice_givenPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues);
+		
+		thrown.expect(EqualsVerifierBugException.class);
+		builder.instantiate(classes(String.class, String.class), prefabValues);
 	}
 	
 	@Test
@@ -336,3 +398,12 @@ final class ConditionalConcreteClass extends ConditionalAbstractClass {
 	@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 	@Override public int hashCode() { return defaultHashCode(this); }
 }
+
+final class StringsContainer {
+	@SuppressWarnings("unused") private final String s;
+	@SuppressWarnings("unused") private final String t;
+	public StringsContainer(String s, String t) { this.s = s; this.t = t; }
+	@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+	@Override public int hashCode() { return defaultHashCode(this); }
+}
+
