@@ -176,4 +176,16 @@ public class ConditionalInstantiatorTest {
         thrown.expect(ReflectionException.class);
         ci.returnConstant("FORTY-TWO");
     }
+
+    @Test
+    public void forNameReturnsClass_whenTypeExists() {
+        Class<?> actual = ConditionalInstantiator.forName("java.util.GregorianCalendar");
+        assertEquals(actual, GregorianCalendar.class);
+    }
+
+    @Test
+    public void forNameReturnsNull_whenTypeDoesntExist() {
+        Class<?> actual = ConditionalInstantiator.forName(THIS_TYPE_DOES_NOT_EXIST);
+        assertNull(actual);
+    }
 }

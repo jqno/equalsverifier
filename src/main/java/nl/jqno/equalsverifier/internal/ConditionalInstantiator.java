@@ -46,12 +46,7 @@ public class ConditionalInstantiator {
      * @return The corresponding class object if the type exists; null otherwise.
      */
     public Class<?> resolve() {
-        try {
-            return Class.forName(fullyQualifiedClassName);
-        }
-        catch (ClassNotFoundException e) {
-            return null;
-        }
+        return forName(fullyQualifiedClassName);
     }
 
     /**
@@ -172,5 +167,20 @@ public class ConditionalInstantiator {
      */
     public static Object[] objects(Object... objects) {
         return objects;
+    }
+
+    /**
+     * Helper method to resolve a Class of a given name.
+     *
+     * @param className The fully qualified name of the class to resolve.
+     * @return The corresponding class if it exists, null otherwise.
+     */
+    public static Class<?> forName(String className) {
+        try {
+            return Class.forName(className);
+        }
+        catch (ClassNotFoundException e) {
+            return null;
+        }
     }
 }
