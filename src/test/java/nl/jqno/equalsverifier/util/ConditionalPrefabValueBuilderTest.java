@@ -15,22 +15,26 @@
  */
 package nl.jqno.equalsverifier.util;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
-import java.math.BigDecimal;
-import java.util.GregorianCalendar;
-
 import nl.jqno.equalsverifier.util.exceptions.EqualsVerifierBugException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.util.ConditionalInstantiator.objects;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 
 public class ConditionalPrefabValueBuilderTest {
 	private PrefabValues prefabValues;
@@ -103,6 +107,65 @@ public class ConditionalPrefabValueBuilderTest {
 	}
 	
 	@Test
+	public void prefabValuesContainsInstances_whenPrefabValuesAreProvided() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.addTo(prefabValues);
+		
+		StringsContainer red = prefabValues.getRed(StringsContainer.class);
+		StringsContainer black = prefabValues.getBlack(StringsContainer.class);
+		assertNotNull(red);
+		assertNotNull(black);
+		assertNotEquals(red, black);
+	}
+	
+	@Test
+	public void throwsBug_whenRequiredPrefabValuesAreNotAvailable() {
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName());
+		
+		thrown.expect(EqualsVerifierBugException.class);
+		builder.instantiate(classes(String.class, String.class), prefabValues);
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenConstructorWithPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	@Test
+	public void nothingHappens_whenNonExistingConstructorOverloadIsCalled_givenPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class), prefabValues)
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsBug_whenInstantiateIsCalledMoreThanTwice_givenPrefabValues() {
+		prefabValues.put(String.class, "red", "black");
+		
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getCanonicalName())
+				.instantiate(classes(String.class, String.class), prefabValues)
+				.instantiate(classes(String.class, String.class), prefabValues);
+		
+		thrown.expect(EqualsVerifierBugException.class);
+		builder.instantiate(classes(String.class, String.class), prefabValues);
+	}
+	
+	@Test
 	public void prefabValuesContainsInstances_whenValidFactoryParametersAreProvided() {
 		ConditionalPrefabValueBuilder.of(Integer.class.getCanonicalName())
 				.callFactory("valueOf", classes(int.class), objects(42))
@@ -151,6 +214,67 @@ public class ConditionalPrefabValueBuilderTest {
 		
 		thrown.expect(EqualsVerifierBugException.class);
 		builder.callFactory("valueOf", classes(int.class), objects(-1));
+	}
+	
+	@Test
+	public void prefabValuesContainsInstances_whenValidExternalFactoryParametersAreProvided() {
+		ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+				.callFactory("java.util.Collections", "emptyList", classes(), objects())
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+				.addTo(prefabValues);
+		
+		assertThat(prefabValues.getRed(List.class), is((List)Collections.emptyList()));
+		assertThat(prefabValues.getBlack(List.class), is((List)Collections.singletonList(1)));
+	}
+	
+	@Test
+	public void nothingHappens_whenTypeDoesNotExist_givenExternalFactoryParameters() {
+		ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
+				.callFactory("java.util.Collections", "emptyList", classes(), objects())
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void nothingHappens_whenExternalFactoryClassDoesNotExist() {
+		ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+				.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects())
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+				.addTo(prefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void nothingHappens_whenExternalFactoryMethodDoesNotExist() {
+		ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+				.callFactory("java.util.Collections", "thisFactoryMethodDoesNotExist", classes(), objects())
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+				.addTo(prefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void nothingHappens_whenNonExistingExternalFactoryOverloadIsCalled() {
+		ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+				.callFactory("java.util.Collections", "emptyList", classes(Object.class), objects(1))
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
+				.addTo(throwingPrefabValues);
+		
+		throwingPrefabValues.verify();
+	}
+	
+	@Test
+	public void throwsBug_whenCallExternalFactoryIsCalledMoreThanTwice() {
+		ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(List.class.getCanonicalName())
+				.callFactory("java.util.Collections", "emptyList", classes(), objects())
+				.callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1));
+		
+		thrown.expect(EqualsVerifierBugException.class);
+		builder.callFactory("java.util.Collections", "emptyList", classes(), objects());
 	}
 	
 	@Test
@@ -274,3 +398,12 @@ final class ConditionalConcreteClass extends ConditionalAbstractClass {
 	@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 	@Override public int hashCode() { return defaultHashCode(this); }
 }
+
+final class StringsContainer {
+	@SuppressWarnings("unused") private final String s;
+	@SuppressWarnings("unused") private final String t;
+	public StringsContainer(String s, String t) { this.s = s; this.t = t; }
+	@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+	@Override public int hashCode() { return defaultHashCode(this); }
+}
+

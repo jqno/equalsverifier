@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,16 +100,45 @@ public class ConditionalPrefabValueBuilder {
 	 *            match the {@code paramTypes}.
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public ConditionalPrefabValueBuilder instantiate(Class<?>[] paramTypes, Object[] paramValues) {
-		if (!stop) {
-			validate();
-			try {
-				instances.add(ci.instantiate(paramTypes, paramValues));
+	public ConditionalPrefabValueBuilder instantiate(final Class<?>[] paramTypes, final Object[] paramValues) {
+		add(new Supplier() {
+			@Override
+			public Object get() {
+				return ci.instantiate(paramTypes, paramValues);
 			}
-			catch (ReflectionException e) {
-				stop = true;
+		});
+		return this;
+	}
+	
+	/**
+	 * Attempts to instantiate the given type by calling its constructor. If
+	 * this fails, it will short-circuit any further calls.
+	 *
+	 * @param paramTypes
+	 *            A list of types that identifies the constructor to be called.
+	 * @param prefabValues
+	 *            The {@link PrefabValues} to draw values from.
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public ConditionalPrefabValueBuilder instantiate(final Class<?>[] paramTypes, final PrefabValues prefabValues) {
+		add(new Supplier() {
+			@Override
+			public Object get() {
+				List<Object> objects = new ArrayList<Object>();
+				for (Class<?> type : paramTypes) {
+					if (!prefabValues.contains(type)) {
+						throw new EqualsVerifierBugException("No prefab values available for type " + type.getCanonicalName());
+					}
+					if (instances.size() == 0) {
+						objects.add(prefabValues.getRed(type));
+					}
+					else {
+						objects.add(prefabValues.getBlack(type));
+					}
+				}
+				return ci.instantiate(paramTypes, objects.toArray());
 			}
-		}
+		});
 		return this;
 	}
 	
@@ -127,16 +156,39 @@ public class ConditionalPrefabValueBuilder {
 	 *            match the {@code paramTypes}.
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public ConditionalPrefabValueBuilder callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
-		if (!stop) {
-			validate();
-			try {
-				instances.add(ci.callFactory(factoryMethod, paramTypes, paramValues));
+	public ConditionalPrefabValueBuilder callFactory(final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+		add(new Supplier() {
+			@Override
+			public Object get() {
+				return ci.callFactory(factoryMethod, paramTypes, paramValues);
 			}
-			catch (ReflectionException e) {
-				stop = true;
+		});
+		return this;
+	}
+
+	/**
+	 * Attempts to instantiate the given type by calling a factory method. If
+	 * this fails, it will short-circuit any further calls.
+	 *
+	 * @param factoryType
+	 *            The type that contains the factory method.
+	 * @param factoryMethod
+	 *            The name of the factory method.
+	 * @param paramTypes
+	 *            A list of types that identifies the factory method's overload
+	 *            to be called.
+	 * @param paramValues
+	 *            A list of values to pass to the constructor. Their types must
+	 *            match the {@code paramTypes}.
+	 * @return {@code this}, for easy method chaining.
+	 */
+	public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+		add(new Supplier() {
+			@Override
+			public Object get() {
+				return ci.callFactory(factoryType, factoryMethod, paramTypes, paramValues);
 			}
-		}
+		});
 		return this;
 	}
 	
@@ -149,16 +201,13 @@ public class ConditionalPrefabValueBuilder {
 	 *            The name of the constant.
 	 * @return {@code this}, for easy method chaining.
 	 */
-	public ConditionalPrefabValueBuilder withConstant(String constantName) {
-		if (!stop) {
-			validate();
-			try {
-				instances.add(ci.returnConstant(constantName));
+	public ConditionalPrefabValueBuilder withConstant(final String constantName) {
+		add(new Supplier() {
+			@Override
+			public Object get() {
+				return ci.returnConstant(constantName);
 			}
-			catch (ReflectionException e) {
-				stop = true;
-			}
-		}
+		});
 		return this;
 	}
 	
@@ -177,10 +226,22 @@ public class ConditionalPrefabValueBuilder {
 			prefabValues.put((Class)type, instances.get(0), instances.get(1));
 		}
 	}
-	
-	private void validate() {
-		if (instances.size() >= 2) {
-			throw new EqualsVerifierBugException("Too many instances");
+
+	private void add(Supplier obtainer) {
+		if (!stop) {
+			if (instances.size() >= 2) {
+				throw new EqualsVerifierBugException("Too many instances");
+			}
+			try {
+				instances.add(obtainer.get());
+			}
+			catch (ReflectionException e) {
+				stop = true;
+			}
 		}
+	}
+
+	private interface Supplier {
+		public Object get();
 	}
 }
