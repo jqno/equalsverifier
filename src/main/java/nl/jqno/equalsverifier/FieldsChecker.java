@@ -56,12 +56,12 @@ class FieldsChecker<T> implements Checker {
 	public void check() {
 		FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
 		
-		if (classAccessor.declaresEquals()) {
+		if (!classAccessor.isEqualsInheritedFromObject()) {
 			inspector.check(new ArrayFieldCheck());
 			inspector.check(new FloatAndDoubleFieldCheck());
 			inspector.check(new ReflexivityFieldCheck());
 		}
-		
+
 		if (!ignoreMutability()) {
 			inspector.check(new MutableStateFieldCheck());
 		}

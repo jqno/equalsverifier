@@ -16,10 +16,14 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.util.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
+import nl.jqno.equalsverifier.util.Formatter;
 import org.junit.Test;
 
 public class VersionedEntityTest extends IntegrationTestBase {
@@ -44,7 +48,27 @@ public class VersionedEntityTest extends IntegrationTestBase {
 				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
 				.verify();
 	}
-	
+
+	@Test
+	public void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
+		expectFailure("catch me if you can");
+		EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
+				.verify();
+	}
+
+	@Test
+	public void succeed_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+		EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
+				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+				.verify();
+	}
+
+	@Test
+	public void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
+		EqualsVerifier.forClass(CanEqualVersionedEntity.class)
+				.verify();
+	}
+
 	public static final class VersionedEntity {
 		private final long id;
 		
@@ -63,5 +87,41 @@ public class VersionedEntityTest extends IntegrationTestBase {
 		}
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+
+	private static class CanEqualVersionedEntity {
+		private final Long id;
+
+		public CanEqualVersionedEntity(Long id) { this.id = id; }
+
+		@Override
+		public final boolean equals(Object obj) {
+			if (!(obj instanceof CanEqualVersionedEntity)) {
+				return false;
+			}
+			CanEqualVersionedEntity other = (CanEqualVersionedEntity)obj;
+			if (id != null) {
+				return id.equals(other.id);
+			}
+			else if (other.id == null) {
+				return other.canEqual(this);
+			}
+			return false;
+		}
+
+		public boolean canEqual(Object obj) {
+			return obj instanceof CanEqualVersionedEntity;
+		}
+
+		@Override public final int hashCode() { return defaultHashCode(this); }
+	}
+
+	private static class NonReflexiveCanEqualVersionedEntity extends CanEqualVersionedEntity {
+		public NonReflexiveCanEqualVersionedEntity(Long id) { super(id); }
+
+		@Override
+		public boolean canEqual(Object obj) {
+			throw new IllegalStateException("catch me if you can");
+		}
 	}
 }
