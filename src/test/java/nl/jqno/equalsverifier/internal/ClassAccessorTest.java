@@ -309,6 +309,11 @@ public class ClassAccessorTest {
         ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject();
     }
 
+    @Test
+    public void anInvalidTypeShouldNotThrowAnExceptionUponCreation() {
+        ClassAccessor.of(null, prefabValues, false);
+    }
+
     private void assertObjectHasNoNullFields(PointContainer foo) {
         assertNotNull(foo);
         assertNotNull(foo.getPoint());
