@@ -15,12 +15,6 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
-import javax.annotation.CheckForNull;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xCustomOnPackage;
@@ -33,17 +27,14 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplic
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305JavaxOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullCustom;
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullInapplicable;
-import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
-import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
-import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
-
+import nl.jqno.equalsverifier.testhelpers.annotations.*;
 import org.junit.Test;
 
-import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
-import edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields;
-import edu.umd.cs.findbugs.annotations.DefaultAnnotationForParameters;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("deprecation")
 public class AnnotationNonnullTest extends IntegrationTestBase {
@@ -295,7 +286,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotation(Nonnull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
     static final class NonnullFindbugs1xJavaxOnClass {
         private final Object o;
 
@@ -313,7 +304,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotation(NotNull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(NotNull.class)
     static final class NonnullFindbugs1xCustomOnClass {
         private final Object o;
 
@@ -331,7 +322,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotationForFields(NotNull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields(NotNull.class)
     static final class NonnullFindbugs1xForFields {
         private final Object o;
 
@@ -349,7 +340,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotationForParameters(NotNull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotationForParameters(NotNull.class)
     static final class NonnullFindbugs1xForParameters {
         private final Object o;
 
@@ -367,7 +358,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotation(Nonnull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
     static class NonnullFindbugs1xOuter {
         static final class FInner {
             private final Object o;
@@ -406,7 +397,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         }
     }
 
-    @DefaultAnnotation(Nonnull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
     static final class NonnullFindbugs1xWithNullableOnClass {
         private final Object o;
         @Nullable
@@ -427,7 +418,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotation(Nonnull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
     static final class NonnullFindbugs1xWithCheckForNullOnClass {
         private final Object o;
         @CheckForNull
@@ -448,7 +439,7 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
         public int hashCode() { return defaultHashCode(this); }
     }
 
-    @DefaultAnnotation(Nonnull.class)
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Nonnull.class)
     static final class NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals {
         private final Object o;
         @Nullable

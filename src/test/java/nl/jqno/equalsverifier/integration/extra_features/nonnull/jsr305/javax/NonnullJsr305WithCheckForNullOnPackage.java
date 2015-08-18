@@ -16,12 +16,11 @@
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import edu.umd.cs.findbugs.annotations.CheckForNull;
 
 @SuppressWarnings("deprecation")
 public final class NonnullJsr305WithCheckForNullOnPackage {
     private final Object o;
-    @CheckForNull
+    @edu.umd.cs.findbugs.annotations.CheckForNull
     private final Object p;
 
     public NonnullJsr305WithCheckForNullOnPackage(Object o, Object p) { this.o = o; this.p = p; }
