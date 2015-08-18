@@ -69,7 +69,7 @@ public class PrefabValues {
      * this one.
      *
      * @param from Prefabricated values to be copied to this
-     * 			{@link PrefabValues}.
+     *          {@link PrefabValues}.
      */
     public void putAll(PrefabValues from) {
         values.putAll(from.values);
@@ -79,7 +79,7 @@ public class PrefabValues {
      * Tests whether prefabricated values exist for the specified class.
      *
      * @param type Class whose presence in this {@link PrefabValues} is to be
-     * 			tested.
+     *          tested.
      * @return True if prefabricated values exist for the specified class.
      */
     public boolean contains(Class<?> type) {

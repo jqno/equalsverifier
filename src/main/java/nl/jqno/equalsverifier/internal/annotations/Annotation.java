@@ -46,7 +46,7 @@ public interface Annotation {
      * whether it applies to that class and all its subclasses.
      *
      * @return True if the annotation is inherited by subclasses of the class
-     * 			in which the annotation appears.
+     *          in which the annotation appears.
      */
     public boolean inherits();
 

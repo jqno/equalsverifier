@@ -111,7 +111,7 @@ public final class EqualsVerifier<T> {
      * Factory method. For general use.
      *
      * @param type The class for which the {@code equals} method should be
-     * 				tested.
+     *          tested.
      */
     public static <T> EqualsVerifier<T> forClass(Class<T> type) {
         List<T> equalExamples = new ArrayList<>();
@@ -130,8 +130,8 @@ public final class EqualsVerifier<T> {
      * @param first An instance of T.
      * @param second Another instance of T, which is unequal to {@code first}.
      * @param more More instances of T, all of which are unequal to one
-     *		 		another and to {@code first} and {@code second}. May also
-     *				contain instances of subclasses of T.
+     *          another and to {@code first} and {@code second}. May also
+     *          contain instances of subclasses of T.
      */
     @SafeVarargs
     public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
@@ -166,10 +166,10 @@ public final class EqualsVerifier<T> {
      *
      * @param first An instance of T.
      * @param second Another instance of T, which is equal, but not identical,
-     * 				to {@code first}.
+     *          to {@code first}.
      * @param more More instances of T, all of which are equal, but not
-     * 				identical, to one another and to {@code first} and
-     * 				{@code second}.
+     *          identical, to one another and to {@code first} and
+     *          {@code second}.
      */
     @SafeVarargs
     public static <T> RelaxedEqualsVerifierHelper<T> forRelaxedEqualExamples(T first, T second, T... more) {
@@ -199,7 +199,7 @@ public final class EqualsVerifier<T> {
      * to see what warnings can be suppressed.
      *
      * @param warnings A list of warnings to suppress in
-     * 			{@code EqualsVerifier}.
+     *          {@code EqualsVerifier}.
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> suppress(Warning... warnings) {
@@ -219,7 +219,7 @@ public final class EqualsVerifier<T> {
      * @param black Another instance of {@code S}.
      * @return {@code this}, for easy method chaining.
      * @throws NullPointerException If either {@code otherType}, {@code red}
-     * 				or {@code black} is null.
+     *          or {@code black} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
     public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
@@ -310,7 +310,7 @@ public final class EqualsVerifier<T> {
      * adherence to the contracts.
      *
      * @param redefinedSubclass A subclass of T for which no instance can be
-     * 				equal to any instance of T.
+     *          equal to any instance of T.
      * @return {@code this}, for easy method chaining.
      *
      * @see Warning#STRICT_INHERITANCE
@@ -341,13 +341,13 @@ public final class EqualsVerifier<T> {
      * {@link Warning#NONFINAL_FIELDS} is suppressed.
      *
      * @param cachedHashCodeField
-     *            The name of the field which stores the cached hash code.
+     *          The name of the field which stores the cached hash code.
      * @param calculateHashCodeMethod
-     *            The name of the method which recomputes the hash code. It
-     *            should return an int and take no parameters.
+     *          The name of the method which recomputes the hash code. It
+     *          should return an int and take no parameters.
      * @param example
-     *            An instance of the class under test, to verify that the
-     *            hashCode has been initialized properly.
+     *          An instance of the class under test, to verify that the
+     *          hashCode has been initialized properly.
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
@@ -362,7 +362,7 @@ public final class EqualsVerifier<T> {
      * {@code hashCode}.
      *
      * @throws AssertionError If the contract is not met, or if
-     * 				{@link EqualsVerifier}'s preconditions do not hold.
+     *          {@link EqualsVerifier}'s preconditions do not hold.
      */
     public void verify() {
         PrefabValues prefabValues = config.getPrefabValues();
@@ -510,7 +510,7 @@ public final class EqualsVerifier<T> {
          * constructed instance of {@link EqualsVerifier}.
          *
          * @param example An instance of T that is unequal to the previously
-         * 			supplied equal examples.
+         *          supplied equal examples.
          * @return An instance of {@link EqualsVerifier}.
          */
         @SuppressWarnings("unchecked")
@@ -523,11 +523,11 @@ public final class EqualsVerifier<T> {
          * fully constructed instance of {@link EqualsVerifier}.
          *
          * @param first An instance of T that is unequal to the previously
-         * 			supplied equal examples.
+         *          supplied equal examples.
          * @param more More instances of T, all of which are unequal to
-         * 			one	another, to {@code first}, and to the previously
-         * 			supplied equal examples. May also contain instances of
-         * 			subclasses of T.
+         *          one another, to {@code first}, and to the previously
+         *          supplied equal examples. May also contain instances of
+         *          subclasses of T.
          * @return An instance of {@link EqualsVerifier}.
          */
         @SafeVarargs

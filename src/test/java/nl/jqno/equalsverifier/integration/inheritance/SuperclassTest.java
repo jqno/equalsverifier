@@ -54,7 +54,7 @@ public class SuperclassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
-        expectFailure("Superclass", "hashCode for",	HashCodeBrokenPoint.class.getSimpleName(),
+        expectFailure("Superclass", "hashCode for", HashCodeBrokenPoint.class.getSimpleName(),
                 "should be equal to hashCode for superclass instance", Point.class.getSimpleName());
         EqualsVerifier.forClass(HashCodeBrokenPoint.class)
                 .verify();

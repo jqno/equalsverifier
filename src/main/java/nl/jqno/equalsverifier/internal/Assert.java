@@ -36,7 +36,7 @@ public class Assert {
      * @param expected Expected value.
      * @param actual Actual value.
      * @throws AssertionException If {@code expected} and {@code actual} are not
-     * 				equal.
+     *          equal.
      */
     public static void assertEquals(Formatter message, Object expected, Object actual) {
         if (!expected.equals(actual)) {

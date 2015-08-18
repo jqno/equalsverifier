@@ -44,9 +44,9 @@ public class ClassAccessor<T> {
      *
      * @param <T> The class on which {@link ClassAccessor} operates.
      * @param type The class on which {@link ClassAccessor} operates. Should be
-     * 			the same as T.
+     *          the same as T.
      * @param prefabValues Prefabricated values with which to fill instantiated
-     * 			objects.
+     *          objects.
      * @param ignoreAnnotationFailure Ignore when processing annotations fails.
      * @return A {@link ClassAccessor} for T.
      */
@@ -134,7 +134,7 @@ public class ClassAccessor<T> {
      * Determines whether a particular field in T has a particular annotation.
      *
      * @param field The field for which we want to know if it has the specified
-     * 			annotation.
+     *          annotation.
      * @param annotation The annotation we want to find.
      * @return True if the specified field in T has the specified annotation.
      */
@@ -217,8 +217,8 @@ public class ClassAccessor<T> {
      * {@link Object}.
      *
      * @return true if T's {@code equals} method is inherited from
-     * 			{@link Object}; false if it is overridden in T or in any of its
-     * 			superclasses (except {@link Object}).
+     *          {@link Object}; false if it is overridden in T or in any of its
+     *          superclasses (except {@link Object}).
      */
     public boolean isEqualsInheritedFromObject() {
         ClassAccessor<? super T> i = this;
@@ -289,7 +289,7 @@ public class ClassAccessor<T> {
      * field is marked with a NonNull annotation).
      *
      * @return An instance of T where all the fields are initialized to their
-     * 			default values.
+     *          default values.
      */
     public T getDefaultValuesObject() {
         T result = Instantiator.of(type).instantiate();

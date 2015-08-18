@@ -33,8 +33,8 @@ public class ConditionalInstantiator {
      * Constructor.
      *
      * @param fullyQualifiedClassName
-     *            The fully-qualified name of the class that we intend to
-     *            instantiate.
+     *          The fully-qualified name of the class that we intend to
+     *          instantiate.
      */
     public ConditionalInstantiator(String fullyQualifiedClassName) {
         this.fullyQualifiedClassName = fullyQualifiedClassName;
@@ -53,10 +53,10 @@ public class ConditionalInstantiator {
      * Attempts to instantiate the type.
      *
      * @param paramTypes
-     *            The types of the constructor parameters of the constructor
-     *            that we want to call.
+     *          The types of the constructor parameters of the constructor
+     *          that we want to call.
      * @param paramValues
-     *            The values that we want to pass into the constructor.
+     *          The values that we want to pass into the constructor.
      * @return An instance of the type given in the constructor with the given
      *         parameter values, or null if the type does not exist.
      * @throws ReflectionException If instantiation fails.
@@ -79,16 +79,16 @@ public class ConditionalInstantiator {
      * Attempts to call a static factory method on the type.
      *
      * @param factoryMethod
-     *            The name of the factory method.
+     *          The name of the factory method.
      * @param paramTypes
-     *            The types of the parameters of the specific overload of the
-     *            factory method we want to call.
+     *          The types of the parameters of the specific overload of the
+     *          factory method we want to call.
      * @param paramValues
-     *            The values that we want to pass into the factory method.
+     *          The values that we want to pass into the factory method.
      * @return An instance of the type given by the factory method with the
      *         given parameter values, or null of the type does not exist.
      * @throws ReflectionException
-     *             If the call to the factory method fails.
+     *          If the call to the factory method fails.
      */
     public Object callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
         return callFactory(fullyQualifiedClassName, factoryMethod, paramTypes, paramValues);
@@ -98,18 +98,18 @@ public class ConditionalInstantiator {
      * Attempts to call a static factory method on a type.
      *
      * @param factoryTypeName
-     *            The type that contains the factory method.
+     *          The type that contains the factory method.
      * @param factoryMethod
-     *            The name of the factory method.
+     *          The name of the factory method.
      * @param paramTypes
-     *            The types of the parameters of the specific overload of the
-     *            factory method we want to call.
+     *          The types of the parameters of the specific overload of the
+     *          factory method we want to call.
      * @param paramValues
-     *            The values that we want to pass into the factory method.
+     *          The values that we want to pass into the factory method.
      * @return An instance of the type given by the factory method with the
-     *         given parameter values, or null of the type does not exist.
+     *          given parameter values, or null of the type does not exist.
      * @throws ReflectionException
-     *             If the call to the factory method fails.
+     *          If the call to the factory method fails.
      */
     public Object callFactory(String factoryTypeName, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
         try {
@@ -130,10 +130,10 @@ public class ConditionalInstantiator {
      * Attempts to resolve a static constant on the type.
      *
      * @param constantName
-     *            The name of the constant.
+     *          The name of the constant.
      * @return The value of the constant, or null if the type does not exist.
      * @throws ReflectionException
-     *             If resolving the constant fails.
+     *          If resolving the constant fails.
      */
     public Object returnConstant(String constantName) {
         try {

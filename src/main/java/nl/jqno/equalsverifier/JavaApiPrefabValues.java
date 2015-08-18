@@ -95,7 +95,7 @@ public class JavaApiPrefabValues {
      * dynamically to {@code prefabValues}.
      *
      * @param prefabValues The instance of prefabValues that should
-     * 			contain the Java API instances.
+     *          contain the Java API instances.
      */
     public static void addTo(PrefabValues prefabValues) {
         new JavaApiPrefabValues(prefabValues).addJavaClasses();

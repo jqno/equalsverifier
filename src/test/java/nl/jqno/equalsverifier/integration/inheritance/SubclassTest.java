@@ -50,7 +50,7 @@ public class SubclassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
-        expectFailure("Subclass", "object is not equal to an instance of a trivial subclass with equal fields",	"Consider making the class final.");
+        expectFailure("Subclass", "object is not equal to an instance of a trivial subclass with equal fields", "Consider making the class final.");
         EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class)
                 .verify();
     }

@@ -28,7 +28,7 @@ import org.objenesis.ObjenesisStd;
  * Instantiates objects of a given class.
  * 
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an
- * 				anonymous subclass of this class.
+ *          anonymous subclass of this class.
  * 
  * @author Jan Ouwens
  */
@@ -41,7 +41,7 @@ public class Instantiator<T> {
      *
      * @param <T> The class on which {@link Instantiator} operates.
      * @param type The class on which {@link Instantiator} operates. Should be
-     * 				the same as T.
+     *          the same as T.
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type) {

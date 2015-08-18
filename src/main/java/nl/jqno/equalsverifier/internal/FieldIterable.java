@@ -68,7 +68,7 @@ public class FieldIterable implements Iterable<Field> {
      * superclasses.
      *
      * @return An iterator over all declared fields of the class and all of its
-     * 			superclasses.
+     *          superclasses.
      */
     @Override
     public Iterator<Field> iterator() {

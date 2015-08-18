@@ -33,7 +33,7 @@ public class RecursionException extends InternalException {
      * Constructor.
      *
      * @param typeStack A collection of types that have been encountered prior
-     * 			to detecting the recursion.
+     *          to detecting the recursion.
      */
     public RecursionException(LinkedHashSet<Class<?>> typeStack) {
         super();

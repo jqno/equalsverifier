@@ -54,7 +54,7 @@ public class AnnotationAccessor {
      * @param supportedAnnotations Collection of annotations to query.
      * @param type The class whose annotations need to be queried.
      * @param ignoreFailure Ignore when processing annotations fails when the
-     * 			class file cannot be read.
+     *          class file cannot be read.
      */
     public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, boolean ignoreFailure) {
         this.supportedAnnotations = supportedAnnotations;
@@ -81,12 +81,12 @@ public class AnnotationAccessor {
      * particular field.
      *
      * @param fieldName The name of the field for which we want to know if it
-     * 			has the annotation.
+     *          has the annotation.
      * @param annotation The annotation we want to find.
      * @return True if the specified field in {@link #type} has the specified
-     * 			annotation.
+     *          annotation.
      * @throws ReflectionException if {@link #type} does not have the specified
-     * 			field.
+     *          field.
      */
     public boolean fieldHas(String fieldName, Annotation annotation) {
         if (shortCircuit || fieldName.startsWith("CGLIB$")) {

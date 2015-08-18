@@ -48,7 +48,7 @@ public class ObjectAccessor<T> {
      * @param <T> {@link #object}'s type, or a supertype.
      * @param object The object to wrap.
      * @param type Superclass of {@link #object}'s type, as which it will be
-     * 			treated by {@link ObjectAccessor}.
+     *          treated by {@link ObjectAccessor}.
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
@@ -142,7 +142,7 @@ public class ObjectAccessor<T> {
      * It cannot modifiy:
      * 1. static final fields, and
      * 2. final fields that are initialized to a compile-time constant in the
-     *		field declaration.
+     *      field declaration.
      * These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
@@ -164,7 +164,7 @@ public class ObjectAccessor<T> {
      * It cannot modifiy:
      * 1. static final fields, and
      * 2. final fields that are initialized to a compile-time constant in the
-     *		field declaration.
+     *      field declaration.
      * These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.

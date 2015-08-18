@@ -36,10 +36,10 @@ public class Formatter {
      * Factory method.
      *
      * @param message The string that will be formatted.
-     * 				The substring %% represents the location where each
-     * 				object's will string representation will be inserted.
+     *          The substring %% represents the location where each
+     *          object's will string representation will be inserted.
      * @param objects The objects whose string representation will be inserted
-     * 				into the message string.
+     *          into the message string.
      * @return A {@code Formatter}.
      */
     public static Formatter of(String message, Object... objects) {
@@ -61,9 +61,9 @@ public class Formatter {
      * Formats the message with the given objects.
      *
      * @return The message, with the given objects's string representations
-     * 			inserted into it.
+     *          inserted into it.
      * @throws IllegalStateException if the number of %%'s in the message does
-     * 			not match the number of objects.
+     *          not match the number of objects.
      */
     public String format() {
         String result = message;
