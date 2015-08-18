@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.testhelpers;
 import static org.junit.Assert.fail;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
@@ -35,7 +36,7 @@ public class Util {
                     f.setAccessible(true);
                     Object x = f.get(here);
                     Object y = there == null ? null : f.get(there);
-                    equals &= nullSafeEquals(x, y);
+                    equals &= Objects.equals(x, y);
                 }
             }
         }
@@ -52,7 +53,7 @@ public class Util {
                 if (isRelevant(x, f)) {
                     f.setAccessible(true);
                     Object val = f.get(x);
-                    hash += 59 * nullSafeHashCode(val);
+                    hash += 59 * Objects.hashCode(val);
                 }
             }
         }
@@ -65,13 +66,5 @@ public class Util {
     private static boolean isRelevant(Object x, Field f) {
         FieldAccessor acc = new FieldAccessor(x, f);
         return acc.canBeModifiedReflectively();
-    }
-
-    public static boolean nullSafeEquals(Object x, Object y) {
-        return x == null ? y == null : x.equals(y);
-    }
-
-    public static int nullSafeHashCode(Object x) {
-        return x == null ? 0 : x.hashCode();
     }
 }

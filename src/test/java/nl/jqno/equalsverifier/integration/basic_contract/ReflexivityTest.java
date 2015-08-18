@@ -16,7 +16,7 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -24,6 +24,8 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class ReflexivityTest extends IntegrationTestBase {
     @Test
@@ -116,7 +118,7 @@ public class ReflexivityTest extends IntegrationTestBase {
                 return false;
             }
             FieldsMixedUpInEquals other = (FieldsMixedUpInEquals)obj;
-            return nullSafeEquals(two, other.one) && nullSafeEquals(two, other.two);
+            return Objects.equals(two, other.one) && Objects.equals(two, other.two);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -30,6 +29,8 @@ import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
 import nl.jqno.equalsverifier.internal.Instantiator;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class AnnotationsTest extends IntegrationTestBase {
@@ -146,7 +147,7 @@ public class AnnotationsTest extends IntegrationTestBase {
                 return false;
             }
             EntityByJpaAnnotation other = (EntityByJpaAnnotation)obj;
-            return i == other.i && nullSafeEquals(s, other.s);
+            return i == other.i && Objects.equals(s, other.s);
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }
@@ -173,7 +174,7 @@ public class AnnotationsTest extends IntegrationTestBase {
                 return false;
             }
             EntityByNonJpaAnnotation other = (EntityByNonJpaAnnotation)obj;
-            return i == other.i && nullSafeEquals(s, other.s);
+            return i == other.i && Objects.equals(s, other.s);
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }

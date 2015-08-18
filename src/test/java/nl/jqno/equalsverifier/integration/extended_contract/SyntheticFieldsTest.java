@@ -17,11 +17,12 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
@@ -66,12 +67,12 @@ public class SyntheticFieldsTest {
                 return false;
             }
             OuterContainer other = (OuterContainer)obj;
-            return nullSafeEquals(outer, other.outer);
+            return Objects.equals(outer, other.outer);
         }
 
         @Override
         public int hashCode() {
-            return nullSafeHashCode(outer);
+            return Objects.hashCode(outer);
         }
     }
 }

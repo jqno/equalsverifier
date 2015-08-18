@@ -17,11 +17,13 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
     private static final String EQUALS = "equals";
@@ -75,7 +77,7 @@ public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
             if (foo == null) {
                 throw throwable();
             }
-            return nullSafeEquals(foo, other.foo);
+            return Objects.equals(foo, other.foo);
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }

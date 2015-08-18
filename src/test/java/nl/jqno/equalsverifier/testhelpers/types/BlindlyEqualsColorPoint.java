@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import java.util.Objects;
 
 public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
     private final Color color;
@@ -37,7 +37,7 @@ public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
 
     @Override
     public int hashCode() {
-        return nullSafeHashCode(color) + (31 * super.hashCode());
+        return Objects.hashCode(color) + (31 * super.hashCode());
     }
 
     @Override

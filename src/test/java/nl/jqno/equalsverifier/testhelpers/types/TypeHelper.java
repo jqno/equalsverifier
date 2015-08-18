@@ -14,31 +14,10 @@
  */
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Scanner;
-import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -115,9 +94,9 @@ public class TypeHelper {
             result &= _Short == other._Short;
             result &= _enum == other._enum;
             result &= Arrays.equals(_array, other._array);
-            result &= nullSafeEquals(_object, other._object);
+            result &= Objects.equals(_object, other._object);
             result &= _type == other._type;
-            result &= nullSafeEquals(_string, other._string);
+            result &= Objects.equals(_string, other._string);
             return result;
         }
     }

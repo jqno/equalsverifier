@@ -17,13 +17,14 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.Util;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class AbstractDelegationTest extends IntegrationTestBase {
@@ -180,7 +181,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
                 return false;
             }
             AbstractContainer other = (AbstractContainer)obj;
-            return nullSafeEquals(foo, other.foo);
+            return Objects.equals(foo, other.foo);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -311,7 +312,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
                 delegator.abstractDelegation();
             }
             EqualsDelegatesToAbstractMethodInField other = (EqualsDelegatesToAbstractMethodInField)obj;
-            return i == other.i && nullSafeEquals(delegator, other.delegator);
+            return i == other.i && Objects.equals(delegator, other.delegator);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -363,7 +364,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
                 return false;
             }
             EqualsInFieldDelegatesToAbstractMethod other = (EqualsInFieldDelegatesToAbstractMethod)obj;
-            return nullSafeEquals(delegator, other.delegator);
+            return Objects.equals(delegator, other.delegator);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -378,7 +379,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
 
         @Override
         public int hashCode() {
-            return nullSafeHashCode(delegator);
+            return Objects.hashCode(delegator);
         }
     }
 

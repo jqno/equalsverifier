@@ -16,12 +16,14 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class TransitivityTest extends IntegrationTestBase {
     @Test
@@ -111,7 +113,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             TwoFieldsUsingAND other = (TwoFieldsUsingAND)obj;
-            return nullSafeEquals(f, other.f) && nullSafeEquals(g, other.g);
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -129,7 +131,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             TwoFieldsUsingOR other = (TwoFieldsUsingOR)obj;
-            return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g);
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g);
         }
 
         @Override public int hashCode() { return 42; }
@@ -148,7 +150,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             ThreeFieldsUsingAND other = (ThreeFieldsUsingAND)obj;
-            return nullSafeEquals(f, other.f) && nullSafeEquals(g, other.g) && nullSafeEquals(h, other.h);
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -167,7 +169,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             ThreeFieldsUsingOR other = (ThreeFieldsUsingOR)obj;
-            return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) || nullSafeEquals(h, other.h);
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
@@ -186,7 +188,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             ThreeFieldsUsingANDOR other = (ThreeFieldsUsingANDOR)obj;
-            return nullSafeEquals(f, other.f) && nullSafeEquals(g, other.g) || nullSafeEquals(h, other.h);
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
@@ -205,7 +207,7 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             ThreeFieldsUsingORAND other = (ThreeFieldsUsingORAND)obj;
-            return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) && nullSafeEquals(h, other.h);
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
@@ -226,8 +228,8 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             FiveFieldsUsingOR other = (FiveFieldsUsingOR)obj;
-            return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) ||
-                    nullSafeEquals(h, other.h) || nullSafeEquals(i, other.i) || nullSafeEquals(j, other.j);
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g) ||
+                    Objects.equals(h, other.h) || Objects.equals(i, other.i) || Objects.equals(j, other.j);
         }
 
         @Override public int hashCode() { return 42; }
@@ -248,8 +250,8 @@ public class TransitivityTest extends IntegrationTestBase {
                 return false;
             }
             FiveFieldsUsingANDsAndORs other = (FiveFieldsUsingANDsAndORs)obj;
-            return nullSafeEquals(f, other.f) || nullSafeEquals(g, other.g) &&
-                    nullSafeEquals(h, other.h) || nullSafeEquals(i, other.i) && nullSafeEquals(j, other.j);
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g) &&
+                    Objects.equals(h, other.h) || Objects.equals(i, other.i) && Objects.equals(j, other.j);
         }
 
         @Override public int hashCode() { return 42; }

@@ -15,12 +15,14 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class RecursionTest extends IntegrationTestBase {
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
@@ -95,7 +97,7 @@ public class RecursionTest extends IntegrationTestBase {
                 return false;
             }
             Node other = (Node)obj;
-            return nullSafeEquals(node, other.node);
+            return Objects.equals(node, other.node);
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }
@@ -118,7 +120,7 @@ public class RecursionTest extends IntegrationTestBase {
                 return false;
             }
             NodeContainer other = (NodeContainer)obj;
-            return nullSafeEquals(node, other.node);
+            return Objects.equals(node, other.node);
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }

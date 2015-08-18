@@ -15,8 +15,7 @@
  */
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
+import java.util.Objects;
 
 public class PointContainer {
     private final Point point;
@@ -35,11 +34,11 @@ public class PointContainer {
             return false;
         }
         PointContainer other = (PointContainer)obj;
-        return nullSafeEquals(point, other.point);
+        return Objects.equals(point, other.point);
     }
 
     @Override
     public int hashCode() {
-        return nullSafeHashCode(point);
+        return Objects.hashCode(point);
     }
 }

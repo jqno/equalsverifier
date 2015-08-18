@@ -17,12 +17,14 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class ExtendedReflexivityTest extends IntegrationTestBase {
     @Test
@@ -68,7 +70,7 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
                 return false;
             }
             UsesEqualsMethod other = (UsesEqualsMethod)obj;
-            return nullSafeEquals(s, other.s);
+            return Objects.equals(s, other.s);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.Configuration;
@@ -30,6 +29,8 @@ import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends IntegrationTestBase {
@@ -139,7 +140,7 @@ public class OriginalStateTest extends IntegrationTestBase {
                 return false;
             }
             SuperContainer other = (SuperContainer)obj;
-            return nullSafeEquals(foo, other.foo);
+            return Objects.equals(foo, other.foo);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

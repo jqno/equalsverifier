@@ -15,8 +15,6 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.Util;
@@ -25,6 +23,8 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 
 import org.junit.Test;
+
+import java.util.Objects;
 
 public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
@@ -362,12 +362,12 @@ public class SignificantFieldsTest extends IntegrationTestBase {
             if (!(obj instanceof IndirectStaticFinalContainer)) {
                 return false;
             }
-            return nullSafeEquals(x, ((IndirectStaticFinalContainer)obj).x);
+            return Objects.equals(x, ((IndirectStaticFinalContainer)obj).x);
         }
 
         @Override
         public int hashCode() {
-            return nullSafeHashCode(x);
+            return Objects.hashCode(x);
         }
     }
 
@@ -422,7 +422,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 return false;
             }
             UsedStatelessContainer other = (UsedStatelessContainer)obj;
-            return i == other.i && nullSafeEquals(stateless, other.stateless);
+            return i == other.i && Objects.equals(stateless, other.stateless);
         }
 
         @Override public int hashCode() { return Util.defaultHashCode(this); }

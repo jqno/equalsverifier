@@ -15,11 +15,10 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -150,7 +149,7 @@ public class ArrayTest extends IntegrationTestBase {
                 return false;
             }
             PrimitiveArrayRegularEquals other = (PrimitiveArrayRegularEquals)obj;
-            return nullSafeEquals(array, other.array);
+            return Objects.equals(array, other.array);
         }
 
         @Override
@@ -175,7 +174,7 @@ public class ArrayTest extends IntegrationTestBase {
 
         @Override
         public int hashCode() {
-            return nullSafeHashCode(array);
+            return Objects.hashCode(array);
         }
     }
 
@@ -352,7 +351,7 @@ public class ArrayTest extends IntegrationTestBase {
                 return false;
             }
             ObjectArrayRegularEquals other = (ObjectArrayRegularEquals)obj;
-            return nullSafeEquals(array, other.array);
+            return Objects.equals(array, other.array);
         }
 
         @Override
@@ -377,7 +376,7 @@ public class ArrayTest extends IntegrationTestBase {
 
         @Override
         public int hashCode() {
-            return nullSafeHashCode(array);
+            return Objects.hashCode(array);
         }
     }
 
