@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Jan Ouwens
+ * Copyright 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,8 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        expectFailure("catch me if you can");
         EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();

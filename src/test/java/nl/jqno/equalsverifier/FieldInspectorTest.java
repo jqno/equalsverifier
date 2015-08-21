@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Jan Ouwens
+ * Copyright 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +33,16 @@ public class FieldInspectorTest {
 
     @Test
     public void objectsAreReset_whenEachIterationBegins() {
-        FieldInspector<Point> inspector = new FieldInspector<Point>(accessor);
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
 
         inspector.check(new ResetObjectForEachIterationCheck());
+    }
+
+    @Test
+    public void objectsAreReset_whenEachIterationBegins_givenNullObjects() {
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
+
+        inspector.checkWithNull(new ResetObjectForEachIterationCheck());
     }
 
     private final class ResetObjectForEachIterationCheck implements FieldCheck {

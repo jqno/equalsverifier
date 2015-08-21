@@ -15,13 +15,14 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
-import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
@@ -294,7 +295,7 @@ public class ClassAccessor<T> {
     public T getDefaultValuesObject() {
         T result = Instantiator.of(type).instantiate();
         for (Field field : FieldIterable.of(type)) {
-            if (fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
+            if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
                 FieldAccessor accessor = new FieldAccessor(result, field);
                 accessor.changeField(prefabValues);
             }
