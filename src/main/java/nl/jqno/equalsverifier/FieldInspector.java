@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2010, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,15 @@ class FieldInspector<T> {
 		for (Field field : FieldIterable.of(classAccessor.getType())) {
 			ObjectAccessor<T> reference = classAccessor.getRedAccessor();
 			ObjectAccessor<T> changed = classAccessor.getRedAccessor();
+			
+			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
+		}
+	}
+	
+	public void checkWithNull(FieldCheck check) {
+		for (Field field : FieldIterable.of(classAccessor.getType())) {
+			ObjectAccessor<T> reference = ObjectAccessor.of(classAccessor.getDefaultValuesObject());
+			ObjectAccessor<T> changed = ObjectAccessor.of(classAccessor.getDefaultValuesObject());
 			
 			check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
 		}

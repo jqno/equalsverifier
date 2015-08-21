@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Jan Ouwens
+ * Copyright 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,12 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.util.Assert.assertTrue;
-import static org.junit.Assert.assertEquals;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
-import nl.jqno.equalsverifier.util.Formatter;
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class VersionedEntityTest extends IntegrationTestBase {
 	@Test
@@ -48,27 +44,28 @@ public class VersionedEntityTest extends IntegrationTestBase {
 				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
 				.verify();
 	}
-
+	
 	@Test
 	public void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
 		expectFailure("catch me if you can");
 		EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
 				.verify();
 	}
-
+	
 	@Test
 	public void succeed_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+		expectFailure("catch me if you can");
 		EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
 				.suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
 				.verify();
 	}
-
+	
 	@Test
 	public void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
 		EqualsVerifier.forClass(CanEqualVersionedEntity.class)
 				.verify();
 	}
-
+	
 	public static final class VersionedEntity {
 		private final long id;
 		
@@ -88,12 +85,12 @@ public class VersionedEntityTest extends IntegrationTestBase {
 		
 		@Override public int hashCode() { return defaultHashCode(this); }
 	}
-
+	
 	private static class CanEqualVersionedEntity {
 		private final Long id;
-
+		
 		public CanEqualVersionedEntity(Long id) { this.id = id; }
-
+		
 		@Override
 		public final boolean equals(Object obj) {
 			if (!(obj instanceof CanEqualVersionedEntity)) {
@@ -108,17 +105,17 @@ public class VersionedEntityTest extends IntegrationTestBase {
 			}
 			return false;
 		}
-
+		
 		public boolean canEqual(Object obj) {
 			return obj instanceof CanEqualVersionedEntity;
 		}
-
+		
 		@Override public final int hashCode() { return defaultHashCode(this); }
 	}
-
+	
 	private static class NonReflexiveCanEqualVersionedEntity extends CanEqualVersionedEntity {
 		public NonReflexiveCanEqualVersionedEntity(Long id) { super(id); }
-
+		
 		@Override
 		public boolean canEqual(Object obj) {
 			throw new IllegalStateException("catch me if you can");

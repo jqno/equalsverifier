@@ -20,6 +20,7 @@ import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.util.annotations.Annotation;
 import nl.jqno.equalsverifier.util.annotations.AnnotationAccessor;
+import nl.jqno.equalsverifier.util.annotations.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.util.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.util.exceptions.ReflectionException;
 
@@ -294,7 +295,7 @@ public class ClassAccessor<T> {
 	public T getDefaultValuesObject() {
 		T result = Instantiator.of(type).instantiate();
 		for (Field field : FieldIterable.of(type)) {
-			if (fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
+			if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
 				FieldAccessor accessor = new FieldAccessor(result, field);
 				accessor.changeField(prefabValues);
 			}

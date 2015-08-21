@@ -15,16 +15,14 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.*;
 
 public class SignificantFieldsTest extends IntegrationTestBase {
 	@Test
@@ -186,6 +184,13 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 	@Test
 	public void succeed_whenClassIsStateless() {
 		EqualsVerifier.forClass(Stateless.class).verify();
+	}
+	
+	@Test
+	public void fail_whenNonNullFieldIsEqualToNullField() {
+		expectFailure("Significant fields", "hashCode relies on", "s", "equals does not", "These objects are equal, but probably shouldn't be");
+		EqualsVerifier.forClass(BugWhenFieldIsNull.class)
+				.verify();
 	}
 	
 	static final class ExtraFieldInEquals {
@@ -425,6 +430,23 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 			return i == other.i && nullSafeEquals(stateless, other.stateless);
 		}
 		
-		@Override public int hashCode() { return Util.defaultHashCode(this); }
+		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	public static final class BugWhenFieldIsNull {
+		private final String s;
+		
+		public BugWhenFieldIsNull(String s) { this.s = s; }
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof BugWhenFieldIsNull)) {
+				return false;
+			}
+			BugWhenFieldIsNull other = (BugWhenFieldIsNull)obj;
+			return !(this.s != null && other.s != null) || this.s.equals(other.s);
+		}
+		
+		@Override public int hashCode() { return nullSafeHashCode(s); }
 	}
 }

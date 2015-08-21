@@ -70,9 +70,13 @@ class FieldsChecker<T> implements Checker {
 			inspector.check(new TransientFieldsCheck());
 		}
 		
-		inspector.check(new SignificantFieldCheck());
+		inspector.check(new SignificantFieldCheck(false));
 		inspector.check(new SymmetryFieldCheck());
 		inspector.check(new TransitivityFieldCheck());
+		
+		if (!warningsToSuppress.contains(Warning.NULL_FIELDS)) {
+			inspector.checkWithNull(new SignificantFieldCheck(true));
+		}
 	}
 	
 	private boolean ignoreMutability() {
@@ -150,6 +154,12 @@ class FieldsChecker<T> implements Checker {
 	}
 	
 	private class SignificantFieldCheck implements FieldCheck {
+		private final boolean skipTestBecause0AndNullBothHaveA0HashCode;
+		
+		public SignificantFieldCheck(boolean whoop) {
+			this.skipTestBecause0AndNullBothHaveA0HashCode = whoop;
+		}
+		
 		@Override
 		public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
 			if (isCachedHashCodeField(referenceAccessor)) {
@@ -160,6 +170,10 @@ class FieldsChecker<T> implements Checker {
 			Object changed = changedAccessor.getObject();
 			String fieldName = referenceAccessor.getFieldName();
 			
+			if (referenceAccessor.get() == null && NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField())) {
+				return;
+			}
+			
 			boolean equalToItself = reference.equals(changed);
 			
 			changedAccessor.changeField(prefabValues);
@@ -168,10 +182,18 @@ class FieldsChecker<T> implements Checker {
 			boolean hashCodeChanged = cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
 			
 			if (equalsChanged != hashCodeChanged) {
-				assertFalse(Formatter.of("Significant fields: equals relies on %%, but hashCode does not.", fieldName),
+				if (!skipTestBecause0AndNullBothHaveA0HashCode) {
+					assertFalse(
+						Formatter.of(
+							"Significant fields: equals relies on %%, but hashCode does not.\n  %% has hashCode %%\n  %% has hashCode %%",
+							fieldName, reference, reference.hashCode(), changed, changed.hashCode()), 
 						equalsChanged);
-				assertFalse(Formatter.of("Significant fields: hashCode relies on %%, but equals does not.", fieldName),
-						hashCodeChanged);
+				}
+				assertFalse(
+					Formatter.of(
+						"Significant fields: hashCode relies on %%, but equals does not.\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
+						fieldName, reference, changed),
+					hashCodeChanged);
 			}
 			
 			if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
