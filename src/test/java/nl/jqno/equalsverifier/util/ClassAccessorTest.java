@@ -271,6 +271,13 @@ public class ClassAccessorTest {
 	}
 	
 	@Test
+	public void getDefaultValuesAccessor() {
+		PointContainer foo = pointContainerAccessor.getDefaultValuesObject();
+		ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getDefaultValuesAccessor();
+		assertEquals(foo, objectAccessor.get());
+	}
+	
+	@Test
 	public void getDefaultValuesObject() {
 		ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
 		DefaultValues foo = accessor.getDefaultValuesObject();

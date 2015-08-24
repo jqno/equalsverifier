@@ -250,7 +250,7 @@ public class ClassAccessor<T> {
 	public T getRedObject() {
 		return getRedAccessor().get();
 	}
-
+	
 	/**
 	 * Returns an {@link ObjectAccessor} for {@link #getRedObject()}.
 	 * 
@@ -271,7 +271,7 @@ public class ClassAccessor<T> {
 	public T getBlackObject() {
 		return getBlackAccessor().get();
 	}
-
+	
 	/**
 	 * Returns an {@link ObjectAccessor} for {@link #getBlackObject()}.
 	 * 
@@ -283,7 +283,7 @@ public class ClassAccessor<T> {
 		result.scramble(prefabValues);
 		return result;
 	}
-
+	
 	/**
 	 * Returns an instance of T where all the fields are initialized to their
 	 * default values. I.e., 0 for ints, and null for objects (except when the
@@ -293,10 +293,19 @@ public class ClassAccessor<T> {
 	 * 			default values.
 	 */
 	public T getDefaultValuesObject() {
-		T result = Instantiator.of(type).instantiate();
+		return getDefaultValuesAccessor().get();
+	}
+	
+	/**
+	 * Returns an {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+	 * 
+	 * @return An {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+	 */
+	public ObjectAccessor<T> getDefaultValuesAccessor() {
+		ObjectAccessor<T> result = buildObjectAccessor();
 		for (Field field : FieldIterable.of(type)) {
 			if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
-				FieldAccessor accessor = new FieldAccessor(result, field);
+				FieldAccessor accessor = result.fieldAccessorFor(field);
 				accessor.changeField(prefabValues);
 			}
 		}
