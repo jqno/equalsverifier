@@ -293,10 +293,19 @@ public class ClassAccessor<T> {
      *          default values.
      */
     public T getDefaultValuesObject() {
-        T result = Instantiator.of(type).instantiate();
+        return getDefaultValuesAccessor().get();
+    }
+
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     *
+     * @return An {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     */
+    public ObjectAccessor<T> getDefaultValuesAccessor() {
+        ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
             if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
-                FieldAccessor accessor = new FieldAccessor(result, field);
+                FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues);
             }
         }

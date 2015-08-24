@@ -40,8 +40,8 @@ class FieldInspector<T> {
 
     public void checkWithNull(FieldCheck check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = ObjectAccessor.of(classAccessor.getDefaultValuesObject());
-            ObjectAccessor<T> changed = ObjectAccessor.of(classAccessor.getDefaultValuesObject());
+            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor();
+            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor();
 
             check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
         }
@@ -50,5 +50,4 @@ class FieldInspector<T> {
     public interface FieldCheck {
         void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
     }
-
 }
