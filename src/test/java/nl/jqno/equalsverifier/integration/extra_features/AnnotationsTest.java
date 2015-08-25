@@ -76,6 +76,46 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
+        EqualsVerifier.forClass(EmbeddableByJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
+        expectFailure("Mutability");
+        EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
+        expectFailure("Mutability");
+        EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
+        EqualsVerifier.forClass(MappedSuperclassByJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
+        expectFailure("Mutability");
+        EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
+        expectFailure("Mutability");
+        EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotation() {
         expectFailure("Transient field", "should not be included in equals/hashCode contract");
         EqualsVerifier.forClass(TransientByJpaAnnotation.class)
@@ -174,6 +214,110 @@ public class AnnotationsTest extends IntegrationTestBase {
                 return false;
             }
             EntityByNonJpaAnnotation other = (EntityByNonJpaAnnotation)obj;
+            return i == other.i && Objects.equals(s, other.s);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Embeddable
+    static class EmbeddableByJpaAnnotation {
+        private int i;
+        private String s;
+
+        public void setI(int i) {
+            this.i = i;
+        }
+
+        public void setS(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof EmbeddableByJpaAnnotation)) {
+                return false;
+            }
+            EmbeddableByJpaAnnotation other = (EmbeddableByJpaAnnotation)obj;
+            return i == other.i && Objects.equals(s, other.s);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    static class SubclassEmbeddableByJpaAnnotation extends EmbeddableByJpaAnnotation {}
+
+    @nl.jqno.equalsverifier.testhelpers.annotations.Embeddable
+    static class EmbeddableByNonJpaAnnotation {
+        private int i;
+        private String s;
+
+        public void setI(int i) {
+            this.i = i;
+        }
+
+        public void setS(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof EmbeddableByNonJpaAnnotation)) {
+                return false;
+            }
+            EmbeddableByNonJpaAnnotation other = (EmbeddableByNonJpaAnnotation)obj;
+            return i == other.i && Objects.equals(s, other.s);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.MappedSuperclass
+    abstract static class MappedSuperclassByJpaAnnotation {
+        private int i;
+        private String s;
+
+        public void setI(int i) {
+            this.i = i;
+        }
+
+        public void setS(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof MappedSuperclassByJpaAnnotation)) {
+                return false;
+            }
+            MappedSuperclassByJpaAnnotation other = (MappedSuperclassByJpaAnnotation)obj;
+            return i == other.i && Objects.equals(s, other.s);
+        }
+
+        @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    static class SubclassMappedSuperclassByJpaAnnotation extends MappedSuperclassByJpaAnnotation {}
+
+    @nl.jqno.equalsverifier.testhelpers.annotations.MappedSuperclass
+    abstract static class MappedSuperclassByNonJpaAnnotation {
+        private int i;
+        private String s;
+
+        public void setI(int i) {
+            this.i = i;
+        }
+
+        public void setS(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof MappedSuperclassByNonJpaAnnotation)) {
+                return false;
+            }
+            MappedSuperclassByNonJpaAnnotation other = (MappedSuperclassByNonJpaAnnotation)obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
