@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
@@ -24,10 +23,13 @@ import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
-
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.Test;
+
+import java.util.Objects;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SuperclassTest extends IntegrationTestBase {
     @Test
@@ -95,6 +97,19 @@ public class SuperclassTest extends IntegrationTestBase {
         EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
                 .withRedefinedSuperclass()
                 .allFieldsShouldBeUsed()
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenVersionedEntityIncorrectlyImplementsCanEqual_givenIncorrectnessIsOnlyObservedFromSubclass() {
+        EqualsVerifier.forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenSuperclassIsVersionedEntityAndIncorrectlyImplementsCanEqual_givenASubclassThatExploitsTheIncorrectness() {
+        expectFailure("Symmetry", "does not equal superclass instance");
+        EqualsVerifier.forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSub.class)
                 .verify();
     }
 
@@ -239,6 +254,49 @@ public class SuperclassTest extends IntegrationTestBase {
         public ConcreteEqualsInheriter(int a, int b) {
             this.a = a;
             this.b = b;
+        }
+    }
+
+    public static class SymmetryBrokenForNullIdWithIncorrectCanEqualSuper {
+        private final Long id;
+
+        public SymmetryBrokenForNullIdWithIncorrectCanEqualSuper(Long id) { this.id = id; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSuper)) {
+                return false;
+            }
+            SymmetryBrokenForNullIdWithIncorrectCanEqualSuper other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSuper) obj;
+
+            if (id != null) {
+                return id.equals(other.id);
+            }
+            else if (other.id == null) {
+                return other.newCanEqual(this);
+            }
+            return false;
+        }
+
+        public boolean newCanEqual(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper o) {
+            return true;
+        }
+
+        @Override public final int hashCode() { return Objects.hashCode(id); }
+    }
+
+    public static class SymmetryBrokenForNullIdWithIncorrectCanEqualSub extends SymmetryBrokenForNullIdWithIncorrectCanEqualSuper {
+        public final String name;
+
+        public SymmetryBrokenForNullIdWithIncorrectCanEqualSub(Long id, String name) { super(id); this.name = name; }
+
+        @Override
+        public boolean newCanEqual(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper obj) {
+            if (obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSub) {
+                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSub) obj;
+                return Objects.equals(name, other.name);
+            }
+            return false;
         }
     }
 }
