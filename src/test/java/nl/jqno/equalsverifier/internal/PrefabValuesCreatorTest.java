@@ -15,36 +15,23 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NotRecursiveA;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveThisIsTheOtherField;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveWithAnotherFieldFirst;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayB;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.*;
 
 public class PrefabValuesCreatorTest {
     private MockStaticFieldValueStash stash;
@@ -96,7 +83,7 @@ public class PrefabValuesCreatorTest {
     public void createOneElementEnum() {
         prefabValues.putFor(OneElementEnum.class);
         assertNotNull(prefabValues.getRed(OneElementEnum.class));
-        assertNull(prefabValues.getBlack(OneElementEnum.class));
+        assertNotNull(prefabValues.getBlack(OneElementEnum.class));
     }
 
     @Test
