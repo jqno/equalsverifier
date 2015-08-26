@@ -19,6 +19,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
+import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 public class EnumTest {
@@ -37,6 +38,13 @@ public class EnumTest {
 	@Test
 	public void useSingleValueEnum() {
 		EqualsVerifier.forClass(SingletonUser.class)
+				.verify();
+	}
+	
+	@Test
+	public void useSingleValueEnumWithoutNullCheck() {
+		EqualsVerifier.forClass(NullThrowingSingletonUser.class)
+				.suppress(Warning.NULL_FIELDS)
 				.verify();
 	}
 	
@@ -79,5 +87,20 @@ public class EnumTest {
 		
 		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
 		@Override public int hashCode() { return defaultHashCode(this); }
+	}
+	
+	static final class NullThrowingSingletonUser {
+		private final Singleton singleton;
+		
+		public NullThrowingSingletonUser(Singleton singleton) {
+			this.singleton = singleton;
+		}
+		
+		@Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+		
+		@Override
+		public int hashCode() {
+			return singleton.hashCode();
+		}
 	}
 }

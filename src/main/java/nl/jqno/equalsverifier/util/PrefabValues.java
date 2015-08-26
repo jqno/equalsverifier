@@ -209,7 +209,7 @@ public class PrefabValues {
 		case 0:
 			throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
 		case 1:
-			put(type, enumConstants[0], null);
+			put(type, enumConstants[0], enumConstants[0]);
 			break;
 		default:
 			put(type, enumConstants[0], enumConstants[1]);

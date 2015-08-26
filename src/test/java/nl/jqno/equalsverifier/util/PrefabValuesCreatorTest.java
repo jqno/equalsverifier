@@ -95,7 +95,7 @@ public class PrefabValuesCreatorTest {
 	public void createOneElementEnum() {
 		prefabValues.putFor(OneElementEnum.class);
 		assertNotNull(prefabValues.getRed(OneElementEnum.class));
-		assertNull(prefabValues.getBlack(OneElementEnum.class));
+		assertNotNull(prefabValues.getBlack(OneElementEnum.class));
 	}
 	
 	@Test
