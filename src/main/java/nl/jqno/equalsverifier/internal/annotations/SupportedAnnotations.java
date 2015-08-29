@@ -49,9 +49,9 @@ public enum SupportedAnnotations implements Annotation {
     /**
      * JPA Entities cannot be final, nor can their fields be.
      * {@link EqualsVerifier} will not complain about non-final fields
-     * on @Entity classes.
+     * on @Entity, @Embeddable and @MappedSuperclass classes.
      */
-    ENTITY(false, "javax.persistence.Entity"),
+    ENTITY(false, "javax.persistence.Entity", "javax.persistence.Embeddable", "javax.persistence.MappedSuperclass"),
 
     /**
      * Fields in JPA Entities that are marked @Transient should not be included

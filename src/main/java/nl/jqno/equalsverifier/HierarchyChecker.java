@@ -32,8 +32,6 @@ class HierarchyChecker<T> implements Checker {
     private final Class<T> type;
     private final ClassAccessor<T> classAccessor;
     private final Class<? extends T> redefinedSubclass;
-    private final ObjectAccessor<T> referenceAccessor;
-    private final T reference;
     private final boolean typeIsFinal;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
@@ -48,8 +46,6 @@ class HierarchyChecker<T> implements Checker {
         this.type = config.getType();
         this.classAccessor = config.createClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
-        this.referenceAccessor = classAccessor.getRedAccessor();
-        this.reference = referenceAccessor.get();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
@@ -66,33 +62,45 @@ class HierarchyChecker<T> implements Checker {
     }
 
     private void checkSuperclass() {
-        Class<? super T> superclass = type.getSuperclass();
         ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
         if (superAccessor.isEqualsInheritedFromObject()) {
             return;
         }
 
-        Object equalSuper = ObjectAccessor.of(reference, superclass).copy();
-
         if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
+            T reference = classAccessor.getRedObject();
+            Object equalSuper = getEqualSuper(reference);
+
             assertFalse(Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.", reference, equalSuper),
                     reference.equals(equalSuper) || equalSuper.equals(reference));
         }
         else {
-            T shallow = referenceAccessor.copy();
-            ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
-
-            assertTrue(Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper),
-                    reference.equals(equalSuper) && equalSuper.equals(reference));
-
-            assertTrue(Formatter.of("Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.", reference, shallow, equalSuper),
-                    reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
-
-            int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
-            int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
-            assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, referenceHashCode, equalSuper, equalSuperHashCode),
-                    referenceHashCode == equalSuperHashCode);
+            checkSuperProperties(classAccessor.getRedAccessor());
+            checkSuperProperties(classAccessor.getDefaultValuesAccessor());
         }
+    }
+
+    private void checkSuperProperties(ObjectAccessor<T> referenceAccessor) {
+        T reference = referenceAccessor.get();
+        Object equalSuper = getEqualSuper(reference);
+
+        T shallow = referenceAccessor.copy();
+        ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
+
+        assertTrue(Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper),
+                reference.equals(equalSuper) && equalSuper.equals(reference));
+
+        assertTrue(Formatter.of("Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.", reference, shallow, equalSuper),
+                reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
+
+        int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
+        int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
+        assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, referenceHashCode, equalSuper, equalSuperHashCode),
+                referenceHashCode == equalSuperHashCode);
+    }
+
+    private Object getEqualSuper(T reference) {
+        return ObjectAccessor.of(reference, type.getSuperclass()).copy();
     }
 
     private void checkSubclass() {
@@ -100,6 +108,8 @@ class HierarchyChecker<T> implements Checker {
             return;
         }
 
+        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor();
+        T reference = referenceAccessor.get();
         T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 
         if (config.isUsingGetClass()) {
@@ -121,6 +131,8 @@ class HierarchyChecker<T> implements Checker {
             fail(Formatter.of("Subclass: %% has a final equals method.\nNo need to supply a redefined subclass.", type.getSimpleName()));
         }
 
+        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor();
+        T reference = referenceAccessor.get();
         T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
         assertFalse(Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),
                 reference.equals(redefinedSub));

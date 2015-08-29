@@ -15,13 +15,14 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
-import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
@@ -292,10 +293,19 @@ public class ClassAccessor<T> {
      *          default values.
      */
     public T getDefaultValuesObject() {
-        T result = Instantiator.of(type).instantiate();
+        return getDefaultValuesAccessor().get();
+    }
+
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     *
+     * @return An {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     */
+    public ObjectAccessor<T> getDefaultValuesAccessor() {
+        ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
-            if (fieldHasAnnotation(field, SupportedAnnotations.NONNULL)) {
-                FieldAccessor accessor = new FieldAccessor(result, field);
+            if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
+                FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues);
             }
         }

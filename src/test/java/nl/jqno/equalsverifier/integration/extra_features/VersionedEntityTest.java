@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 Jan Ouwens
+ * Copyright 2013-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,28 +20,58 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Test;
 
+import java.util.Objects;
+
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class VersionedEntityTest extends IntegrationTestBase {
     @Test
     public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
         expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(VersionedEntity.class)
+        EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
                 .verify();
     }
 
     @Test
     public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
         expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(VersionedEntity.class)
+        EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY)
                 .verify();
     }
 
     @Test
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
-        EqualsVerifier.forClass(VersionedEntity.class)
+        EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenInstanceWithAZeroIdDoesNotEqualItself_givenAVersionedEntityWithState() {
+        expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());
+        EqualsVerifier.forClass(StringVersionedEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenInstanceWithANonzeroIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
+        expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
+        EqualsVerifier.forClass(StringVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier.forClass(StringVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+        EqualsVerifier.forClass(WeakStringVersionedEntity.class)
                 .verify();
     }
 
@@ -53,7 +83,8 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        expectFailure("catch me if you can");
         EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
@@ -65,17 +96,17 @@ public class VersionedEntityTest extends IntegrationTestBase {
                 .verify();
     }
 
-    public static final class VersionedEntity {
+    public static final class OtherwiseStatelessVersionedEntity {
         private final long id;
 
-        public VersionedEntity(long id) { this.id = id; }
+        public OtherwiseStatelessVersionedEntity(long id) { this.id = id; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof VersionedEntity)) {
+            if (!(obj instanceof OtherwiseStatelessVersionedEntity)) {
                 return false;
             }
-            VersionedEntity other = (VersionedEntity) obj;
+            OtherwiseStatelessVersionedEntity other = (OtherwiseStatelessVersionedEntity) obj;
             if (id == 0L && other.id == 0L) {
                 return super.equals(obj);
             }
@@ -83,6 +114,52 @@ public class VersionedEntityTest extends IntegrationTestBase {
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    public static final class StringVersionedEntity {
+        private final long id;
+        private final String s;
+
+        public StringVersionedEntity(long id, String s) { this.id = id; this.s = s; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof StringVersionedEntity)) {
+                return false;
+            }
+            StringVersionedEntity other = (StringVersionedEntity) obj;
+            if (id == 0L && other.id == 0L) {
+                return false;
+            }
+            return id == other.id;
+        }
+
+        @Override public int hashCode() {
+            return Float.floatToIntBits(id);
+        }
+    }
+
+    public static final class WeakStringVersionedEntity {
+        private final long id;
+        private final String s;
+
+        public WeakStringVersionedEntity(long id, String s) { this.id = id; this.s = s; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof WeakStringVersionedEntity)) {
+                return false;
+            }
+            WeakStringVersionedEntity other = (WeakStringVersionedEntity) obj;
+            if (id == 0L && other.id == 0L) {
+                return Objects.equals(s, other.s);
+            }
+            return id == other.id;
+        }
+
+        @Override public int hashCode() {
+            return Float.floatToIntBits(id);
+        }
     }
 
     private static class CanEqualVersionedEntity {
