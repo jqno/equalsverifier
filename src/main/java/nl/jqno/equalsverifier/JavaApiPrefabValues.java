@@ -421,7 +421,7 @@ public class JavaApiPrefabValues {
         RED, BLACK;
 
         public EnumMap<Dummy, String> map() {
-            EnumMap<Dummy, String> result = new EnumMap<Dummy, String>(Dummy.class);
+            EnumMap<Dummy, String> result = new EnumMap<>(Dummy.class);
             result.put(this, toString());
             return result;
         }
