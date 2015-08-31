@@ -99,18 +99,16 @@ public class Formatter {
         ObjectAccessor<?> accessor = ObjectAccessor.of(obj);
 
         result.append("[");
-        String typeName = type.getSimpleName().replaceAll("\\$\\$EnhancerByCGLIB.*", "");
+        String typeName = type.getSimpleName().replaceAll("\\$\\$DynamicSubclass.*", "");
         result.append(typeName);
 
         for (Field field : FieldIterable.of(type)) {
             String fieldName = field.getName();
-            if (!fieldName.startsWith("CGLIB$")) {
-                result.append(" ");
-                result.append(fieldName);
-                result.append("=");
-                Object value = accessor.fieldAccessorFor(field).get();
-                result.append(stringify(value));
-            }
+            result.append(" ");
+            result.append(fieldName);
+            result.append("=");
+            Object value = accessor.fieldAccessorFor(field).get();
+            result.append(stringify(value));
         }
 
         result.append("]");

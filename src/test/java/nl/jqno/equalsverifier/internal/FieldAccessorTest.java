@@ -367,21 +367,6 @@ public class FieldAccessorTest {
     }
 
     @Test
-    public void changeFieldOnCglibFieldIsNoOp() throws NoSuchFieldException, IllegalAccessException {
-        class Empty {}
-
-        Empty cglibed = Instantiator.of(Empty.class).instantiateAnonymousSubclass();
-        String fieldName = getSyntheticFieldName(cglibed, "CGLIB$");
-        Field field = cglibed.getClass().getDeclaredField(fieldName);
-        field.setAccessible(true);
-
-        Object original = field.get(cglibed);
-        changeField(cglibed, fieldName);
-
-        assertEquals(original, field.get(cglibed));
-    }
-
-    @Test
     public void changeArrayField() {
         AllArrayTypesContainer reference = new AllArrayTypesContainer();
         AllArrayTypesContainer changed = new AllArrayTypesContainer();

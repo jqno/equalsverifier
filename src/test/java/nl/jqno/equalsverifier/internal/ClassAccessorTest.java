@@ -15,23 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_CLASS_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.INAPPLICABLE;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.PACKAGE_ANNOTATION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_CLASS_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
@@ -39,25 +24,20 @@ import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClassContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHashCode;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllRecursiveCollectionImplementationsContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllTypesContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle.AnnotatedInner;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFieldsSubWithFields;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.RecursiveApiClassesContainer;
-import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
+import static org.junit.Assert.*;
 
 public class ClassAccessorTest {
     private PrefabValues prefabValues;
@@ -122,14 +102,6 @@ public class ClassAccessorTest {
     @Test
     public void packageInfoDoesNotExist() {
         ClassAccessor<?> accessor = new ClassAccessor<>(ClassAccessorTest.class, prefabValues, TestSupportedAnnotations.values(), false);
-        assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
-    }
-
-    @Test
-    public void packageDoesNotExist() {
-        Class<?> type = Instantiator.of(Object.class).instantiateAnonymousSubclass().getClass();
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        ClassAccessor<?> accessor = new ClassAccessor(type, prefabValues, TestSupportedAnnotations.values(), false);
         assertFalse(accessor.packageHasAnnotation(PACKAGE_ANNOTATION));
     }
 

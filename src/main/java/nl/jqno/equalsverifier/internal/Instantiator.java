@@ -15,14 +15,14 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import java.lang.reflect.Modifier;
-import java.util.List;
-
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.NoOp;
-
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.NamingStrategy;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+
+import java.lang.reflect.Modifier;
 
 /**
  * Instantiates objects of a given class.
@@ -82,25 +82,24 @@ public class Instantiator<T> {
         return objenesis.newInstance(proxyClass);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("unchecked")
     private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
-        Enhancer e = new Enhancer() {
-            @Override
-            protected void filterConstructors(Class sc, List constructors) {
-            // Don't filter
-            }
-        };
-
+        DynamicType.Builder<S> builder = createBuilder(superclass);
+        return (Class<S>) builder
+                .name(new NamingStrategy.Fixed(superclass.getName() + "$$DynamicSubclass"))
+                .make()
+                .load(superclass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .getLoaded();
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static <S> DynamicType.Builder<S> createBuilder(Class<S> superclass) {
+        ByteBuddy byteBuddy = new ByteBuddy();
         if (superclass.isInterface()) {
-            e.setInterfaces(new Class[] { superclass });
+            return (DynamicType.Builder<S>) byteBuddy.subclass(Object.class).implement(superclass);
         }
         else {
-            e.setSuperclass(superclass);
+            return byteBuddy.subclass(superclass);
         }
-
-        e.setCallbackType(NoOp.class);
-        @SuppressWarnings("unchecked")
-        Class<S> proxyClass = e.createClass();
-        return proxyClass;
     }
 }

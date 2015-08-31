@@ -89,7 +89,7 @@ public class AnnotationAccessor {
      *          field.
      */
     public boolean fieldHas(String fieldName, Annotation annotation) {
-        if (shortCircuit || fieldName.startsWith("CGLIB$")) {
+        if (shortCircuit) {
             return false;
         }
         process();

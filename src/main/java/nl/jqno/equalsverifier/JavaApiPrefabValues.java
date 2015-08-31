@@ -72,7 +72,6 @@ import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.regex.Pattern;
 
-import net.sf.cglib.proxy.NoOp;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 
@@ -120,7 +119,6 @@ public class JavaApiPrefabValues {
         addJavaFXClasses();
         addGoogleGuavaClasses();
         addJodaTimeClasses();
-        addClassesNecessaryForCgLib();
     }
 
     private void addPrimitiveClasses() {
@@ -399,10 +397,6 @@ public class JavaApiPrefabValues {
                 .instantiate(classes(int.class, int.class), objects(6, 1))
                 .instantiate(classes(int.class, int.class), objects(7, 26))
                 .addTo(prefabValues);
-    }
-
-    private void addClassesNecessaryForCgLib() {
-        prefabValues.put(NoOp.class, new NoOp(){}, new NoOp(){});
     }
 
     private <T extends Collection<Object>> void addCollection(Class<T> type, T red, T black) {

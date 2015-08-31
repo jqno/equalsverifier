@@ -180,13 +180,6 @@ public class FieldAccessor {
         if (Modifier.isFinal(modifiers) && Modifier.isStatic(modifiers)) {
             return false;
         }
-        // CGLib, which is used by this class, adds several fields to classes
-        // that it creates. If they are changed using reflection, exceptions
-        // are thrown.
-        if (field.getName().startsWith("CGLIB$")) {
-            return false;
-        }
-
         return true;
     }
 

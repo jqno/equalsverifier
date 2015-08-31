@@ -89,9 +89,9 @@ limitations under the License.
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>3.1</version>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>0.6.15</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -254,7 +254,7 @@ limitations under the License.
                         <configuration>
                             <includes>
                                 <include>org.ow2.asm:asm</include>
-                                <include>cglib:cglib</include>
+                                <include>net.bytebuddy:byte-buddy</include>
                                 <include>org.objenesis:objenesis</include>
                             </includes>
                             <rules>
@@ -263,8 +263,8 @@ limitations under the License.
                                     <result>nl.jqno.equalsverifier.internal.lib.asm.@1</result>
                                 </rule>
                                 <rule>
-                                    <pattern>net.sf.cglib.**</pattern>
-                                    <result>nl.jqno.equalsverifier.internal.lib.cglib.@1</result>
+                                    <pattern>net.bytebuddy.**</pattern>
+                                    <result>nl.jqno.equalsverifier.internal.lib.bytebuddy.@1</result>
                                 </rule>
                                 <rule>
                                     <pattern>org.objenesis.**</pattern>
