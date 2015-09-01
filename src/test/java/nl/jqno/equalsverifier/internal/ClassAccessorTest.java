@@ -116,17 +116,10 @@ public class ClassAccessorTest {
     @Test
     public void classInDefaultPackageDoesntThrowNPE() throws IOException {
         File tempFileLocation = tempFolder.newFolder();
-        ConditionalCompiler compiler = null;
-        try {
-            compiler = new ConditionalCompiler(tempFileLocation);
+        try (ConditionalCompiler compiler = new ConditionalCompiler(tempFileLocation)) {
             Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
             ClassAccessor<?> accessor = ClassAccessor.of(defaultPackage, prefabValues, false);
             accessor.packageHasAnnotation(PACKAGE_ANNOTATION);
-        }
-        finally {
-            if (compiler != null) {
-                compiler.close();
-            }
         }
     }
 
