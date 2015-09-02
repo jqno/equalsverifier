@@ -47,7 +47,7 @@ class FieldsChecker<T> implements Checker {
         this.classAccessor = config.createClassAccessor();
         this.prefabValues = classAccessor.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
-        this.allFieldsShouldBeUsed = config.isAllFieldsShouldBeUsed();
+        this.allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED);
         this.allFieldsShouldBeUsedExceptions = config.getAllFieldsShouldBeUsedExceptions();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }

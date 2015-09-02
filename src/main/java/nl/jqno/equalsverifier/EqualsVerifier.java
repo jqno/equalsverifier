@@ -255,7 +255,7 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> allFieldsShouldBeUsed() {
-        config = config.withAllFieldsShouldBeUsed();
+        suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
         return this;
     }
 
