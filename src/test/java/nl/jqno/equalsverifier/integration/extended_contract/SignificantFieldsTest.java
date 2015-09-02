@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
@@ -45,14 +46,14 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenAFieldIsUnused_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(OneFieldUnused.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -66,21 +67,21 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenATransientFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenAStaticFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenAFieldIsUnusedInASubclass_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(OneFieldUnusedExtended.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -94,14 +95,14 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenNoEqualsMethodPresent_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NoFieldsUsed.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenNoFieldsAreAdded_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(NoFieldsAdded.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -168,7 +169,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers_givenAllFieldsarningIsSuppressed() {
         EqualsVerifier.forClass(IndirectStaticFinalContainer.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -187,7 +188,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassIsStateless_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(Stateless.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

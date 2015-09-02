@@ -249,18 +249,6 @@ public final class EqualsVerifier<T> {
 
     /**
      * Signals that all non-transient fields are relevant in the {@code equals}
-     * contract. {@code EqualsVerifier} will fail if one non-transient field
-     * does not affect the outcome of {@code equals}.
-     *
-     * @return {@code this}, for easy method chaining.
-     */
-    public EqualsVerifier<T> allFieldsShouldBeUsed() {
-        suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
-        return this;
-    }
-
-    /**
-     * Signals that all non-transient fields are relevant in the {@code equals}
      * contract, except for the ones specified. {@code EqualsVerifier} will
      * fail if one non-specified, non-transient field does not affect the
      * outcome of {@code equals}, or if one specified field does.
@@ -269,7 +257,6 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-//        config = config.withAllFieldsShouldBeUsed();
         config = config.withAllFieldsShouldBeUsedExceptions(fields);
 
         Set<String> actualFieldNames = new HashSet<>();

@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
@@ -35,7 +36,7 @@ public class SuperclassTest extends IntegrationTestBase {
     @Test
     public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(ColorBlindColorPoint.class)
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -97,7 +98,7 @@ public class SuperclassTest extends IntegrationTestBase {
     public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectlyAndAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
                 .withRedefinedSuperclass()
-                .allFieldsShouldBeUsed()
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
