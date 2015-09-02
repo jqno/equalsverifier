@@ -163,6 +163,9 @@ public final class EqualsVerifier<T> {
      * Using this factory method requires that
      * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
      * be called to supply a list of unequal instances of T.
+     * 
+     * This method automatically suppresses
+     * {@link Warning#ALL_FIELDS_SHOULD_BE_USED}.
      *
      * @param first An instance of T.
      * @param second Another instance of T, which is equal, but not identical,
@@ -528,7 +531,8 @@ public final class EqualsVerifier<T> {
                     throw new IllegalArgumentException("An equal example also appears as unequal example.");
                 }
             }
-            return new EqualsVerifier<>(type, equalExamples, unequalExamples);
+            return new EqualsVerifier<>(type, equalExamples, unequalExamples)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
         }
     }
 }

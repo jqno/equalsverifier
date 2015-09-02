@@ -18,9 +18,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RelaxedEqualsTest extends IntegrationTestBase {
@@ -41,7 +39,7 @@ public class RelaxedEqualsTest extends IntegrationTestBase {
         EqualsVerifier.forExamples(a, b);
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenObjectsWithDifferentFieldsAreEqual_givenTheyAreGivenAsRelaxedEqualExamples() {
         EqualsVerifier.forRelaxedEqualExamples(a, b)
                 .andUnequalExample(x)
@@ -55,7 +53,7 @@ public class RelaxedEqualsTest extends IntegrationTestBase {
                 .andUnequalExamples(a);
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenAnUnusedFieldIsNull_givenItIsGivenAsARelaxedEqualExample() {
         EqualsVerifier.forRelaxedEqualExamples(new NullContainingSubMultiple(1, 2), new NullContainingSubMultiple(2, 1))
                 .andUnequalExample(new NullContainingSubMultiple(2, 2))

@@ -18,9 +18,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
-
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class RelaxedEqualsPreconditionTest extends IntegrationTestBase {
@@ -54,7 +52,7 @@ public class RelaxedEqualsPreconditionTest extends IntegrationTestBase {
         EqualsVerifier.forRelaxedEqualExamples(red, null);
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenTheVarargArrayIsNull() {
         EqualsVerifier.forRelaxedEqualExamples(red, black, (Multiple[])null)
                 .andUnequalExample(green)
@@ -75,7 +73,7 @@ public class RelaxedEqualsPreconditionTest extends IntegrationTestBase {
                 .andUnequalExample(null);
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenTheUnequalVarargArrayIsNull() {
         EqualsVerifier.forRelaxedEqualExamples(red, black)
                 .andUnequalExamples(green, (Multiple[])null)
