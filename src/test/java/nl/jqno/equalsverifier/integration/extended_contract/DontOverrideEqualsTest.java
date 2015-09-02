@@ -25,6 +25,7 @@ public class DontOverrideEqualsTest {
     public void succeed_whenClassDoesntOverrideEqualsOrHashCode() {
         EqualsVerifier.forClass(Pojo.class)
                 .suppress(Warning.NONFINAL_FIELDS)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 

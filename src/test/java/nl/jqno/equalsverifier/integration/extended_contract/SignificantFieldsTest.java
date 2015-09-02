@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -49,16 +50,16 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenAFieldIsUnused() {
+    public void succeed_whenAFieldIsUnused_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(OneFieldUnused.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 
     @Test
-    public void fail_whenAFieldIsUnused_givenAllFieldsShouldBeUsed() {
+    public void fail_whenAFieldIsUnused() {
         expectFailure("Significant fields", "equals does not use", "colorNotUsed");
         EqualsVerifier.forClass(OneFieldUnused.class)
-                .allFieldsShouldBeUsed()
                 .verify();
     }
 
@@ -77,22 +78,23 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenAFieldIsUnusedInASubclass() {
-        EqualsVerifier.forClass(OneFieldUnusedExtended.class)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenAFieldIsUnusedInASubclass_givenAllFieldsShouldBeUsed() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+    public void succeed_whenAFieldIsUnusedInASubclass_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(OneFieldUnusedExtended.class)
                 .allFieldsShouldBeUsed()
                 .verify();
     }
 
     @Test
-    public void succeed_whenNoFieldsAreUsed() {
+    public void fail_whenAFieldIsUnusedInASubclass() {
+        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+        EqualsVerifier.forClass(OneFieldUnusedExtended.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenNoEqualsMethodPresent_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NoFieldsUsed.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 
@@ -104,18 +106,16 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsed() {
+    public void fail_whenNoFieldsAreUsed() {
         expectFailure("Significant fields", "equals does not use", "color");
         EqualsVerifier.forClass(NoFieldsUsed.class)
-                .allFieldsShouldBeUsed()
                 .verify();
     }
 
     @Test
-    public void fail_whenNoFieldsAreUsed_givenAllFieldsShouldBeUsedAndUsingGetClass() {
+    public void fail_whenNoFieldsAreUsed_givenUsingGetClass() {
         expectFailure("Significant fields", "equals does not use", "color");
         EqualsVerifier.forClass(NoFieldsUsed.class)
-                .allFieldsShouldBeUsed()
                 .usingGetClass()
                 .verify();
     }
@@ -166,26 +166,29 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers() {
+    public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers_givenAllFieldsarningIsSuppressed() {
         EqualsVerifier.forClass(IndirectStaticFinalContainer.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 
-    @Test
+    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
     public void succeed_whenUnusedFieldIsStateless() {
         EqualsVerifier.forClass(UnusedStatelessContainer.class)
                 .verify();
     }
 
-    @Test
+    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
     public void succeed_whenUsedFieldIsStateless() {
         EqualsVerifier.forClass(UsedStatelessContainer.class)
                 .verify();
     }
 
     @Test
-    public void succeed_whenClassIsStateless() {
-        EqualsVerifier.forClass(Stateless.class).verify();
+    public void succeed_whenClassIsStateless_givenAllFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(Stateless.class)
+                .allFieldsShouldBeUsed()
+                .verify();
     }
 
     @Test

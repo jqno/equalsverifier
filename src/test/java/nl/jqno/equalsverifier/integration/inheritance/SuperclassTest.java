@@ -33,8 +33,9 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SuperclassTest extends IntegrationTestBase {
     @Test
-    public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlso() {
+    public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(ColorBlindColorPoint.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 

@@ -74,6 +74,7 @@ public class ReflexivityTest extends IntegrationTestBase {
     public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
         EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
                 .suppress(Warning.IDENTICAL_COPY)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 

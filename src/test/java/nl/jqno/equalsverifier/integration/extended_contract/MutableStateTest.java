@@ -40,6 +40,7 @@ public class MutableStateTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
         EqualsVerifier.forClass(UnusedPrimitiveMutableField.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 

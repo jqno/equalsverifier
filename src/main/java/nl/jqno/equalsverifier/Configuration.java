@@ -53,7 +53,7 @@ public class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<>(type, new PrefabValues(), false, new HashSet<String>(),
+        return new Configuration<>(type, new PrefabValues(), true, new HashSet<String>(),
                 CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
     }
 
@@ -66,7 +66,7 @@ public class Configuration<T> {
     }
 
     public Configuration<T> withAllFieldsShouldBeUsed() {
-        return new Configuration<>(type, prefabValues, true, allFieldsShouldBeUsedExceptions,
+        return new Configuration<>(type, prefabValues, false, allFieldsShouldBeUsedExceptions,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 

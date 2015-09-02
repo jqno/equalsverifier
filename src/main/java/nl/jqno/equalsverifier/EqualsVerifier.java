@@ -269,7 +269,7 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-        config = config.withAllFieldsShouldBeUsed();
+//        config = config.withAllFieldsShouldBeUsed();
         config = config.withAllFieldsShouldBeUsedExceptions(fields);
 
         Set<String> actualFieldNames = new HashSet<>();

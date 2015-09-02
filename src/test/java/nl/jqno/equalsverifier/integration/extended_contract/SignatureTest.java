@@ -64,6 +64,7 @@ public class SignatureTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded() {
         EqualsVerifier.forClass(NoEqualsMethod.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 

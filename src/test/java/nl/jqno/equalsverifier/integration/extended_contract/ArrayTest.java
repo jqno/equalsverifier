@@ -123,12 +123,14 @@ public class ArrayTest extends IntegrationTestBase {
     @Test
     public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
         EqualsVerifier.forClass(ArrayAndSomethingUnused.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 
     @Test
     public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
         EqualsVerifier.forClass(ArrayAndNoEquals.class)
+                .allFieldsShouldBeUsed()
                 .verify();
     }
 
