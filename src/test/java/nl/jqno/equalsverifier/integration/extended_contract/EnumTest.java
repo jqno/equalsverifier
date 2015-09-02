@@ -15,13 +15,12 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import org.junit.Test;
+
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-import nl.jqno.equalsverifier.Warning;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class EnumTest {
     @Test
@@ -30,19 +29,19 @@ public class EnumTest {
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void ignoreSingleValueEnum() {
         EqualsVerifier.forClass(SingletonContainer.class)
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void useSingleValueEnum() {
         EqualsVerifier.forClass(SingletonUser.class)
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void useSingleValueEnumWithoutNullCheck() {
         EqualsVerifier.forClass(NullThrowingSingletonUser.class)
                 .suppress(Warning.NULL_FIELDS)
