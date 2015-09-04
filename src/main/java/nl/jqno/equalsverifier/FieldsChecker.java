@@ -183,17 +183,15 @@ class FieldsChecker<T> implements Checker {
 
             if (equalsChanged != hashCodeChanged) {
                 if (!skipTestBecause0AndNullBothHaveA0HashCode) {
-                    assertFalse(
-                            Formatter.of(
-                                    "Significant fields: equals relies on %%, but hashCode does not.\n  %% has hashCode %%\n  %% has hashCode %%",
-                                    fieldName, reference, reference.hashCode(), changed, changed.hashCode()),
-                            equalsChanged);
+                    Formatter formatter = Formatter.of(
+                            "Significant fields: equals relies on %%, but hashCode does not.\n  %% has hashCode %%\n  %% has hashCode %%",
+                            fieldName, reference, reference.hashCode(), changed, changed.hashCode());
+                    assertFalse(formatter, equalsChanged);
                 }
-                assertFalse(
-                        Formatter.of(
-                                "Significant fields: hashCode relies on %%, but equals does not.\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
-                                fieldName, reference, changed),
-                        hashCodeChanged);
+                Formatter formatter = Formatter.of(
+                        "Significant fields: hashCode relies on %%, but equals does not.\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
+                        fieldName, reference, changed);
+                assertFalse(formatter, hashCodeChanged);
             }
 
             if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
