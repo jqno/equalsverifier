@@ -15,25 +15,29 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
-    public void succeed_whenClassHasASyntheticField() {
+    @Test
+    public void succeed_whenClassHasASyntheticFieldBecauseItsInsideAUnitTestClass() {
         EqualsVerifier.forClass(Outer.class)
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
+    public void succeed_whenClassHasASyntheticFieldBecauseItsAnInnerClass() {
+        EqualsVerifier.forClass(Outer.Inner.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassHasAFieldThatHasASyntheticField() {
         EqualsVerifier.forClass(OuterContainer.class)
                 .verify();
@@ -43,10 +47,12 @@ public class SyntheticFieldsTest {
         private final Inner inner;
 
         private /* non-static */ final class Inner {
-            int foo;
+            private final int foo;
 
-            @Override public boolean equals(Object obj) { return obj instanceof Inner; }
-            @Override public int hashCode() { return 42; }
+            public Inner(int foo) { this.foo = foo; }
+
+            @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+            @Override public int hashCode() { return defaultHashCode(this); }
         }
 
         public Outer() { inner = null; }
