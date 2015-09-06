@@ -21,7 +21,6 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -173,15 +172,31 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
-    public void succeed_whenUnusedFieldIsStateless() {
+    @Test
+    public void fail_whenUnusedFieldIsStateless() {
+        expectFailure("Significant fields", "statelessField", "or it is stateless");
         EqualsVerifier.forClass(UnusedStatelessContainer.class)
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
-    public void succeed_whenUsedFieldIsStateless() {
+    @Test
+    public void succeed_whenUnusedFieldIsStateless_givenAllFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(UnusedStatelessContainer.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenUsedFieldIsStateless() {
+        expectFailure("Significant fields", "statelessField", "or it is stateless");
         EqualsVerifier.forClass(UsedStatelessContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenUsedFieldIsStateless_givenAllFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(UsedStatelessContainer.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -402,9 +417,9 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     static final class UnusedStatelessContainer {
         private final int i;
         @SuppressWarnings("unused")
-        private final Stateless stateless;
+        private final Stateless statelessField;
 
-        public UnusedStatelessContainer(int i, Stateless stateless) { this.i = i; this.stateless = stateless; }
+        public UnusedStatelessContainer(int i, Stateless statelessField) { this.i = i; this.statelessField = statelessField; }
 
         @Override
         public boolean equals(Object obj) {
@@ -423,9 +438,9 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 
     static final class UsedStatelessContainer {
         private final int i;
-        private final Stateless stateless;
+        private final Stateless statelessField;
 
-        public UsedStatelessContainer(int i, Stateless stateless) { this.i = i; this.stateless = stateless; }
+        public UsedStatelessContainer(int i, Stateless statelessField) { this.i = i; this.statelessField = statelessField; }
 
         @Override
         public boolean equals(Object obj) {
@@ -433,7 +448,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 return false;
             }
             UsedStatelessContainer other = (UsedStatelessContainer)obj;
-            return i == other.i && Objects.equals(stateless, other.stateless);
+            return i == other.i && Objects.equals(statelessField, other.statelessField);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

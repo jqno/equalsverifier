@@ -194,10 +194,10 @@ class FieldsChecker<T> implements Checker {
 
             boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) && !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
             if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
-                assertTrue(Formatter.of("Significant fields: equals does not use %%", fieldName), equalToItself);
+                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
                 boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
-                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName),
+                assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
                         !thisFieldShouldBeUsed || equalsChanged);
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
                         thisFieldShouldBeUsed || !equalsChanged);
