@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -41,7 +40,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
@@ -63,16 +62,31 @@ public class VersionedEntityTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
+    @Test
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(StringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
     }
 
-    @Test@Ignore("TODO: how should this interact with allFieldsShouldBeUsed?")
-    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+    @Test
+    public void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+        expectFailure("Significant fields");
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
