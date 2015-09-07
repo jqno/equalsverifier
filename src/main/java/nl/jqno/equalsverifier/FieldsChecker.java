@@ -39,14 +39,14 @@ class FieldsChecker<T> implements Checker {
     private final ClassAccessor<T> classAccessor;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
-    private final Set<String> allFieldsShouldBeUsedExceptions;
+    private final Set<String> ignoredFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public FieldsChecker(Configuration<T> config) {
         this.classAccessor = config.createClassAccessor();
         this.prefabValues = classAccessor.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
-        this.allFieldsShouldBeUsedExceptions = config.getAllFieldsShouldBeUsedExceptions();
+        this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -196,7 +196,7 @@ class FieldsChecker<T> implements Checker {
             if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
-                boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
+                boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !ignoredFields.contains(fieldName);
                 assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
                         !thisFieldShouldBeUsed || equalsChanged);
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),

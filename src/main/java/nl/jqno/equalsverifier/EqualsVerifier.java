@@ -259,14 +259,14 @@ public final class EqualsVerifier<T> {
      * @param fields
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-        config = config.withAllFieldsShouldBeUsedExceptions(fields);
+    public EqualsVerifier<T> withIgnoredFields(String... fields) {
+        config = config.withIgnoredFields(fields);
 
         Set<String> actualFieldNames = new HashSet<>();
         for (Field field : FieldIterable.of(config.getType())) {
             actualFieldNames.add(field.getName());
         }
-        for (String field : config.getAllFieldsShouldBeUsedExceptions()) {
+        for (String field : config.getIgnoredFields()) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
             }

@@ -123,14 +123,14 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAFieldIsUnused_givenAllFieldsShouldBeUsedExceptThatField() {
         EqualsVerifier.forClass(OneFieldUnused.class)
-                .allFieldsShouldBeUsedExcept("colorNotUsed")
+                .withIgnoredFields("colorNotUsed")
                 .verify();
     }
 
     @Test
     public void succeed_whenTwoFieldsAreUnused_givenAllFieldsShouldBeUsedExceptThoseTwo() {
         EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
-                .allFieldsShouldBeUsedExcept("colorNotUsed", "colorAlsoNotUsed")
+                .withIgnoredFields("colorNotUsed", "colorAlsoNotUsed")
                 .verify();
     }
 
@@ -138,7 +138,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_whenTwoFieldsAreUnUsed_givenAllFieldsShouldBeUsedExceptOneOfThemButNotBoth() {
         expectFailure("Significant fields", "equals does not use", "colorAlsoNotUsed");
         EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
-                .allFieldsShouldBeUsedExcept("colorNotUsed")
+                .withIgnoredFields("colorNotUsed")
                 .verify();
     }
 
@@ -146,7 +146,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsedExceptOneThatActuallyIsUsed() {
         expectFailure("Significant fields", "equals should not use", "x", "but it does");
         EqualsVerifier.forClass(FinalPoint.class)
-                .allFieldsShouldBeUsedExcept("x")
+                .withIgnoredFields("x")
                 .verify();
     }
 
@@ -154,7 +154,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_whenOneFieldIsUnused_givenAllFieldsShouldBeUsedExceptTwoFields() {
         expectFailure("Significant fields", "equals should not use", "x", "but it does");
         EqualsVerifier.forClass(OneFieldUnused.class)
-                .allFieldsShouldBeUsedExcept("x", "colorNotUsed")
+                .withIgnoredFields("x", "colorNotUsed")
                 .verify();
     }
 
@@ -162,7 +162,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void anExceptionIsThrown_whenANonExistingFieldIsExcepted() {
         expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)
-                .allFieldsShouldBeUsedExcept("thisFieldDoesNotExist");
+                .withIgnoredFields("thisFieldDoesNotExist");
     }
 
     @Test
