@@ -196,11 +196,11 @@ class FieldsChecker<T> implements Checker {
             if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
-                boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !ignoredFields.contains(fieldName);
+                boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
                 assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
-                        !thisFieldShouldBeUsed || equalsChanged);
+                        fieldShouldBeIgnored || equalsChanged);
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
-                        thisFieldShouldBeUsed || !equalsChanged);
+                        !fieldShouldBeIgnored || !equalsChanged);
             }
 
             referenceAccessor.changeField(prefabValues);
