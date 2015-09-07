@@ -42,7 +42,7 @@ class SignatureChecker<T> implements Checker {
     }
 
     private List<Method> getEqualsMethods() {
-        List<Method> result = new ArrayList<Method>();
+        List<Method> result = new ArrayList<>();
 
         for (Method method : type.getDeclaredMethods()) {
             if (method.getName().equals("equals")) {
