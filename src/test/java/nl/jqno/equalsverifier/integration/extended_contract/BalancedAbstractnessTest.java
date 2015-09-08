@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
@@ -35,6 +36,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
     public void fail_whenBothEqualsAndHashCodeAreAbstract() {
         expectFailure(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
         EqualsVerifier.forClass(AbstractBoth.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .verify();
     }
 
@@ -42,6 +44,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
     public void fail_whenEqualsIsAbstract() {
         expectFailure(EQUALS_IS_ABSTRACT, HASHCODE_IS_NOT, AbstractEquals.class.getSimpleName());
         EqualsVerifier.forClass(AbstractEquals.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .verify();
     }
 

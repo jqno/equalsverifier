@@ -94,7 +94,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenNoEqualsMethodPresent_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NoFieldsUsed.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -109,6 +109,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_whenNoFieldsAreUsed() {
         expectFailure("Significant fields", "equals does not use", "color");
         EqualsVerifier.forClass(NoFieldsUsed.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .verify();
     }
 
@@ -116,6 +117,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_whenNoFieldsAreUsed_givenUsingGetClass() {
         expectFailure("Significant fields", "equals does not use", "color");
         EqualsVerifier.forClass(NoFieldsUsed.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .usingGetClass()
                 .verify();
     }
