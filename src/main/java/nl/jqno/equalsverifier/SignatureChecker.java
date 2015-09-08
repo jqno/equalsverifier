@@ -38,15 +38,14 @@ class SignatureChecker<T> implements Checker {
 
     @Override
     public void check() {
-        checkEqualsIsDefined();
         List<Method> equalsMethods = getEqualsMethods();
         if (equalsMethods.size() > 1) {
             failOverloaded("More than one equals method found");
         }
-        if (equalsMethods.size() == 0) {
-            return;
+        if (equalsMethods.size() == 1) {
+            checkEquals(equalsMethods.get(0));
         }
-        checkEquals(equalsMethods.get(0));
+        checkEqualsIsDefined();
     }
 
     private void checkEqualsIsDefined() {
