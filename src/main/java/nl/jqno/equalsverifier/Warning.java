@@ -104,6 +104,15 @@ public enum Warning {
     IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 
     /**
+     * Disables the check that verifies {@code equals} is actually overridden.
+     * <p>
+     * Can be used when a whole package of classes is automatically scanned and
+     * presented to EqualsVerifier, and one or more of them don't need to
+     * override {@code equals}.
+     */
+    INHERITED_DIRECTLY_FROM_OBJECT,
+
+    /**
      * Disables the example check for cached {@code hashCode}.
      * <p>
      * The example check verifies that the cached {@code hashCode} is properly

@@ -32,14 +32,22 @@ public class DontOverrideEqualsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
+        EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenEqualsIsInheritedButNotFromObject() {
         EqualsVerifier.forClass(InheritedEqualsAndHashCodeMethod.class)
                 .verify();
     }
 
-    @Test@Ignore("TODO: what to do with this?")
-    public void succeed_whenEqualsIsInheritedDirectlyFromObject_given() {
+    @Test
+    public void succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
         EqualsVerifier.forClass(Pojo.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .suppress(Warning.NONFINAL_FIELDS, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }

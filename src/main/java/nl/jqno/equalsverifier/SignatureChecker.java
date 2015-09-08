@@ -21,23 +21,24 @@ import nl.jqno.equalsverifier.internal.Formatter;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class SignatureChecker<T> implements Checker {
     private final Class<T> type;
     private final ClassAccessor<T> classAccessor;
+    private final Set<Warning> warningsToSuppress;
 
     public SignatureChecker(Configuration<T> config) {
         this.type = config.getType();
         this.classAccessor = config.createClassAccessor();
+        this.warningsToSuppress = config.getWarningsToSuppress();
     }
 
     @Override
     public void check() {
-        if (classAccessor.isEqualsInheritedFromObject()) {
-            fail(Formatter.of("Equals is inherited directly from Object"));
-        }
+        checkEqualsIsDefined();
         List<Method> equalsMethods = getEqualsMethods();
         if (equalsMethods.size() > 1) {
             failOverloaded("More than one equals method found");
@@ -46,6 +47,17 @@ class SignatureChecker<T> implements Checker {
             return;
         }
         checkEquals(equalsMethods.get(0));
+    }
+
+    private void checkEqualsIsDefined() {
+        boolean fail =
+                !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT) &&
+                classAccessor.isEqualsInheritedFromObject();
+        if (fail) {
+            fail(Formatter.of(
+                    "Equals is inherited directly from Object.\n" +
+                    "Suppress Warning." + Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() + " to skip this check."));
+        }
     }
 
     private List<Method> getEqualsMethods() {
