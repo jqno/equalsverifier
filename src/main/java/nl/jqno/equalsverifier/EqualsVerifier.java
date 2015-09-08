@@ -163,6 +163,9 @@ public final class EqualsVerifier<T> {
      * Using this factory method requires that
      * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
      * be called to supply a list of unequal instances of T.
+     * 
+     * This method automatically suppresses
+     * {@link Warning#ALL_FIELDS_SHOULD_BE_USED}.
      *
      * @param first An instance of T.
      * @param second Another instance of T, which is equal, but not identical,
@@ -248,35 +251,25 @@ public final class EqualsVerifier<T> {
     }
 
     /**
-     * Signals that all non-transient fields are relevant in the {@code equals}
-     * contract. {@code EqualsVerifier} will fail if one non-transient field
-     * does not affect the outcome of {@code equals}.
+     * Signals that all given fields are not relevant for the {@code equals}
+     * contract. {@code EqualsVerifier} will not fail if one of these fields
+     * does not affect the outcome of {@code equals}, but it will fail if one
+     * of these fields does affect the outcome of {@code equals}.
      *
-     * @return {@code this}, for easy method chaining.
-     */
-    public EqualsVerifier<T> allFieldsShouldBeUsed() {
-        config = config.withAllFieldsShouldBeUsed();
-        return this;
-    }
-
-    /**
-     * Signals that all non-transient fields are relevant in the {@code equals}
-     * contract, except for the ones specified. {@code EqualsVerifier} will
-     * fail if one non-specified, non-transient field does not affect the
-     * outcome of {@code equals}, or if one specified field does.
+     * Note that these fields will still be used to test for null-ness, among
+     * other things.
      *
      * @param fields
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifier<T> allFieldsShouldBeUsedExcept(String... fields) {
-        config = config.withAllFieldsShouldBeUsed();
-        config = config.withAllFieldsShouldBeUsedExceptions(fields);
+    public EqualsVerifier<T> withIgnoredFields(String... fields) {
+        config = config.withIgnoredFields(fields);
 
         Set<String> actualFieldNames = new HashSet<>();
         for (Field field : FieldIterable.of(config.getType())) {
             actualFieldNames.add(field.getName());
         }
-        for (String field : config.getAllFieldsShouldBeUsedExceptions()) {
+        for (String field : config.getIgnoredFields()) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
             }
@@ -541,7 +534,8 @@ public final class EqualsVerifier<T> {
                     throw new IllegalArgumentException("An equal example also appears as unequal example.");
                 }
             }
-            return new EqualsVerifier<>(type, equalExamples, unequalExamples);
+            return new EqualsVerifier<>(type, equalExamples, unequalExamples)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
         }
     }
 }

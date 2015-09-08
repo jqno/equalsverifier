@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Ignore;
@@ -36,6 +37,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOR() {
         expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOR.class.getSimpleName());
         EqualsVerifier.forClass(TwoFieldsUsingOR.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -49,6 +51,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOR() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(ThreeFieldsUsingOR.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -62,6 +65,7 @@ public class TransitivityTest extends IntegrationTestBase {
         expectFailure("Transitivity");
         EqualsVerifier.forRelaxedEqualExamples(one, two, three)
                 .andUnequalExample(other)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -69,6 +73,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingANDAndOR() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(ThreeFieldsUsingANDOR.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -76,6 +81,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingORAndAND() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(ThreeFieldsUsingORAND.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -83,6 +89,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingOR() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(FiveFieldsUsingOR.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -90,6 +97,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingANDsAndORs() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(FiveFieldsUsingANDsAndORs.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

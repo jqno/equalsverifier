@@ -23,6 +23,15 @@ package nl.jqno.equalsverifier;
  */
 public enum Warning {
     /**
+     * Signals that not all fields are relevant in the {@code equals} contract.
+     * {@code EqualsVerifier} will not fail if one or more fields do not affect
+     * the outcome of {@code equals}.
+     * 
+     * Only applies to non-transient fields.
+     */
+    ALL_FIELDS_SHOULD_BE_USED,
+    
+    /**
      * Disables annotation processing for the class under test.
      * <p>
      * Suppress this warning if {@link EqualsVerifier} cannot read the bytecode

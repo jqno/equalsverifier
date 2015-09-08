@@ -39,16 +39,14 @@ class FieldsChecker<T> implements Checker {
     private final ClassAccessor<T> classAccessor;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
-    private final boolean allFieldsShouldBeUsed;
-    private final Set<String> allFieldsShouldBeUsedExceptions;
+    private final Set<String> ignoredFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public FieldsChecker(Configuration<T> config) {
         this.classAccessor = config.createClassAccessor();
         this.prefabValues = classAccessor.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
-        this.allFieldsShouldBeUsed = config.isAllFieldsShouldBeUsed();
-        this.allFieldsShouldBeUsedExceptions = config.getAllFieldsShouldBeUsedExceptions();
+        this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -194,14 +192,15 @@ class FieldsChecker<T> implements Checker {
                 assertFalse(formatter, hashCodeChanged);
             }
 
-            if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient()) {
-                assertTrue(Formatter.of("Significant fields: equals does not use %%", fieldName), equalToItself);
+            boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) && !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
+            if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
+                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
-                boolean thisFieldShouldBeUsed = allFieldsShouldBeUsed && !allFieldsShouldBeUsedExceptions.contains(fieldName);
-                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName),
-                        !thisFieldShouldBeUsed || equalsChanged);
+                boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
+                assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
+                        fieldShouldBeIgnored || equalsChanged);
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
-                        thisFieldShouldBeUsed || !equalsChanged);
+                        !fieldShouldBeIgnored || !equalsChanged);
             }
 
             referenceAccessor.changeField(prefabValues);

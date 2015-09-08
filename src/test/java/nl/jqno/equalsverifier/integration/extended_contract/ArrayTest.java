@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.Util;
 
@@ -123,12 +124,14 @@ public class ArrayTest extends IntegrationTestBase {
     @Test
     public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
         EqualsVerifier.forClass(ArrayAndSomethingUnused.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
         EqualsVerifier.forClass(ArrayAndNoEquals.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

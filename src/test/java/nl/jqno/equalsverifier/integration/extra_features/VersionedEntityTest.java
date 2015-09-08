@@ -70,8 +70,23 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+    public void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+        expectFailure("Significant fields");
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(WeakStringVersionedEntity.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

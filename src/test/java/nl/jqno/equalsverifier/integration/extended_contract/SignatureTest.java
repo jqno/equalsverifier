@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 
 import org.junit.Test;
@@ -64,6 +65,7 @@ public class SignatureTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded() {
         EqualsVerifier.forClass(NoEqualsMethod.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

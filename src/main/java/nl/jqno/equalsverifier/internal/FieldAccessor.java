@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2012, 2014 Jan Ouwens
+ * Copyright 2010-2012, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -94,6 +94,14 @@ public class FieldAccessor {
      */
     public boolean fieldIsTransient() {
         return Modifier.isTransient(field.getModifiers());
+    }
+    
+    /**
+     * Returns whether the field is an enum with a single value.
+     */
+    public boolean fieldIsSingleValueEnum() {
+        Class<?> type = field.getType();
+        return type.isEnum() && type.getEnumConstants().length == 1;
     }
 
     /**

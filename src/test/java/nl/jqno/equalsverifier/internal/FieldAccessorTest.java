@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012, 2014 Jan Ouwens
+ * Copyright 2010, 2012, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,21 +27,9 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractAndInterfaceArrayContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClassContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllArrayTypesContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllTypesContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.FinalContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PointArrayContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrivateObjectContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TransientContainer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -142,6 +130,27 @@ public class FieldAccessorTest {
         TransientContainer foo = new TransientContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
         assertTrue(fieldAccessor.fieldIsTransient());
+    }
+    
+    @Test
+    public void isNotEnum() {
+        PrimitiveContainer foo = new PrimitiveContainer();
+        FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
+        assertFalse(fieldAccessor.fieldIsSingleValueEnum());
+    }
+    
+    @Test
+    public void isEnumButNotSingleValue() {
+        EnumContainer foo = new EnumContainer();
+        FieldAccessor fieldAccessor = getAccessorFor(foo, "twoElementEnum");
+        assertFalse(fieldAccessor.fieldIsSingleValueEnum());
+    }
+    
+    @Test
+    public void isSingleValueEnum() {
+        EnumContainer foo = new EnumContainer();
+        FieldAccessor fieldAccessor = getAccessorFor(foo, "oneElementEnum");
+        assertTrue(fieldAccessor.fieldIsSingleValueEnum());
     }
 
     @Test
