@@ -26,7 +26,7 @@ public enum Warning {
      * Signals that not all fields are relevant in the {@code equals} contract.
      * {@code EqualsVerifier} will not fail if one or more fields do not affect
      * the outcome of {@code equals}.
-     * 
+     * <p>
      * Only applies to non-transient fields.
      */
     ALL_FIELDS_SHOULD_BE_USED,
@@ -104,9 +104,9 @@ public enum Warning {
     IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 
     /**
-     * Disables the example check for cached hashCode.
+     * Disables the example check for cached {@code hashCode}.
      * <p>
-     * The example check verifies that the cached hashCode is properly
+     * The example check verifies that the cached {@code hashCode} is properly
      * initialized. You can use this, if creating an example object is too
      * cumbersome. In this case, null can be passed as an example.
      * <p>
