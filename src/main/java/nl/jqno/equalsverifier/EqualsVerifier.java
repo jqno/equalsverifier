@@ -251,10 +251,13 @@ public final class EqualsVerifier<T> {
     }
 
     /**
-     * Signals that all non-transient fields are relevant in the {@code equals}
-     * contract, except for the ones specified. {@code EqualsVerifier} will
-     * fail if one non-specified, non-transient field does not affect the
-     * outcome of {@code equals}, or if one specified field does.
+     * Signals that all given fields are not relevant for the {@code equals}
+     * contract. {@code EqualsVerifier} will not fail if one of these fields
+     * does not affect the outcome of {@code equals}, but it will fail if one
+     * of these fields does affect the outcome of {@code equals}.
+     *
+     * Note that these fields will still be used to test for null-ness, among
+     * other things.
      *
      * @param fields
      * @return {@code this}, for easy method chaining.
