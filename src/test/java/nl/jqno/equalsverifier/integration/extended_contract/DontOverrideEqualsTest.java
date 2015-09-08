@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2014 Jan Ouwens
+ * Copyright 2010, 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,36 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.Ignore;
 import org.junit.Test;
 
-public class DontOverrideEqualsTest {
+public class DontOverrideEqualsTest extends IntegrationTestBase {
     @Test
-    public void succeed_whenClassDoesntOverrideEqualsOrHashCode() {
+    public void fail_whenEqualsIsInheritedDirectlyFromObject() {
+        expectFailure("Equals is inherited directly from Object");
+        EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsIsInheritedButNotFromObject() {
+        EqualsVerifier.forClass(InheritedEqualsAndHashCodeMethod.class)
+                .verify();
+    }
+
+    @Test@Ignore("TODO: what to do with this?")
+    public void succeed_whenEqualsIsInheritedDirectlyFromObject_given() {
         EqualsVerifier.forClass(Pojo.class)
                 .suppress(Warning.NONFINAL_FIELDS, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
+    }
+
+    static final class NoEqualsNoHashCodeMethod {}
+
+    static final class InheritedEqualsAndHashCodeMethod extends Point {
+        InheritedEqualsAndHashCodeMethod(int x, int y) { super(x, y); }
     }
 
     public final class Pojo {
