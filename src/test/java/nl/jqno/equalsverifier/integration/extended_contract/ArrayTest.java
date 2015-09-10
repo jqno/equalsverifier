@@ -15,17 +15,17 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static org.hamcrest.CoreMatchers.containsString;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Objects;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.Util;
-
-import org.junit.Test;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static org.hamcrest.CoreMatchers.containsString;
 
 public class ArrayTest extends IntegrationTestBase {
     private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
@@ -130,8 +130,8 @@ public class ArrayTest extends IntegrationTestBase {
 
     @Test
     public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
-        EqualsVerifier.forClass(ArrayAndNoEquals.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+        EqualsVerifier.forClass(ArraysAreUnused.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -335,6 +335,9 @@ public class ArrayTest extends IntegrationTestBase {
             private final Object[][] grid;
             private BoardManipulator manipulator = new BoardManipulator(this);
             public Board(Object[][] grid) { this.grid = grid; }
+
+            @Override public boolean equals(Object obj) { return super.equals(obj); }
+            @Override public int hashCode() { return super.hashCode(); }
         }
 
         static final class BoardManipulator {
@@ -426,18 +429,18 @@ public class ArrayTest extends IntegrationTestBase {
     }
 
     @SuppressWarnings("unused")
-    static final class ArrayAndNoEquals {
+    static final class ArraysAreUnused {
         private final int[] ints;
         private final Object[] objects;
         private final int[][] arrays;
 
-        public ArrayAndNoEquals(int[] ints, Object[] objects, int[][] arrays) { this.ints = ints; this.objects = objects; this.arrays = arrays; }
+        public ArraysAreUnused(int[] ints, Object[] objects, int[][] arrays) { this.ints = ints; this.objects = objects; this.arrays = arrays; }
     }
 
     static final class EmptyStaticFinalArrayContainer {
         public static final EmptyStaticFinalArrayContainer[] EMPTY = {};
 
-        @Override public boolean equals(Object obj) { return Util.defaultEquals(this, obj); }
-        @Override public int hashCode() { return Util.defaultHashCode(this); }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 }

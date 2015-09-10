@@ -59,13 +59,14 @@ public class SignatureTest extends IntegrationTestBase {
     public void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
         expectOverloadFailure("More than one equals method found");
         EqualsVerifier.forClass(OverloadedAndOverridden.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .verify();
     }
 
     @Test
-    public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded() {
+    public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded_givenInheritedDirectlyWarningIsSuppressed() {
         EqualsVerifier.forClass(NoEqualsMethod.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 

@@ -15,30 +15,48 @@
  */
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.Formatter;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
-import nl.jqno.equalsverifier.internal.Assert;
-import nl.jqno.equalsverifier.internal.Formatter;
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class SignatureChecker<T> implements Checker {
     private final Class<T> type;
+    private final ClassAccessor<T> classAccessor;
+    private final Set<Warning> warningsToSuppress;
 
     public SignatureChecker(Configuration<T> config) {
         this.type = config.getType();
+        this.classAccessor = config.createClassAccessor();
+        this.warningsToSuppress = config.getWarningsToSuppress();
     }
 
     @Override
     public void check() {
         List<Method> equalsMethods = getEqualsMethods();
         if (equalsMethods.size() > 1) {
-            fail("More than one equals method found");
+            failOverloaded("More than one equals method found");
         }
-        if (equalsMethods.size() == 0) {
-            return;
+        if (equalsMethods.size() == 1) {
+            checkEquals(equalsMethods.get(0));
         }
-        checkEquals(equalsMethods.get(0));
+        checkEqualsIsDefined();
+    }
+
+    private void checkEqualsIsDefined() {
+        boolean fail =
+                !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT) &&
+                classAccessor.isEqualsInheritedFromObject();
+        if (fail) {
+            fail(Formatter.of(
+                    "Equals is inherited directly from Object.\n" +
+                    "Suppress Warning." + Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() + " to skip this check."));
+        }
     }
 
     private List<Method> getEqualsMethods() {
@@ -56,21 +74,21 @@ class SignatureChecker<T> implements Checker {
     private void checkEquals(Method equals) {
         Class<?>[] parameterTypes = equals.getParameterTypes();
         if (parameterTypes.length > 1) {
-            fail("Too many parameters");
+            failOverloaded("Too many parameters");
         }
         if (parameterTypes.length == 0) {
-            fail("No parameter");
+            failOverloaded("No parameter");
         }
         Class<?> parameterType = parameterTypes[0];
         if (parameterType == type) {
-            fail("Parameter should be an Object, not " + type.getSimpleName());
+            failOverloaded("Parameter should be an Object, not " + type.getSimpleName());
         }
         if (parameterType != Object.class) {
-            fail("Parameter should be an Object");
+            failOverloaded("Parameter should be an Object");
         }
     }
 
-    private void fail(String message) {
-        Assert.fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
+    private void failOverloaded(String message) {
+        fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
     }
 }
