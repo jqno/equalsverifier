@@ -47,6 +47,7 @@
             <property name="option" value="bottom"/>
             <property name="sortStaticImportsAlphabetically" value="true"/>
         </module>
+        <module name="Indentation"/>
         <module name="InnerAssignment"/>
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>

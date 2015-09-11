@@ -29,6 +29,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 public class FieldIterableTest {
+    private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
+    private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
+    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -134,41 +138,44 @@ public class FieldIterableTest {
         assertFalse(iterable.iterator().hasNext());
     }
 
-    @SuppressWarnings("serial")
-    private static final Set<Field> FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
+    private static Set<Field> createFieldContainerFields() {
+        Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
         try {
-            add(type.getDeclaredField("i"));
-            add(type.getDeclaredField("j"));
-            add(type.getDeclaredField("k"));
-            add(type.getDeclaredField("l"));
-            add(type.getDeclaredField("I"));
-            add(type.getDeclaredField("J"));
-            add(type.getDeclaredField("K"));
-            add(type.getDeclaredField("L"));
+            result.add(type.getDeclaredField("i"));
+            result.add(type.getDeclaredField("j"));
+            result.add(type.getDeclaredField("k"));
+            result.add(type.getDeclaredField("l"));
+            result.add(type.getDeclaredField("I"));
+            result.add(type.getDeclaredField("J"));
+            result.add(type.getDeclaredField("K"));
+            result.add(type.getDeclaredField("L"));
         }
         catch (NoSuchFieldException e) {
             throw new IllegalStateException(e);
         }
-    }};
+        return result;
+    }
 
-    @SuppressWarnings("serial")
-    private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
+    private static Set<Field> createSubFieldContainerFields() {
+        Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersSubFieldContainer> type = DifferentAccessModifiersSubFieldContainer.class;
         try {
-            add(type.getDeclaredField("a"));
-            add(type.getDeclaredField("b"));
-            add(type.getDeclaredField("c"));
-            add(type.getDeclaredField("d"));
+            result.add(type.getDeclaredField("a"));
+            result.add(type.getDeclaredField("b"));
+            result.add(type.getDeclaredField("c"));
+            result.add(type.getDeclaredField("d"));
         }
         catch (NoSuchFieldException e) {
             throw new IllegalStateException(e);
         }
-    }};
+        return result;
+    }
 
-    @SuppressWarnings("serial")
-    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
-        addAll(FIELD_CONTAINER_FIELDS);
-        addAll(SUB_FIELD_CONTAINER_FIELDS);
-    }};
+    private static Set<Field> createFieldAndSubFieldContainerFields() {
+        Set<Field> result = new HashSet<>();
+        result.addAll(FIELD_CONTAINER_FIELDS);
+        result.addAll(SUB_FIELD_CONTAINER_FIELDS);
+        return result;
+    }
 }

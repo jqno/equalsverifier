@@ -355,8 +355,9 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         @SuppressWarnings("unused")
         private final Color colorAlsoNotUsed;
 
-        public TwoFieldsUnusedColorPoint(int x, int y, Color color)
-            { this.x = x; this.y = y; this.colorNotUsed = color; this.colorAlsoNotUsed = color; }
+        public TwoFieldsUnusedColorPoint(int x, int y, Color color) {
+            this.x = x; this.y = y; this.colorNotUsed = color; this.colorAlsoNotUsed = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
