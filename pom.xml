@@ -79,6 +79,7 @@ limitations under the License.
         <maven.compiler.target>1.7</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <jacoco.version>0.7.4.201502262128</jacoco.version>
+        <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
     </properties>
 
     <dependencies>
@@ -245,6 +246,10 @@ limitations under the License.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
+                    <configLocation>${checkstyle.config}</configLocation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <encoding>UTF-8</encoding>
+                    <linkXRef>false</linkXRef>
                     <consoleOutput>true</consoleOutput>
                 </configuration>
                 <executions>
@@ -324,12 +329,6 @@ limitations under the License.
                             <version>6.10.1</version>
                         </dependency>
                     </dependencies>
-                    <configuration>
-                        <configLocation>project/checkstyle-config.xml</configLocation>
-                        <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                        <encoding>UTF-8</encoding>
-                        <linkXRef>false</linkXRef>
-                    </configuration>
                 </plugin>
 
                 <!-- Sadly, all this is needed to suppress errors and warnings in M2Eclipse. -->
@@ -379,6 +378,12 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <configuration>
+                    <configLocation>${checkstyle.config}</configLocation>
+                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                    <encoding>UTF-8</encoding>
+                    <linkXRef>false</linkXRef>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <reports>
@@ -390,4 +395,3 @@ limitations under the License.
         </plugins>
     </reporting>
 </project>
-
