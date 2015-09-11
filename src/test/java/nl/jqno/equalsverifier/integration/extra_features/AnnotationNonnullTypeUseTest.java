@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
 
 public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {

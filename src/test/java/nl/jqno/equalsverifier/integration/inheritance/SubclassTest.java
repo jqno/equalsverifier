@@ -15,20 +15,13 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.types.BlindlyEqualsColorPoint;
-import nl.jqno.equalsverifier.testhelpers.types.BlindlyEqualsPoint;
-import nl.jqno.equalsverifier.testhelpers.types.CanEqualColorPoint;
-import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.types.Color;
-import nl.jqno.equalsverifier.testhelpers.types.EqualSubclassForBlindlyEqualsPoint;
-import nl.jqno.equalsverifier.testhelpers.types.EqualSubclassForCanEqualPoint;
-import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
-
+import nl.jqno.equalsverifier.testhelpers.types.*;
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 /**
  * Tests, among other things, the following approaches to inheritance with added

@@ -15,23 +15,20 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.*;
 
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";

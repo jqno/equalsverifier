@@ -15,11 +15,10 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import static org.junit.Assert.assertTrue;
-
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
     private static final String JAVA_8_CLASS_NAME = "Java8Class";

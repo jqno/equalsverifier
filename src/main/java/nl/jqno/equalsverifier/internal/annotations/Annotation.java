@@ -15,15 +15,13 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.RetentionPolicy;
-
 /**
  * Describes an annotation that can be recognised by EqualsVerifier.
  * 
- * The annotation can have {@link RetentionPolicy#RUNTIME} or
- * {@link RetentionPolicy#CLASS}, and must have either {@link ElementType#TYPE}
- * or {@link ElementType#FIELD}.
+ * The annotation can have {@link java.lang.annotation.RetentionPolicy#RUNTIME}
+ * or {@link java.lang.annotation.RetentionPolicy#CLASS}, and must have either
+ * {@link java.lang.annotation.ElementType#TYPE} or
+ * {@link java.lang.annotation.ElementType#FIELD}.
  * 
  * @author Jan Ouwens
  */

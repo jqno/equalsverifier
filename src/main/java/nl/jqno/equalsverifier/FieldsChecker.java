@@ -15,25 +15,17 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
-import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
+import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.PrefabValues;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
-import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class FieldsChecker<T> implements Checker {
     private final ClassAccessor<T> classAccessor;

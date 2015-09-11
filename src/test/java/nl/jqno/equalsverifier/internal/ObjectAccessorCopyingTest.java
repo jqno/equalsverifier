@@ -15,19 +15,16 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
-
 import org.junit.Test;
+
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.*;
 
 public class ObjectAccessorCopyingTest {
     @Test

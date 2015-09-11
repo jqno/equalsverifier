@@ -15,47 +15,27 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_CLASS_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_DOESNT_INHERIT;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_INHERITS;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.INAPPLICABLE;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_CLASS_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_DOESNT_INHERIT;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_INHERITS;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR;
-import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
+import nl.jqno.equalsverifier.internal.Instantiator;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedFields;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithBoth;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithClass;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedWithRuntime;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InapplicableAnnotations;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.LoadedBySystemClassLoader;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubclassWithAnnotations;
-import nl.jqno.equalsverifier.internal.Instantiator;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.objectweb.asm.Type;
+
+import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class AnnotationAccessorTest {
     private static final String RUNTIME_RETENTION = "runtimeRetention";

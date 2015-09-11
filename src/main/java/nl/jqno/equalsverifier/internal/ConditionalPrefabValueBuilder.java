@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Builds prefab values for classes that may or may not be present on the

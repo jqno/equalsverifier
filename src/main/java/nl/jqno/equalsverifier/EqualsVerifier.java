@@ -15,14 +15,14 @@
  */
 package nl.jqno.equalsverifier;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the

@@ -15,12 +15,12 @@
  */
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Records an initializer for a cached hash code (field name and recompute

@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
 
 /**

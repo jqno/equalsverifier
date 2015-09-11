@@ -15,17 +15,16 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-
 import org.junit.Test;
 
 import java.util.Objects;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class ReflexivityTest extends IntegrationTestBase {
     @Test

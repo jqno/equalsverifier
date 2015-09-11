@@ -15,17 +15,14 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
-import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class ExamplesChecker<T> implements Checker {
     private final Class<T> type;

@@ -15,10 +15,10 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Provides reflective access to one field of an object.

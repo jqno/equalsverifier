@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
 
 public class Java8ApiClassesTest extends Java8IntegrationTestBase {

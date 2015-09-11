@@ -15,13 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import nl.jqno.equalsverifier.internal.Formatter;
 
 import java.util.EnumSet;
 
-import nl.jqno.equalsverifier.internal.Formatter;
+import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class CachedHashCodeChecker<T> implements Checker {
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;

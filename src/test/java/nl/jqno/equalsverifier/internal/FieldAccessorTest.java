@@ -15,24 +15,17 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
-import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.lang.reflect.Field;
+
+import static org.junit.Assert.*;
 
 public class FieldAccessorTest {
     private static final Point RED_NEW_POINT = new Point(10, 20);

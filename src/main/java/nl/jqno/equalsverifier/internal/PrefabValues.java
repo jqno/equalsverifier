@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -22,9 +25,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-
-import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Container and creator of prefabricated instances of objects and classes.

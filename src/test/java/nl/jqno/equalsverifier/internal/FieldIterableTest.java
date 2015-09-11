@@ -14,8 +14,10 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -23,18 +25,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DifferentAccessModifiersFieldContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DifferentAccessModifiersSubFieldContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptySubFieldContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFields;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFieldsSubWithFields;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SubEmptySubFieldContainer;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 public class FieldIterableTest {
     @Rule

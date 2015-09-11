@@ -15,67 +15,20 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.forName;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
+import javax.naming.Reference;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Deque;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.Properties;
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.UUID;
-import java.util.WeakHashMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentNavigableMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
-import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
-import nl.jqno.equalsverifier.internal.PrefabValues;
-
-import javax.naming.Reference;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.

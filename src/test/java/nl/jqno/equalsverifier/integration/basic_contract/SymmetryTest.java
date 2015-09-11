@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier.integration.basic_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SymmetryTest extends IntegrationTestBase {
     private static final String SYMMETRY = "Symmetry";

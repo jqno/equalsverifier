@@ -15,13 +15,13 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import static org.junit.Assert.fail;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.FieldIterable;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
 
-import nl.jqno.equalsverifier.internal.FieldAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
+import static org.junit.Assert.fail;
 
 public class Util {
     public static boolean defaultEquals(Object here, Object there) {

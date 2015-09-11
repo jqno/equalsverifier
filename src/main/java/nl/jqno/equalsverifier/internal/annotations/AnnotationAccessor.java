@@ -15,22 +15,15 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import org.objectweb.asm.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.TypePath;
 
 /**
  * Provides access to the annotations that are defined on a class

@@ -15,19 +15,15 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
 
 public class PrefabValuesTest {
     private static final Class<String> EXISTING_KEY = String.class;

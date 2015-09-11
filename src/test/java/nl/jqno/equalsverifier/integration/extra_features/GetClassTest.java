@@ -15,14 +15,14 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class GetClassTest extends IntegrationTestBase {
     @Test

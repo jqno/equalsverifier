@@ -15,26 +15,23 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
-
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.*;
 
 public class ConditionalPrefabValueBuilderTest {
     private PrefabValues prefabValues;

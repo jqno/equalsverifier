@@ -15,17 +15,16 @@
  */
 package nl.jqno.equalsverifier.coverage;
 
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
+
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class CoverageNoInheritanceTest {

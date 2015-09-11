@@ -15,16 +15,15 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.Util;
-
 import org.junit.Test;
 
 import java.util.Objects;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class AbstractDelegationTest extends IntegrationTestBase {

@@ -14,30 +14,14 @@
  */
 package nl.jqno.equalsverifier.testhelpers.types;
 
+import nl.jqno.equalsverifier.testhelpers.annotations.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
-
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationDoesntInherit;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationInherits;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.Inapplicable;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationDoesntInherit;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationInherits;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 
 public class TypeHelper {
     private static final Object OBJECT = new Object();

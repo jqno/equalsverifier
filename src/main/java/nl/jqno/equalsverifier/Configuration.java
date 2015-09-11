@@ -15,14 +15,10 @@
  */
 package nl.jqno.equalsverifier;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.PrefabValues;
+
+import java.util.*;
 
 public class Configuration<T> {
     private final Class<T> type;

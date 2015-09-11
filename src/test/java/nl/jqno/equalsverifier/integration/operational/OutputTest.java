@@ -15,18 +15,18 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import static org.hamcrest.CoreMatchers.not;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.not;
 
 public class OutputTest extends IntegrationTestBase {
     private static final String SEE_ALSO = "For more information, go to";

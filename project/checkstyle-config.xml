@@ -40,6 +40,13 @@
             <property name="ignoreCase" value="true"/>
             <property name="message" value="Octal integer literals are not allowed"/>
         </module>
+        <module name="ImportOrder">
+            <property name="groups" value="*,javax,java"/>
+            <property name="ordered" value="true"/>
+            <property name="separated" value="false"/>
+            <property name="option" value="bottom"/>
+            <property name="sortStaticImportsAlphabetically" value="true"/>
+        </module>
         <module name="InnerAssignment"/>
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>
@@ -96,6 +103,7 @@
         </module>
         <module name="TypeName"/>
         <module name="UncommentedMain"/>
+        <module name="UnusedImports"/>
         <module name="UpperEll"/>
     </module>
 </module>

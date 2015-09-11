@@ -14,15 +14,14 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Objects;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class RecursionTest extends IntegrationTestBase {
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";

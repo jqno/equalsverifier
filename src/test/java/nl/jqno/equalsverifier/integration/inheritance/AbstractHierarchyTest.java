@@ -15,13 +15,13 @@
  */
 package nl.jqno.equalsverifier.integration.inheritance;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class AbstractHierarchyTest extends IntegrationTestBase {
     @Test

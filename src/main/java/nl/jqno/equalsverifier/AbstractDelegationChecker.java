@@ -15,15 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import nl.jqno.equalsverifier.internal.*;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.Instantiator;
-import nl.jqno.equalsverifier.internal.PrefabValues;
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
