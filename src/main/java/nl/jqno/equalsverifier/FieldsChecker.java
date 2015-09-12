@@ -171,6 +171,13 @@ class FieldsChecker<T> implements Checker {
             boolean equalsChanged = !reference.equals(changed);
             boolean hashCodeChanged = cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
 
+            assertEqualsAndHashCodeRelyOnSameFields(equalsChanged, hashCodeChanged, reference, changed, fieldName);
+            assertFieldShouldBeIgnored(equalToItself, equalsChanged, referenceAccessor, fieldName);
+
+            referenceAccessor.changeField(prefabValues);
+        }
+
+        private void assertEqualsAndHashCodeRelyOnSameFields(boolean equalsChanged, boolean hashCodeChanged, Object reference, Object changed, String fieldName) {
             if (equalsChanged != hashCodeChanged) {
                 if (!skipTestBecause0AndNullBothHaveA0HashCode) {
                     Formatter formatter = Formatter.of(
@@ -183,7 +190,9 @@ class FieldsChecker<T> implements Checker {
                         fieldName, reference, changed);
                 assertFalse(formatter, hashCodeChanged);
             }
+        }
 
+        private void assertFieldShouldBeIgnored(boolean equalToItself, boolean equalsChanged, FieldAccessor referenceAccessor, String fieldName) {
             boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) && !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
             if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
@@ -194,8 +203,6 @@ class FieldsChecker<T> implements Checker {
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
                         !fieldShouldBeIgnored || !equalsChanged);
             }
-
-            referenceAccessor.changeField(prefabValues);
         }
     }
 

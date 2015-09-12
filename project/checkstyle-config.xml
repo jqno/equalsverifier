@@ -32,6 +32,7 @@
         <module name="ClassTypeParameterName"/>
         <module name="CommentsIndentation"/>
         <module name="ConstantName"/>
+        <module name="CyclomaticComplexity"/>
         <module name="DefaultComesLast"/>
         <module name="EmptyBlock"/>
         <module name="EmptyForInitializerPad"/>
