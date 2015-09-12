@@ -160,7 +160,7 @@ public class AnnotationAccessorTest {
     }
 
     private Set<String> mapGetDescriptor(AnnotationWithClassValuesDescriptor annotation) {
-        Set<String> result = new HashSet<String>();
+        Set<String> result = new HashSet<>();
         for (Object o : annotation.properties.getArrayValues("annotations")) {
             Type type = (Type)o;
             result.add(type.getDescriptor());

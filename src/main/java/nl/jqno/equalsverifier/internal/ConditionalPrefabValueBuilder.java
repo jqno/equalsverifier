@@ -24,15 +24,15 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 /**
  * Builds prefab values for classes that may or may not be present on the
  * classpath.
- * 
+ *
  * Will try to create precisely two prefab values for a given class by calling
  * its constructor, a factory method, or a public static final constant declared
  * within the class, and add them to a {@link PrefabValues} object.
- * 
+ *
  * If the class is not present on the classpath, or if calling any of its
  * members fails, it will result in a no-op. ConditionalPrefabValueBuilder will
  * not throw an exception.
- * 
+ *
  * @author Jan Ouwens
  */
 public class ConditionalPrefabValueBuilder {
@@ -124,7 +124,7 @@ public class ConditionalPrefabValueBuilder {
         add(new Supplier() {
             @Override
             public Object get() {
-                List<Object> objects = new ArrayList<Object>();
+                List<Object> objects = new ArrayList<>();
                 for (Class<?> type : paramTypes) {
                     if (!prefabValues.contains(type)) {
                         throw new EqualsVerifierBugException("No prefab values available for type " + type.getCanonicalName());
