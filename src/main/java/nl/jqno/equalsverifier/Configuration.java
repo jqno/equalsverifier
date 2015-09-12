@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.internal.PrefabValues;
 
 import java.util.*;
 
-public class Configuration<T> {
+public final class Configuration<T> {
     private final Class<T> type;
     private final PrefabValues prefabValues;
 

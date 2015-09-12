@@ -486,7 +486,7 @@ public final class EqualsVerifier<T> {
      *
      * @author Jan Ouwens
      */
-    public static class RelaxedEqualsVerifierHelper<T> {
+    public static final class RelaxedEqualsVerifierHelper<T> {
         private final Class<T> type;
         private final List<T> equalExamples;
 

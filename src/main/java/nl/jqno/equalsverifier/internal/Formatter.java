@@ -28,7 +28,7 @@ import java.util.regex.Matcher;
  *
  * @author Jan Ouwens
  */
-public class Formatter {
+public final class Formatter {
     private final String message;
     private Object[] objects;
 

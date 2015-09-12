@@ -35,7 +35,7 @@ import java.util.List;
  *
  * @author Jan Ouwens
  */
-public class ConditionalPrefabValueBuilder {
+public final class ConditionalPrefabValueBuilder {
     private final Class<?> type;
     private boolean stop = false;
     private ConditionalInstantiator ci;

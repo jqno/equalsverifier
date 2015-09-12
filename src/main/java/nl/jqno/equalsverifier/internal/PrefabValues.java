@@ -251,7 +251,7 @@ public class PrefabValues {
         return result;
     }
 
-    private static class Tuple<T> {
+    private static final class Tuple<T> {
         private T red;
         private T black;
 

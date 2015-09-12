@@ -42,6 +42,7 @@
         <module name="EqualsAvoidNull"/>
         <module name="ExecutableStatementCount"/>
         <module name="FallThrough"/>
+        <module name="FinalClass"/>
         <module name="GenericWhitespace"/>
         <module name="IllegalImport"/>
         <module name="IllegalThrows"/>

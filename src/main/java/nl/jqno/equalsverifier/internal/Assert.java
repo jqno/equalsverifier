@@ -23,7 +23,7 @@ import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
  *
  * @author Jan Ouwens
  */
-public class Assert {
+public final class Assert {
     private Assert() {
         // Do not instantiate
     }

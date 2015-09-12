@@ -25,7 +25,7 @@ import java.lang.reflect.Field;
  *
  * @param <T> The specified object's class.
  */
-public class ObjectAccessor<T> {
+public final class ObjectAccessor<T> {
     private final T object;
     private final Class<T> type;
 

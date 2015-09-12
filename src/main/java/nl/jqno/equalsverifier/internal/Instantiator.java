@@ -32,7 +32,7 @@ import java.lang.reflect.Modifier;
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an
  *          anonymous subclass of this class.
  */
-public class Instantiator<T> {
+public final class Instantiator<T> {
     private final Class<T> type;
     private Objenesis objenesis;
 

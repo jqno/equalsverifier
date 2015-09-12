@@ -39,7 +39,7 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
  *
  * @author Jan Ouwens
  */
-public class JavaApiPrefabValues {
+public final class JavaApiPrefabValues {
     private PrefabValues prefabValues;
 
     /**
