@@ -9,6 +9,9 @@
 
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
+    <module name="RegexpHeader">
+        <property name="headerFile" value="project/java-header.txt"/>
+    </module>
 
     <module name="TreeWalker">
         <module name="AnnotationUseStyle"/>
