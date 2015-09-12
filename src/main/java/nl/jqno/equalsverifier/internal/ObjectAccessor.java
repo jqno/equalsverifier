@@ -21,9 +21,9 @@ import java.lang.reflect.Field;
  * Wraps an object to provide reflective access to it. ObjectAccessor can
  * copy and scramble the wrapped object.
  *
- * @param <T> The specified object's class.
- *
  * @author Jan Ouwens
+ *
+ * @param <T> The specified object's class.
  */
 public class ObjectAccessor<T> {
     private final T object;

@@ -29,9 +29,9 @@ import java.lang.reflect.Modifier;
  * can create two different instances of T, which are guaranteed not to be
  * equal to each other, and which contain no null values.
  *
- * @param <T> A class.
- *
  * @author Jan Ouwens
+ *
+ * @param <T> A class.
  */
 public class ClassAccessor<T> {
     private final Class<T> type;

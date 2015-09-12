@@ -23,6 +23,7 @@
         <module name="AnnotationUseStyle"/>
         <module name="AnonInnerLength"/>
         <module name="ArrayTypeStyle"/>
+        <module name="AtclauseOrder"/>
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowEscapesForControlCharacters" value="true"/>
         </module>

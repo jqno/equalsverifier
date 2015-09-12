@@ -27,10 +27,10 @@ import java.lang.reflect.Modifier;
 /**
  * Instantiates objects of a given class.
  *
+ * @author Jan Ouwens
+ *
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an
  *          anonymous subclass of this class.
- *
- * @author Jan Ouwens
  */
 public class Instantiator<T> {
     private final Class<T> type;

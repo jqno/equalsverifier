@@ -96,9 +96,10 @@ import java.util.*;
  * For more information, see the documentation at
  * http://www.jqno.nl/equalsverifier/
  *
+ * @author Jan Ouwens
+ *
  * @param <T> The class under test.
  *
- * @author Jan Ouwens
  * @see java.lang.Object#equals(Object)
  * @see java.lang.Object#hashCode()
  */
