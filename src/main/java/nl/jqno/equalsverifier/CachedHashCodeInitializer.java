@@ -119,7 +119,9 @@ class CachedHashCodeInitializer<T> {
                     return method;
                 }
             }
-            catch (NoSuchMethodException ignore) {}
+            catch (NoSuchMethodException ignore) {
+                // Method not found; continue.
+            }
             currentClass = currentClass.getSuperclass();
         }
         throw new IllegalArgumentException("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");

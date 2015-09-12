@@ -35,6 +35,7 @@
         <module name="CyclomaticComplexity"/>
         <module name="DefaultComesLast"/>
         <module name="EmptyBlock"/>
+        <module name="EmptyCatchBlock"/>
         <module name="EmptyForInitializerPad"/>
         <module name="EmptyForIteratorPad"/>
         <module name="EmptyStatement"/>
