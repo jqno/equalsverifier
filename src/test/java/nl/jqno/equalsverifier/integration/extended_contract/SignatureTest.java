@@ -120,8 +120,8 @@ public class SignatureTest extends IntegrationTestBase {
 
         OverloadedWithUnrelatedParameter(int i) { this.i = i; }
 
-        public boolean equals(int i) {
-            return this.i == i;
+        public boolean equals(int obj) {
+            return this.i == obj;
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

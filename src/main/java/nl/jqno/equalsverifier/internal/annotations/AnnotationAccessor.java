@@ -111,9 +111,9 @@ public class AnnotationAccessor {
         }
     }
 
-    private void visitType(Class<?> type, boolean inheriting) {
-        ClassLoader classLoader = getClassLoaderFor(type);
-        Type asmType = Type.getType(type);
+    private void visitType(Class<?> c, boolean inheriting) {
+        ClassLoader classLoader = getClassLoaderFor(c);
+        Type asmType = Type.getType(c);
         String url = asmType.getInternalName() + ".class";
         InputStream is = classLoader.getResourceAsStream(url);
 
@@ -127,14 +127,14 @@ public class AnnotationAccessor {
                 shortCircuit = true;
             }
             else {
-                throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
+                throw new ReflectionException("Cannot read class file for " + c.getSimpleName() +
                         ".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
             }
         }
     }
 
-    private ClassLoader getClassLoaderFor(Class<?> type) {
-        ClassLoader result = type.getClassLoader();
+    private ClassLoader getClassLoaderFor(Class<?> c) {
+        ClassLoader result = c.getClassLoader();
         if (result == null) {
             result = ClassLoader.getSystemClassLoader();
         }

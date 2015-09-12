@@ -125,15 +125,15 @@ public final class ConditionalPrefabValueBuilder {
             @Override
             public Object get() {
                 List<Object> objects = new ArrayList<>();
-                for (Class<?> type : paramTypes) {
-                    if (!prefabValues.contains(type)) {
-                        throw new EqualsVerifierBugException("No prefab values available for type " + type.getCanonicalName());
+                for (Class<?> c : paramTypes) {
+                    if (!prefabValues.contains(c)) {
+                        throw new EqualsVerifierBugException("No prefab values available for type " + c.getCanonicalName());
                     }
                     if (instances.size() == 0) {
-                        objects.add(prefabValues.getRed(type));
+                        objects.add(prefabValues.getRed(c));
                     }
                     else {
-                        objects.add(prefabValues.getBlack(type));
+                        objects.add(prefabValues.getBlack(c));
                     }
                 }
                 return ci.instantiate(paramTypes, objects.toArray());

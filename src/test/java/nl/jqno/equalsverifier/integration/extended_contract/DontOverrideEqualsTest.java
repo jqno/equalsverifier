@@ -57,19 +57,19 @@ public class DontOverrideEqualsTest extends IntegrationTestBase {
     }
 
     public final class Pojo {
-        private String value;
+        private String s;
 
-        public void setValue(String value) {
-            this.value = value;
+        public void setS(String value) {
+            this.s = value;
         }
 
-        public String getValue() {
-            return value;
+        public String getS() {
+            return s;
         }
 
         @Override
         public String toString() {
-            return getClass().getName() + " " + value;
+            return getClass().getName() + " " + s;
         }
     }
 }

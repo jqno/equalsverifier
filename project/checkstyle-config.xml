@@ -44,6 +44,9 @@
         <module name="FallThrough"/>
         <module name="FinalClass"/>
         <module name="GenericWhitespace"/>
+        <module name="HiddenField">
+            <property name="ignoreConstructorParameter" value="true"/>
+        </module>
         <module name="IllegalImport"/>
         <module name="IllegalThrows"/>
         <module name="IllegalToken">

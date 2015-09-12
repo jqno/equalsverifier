@@ -172,12 +172,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -199,12 +199,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -224,12 +224,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -251,12 +251,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -276,12 +276,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -303,12 +303,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override

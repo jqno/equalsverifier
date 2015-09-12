@@ -89,10 +89,10 @@ public final class FieldIterable implements Iterable<Field> {
         return result;
     }
 
-    private List<Field> addFieldsFor(Class<?> type) {
+    private List<Field> addFieldsFor(Class<?> c) {
         List<Field> result = new ArrayList<>();
 
-        for (Field field : type.getDeclaredFields()) {
+        for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic()) {
                 result.add(field);
             }
