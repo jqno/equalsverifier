@@ -28,6 +28,7 @@
             <property name="allowEscapesForControlCharacters" value="true"/>
         </module>
         <module name="AvoidNestedBlocks"/>
+        <module name="BooleanExpressionComplexity"/>
         <module name="ClassTypeParameterName"/>
         <module name="CommentsIndentation"/>
         <module name="DefaultComesLast"/>
