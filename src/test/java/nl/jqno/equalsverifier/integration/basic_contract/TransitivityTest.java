@@ -27,39 +27,39 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class TransitivityTest extends IntegrationTestBase {
     @Test
-    public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAND() {
-        EqualsVerifier.forClass(TwoFieldsUsingAND.class)
+    public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAnd() {
+        EqualsVerifier.forClass(TwoFieldsUsingAnd.class)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForTwoFieldsIsCombinedUsingOR() {
-        expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOR.class.getSimpleName());
-        EqualsVerifier.forClass(TwoFieldsUsingOR.class)
+    public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
+        expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOr.class.getSimpleName());
+        EqualsVerifier.forClass(TwoFieldsUsingOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
-    public void succeed_whenEqualityForThreeFieldsIsCombinedUsingAND() {
-        EqualsVerifier.forClass(ThreeFieldsUsingAND.class)
+    public void succeed_whenEqualityForThreeFieldsIsCombinedUsingAnd() {
+        EqualsVerifier.forClass(ThreeFieldsUsingAnd.class)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOR() {
+    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
         expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingOR.class)
+        EqualsVerifier.forClass(ThreeFieldsUsingOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOR_givenRelaxedEqualExamples() {
-        ThreeFieldsUsingOR one = new ThreeFieldsUsingOR("a", "1", "alpha");
-        ThreeFieldsUsingOR two = new ThreeFieldsUsingOR("b", "1", "alpha");
-        ThreeFieldsUsingOR three = new ThreeFieldsUsingOR("c", "1", "alpha");
-        ThreeFieldsUsingOR other = new ThreeFieldsUsingOR("d", "4", "delta");
+    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr_givenRelaxedEqualExamples() {
+        ThreeFieldsUsingOr one = new ThreeFieldsUsingOr("a", "1", "alpha");
+        ThreeFieldsUsingOr two = new ThreeFieldsUsingOr("b", "1", "alpha");
+        ThreeFieldsUsingOr three = new ThreeFieldsUsingOr("c", "1", "alpha");
+        ThreeFieldsUsingOr other = new ThreeFieldsUsingOr("d", "4", "delta");
 
         expectFailure("Transitivity");
         EqualsVerifier.forRelaxedEqualExamples(one, two, three)
@@ -69,33 +69,33 @@ public class TransitivityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingANDAndOR() {
+    public void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
         expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingANDOR.class)
+        EqualsVerifier.forClass(ThreeFieldsUsingAndOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingORAndAND() {
+    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
         expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingORAND.class)
+        EqualsVerifier.forClass(ThreeFieldsUsingOrAnd.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForFiveFieldsIsCombinedUsingOR() {
+    public void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
         expectFailure("Transitivity");
-        EqualsVerifier.forClass(FiveFieldsUsingOR.class)
+        EqualsVerifier.forClass(FiveFieldsUsingOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
-    public void fail_whenEqualityForFiveFieldsIsCombinedUsingANDsAndORs() {
+    public void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
         expectFailure("Transitivity");
-        EqualsVerifier.forClass(FiveFieldsUsingANDsAndORs.class)
+        EqualsVerifier.forClass(FiveFieldsUsingAndsAndOrs.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
@@ -108,133 +108,133 @@ public class TransitivityTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static final class TwoFieldsUsingAND {
+    static final class TwoFieldsUsingAnd {
         private final String f;
         private final String g;
 
-        public TwoFieldsUsingAND(String f, String g) { this.f = f; this.g = g; }
+        public TwoFieldsUsingAnd(String f, String g) { this.f = f; this.g = g; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof TwoFieldsUsingAND)) {
+            if (!(obj instanceof TwoFieldsUsingAnd)) {
                 return false;
             }
-            TwoFieldsUsingAND other = (TwoFieldsUsingAND)obj;
+            TwoFieldsUsingAnd other = (TwoFieldsUsingAnd)obj;
             return Objects.equals(f, other.f) && Objects.equals(g, other.g);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static final class TwoFieldsUsingOR {
+    static final class TwoFieldsUsingOr {
         private final String f;
         private final String g;
 
-        public TwoFieldsUsingOR(String f, String g) { this.f = f; this.g = g; }
+        public TwoFieldsUsingOr(String f, String g) { this.f = f; this.g = g; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof TwoFieldsUsingOR)) {
+            if (!(obj instanceof TwoFieldsUsingOr)) {
                 return false;
             }
-            TwoFieldsUsingOR other = (TwoFieldsUsingOR)obj;
+            TwoFieldsUsingOr other = (TwoFieldsUsingOr)obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g);
         }
 
         @Override public int hashCode() { return 42; }
     }
 
-    static final class ThreeFieldsUsingAND {
+    static final class ThreeFieldsUsingAnd {
         private final String f;
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingAND(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingAnd(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof ThreeFieldsUsingAND)) {
+            if (!(obj instanceof ThreeFieldsUsingAnd)) {
                 return false;
             }
-            ThreeFieldsUsingAND other = (ThreeFieldsUsingAND)obj;
+            ThreeFieldsUsingAnd other = (ThreeFieldsUsingAnd)obj;
             return Objects.equals(f, other.f) && Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static final class ThreeFieldsUsingOR {
+    static final class ThreeFieldsUsingOr {
         private final String f;
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingOR(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingOr(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof ThreeFieldsUsingOR)) {
+            if (!(obj instanceof ThreeFieldsUsingOr)) {
                 return false;
             }
-            ThreeFieldsUsingOR other = (ThreeFieldsUsingOR)obj;
+            ThreeFieldsUsingOr other = (ThreeFieldsUsingOr)obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
     }
 
-    static final class ThreeFieldsUsingANDOR {
+    static final class ThreeFieldsUsingAndOr {
         private final String f;
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingANDOR(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingAndOr(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof ThreeFieldsUsingANDOR)) {
+            if (!(obj instanceof ThreeFieldsUsingAndOr)) {
                 return false;
             }
-            ThreeFieldsUsingANDOR other = (ThreeFieldsUsingANDOR)obj;
+            ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr)obj;
             return Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
     }
 
-    static final class ThreeFieldsUsingORAND {
+    static final class ThreeFieldsUsingOrAnd {
         private final String f;
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingORAND(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingOrAnd(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof ThreeFieldsUsingORAND)) {
+            if (!(obj instanceof ThreeFieldsUsingOrAnd)) {
                 return false;
             }
-            ThreeFieldsUsingORAND other = (ThreeFieldsUsingORAND)obj;
+            ThreeFieldsUsingOrAnd other = (ThreeFieldsUsingOrAnd)obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
         @Override public int hashCode() { return 42; }
     }
 
-    static final class FiveFieldsUsingOR {
+    static final class FiveFieldsUsingOr {
         private final String f;
         private final String g;
         private final String h;
         private final String i;
         private final String j;
 
-        public FiveFieldsUsingOR(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
+        public FiveFieldsUsingOr(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof FiveFieldsUsingOR)) {
+            if (!(obj instanceof FiveFieldsUsingOr)) {
                 return false;
             }
-            FiveFieldsUsingOR other = (FiveFieldsUsingOR)obj;
+            FiveFieldsUsingOr other = (FiveFieldsUsingOr)obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g) ||
                     Objects.equals(h, other.h) || Objects.equals(i, other.i) || Objects.equals(j, other.j);
         }
@@ -242,21 +242,21 @@ public class TransitivityTest extends IntegrationTestBase {
         @Override public int hashCode() { return 42; }
     }
 
-    static final class FiveFieldsUsingANDsAndORs {
+    static final class FiveFieldsUsingAndsAndOrs {
         private final String f;
         private final String g;
         private final String h;
         private final String i;
         private final String j;
 
-        public FiveFieldsUsingANDsAndORs(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
+        public FiveFieldsUsingAndsAndOrs(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof FiveFieldsUsingANDsAndORs)) {
+            if (!(obj instanceof FiveFieldsUsingAndsAndOrs)) {
                 return false;
             }
-            FiveFieldsUsingANDsAndORs other = (FiveFieldsUsingANDsAndORs)obj;
+            FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs)obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g) &&
                     Objects.equals(h, other.h) || Objects.equals(i, other.i) && Objects.equals(j, other.j);
         }

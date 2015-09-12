@@ -17,6 +17,9 @@
     </module>
 
     <module name="TreeWalker">
+        <module name="AbbreviationAsWordInName">
+            <property name="allowedAbbreviationLength" value="1"/>
+        </module>
         <module name="AnnotationUseStyle"/>
         <module name="AnonInnerLength"/>
         <module name="ArrayTypeStyle"/>

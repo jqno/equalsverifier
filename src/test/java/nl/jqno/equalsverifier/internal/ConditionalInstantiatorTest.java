@@ -71,7 +71,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidConstructorParametersAreProvided() {
+    public void throwsIse_whenInvalidConstructorParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar");
 
         thrown.expect(ReflectionException.class);
@@ -95,7 +95,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidMethodNameIsProvided() {
+    public void throwsIse_whenInvalidMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
         thrown.expect(ReflectionException.class);
@@ -103,7 +103,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidFactoryMethodParametersAreProvided() {
+    public void throwsIse_whenInvalidFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
         thrown.expect(ReflectionException.class);
@@ -135,7 +135,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidExternalFactoryMethodNameIsProvided() {
+    public void throwsIse_whenInvalidExternalFactoryMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
@@ -143,7 +143,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidExternalFactoryMethodParametersAreProvided() {
+    public void throwsIse_whenInvalidExternalFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
@@ -167,7 +167,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenConstantDoesNotExist() {
+    public void throwsIse_whenConstantDoesNotExist() {
         ci = new ConditionalInstantiator("java.math.BigDecimal");
 
         thrown.expect(ReflectionException.class);

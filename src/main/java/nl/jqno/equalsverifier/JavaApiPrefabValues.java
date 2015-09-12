@@ -69,7 +69,7 @@ public class JavaApiPrefabValues {
         addSets();
         addQueues();
         addJava8ApiClasses();
-        addJavaFXClasses();
+        addJavaFxClasses();
         addGoogleGuavaClasses();
         addJodaTimeClasses();
     }
@@ -194,7 +194,7 @@ public class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
-    private void addJavaFXClasses() {
+    private void addJavaFxClasses() {
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableList")
                 .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.getRed(List.class)))
                 .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.getBlack(List.class)))

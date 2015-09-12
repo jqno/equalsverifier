@@ -114,7 +114,7 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void classInDefaultPackageDoesntThrowNPE() throws IOException {
+    public void classInDefaultPackageDoesntThrowNpe() throws IOException {
         File tempFileLocation = tempFolder.newFolder();
         try (ConditionalCompiler compiler = new ConditionalCompiler(tempFileLocation)) {
             Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
