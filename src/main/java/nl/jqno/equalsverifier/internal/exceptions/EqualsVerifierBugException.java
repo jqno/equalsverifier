@@ -17,7 +17,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
 
 /**
  * Signals a bug in EqualsVerifier.
- * 
+ *
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")

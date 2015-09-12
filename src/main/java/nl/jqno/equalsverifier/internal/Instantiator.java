@@ -26,10 +26,10 @@ import java.lang.reflect.Modifier;
 
 /**
  * Instantiates objects of a given class.
- * 
+ *
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an
  *          anonymous subclass of this class.
- * 
+ *
  * @author Jan Ouwens
  */
 public class Instantiator<T> {
@@ -91,7 +91,7 @@ public class Instantiator<T> {
                 .load(superclass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
     }
-    
+
     @SuppressWarnings("unchecked")
     private static <S> DynamicType.Builder<S> createBuilder(Class<S> superclass) {
         ByteBuddy byteBuddy = new ByteBuddy();

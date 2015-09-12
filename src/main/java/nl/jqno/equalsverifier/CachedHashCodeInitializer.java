@@ -25,15 +25,15 @@ import java.lang.reflect.Modifier;
 /**
  * Records an initializer for a cached hash code (field name and recompute
  * method), if any, for the object to be verified.
- * 
+ *
  * EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to
  * obtain the hash code, call the {@link #getInitializedHashCode(Object)} method
  * in this class:
- * 
+ *
  * * If this class has recorded a cached hash code initializer for the object,
  * that method will recompute and update the cached hash code in the object
  * automatically, before returning the result of <code>Object.hashCode()</code>.
- * 
+ *
  * * If this class has not recorded a cached hash code initializer for the
  * object, it will simply return the value of <code>Object.hashCode()</code> as
  * normal instead.

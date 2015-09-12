@@ -23,11 +23,11 @@ import java.util.Set;
 
 /**
  * Descriptions of the annotations that EqualsVerifier supports.
- * 
+ *
  * The actual annotations cannot be referenced here, as that would create
  * dependencies on the libraries that contain them, and it would preclude
  * people from creating and using their own annotations with the same name.
- * 
+ *
  * @author Jan Ouwens
  */
 public enum SupportedAnnotations implements Annotation {

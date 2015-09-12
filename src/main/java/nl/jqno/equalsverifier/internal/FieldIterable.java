@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * Iterable to iterate over all declared fields in a class and, if needed,
  * over all declared fields of its superclasses.
- * 
+ *
  * @author Jan Ouwens
  */
 public class FieldIterable implements Iterable<Field> {

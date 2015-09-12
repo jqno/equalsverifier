@@ -17,12 +17,12 @@ package nl.jqno.equalsverifier.internal.annotations;
 
 /**
  * Describes an annotation that can be recognised by EqualsVerifier.
- * 
+ *
  * The annotation can have {@link java.lang.annotation.RetentionPolicy#RUNTIME}
  * or {@link java.lang.annotation.RetentionPolicy#CLASS}, and must have either
  * {@link java.lang.annotation.ElementType#TYPE} or
  * {@link java.lang.annotation.ElementType#FIELD}.
- * 
+ *
  * @author Jan Ouwens
  */
 public interface Annotation {

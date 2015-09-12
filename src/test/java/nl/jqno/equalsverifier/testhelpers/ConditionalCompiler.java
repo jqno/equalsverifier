@@ -32,7 +32,7 @@ import java.util.Locale;
 
 /**
  * Compiles a class contained within a String.
- * 
+ *
  * Useful for tests that refer to types that may or may not be present on the
  * classpath.
  */

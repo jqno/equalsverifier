@@ -95,7 +95,7 @@ public class FieldAccessor {
     public boolean fieldIsTransient() {
         return Modifier.isTransient(field.getModifiers());
     }
-    
+
     /**
      * Returns whether the field is an enum with a single value.
      */

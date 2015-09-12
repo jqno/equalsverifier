@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 
 public class ObjectAccessorScramblingTest {
     private PrefabValues prefabValues;
-    
+
     @Before
     public void setup() {
         prefabValues = new PrefabValues(new StaticFieldValueStash());

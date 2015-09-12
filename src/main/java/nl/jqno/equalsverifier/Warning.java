@@ -17,7 +17,7 @@ package nl.jqno.equalsverifier;
 
 /**
  * Enum of warnings that can be suppressed in {@link EqualsVerifier}.
- * 
+ *
  * @author Jan Ouwens
  * @see EqualsVerifier#suppress(Warning...)
  */
@@ -30,7 +30,7 @@ public enum Warning {
      * Only applies to non-transient fields.
      */
     ALL_FIELDS_SHOULD_BE_USED,
-    
+
     /**
      * Disables annotation processing for the class under test.
      * <p>

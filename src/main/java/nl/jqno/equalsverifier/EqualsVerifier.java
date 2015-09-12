@@ -52,28 +52,28 @@ import java.util.*;
  * - Call {@link #verify()} to perform the actual verifications.
  * <p>
  * Example use:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class).verify();
  * }</pre>
- * 
+ *
  * Or, if you prefer to use a {@code getClass()} check instead of an
  * {@code instanceof} check in the body of your {@code equals} method:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
  *     .usingGetClass()
  *     .verify();
  * }</pre>
- * 
+ *
  * With some warnings suppressed:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
  *     .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
  *     .verify();
  * }</pre>
- * 
+ *
  * The following properties are verified:<br>
  * - Preconditions for {@link EqualsVerifier} itself.<br>
  * - Reflexivity and symmetry of the {@code equals} method.<br>
@@ -95,9 +95,9 @@ import java.util.*;
  * <p>
  * For more information, see the documentation at
  * http://www.jqno.nl/equalsverifier/
- * 
+ *
  * @param <T> The class under test.
- * 
+ *
  * @author Jan Ouwens
  * @see java.lang.Object#equals(Object)
  * @see java.lang.Object#hashCode()
@@ -163,7 +163,7 @@ public final class EqualsVerifier<T> {
      * Using this factory method requires that
      * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
      * be called to supply a list of unequal instances of T.
-     * 
+     *
      * This method automatically suppresses
      * {@link Warning#ALL_FIELDS_SHOULD_BE_USED}.
      *

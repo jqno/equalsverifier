@@ -28,7 +28,7 @@ import java.lang.reflect.Modifier;
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
  * can create two different instances of T, which are guaranteed not to be
  * equal to each other, and which contain no null values.
- * 
+ *
  * @param <T> A class.
  *
  * @author Jan Ouwens

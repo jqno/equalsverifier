@@ -23,7 +23,7 @@ import java.lang.reflect.Method;
 
 /**
  * Allows instantiation of classes that may or may not be present on the classpath.
- * 
+ *
  * @author Jan Ouwens
  */
 public class ConditionalInstantiator {

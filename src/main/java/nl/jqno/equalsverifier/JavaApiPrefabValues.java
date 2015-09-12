@@ -32,11 +32,11 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
- * 
+ *
  * Contains hand-made instances of well-known Java API classes that cannot be
  * instantiated dynamically because of an internal infinite recursion of types,
  * or other issues.
- * 
+ *
  * @author Jan Ouwens
  */
 public class JavaApiPrefabValues {

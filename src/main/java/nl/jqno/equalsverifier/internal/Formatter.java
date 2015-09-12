@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 
 /**
  * Formats a string with the contents of one or more objects.
- * 
+ *
  * If possible, uses each object's {@code toString} method.
  * If this throws an exception, Formatter creates its own string
  * representation of the object, containing its class name and

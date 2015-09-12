@@ -94,7 +94,12 @@
             <property name="format" value="System\.(out|err)\.print"/>
             <property name="illegalPattern" value="true"/>
             <property name="ignoreComments" value="true"/>
-            <property name="message" value="System.out.println and System.err.println is not allowed"/>
+            <property name="message" value="System.out.println and System.err.println is not allowed."/>
+        </module>
+        <module name="Regexp">
+            <property name="format" value="[ \t]+$"/>
+            <property name="illegalPattern" value="true"/>
+            <property name="message" value="Whitespace at the end of a line is not allowed."/>
         </module>
         <module name="RightCurly">
             <property name="option" value="alone"/>

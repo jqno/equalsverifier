@@ -26,11 +26,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 /**
  * Tests, among other things, the following approaches to inheritance with added
  * fields:
- * 
+ *
  * 1. "blindly equals", as described by Tal Cohen in Dr. Dobb's Journal, May
  *    2002. See also http://www.ddj.com/java/184405053 and
  *    http://tal.forum2.org/equals
- * 
+ *
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
  *    Scala.
  */

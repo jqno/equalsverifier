@@ -124,21 +124,21 @@ public class FieldAccessorTest {
         FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
         assertTrue(fieldAccessor.fieldIsTransient());
     }
-    
+
     @Test
     public void isNotEnum() {
         PrimitiveContainer foo = new PrimitiveContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
         assertFalse(fieldAccessor.fieldIsSingleValueEnum());
     }
-    
+
     @Test
     public void isEnumButNotSingleValue() {
         EnumContainer foo = new EnumContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, "twoElementEnum");
         assertFalse(fieldAccessor.fieldIsSingleValueEnum());
     }
-    
+
     @Test
     public void isSingleValueEnum() {
         EnumContainer foo = new EnumContainer();

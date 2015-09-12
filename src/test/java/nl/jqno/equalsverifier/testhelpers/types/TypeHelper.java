@@ -284,13 +284,13 @@ public class TypeHelper {
     public static class NoFieldsSubWithFields extends NoFields {
         public Object field;
     }
-    
+
     public enum TwoElementEnum { ONE, TWO }
 
     public enum OneElementEnum { ONE }
 
     public enum EmptyEnum {}
-    
+
     public static final class EnumContainer {
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;
