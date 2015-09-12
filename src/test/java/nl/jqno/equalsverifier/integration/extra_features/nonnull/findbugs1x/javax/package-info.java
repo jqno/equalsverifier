@@ -19,4 +19,3 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.jav
 import nl.jqno.equalsverifier.testhelpers.annotations.edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 
 import javax.annotation.Nonnull;
-
