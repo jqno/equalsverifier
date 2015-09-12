@@ -166,6 +166,6 @@ public class PrefabValuesCreatorTest {
     }
 
     static class StaticFinalContainer {
-        public static final StaticFinalContainer x = new StaticFinalContainer();
+        public static final StaticFinalContainer X = new StaticFinalContainer();
     }
 }

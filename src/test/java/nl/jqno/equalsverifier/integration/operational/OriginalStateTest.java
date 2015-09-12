@@ -42,7 +42,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     @Test
     public void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEquals.class).verify();
-        assertEquals(STATIC_FINAL, CorrectEquals.staticFinalValue);
+        assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
         assertEquals(STATIC, CorrectEquals.staticValue);
     }
 
@@ -73,7 +73,7 @@ public class OriginalStateTest extends IntegrationTestBase {
         EqualsVerifier.forClass(SubContainer.class).verify();
         assertEquals(STATIC, CorrectEquals.staticValue);
         assertEquals(STATIC, SuperContainer.staticValue);
-        assertEquals(STATIC_FINAL, SuperContainer.staticFinalValue);
+        assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     static final class CorrectEquals {
-        private static final Object staticFinalValue = STATIC_FINAL;
+        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
         private static Object staticValue = STATIC;
         private final Object instanceValue;
 
@@ -127,7 +127,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     static abstract class SuperContainer {
-        private static final Object staticFinalValue = STATIC_FINAL;
+        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
         private static Object staticValue = STATIC;
 
         private final CorrectEquals foo;

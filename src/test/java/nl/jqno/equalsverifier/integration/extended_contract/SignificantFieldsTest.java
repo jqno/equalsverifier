@@ -375,7 +375,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     static final class X {
-        public static final X x = new X();
+        public static final X X = new X();
 
         @Override public boolean equals(Object obj) { return obj instanceof X; }
         @Override public int hashCode() { return 42; }
