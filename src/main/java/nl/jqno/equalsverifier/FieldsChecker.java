@@ -154,8 +154,8 @@ class FieldsChecker<T> implements Checker {
     private class SignificantFieldCheck implements FieldCheck {
         private final boolean skipTestBecause0AndNullBothHaveA0HashCode;
 
-        public SignificantFieldCheck(boolean whoop) {
-            this.skipTestBecause0AndNullBothHaveA0HashCode = whoop;
+        public SignificantFieldCheck(boolean skipTestBecause0AndNullBothHaveA0HashCode) {
+            this.skipTestBecause0AndNullBothHaveA0HashCode = skipTestBecause0AndNullBothHaveA0HashCode;
         }
 
         @Override
