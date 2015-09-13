@@ -398,15 +398,16 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithoutExamples() {
-        Checker signatureChecker = new SignatureChecker<>(config);
-        Checker abstractDelegationChecker = new AbstractDelegationChecker<>(config);
-        Checker nullChecker = new NullChecker<>(config);
-        Checker cachedHashCodeChecker = new CachedHashCodeChecker<>(config);
+        Checker[] checkers = {
+            new SignatureChecker<>(config),
+            new AbstractDelegationChecker<>(config),
+            new NullChecker<>(config),
+            new CachedHashCodeChecker<>(config)
+        };
 
-        signatureChecker.check();
-        abstractDelegationChecker.check();
-        nullChecker.check();
-        cachedHashCodeChecker.check();
+        for (Checker checker : checkers) {
+            checker.check();
+        }
     }
 
     private void ensureUnequalExamples() {
@@ -420,15 +421,16 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithExamples() {
-        Checker preconditionChecker = new PreconditionChecker<>(config, equalExamples, unequalExamples);
-        Checker examplesChecker = new ExamplesChecker<>(config, equalExamples, unequalExamples);
-        Checker hierarchyChecker = new HierarchyChecker<>(config);
-        Checker fieldsChecker = new FieldsChecker<>(config);
+        Checker[] checkers = {
+            new PreconditionChecker<>(config, equalExamples, unequalExamples),
+            new ExamplesChecker<>(config, equalExamples, unequalExamples),
+            new HierarchyChecker<>(config),
+            new FieldsChecker<>(config)
+        };
 
-        preconditionChecker.check();
-        examplesChecker.check();
-        hierarchyChecker.check();
-        fieldsChecker.check();
+        for (Checker checker : checkers) {
+            checker.check();
+        }
     }
 
     @SafeVarargs

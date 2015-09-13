@@ -149,6 +149,7 @@
         <module name="UnnecessaryParentheses"/>
         <module name="UnusedImports"/>
         <module name="UpperEll"/>
+        <module name="VariableDeclarationUsageDistance"/>
 
         <module name="FileContentsHolder"/>
     </module>
