@@ -80,6 +80,8 @@ limitations under the License.
         <encoding>UTF-8</encoding>
         <jacoco.version>0.7.4.201502262128</jacoco.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
+        <findbugs.effort>Max</findbugs.effort>
+        <findbugs.threshold>Low</findbugs.threshold>
     </properties>
 
     <dependencies>
@@ -270,8 +272,8 @@ limitations under the License.
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
                 <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
+                    <effort>${findbugs.effort}</effort>
+                    <threshold>${findbugs.threshold}</threshold>
                     <xmlOutput>true</xmlOutput>
                 </configuration>
                 <executions>
@@ -421,6 +423,10 @@ limitations under the License.
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
+                <configuration>
+                    <effort>${findbugs.effort}</effort>
+                    <threshold>${findbugs.threshold}</threshold>
+                </configuration>
             </plugin>
         </plugins>
     </reporting>
