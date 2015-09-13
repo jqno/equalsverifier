@@ -44,8 +44,7 @@ public enum TestSupportedAnnotations implements Annotation {
         public boolean validate(AnnotationProperties properties) {
             return false;
         }
-    },
-    ;
+    };
 
     private final boolean inherits;
     private final List<String> descriptors;

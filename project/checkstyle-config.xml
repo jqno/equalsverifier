@@ -106,6 +106,7 @@
         <module name="NoWhitespaceAfter">
             <property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS,TYPECAST,ARRAY_DECLARATOR"/>
         </module>
+        <module name="NoWhitespaceBefore"/>
         <module name="NPathComplexity"/>
         <module name="OperatorWrap">
             <property name="option" value="eol"/>

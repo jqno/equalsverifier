@@ -129,8 +129,7 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
-    NULLABLE(false, "Nullable", "CheckForNull"),
-    ;
+    NULLABLE(false, "Nullable", "CheckForNull");
 
     private final boolean inherits;
     private final List<String> descriptors;
