@@ -305,10 +305,10 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     static final class OneStaticFieldUnusedColorPoint {
-        private final int x;
-        private final int y;
         @SuppressWarnings("unused")
         private static Color color;
+        private final int x;
+        private final int y;
 
         public OneStaticFieldUnusedColorPoint(int x, int y, Color color) { this.x = x; this.y = y; OneStaticFieldUnusedColorPoint.color = color; }
 

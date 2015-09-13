@@ -31,6 +31,15 @@ public final class FieldIterable implements Iterable<Field> {
     private final boolean includeSuperclasses;
 
     /**
+     * Private constructor. Call {@link #of(Class)} or
+     * {@link #ofIgnoringSuper(Class)} instead.
+     */
+    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
+        this.type = type;
+        this.includeSuperclasses = includeSuperclasses;
+    }
+
+    /**
      * Factory method for a FieldIterator that iterates over all declared
      * fields of {@code type} and over the declared fields of all of its
      * superclasses.
@@ -52,15 +61,6 @@ public final class FieldIterable implements Iterable<Field> {
      */
     public static FieldIterable ofIgnoringSuper(Class<?> type) {
         return new FieldIterable(type, false);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class)} or
-     * {@link #ofIgnoringSuper(Class)} instead.
-     */
-    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
-        this.type = type;
-        this.includeSuperclasses = includeSuperclasses;
     }
 
     /**

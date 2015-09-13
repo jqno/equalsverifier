@@ -109,6 +109,19 @@ public final class EqualsVerifier<T> {
     private Configuration<T> config;
 
     /**
+     * Private constructor. Call {@link #forClass(Class)},
+     * {@link #forExamples(Object, Object, Object...)} or
+     * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
+     */
+    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+        this.config = Configuration.of(type);
+        this.equalExamples = equalExamples;
+        this.unequalExamples = unequalExamples;
+
+        JavaApiPrefabValues.addTo(config.getPrefabValues());
+    }
+
+    /**
      * Factory method. For general use.
      *
      * @param type The class for which the {@code equals} method should be
@@ -183,19 +196,6 @@ public final class EqualsVerifier<T> {
         Class<T> type = (Class<T>)first.getClass();
 
         return new RelaxedEqualsVerifierHelper<>(type, examples);
-    }
-
-    /**
-     * Private constructor. Call {@link #forClass(Class)},
-     * {@link #forExamples(Object, Object, Object...)} or
-     * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
-     */
-    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-        this.config = Configuration.of(type);
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
-
-        JavaApiPrefabValues.addTo(config.getPrefabValues());
     }
 
     /**

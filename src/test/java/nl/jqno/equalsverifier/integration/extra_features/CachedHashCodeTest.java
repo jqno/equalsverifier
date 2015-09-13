@@ -272,8 +272,8 @@ public class CachedHashCodeTest extends IntegrationTestBase {
     }
 
     static class ObjectWithProtectedCalculateHashCodeMembers {
-        @Nonnull private final String name;
         protected final int cachedHashCode;
+        @Nonnull private final String name;
 
         public ObjectWithProtectedCalculateHashCodeMembers(String name) {
             this.name = name;
@@ -300,8 +300,8 @@ public class CachedHashCodeTest extends IntegrationTestBase {
     }
 
     static class ObjectWithDefaultVisibilityCalculateHashCodeMembers {
-        @Nonnull private final String name;
         final int cachedHashCode;
+        @Nonnull private final String name;
 
         public ObjectWithDefaultVisibilityCalculateHashCodeMembers(String name) {
             this.name = name;

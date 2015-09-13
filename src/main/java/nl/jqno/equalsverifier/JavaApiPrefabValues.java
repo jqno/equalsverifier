@@ -43,6 +43,13 @@ public final class JavaApiPrefabValues {
     private PrefabValues prefabValues;
 
     /**
+     * Private constructor. Use {@link #addTo(PrefabValues)}.
+     */
+    private JavaApiPrefabValues(PrefabValues prefabValues) {
+        this.prefabValues = prefabValues;
+    }
+
+    /**
      * Adds instances of Java API classes that cannot be instantiated
      * dynamically to {@code prefabValues}.
      *
@@ -51,13 +58,6 @@ public final class JavaApiPrefabValues {
      */
     public static void addTo(PrefabValues prefabValues) {
         new JavaApiPrefabValues(prefabValues).addJavaClasses();
-    }
-
-    /**
-     * Private constructor. Use {@link #addTo(PrefabValues)}.
-     */
-    private JavaApiPrefabValues(PrefabValues prefabValues) {
-        this.prefabValues = prefabValues;
     }
 
     private void addJavaClasses() {

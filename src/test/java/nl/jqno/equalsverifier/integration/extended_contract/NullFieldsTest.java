@@ -188,8 +188,8 @@ public class NullFieldsTest extends IntegrationTestBase {
     }
 
     static final class ConstantFieldIsNull {
-        private final Object o;
         private static final String NULL_CONSTANT = null;
+        private final Object o;
 
         public ConstantFieldIsNull(Object o) {
             this.o = o;

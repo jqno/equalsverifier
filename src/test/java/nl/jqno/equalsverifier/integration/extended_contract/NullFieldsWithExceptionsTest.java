@@ -63,9 +63,9 @@ public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
     abstract static class EqualsThrower {
         private final String foo;
 
-        protected abstract RuntimeException throwable();
-
         public EqualsThrower(String foo) { this.foo = foo; }
+
+        protected abstract RuntimeException throwable();
 
         @Override
         public final boolean equals(Object obj) {
@@ -103,9 +103,9 @@ public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
     abstract static class HashCodeThrower {
         private final String foo;
 
-        protected abstract RuntimeException throwable();
-
         public HashCodeThrower(String foo) { this.foo = foo; }
+
+        protected abstract RuntimeException throwable();
 
         @Override public final boolean equals(Object obj) { return defaultEquals(this, obj); }
 

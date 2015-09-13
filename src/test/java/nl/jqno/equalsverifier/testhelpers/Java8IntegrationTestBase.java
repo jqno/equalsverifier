@@ -25,10 +25,10 @@ import java.io.File;
 import java.io.IOException;
 
 public class Java8IntegrationTestBase extends IntegrationTestBase {
-    private ConditionalCompiler compiler;
-
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    private ConditionalCompiler compiler;
 
     @Before
     public void setUp() throws IOException {

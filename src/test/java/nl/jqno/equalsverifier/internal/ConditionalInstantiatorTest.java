@@ -33,10 +33,10 @@ import static org.junit.Assert.*;
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
 
-    private ConditionalInstantiator ci;
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private ConditionalInstantiator ci;
 
     @Test
     public void resolveReturnsClass_whenTypeExists() {

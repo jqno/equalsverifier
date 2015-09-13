@@ -30,6 +30,14 @@ public final class ObjectAccessor<T> {
     private final Class<T> type;
 
     /**
+     * Private constructor. Call {@link #of(Object)} to instantiate.
+     */
+    private ObjectAccessor(T object, Class<T> type) {
+        this.object = object;
+        this.type = type;
+    }
+
+    /**
      * Factory method.
      *
      * @param <T> {@link #object}'s type.
@@ -53,14 +61,6 @@ public final class ObjectAccessor<T> {
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
         return new ObjectAccessor<T>(object, type);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Object)} to instantiate.
-     */
-    private ObjectAccessor(T object, Class<T> type) {
-        this.object = object;
-        this.type = type;
     }
 
     /**

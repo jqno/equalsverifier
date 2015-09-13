@@ -21,10 +21,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class AssertTest {
+    private static final Formatter FAIL = Formatter.of("fail");
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private static final Formatter FAIL = Formatter.of("fail");
     @Test
     public void assertEqualsObjectSuccess() {
         String red = new String("text");

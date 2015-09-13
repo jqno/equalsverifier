@@ -33,6 +33,17 @@ public final class Formatter {
     private Object[] objects;
 
     /**
+     * Private constructor. Call {@link #of(String, Object...)} to instantiate.
+     */
+    private Formatter(String message, Object... objects) {
+        if (message == null) {
+            throw new NullPointerException();
+        }
+        this.message = message;
+        this.objects = objects;
+    }
+
+    /**
      * Factory method.
      *
      * @param message The string that will be formatted.
@@ -44,17 +55,6 @@ public final class Formatter {
      */
     public static Formatter of(String message, Object... objects) {
         return new Formatter(message, objects);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(String, Object...)} to instantiate.
-     */
-    private Formatter(String message, Object... objects) {
-        if (message == null) {
-            throw new NullPointerException();
-        }
-        this.message = message;
-        this.objects = objects;
     }
 
     /**

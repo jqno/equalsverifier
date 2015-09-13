@@ -34,6 +34,9 @@ public class PrefabValuesTest {
     private static final Class<Object> NON_EXISTING_KEY = Object.class;
     private static final Object VALUE_FOR_NON_EXISTING_KEY = new Object();
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     private MockStaticFieldValueStash stash;
     private PrefabValues p;
 
@@ -43,10 +46,6 @@ public class PrefabValuesTest {
         p = new PrefabValues(stash);
         p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
 
     @Test
     public void happyPath() {

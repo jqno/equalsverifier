@@ -171,6 +171,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
         throw new IllegalStateException("Inner class not found");
     }
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_MANUAL_NAME = "NonnullManual";
     private static final String NONNULL_MANUAL =
             "\nimport java.util.Objects;" +
@@ -193,6 +194,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_ON_CLASS_NAME = "NonnullEclipseOnClass";
     private static final String NONNULL_ECLIPSE_ON_CLASS =
             "\nimport java.util.Objects;" +
@@ -216,6 +218,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
     private static final String NONNULL_ECLIPSE_ON_PACKAGE_NAME =
             "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage";
     private static final String NONNULL_ECLIPSE_ON_PACKAGE =
@@ -240,6 +243,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_OUTER_NAME = "NonnullEclipseOuter";
     private static final String NONNULL_ECLIPSE_OUTER =
             "\nimport java.util.Objects;" +
@@ -284,6 +288,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME = "NonnullEclipseWithNullableOnClass";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS =
             "\nimport java.util.Objects;" +
@@ -308,6 +313,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME =
             "NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS =
@@ -333,6 +339,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME =
             "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseWithNullableOnPackageAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE =
@@ -359,6 +366,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithInapplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS =
             "\nimport java.util.Objects;" +
@@ -383,6 +391,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithApplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS =
             "\nimport java.util.Objects;" +

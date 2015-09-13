@@ -44,6 +44,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String CLASS_NAME = "Java8ApiClassesContainer";
     private static final String CLASS =
             "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
@@ -82,6 +83,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_CLASS_NAME = "JavaFXApiClassesContainer";
     private static final String JAVAFX_CLASS =
             "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +

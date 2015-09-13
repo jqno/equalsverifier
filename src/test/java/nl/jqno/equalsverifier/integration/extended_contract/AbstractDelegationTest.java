@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -286,15 +285,13 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     }
 
     static abstract class AbstractDelegator {
-        abstract void abstractDelegation();
-
         private int i;
         public AbstractDelegator(int i) { this.i = i; }
+
+        abstract void abstractDelegation();
+
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override
-        public int hashCode() {
-            return Util.defaultHashCode(this);
-        }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static final class AbstractDelegatorImpl extends AbstractDelegator {

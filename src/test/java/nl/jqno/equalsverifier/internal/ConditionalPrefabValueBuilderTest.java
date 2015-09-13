@@ -34,11 +34,11 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;
 
 public class ConditionalPrefabValueBuilderTest {
-    private PrefabValues prefabValues;
-    private PrefabValuesThrowsWhenCalled throwingPrefabValues;
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private PrefabValues prefabValues;
+    private PrefabValuesThrowsWhenCalled throwingPrefabValues;
 
     @Before
     public void setUp() {

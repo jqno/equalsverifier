@@ -41,6 +41,17 @@ public class ClassAccessor<T> {
     private final AnnotationAccessor annotationAccessor;
 
     /**
+     * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
+     */
+    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
+        this.type = type;
+        this.prefabValues = prefabValues;
+        this.supportedAnnotations = supportedAnnotations;
+        this.ignoreAnnotationFailure = ignoreAnnotationFailure;
+        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
+    }
+
+    /**
      * Factory method.
      *
      * @param <T> The class on which {@link ClassAccessor} operates.
@@ -53,17 +64,6 @@ public class ClassAccessor<T> {
      */
     public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues, boolean ignoreAnnotationFailure) {
         return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
-     */
-    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
-        this.type = type;
-        this.prefabValues = prefabValues;
-        this.supportedAnnotations = supportedAnnotations;
-        this.ignoreAnnotationFailure = ignoreAnnotationFailure;
-        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
     }
 
     /**

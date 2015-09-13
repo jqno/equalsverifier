@@ -190,23 +190,23 @@ public class TypeHelper {
 
     public static class DifferentAccessModifiersFieldContainer {
         @SuppressWarnings("unused")
-        private final int i = 0;
-        final int j = 0;
-        protected final int k = 0;
-        public final int l = 0;
-        @SuppressWarnings("unused")
-        private static final int I = 0;
-        final static int J = 0;
-        protected static final int K = 0;
         public static final int L = 0;
+        protected static final int K = 0;
+        final static int J = 0;
+        private static final int I = 0;
+        @SuppressWarnings("unused")
+        public final int l = 0;
+        protected final int k = 0;
+        final int j = 0;
+        private final int i = 0;
     }
 
     public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
         @SuppressWarnings("unused")
-        private final String a = "";
-        final String b = "";
-        protected final String c = "";
         public final String d = "";
+        protected final String c = "";
+        final String b = "";
+        private final String a = "";
     }
 
     public static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}

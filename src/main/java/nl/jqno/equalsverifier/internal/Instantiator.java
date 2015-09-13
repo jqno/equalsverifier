@@ -37,6 +37,14 @@ public final class Instantiator<T> {
     private Objenesis objenesis;
 
     /**
+     * Private constructor. Call {@link #of(Class)} to instantiate.
+     */
+    private Instantiator(Class<T> type) {
+        this.type = type;
+        this.objenesis = new ObjenesisStd();
+    }
+
+    /**
      * Factory method.
      *
      * @param <T> The class on which {@link Instantiator} operates.
@@ -49,14 +57,6 @@ public final class Instantiator<T> {
             return new Instantiator<>(createDynamicSubclass(type));
         }
         return new Instantiator<>(type);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class)} to instantiate.
-     */
-    private Instantiator(Class<T> type) {
-        this.type = type;
-        this.objenesis = new ObjenesisStd();
     }
 
     /**

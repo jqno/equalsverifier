@@ -42,6 +42,17 @@ public final class ConditionalPrefabValueBuilder {
     private List<Object> instances = new ArrayList<>();
 
     /**
+     * Private constructor. Call {@link #of(String)} instead.
+     */
+    private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
+        this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
+        this.type = ci.resolve();
+        if (type == null) {
+            stop = true;
+        }
+    }
+
+    /**
      * Factory method.
      *
      * @param fullyQualifiedClassName
@@ -51,17 +62,6 @@ public final class ConditionalPrefabValueBuilder {
      */
     public static ConditionalPrefabValueBuilder of(String fullyQualifiedClassName) {
         return new ConditionalPrefabValueBuilder(fullyQualifiedClassName);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(String)} instead.
-     */
-    private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
-        this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
-        this.type = ci.resolve();
-        if (type == null) {
-            stop = true;
-        }
     }
 
     /**

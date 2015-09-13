@@ -39,6 +39,7 @@
         <module name="CommentsIndentation"/>
         <module name="ConstantName"/>
         <module name="CyclomaticComplexity"/>
+        <module name="DeclarationOrder"/>
         <module name="DefaultComesLast"/>
         <module name="EmptyBlock"/>
         <module name="EmptyCatchBlock"/>
