@@ -47,6 +47,7 @@
         <module name="HiddenField">
             <property name="ignoreConstructorParameter" value="true"/>
         </module>
+        <module name="HideUtilityClassConstructor"/>
         <module name="IllegalImport"/>
         <module name="IllegalThrows"/>
         <module name="IllegalToken">

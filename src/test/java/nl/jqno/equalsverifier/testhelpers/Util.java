@@ -23,7 +23,9 @@ import java.util.Objects;
 
 import static org.junit.Assert.fail;
 
-public class Util {
+public final class Util {
+    private Util() {}
+
     public static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
