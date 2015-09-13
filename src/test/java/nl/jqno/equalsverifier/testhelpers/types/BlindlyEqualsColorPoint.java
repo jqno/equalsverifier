@@ -31,8 +31,8 @@ public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
             return false;
         }
         BlindlyEqualsColorPoint cp = (BlindlyEqualsColorPoint)o;
-        return (super.blindlyEquals(cp) &&
-                cp.color == this.color);
+        return super.blindlyEquals(cp) &&
+                cp.color == this.color;
     }
 
     @Override

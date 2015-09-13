@@ -111,9 +111,9 @@ class AbstractDelegationChecker<T> implements Checker {
     private Formatter buildSingleAbstractMethodErrorMessage(Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
         return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
                 c.getSimpleName(),
-                (isEqualsAbstract ? "equals" : "hashCode"),
-                (isEqualsAbstract ? "hashCode" : "equals"),
-                (bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete."));
+                isEqualsAbstract ? "equals" : "hashCode",
+                isEqualsAbstract ? "hashCode" : "equals",
+                bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
     }
 
     @SuppressWarnings("unchecked")

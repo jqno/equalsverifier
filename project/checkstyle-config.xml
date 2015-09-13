@@ -146,6 +146,7 @@
         </module>
         <module name="TypeName"/>
         <module name="UncommentedMain"/>
+        <module name="UnnecessaryParentheses"/>
         <module name="UnusedImports"/>
         <module name="UpperEll"/>
 
