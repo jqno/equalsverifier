@@ -95,6 +95,7 @@
         <module name="ModifiedControlVariable"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="MutableException"/>
+        <module name="NeedBraces"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
         <module name="NestedTryDepth"/>

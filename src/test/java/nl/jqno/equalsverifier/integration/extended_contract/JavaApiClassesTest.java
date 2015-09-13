@@ -97,13 +97,17 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 
         private void callIterator(Collection<?>... collections) {
             for (Collection<?> c : collections) {
-                if (c != null) c.iterator();
+                if (c != null) {
+                    c.iterator();
+                }
             }
         }
 
         private void callKeySet(Map<?, ?>... maps) {
             for (Map<?, ?> m : maps) {
-                if (m != null) m.keySet();
+                if (m != null) {
+                    m.keySet();
+                }
             }
         }
     }

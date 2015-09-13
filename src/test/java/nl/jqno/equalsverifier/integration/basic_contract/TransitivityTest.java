@@ -279,10 +279,10 @@ public class TransitivityTest extends IntegrationTestBase {
             }
             AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual) obj;
             int x = 0;
-            if (i == other.i) x++;
-            if (j == other.j) x++;
-            if (k == other.k) x++;
-            if (l == other.l) x++;
+            if (i == other.i) { x++; }
+            if (j == other.j) { x++; }
+            if (k == other.k) { x++; }
+            if (l == other.l) { x++; }
             return x >= 2;
         }
 
