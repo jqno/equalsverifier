@@ -70,6 +70,7 @@
         <module name="InnerAssignment"/>
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>
+        <module name="JavadocTagContinuationIndentation"/>
         <module name="JavaNCSS"/>
         <module name="LocalVariableName"/>
         <module name="MethodCount"/>
