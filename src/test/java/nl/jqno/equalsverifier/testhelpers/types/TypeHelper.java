@@ -30,6 +30,7 @@ public class TypeHelper {
     public enum Enum { FIRST, SECOND }
 
     public static final class AllTypesContainer {
+        // CHECKSTYLE: ignore MemberName for 23 lines.
         public boolean _boolean = false;
         public byte _byte = 0;
         public char _char = '\u0000';
@@ -96,6 +97,7 @@ public class TypeHelper {
         long[] longs = { 1L };
         short[] shorts = { 1 };
 
+        // CHECKSTYLE: ignore MemberName for 8 lines.
         Boolean[] Booleans = { true };
         Byte[] Bytes = { 1 };
         Character[] Characters = { 'a' };

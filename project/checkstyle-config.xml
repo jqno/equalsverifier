@@ -81,6 +81,7 @@
         <module name="JavaNCSS"/>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
+        <module name="MemberName"/>
         <module name="MethodCount"/>
         <module name="MethodLength"/>
         <module name="MethodName">
