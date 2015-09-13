@@ -150,6 +150,7 @@
         <module name="TodoComment">
             <property name="format" value="TODO"/>
         </module>
+        <module name="TypecastParenPad"/>
         <module name="TypeName"/>
         <module name="UncommentedMain"/>
         <module name="UnnecessaryParentheses"/>
