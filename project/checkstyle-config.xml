@@ -150,6 +150,9 @@
         <module name="UnusedImports"/>
         <module name="UpperEll"/>
         <module name="VariableDeclarationUsageDistance"/>
+        <module name="WhitespaceAfter">
+            <property name="tokens" value="COMMA,SEMI"/>
+        </module>
 
         <module name="FileContentsHolder"/>
     </module>

@@ -117,12 +117,12 @@ public final class JavaApiPrefabValues {
         prefabValues.put(UUID.class, new UUID(0, -1), new UUID(1, 0));
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
         addCollectionToPrefabValues(Collection.class, new ArrayList(), new ArrayList());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
         addCollectionToPrefabValues(List.class, new ArrayList(), new ArrayList());
         addCollectionToPrefabValues(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
@@ -130,7 +130,7 @@ public final class JavaApiPrefabValues {
         addCollectionToPrefabValues(ArrayList.class, new ArrayList(), new ArrayList());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addMaps() {
         addMapToPrefabValues(Map.class, new HashMap(), new HashMap());
         addMapToPrefabValues(SortedMap.class, new TreeMap(), new TreeMap());
@@ -146,7 +146,7 @@ public final class JavaApiPrefabValues {
         addMapToPrefabValues(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addSets() {
         addCollectionToPrefabValues(Set.class, new HashSet(), new HashSet());
         addCollectionToPrefabValues(SortedSet.class, new TreeSet(), new TreeSet());

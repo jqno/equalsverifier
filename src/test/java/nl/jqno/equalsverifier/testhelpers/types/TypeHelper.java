@@ -165,14 +165,14 @@ public class TypeHelper {
         CopyOnWriteArrayList<?> copyOnWriteArrayList;
         LinkedList<?> linkedList;
 
-        ConcurrentHashMap<?,?> concurrentHashMap;
-        EnumMap<?,?> enumMap;
-        HashMap<?,?> hashMap;
-        Hashtable<?,?> hashtable;
-        LinkedHashMap<?,?> linkedHashMap;
+        ConcurrentHashMap<?, ?> concurrentHashMap;
+        EnumMap<?, ?> enumMap;
+        HashMap<?, ?> hashMap;
+        Hashtable<?, ?> hashtable;
+        LinkedHashMap<?, ?> linkedHashMap;
         Properties properties;
-        TreeMap<?,?> treeMap;
-        WeakHashMap<?,?> weakHashMap;
+        TreeMap<?, ?> treeMap;
+        WeakHashMap<?, ?> weakHashMap;
 
         CopyOnWriteArraySet<?> copyOnWriteArraySet;
         EnumSet<?> enumSet;
