@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Applies a Nonnull annotation to the whole package using JSR305's default annotation system,
+ * but in a way that makes Nonnull inapplicable.
+ */
 @DefaultNonnullInapplicable
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable;
 

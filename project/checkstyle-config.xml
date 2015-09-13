@@ -71,6 +71,7 @@
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>
         <module name="JavadocTagContinuationIndentation"/>
+        <module name="JavadocStyle"/>
         <module name="JavaNCSS"/>
         <module name="LocalVariableName"/>
         <module name="MethodCount"/>

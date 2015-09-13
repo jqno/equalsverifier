@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Applies Javax's Nonnull annotation to the whole package using Findbugs 1.x's DefaultAnnotation.
+ */
 @DefaultAnnotation(Nonnull.class)
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.javax;
 

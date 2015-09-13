@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+ * Applies Eclipse's NonNullByDefault annotation to the package.
+ */
 @NonNullByDefault
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;
 

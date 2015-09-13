@@ -42,7 +42,7 @@ public class AnnotationAccessor {
     private boolean shortCircuit = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param supportedAnnotations Collection of annotations to query.
      * @param type The class whose annotations need to be queried.
