@@ -30,8 +30,10 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class ArrayTest extends IntegrationTestBase {
     private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
     private static final String REGULAR_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
-    private static final String MULTIDIMENSIONAL_EQUALS = "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
-    private static final String MULTIDIMENSIONAL_HASHCODE = "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
+    private static final String MULTIDIMENSIONAL_EQUALS =
+            "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
+    private static final String MULTIDIMENSIONAL_HASHCODE =
+            "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
     private static final String FIELD_NAME = "array";
 
     @Test

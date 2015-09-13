@@ -43,14 +43,16 @@ public class SubclassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
-        expectFailure("Subclass", "object is not equal to an instance of a trivial subclass with equal fields", "Consider making the class final.");
+        expectFailure("Subclass", "object is not equal to an instance of a trivial subclass with equal fields",
+                "Consider making the class final.");
         EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class)
                 .verify();
     }
 
     @Test
     public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
-        expectFailure("Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
+        expectFailure("Subclass", BlindlyEqualsPoint.class.getSimpleName(), "equals subclass instance",
+                EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
         EqualsVerifier.forClass(BlindlyEqualsPoint.class)
                 .withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class)
                 .verify();
@@ -72,7 +74,8 @@ public class SubclassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
-        expectFailure("Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance", EqualSubclassForCanEqualPoint.class.getSimpleName());
+        expectFailure("Subclass", CanEqualPoint.class.getSimpleName(), "equals subclass instance",
+                EqualSubclassForCanEqualPoint.class.getSimpleName());
         EqualsVerifier.forClass(CanEqualPoint.class)
                 .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
                 .verify();
@@ -94,7 +97,8 @@ public class SubclassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
-        expectFailure("Subclass", FinalEqualsAndHashCode.class.getSimpleName(), "has a final equals method", "No need to supply a redefined subclass");
+        expectFailure("Subclass", FinalEqualsAndHashCode.class.getSimpleName(),
+                "has a final equals method", "No need to supply a redefined subclass");
         EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
                 .withRedefinedSubclass(RedeFinalSubPoint.class)
                 .verify();

@@ -34,7 +34,8 @@ public class TransitivityTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
-        expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too", TwoFieldsUsingOr.class.getSimpleName());
+        expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too",
+                TwoFieldsUsingOr.class.getSimpleName());
         EqualsVerifier.forClass(TwoFieldsUsingOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
@@ -149,7 +150,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingAnd(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingAnd(String f, String g, String h) {
+            this.f = f; this.g = g; this.h = h;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -168,7 +171,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingOr(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingOr(String f, String g, String h) {
+            this.f = f; this.g = g; this.h = h;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -187,7 +192,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingAndOr(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingAndOr(String f, String g, String h) {
+            this.f = f; this.g = g; this.h = h;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -206,7 +213,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String g;
         private final String h;
 
-        public ThreeFieldsUsingOrAnd(String f, String g, String h) { this.f = f; this.g = g; this.h = h; }
+        public ThreeFieldsUsingOrAnd(String f, String g, String h) {
+            this.f = f; this.g = g; this.h = h;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -227,7 +236,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String i;
         private final String j;
 
-        public FiveFieldsUsingOr(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
+        public FiveFieldsUsingOr(String f, String g, String h, String i, String j) {
+            this.f = f; this.g = g; this.h = h; this.i = i; this.j = j;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -249,7 +260,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final String i;
         private final String j;
 
-        public FiveFieldsUsingAndsAndOrs(String f, String g, String h, String i, String j) { this.f = f; this.g = g; this.h = h; this.i = i; this.j = j; }
+        public FiveFieldsUsingAndsAndOrs(String f, String g, String h, String i, String j) {
+            this.f = f; this.g = g; this.h = h; this.i = i; this.j = j;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -270,7 +283,9 @@ public class TransitivityTest extends IntegrationTestBase {
         private final int k;
         private final int l;
 
-        public AtLeast2FieldsAreEqual(int i, int j, int k, int l) { this.i = i; this.j = j; this.k = k; this.l = l; }
+        public AtLeast2FieldsAreEqual(int i, int j, int k, int l) {
+            this.i = i; this.j = j; this.k = k; this.l = l;
+        }
 
         @Override
         public boolean equals(Object obj) {

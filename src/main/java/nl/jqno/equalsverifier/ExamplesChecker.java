@@ -112,7 +112,8 @@ class ExamplesChecker<T> implements Checker {
         }
 
         int copyHashCode = cachedHashCodeInitializer.getInitializedHashCode(copy);
-        Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)", reference, referenceHashCode, copy, copyHashCode);
+        Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)",
+                reference, referenceHashCode, copy, copyHashCode);
         assertEquals(f, referenceHashCode, copyHashCode);
     }
 

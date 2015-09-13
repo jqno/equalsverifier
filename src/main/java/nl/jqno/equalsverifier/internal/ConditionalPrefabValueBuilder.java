@@ -182,7 +182,8 @@ public final class ConditionalPrefabValueBuilder {
      *          match the {@code paramTypes}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+    public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod,
+                final Class<?>[] paramTypes, final Object[] paramValues) {
         add(new Supplier() {
             @Override
             public Object get() {

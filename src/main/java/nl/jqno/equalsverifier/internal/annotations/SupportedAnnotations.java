@@ -67,7 +67,8 @@ public enum SupportedAnnotations implements Annotation {
      * Note that @DefaultAnnotation is deprectated. Nevertheless, EqualsVerifier
      * still supports it.
      */
-    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
+    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false,
+            "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
         @Override
         public boolean validate(AnnotationProperties properties) {
             Set<Object> values = properties.getArrayValues("value");

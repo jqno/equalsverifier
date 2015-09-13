@@ -109,7 +109,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
+        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME,
+                NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
         EqualsVerifier.forClass(type)
                 .verify();
     }
@@ -215,7 +216,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    private static final String NONNULL_ECLIPSE_ON_PACKAGE_NAME = "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage";
+    private static final String NONNULL_ECLIPSE_ON_PACKAGE_NAME =
+            "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage";
     private static final String NONNULL_ECLIPSE_ON_PACKAGE =
             "\npackage nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;" +
             "\n" +
@@ -306,7 +308,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME = "NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
+    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME =
+            "NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS =
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
@@ -330,7 +333,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME = "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseWithNullableOnPackageAndNullCheckInEquals";
+    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME =
+            "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseWithNullableOnPackageAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE =
             "\npackage nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;" +
             "\n" +
@@ -347,7 +351,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n        if (!(obj instanceof NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)) {" +
             "\n            return false;" +
             "\n        }" +
-            "\n        NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other = (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)obj;" +
+            "\n        NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other =" +
+            "\n                (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)obj;" +
             "\n        return o.equals(other.o);" +
             "\n    }" +
             "\n" +

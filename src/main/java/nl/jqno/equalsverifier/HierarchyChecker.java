@@ -68,8 +68,9 @@ class HierarchyChecker<T> implements Checker {
             T reference = classAccessor.getRedObject();
             Object equalSuper = getEqualSuper(reference);
 
-            assertFalse(Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.", reference, equalSuper),
-                    reference.equals(equalSuper) || equalSuper.equals(reference));
+            Formatter formatter = Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.",
+                    reference, equalSuper);
+            assertFalse(formatter, reference.equals(equalSuper) || equalSuper.equals(reference));
         }
         else {
             checkSuperProperties(classAccessor.getRedAccessor());
@@ -84,16 +85,20 @@ class HierarchyChecker<T> implements Checker {
         T shallow = referenceAccessor.copy();
         ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
 
-        assertTrue(Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper),
-                reference.equals(equalSuper) && equalSuper.equals(reference));
+        Formatter symmetryFormatter = Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper);
+        assertTrue(symmetryFormatter, reference.equals(equalSuper) && equalSuper.equals(reference));
 
-        assertTrue(Formatter.of("Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.", reference, shallow, equalSuper),
-                reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
+        Formatter transitivityFormatter = Formatter.of(
+                "Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.",
+                reference, shallow, equalSuper);
+        assertTrue(transitivityFormatter, reference.equals(shallow) || reference.equals(equalSuper) != equalSuper.equals(shallow));
 
         int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
         int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
-        assertTrue(Formatter.of("Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)", reference, referenceHashCode, equalSuper, equalSuperHashCode),
-                referenceHashCode == equalSuperHashCode);
+        Formatter superclassFormatter = Formatter.of(
+                "Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)",
+                reference, referenceHashCode, equalSuper, equalSuperHashCode);
+        assertTrue(superclassFormatter, referenceHashCode == equalSuperHashCode);
     }
 
     private Object getEqualSuper(T reference) {
@@ -110,12 +115,17 @@ class HierarchyChecker<T> implements Checker {
         T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 
         if (config.isUsingGetClass()) {
-            assertFalse(Formatter.of("Subclass: object is equal to an instance of a trivial subclass with equal fields:\n  %%\nThis should not happen when using getClass().", reference),
-                    reference.equals(equalSub));
+            Formatter formatter = Formatter.of(
+                    "Subclass: object is equal to an instance of a trivial subclass with equal fields:" +
+                    "\n  %%\nThis should not happen when using getClass().",
+                    reference);
+            assertFalse(formatter, reference.equals(equalSub));
         }
         else {
-            assertTrue(Formatter.of("Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\nConsider making the class final.", reference),
-                    reference.equals(equalSub));
+            Formatter formatter = Formatter.of(
+                    "Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\nConsider making the class final.",
+                    reference);
+            assertTrue(formatter, reference.equals(equalSub));
         }
     }
 
@@ -148,10 +158,15 @@ class HierarchyChecker<T> implements Checker {
                     equalsIsFinal, hashCodeIsFinal);
         }
         else {
-            assertTrue(Formatter.of("Subclass: equals is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final."),
-                    equalsIsFinal);
-            assertTrue(Formatter.of("Subclass: hashCode is not final.\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final."),
-                    hashCodeIsFinal);
+            Formatter equalsFormatter = Formatter.of(
+                    "Subclass: equals is not final." +
+                    "\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.");
+            assertTrue(equalsFormatter, equalsIsFinal);
+
+            Formatter hashCodeFormatter = Formatter.of(
+                    "Subclass: hashCode is not final." +
+                    "\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.");
+            assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
     }
 

@@ -85,7 +85,7 @@ public class WarningsMixTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    public void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         expectFailureWithCause(NullPointerException.class, "Non-nullity:");
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)

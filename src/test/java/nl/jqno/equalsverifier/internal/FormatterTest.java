@@ -96,7 +96,8 @@ public class FormatterTest {
         Instantiator<Throwing> i = Instantiator.of(Throwing.class);
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
-        assertThat(f.format(), containsString("TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)"));
+        String expected = "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
+        assertThat(f.format(), containsString(expected));
     }
 
     @Test
@@ -117,7 +118,9 @@ public class FormatterTest {
         mix.throwing = new Throwing(42, "empty");
 
         Formatter f = Formatter.of("%%", mix);
-        assertThat(f.format(), containsString("[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]-throws UnsupportedOperationException(null)"));
+        String expected = "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]" +
+                "-throws UnsupportedOperationException(null)";
+        assertThat(f.format(), containsString(expected));
     }
 
     @Test

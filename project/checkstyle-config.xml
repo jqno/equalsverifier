@@ -79,6 +79,9 @@
         <module name="JavadocTagContinuationIndentation"/>
         <module name="JavadocStyle"/>
         <module name="JavaNCSS"/>
+        <module name="LineLength">
+            <property name="max" value="150"/>
+        </module>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
         <module name="MemberName"/>

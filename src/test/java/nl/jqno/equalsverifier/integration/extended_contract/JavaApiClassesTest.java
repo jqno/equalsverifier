@@ -72,11 +72,13 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         public CollectionInterfacesContainer(Collection<String> collection, List<String> list,
                 Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
                 Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
-                Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap, ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
+                Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap,
+                ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
             this.collection = collection; this.list = list;
             this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
             this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
-            this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap; this.concurrentNavigableMap = concurrentNavigableMap;
+            this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap;
+            this.concurrentNavigableMap = concurrentNavigableMap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

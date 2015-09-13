@@ -42,7 +42,8 @@ public class GetClassTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
-        expectFailure("Subclass", "object is equal to an instance of a trivial subclass with equal fields", "This should not happen when using getClass().");
+        expectFailure("Subclass", "object is equal to an instance of a trivial subclass with equal fields",
+                "This should not happen when using getClass().");
         EqualsVerifier.forClass(FinalMethodsPoint.class)
                 .usingGetClass()
                 .verify();

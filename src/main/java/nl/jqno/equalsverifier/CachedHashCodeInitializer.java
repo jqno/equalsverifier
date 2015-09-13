@@ -106,7 +106,8 @@ class CachedHashCodeInitializer<T> {
                 }
             }
         }
-        throw new IllegalArgumentException("Cached hashCode: Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
+        throw new IllegalArgumentException(
+                "Cached hashCode: Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
     }
 
     private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
@@ -124,6 +125,7 @@ class CachedHashCodeInitializer<T> {
             }
             currentClass = currentClass.getSuperclass();
         }
-        throw new IllegalArgumentException("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
+        throw new IllegalArgumentException(
+                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
     }
 }

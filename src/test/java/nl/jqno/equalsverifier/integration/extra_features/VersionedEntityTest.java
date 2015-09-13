@@ -41,7 +41,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
@@ -63,7 +63,8 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    // CHECKSTYLE: ignore LineLength for 1 line.
+    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(StringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
@@ -77,13 +78,15 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    // CHECKSTYLE: ignore LineLength for 1 line.
+    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
     }
 
     @Test
+    // CHECKSTYLE: ignore LineLength for 1 line.
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -98,7 +101,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenIdenticalCopyForVersionedEntityWarningIsSuppressed() {
+    public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenVersionedEntityWarningIsSuppressed() {
         expectFailure("catch me if you can");
         EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
