@@ -113,6 +113,7 @@
             <property name="option" value="eol"/>
         </module>
         <module name="OuterTypeFilename"/>
+        <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageAnnotation"/>
         <module name="PackageDeclaration"/>
         <module name="PackageName"/>

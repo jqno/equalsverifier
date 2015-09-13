@@ -39,7 +39,7 @@ public class ObjectAccessorScramblingTest {
         Point copy = copy(original);
 
         assertTrue(original.equals(copy));
-        scramble(copy);
+        doScramble(copy);
         assertFalse(original.equals(copy));
     }
 
@@ -48,7 +48,7 @@ public class ObjectAccessorScramblingTest {
         Point3D modified = new Point3D(2, 3, 4);
         Point3D reference = copy(modified);
 
-        scramble(modified);
+        doScramble(modified);
 
         assertFalse(modified.equals(reference));
         modified.z = 4;
@@ -74,7 +74,7 @@ public class ObjectAccessorScramblingTest {
         int originalInt = StaticFinalContainer.CONST;
         Object originalObject = StaticFinalContainer.OBJECT;
 
-        scramble(foo);
+        doScramble(foo);
 
         assertEquals(originalInt, foo.CONST);
         assertEquals(originalObject, foo.OBJECT);
@@ -84,7 +84,7 @@ public class ObjectAccessorScramblingTest {
     public void scrambleString() {
         StringContainer foo = new StringContainer();
         String before = foo.s;
-        scramble(foo);
+        doScramble(foo);
         assertFalse(before.equals(foo.s));
     }
 
@@ -93,7 +93,7 @@ public class ObjectAccessorScramblingTest {
         FinalAssignedStringContainer foo = new FinalAssignedStringContainer();
         String before = foo.s;
 
-        scramble(foo);
+        doScramble(foo);
 
         assertEquals(before, foo.s);
     }
@@ -105,7 +105,7 @@ public class ObjectAccessorScramblingTest {
         Point before = foo.p;
 
         assertTrue(before.equals(foo.p));
-        scramble(foo);
+        doScramble(foo);
         assertFalse(before.equals(foo.p));
     }
 
@@ -113,7 +113,7 @@ public class ObjectAccessorScramblingTest {
         return ObjectAccessor.of(object).copy();
     }
 
-    private void scramble(Object object) {
+    private void doScramble(Object object) {
         ObjectAccessor.of(object).scramble(prefabValues);
     }
 

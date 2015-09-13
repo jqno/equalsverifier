@@ -188,7 +188,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnObjectSetsNull() throws NoSuchFieldException {
         ObjectContainer foo = new ObjectContainer();
         foo.field = new Object();
-        nullField(foo, FIELD_NAME);
+        doNullField(foo, FIELD_NAME);
         assertNull(foo.field);
     }
 
@@ -196,7 +196,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnArraySetsNull() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._array = new int[] { 1, 2, 3 };
-        nullField(foo, "_array");
+        doNullField(foo, "_array");
         assertNull(foo._array);
     }
 
@@ -204,7 +204,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnBooleanSetsFalse() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._boolean = true;
-        nullField(foo, "_boolean");
+        doNullField(foo, "_boolean");
         assertEquals(false, foo._boolean);
     }
 
@@ -212,7 +212,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnByteSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._byte = 10;
-        nullField(foo, "_byte");
+        doNullField(foo, "_byte");
         assertEquals(0, foo._byte);
     }
 
@@ -220,7 +220,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnCharSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._char = 'a';
-        nullField(foo, "_char");
+        doNullField(foo, "_char");
         assertEquals('\u0000', foo._char);
     }
 
@@ -228,7 +228,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnDoubleSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._double = 1.1;
-        nullField(foo, "_double");
+        doNullField(foo, "_double");
         assertEquals(0.0, foo._double, 0.0000001);
     }
 
@@ -236,7 +236,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnFloatSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._float = 1.1f;
-        nullField(foo, "_float");
+        doNullField(foo, "_float");
         assertEquals(0.0f, foo._float, 0.0000001);
     }
 
@@ -244,7 +244,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnIntSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._int = 10;
-        nullField(foo, "_int");
+        doNullField(foo, "_int");
         assertEquals(0, foo._int);
     }
 
@@ -252,7 +252,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnLongSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._long = 10;
-        nullField(foo, "_long");
+        doNullField(foo, "_long");
         assertEquals(0, foo._long);
     }
 
@@ -260,7 +260,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnShortSetsZero() throws NoSuchFieldException {
         AllTypesContainer foo = new AllTypesContainer();
         foo._short = 10;
-        nullField(foo, "_short");
+        doNullField(foo, "_short");
         assertEquals(0, foo._short);
     }
 
@@ -268,7 +268,7 @@ public class FieldAccessorTest {
     @Test
     public void defaultFieldOnPrimitiveStaticFinalIsNoOp() throws NoSuchFieldException {
         StaticFinalContainer foo = new StaticFinalContainer();
-        nullField(foo, "CONST");
+        doNullField(foo, "CONST");
         assertEquals(42, foo.CONST);
     }
 
@@ -277,7 +277,7 @@ public class FieldAccessorTest {
     public void defaultFieldOnObjectStaticFinalIsNoOp() throws NoSuchFieldException {
         StaticFinalContainer foo = new StaticFinalContainer();
         Object original = foo.OBJECT;
-        nullField(foo, "OBJECT");
+        doNullField(foo, "OBJECT");
         assertSame(original, foo.OBJECT);
     }
 
@@ -286,14 +286,14 @@ public class FieldAccessorTest {
         Outer outer = new Outer();
         Inner inner = outer.new Inner();
         String fieldName = getSyntheticFieldName(inner, "this$");
-        nullField(inner, fieldName);
+        doNullField(inner, fieldName);
         assertSame(outer, inner.getOuter());
     }
 
     @Test
     public void defaultPrivateField() throws NoSuchFieldException {
         PrivateObjectContainer foo = new PrivateObjectContainer();
-        nullField(foo, FIELD_NAME);
+        doNullField(foo, FIELD_NAME);
         assertNull(foo.get());
     }
 
@@ -305,7 +305,7 @@ public class FieldAccessorTest {
         from.field = value;
 
         PrimitiveContainer to = new PrimitiveContainer();
-        copyField(to, from, FIELD_NAME);
+        doCopyField(to, from, FIELD_NAME);
 
         assertEquals(value, to.field);
     }
@@ -318,7 +318,7 @@ public class FieldAccessorTest {
         from.field = value;
 
         ObjectContainer to = new ObjectContainer();
-        copyField(to, from, FIELD_NAME);
+        doCopyField(to, from, FIELD_NAME);
 
         assertSame(value, to.field);
     }
@@ -341,7 +341,7 @@ public class FieldAccessorTest {
     @Test
     public void changeFieldOnPrimitiveStaticFinalIsNoOp() throws NoSuchFieldException {
         StaticFinalContainer foo = new StaticFinalContainer();
-        changeField(foo, "CONST");
+        doChangeField(foo, "CONST");
         assertEquals(42, foo.CONST);
     }
 
@@ -350,21 +350,21 @@ public class FieldAccessorTest {
     public void changeFieldStaticFinal() throws SecurityException, NoSuchFieldException {
         StaticFinalContainer foo = new StaticFinalContainer();
         Object original = foo.OBJECT;
-        changeField(foo, "OBJECT");
+        doChangeField(foo, "OBJECT");
         assertEquals(original, foo.OBJECT);
     }
 
     @Test
     public void changeAbstractField() {
         AbstractClassContainer foo = new AbstractClassContainer();
-        changeField(foo, FIELD_NAME);
+        doChangeField(foo, FIELD_NAME);
         assertNotNull(foo.field);
     }
 
     @Test
     public void changeInterfaceField() {
         InterfaceContainer foo = new InterfaceContainer();
-        changeField(foo, FIELD_NAME);
+        doChangeField(foo, FIELD_NAME);
         assertNotNull(foo.field);
     }
 
@@ -385,14 +385,14 @@ public class FieldAccessorTest {
     @Test
     public void changeAbstractArrayField() {
         AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
-        changeField(foo, "abstractClasses");
+        doChangeField(foo, "abstractClasses");
         assertNotNull(foo.abstractClasses[0]);
     }
 
     @Test
     public void changeInterfaceArrayField() {
         AbstractAndInterfaceArrayContainer foo = new AbstractAndInterfaceArrayContainer();
-        changeField(foo, "interfaces");
+        doChangeField(foo, "interfaces");
         assertNotNull(foo.interfaces[0]);
     }
 
@@ -401,13 +401,13 @@ public class FieldAccessorTest {
         PointContainer foo = new PointContainer(new Point(1, 2));
         prefabValues.put(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
 
-        changeField(foo, "point");
+        doChangeField(foo, "point");
         assertEquals(RED_NEW_POINT, foo.getPoint());
 
-        changeField(foo, "point");
+        doChangeField(foo, "point");
         assertEquals(BLACK_NEW_POINT, foo.getPoint());
 
-        changeField(foo, "point");
+        doChangeField(foo, "point");
         assertEquals(RED_NEW_POINT, foo.getPoint());
     }
 
@@ -416,13 +416,13 @@ public class FieldAccessorTest {
         PointArrayContainer foo = new PointArrayContainer();
         prefabValues.put(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
 
-        changeField(foo, "points");
+        doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);
 
-        changeField(foo, "points");
+        doChangeField(foo, "points");
         assertEquals(BLACK_NEW_POINT, foo.points[0]);
 
-        changeField(foo, "points");
+        doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);
     }
 
@@ -434,15 +434,15 @@ public class FieldAccessorTest {
         getAccessorFor(object, fieldName).set(value);
     }
 
-    private void nullField(Object object, String fieldName) {
+    private void doNullField(Object object, String fieldName) {
         getAccessorFor(object, fieldName).defaultField();
     }
 
-    private void copyField(Object to, Object from, String fieldName) {
+    private void doCopyField(Object to, Object from, String fieldName) {
         getAccessorFor(from, fieldName).copyTo(to);
     }
 
-    private void changeField(Object object, String fieldName) {
+    private void doChangeField(Object object, String fieldName) {
         getAccessorFor(object, fieldName).changeField(prefabValues);
     }
 

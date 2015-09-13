@@ -119,40 +119,40 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked","rawtypes"})
     private void addCollection() {
-        addCollection(Collection.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(Collection.class, new ArrayList(), new ArrayList());
     }
 
     @SuppressWarnings({"unchecked","rawtypes"})
     private void addLists() {
-        addCollection(List.class, new ArrayList(), new ArrayList());
-        addCollection(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
-        addCollection(LinkedList.class, new LinkedList(), new LinkedList());
-        addCollection(ArrayList.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(List.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
+        addCollectionToPrefabValues(LinkedList.class, new LinkedList(), new LinkedList());
+        addCollectionToPrefabValues(ArrayList.class, new ArrayList(), new ArrayList());
     }
 
     @SuppressWarnings({"unchecked","rawtypes"})
     private void addMaps() {
-        addMap(Map.class, new HashMap(), new HashMap());
-        addMap(SortedMap.class, new TreeMap(), new TreeMap());
-        addMap(NavigableMap.class, new TreeMap(), new TreeMap());
-        addMap(ConcurrentNavigableMap.class, new ConcurrentSkipListMap(), new ConcurrentSkipListMap());
+        addMapToPrefabValues(Map.class, new HashMap(), new HashMap());
+        addMapToPrefabValues(SortedMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(NavigableMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(ConcurrentNavigableMap.class, new ConcurrentSkipListMap(), new ConcurrentSkipListMap());
         prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
-        addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
-        addMap(HashMap.class, new HashMap(), new HashMap());
-        addMap(Hashtable.class, new Hashtable(), new Hashtable());
-        addMap(LinkedHashMap.class, new LinkedHashMap(), new LinkedHashMap());
-        addMap(Properties.class, new Properties(), new Properties());
-        addMap(TreeMap.class, new TreeMap(), new TreeMap());
-        addMap(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
+        addMapToPrefabValues(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
+        addMapToPrefabValues(HashMap.class, new HashMap(), new HashMap());
+        addMapToPrefabValues(Hashtable.class, new Hashtable(), new Hashtable());
+        addMapToPrefabValues(LinkedHashMap.class, new LinkedHashMap(), new LinkedHashMap());
+        addMapToPrefabValues(Properties.class, new Properties(), new Properties());
+        addMapToPrefabValues(TreeMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
     }
 
     @SuppressWarnings({"unchecked","rawtypes"})
     private void addSets() {
-        addCollection(Set.class, new HashSet(), new HashSet());
-        addCollection(SortedSet.class, new TreeSet(), new TreeSet());
-        addCollection(NavigableSet.class, new TreeSet(), new TreeSet());
-        addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
-        addCollection(TreeSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(Set.class, new HashSet(), new HashSet());
+        addCollectionToPrefabValues(SortedSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(NavigableSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
+        addCollectionToPrefabValues(TreeSet.class, new TreeSet(), new TreeSet());
         prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 
         BitSet redBitSet = new BitSet();
@@ -352,13 +352,13 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
-    private <T extends Collection<Object>> void addCollection(Class<T> type, T red, T black) {
+    private <T extends Collection<Object>> void addCollectionToPrefabValues(Class<T> type, T red, T black) {
         red.add("red");
         black.add("black");
         prefabValues.put(type, red, black);
     }
 
-    private <T extends Map<Object, Object>> void addMap(Class<T> type, T red, T black) {
+    private <T extends Map<Object, Object>> void addMapToPrefabValues(Class<T> type, T red, T black) {
         red.put("red_key", "red_value");
         black.put("black_key", "black_value");
         prefabValues.put(type, red, black);
