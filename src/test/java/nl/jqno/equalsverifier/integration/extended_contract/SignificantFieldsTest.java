@@ -285,7 +285,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         private final int x;
         private final int y;
         @SuppressWarnings("unused")
-        private transient final Color color;
+        private final transient Color color;
 
         public OneTransientFieldUnusedColorPoint(int x, int y, Color color) { this.x = x; this.y = y; this.color = color; }
 

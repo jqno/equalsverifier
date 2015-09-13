@@ -199,7 +199,7 @@ public class FormatterTest {
         }
     }
 
-    static abstract class Abstract {
+    abstract static class Abstract {
         @SuppressWarnings("unused")
         private final int x = 10;
 
@@ -214,7 +214,7 @@ public class FormatterTest {
         }
     }
 
-    static abstract class AbstractDelegation {
+    abstract static class AbstractDelegation {
         @SuppressWarnings("unused")
         private final int y = 20;
 

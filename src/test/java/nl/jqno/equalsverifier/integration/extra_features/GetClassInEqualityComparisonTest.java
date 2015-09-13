@@ -41,7 +41,7 @@ public class GetClassInEqualityComparisonTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static abstract class Identifiable {
+    abstract static class Identifiable {
         private final int id;
 
         public Identifiable(int id) { this.id = id; }

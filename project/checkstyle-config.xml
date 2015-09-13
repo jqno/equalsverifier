@@ -97,6 +97,7 @@
         <module name="MissingOverride"/>
         <module name="MissingSwitchDefault"/>
         <module name="ModifiedControlVariable"/>
+        <module name="ModifierOrder"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="MutableException"/>
         <module name="NeedBraces"/>

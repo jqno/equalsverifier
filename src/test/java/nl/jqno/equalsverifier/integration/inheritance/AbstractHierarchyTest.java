@@ -51,7 +51,7 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static abstract class AbstractFinalMethodsPoint {
+    abstract static class AbstractFinalMethodsPoint {
         private final int x;
         private final int y;
 
@@ -69,7 +69,7 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
         @Override public final int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class AbstractRedefinablePoint {
+    abstract static class AbstractRedefinablePoint {
         private final int x;
         private final int y;
 
@@ -113,7 +113,7 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class NullThrowingColorContainer {
+    abstract static class NullThrowingColorContainer {
         private final Color color;
 
         public NullThrowingColorContainer(Color color) { this.color = color; }

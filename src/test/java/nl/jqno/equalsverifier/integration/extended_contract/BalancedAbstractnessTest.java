@@ -116,7 +116,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class AbstractEqualsButNotHashCode {
+    abstract static class AbstractEqualsButNotHashCode {
         @Override
         public abstract boolean equals(Object obj);
     }
@@ -130,7 +130,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class AbstractHashCodeButNotEquals {
+    abstract static class AbstractHashCodeButNotEquals {
         @Override
         public abstract int hashCode();
     }
@@ -144,7 +144,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class IntermediateSubclassOfAbstractBoth extends AbstractBoth {}
+    abstract static class IntermediateSubclassOfAbstractBoth extends AbstractBoth {}
 
     static final class SubclassOfSubclassOfAbstractBoth extends IntermediateSubclassOfAbstractBoth {
         private final int foo;

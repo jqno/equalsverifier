@@ -387,7 +387,7 @@ public class ConditionalPrefabValueBuilderTest {
     }
 
     interface ConditionalInterface {}
-    static abstract class ConditionalAbstractClass implements ConditionalInterface {}
+    abstract static class ConditionalAbstractClass implements ConditionalInterface {}
     static final class ConditionalConcreteClass extends ConditionalAbstractClass {
         @SuppressWarnings("unused") private final int i;
         public ConditionalConcreteClass(int i) { this.i = i; }

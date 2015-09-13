@@ -126,7 +126,7 @@ public class OriginalStateTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class SuperContainer {
+    abstract static class SuperContainer {
         private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
         private static Object staticValue = STATIC;
 

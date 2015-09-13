@@ -195,7 +195,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
+    abstract static class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
 
     static final class SubOfEmptySubOfAbstract extends EmptySubOfAbstract {
         private final Color color;
@@ -236,7 +236,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    public static abstract class AbstractEqualsDefiner {
+    public abstract static class AbstractEqualsDefiner {
         @Override
         public final boolean equals(Object obj) {
             return EqualsBuilder.reflectionEquals(this, obj);
