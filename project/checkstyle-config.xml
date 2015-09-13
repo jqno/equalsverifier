@@ -7,6 +7,12 @@
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="error"/>
 
+    <module name="SuppressWithNearbyCommentFilter">
+        <property name="commentFormat" value="CHECKSTYLE: ignore (\w+) for (\d+) lines?\."/>
+        <property name="checkFormat" value="$1"/>
+        <property name="influenceFormat" value="$2"/>
+    </module>
+
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
     <module name="RegexpHeader">
@@ -132,5 +138,7 @@
         <module name="UncommentedMain"/>
         <module name="UnusedImports"/>
         <module name="UpperEll"/>
+
+        <module name="FileContentsHolder"/>
     </module>
 </module>
