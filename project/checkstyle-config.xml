@@ -108,6 +108,7 @@
         </module>
         <module name="NoWhitespaceBefore"/>
         <module name="NPathComplexity"/>
+        <module name="OneTopLevelClass"/>
         <module name="OperatorWrap">
             <property name="option" value="eol"/>
         </module>
