@@ -138,7 +138,7 @@ public class ReflexivityTest extends IntegrationTestBase {
                 return false;
             if (getClass() != obj.getClass())
                 return false;
-            ReflexivityBrokenOnNullFields other = (ReflexivityBrokenOnNullFields) obj;
+            ReflexivityBrokenOnNullFields other = (ReflexivityBrokenOnNullFields)obj;
             if (a == null) {
                 if (other.a != null)
                     return false;

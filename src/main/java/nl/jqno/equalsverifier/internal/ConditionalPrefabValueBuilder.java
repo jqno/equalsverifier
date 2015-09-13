@@ -223,7 +223,7 @@ public final class ConditionalPrefabValueBuilder {
             if (instances.size() < 2) {
                 throw new EqualsVerifierBugException("Not enough instances");
             }
-            prefabValues.put((Class) type, instances.get(0), instances.get(1));
+            prefabValues.put((Class)type, instances.get(0), instances.get(1));
         }
     }
 

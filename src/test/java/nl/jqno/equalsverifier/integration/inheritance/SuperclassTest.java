@@ -269,7 +269,7 @@ public class SuperclassTest extends IntegrationTestBase {
             if (!(obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSuper)) {
                 return false;
             }
-            SymmetryBrokenForNullIdWithIncorrectCanEqualSuper other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSuper) obj;
+            SymmetryBrokenForNullIdWithIncorrectCanEqualSuper other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSuper)obj;
 
             if (id != null) {
                 return id.equals(other.id);
@@ -295,7 +295,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override
         public boolean newCanEqual(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper obj) {
             if (obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSub) {
-                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSub) obj;
+                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSub)obj;
                 return Objects.equals(name, other.name);
             }
             return false;

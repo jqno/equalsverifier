@@ -295,7 +295,7 @@ public class ArrayTest extends IntegrationTestBase {
             if (!(obj instanceof TwoMultidimensionalArraysShallowHashCodeForSecond)) {
                 return false;
             }
-            TwoMultidimensionalArraysShallowHashCodeForSecond other = (TwoMultidimensionalArraysShallowHashCodeForSecond) obj;
+            TwoMultidimensionalArraysShallowHashCodeForSecond other = (TwoMultidimensionalArraysShallowHashCodeForSecond)obj;
             return Arrays.deepEquals(first, other.first) && Arrays.deepEquals(second, other.second);
         }
 

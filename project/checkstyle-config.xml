@@ -103,6 +103,9 @@
         <module name="NoFinalizer"/>
         <module name="NoLineWrap"/>
         <module name="NonEmptyAtclauseDescription"/>
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS,TYPECAST,ARRAY_DECLARATOR"/>
+        </module>
         <module name="NPathComplexity"/>
         <module name="OperatorWrap">
             <property name="option" value="eol"/>

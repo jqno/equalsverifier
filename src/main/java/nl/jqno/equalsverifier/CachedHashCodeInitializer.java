@@ -89,7 +89,7 @@ class CachedHashCodeInitializer<T> {
     private void recomputeCachedHashCode(Object object) {
         try {
             cachedHashCodeField.set(object, 0); // zero the field first, in case calculateMethod checks it
-            Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
+            Integer recomputedHashCode = (Integer)calculateMethod.invoke(object);
             cachedHashCodeField.set(object, recomputedHashCode);
         }
         catch (Exception e) {

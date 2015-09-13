@@ -85,7 +85,7 @@ public final class Instantiator<T> {
     @SuppressWarnings("unchecked")
     private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
         DynamicType.Builder<S> builder = createBuilder(superclass);
-        return (Class<S>) builder
+        return (Class<S>)builder
                 .name(new NamingStrategy.Fixed(superclass.getName() + "$$DynamicSubclass"))
                 .make()
                 .load(superclass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
@@ -96,7 +96,7 @@ public final class Instantiator<T> {
     private static <S> DynamicType.Builder<S> createBuilder(Class<S> superclass) {
         ByteBuddy byteBuddy = new ByteBuddy();
         if (superclass.isInterface()) {
-            return (DynamicType.Builder<S>) byteBuddy.subclass(Object.class).implement(superclass);
+            return (DynamicType.Builder<S>)byteBuddy.subclass(Object.class).implement(superclass);
         }
         else {
             return byteBuddy.subclass(superclass);

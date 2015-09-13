@@ -277,7 +277,7 @@ public class TransitivityTest extends IntegrationTestBase {
             if (!(obj instanceof AtLeast2FieldsAreEqual)) {
                 return false;
             }
-            AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual) obj;
+            AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual)obj;
             int x = 0;
             if (i == other.i) { x++; }
             if (j == other.j) { x++; }

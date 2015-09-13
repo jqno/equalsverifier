@@ -121,7 +121,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
             if (!(obj instanceof OtherwiseStatelessVersionedEntity)) {
                 return false;
             }
-            OtherwiseStatelessVersionedEntity other = (OtherwiseStatelessVersionedEntity) obj;
+            OtherwiseStatelessVersionedEntity other = (OtherwiseStatelessVersionedEntity)obj;
             if (id == 0L && other.id == 0L) {
                 return super.equals(obj);
             }
@@ -142,7 +142,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
             if (!(obj instanceof StringVersionedEntity)) {
                 return false;
             }
-            StringVersionedEntity other = (StringVersionedEntity) obj;
+            StringVersionedEntity other = (StringVersionedEntity)obj;
             if (id == 0L && other.id == 0L) {
                 return false;
             }
@@ -165,7 +165,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
             if (!(obj instanceof WeakStringVersionedEntity)) {
                 return false;
             }
-            WeakStringVersionedEntity other = (WeakStringVersionedEntity) obj;
+            WeakStringVersionedEntity other = (WeakStringVersionedEntity)obj;
             if (id == 0L && other.id == 0L) {
                 return Objects.equals(s, other.s);
             }
@@ -187,7 +187,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
             if (!(obj instanceof CanEqualVersionedEntity)) {
                 return false;
             }
-            CanEqualVersionedEntity other = (CanEqualVersionedEntity) obj;
+            CanEqualVersionedEntity other = (CanEqualVersionedEntity)obj;
             if (id != null) {
                 return id.equals(other.id);
             }

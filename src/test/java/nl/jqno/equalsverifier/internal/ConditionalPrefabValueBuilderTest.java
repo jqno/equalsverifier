@@ -220,8 +220,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(List.class), is((List) Collections.emptyList()));
-        assertThat(prefabValues.getBlack(List.class), is((List) Collections.singletonList(1)));
+        assertThat(prefabValues.getRed(List.class), is((List)Collections.emptyList()));
+        assertThat(prefabValues.getBlack(List.class), is((List)Collections.singletonList(1)));
     }
 
     @Test

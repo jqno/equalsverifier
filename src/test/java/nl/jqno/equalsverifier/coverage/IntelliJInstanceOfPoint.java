@@ -24,6 +24,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  * - Accept subclasses as parameter to equals() method: true
  */
 // CHECKSTYLE: ignore NeedBraces for 35 lines.
+// CHECKSTYLE: ignore NoWhitespaceAfter for 35 lines.
 public final class IntelliJInstanceOfPoint {
     private final int x;
     private final int y;
