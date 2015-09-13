@@ -95,13 +95,13 @@
         <module name="ModifiedControlVariable"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="MutableException"/>
-        <module name="NPathComplexity"/>
         <module name="NestedForDepth"/>
         <module name="NestedIfDepth"/>
         <module name="NestedTryDepth"/>
         <module name="NoClone"/>
         <module name="NoFinalizer"/>
         <module name="NoLineWrap"/>
+        <module name="NPathComplexity"/>
         <module name="OperatorWrap">
             <property name="option" value="eol"/>
         </module>
