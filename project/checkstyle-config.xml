@@ -102,6 +102,7 @@
         <module name="NoClone"/>
         <module name="NoFinalizer"/>
         <module name="NoLineWrap"/>
+        <module name="NonEmptyAtclauseDescription"/>
         <module name="NPathComplexity"/>
         <module name="OperatorWrap">
             <property name="option" value="eol"/>

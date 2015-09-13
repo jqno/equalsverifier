@@ -260,7 +260,7 @@ public final class EqualsVerifier<T> {
      * Note that these fields will still be used to test for null-ness, among
      * other things.
      *
-     * @param fields
+     * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
