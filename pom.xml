@@ -101,18 +101,18 @@ limitations under the License.
             <version>5.0.3</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>3.0.0</version>
+            <scope>compile</scope>
+        </dependency>
 
         <!-- test dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>annotations</artifactId>
-            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -267,6 +267,25 @@ limitations under the License.
             </plugin>
 
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>analyze-compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>jarjar-maven-plugin</artifactId>
                 <version>1.9</version>
@@ -331,6 +350,12 @@ limitations under the License.
                     </dependencies>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>3.0.2</version>
+                </plugin>
+
                 <!-- Sadly, all this is needed to suppress errors and warnings in M2Eclipse. -->
                 <plugin>
                     <groupId>org.eclipse.m2e</groupId>
@@ -391,6 +416,11 @@ limitations under the License.
                         </reports>
                     </reportSet>
                 </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </reporting>
