@@ -124,6 +124,7 @@
         <module name="PackageName"/>
         <module name="ParameterAssignment"/>
         <module name="ParameterName"/>
+        <module name="ParameterNumber"/>
         <module name="ParenPad"/>
         <module name="RedundantImport"/>
         <module name="Regexp">

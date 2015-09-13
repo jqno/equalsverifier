@@ -53,6 +53,7 @@ public class ExternalApiClassesTest {
         private final Range<?> range;
         private final Optional<?> optional;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
                 ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet, ImmutableMultiset<?> iMultiset,
                 ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
@@ -81,6 +82,7 @@ public class ExternalApiClassesTest {
         private final YearMonth yearMonth;
         private final MonthDay monthDay;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public JodaTimeContainer(LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime, Chronology chronology,
                 DateTimeZone dateTimeZone, Partial partial, PeriodType periodType, Period period, YearMonth yearMonth, MonthDay monthDay) {
             this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime; this.chronology = chronology;

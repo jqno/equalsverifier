@@ -69,6 +69,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final NavigableMap<String, String> navigableMap;
         private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CollectionInterfacesContainer(Collection<String> collection, List<String> list,
                 Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
                 Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
@@ -130,6 +131,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final SimpleDateFormat simpleDateFormat;
         private final UUID uuid;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
                 Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
                 Reference ref, SimpleDateFormat simpleDateFormat, UUID uuid) {

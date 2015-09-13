@@ -31,6 +31,7 @@ public final class Configuration<T> {
     private final boolean usingGetClass;
     private final EnumSet<Warning> warningsToSuppress;
 
+    // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, PrefabValues prefabValues, Set<String> ignoredFields,
                           CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                           Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
