@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 
@@ -98,6 +99,7 @@ public final class JavaApiPrefabValues {
         prefabValues.put(String.class, "one", "two");
     }
 
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")
     private void addClasses() {
         prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
         prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
