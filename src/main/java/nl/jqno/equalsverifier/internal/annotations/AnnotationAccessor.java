@@ -217,7 +217,7 @@ public class AnnotationAccessor {
         }
     }
 
-    private class AnnotationArrayValueVisitor extends AnnotationVisitor {
+    private static class AnnotationArrayValueVisitor extends AnnotationVisitor {
         private final Set<Object> foundAnnotations;
 
         public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
