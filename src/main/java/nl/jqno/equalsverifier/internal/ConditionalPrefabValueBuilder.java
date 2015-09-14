@@ -228,12 +228,6 @@ public final class ConditionalPrefabValueBuilder {
         }
     }
 
-    private void validate() {
-        if (instances.size() >= 2) {
-            throw new EqualsVerifierBugException("Too many instances");
-        }
-    }
-
     private void add(Supplier obtainer) {
         if (!stop) {
             if (instances.size() >= 2) {
