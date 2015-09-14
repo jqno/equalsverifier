@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Field;
@@ -110,6 +111,7 @@ public class FieldAccessor {
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "Only called in test code, not production.")
     public Object get() {
         field.setAccessible(true);
         try {
