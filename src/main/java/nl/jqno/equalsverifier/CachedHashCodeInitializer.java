@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
@@ -92,7 +93,7 @@ class CachedHashCodeInitializer<T> {
             Integer recomputedHashCode = (Integer)calculateMethod.invoke(object);
             cachedHashCodeField.set(object, recomputedHashCode);
         }
-        catch (Exception e) {
+        catch (IllegalAccessException | InvocationTargetException e) {
             throw new ReflectionException(e);
         }
     }
