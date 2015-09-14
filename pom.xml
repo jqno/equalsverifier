@@ -183,8 +183,8 @@ limitations under the License.
                 <version>1.8</version>
                 <executions>
                     <execution>
-                        <id>default-report</id>
-                        <phase>package</phase>
+                        <id>run-jacoco</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>run</goal>
                         </goals>
@@ -256,8 +256,8 @@ limitations under the License.
                 </configuration>
                 <executions>
                     <execution>
-                        <id>validate</id>
-                        <phase>validate</phase>
+                        <id>run-checkstyle</id>
+                        <phase>verify</phase>
                         <configuration>
                             <failsOnError>true</failsOnError>
                         </configuration>
@@ -278,8 +278,8 @@ limitations under the License.
                 </configuration>
                 <executions>
                     <execution>
-                        <id>analyze-compile</id>
-                        <phase>compile</phase>
+                        <id>run-findbugs</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
