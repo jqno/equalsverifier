@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
@@ -78,6 +79,7 @@ class ExamplesChecker<T> implements Checker {
                 reference, reference);
     }
 
+    @SuppressFBWarnings(value = "EC_NULL_ARG", justification = "Check what happens when null is passed into equals.")
     private void checkNonNullity(T reference) {
         try {
             boolean nullity = reference.equals(null);
