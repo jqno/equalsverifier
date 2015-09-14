@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.*;
 
 import java.lang.reflect.Field;
@@ -146,6 +147,7 @@ class AbstractDelegationChecker<T> implements Checker {
         }
     }
 
+    @SuppressFBWarnings(value = "DE_MIGHT_IGNORE", justification = "These exceptions will re-occur and be handled later.")
     private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
         try {
             instance.equals(copy);
