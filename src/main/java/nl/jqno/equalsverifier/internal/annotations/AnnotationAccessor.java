@@ -20,10 +20,7 @@ import org.objectweb.asm.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Provides access to the annotations that are defined on a class
@@ -50,7 +47,7 @@ public class AnnotationAccessor {
      *          class file cannot be read.
      */
     public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, boolean ignoreFailure) {
-        this.supportedAnnotations = supportedAnnotations;
+        this.supportedAnnotations = Arrays.copyOf(supportedAnnotations, supportedAnnotations.length);
         this.type = type;
         this.ignoreFailure = ignoreFailure;
     }
