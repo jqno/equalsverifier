@@ -112,10 +112,9 @@ public class AnnotationAccessor {
         ClassLoader classLoader = getClassLoaderFor(c);
         Type asmType = Type.getType(c);
         String url = asmType.getInternalName() + ".class";
-        InputStream is = classLoader.getResourceAsStream(url);
 
-        Visitor v = new Visitor(inheriting);
-        try {
+        try (InputStream is = classLoader.getResourceAsStream(url)) {
+            Visitor v = new Visitor(inheriting);
             ClassReader cr = new ClassReader(is);
             cr.accept(v, 0);
         }
