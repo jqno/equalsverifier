@@ -181,8 +181,7 @@ limitations under the License.
                                     </executiondata>
                                     <structure name="EqualsVerifier: external coverage">
                                         <classfiles>
-                                            <fileset
-                                                    dir="${project.build.directory}/test-classes/nl/jqno/equalsverifier/coverage"/>
+                                            <fileset dir="${project.build.directory}/test-classes/nl/jqno/equalsverifier/coverage"/>
                                         </classfiles>
                                         <sourcefiles encoding="UTF-8">
                                             <fileset dir="src/test/java"/>
