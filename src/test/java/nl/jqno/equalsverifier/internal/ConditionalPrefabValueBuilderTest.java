@@ -114,9 +114,9 @@ public class ConditionalPrefabValueBuilderTest {
 
         StringsContainer red = prefabValues.getRed(StringsContainer.class);
         StringsContainer black = prefabValues.getBlack(StringsContainer.class);
-        assertNotNull(red);
-        assertNotNull(black);
         assertNotEquals(red, black);
+        assertEquals(red.s, prefabValues.getRed(String.class));
+        assertEquals(black.s, prefabValues.getBlack(String.class));
     }
 
     @Test
