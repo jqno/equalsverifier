@@ -273,6 +273,7 @@ limitations under the License.
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
                 <configuration>
+                    <threads>3</threads>
                     <targetClasses>
                         <param>nl.jqno.equalsverifier.*</param>
                     </targetClasses>
