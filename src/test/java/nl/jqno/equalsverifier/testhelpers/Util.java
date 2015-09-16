@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.testhelpers;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
 
@@ -68,5 +69,16 @@ public final class Util {
     private static boolean isRelevant(Object x, Field f) {
         FieldAccessor acc = new FieldAccessor(x, f);
         return acc.canBeModifiedReflectively();
+    }
+
+    public static void coverThePrivateConstructor(Class<?> type) {
+        try {
+            Constructor<?> constructor = type.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+        }
+        catch (Exception e) {
+            fail("Could not call constructor of " + type.getName());
+        }
     }
 }
