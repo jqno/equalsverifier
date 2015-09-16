@@ -22,6 +22,7 @@ import nl.jqno.equalsverifier.internal.ObjectAccessor;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Objects;
 
 import static nl.jqno.equalsverifier.internal.Assert.*;
 
@@ -123,7 +124,7 @@ class ExamplesChecker<T> implements Checker {
         for (Field field : FieldIterable.of(reference.getClass())) {
             try {
                 field.setAccessible(true);
-                if (!nullSafeEquals(field.get(reference), field.get(other))) {
+                if (!Objects.equals(field.get(reference), field.get(other))) {
                     return false;
                 }
             }
@@ -133,9 +134,5 @@ class ExamplesChecker<T> implements Checker {
         }
 
         return true;
-    }
-
-    private boolean nullSafeEquals(Object x, Object y) {
-        return x == null ? y == null : x.equals(y);
     }
 }
