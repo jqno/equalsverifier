@@ -418,18 +418,6 @@ limitations under the License.
             </plugin>
 
             <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>report</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
@@ -457,4 +445,31 @@ limitations under the License.
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>addPitReport</id>
+            <activation>
+                <file>
+                    <exists>target/pit-reports</exists>
+                </file>
+            </activation>
+
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <reportSets>
+                            <reportSet>
+                                <reports>
+                                    <report>report</report>
+                                </reports>
+                            </reportSet>
+                        </reportSets>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+    </profiles>
 </project>
