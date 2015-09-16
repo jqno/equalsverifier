@@ -72,9 +72,6 @@ public enum SupportedAnnotations implements Annotation {
         @Override
         public boolean validate(AnnotationProperties properties) {
             Set<Object> values = properties.getArrayValues("value");
-            if (values == null) {
-                return false;
-            }
             for (Object value : values) {
                 for (String descriptor : NONNULL.descriptors()) {
                     Type type = (Type)value;
