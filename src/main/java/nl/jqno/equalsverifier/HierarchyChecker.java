@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -175,11 +176,8 @@ class HierarchyChecker<T> implements Checker {
             Method method = type.getMethod(methodName, parameterTypes);
             return Modifier.isFinal(method.getModifiers());
         }
-        catch (SecurityException e) {
-            throw new AssertionError("Security error: cannot access equals method for class " + type);
-        }
-        catch (NoSuchMethodException e) {
-            throw new AssertionError("Impossible: class " + type + " has no equals method.");
+        catch (SecurityException | NoSuchMethodException e) {
+            throw new ReflectionException("Should never occur: cannot find " + type.getName() + "." + methodName);
         }
 
     }

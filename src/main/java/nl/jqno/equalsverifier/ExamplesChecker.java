@@ -127,10 +127,7 @@ class ExamplesChecker<T> implements Checker {
                     return false;
                 }
             }
-            catch (IllegalArgumentException e) {
-                return false;
-            }
-            catch (IllegalAccessException e) {
+            catch (IllegalArgumentException | IllegalAccessException e) {
                 return false;
             }
         }
