@@ -95,10 +95,7 @@ public enum SupportedAnnotations implements Annotation {
                 boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
                 return hasNonnullAnnotation && hasValidTypeQualifierDefault;
             }
-            catch (ClassNotFoundException ignored) {
-                return false;
-            }
-            catch (UnsupportedClassVersionError ignored) {
+            catch (ClassNotFoundException | UnsupportedClassVersionError ignored) {
                 return false;
             }
         }
