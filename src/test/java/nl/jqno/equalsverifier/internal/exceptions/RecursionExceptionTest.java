@@ -15,13 +15,12 @@
  */
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.junit.Assert.assertTrue;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.Test;
 
 import java.util.LinkedHashSet;
 
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-
-import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 
 public class RecursionExceptionTest {
     @Test

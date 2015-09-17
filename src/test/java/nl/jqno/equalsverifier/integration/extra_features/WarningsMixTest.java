@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-
 import org.junit.Test;
 
 public class WarningsMixTest extends IntegrationTestBase {
@@ -86,7 +85,7 @@ public class WarningsMixTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    public void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         expectFailureWithCause(NullPointerException.class, "Non-nullity:");
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)

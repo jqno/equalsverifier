@@ -15,15 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.fail;
-
-import java.lang.reflect.Field;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+
+import java.lang.reflect.Field;
+
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class NullChecker<T> implements Checker {
     private final Configuration<T> config;
@@ -61,6 +62,7 @@ class NullChecker<T> implements Checker {
 
             handle("equals", field, new Runnable() {
                 @Override
+                @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
                 public void run() {
                     reference.equals(changed);
                 }
@@ -68,6 +70,7 @@ class NullChecker<T> implements Checker {
 
             handle("equals", field, new Runnable() {
                 @Override
+                @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
                 public void run() {
                     changed.equals(reference);
                 }

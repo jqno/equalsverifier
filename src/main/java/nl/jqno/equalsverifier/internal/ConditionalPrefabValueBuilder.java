@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Builds prefab values for classes that may or may not be present on the
@@ -35,11 +35,22 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
  *
  * @author Jan Ouwens
  */
-public class ConditionalPrefabValueBuilder {
+public final class ConditionalPrefabValueBuilder {
     private final Class<?> type;
     private boolean stop = false;
     private ConditionalInstantiator ci;
     private List<Object> instances = new ArrayList<>();
+
+    /**
+     * Private constructor. Call {@link #of(String)} instead.
+     */
+    private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
+        this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
+        this.type = ci.resolve();
+        if (type == null) {
+            stop = true;
+        }
+    }
 
     /**
      * Factory method.
@@ -51,17 +62,6 @@ public class ConditionalPrefabValueBuilder {
      */
     public static ConditionalPrefabValueBuilder of(String fullyQualifiedClassName) {
         return new ConditionalPrefabValueBuilder(fullyQualifiedClassName);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(String)} instead.
-     */
-    private ConditionalPrefabValueBuilder(String fullyQualifiedClassName) {
-        this.ci = new ConditionalInstantiator(fullyQualifiedClassName);
-        this.type = ci.resolve();
-        if (type == null) {
-            stop = true;
-        }
     }
 
     /**
@@ -125,15 +125,15 @@ public class ConditionalPrefabValueBuilder {
             @Override
             public Object get() {
                 List<Object> objects = new ArrayList<>();
-                for (Class<?> type : paramTypes) {
-                    if (!prefabValues.contains(type)) {
-                        throw new EqualsVerifierBugException("No prefab values available for type " + type.getCanonicalName());
+                for (Class<?> c : paramTypes) {
+                    if (!prefabValues.contains(c)) {
+                        throw new EqualsVerifierBugException("No prefab values available for type " + c.getCanonicalName());
                     }
                     if (instances.size() == 0) {
-                        objects.add(prefabValues.getRed(type));
+                        objects.add(prefabValues.getRed(c));
                     }
                     else {
-                        objects.add(prefabValues.getBlack(type));
+                        objects.add(prefabValues.getBlack(c));
                     }
                 }
                 return ci.instantiate(paramTypes, objects.toArray());
@@ -182,7 +182,8 @@ public class ConditionalPrefabValueBuilder {
      *          match the {@code paramTypes}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod, final Class<?>[] paramTypes, final Object[] paramValues) {
+    public ConditionalPrefabValueBuilder callFactory(final String factoryType, final String factoryMethod,
+                final Class<?>[] paramTypes, final Object[] paramValues) {
         add(new Supplier() {
             @Override
             public Object get() {
@@ -223,13 +224,7 @@ public class ConditionalPrefabValueBuilder {
             if (instances.size() < 2) {
                 throw new EqualsVerifierBugException("Not enough instances");
             }
-            prefabValues.put((Class) type, instances.get(0), instances.get(1));
-        }
-    }
-
-    private void validate() {
-        if (instances.size() >= 2) {
-            throw new EqualsVerifierBugException("Too many instances");
+            prefabValues.put((Class)type, instances.get(0), instances.get(1));
         }
     }
 

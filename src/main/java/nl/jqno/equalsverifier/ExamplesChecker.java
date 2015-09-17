@@ -15,17 +15,16 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
-import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
-import static nl.jqno.equalsverifier.internal.Assert.fail;
-
-import java.lang.reflect.Field;
-import java.util.List;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
+
+import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class ExamplesChecker<T> implements Checker {
     private final Class<T> type;
@@ -81,6 +80,7 @@ class ExamplesChecker<T> implements Checker {
                 reference, reference);
     }
 
+    @SuppressFBWarnings(value = "EC_NULL_ARG", justification = "Check what happens when null is passed into equals.")
     private void checkNonNullity(T reference) {
         try {
             boolean nullity = reference.equals(null);
@@ -115,7 +115,8 @@ class ExamplesChecker<T> implements Checker {
         }
 
         int copyHashCode = cachedHashCodeInitializer.getInitializedHashCode(copy);
-        Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)", reference, referenceHashCode, copy, copyHashCode);
+        Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)",
+                reference, referenceHashCode, copy, copyHashCode);
         assertEquals(f, referenceHashCode, copyHashCode);
     }
 
@@ -123,22 +124,15 @@ class ExamplesChecker<T> implements Checker {
         for (Field field : FieldIterable.of(reference.getClass())) {
             try {
                 field.setAccessible(true);
-                if (!nullSafeEquals(field.get(reference), field.get(other))) {
+                if (!Objects.equals(field.get(reference), field.get(other))) {
                     return false;
                 }
             }
-            catch (IllegalArgumentException e) {
-                return false;
-            }
-            catch (IllegalAccessException e) {
+            catch (IllegalArgumentException | IllegalAccessException e) {
                 return false;
             }
         }
 
         return true;
-    }
-
-    private boolean nullSafeEquals(Object x, Object y) {
-        return x == null ? y == null : x.equals(y);
     }
 }

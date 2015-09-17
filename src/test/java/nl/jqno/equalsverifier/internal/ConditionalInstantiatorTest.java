@@ -15,31 +15,28 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.*;
 
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
 
-    private ConditionalInstantiator ci;
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private ConditionalInstantiator ci;
 
     @Test
     public void resolveReturnsClass_whenTypeExists() {
@@ -74,7 +71,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidConstructorParametersAreProvided() {
+    public void throwsIse_whenInvalidConstructorParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar");
 
         thrown.expect(ReflectionException.class);
@@ -98,7 +95,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidMethodNameIsProvided() {
+    public void throwsIse_whenInvalidMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
         thrown.expect(ReflectionException.class);
@@ -106,7 +103,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidFactoryMethodParametersAreProvided() {
+    public void throwsIse_whenInvalidFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
         thrown.expect(ReflectionException.class);
@@ -138,7 +135,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidExternalFactoryMethodNameIsProvided() {
+    public void throwsIse_whenInvalidExternalFactoryMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
@@ -146,7 +143,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenInvalidExternalFactoryMethodParametersAreProvided() {
+    public void throwsIse_whenInvalidExternalFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
@@ -170,7 +167,7 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void throwsISE_whenConstantDoesNotExist() {
+    public void throwsIse_whenConstantDoesNotExist() {
         ci = new ConditionalInstantiator("java.math.BigDecimal");
 
         thrown.expect(ReflectionException.class);

@@ -20,10 +20,10 @@ import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 /**
  * Alternative for org.junit.Assert, so we can assert things without having a
  * dependency on JUnit.
- * 
+ *
  * @author Jan Ouwens
  */
-public class Assert {
+public final class Assert {
     private Assert() {
         // Do not instantiate
     }

@@ -23,12 +23,21 @@ import java.util.List;
 /**
  * Iterable to iterate over all declared fields in a class and, if needed,
  * over all declared fields of its superclasses.
- * 
+ *
  * @author Jan Ouwens
  */
-public class FieldIterable implements Iterable<Field> {
+public final class FieldIterable implements Iterable<Field> {
     private final Class<?> type;
     private final boolean includeSuperclasses;
+
+    /**
+     * Private constructor. Call {@link #of(Class)} or
+     * {@link #ofIgnoringSuper(Class)} instead.
+     */
+    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
+        this.type = type;
+        this.includeSuperclasses = includeSuperclasses;
+    }
 
     /**
      * Factory method for a FieldIterator that iterates over all declared
@@ -52,15 +61,6 @@ public class FieldIterable implements Iterable<Field> {
      */
     public static FieldIterable ofIgnoringSuper(Class<?> type) {
         return new FieldIterable(type, false);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class)} or
-     * {@link #ofIgnoringSuper(Class)} instead.
-     */
-    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
-        this.type = type;
-        this.includeSuperclasses = includeSuperclasses;
     }
 
     /**
@@ -89,10 +89,10 @@ public class FieldIterable implements Iterable<Field> {
         return result;
     }
 
-    private List<Field> addFieldsFor(Class<?> type) {
+    private List<Field> addFieldsFor(Class<?> c) {
         List<Field> result = new ArrayList<>();
 
-        for (Field field : type.getDeclaredFields()) {
+        for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic()) {
                 result.add(field);
             }

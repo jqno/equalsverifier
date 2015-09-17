@@ -15,10 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
  * Provides reflective access to one field of an object.
@@ -95,7 +96,7 @@ public class FieldAccessor {
     public boolean fieldIsTransient() {
         return Modifier.isTransient(field.getModifiers());
     }
-    
+
     /**
      * Returns whether the field is an enum with a single value.
      */
@@ -110,6 +111,7 @@ public class FieldAccessor {
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "Only called in test code, not production.")
     public Object get() {
         field.setAccessible(true);
         try {

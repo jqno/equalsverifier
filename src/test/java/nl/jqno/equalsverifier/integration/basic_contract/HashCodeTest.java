@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
 
 public class HashCodeTest extends IntegrationTestBase {

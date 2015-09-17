@@ -15,15 +15,12 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.*;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.Instantiator;
-import nl.jqno.equalsverifier.internal.PrefabValues;
+import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
@@ -75,11 +72,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
-            Class<?> type = field.getType();
-            Object instance = safelyGetInstance(type);
-            Object copy = safelyGetInstance(type);
+            Class<?> c = field.getType();
+            Object instance = safelyGetInstance(c);
+            Object copy = safelyGetInstance(c);
             if (instance != null && copy != null) {
-                checkAbstractMethods(type, instance, copy, true);
+                checkAbstractMethods(c, instance, copy, true);
             }
         }
     }
@@ -112,37 +109,37 @@ class AbstractDelegationChecker<T> implements Checker {
         checkAbstractMethods(superclass, instance, copy, false);
     }
 
-    private Formatter buildSingleAbstractMethodErrorMessage(Class<?> type, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
+    private Formatter buildSingleAbstractMethodErrorMessage(Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
         return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
-                type.getSimpleName(),
-                (isEqualsAbstract ? "equals" : "hashCode"),
-                (isEqualsAbstract ? "hashCode" : "equals"),
-                (bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete."));
+                c.getSimpleName(),
+                isEqualsAbstract ? "equals" : "hashCode",
+                isEqualsAbstract ? "hashCode" : "equals",
+                bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
     }
 
     @SuppressWarnings("unchecked")
-    private <S> S getRedPrefabValue(Class<?> type) {
-        if (prefabValues.contains(type)) {
-            return (S)prefabValues.getRed(type);
+    private <S> S getRedPrefabValue(Class<?> c) {
+        if (prefabValues.contains(c)) {
+            return (S)prefabValues.getRed(c);
         }
         return null;
     }
 
     @SuppressWarnings("unchecked")
-    private <S> S getBlackPrefabValue(Class<?> type) {
-        if (prefabValues.contains(type)) {
-            return (S)prefabValues.getBlack(type);
+    private <S> S getBlackPrefabValue(Class<?> c) {
+        if (prefabValues.contains(c)) {
+            return (S)prefabValues.getBlack(c);
         }
         return null;
     }
 
-    private Object safelyGetInstance(Class<?> type) {
-        Object result = getRedPrefabValue(type);
+    private Object safelyGetInstance(Class<?> c) {
+        Object result = getRedPrefabValue(c);
         if (result != null) {
             return result;
         }
         try {
-            return Instantiator.of(type).instantiate();
+            return Instantiator.of(c).instantiate();
         }
         catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null.
@@ -150,6 +147,7 @@ class AbstractDelegationChecker<T> implements Checker {
         }
     }
 
+    @SuppressFBWarnings(value = "DE_MIGHT_IGNORE", justification = "These exceptions will re-occur and be handled later.")
     private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
         try {
             instance.equals(copy);
@@ -174,10 +172,10 @@ class AbstractDelegationChecker<T> implements Checker {
         }
     }
 
-    private Formatter buildAbstractDelegationErrorMessage(Class<?> type, boolean prefabPossible, String method, String originalMessage) {
-        Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", type.getName());
+    private Formatter buildAbstractDelegationErrorMessage(Class<?> c, boolean prefabPossible, String method, String originalMessage) {
+        Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", c.getName());
 
         return Formatter.of("Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
-                type.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
+                c.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
     }
 }

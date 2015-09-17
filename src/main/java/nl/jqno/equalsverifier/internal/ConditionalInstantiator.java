@@ -15,15 +15,15 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
 /**
  * Allows instantiation of classes that may or may not be present on the classpath.
- * 
+ *
  * @author Jan Ouwens
  */
 public class ConditionalInstantiator {

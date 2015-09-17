@@ -1,5 +1,6 @@
 /*
  * Copyright 2010-2013, 2015 Jan Ouwens
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,30 +15,14 @@
  */
 package nl.jqno.equalsverifier.testhelpers.types;
 
+import nl.jqno.equalsverifier.testhelpers.annotations.*;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
-
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationDoesntInherit;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationInherits;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.Inapplicable;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationDoesntInherit;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationInherits;
-import nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention;
 
 public class TypeHelper {
     private static final Object OBJECT = new Object();
@@ -45,6 +30,7 @@ public class TypeHelper {
     public enum Enum { FIRST, SECOND }
 
     public static final class AllTypesContainer {
+        // CHECKSTYLE: ignore MemberName for 23 lines.
         public boolean _boolean = false;
         public byte _byte = 0;
         public char _char = '\u0000';
@@ -111,6 +97,7 @@ public class TypeHelper {
         long[] longs = { 1L };
         short[] shorts = { 1 };
 
+        // CHECKSTYLE: ignore MemberName for 8 lines.
         Boolean[] Booleans = { true };
         Byte[] Bytes = { 1 };
         Character[] Characters = { 'a' };
@@ -178,14 +165,14 @@ public class TypeHelper {
         CopyOnWriteArrayList<?> copyOnWriteArrayList;
         LinkedList<?> linkedList;
 
-        ConcurrentHashMap<?,?> concurrentHashMap;
-        EnumMap<?,?> enumMap;
-        HashMap<?,?> hashMap;
-        Hashtable<?,?> hashtable;
-        LinkedHashMap<?,?> linkedHashMap;
+        ConcurrentHashMap<?, ?> concurrentHashMap;
+        EnumMap<?, ?> enumMap;
+        HashMap<?, ?> hashMap;
+        Hashtable<?, ?> hashtable;
+        LinkedHashMap<?, ?> linkedHashMap;
         Properties properties;
-        TreeMap<?,?> treeMap;
-        WeakHashMap<?,?> weakHashMap;
+        TreeMap<?, ?> treeMap;
+        WeakHashMap<?, ?> weakHashMap;
 
         CopyOnWriteArraySet<?> copyOnWriteArraySet;
         EnumSet<?> enumSet;
@@ -203,23 +190,23 @@ public class TypeHelper {
 
     public static class DifferentAccessModifiersFieldContainer {
         @SuppressWarnings("unused")
-        private final int i = 0;
-        final int j = 0;
-        protected final int k = 0;
-        public final int l = 0;
-        @SuppressWarnings("unused")
-        private static final int I = 0;
-        final static int J = 0;
-        protected static final int K = 0;
         public static final int L = 0;
+        protected static final int K = 0;
+        static final int J = 0;
+        private static final int I = 0;
+        @SuppressWarnings("unused")
+        public final int l = 0;
+        protected final int k = 0;
+        final int j = 0;
+        private final int i = 0;
     }
 
     public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
         @SuppressWarnings("unused")
-        private final String a = "";
-        final String b = "";
-        protected final String c = "";
         public final String d = "";
+        protected final String c = "";
+        final String b = "";
+        private final String a = "";
     }
 
     public static class EmptySubFieldContainer extends DifferentAccessModifiersFieldContainer {}
@@ -230,7 +217,7 @@ public class TypeHelper {
 
     public interface Interface {}
 
-    public static abstract class AbstractClass {
+    public abstract static class AbstractClass {
         int field;
     }
 
@@ -299,13 +286,13 @@ public class TypeHelper {
     public static class NoFieldsSubWithFields extends NoFields {
         public Object field;
     }
-    
+
     public enum TwoElementEnum { ONE, TWO }
 
     public enum OneElementEnum { ONE }
 
     public enum EmptyEnum {}
-    
+
     public static final class EnumContainer {
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;
@@ -364,7 +351,7 @@ public class TypeHelper {
         public int inapplicable;
     }
 
-    public static abstract class AbstractEqualsAndHashCode {
+    public abstract static class AbstractEqualsAndHashCode {
         @Override
         public abstract boolean equals(Object obj);
 

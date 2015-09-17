@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
 
 public class GetClassInEqualityComparisonTest extends IntegrationTestBase {
@@ -42,7 +41,7 @@ public class GetClassInEqualityComparisonTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static abstract class Identifiable {
+    abstract static class Identifiable {
         private final int id;
 
         public Identifiable(int id) { this.id = id; }

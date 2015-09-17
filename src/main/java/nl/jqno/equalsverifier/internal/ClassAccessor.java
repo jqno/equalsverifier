@@ -28,10 +28,10 @@ import java.lang.reflect.Modifier;
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
  * can create two different instances of T, which are guaranteed not to be
  * equal to each other, and which contain no null values.
- * 
- * @param <T> A class.
  *
  * @author Jan Ouwens
+ *
+ * @param <T> A class.
  */
 public class ClassAccessor<T> {
     private final Class<T> type;
@@ -39,6 +39,17 @@ public class ClassAccessor<T> {
     private final Annotation[] supportedAnnotations;
     private final boolean ignoreAnnotationFailure;
     private final AnnotationAccessor annotationAccessor;
+
+    /**
+     * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
+     */
+    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
+        this.type = type;
+        this.prefabValues = prefabValues;
+        this.supportedAnnotations = supportedAnnotations;
+        this.ignoreAnnotationFailure = ignoreAnnotationFailure;
+        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
+    }
 
     /**
      * Factory method.
@@ -53,17 +64,6 @@ public class ClassAccessor<T> {
      */
     public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues, boolean ignoreAnnotationFailure) {
         return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
-     */
-    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
-        this.type = type;
-        this.prefabValues = prefabValues;
-        this.supportedAnnotations = supportedAnnotations;
-        this.ignoreAnnotationFailure = ignoreAnnotationFailure;
-        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
     }
 
     /**

@@ -15,21 +15,20 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import java.io.File;
-import java.io.IOException;
-
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-public class Java8IntegrationTestBase extends IntegrationTestBase {
-    private ConditionalCompiler compiler;
+import java.io.File;
+import java.io.IOException;
 
+public class Java8IntegrationTestBase extends IntegrationTestBase {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
+
+    private ConditionalCompiler compiler;
 
     @Before
     public void setUp() throws IOException {

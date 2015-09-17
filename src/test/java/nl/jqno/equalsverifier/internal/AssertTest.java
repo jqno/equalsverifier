@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013 Jan Ouwens
+ * Copyright 2009-2010, 2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +16,23 @@
 package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+
 public class AssertTest {
+    private static final Formatter FAIL = Formatter.of("fail");
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private static final Formatter FAIL = Formatter.of("fail");
+    @Test
+    public void coverTheConstructor() {
+        coverThePrivateConstructor(Assert.class);
+    }
+
     @Test
     public void assertEqualsObjectSuccess() {
         String red = new String("text");

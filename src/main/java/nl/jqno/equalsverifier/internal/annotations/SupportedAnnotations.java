@@ -15,40 +15,38 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
+import org.objectweb.asm.Type;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.objectweb.asm.Type;
-
 /**
- * Descriptions of the annotations that {@link EqualsVerifier} supports.
- * 
+ * Descriptions of the annotations that EqualsVerifier supports.
+ *
  * The actual annotations cannot be referenced here, as that would create
  * dependencies on the libraries that contain them, and it would preclude
  * people from creating and using their own annotations with the same name.
- * 
+ *
  * @author Jan Ouwens
  */
 public enum SupportedAnnotations implements Annotation {
     /**
-     * If a class is marked @Immutable, {@link EqualsVerifier} will not
+     * If a class is marked @Immutable, EqualsVerifier will not
      * complain about fields not being final.
      */
     IMMUTABLE(false, "Immutable"),
 
     /**
      * If a field is marked @Nonnull (or @NonNull or @NotNull),
-     * {@link EqualsVerifier} will not complain about potential
+     * EqualsVerifier will not complain about potential
      * {@link NullPointerException}s being thrown if this field is null.
      */
     NONNULL(true, "Nonnull", "NonNull", "NotNull"),
 
     /**
      * JPA Entities cannot be final, nor can their fields be.
-     * {@link EqualsVerifier} will not complain about non-final fields
+     * EqualsVerifier will not complain about non-final fields
      * on @Entity, @Embeddable and @MappedSuperclass classes.
      */
     ENTITY(false, "javax.persistence.Entity", "javax.persistence.Embeddable", "javax.persistence.MappedSuperclass"),
@@ -56,26 +54,24 @@ public enum SupportedAnnotations implements Annotation {
     /**
      * Fields in JPA Entities that are marked @Transient should not be included
      * in the equals/hashCode contract, like fields that have the Java
-     * transient modifier. {@link EqualsVerifier} will treat these the same.
+     * transient modifier. EqualsVerifier will treat these the same.
      */
     TRANSIENT(true, "javax.persistence.Transient"),
 
     /**
      * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
-     * {@link EqualsVerifier} will not complain about potential
+     * EqualsVerifier will not complain about potential
      * {@link NullPointerException}s being thrown if any of the fields in that
      * class or package are null.
      *
      * Note that @DefaultAnnotation is deprectated. Nevertheless, EqualsVerifier
      * still supports it.
      */
-    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false, "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
+    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false,
+            "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
         @Override
         public boolean validate(AnnotationProperties properties) {
             Set<Object> values = properties.getArrayValues("value");
-            if (values == null) {
-                return false;
-            }
             for (Object value : values) {
                 for (String descriptor : NONNULL.descriptors()) {
                     Type type = (Type)value;
@@ -99,10 +95,7 @@ public enum SupportedAnnotations implements Annotation {
                 boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
                 return hasNonnullAnnotation && hasValidTypeQualifierDefault;
             }
-            catch (ClassNotFoundException ignored) {
-                return false;
-            }
-            catch (UnsupportedClassVersionError ignored) {
+            catch (ClassNotFoundException | UnsupportedClassVersionError ignored) {
                 return false;
             }
         }
@@ -131,8 +124,7 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
-    NULLABLE(false, "Nullable", "CheckForNull"),
-    ;
+    NULLABLE(false, "Nullable", "CheckForNull");
 
     private final boolean inherits;
     private final List<String> descriptors;

@@ -15,27 +15,18 @@
  */
 package nl.jqno.equalsverifier.coverage;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 @RunWith(Parameterized.class)
 public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { HandwrittenCanEqual.class },
-                { LombokCanEqual.class }
-        });
-    }
-
     private final Class<?> containerType;
     private final Class<T> superType;
     private final Class<U> subType;
@@ -48,6 +39,14 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
         this.superType = find(containingTypes, "Point");
         this.subType = find(containingTypes, "ColorPoint");
         this.endpointType = find(containingTypes, "EndPoint");
+    }
+
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][] {
+                { HandwrittenCanEqual.class },
+                { LombokCanEqual.class }
+        });
     }
 
     @SuppressWarnings("rawtypes")

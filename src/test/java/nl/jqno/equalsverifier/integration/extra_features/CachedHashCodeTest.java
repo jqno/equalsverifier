@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
@@ -183,15 +182,15 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 
     @Test
     public void succeed_whenCachedHashCodeIsLazilyInitializedAndCachedHashCodeFieldIsCalledInEquals_givenItIsValid() {
-        EqualsVerifier.forClass(ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals.class)
-                .withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals(SOME_NAME))
+        EqualsVerifier.forClass(ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals.class)
+                .withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals(SOME_NAME))
                 .verify();
     }
 
     @Test
     public void succeed_whenCachedHashCodeIsLazilyInitializedAndHashCodeMethodIsCalledInEquals_givenItIsValid() {
-        EqualsVerifier.forClass(ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals.class)
-                .withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals(SOME_NAME))
+        EqualsVerifier.forClass(ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals.class)
+                .withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals(SOME_NAME))
                 .verify();
     }
 
@@ -209,7 +208,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithValidCachedHashCode)) {
                 return false;
             }
-            ObjectWithValidCachedHashCode that = (ObjectWithValidCachedHashCode) obj;
+            ObjectWithValidCachedHashCode that = (ObjectWithValidCachedHashCode)obj;
             return name.equals(that.name);
         }
 
@@ -241,7 +240,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithInvalidCachedHashCode)) {
                 return false;
             }
-            ObjectWithInvalidCachedHashCode that = (ObjectWithInvalidCachedHashCode) obj;
+            ObjectWithInvalidCachedHashCode that = (ObjectWithInvalidCachedHashCode)obj;
             return name.equals(that.name);
         }
 
@@ -273,8 +272,8 @@ public class CachedHashCodeTest extends IntegrationTestBase {
     }
 
     static class ObjectWithProtectedCalculateHashCodeMembers {
-        @Nonnull private final String name;
         protected final int cachedHashCode;
+        @Nonnull private final String name;
 
         public ObjectWithProtectedCalculateHashCodeMembers(String name) {
             this.name = name;
@@ -286,7 +285,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithProtectedCalculateHashCodeMembers)) {
                 return false;
             }
-            ObjectWithProtectedCalculateHashCodeMembers that = (ObjectWithProtectedCalculateHashCodeMembers) obj;
+            ObjectWithProtectedCalculateHashCodeMembers that = (ObjectWithProtectedCalculateHashCodeMembers)obj;
             return name.equals(that.name);
         }
 
@@ -301,8 +300,8 @@ public class CachedHashCodeTest extends IntegrationTestBase {
     }
 
     static class ObjectWithDefaultVisibilityCalculateHashCodeMembers {
-        @Nonnull private final String name;
         final int cachedHashCode;
+        @Nonnull private final String name;
 
         public ObjectWithDefaultVisibilityCalculateHashCodeMembers(String name) {
             this.name = name;
@@ -314,7 +313,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithDefaultVisibilityCalculateHashCodeMembers)) {
                 return false;
             }
-            ObjectWithDefaultVisibilityCalculateHashCodeMembers that = (ObjectWithDefaultVisibilityCalculateHashCodeMembers) obj;
+            ObjectWithDefaultVisibilityCalculateHashCodeMembers that = (ObjectWithDefaultVisibilityCalculateHashCodeMembers)obj;
             return name.equals(that.name);
         }
 
@@ -342,7 +341,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithUninitializedCachedHashCode)) {
                 return false;
             }
-            ObjectWithUninitializedCachedHashCode that = (ObjectWithUninitializedCachedHashCode) obj;
+            ObjectWithUninitializedCachedHashCode that = (ObjectWithUninitializedCachedHashCode)obj;
             return name.equals(that.name);
         }
 
@@ -371,7 +370,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithLegitimatelyZeroHashCode)) {
                 return false;
             }
-            ObjectWithLegitimatelyZeroHashCode that = (ObjectWithLegitimatelyZeroHashCode) obj;
+            ObjectWithLegitimatelyZeroHashCode that = (ObjectWithLegitimatelyZeroHashCode)obj;
             return number == that.number;
         }
 
@@ -398,7 +397,7 @@ public class CachedHashCodeTest extends IntegrationTestBase {
             if (!(obj instanceof ObjectWithLazilyInitializedCachedHashCode)) {
                 return false;
             }
-            ObjectWithLazilyInitializedCachedHashCode that = (ObjectWithLazilyInitializedCachedHashCode) obj;
+            ObjectWithLazilyInitializedCachedHashCode that = (ObjectWithLazilyInitializedCachedHashCode)obj;
             return name.equals(that.name);
         }
 
@@ -415,20 +414,20 @@ public class CachedHashCodeTest extends IntegrationTestBase {
         }
     }
 
-    static class ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals {
+    static class ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals {
         @Nonnull private final String name;
         private int cachedHashCode;
 
-        public ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals(String name) {
+        public ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals(String name) {
             this.name = name;
         }
 
         @Override
         public final boolean equals(Object obj) {
-            if (!(obj instanceof ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals)) {
+            if (!(obj instanceof ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals)) {
                 return false;
             }
-            ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals that = (ObjectWithLazilyInitializedCachedHashCodeAndFieldIsCalledInEquals) obj;
+            ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals that = (ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals)obj;
             if (cachedHashCode != that.cachedHashCode) {
                 return false;
             }
@@ -448,23 +447,23 @@ public class CachedHashCodeTest extends IntegrationTestBase {
         }
     }
 
-    static class ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals {
+    static class ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals {
         @Nonnull private final String name;
         private int cachedHashCode;
 
-        public ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals(String name) {
+        public ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals(String name) {
             this.name = name;
         }
 
         @Override
         public final boolean equals(Object obj) {
-            if (!(obj instanceof ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals)) {
+            if (!(obj instanceof ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals)) {
                 return false;
             }
             if (hashCode() != obj.hashCode()) {
                 return false;
             }
-            ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals that = (ObjectWithLazilyInitializedCachedHashCodeAndMethodIsCalledInEquals) obj;
+            ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals that = (ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals)obj;
             return name.equals(that.name);
         }
 

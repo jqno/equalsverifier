@@ -15,22 +15,22 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
+import nl.jqno.equalsverifier.Configuration;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.PrefabValues;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
+import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
+import org.junit.Test;
+
+import java.util.Objects;
+
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import nl.jqno.equalsverifier.Configuration;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
-import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
-import nl.jqno.equalsverifier.internal.FieldAccessor;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.PrefabValues;
-
-import org.junit.Test;
-
-import java.util.Objects;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends IntegrationTestBase {
@@ -42,7 +42,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     @Test
     public void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEquals.class).verify();
-        assertEquals(STATIC_FINAL, CorrectEquals.staticFinalValue);
+        assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
         assertEquals(STATIC, CorrectEquals.staticValue);
     }
 
@@ -73,7 +73,7 @@ public class OriginalStateTest extends IntegrationTestBase {
         EqualsVerifier.forClass(SubContainer.class).verify();
         assertEquals(STATIC, CorrectEquals.staticValue);
         assertEquals(STATIC, SuperContainer.staticValue);
-        assertEquals(STATIC_FINAL, SuperContainer.staticFinalValue);
+        assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
     }
 
     @Test
@@ -98,7 +98,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     static final class CorrectEquals {
-        private static final Object staticFinalValue = STATIC_FINAL;
+        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
         private static Object staticValue = STATIC;
         private final Object instanceValue;
 
@@ -126,8 +126,8 @@ public class OriginalStateTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class SuperContainer {
-        private static final Object staticFinalValue = STATIC_FINAL;
+    abstract static class SuperContainer {
+        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
         private static Object staticValue = STATIC;
 
         private final CorrectEquals foo;

@@ -30,8 +30,10 @@ import static org.hamcrest.CoreMatchers.containsString;
 public class ArrayTest extends IntegrationTestBase {
     private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
     private static final String REGULAR_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
-    private static final String MULTIDIMENSIONAL_EQUALS = "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
-    private static final String MULTIDIMENSIONAL_HASHCODE = "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
+    private static final String MULTIDIMENSIONAL_EQUALS =
+            "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
+    private static final String MULTIDIMENSIONAL_HASHCODE =
+            "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
     private static final String FIELD_NAME = "array";
 
     @Test
@@ -281,7 +283,7 @@ public class ArrayTest extends IntegrationTestBase {
         }
     }
 
-    final static class TwoMultidimensionalArraysShallowHashCodeForSecond {
+    static final class TwoMultidimensionalArraysShallowHashCodeForSecond {
         private final Object[][] first;
         private final Object[][] second;
 
@@ -295,7 +297,7 @@ public class ArrayTest extends IntegrationTestBase {
             if (!(obj instanceof TwoMultidimensionalArraysShallowHashCodeForSecond)) {
                 return false;
             }
-            TwoMultidimensionalArraysShallowHashCodeForSecond other = (TwoMultidimensionalArraysShallowHashCodeForSecond) obj;
+            TwoMultidimensionalArraysShallowHashCodeForSecond other = (TwoMultidimensionalArraysShallowHashCodeForSecond)obj;
             return Arrays.deepEquals(first, other.first) && Arrays.deepEquals(second, other.second);
         }
 

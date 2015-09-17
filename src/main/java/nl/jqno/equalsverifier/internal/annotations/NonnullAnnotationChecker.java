@@ -15,21 +15,19 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.ECLIPSE_DEFAULT_ANNOTATION_NONNULL;
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL;
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL;
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.NONNULL;
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.NULLABLE;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
+import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.*;
 
 /**
  * Utility class that checks whether a field is marked with an Nonnull
  * annotation of some sort.
  */
-public class NonnullAnnotationChecker {
+public final class NonnullAnnotationChecker {
+    private NonnullAnnotationChecker() {}
+
     /**
      * Checks whether the given field is marked with an Nonnull annotation,
      * whether directly, or through some default annotation mechanism.

@@ -285,7 +285,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         private final int x;
         private final int y;
         @SuppressWarnings("unused")
-        private transient final Color color;
+        private final transient Color color;
 
         public OneTransientFieldUnusedColorPoint(int x, int y, Color color) { this.x = x; this.y = y; this.color = color; }
 
@@ -305,10 +305,10 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     static final class OneStaticFieldUnusedColorPoint {
-        private final int x;
-        private final int y;
         @SuppressWarnings("unused")
         private static Color color;
+        private final int x;
+        private final int y;
 
         public OneStaticFieldUnusedColorPoint(int x, int y, Color color) { this.x = x; this.y = y; OneStaticFieldUnusedColorPoint.color = color; }
 
@@ -355,8 +355,9 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         @SuppressWarnings("unused")
         private final Color colorAlsoNotUsed;
 
-        public TwoFieldsUnusedColorPoint(int x, int y, Color color)
-            { this.x = x; this.y = y; this.colorNotUsed = color; this.colorAlsoNotUsed = color; }
+        public TwoFieldsUnusedColorPoint(int x, int y, Color color) {
+            this.x = x; this.y = y; this.colorNotUsed = color; this.colorAlsoNotUsed = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -374,7 +375,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     static final class X {
-        public static final X x = new X();
+        public static final X X = new X();
 
         @Override public boolean equals(Object obj) { return obj instanceof X; }
         @Override public int hashCode() { return 42; }

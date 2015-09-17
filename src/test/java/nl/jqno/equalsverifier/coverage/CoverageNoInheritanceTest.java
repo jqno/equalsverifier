@@ -15,20 +15,25 @@
  */
 package nl.jqno.equalsverifier.coverage;
 
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
+
 @RunWith(Parameterized.class)
 public class CoverageNoInheritanceTest {
+    private final Class<?> type;
+
+    public CoverageNoInheritanceTest(Class<?> type) {
+        this.type = type;
+    }
+
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
@@ -41,12 +46,6 @@ public class CoverageNoInheritanceTest {
                 { LombokInstanceOfPoint.class },
                 { NetBeansGetClassPoint.class }
         });
-    }
-
-    private final Class<?> type;
-
-    public CoverageNoInheritanceTest(Class<?> type) {
-        this.type = type;
     }
 
     @Test

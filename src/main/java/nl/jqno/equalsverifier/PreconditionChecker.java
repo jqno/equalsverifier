@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
+import nl.jqno.equalsverifier.internal.Formatter;
 
 import java.util.List;
 
-import nl.jqno.equalsverifier.internal.Formatter;
+import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
 
 class PreconditionChecker<T> implements Checker {
     private final Class<T> type;

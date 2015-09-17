@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
 
 public class Java8ApiClassesTest extends Java8IntegrationTestBase {
@@ -35,7 +34,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
     }
 
     @Test
-    public void successfullyInstantiatesAJavaFXClass_whenJava8IsAvailable() throws Exception {
+    public void successfullyInstantiatesAJavaFxClass_whenJava8IsAvailable() throws Exception {
         if (!isJava8Available()) {
             return;
         }
@@ -45,6 +44,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String CLASS_NAME = "Java8ApiClassesContainer";
     private static final String CLASS =
             "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
@@ -83,6 +83,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_CLASS_NAME = "JavaFXApiClassesContainer";
     private static final String JAVAFX_CLASS =
             "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +

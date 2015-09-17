@@ -15,16 +15,12 @@
  */
 package nl.jqno.equalsverifier;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 
-public class Configuration<T> {
+import java.util.*;
+
+public final class Configuration<T> {
     private final Class<T> type;
     private final PrefabValues prefabValues;
 
@@ -35,6 +31,7 @@ public class Configuration<T> {
     private final boolean usingGetClass;
     private final EnumSet<Warning> warningsToSuppress;
 
+    // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, PrefabValues prefabValues, Set<String> ignoredFields,
                           CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                           Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {

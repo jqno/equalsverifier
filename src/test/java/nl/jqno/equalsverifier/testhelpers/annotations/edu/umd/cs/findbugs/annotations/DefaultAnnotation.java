@@ -15,11 +15,7 @@
  */
 package nl.jqno.equalsverifier.testhelpers.annotations.edu.umd.cs.findbugs.annotations;
 
-import java.lang.annotation.Annotation;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.lang.annotation.*;
 
 /**
  * This annotation serves as a paceholder for the real

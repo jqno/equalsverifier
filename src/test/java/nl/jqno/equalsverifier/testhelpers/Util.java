@@ -15,15 +15,18 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import static org.junit.Assert.fail;
-
-import java.lang.reflect.Field;
-import java.util.Objects;
-
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 
-public class Util {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.Objects;
+
+import static org.junit.Assert.fail;
+
+public final class Util {
+    private Util() {}
+
     public static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
@@ -66,5 +69,16 @@ public class Util {
     private static boolean isRelevant(Object x, Field f) {
         FieldAccessor acc = new FieldAccessor(x, f);
         return acc.canBeModifiedReflectively();
+    }
+
+    public static void coverThePrivateConstructor(Class<?> type) {
+        try {
+            Constructor<?> constructor = type.getDeclaredConstructor();
+            constructor.setAccessible(true);
+            constructor.newInstance();
+        }
+        catch (Exception e) {
+            fail("Could not call constructor of " + type.getName());
+        }
     }
 }

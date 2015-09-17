@@ -34,11 +34,11 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 public class PrefabValuesCreatorTest {
-    private MockStaticFieldValueStash stash;
-    private PrefabValues prefabValues;
-
     @Rule
     public ExpectedException thrown = ExpectedException.none();
+
+    private MockStaticFieldValueStash stash;
+    private PrefabValues prefabValues;
 
     @Before
     public void setup() {
@@ -166,6 +166,6 @@ public class PrefabValuesCreatorTest {
     }
 
     static class StaticFinalContainer {
-        public static final StaticFinalContainer x = new StaticFinalContainer();
+        public static final StaticFinalContainer X = new StaticFinalContainer();
     }
 }

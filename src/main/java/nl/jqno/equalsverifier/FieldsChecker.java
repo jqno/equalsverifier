@@ -15,25 +15,17 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.Assert.assertFalse;
-import static nl.jqno.equalsverifier.internal.Assert.assertTrue;
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
+import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 
-import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.PrefabValues;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
-import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class FieldsChecker<T> implements Checker {
     private final ClassAccessor<T> classAccessor;
@@ -119,7 +111,10 @@ class FieldsChecker<T> implements Checker {
             boolean z = a1.equals(b2);
 
             if (countFalses(x, y, z) == 1) {
-                fail(Formatter.of("Transitivity: two of these three instances are equal to each other, so the third one should be, too:\n-  %%\n-  %%\n-  %%", a1, b1, b2));
+                fail(Formatter.of(
+                        "Transitivity: two of these three instances are equal to each other," +
+                        " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
+                        a1, b1, b2));
             }
         }
 
@@ -177,23 +172,45 @@ class FieldsChecker<T> implements Checker {
             changedAccessor.changeField(prefabValues);
 
             boolean equalsChanged = !reference.equals(changed);
-            boolean hashCodeChanged = cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
+            boolean hashCodeChanged =
+                    cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
+
+            assertEqualsAndHashCodeRelyOnSameFields(equalsChanged, hashCodeChanged, reference, changed, fieldName);
+            assertFieldShouldBeIgnored(equalToItself, equalsChanged, referenceAccessor, fieldName);
+
+            referenceAccessor.changeField(prefabValues);
+        }
+
+        private void assertEqualsAndHashCodeRelyOnSameFields(boolean equalsChanged, boolean hashCodeChanged,
+                    Object reference, Object changed, String fieldName) {
 
             if (equalsChanged != hashCodeChanged) {
                 if (!skipTestBecause0AndNullBothHaveA0HashCode) {
                     Formatter formatter = Formatter.of(
-                            "Significant fields: equals relies on %%, but hashCode does not.\n  %% has hashCode %%\n  %% has hashCode %%",
+                            "Significant fields: equals relies on %%, but hashCode does not." +
+                            "\n  %% has hashCode %%\n  %% has hashCode %%",
                             fieldName, reference, reference.hashCode(), changed, changed.hashCode());
                     assertFalse(formatter, equalsChanged);
                 }
                 Formatter formatter = Formatter.of(
-                        "Significant fields: hashCode relies on %%, but equals does not.\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
+                        "Significant fields: hashCode relies on %%, but equals does not." +
+                        "\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
                         fieldName, reference, changed);
                 assertFalse(formatter, hashCodeChanged);
             }
+        }
 
-            boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) && !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
-            if (allFieldsShouldBeUsed && !referenceAccessor.fieldIsStatic() && !referenceAccessor.fieldIsTransient() && !referenceAccessor.fieldIsSingleValueEnum()) {
+        private void assertFieldShouldBeIgnored(boolean equalToItself, boolean equalsChanged,
+                    FieldAccessor referenceAccessor, String fieldName) {
+
+            boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
+                    !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
+
+            boolean fieldIsEligible = !referenceAccessor.fieldIsStatic() &&
+                    !referenceAccessor.fieldIsTransient() &&
+                    !referenceAccessor.fieldIsSingleValueEnum();
+
+            if (allFieldsShouldBeUsed && fieldIsEligible) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
                 boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
@@ -202,8 +219,6 @@ class FieldsChecker<T> implements Checker {
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
                         !fieldShouldBeIgnored || !equalsChanged);
             }
-
-            referenceAccessor.changeField(prefabValues);
         }
     }
 
@@ -249,9 +264,15 @@ class FieldsChecker<T> implements Checker {
         }
 
         private void assertDeep(String fieldName, Object reference, Object changed) {
-            assertEquals(Formatter.of("Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.", fieldName),
-                    reference, changed);
-            assertEquals(Formatter.of("Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.", fieldName),
+            Formatter eqEqFormatter = Formatter.of(
+                    "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.",
+                    fieldName);
+            assertEquals(eqEqFormatter, reference, changed);
+
+            Formatter regularFormatter = Formatter.of(
+                    "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.",
+                    fieldName);
+            assertEquals(regularFormatter,
                     cachedHashCodeInitializer.getInitializedHashCode(reference), cachedHashCodeInitializer.getInitializedHashCode(changed));
         }
 
@@ -334,7 +355,8 @@ class FieldsChecker<T> implements Checker {
             changedAccessor.set(copy);
 
             Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
-                    "\nIf this is intentional, consider suppressing Warning.%%", changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
+                    "\nIf this is intentional, consider suppressing Warning.%%",
+                    changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
             Object left = referenceAccessor.getObject();
             Object right = changedAccessor.getObject();
             assertEquals(f, left, right);

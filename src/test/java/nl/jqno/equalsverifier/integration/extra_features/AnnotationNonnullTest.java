@@ -70,6 +70,20 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
     }
 
     @Test
+    public void fail_whenEqualsDoesntCheckForNull_givenEmptyFindbugs1xDefaultAnnotationOnClass() {
+        expectFailure("Non-nullity");
+        EqualsVerifier.forClass(EmptyFindbugs1xCustomOnClass.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithoutNonnullAnnotationOnClass() {
+        expectFailure("Non-nullity");
+        EqualsVerifier.forClass(NotNonnullFindbugs1xCustomOnClass.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithJavaxNonnullAnnotationOnPackage() {
         EqualsVerifier.forClass(NonnullFindbugs1xJavaxOnPackage.class)
                 .verify();
@@ -316,6 +330,42 @@ public class AnnotationNonnullTest extends IntegrationTestBase {
                 return false;
             }
             NonnullFindbugs1xCustomOnClass other = (NonnullFindbugs1xCustomOnClass)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation({})
+    static final class EmptyFindbugs1xCustomOnClass {
+        private final Object o;
+
+        public EmptyFindbugs1xCustomOnClass(Object o) { this.o = o; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EmptyFindbugs1xCustomOnClass)) {
+                return false;
+            }
+            EmptyFindbugs1xCustomOnClass other = (EmptyFindbugs1xCustomOnClass)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @edu.umd.cs.findbugs.annotations.DefaultAnnotation(Immutable.class)
+    static final class NotNonnullFindbugs1xCustomOnClass {
+        private final Object o;
+
+        public NotNonnullFindbugs1xCustomOnClass(Object o) { this.o = o; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NotNonnullFindbugs1xCustomOnClass)) {
+                return false;
+            }
+            NotNonnullFindbugs1xCustomOnClass other = (NotNonnullFindbugs1xCustomOnClass)obj;
             return o.equals(other.o);
         }
 

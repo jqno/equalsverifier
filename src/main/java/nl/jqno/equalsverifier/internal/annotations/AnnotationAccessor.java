@@ -15,27 +15,17 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import org.objectweb.asm.*;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
-import org.objectweb.asm.AnnotationVisitor;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.ClassVisitor;
-import org.objectweb.asm.FieldVisitor;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.Type;
-import org.objectweb.asm.TypePath;
+import java.util.*;
 
 /**
  * Provides access to the annotations that are defined on a class
  * and its fields.
- * 
+ *
  * @author Jan Ouwens
  */
 public class AnnotationAccessor {
@@ -49,7 +39,7 @@ public class AnnotationAccessor {
     private boolean shortCircuit = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param supportedAnnotations Collection of annotations to query.
      * @param type The class whose annotations need to be queried.
@@ -57,7 +47,7 @@ public class AnnotationAccessor {
      *          class file cannot be read.
      */
     public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, boolean ignoreFailure) {
-        this.supportedAnnotations = supportedAnnotations;
+        this.supportedAnnotations = Arrays.copyOf(supportedAnnotations, supportedAnnotations.length);
         this.type = type;
         this.ignoreFailure = ignoreFailure;
     }
@@ -118,14 +108,13 @@ public class AnnotationAccessor {
         }
     }
 
-    private void visitType(Class<?> type, boolean inheriting) {
-        ClassLoader classLoader = getClassLoaderFor(type);
-        Type asmType = Type.getType(type);
+    private void visitType(Class<?> c, boolean inheriting) {
+        ClassLoader classLoader = getClassLoaderFor(c);
+        Type asmType = Type.getType(c);
         String url = asmType.getInternalName() + ".class";
-        InputStream is = classLoader.getResourceAsStream(url);
 
-        Visitor v = new Visitor(inheriting);
-        try {
+        try (InputStream is = classLoader.getResourceAsStream(url)) {
+            Visitor v = new Visitor(inheriting);
             ClassReader cr = new ClassReader(is);
             cr.accept(v, 0);
         }
@@ -134,14 +123,14 @@ public class AnnotationAccessor {
                 shortCircuit = true;
             }
             else {
-                throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
+                throw new ReflectionException("Cannot read class file for " + c.getSimpleName() +
                         ".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
             }
         }
     }
 
-    private ClassLoader getClassLoaderFor(Class<?> type) {
-        ClassLoader result = type.getClassLoader();
+    private ClassLoader getClassLoaderFor(Class<?> c) {
+        ClassLoader result = c.getClassLoader();
         if (result == null) {
             result = ClassLoader.getSystemClassLoader();
         }
@@ -227,7 +216,7 @@ public class AnnotationAccessor {
         }
     }
 
-    private class AnnotationArrayValueVisitor extends AnnotationVisitor {
+    private static class AnnotationArrayValueVisitor extends AnnotationVisitor {
         private final Set<Object> foundAnnotations;
 
         public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {

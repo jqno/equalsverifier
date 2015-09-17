@@ -15,19 +15,15 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import static org.junit.Assert.*;
 
 public class PrefabValuesTest {
     private static final Class<String> EXISTING_KEY = String.class;
@@ -38,6 +34,9 @@ public class PrefabValuesTest {
     private static final Class<Object> NON_EXISTING_KEY = Object.class;
     private static final Object VALUE_FOR_NON_EXISTING_KEY = new Object();
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     private MockStaticFieldValueStash stash;
     private PrefabValues p;
 
@@ -47,10 +46,6 @@ public class PrefabValuesTest {
         p = new PrefabValues(stash);
         p.put(EXISTING_KEY, EXISTING_RED_VALUE, EXISTING_BLACK_VALUE);
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
 
     @Test
     public void happyPath() {

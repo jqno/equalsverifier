@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 
 /**
  * Formats a string with the contents of one or more objects.
- * 
+ *
  * If possible, uses each object's {@code toString} method.
  * If this throws an exception, Formatter creates its own string
  * representation of the object, containing its class name and
@@ -28,9 +28,20 @@ import java.util.regex.Matcher;
  *
  * @author Jan Ouwens
  */
-public class Formatter {
+public final class Formatter {
     private final String message;
     private Object[] objects;
+
+    /**
+     * Private constructor. Call {@link #of(String, Object...)} to instantiate.
+     */
+    private Formatter(String message, Object... objects) {
+        if (message == null) {
+            throw new NullPointerException();
+        }
+        this.message = message;
+        this.objects = objects;
+    }
 
     /**
      * Factory method.
@@ -44,17 +55,6 @@ public class Formatter {
      */
     public static Formatter of(String message, Object... objects) {
         return new Formatter(message, objects);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(String, Object...)} to instantiate.
-     */
-    private Formatter(String message, Object... objects) {
-        if (message == null) {
-            throw new NullPointerException();
-        }
-        this.message = message;
-        this.objects = objects;
     }
 
     /**

@@ -1,34 +1,28 @@
+/*
+ * Copyright 2014 Jan Ouwens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.jqno.equalsverifier.integration.extended_contract;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.*;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.joda.time.*;
+import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import nl.jqno.equalsverifier.EqualsVerifier;
-
-import org.joda.time.Chronology;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.joda.time.LocalTime;
-import org.joda.time.MonthDay;
-import org.joda.time.Partial;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
-import org.joda.time.YearMonth;
-import org.junit.Test;
-
-import com.google.common.base.Optional;
-import com.google.common.collect.ImmutableBiMap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableListMultimap;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.ImmutableSetMultimap;
-import com.google.common.collect.ImmutableSortedMap;
-import com.google.common.collect.ImmutableSortedMultiset;
-import com.google.common.collect.ImmutableSortedSet;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Range;
 
 public class ExternalApiClassesTest {
     @Test
@@ -59,8 +53,17 @@ public class ExternalApiClassesTest {
         private final Range<?> range;
         private final Optional<?> optional;
 
-        public GuavaContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet, ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet, ImmutableMultiset<?> iMultiset, ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap, ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable, Range<?> range, Optional<?> optional)
-            { this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap; this.iSortedSet = iSortedSet; this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset; this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap; this.iTable = iTable; this.range = range; this.optional = optional; }
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
+                ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet, ImmutableMultiset<?> iMultiset,
+                ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
+                ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
+                Range<?> range, Optional<?> optional) {
+            this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
+            this.iSortedSet = iSortedSet; this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset;
+            this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap;
+            this.iTable = iTable; this.range = range; this.optional = optional;
+        }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -79,8 +82,13 @@ public class ExternalApiClassesTest {
         private final YearMonth yearMonth;
         private final MonthDay monthDay;
 
-        public JodaTimeContainer(LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime, Chronology chronology, DateTimeZone dateTimeZone, Partial partial, PeriodType periodType, Period period, YearMonth yearMonth, MonthDay monthDay)
-            { this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime; this.chronology = chronology; this.dateTimeZone = dateTimeZone; this.partial = partial; this.periodType = periodType; this.period = period; this.yearMonth = yearMonth; this.monthDay = monthDay; }
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public JodaTimeContainer(LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime, Chronology chronology,
+                DateTimeZone dateTimeZone, Partial partial, PeriodType periodType, Period period, YearMonth yearMonth, MonthDay monthDay) {
+            this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime; this.chronology = chronology;
+            this.dateTimeZone = dateTimeZone; this.partial = partial; this.periodType = periodType; this.period = period;
+            this.yearMonth = yearMonth; this.monthDay = monthDay;
+        }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }

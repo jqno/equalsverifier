@@ -15,15 +15,14 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
+import org.junit.Test;
 
 import java.lang.reflect.Field;
 
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-
-import org.junit.Test;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 
 public class ObjectAccessorTest {
     @Test

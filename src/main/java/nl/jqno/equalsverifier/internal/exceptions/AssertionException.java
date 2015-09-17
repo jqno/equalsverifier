@@ -19,7 +19,7 @@ import nl.jqno.equalsverifier.internal.Formatter;
 
 /**
  * Signals that an EqualsVerfier assertion has failed.
- * 
+ *
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")

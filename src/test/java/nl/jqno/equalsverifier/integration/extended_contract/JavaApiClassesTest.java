@@ -15,39 +15,22 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import org.junit.Test;
 
+import javax.naming.Reference;
 import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Deque;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.Queue;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.regex.Pattern;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
-import org.junit.Test;
-
-import javax.naming.Reference;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class JavaApiClassesTest extends IntegrationTestBase {
     @Test
@@ -86,14 +69,17 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final NavigableMap<String, String> navigableMap;
         private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CollectionInterfacesContainer(Collection<String> collection, List<String> list,
                 Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
                 Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
-                Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap, ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
+                Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap,
+                ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
             this.collection = collection; this.list = list;
             this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
             this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
-            this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap; this.concurrentNavigableMap = concurrentNavigableMap;
+            this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap;
+            this.concurrentNavigableMap = concurrentNavigableMap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -114,13 +100,17 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 
         private void callIterator(Collection<?>... collections) {
             for (Collection<?> c : collections) {
-                if (c != null) c.iterator();
+                if (c != null) {
+                    c.iterator();
+                }
             }
         }
 
         private void callKeySet(Map<?, ?>... maps) {
             for (Map<?, ?> m : maps) {
-                if (m != null) m.keySet();
+                if (m != null) {
+                    m.keySet();
+                }
             }
         }
     }
@@ -141,6 +131,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final SimpleDateFormat simpleDateFormat;
         private final UUID uuid;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
                 Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
                 Reference ref, SimpleDateFormat simpleDateFormat, UUID uuid) {

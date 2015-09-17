@@ -15,12 +15,12 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SignatureTest extends IntegrationTestBase {
     private static final String OVERLOADED = "Overloaded";
@@ -120,8 +120,8 @@ public class SignatureTest extends IntegrationTestBase {
 
         OverloadedWithUnrelatedParameter(int i) { this.i = i; }
 
-        public boolean equals(int i) {
-            return this.i == i;
+        public boolean equals(int obj) {
+            return this.i == obj;
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

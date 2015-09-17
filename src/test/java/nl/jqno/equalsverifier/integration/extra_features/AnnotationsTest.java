@@ -15,22 +15,21 @@
  */
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
-import nl.jqno.equalsverifier.internal.Instantiator;
-
 import org.junit.Test;
 
 import java.util.Objects;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class AnnotationsTest extends IntegrationTestBase {
@@ -173,12 +172,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -200,12 +199,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -225,12 +224,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -252,12 +251,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -277,12 +276,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override
@@ -304,12 +303,12 @@ public class AnnotationsTest extends IntegrationTestBase {
         private int i;
         private String s;
 
-        public void setI(int i) {
-            this.i = i;
+        public void setI(int value) {
+            this.i = value;
         }
 
-        public void setS(String s) {
-            this.s = s;
+        public void setS(String value) {
+            this.s = value;
         }
 
         @Override

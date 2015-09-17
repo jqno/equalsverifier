@@ -15,25 +15,26 @@
  */
 package nl.jqno.equalsverifier;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 /**
  * Records an initializer for a cached hash code (field name and recompute
  * method), if any, for the object to be verified.
- * 
+ *
  * EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to
  * obtain the hash code, call the {@link #getInitializedHashCode(Object)} method
  * in this class:
- * 
+ *
  * * If this class has recorded a cached hash code initializer for the object,
  * that method will recompute and update the cached hash code in the object
  * automatically, before returning the result of <code>Object.hashCode()</code>.
- * 
+ *
  * * If this class has not recorded a cached hash code initializer for the
  * object, it will simply return the value of <code>Object.hashCode()</code> as
  * normal instead.
@@ -89,10 +90,10 @@ class CachedHashCodeInitializer<T> {
     private void recomputeCachedHashCode(Object object) {
         try {
             cachedHashCodeField.set(object, 0); // zero the field first, in case calculateMethod checks it
-            Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
+            Integer recomputedHashCode = (Integer)calculateMethod.invoke(object);
             cachedHashCodeField.set(object, recomputedHashCode);
         }
-        catch (Exception e) {
+        catch (IllegalAccessException | InvocationTargetException e) {
             throw new ReflectionException(e);
         }
     }
@@ -106,7 +107,8 @@ class CachedHashCodeInitializer<T> {
                 }
             }
         }
-        throw new IllegalArgumentException("Cached hashCode: Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
+        throw new IllegalArgumentException(
+                "Cached hashCode: Could not find cachedHashCodeField: must be 'private int " + cachedHashCodeFieldName + ";'");
     }
 
     private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
@@ -119,9 +121,12 @@ class CachedHashCodeInitializer<T> {
                     return method;
                 }
             }
-            catch (NoSuchMethodException ignore) {}
+            catch (NoSuchMethodException ignore) {
+                // Method not found; continue.
+            }
             currentClass = currentClass.getSuperclass();
         }
-        throw new IllegalArgumentException("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
+        throw new IllegalArgumentException(
+                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");
     }
 }

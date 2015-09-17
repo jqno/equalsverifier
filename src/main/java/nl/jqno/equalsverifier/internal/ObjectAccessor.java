@@ -20,14 +20,22 @@ import java.lang.reflect.Field;
 /**
  * Wraps an object to provide reflective access to it. ObjectAccessor can
  * copy and scramble the wrapped object.
- * 
- * @param <T> The specified object's class.
  *
  * @author Jan Ouwens
+ *
+ * @param <T> The specified object's class.
  */
-public class ObjectAccessor<T> {
+public final class ObjectAccessor<T> {
     private final T object;
     private final Class<T> type;
+
+    /**
+     * Private constructor. Call {@link #of(Object)} to instantiate.
+     */
+    private ObjectAccessor(T object, Class<T> type) {
+        this.object = object;
+        this.type = type;
+    }
 
     /**
      * Factory method.
@@ -53,14 +61,6 @@ public class ObjectAccessor<T> {
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
         return new ObjectAccessor<T>(object, type);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Object)} to instantiate.
-     */
-    private ObjectAccessor(T object, Class<T> type) {
-        this.object = object;
-        this.type = type;
     }
 
     /**

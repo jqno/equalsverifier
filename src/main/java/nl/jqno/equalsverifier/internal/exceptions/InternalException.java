@@ -19,7 +19,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
  * Exception internal to the EqualsVerifier project. Using this exception,
  * EqualsVerifier can distinguish between exceptions thrown internally, and
  * exceptions thrown by external code (e.g., in tested equals methods).
- * 
+ *
  * This is an abstract class; the subclasses indicate the type of exception
  * that is signalled by the EqualsVerifier internals.
  *

@@ -38,12 +38,13 @@ public class StaticFieldValueStash {
     }
 
     public void restoreAll() {
-        for (Class<?> type : stash.keySet()) {
+        for (Map.Entry<Class<?>, Map<Field, Object>> entry : stash.entrySet()) {
+            Class<?> type = entry.getKey();
             ObjectAccessor<?> objectAccessor = ObjectAccessor.of(null, type);
             for (Field field : FieldIterable.of(type)) {
                 FieldAccessor accessor = objectAccessor.fieldAccessorFor(field);
                 if (accessor.fieldIsStatic()) {
-                    accessor.set(stash.get(type).get(field));
+                    accessor.set(entry.getValue().get(field));
                 }
             }
         }

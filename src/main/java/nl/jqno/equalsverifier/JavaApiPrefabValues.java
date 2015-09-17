@@ -15,79 +15,40 @@
  */
 package nl.jqno.equalsverifier;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.forName;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
+import nl.jqno.equalsverifier.internal.PrefabValues;
 
+import javax.naming.Reference;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Deque;
-import java.util.EnumMap;
-import java.util.EnumSet;
-import java.util.Formatter;
-import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.NavigableMap;
-import java.util.NavigableSet;
-import java.util.Properties;
-import java.util.Queue;
-import java.util.Scanner;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.SortedSet;
-import java.util.TimeZone;
-import java.util.TreeMap;
-import java.util.TreeSet;
-import java.util.UUID;
-import java.util.WeakHashMap;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ConcurrentNavigableMap;
-import java.util.concurrent.ConcurrentSkipListMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.PriorityBlockingQueue;
-import java.util.concurrent.SynchronousQueue;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
-import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
-import nl.jqno.equalsverifier.internal.PrefabValues;
-
-import javax.naming.Reference;
+import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
- * 
+ *
  * Contains hand-made instances of well-known Java API classes that cannot be
  * instantiated dynamically because of an internal infinite recursion of types,
  * or other issues.
- * 
+ *
  * @author Jan Ouwens
  */
-public class JavaApiPrefabValues {
+public final class JavaApiPrefabValues {
     private PrefabValues prefabValues;
+
+    /**
+     * Private constructor. Use {@link #addTo(PrefabValues)}.
+     */
+    private JavaApiPrefabValues(PrefabValues prefabValues) {
+        this.prefabValues = prefabValues;
+    }
 
     /**
      * Adds instances of Java API classes that cannot be instantiated
@@ -100,13 +61,6 @@ public class JavaApiPrefabValues {
         new JavaApiPrefabValues(prefabValues).addJavaClasses();
     }
 
-    /**
-     * Private constructor. Use {@link #addTo(PrefabValues)}.
-     */
-    private JavaApiPrefabValues(PrefabValues prefabValues) {
-        this.prefabValues = prefabValues;
-    }
-
     private void addJavaClasses() {
         addPrimitiveClasses();
         addClasses();
@@ -116,7 +70,7 @@ public class JavaApiPrefabValues {
         addSets();
         addQueues();
         addJava8ApiClasses();
-        addJavaFXClasses();
+        addJavaFxClasses();
         addGoogleGuavaClasses();
         addJodaTimeClasses();
     }
@@ -145,6 +99,7 @@ public class JavaApiPrefabValues {
         prefabValues.put(String.class, "one", "two");
     }
 
+    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")
     private void addClasses() {
         prefabValues.put(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
         prefabValues.put(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
@@ -164,42 +119,42 @@ public class JavaApiPrefabValues {
         prefabValues.put(UUID.class, new UUID(0, -1), new UUID(1, 0));
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
-        addCollection(Collection.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(Collection.class, new ArrayList(), new ArrayList());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
-        addCollection(List.class, new ArrayList(), new ArrayList());
-        addCollection(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
-        addCollection(LinkedList.class, new LinkedList(), new LinkedList());
-        addCollection(ArrayList.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(List.class, new ArrayList(), new ArrayList());
+        addCollectionToPrefabValues(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
+        addCollectionToPrefabValues(LinkedList.class, new LinkedList(), new LinkedList());
+        addCollectionToPrefabValues(ArrayList.class, new ArrayList(), new ArrayList());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addMaps() {
-        addMap(Map.class, new HashMap(), new HashMap());
-        addMap(SortedMap.class, new TreeMap(), new TreeMap());
-        addMap(NavigableMap.class, new TreeMap(), new TreeMap());
-        addMap(ConcurrentNavigableMap.class, new ConcurrentSkipListMap(), new ConcurrentSkipListMap());
+        addMapToPrefabValues(Map.class, new HashMap(), new HashMap());
+        addMapToPrefabValues(SortedMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(NavigableMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(ConcurrentNavigableMap.class, new ConcurrentSkipListMap(), new ConcurrentSkipListMap());
         prefabValues.put(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
-        addMap(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
-        addMap(HashMap.class, new HashMap(), new HashMap());
-        addMap(Hashtable.class, new Hashtable(), new Hashtable());
-        addMap(LinkedHashMap.class, new LinkedHashMap(), new LinkedHashMap());
-        addMap(Properties.class, new Properties(), new Properties());
-        addMap(TreeMap.class, new TreeMap(), new TreeMap());
-        addMap(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
+        addMapToPrefabValues(ConcurrentHashMap.class, new ConcurrentHashMap(), new ConcurrentHashMap());
+        addMapToPrefabValues(HashMap.class, new HashMap(), new HashMap());
+        addMapToPrefabValues(Hashtable.class, new Hashtable(), new Hashtable());
+        addMapToPrefabValues(LinkedHashMap.class, new LinkedHashMap(), new LinkedHashMap());
+        addMapToPrefabValues(Properties.class, new Properties(), new Properties());
+        addMapToPrefabValues(TreeMap.class, new TreeMap(), new TreeMap());
+        addMapToPrefabValues(WeakHashMap.class, new WeakHashMap(), new WeakHashMap());
     }
 
-    @SuppressWarnings({"unchecked","rawtypes"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addSets() {
-        addCollection(Set.class, new HashSet(), new HashSet());
-        addCollection(SortedSet.class, new TreeSet(), new TreeSet());
-        addCollection(NavigableSet.class, new TreeSet(), new TreeSet());
-        addCollection(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
-        addCollection(TreeSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(Set.class, new HashSet(), new HashSet());
+        addCollectionToPrefabValues(SortedSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(NavigableSet.class, new TreeSet(), new TreeSet());
+        addCollectionToPrefabValues(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
+        addCollectionToPrefabValues(TreeSet.class, new TreeSet(), new TreeSet());
         prefabValues.put(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 
         BitSet redBitSet = new BitSet();
@@ -241,7 +196,7 @@ public class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
-    private void addJavaFXClasses() {
+    private void addJavaFxClasses() {
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableList")
                 .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.getRed(List.class)))
                 .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.getBlack(List.class)))
@@ -399,13 +354,13 @@ public class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
-    private <T extends Collection<Object>> void addCollection(Class<T> type, T red, T black) {
+    private <T extends Collection<Object>> void addCollectionToPrefabValues(Class<T> type, T red, T black) {
         red.add("red");
         black.add("black");
         prefabValues.put(type, red, black);
     }
 
-    private <T extends Map<Object, Object>> void addMap(Class<T> type, T red, T black) {
+    private <T extends Map<Object, Object>> void addMapToPrefabValues(Class<T> type, T red, T black) {
         red.put("red_key", "red_value");
         black.put("black_key", "black_value");
         prefabValues.put(type, red, black);

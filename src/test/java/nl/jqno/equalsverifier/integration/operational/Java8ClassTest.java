@@ -17,12 +17,11 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
-
 import org.junit.Test;
 
 /**
  * Tests that EqualsVerifier can handle a Java 8 class with streams.
- * 
+ *
  * Since we want to maintain compatibility with Java 6 and 7, we need to
  * detect whether a Java 8 runtime is present and if so, compile and load
  * the class at run-time and then pass it to EqualsVerifier.

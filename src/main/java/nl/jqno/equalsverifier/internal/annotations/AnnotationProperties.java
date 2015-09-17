@@ -22,7 +22,7 @@ import java.util.Set;
 /**
  * Contains all properties of an annotation necessary to to make decisions about
  * that annotation.
- * 
+ *
  * Note that this object does not contain all possible properties; only the ones
  * that are actually used by EqualsVerifier.
  */

@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * Applies Eclipse's NonNullByDefault annotation to the package.
- *
- * Actual classes in this package reside in AnnotationNonnullTypeUseTest,
- * because they're Java 8 only and need to be compiled conditionally.
- */
-@NonNullByDefault
-package nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;
+package nl.jqno.equalsverifier.internal.annotations;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.org.eclipse.jdt.annotation.NonNullByDefault;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+
+public class NonnullAnnotationCheckerTest extends IntegrationTestBase {
+    @Test
+    public void coverConstructor() {
+        coverThePrivateConstructor(NonnullAnnotationChecker.class);
+    }
+}

@@ -1,5 +1,6 @@
 /*
  * Copyright 2011, 2015 Jan Ouwens
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,14 +15,15 @@
  */
 package nl.jqno.equalsverifier.testhelpers.annotations;
 
-import java.util.Arrays;
-import java.util.List;
-
 import nl.jqno.equalsverifier.internal.annotations.Annotation;
 import nl.jqno.equalsverifier.internal.annotations.AnnotationProperties;
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum TestSupportedAnnotations implements Annotation {
-    TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention"), // closing ; is added by AnnotationAccessor
+    // Type's closing ; is added by AnnotationAccessor.
+    TYPE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationRuntimeRetention"),
     TYPE_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationClassRetention"),
     FIELD_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationRuntimeRetention"),
     FIELD_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationClassRetention"),
@@ -43,8 +45,7 @@ public enum TestSupportedAnnotations implements Annotation {
         public boolean validate(AnnotationProperties properties) {
             return false;
         }
-    },
-    ;
+    };
 
     private final boolean inherits;
     private final List<String> descriptors;

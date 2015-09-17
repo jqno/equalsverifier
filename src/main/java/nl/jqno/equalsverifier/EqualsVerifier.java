@@ -15,14 +15,14 @@
  */
 package nl.jqno.equalsverifier;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.PrefabValues;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+
+import java.lang.reflect.Field;
+import java.util.*;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
@@ -52,28 +52,28 @@ import nl.jqno.equalsverifier.internal.exceptions.InternalException;
  * - Call {@link #verify()} to perform the actual verifications.
  * <p>
  * Example use:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class).verify();
  * }</pre>
- * 
+ *
  * Or, if you prefer to use a {@code getClass()} check instead of an
  * {@code instanceof} check in the body of your {@code equals} method:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
  *     .usingGetClass()
  *     .verify();
  * }</pre>
- * 
+ *
  * With some warnings suppressed:
- * 
+ *
  * <pre>{@code
  * EqualsVerifier.forClass(My.class)
  *     .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
  *     .verify();
  * }</pre>
- * 
+ *
  * The following properties are verified:<br>
  * - Preconditions for {@link EqualsVerifier} itself.<br>
  * - Reflexivity and symmetry of the {@code equals} method.<br>
@@ -95,10 +95,11 @@ import nl.jqno.equalsverifier.internal.exceptions.InternalException;
  * <p>
  * For more information, see the documentation at
  * http://www.jqno.nl/equalsverifier/
- * 
- * @param <T> The class under test.
- * 
+ *
  * @author Jan Ouwens
+ *
+ * @param <T> The class under test.
+ *
  * @see java.lang.Object#equals(Object)
  * @see java.lang.Object#hashCode()
  */
@@ -106,6 +107,19 @@ public final class EqualsVerifier<T> {
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
     private Configuration<T> config;
+
+    /**
+     * Private constructor. Call {@link #forClass(Class)},
+     * {@link #forExamples(Object, Object, Object...)} or
+     * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
+     */
+    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+        this.config = Configuration.of(type);
+        this.equalExamples = equalExamples;
+        this.unequalExamples = unequalExamples;
+
+        JavaApiPrefabValues.addTo(config.getPrefabValues());
+    }
 
     /**
      * Factory method. For general use.
@@ -163,7 +177,7 @@ public final class EqualsVerifier<T> {
      * Using this factory method requires that
      * {@link RelaxedEqualsVerifierHelper#andUnequalExamples(Object, Object...)}
      * be called to supply a list of unequal instances of T.
-     * 
+     *
      * This method automatically suppresses
      * {@link Warning#ALL_FIELDS_SHOULD_BE_USED}.
      *
@@ -182,19 +196,6 @@ public final class EqualsVerifier<T> {
         Class<T> type = (Class<T>)first.getClass();
 
         return new RelaxedEqualsVerifierHelper<>(type, examples);
-    }
-
-    /**
-     * Private constructor. Call {@link #forClass(Class)},
-     * {@link #forExamples(Object, Object, Object...)} or
-     * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
-     */
-    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-        this.config = Configuration.of(type);
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
-
-        JavaApiPrefabValues.addTo(config.getPrefabValues());
     }
 
     /**
@@ -259,7 +260,7 @@ public final class EqualsVerifier<T> {
      * Note that these fields will still be used to test for null-ness, among
      * other things.
      *
-     * @param fields
+     * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
@@ -397,15 +398,16 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithoutExamples() {
-        Checker signatureChecker = new SignatureChecker<>(config);
-        Checker abstractDelegationChecker = new AbstractDelegationChecker<>(config);
-        Checker nullChecker = new NullChecker<>(config);
-        Checker cachedHashCodeChecker = new CachedHashCodeChecker<>(config);
+        Checker[] checkers = {
+            new SignatureChecker<>(config),
+            new AbstractDelegationChecker<>(config),
+            new NullChecker<>(config),
+            new CachedHashCodeChecker<>(config)
+        };
 
-        signatureChecker.check();
-        abstractDelegationChecker.check();
-        nullChecker.check();
-        cachedHashCodeChecker.check();
+        for (Checker checker : checkers) {
+            checker.check();
+        }
     }
 
     private void ensureUnequalExamples() {
@@ -419,15 +421,16 @@ public final class EqualsVerifier<T> {
     }
 
     private void verifyWithExamples() {
-        Checker preconditionChecker = new PreconditionChecker<>(config, equalExamples, unequalExamples);
-        Checker examplesChecker = new ExamplesChecker<>(config, equalExamples, unequalExamples);
-        Checker hierarchyChecker = new HierarchyChecker<>(config);
-        Checker fieldsChecker = new FieldsChecker<>(config);
+        Checker[] checkers = {
+            new PreconditionChecker<>(config, equalExamples, unequalExamples),
+            new ExamplesChecker<>(config, equalExamples, unequalExamples),
+            new HierarchyChecker<>(config),
+            new FieldsChecker<>(config)
+        };
 
-        preconditionChecker.check();
-        examplesChecker.check();
-        hierarchyChecker.check();
-        fieldsChecker.check();
+        for (Checker checker : checkers) {
+            checker.check();
+        }
     }
 
     @SafeVarargs
@@ -485,7 +488,7 @@ public final class EqualsVerifier<T> {
      *
      * @author Jan Ouwens
      */
-    public static class RelaxedEqualsVerifierHelper<T> {
+    public static final class RelaxedEqualsVerifierHelper<T> {
         private final Class<T> type;
         private final List<T> equalExamples;
 

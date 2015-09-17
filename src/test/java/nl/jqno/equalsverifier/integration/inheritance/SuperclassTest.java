@@ -195,7 +195,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static abstract class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
+    abstract static class EmptySubOfAbstract extends AbstractEqualsAndHashCode {}
 
     static final class SubOfEmptySubOfAbstract extends EmptySubOfAbstract {
         private final Color color;
@@ -236,7 +236,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    public static abstract class AbstractEqualsDefiner {
+    public abstract static class AbstractEqualsDefiner {
         @Override
         public final boolean equals(Object obj) {
             return EqualsBuilder.reflectionEquals(this, obj);
@@ -269,7 +269,7 @@ public class SuperclassTest extends IntegrationTestBase {
             if (!(obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSuper)) {
                 return false;
             }
-            SymmetryBrokenForNullIdWithIncorrectCanEqualSuper other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSuper) obj;
+            SymmetryBrokenForNullIdWithIncorrectCanEqualSuper other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSuper)obj;
 
             if (id != null) {
                 return id.equals(other.id);
@@ -295,7 +295,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override
         public boolean newCanEqual(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper obj) {
             if (obj instanceof SymmetryBrokenForNullIdWithIncorrectCanEqualSub) {
-                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSub) obj;
+                SymmetryBrokenForNullIdWithIncorrectCanEqualSub other = (SymmetryBrokenForNullIdWithIncorrectCanEqualSub)obj;
                 return Objects.equals(name, other.name);
             }
             return false;

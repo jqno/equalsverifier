@@ -40,12 +40,12 @@ import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnota
 import static org.junit.Assert.*;
 
 public class ClassAccessorTest {
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
+
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
-
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     @Before
     public void setup() {
@@ -114,7 +114,7 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void classInDefaultPackageDoesntThrowNPE() throws IOException {
+    public void classInDefaultPackageDoesntThrowNpe() throws IOException {
         File tempFileLocation = tempFolder.newFolder();
         try (ConditionalCompiler compiler = new ConditionalCompiler(tempFileLocation)) {
             Class<?> defaultPackage = compiler.compile(DEFAULT_PACKAGE_NAME, DEFAULT_PACKAGE);
@@ -297,6 +297,7 @@ public class ClassAccessorTest {
         @NonNull String t;
     }
 
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
     // Generated at runtime, so we don't actually have to put a class in the default package.
     private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
     private static final String DEFAULT_PACKAGE =

@@ -26,15 +26,23 @@ import java.lang.reflect.Modifier;
 
 /**
  * Instantiates objects of a given class.
- * 
+ *
+ * @author Jan Ouwens
+ *
  * @param <T> {@link Instantiator} instantiates objects of this class, or of an
  *          anonymous subclass of this class.
- * 
- * @author Jan Ouwens
  */
-public class Instantiator<T> {
+public final class Instantiator<T> {
     private final Class<T> type;
     private Objenesis objenesis;
+
+    /**
+     * Private constructor. Call {@link #of(Class)} to instantiate.
+     */
+    private Instantiator(Class<T> type) {
+        this.type = type;
+        this.objenesis = new ObjenesisStd();
+    }
 
     /**
      * Factory method.
@@ -49,14 +57,6 @@ public class Instantiator<T> {
             return new Instantiator<>(createDynamicSubclass(type));
         }
         return new Instantiator<>(type);
-    }
-
-    /**
-     * Private constructor. Call {@link #of(Class)} to instantiate.
-     */
-    private Instantiator(Class<T> type) {
-        this.type = type;
-        this.objenesis = new ObjenesisStd();
     }
 
     /**
@@ -85,18 +85,18 @@ public class Instantiator<T> {
     @SuppressWarnings("unchecked")
     private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
         DynamicType.Builder<S> builder = createBuilder(superclass);
-        return (Class<S>) builder
+        return (Class<S>)builder
                 .name(new NamingStrategy.Fixed(superclass.getName() + "$$DynamicSubclass"))
                 .make()
                 .load(superclass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
     }
-    
+
     @SuppressWarnings("unchecked")
     private static <S> DynamicType.Builder<S> createBuilder(Class<S> superclass) {
         ByteBuddy byteBuddy = new ByteBuddy();
         if (superclass.isInterface()) {
-            return (DynamicType.Builder<S>) byteBuddy.subclass(Object.class).implement(superclass);
+            return (DynamicType.Builder<S>)byteBuddy.subclass(Object.class).implement(superclass);
         }
         else {
             return byteBuddy.subclass(superclass);

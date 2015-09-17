@@ -1,6 +1,6 @@
 /*
  * Copyright 2010, 2012-2015 Jan Ouwens
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -23,15 +26,13 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-
 /**
  * Container and creator of prefabricated instances of objects and classes.
  *
  * @author Jan Ouwens
  */
 public class PrefabValues {
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
     private final StaticFieldValueStash stash;
     private final Map<Class<?>, Tuple<?>> values = new HashMap<>();
 
@@ -143,15 +144,7 @@ public class PrefabValues {
     }
 
     private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
-        return
-                (expectedClass.equals(boolean.class) && actualClass.equals(Boolean.class)) ||
-                (expectedClass.equals(byte.class) && actualClass.equals(Byte.class)) ||
-                (expectedClass.equals(char.class) && actualClass.equals(Character.class)) ||
-                (expectedClass.equals(double.class) && actualClass.equals(Double.class)) ||
-                (expectedClass.equals(float.class) && actualClass.equals(Float.class)) ||
-                (expectedClass.equals(int.class) && actualClass.equals(Integer.class)) ||
-                (expectedClass.equals(long.class) && actualClass.equals(Long.class)) ||
-                (expectedClass.equals(short.class) && actualClass.equals(Short.class));
+        return PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
     }
 
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
@@ -206,14 +199,14 @@ public class PrefabValues {
         T[] enumConstants = type.getEnumConstants();
 
         switch (enumConstants.length) {
-        case 0:
-            throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
-        case 1:
-            put(type, enumConstants[0], enumConstants[0]);
-            break;
-        default:
-            put(type, enumConstants[0], enumConstants[1]);
-            break;
+            case 0:
+                throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
+            case 1:
+                put(type, enumConstants[0], enumConstants[0]);
+                break;
+            default:
+                put(type, enumConstants[0], enumConstants[1]);
+                break;
         }
     }
 
@@ -245,7 +238,20 @@ public class PrefabValues {
         put(type, red, black);
     }
 
-    private static class Tuple<T> {
+    private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
+        Map<Class<?>, Class<?>> result = new HashMap<>();
+        result.put(boolean.class, Boolean.class);
+        result.put(byte.class, Byte.class);
+        result.put(char.class, Character.class);
+        result.put(double.class, Double.class);
+        result.put(float.class, Float.class);
+        result.put(int.class, Integer.class);
+        result.put(long.class, Long.class);
+        result.put(short.class, Short.class);
+        return result;
+    }
+
+    private static final class Tuple<T> {
         private T red;
         private T black;
 
