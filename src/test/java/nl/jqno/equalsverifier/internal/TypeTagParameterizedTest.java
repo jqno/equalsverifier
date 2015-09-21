@@ -51,36 +51,21 @@ public class TypeTagParameterizedTest {
     @Parameters(name = "Field {0} should be {1}")
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][] {
-                { "simpleField",
-                        new TypeTag(String.class)
-                },
-                { "fieldWithSingleTypeParameter",
-                        new TypeTag(List.class, new TypeTag(String.class))
-                },
-                { "fieldWithTwoTypeParameters",
-                        new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Integer.class))
-                },
-                { "fieldWithNestedTypeParameters",
+                { "simpleField", new TypeTag(String.class) },
+                { "fieldWithSingleTypeParameter", new TypeTag(List.class, new TypeTag(String.class)) },
+                { "fieldWithTwoTypeParameters", new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Integer.class)) },
+                { "fieldWithNestedTypeParameters", new TypeTag(Map.class,
+                        new TypeTag(String.class),
+                        new TypeTag(List.class, new TypeTag(String.class))) },
+                { "fieldWithRidiculousTypeParameters", new TypeTag(Map.class,
+                        new TypeTag(List.class, new TypeTag(Integer.class)),
                         new TypeTag(Map.class,
-                                new TypeTag(String.class),
-                                new TypeTag(List.class, new TypeTag(String.class)))
-                },
-                { "fieldWithRidiculousTypeParameters",
-                        new TypeTag(Map.class,
-                                new TypeTag(List.class, new TypeTag(Integer.class)),
+                                new TypeTag(List.class, new TypeTag(Double.class)),
                                 new TypeTag(Map.class,
-                                        new TypeTag(List.class, new TypeTag(Double.class)),
-                                        new TypeTag(Map.class,
-                                                new TypeTag(String.class),
-                                                new TypeTag(Float.class))))
-                },
-                { "primitiveField",
-                        new TypeTag(int.class)
-                },
-                { "arrayField",
-                        new TypeTag(String[].class)
-
-                }
+                                        new TypeTag(String.class),
+                                        new TypeTag(Float.class)))) },
+                { "primitiveField", new TypeTag(int.class) },
+                { "arrayField", new TypeTag(String[].class) }
         });
     }
 

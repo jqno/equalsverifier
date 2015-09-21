@@ -19,12 +19,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 public class TypeTagTest {
     @Test
@@ -32,5 +30,13 @@ public class TypeTagTest {
         EqualsVerifier.forClass(TypeTag.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
+    }
+
+    @Test
+    public void testToString() {
+        assertEquals("TypeTag: String", new TypeTag(String.class).toString());
+        assertEquals("TypeTag: List<TypeTag: String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
+        assertEquals("TypeTag: Map<TypeTag: Integer, TypeTag: List<TypeTag: String>>",
+                new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class))).toString());
     }
 }
