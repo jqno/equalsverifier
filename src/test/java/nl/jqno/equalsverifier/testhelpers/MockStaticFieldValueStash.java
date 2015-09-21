@@ -22,7 +22,7 @@ public class MockStaticFieldValueStash extends StaticFieldValueStash {
     public boolean restoreCalled = false;
 
     @Override
-    public <T> void backup(Class<T> type) {
+    public void backup(Class<?> type) {
         lastBackuppedType = type;
         super.backup(type);
     }
