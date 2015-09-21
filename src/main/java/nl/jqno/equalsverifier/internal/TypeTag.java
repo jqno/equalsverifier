@@ -24,10 +24,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Represents a generic type, including raw type and generic type parameters.
+ *
+ * If the type is not generic, the genericTypes list will be empty.
+ *
+ * @author Jan Ouwens
+ */
 public final class TypeTag {
     private final Class<?> type;
     private final List<TypeTag> genericTypes;
 
+    /**
+     * Constructor.
+     *
+     * @param type The raw type.
+     * @param genericTypes A list of TypeTags for each generic type parameter.
+     */
     public TypeTag(Class<?> type, TypeTag... genericTypes) {
         this(type, Arrays.asList(genericTypes));
     }
@@ -37,6 +50,12 @@ public final class TypeTag {
         this.genericTypes = genericTypes;
     }
 
+    /**
+     * Resolves a TypeTag from the type of a {@link Field} instance.
+     *
+     * @param field The field to resolve.
+     * @return The TypeTag for the given field.
+     */
     public static TypeTag of(Field field) {
         return resolve(field.getGenericType());
     }
@@ -57,6 +76,9 @@ public final class TypeTag {
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString());
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof TypeTag)) {
@@ -66,6 +88,9 @@ public final class TypeTag {
         return type.equals(other.type) && genericTypes.equals(other.genericTypes);
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public int hashCode() {
         int result = 37;
@@ -74,6 +99,9 @@ public final class TypeTag {
         return result;
     }
 
+    /**
+     * @inheritDoc
+     */
     @Override
     public String toString() {
         StringBuffer s = new StringBuffer("TypeTag: ");
