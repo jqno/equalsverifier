@@ -27,91 +27,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 public class TypeTagTest {
-    @SuppressWarnings("unused") private final String simpleField = null;
-    @SuppressWarnings("unused") private final List<String> fieldWithSingleTypeParameter = null;
-    @SuppressWarnings("unused") private final Map<String, Integer> fieldWithTwoTypeParameters = null;
-    @SuppressWarnings("unused") private final Map<String, List<String>> fieldWithNestedTypeParameters = null;
-    @SuppressWarnings("unused") private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters = null;
-
-    @SuppressWarnings("unused") private final int primitiveField = 0;
-    @SuppressWarnings("unused") private final String[] arrayField = null;
-
-    private TypeTag expected;
-    private TypeTag actual;
-
-    @Test
-    public void createSimpleTypeTagFromField() {
-        expected = new TypeTag(String.class);
-        actual = TypeTag.of(getField("simpleField"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createTypeTagWithSingleTypeParameterFromField() {
-        expected = new TypeTag(List.class, new TypeTag(String.class));
-        actual = TypeTag.of(getField("fieldWithSingleTypeParameter"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createTypeTagWithTwoTypeParametersFromField() {
-        expected = new TypeTag(Map.class,
-                new TypeTag(String.class),
-                new TypeTag(Integer.class));
-        actual = TypeTag.of(getField("fieldWithTwoTypeParameters"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createTypeTagWithNestedTypeParametersFromField() {
-        expected = new TypeTag(Map.class,
-                new TypeTag(String.class),
-                new TypeTag(List.class, new TypeTag(String.class)));
-        actual = TypeTag.of(getField("fieldWithNestedTypeParameters"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createTypeTagWithRidiculousTypeParametersFromField() {
-        expected = new TypeTag(Map.class,
-                new TypeTag(List.class, new TypeTag(Integer.class)),
-                new TypeTag(Map.class,
-                        new TypeTag(List.class, new TypeTag(Double.class)),
-                        new TypeTag(Map.class,
-                                new TypeTag(String.class),
-                                new TypeTag(Float.class))));
-        actual = TypeTag.of(getField("fieldWithRidiculousTypeParameters"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createPrimitiveTypeTagFromField() {
-        expected = new TypeTag(int.class);
-        actual = TypeTag.of(getField("primitiveField"));
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void createArrayTypeTagFromField() {
-        expected = new TypeTag(String[].class);
-        actual = TypeTag.of(getField("arrayField"));
-        assertEquals(expected, actual);
-    }
-
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier.forClass(TypeTag.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
-    }
-
-    private Field getField(String name) {
-        try {
-            return getClass().getDeclaredField(name);
-        }
-        catch (NoSuchFieldException e) {
-            fail(e.toString());
-            return null;
-        }
     }
 }
