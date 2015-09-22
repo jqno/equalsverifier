@@ -77,6 +77,13 @@ public final class TypeTag {
     }
 
     /**
+     * Getter for the TypeTag's raw type.
+     */
+    public Class<?> getType() {
+        return type;
+    }
+
+    /**
      * @inheritDoc
      */
     @Override

@@ -25,6 +25,9 @@ import java.util.Map;
 import static org.junit.Assert.assertEquals;
 
 public class TypeTagTest {
+    private static final TypeTag SOME_LONG_TYPETAG =
+            new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
+
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier.forClass(TypeTag.class)
@@ -33,10 +36,14 @@ public class TypeTagTest {
     }
 
     @Test
+    public void getType() {
+        assertEquals(Map.class, SOME_LONG_TYPETAG.getType());
+    }
+
+    @Test
     public void testToString() {
         assertEquals("TypeTag: String", new TypeTag(String.class).toString());
         assertEquals("TypeTag: List<TypeTag: String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
-        assertEquals("TypeTag: Map<TypeTag: Integer, TypeTag: List<TypeTag: String>>",
-                new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class))).toString());
+        assertEquals("TypeTag: Map<TypeTag: Integer, TypeTag: List<TypeTag: String>>", SOME_LONG_TYPETAG.toString());
     }
 }
