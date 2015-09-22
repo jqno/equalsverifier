@@ -17,7 +17,9 @@ package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
 import java.util.Map;
@@ -28,11 +30,20 @@ public class TypeTagTest {
     private static final TypeTag SOME_LONG_TYPETAG =
             new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier.forClass(TypeTag.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
+    }
+
+    @Test
+    public void typeCannotBeNull() {
+        thrown.expect(NullPointerException.class);
+        new TypeTag(null);
     }
 
     @Test

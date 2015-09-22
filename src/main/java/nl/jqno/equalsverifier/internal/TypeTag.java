@@ -46,6 +46,9 @@ public final class TypeTag {
     }
 
     private TypeTag(Class<?> type, List<TypeTag> genericTypes) {
+        if (type == null) {
+            throw new NullPointerException("type");
+        }
         this.type = type;
         this.genericTypes = genericTypes;
     }
