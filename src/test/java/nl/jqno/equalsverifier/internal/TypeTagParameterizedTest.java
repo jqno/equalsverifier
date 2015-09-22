@@ -36,6 +36,7 @@ public class TypeTagParameterizedTest {
     @SuppressWarnings("unused") private final Map<String, Integer> fieldWithTwoTypeParameters = null;
     @SuppressWarnings("unused") private final Map<String, List<String>> fieldWithNestedTypeParameters = null;
     @SuppressWarnings("unused") private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters = null;
+    @SuppressWarnings({ "unused", "raw" }) private final Map rawMapField = null;
 
     @SuppressWarnings("unused") private final int primitiveField = 0;
     @SuppressWarnings("unused") private final String[] arrayField = null;
@@ -64,6 +65,7 @@ public class TypeTagParameterizedTest {
                                 new TypeTag(Map.class,
                                         new TypeTag(String.class),
                                         new TypeTag(Float.class)))) },
+                { "rawMapField", new TypeTag(Map.class) },
                 { "primitiveField", new TypeTag(int.class) },
                 { "arrayField", new TypeTag(String[].class) }
         });
