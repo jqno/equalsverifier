@@ -30,8 +30,6 @@ import java.util.List;
  * @author Jan Ouwens
  */
 public final class TypeTag {
-    public static final TypeTag WILDCARD = new TypeTag(Wildcard.class);
-
     private final Class<?> type;
     private final List<TypeTag> genericTypes;
 
@@ -65,6 +63,9 @@ public final class TypeTag {
 
     private static TypeTag resolve(Type type) {
         List<TypeTag> nestedTags = new ArrayList<>();
+        if (type instanceof Class) {
+            return new TypeTag((Class)type, nestedTags);
+        }
         if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType)type;
             Type[] typeArgs = pt.getActualTypeArguments();
@@ -73,17 +74,16 @@ public final class TypeTag {
             }
             return new TypeTag((Class)pt.getRawType(), nestedTags);
         }
-        else if (type instanceof GenericArrayType) {
+        if (type instanceof GenericArrayType) {
             GenericArrayType gat = (GenericArrayType)type;
             Type t = gat.getGenericComponentType();
-            System.out.println("tpe " + t);
             return new TypeTag(GenericArray.class, resolve(t));
         }
-        else if (type instanceof Class) {
-            return new TypeTag((Class)type, nestedTags);
+        if (type instanceof WildcardType) {
+            return new TypeTag(Wildcard.class);
         }
-        else if (type instanceof WildcardType) {
-            return WILDCARD;
+        if (type instanceof java.lang.reflect.TypeVariable) {
+            return new TypeTag(TypeTag.TypeVariable.class);
         }
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
@@ -140,12 +140,17 @@ public final class TypeTag {
     }
 
     /**
-     * Represents a wildcard type parameter.
+     * Represents a wildcard type parameter like {@code List<?>}.
      */
     public static final class Wildcard {}
 
     /**
-     * Represents a generic array type parameter.
+     * Represents a variable type parameter like {@code List<T>}.
+     */
+    public static final class TypeVariable {}
+
+    /**
+     * Represents a generic array type parameter like {@code List<T>[]}.
      */
     public static final class GenericArray {}
 }

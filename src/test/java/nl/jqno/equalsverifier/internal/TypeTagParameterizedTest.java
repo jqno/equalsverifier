@@ -30,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
-public class TypeTagParameterizedTest {
+public class TypeTagParameterizedTest<T> {
     @SuppressWarnings("unused") private final String simpleField = null;
     @SuppressWarnings("unused") private final List<String> fieldWithSingleTypeParameter = null;
     @SuppressWarnings("unused") private final Map<String, Integer> fieldWithTwoTypeParameters = null;
@@ -39,6 +39,7 @@ public class TypeTagParameterizedTest {
     @SuppressWarnings({ "unused", "raw" }) private final Map rawMapField = null;
     @SuppressWarnings("unused") List<?> fieldWithWildcardParameter = null;
     @SuppressWarnings("unused") Class<String>[] fieldWithGenericArrayParameter = null;
+    @SuppressWarnings("unused") List<T> fieldWithTypeVariable = null;
 
     @SuppressWarnings("unused") private final int primitiveField = 0;
     @SuppressWarnings("unused") private final String[] arrayField = null;
@@ -68,8 +69,9 @@ public class TypeTagParameterizedTest {
                                         new TypeTag(String.class),
                                         new TypeTag(Float.class)))) },
                 { "rawMapField", new TypeTag(Map.class) },
-                { "fieldWithWildcardParameter", new TypeTag(List.class, TypeTag.WILDCARD) },
+                { "fieldWithWildcardParameter", new TypeTag(List.class, new TypeTag(TypeTag.Wildcard.class)) },
                 { "fieldWithGenericArrayParameter", new TypeTag(TypeTag.GenericArray.class, new TypeTag(Class.class, new TypeTag(String.class))) },
+                { "fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)) },
                 { "primitiveField", new TypeTag(int.class) },
                 { "arrayField", new TypeTag(String[].class) }
         });
