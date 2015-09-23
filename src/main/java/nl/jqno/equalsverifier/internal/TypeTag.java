@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +33,8 @@ import java.util.List;
  * @author Jan Ouwens
  */
 public final class TypeTag {
+    public static final TypeTag WILDCARD = new TypeTag(Wildcard.class);
+
     private final Class<?> type;
     private final List<TypeTag> genericTypes;
 
@@ -76,7 +79,10 @@ public final class TypeTag {
         else if (type instanceof Class) {
             return new TypeTag((Class)type, nestedTags);
         }
-        throw new EqualsVerifierBugException("Failed to tag type " + type.toString());
+        else if (type instanceof WildcardType) {
+            return WILDCARD;
+        }
+        throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
 
     /**
@@ -129,4 +135,9 @@ public final class TypeTag {
         }
         return s.toString();
     }
+
+    /**
+     * Represents a wildcard type parameter.
+     */
+    public static final class Wildcard {}
 }
