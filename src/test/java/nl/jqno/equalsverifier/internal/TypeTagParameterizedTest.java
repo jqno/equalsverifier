@@ -38,6 +38,7 @@ public class TypeTagParameterizedTest {
     @SuppressWarnings("unused") private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters = null;
     @SuppressWarnings({ "unused", "raw" }) private final Map rawMapField = null;
     @SuppressWarnings("unused") List<?> fieldWithWildcardParameter = null;
+    @SuppressWarnings("unused") Class<String>[] fieldWithGenericArrayParameter = null;
 
     @SuppressWarnings("unused") private final int primitiveField = 0;
     @SuppressWarnings("unused") private final String[] arrayField = null;
@@ -68,6 +69,7 @@ public class TypeTagParameterizedTest {
                                         new TypeTag(Float.class)))) },
                 { "rawMapField", new TypeTag(Map.class) },
                 { "fieldWithWildcardParameter", new TypeTag(List.class, TypeTag.WILDCARD) },
+                { "fieldWithGenericArrayParameter", new TypeTag(TypeTag.GenericArray.class, new TypeTag(Class.class, new TypeTag(String.class))) },
                 { "primitiveField", new TypeTag(int.class) },
                 { "arrayField", new TypeTag(String[].class) }
         });

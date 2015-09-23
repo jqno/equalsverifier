@@ -17,10 +17,7 @@ package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.lang.reflect.WildcardType;
+import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,6 +72,12 @@ public final class TypeTag {
                 nestedTags.add(resolve(typeArg));
             }
             return new TypeTag((Class)pt.getRawType(), nestedTags);
+        }
+        else if (type instanceof GenericArrayType) {
+            GenericArrayType gat = (GenericArrayType)type;
+            Type t = gat.getGenericComponentType();
+            System.out.println("tpe " + t);
+            return new TypeTag(GenericArray.class, resolve(t));
         }
         else if (type instanceof Class) {
             return new TypeTag((Class)type, nestedTags);
@@ -140,4 +143,9 @@ public final class TypeTag {
      * Represents a wildcard type parameter.
      */
     public static final class Wildcard {}
+
+    /**
+     * Represents a generic array type parameter.
+     */
+    public static final class GenericArray {}
 }
