@@ -85,10 +85,15 @@ public final class Instantiator<T> {
     @SuppressWarnings("unchecked")
     private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
         DynamicType.Builder<S> builder = createBuilder(superclass);
+
+        boolean isSystemClass = superclass.getName().startsWith("java");
+        String namePrefix = isSystemClass ? "$" : "";
+        ClassLoader classLoader = isSystemClass ? Instantiator.class.getClassLoader() : superclass.getClassLoader();
+
         return (Class<S>)builder
-                .name(new NamingStrategy.Fixed(superclass.getName() + "$$DynamicSubclass"))
+                .name(new NamingStrategy.Fixed(namePrefix + superclass.getName() + "$$DynamicSubclass"))
                 .make()
-                .load(superclass.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .load(classLoader, ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
     }
 

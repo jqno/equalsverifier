@@ -23,6 +23,8 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class InstantiatorTest {
@@ -70,5 +72,11 @@ public class InstantiatorTest {
         Point p = instantiator.instantiateAnonymousSubclass();
         assertFalse(p.getClass() == Point.class);
         assertTrue(Point.class.isAssignableFrom(p.getClass()));
+    }
+
+    @Test
+    public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
+        Instantiator<List> instantiator = Instantiator.of(List.class);
+        instantiator.instantiateAnonymousSubclass();
     }
 }
