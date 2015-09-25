@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -93,6 +94,13 @@ public final class TypeTag {
      */
     public Class<?> getType() {
         return type;
+    }
+
+    /**
+     * Getter for the TypeTag's generic types.
+     */
+    public List<TypeTag> getGenericTypes() {
+        return Collections.unmodifiableList(genericTypes);
     }
 
     /**

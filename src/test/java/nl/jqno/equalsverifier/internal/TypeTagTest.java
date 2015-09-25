@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -49,6 +50,12 @@ public class TypeTagTest {
     @Test
     public void getType() {
         assertEquals(Map.class, SOME_LONG_TYPETAG.getType());
+    }
+
+    @Test
+    public void getGenericTypes() {
+        List<TypeTag> expected = Arrays.asList(new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
+        assertEquals(expected, SOME_LONG_TYPETAG.getGenericTypes());
     }
 
     @Test
