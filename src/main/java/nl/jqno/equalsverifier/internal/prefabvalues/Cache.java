@@ -20,14 +20,14 @@ import nl.jqno.equalsverifier.internal.TypeTag;
 import java.util.HashMap;
 import java.util.Map;
 
-class PrefabValueCache {
-    private final Map<TypeTag, PrefabValueTuple> cache = new HashMap<>();
+class Cache {
+    private final Map<TypeTag, Tuple> cache = new HashMap<>();
 
     public <T> void put(TypeTag tag, T red, T black) {
-        cache.put(tag, new PrefabValueTuple<>(red, black));
+        cache.put(tag, new Tuple<>(red, black));
     }
 
-    public PrefabValueTuple getTuple(TypeTag tag) {
+    public Tuple getTuple(TypeTag tag) {
         return cache.get(tag);
     }
 

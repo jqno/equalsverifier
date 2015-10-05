@@ -21,12 +21,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class PrefabValueTupleTest {
-    private PrefabValueTuple<String> tuple = new PrefabValueTuple<>("red", "black");
+public class TupleTest {
+    private Tuple<String> tuple = new Tuple<>("red", "black");
 
     @Test
     public void equalsAndHashCode() {
-        EqualsVerifier.forClass(PrefabValueTuple.class)
+        EqualsVerifier.forClass(Tuple.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
     }

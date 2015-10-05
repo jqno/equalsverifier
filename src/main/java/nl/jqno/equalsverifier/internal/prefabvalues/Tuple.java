@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-final class PrefabValueTuple<T> {
+final class Tuple<T> {
     private final T red;
     private final T black;
 
-    public PrefabValueTuple(T red, T black) {
+    public Tuple(T red, T black) {
         this.red = red;
         this.black = black;
     }
@@ -34,10 +34,10 @@ final class PrefabValueTuple<T> {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof PrefabValueTuple)) {
+        if (!(obj instanceof Tuple)) {
             return false;
         }
-        PrefabValueTuple other = (PrefabValueTuple)obj;
+        Tuple other = (Tuple)obj;
         return red.equals(other.red) && black.equals(other.black);
     }
 

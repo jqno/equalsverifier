@@ -22,13 +22,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class PrefabValueCacheTest {
+public class CacheTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
-    private static final PrefabValueTuple<String> STRING_TUPLE = new PrefabValueTuple<>("red", "black");
+    private static final Tuple<String> STRING_TUPLE = new Tuple<>("red", "black");
     private static final TypeTag INT_TAG = new TypeTag(int.class);
-    private static final PrefabValueTuple<Integer> INT_TUPLE = new PrefabValueTuple<>(42, 1337);
+    private static final Tuple<Integer> INT_TUPLE = new Tuple<>(42, 1337);
 
-    private PrefabValueCache cache = new PrefabValueCache();
+    private Cache cache = new Cache();
 
     @Test
     public void putAndGetTuple() {
