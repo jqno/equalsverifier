@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.TypeTag;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

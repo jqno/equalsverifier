@@ -15,8 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.TypeTag;
-
 import java.util.HashMap;
 import java.util.Map;
 
