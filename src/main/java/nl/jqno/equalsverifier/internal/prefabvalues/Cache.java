@@ -25,7 +25,8 @@ class Cache {
         cache.put(tag, new Tuple<>(red, black));
     }
 
-    public Tuple getTuple(TypeTag tag) {
+    @SuppressWarnings("unchecked")
+    public <T> Tuple<T> getTuple(TypeTag tag) {
         return cache.get(tag);
     }
 

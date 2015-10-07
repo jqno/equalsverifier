@@ -32,7 +32,7 @@ public class CacheTest {
     @Test
     public void putAndGetTuple() {
         cache.put(STRING_TAG, STRING_TUPLE.getRed(), STRING_TUPLE.getBlack());
-        assertEquals(STRING_TUPLE, cache.getTuple(STRING_TAG));
+        assertEquals(STRING_TUPLE, cache.<String>getTuple(STRING_TAG));
     }
 
     @Test
