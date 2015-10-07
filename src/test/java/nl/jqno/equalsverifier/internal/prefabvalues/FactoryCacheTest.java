@@ -21,9 +21,9 @@ import static org.junit.Assert.*;
 
 public class FactoryCacheTest {
     private static final Class<String> STRING_CLASS = String.class;
-    private static final PrefabValueFactory<String> STRING_FACTORY = new TestFactory<>("red", "black");
+    private static final PrefabValueFactory<String> STRING_FACTORY = new SimpleFactory<>("red", "black");
     private static final Class<Integer> INT_CLASS = int.class;
-    private static final PrefabValueFactory<Integer> INT_FACTORY = new TestFactory<>(42, 1337);
+    private static final PrefabValueFactory<Integer> INT_FACTORY = new SimpleFactory<>(42, 1337);
 
     private FactoryCache cache = new FactoryCache();
 
@@ -51,25 +51,5 @@ public class FactoryCacheTest {
     @Test
     public void doesntContain() {
         assertFalse(cache.contains(STRING_CLASS));
-    }
-
-    private static final class TestFactory<T> implements PrefabValueFactory<T> {
-        private final T red;
-        private final T black;
-
-        public TestFactory(T red, T black) {
-            this.red = red;
-            this.black = black;
-        }
-
-        @Override
-        public T createRed() {
-            return red;
-        }
-
-        @Override
-        public T createBlack() {
-            return black;
-        }
     }
 }
