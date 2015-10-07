@@ -34,17 +34,18 @@ public class PrefabValues {
     private <T> Tuple<T> giveTuple(TypeTag tag) {
         Class<T> type = tag.getType();
 
-        if (cache.contains(tag)) {
-            return cache.getTuple(tag);
+        if (!cache.contains(tag)) {
+            if (factoryCache.contains(type)) {
+                PrefabValueFactory<T> factory = factoryCache.get(type);
+                Tuple<T> tuple = factory.createValues(tag, this);
+                cache.put(tag, tuple.getRed(), tuple.getBlack());
+            }
+            else {
+                throw new IllegalStateException();
+            }
         }
 
-        if (factoryCache.contains(type)) {
-            PrefabValueFactory<T> factory = factoryCache.get(type);
-            Tuple<T> tuple = new Tuple<>(factory.createRed(tag, this), factory.createBlack(tag, this));
-            cache.put(tag, tuple.getRed(), tuple.getRed());
-            return tuple;
-        }
 
-        throw new IllegalStateException();
+        return cache.getTuple(tag);
     }
 }

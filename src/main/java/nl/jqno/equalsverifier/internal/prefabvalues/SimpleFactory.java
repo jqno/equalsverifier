@@ -16,22 +16,14 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 public class SimpleFactory<T> implements PrefabValueFactory<T> {
-    private final T red;
-    private final T black;
+    private Tuple<T> tuple;
 
     public SimpleFactory(T red, T black) {
-        this.red = red;
-        this.black = black;
-
+        this.tuple = new Tuple<>(red, black);
     }
 
     @Override
-    public T createRed(TypeTag tag, PrefabValues prefabValues) {
-        return red;
-    }
-
-    @Override
-    public T createBlack(TypeTag tag, PrefabValues prefabValues) {
-        return black;
+    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues) {
+        return tuple;
     }
 }

@@ -22,16 +22,12 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
  */
 public interface PrefabValueFactory<T> {
     /**
-     * Creates a "red" prefab value.
+     * Creates a tuple of two prefab values.
      *
+     * @param tag The typetag of the type for which to create values.
+     * @param prefabValues Repository for querying instances of generic types
+     *          of the type tag.
      * @return A "red" instance of {@link T}.
      */
-    public T createRed(TypeTag tag, PrefabValues prefabValues);
-
-    /**
-     * Creates a "black" prefab value.
-     *
-     * @return A "black" instance of {@link T}.
-     */
-    public T createBlack(TypeTag tag, PrefabValues prefabValues);
+    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues);
 }

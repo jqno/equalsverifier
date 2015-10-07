@@ -36,9 +36,9 @@ public class PrefabValuesTest {
     @Test
     public void sanityTestFactoryIncreasesStringLength() {
         AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertEquals("r", f.createRed(null, null));
-        assertEquals("rr", f.createRed(null, null));
-        assertEquals("rrr", f.createRed(null, null));
+        assertEquals("r", f.createValues(null, null).getRed());
+        assertEquals("rr", f.createValues(null, null).getRed());
+        assertEquals("rrr", f.createValues(null, null).getRed());
     }
 
     @Test
@@ -69,25 +69,26 @@ public class PrefabValuesTest {
 
         public AppendingStringTestFactory() { red = ""; black = ""; }
 
-        @Override public String createRed(TypeTag tag, PrefabValues prefabValues) { red += "r"; return red; }
-        @Override public String createBlack(TypeTag tag, PrefabValues prefabValues) { black += "b"; return black; }
+        @Override
+        public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues) {
+            red += "r"; black += "b";
+            return new Tuple<>(red, black);
+        }
     }
 
     private static class ListTestFactory implements PrefabValueFactory<List> {
         @Override
         @SuppressWarnings("unchecked")
-        public List createRed(TypeTag tag, PrefabValues prefabValues) {
-            List result = new ArrayList<>();
-            result.add(prefabValues.giveRed(tag.getGenericTypes().get(0)));
-            return result;
-        }
+        public Tuple<List> createValues(TypeTag tag, PrefabValues prefabValues) {
+            TypeTag subtag = tag.getGenericTypes().get(0);
 
-        @Override
-        @SuppressWarnings("unchecked")
-        public List createBlack(TypeTag tag, PrefabValues prefabValues) {
-            List result = new ArrayList<>();
-            result.add(prefabValues.giveBlack(tag.getGenericTypes().get(0)));
-            return result;
+            List red = new ArrayList<>();
+            red.add(prefabValues.giveRed(subtag));
+
+            List black = new ArrayList<>();
+            black.add(prefabValues.giveBlack(subtag));
+
+            return new Tuple<>(red, black);
         }
     }
 }
