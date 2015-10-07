@@ -23,8 +23,12 @@ public class PrefabValues {
         factoryCache.put(type, factory);
     }
 
-    public Object giveRed(TypeTag tag) {
-        return giveTuple(tag).getRed();
+    public <T> T giveRed(TypeTag tag) {
+        return this.<T>giveTuple(tag).getRed();
+    }
+
+    public <T> T giveBlack(TypeTag tag) {
+        return this.<T>giveTuple(tag).getBlack();
     }
 
     private <T> Tuple<T> giveTuple(TypeTag tag) {
