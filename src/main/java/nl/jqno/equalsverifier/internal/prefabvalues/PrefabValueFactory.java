@@ -26,12 +26,12 @@ public interface PrefabValueFactory<T> {
      *
      * @return A "red" instance of {@link T}.
      */
-    public T createRed();
+    public T createRed(TypeTag tag, PrefabValues prefabValues);
 
     /**
      * Creates a "black" prefab value.
      *
      * @return A "black" instance of {@link T}.
      */
-    public T createBlack();
+    public T createBlack(TypeTag tag, PrefabValues prefabValues);
 }

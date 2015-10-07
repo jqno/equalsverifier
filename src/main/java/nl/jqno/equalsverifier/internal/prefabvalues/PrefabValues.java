@@ -36,7 +36,7 @@ public class PrefabValues {
 
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
-            Tuple<T> tuple = new Tuple<>(factory.createRed(), factory.createBlack());
+            Tuple<T> tuple = new Tuple<>(factory.createRed(tag, this), factory.createBlack(tag, this));
             cache.put(tag, tuple.getRed(), tuple.getRed());
             return tuple;
         }

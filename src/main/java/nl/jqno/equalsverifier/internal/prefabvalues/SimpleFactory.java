@@ -26,12 +26,12 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
-    public T createRed() {
+    public T createRed(TypeTag tag, PrefabValues prefabValues) {
         return red;
     }
 
     @Override
-    public T createBlack() {
+    public T createBlack(TypeTag tag, PrefabValues prefabValues) {
         return black;
     }
 }

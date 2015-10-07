@@ -24,11 +24,11 @@ public class SimpleFactoryTest {
 
     @Test
     public void createRed() {
-        assertEquals("red", factory.createRed());
+        assertEquals("red", factory.createRed(null, null));
     }
 
     @Test
     public void createBlack() {
-        assertEquals("black", factory.createBlack());
+        assertEquals("black", factory.createBlack(null, null));
     }
 }

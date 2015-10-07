@@ -32,9 +32,9 @@ public class PrefabValuesTest {
     @Test
     public void sanityTestFactoryIncreasesStringLength() {
         TestFactory f = new TestFactory();
-        assertEquals("r", f.createRed());
-        assertEquals("rr", f.createRed());
-        assertEquals("rrr", f.createRed());
+        assertEquals("r", f.createRed(null, null));
+        assertEquals("rr", f.createRed(null, null));
+        assertEquals("rrr", f.createRed(null, null));
     }
 
     @Test
@@ -54,7 +54,7 @@ public class PrefabValuesTest {
 
         public TestFactory() { red = ""; black = ""; }
 
-        @Override public String createRed() { red += "r"; return red; }
-        @Override public String createBlack() { black += "b"; return black; }
+        @Override public String createRed(TypeTag tag, PrefabValues prefabValues) { red += "r"; return red; }
+        @Override public String createBlack(TypeTag tag, PrefabValues prefabValues) { black += "b"; return black; }
     }
 }
