@@ -92,8 +92,9 @@ public final class TypeTag {
     /**
      * Getter for the TypeTag's raw type.
      */
-    public Class<?> getType() {
-        return type;
+    @SuppressWarnings("unchecked")
+    public <T> Class<T> getType() {
+        return (Class<T>)type;
     }
 
     /**
