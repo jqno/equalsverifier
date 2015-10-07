@@ -64,12 +64,12 @@ public class FactoryCacheTest {
         }
 
         @Override
-        public T createRed(TypeTag typeTag, PrefabValues prefabValues) {
+        public T createRed() {
             return red;
         }
 
         @Override
-        public T createBlack(TypeTag typeTag, PrefabValues prefabValues) {
+        public T createBlack() {
             return black;
         }
     }

@@ -26,18 +26,14 @@ public interface PrefabValueFactory<T> {
     /**
      * Creates a "red" prefab value.
      *
-     * @param typeTag Tag for the type to instantiate.
-     * @param prefabValues From which to draw object instances.
      * @return A "red" instance of {@link T}.
      */
-    public T createRed(TypeTag typeTag, PrefabValues prefabValues);
+    public T createRed();
 
     /**
      * Creates a "black" prefab value.
      *
-     * @param typeTag Tag for the type to instantiate.
-     * @param prefabValues From which to draw object instances.
      * @return A "black" instance of {@link T}.
      */
-    public T createBlack(TypeTag typeTag, PrefabValues prefabValues);
+    public T createBlack();
 }
