@@ -53,6 +53,17 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveBlackFromFactory() {
+        assertEquals("b", pv.giveBlack(STRING_TAG));
+    }
+
+    @Test
+    public void giveBlackFromCache() {
+        pv.giveRed(STRING_TAG);
+        assertEquals("b", pv.giveBlack(STRING_TAG));
+    }
+
+    @Test
     public void stringListIsSeparateFromIntegerList() {
         pv.addFactory(List.class, new ListTestFactory());
 
