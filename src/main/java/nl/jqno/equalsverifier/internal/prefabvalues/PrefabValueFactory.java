@@ -15,8 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.PrefabValues;
-
 /**
  * Creates instances of generic types for use as prefab value.
  *

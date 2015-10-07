@@ -21,7 +21,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class PrefabValuesTest {
-    private final static TypeTag STRING_TAG = new TypeTag(String.class);
+    private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private PrefabValues pv = new PrefabValues();
 
     @Before
