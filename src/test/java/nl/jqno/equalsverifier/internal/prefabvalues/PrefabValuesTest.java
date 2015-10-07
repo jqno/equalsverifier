@@ -18,6 +18,9 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 public class PrefabValuesTest {
@@ -26,12 +29,13 @@ public class PrefabValuesTest {
 
     @Before
     public void setUp() {
-        pv.addFactory(String.class, new TestFactory());
+        pv.addFactory(String.class, new AppendingStringTestFactory());
+        pv.addFactory(int.class, new SimpleFactory<>(42, 1337));
     }
 
     @Test
     public void sanityTestFactoryIncreasesStringLength() {
-        TestFactory f = new TestFactory();
+        AppendingStringTestFactory f = new AppendingStringTestFactory();
         assertEquals("r", f.createRed(null, null));
         assertEquals("rr", f.createRed(null, null));
         assertEquals("rrr", f.createRed(null, null));
@@ -48,13 +52,42 @@ public class PrefabValuesTest {
         assertEquals("r", pv.giveRed(STRING_TAG));
     }
 
-    private static class TestFactory implements PrefabValueFactory<String> {
+    @Test
+    public void stringListIsSeparateFromIntegerList() {
+        pv.addFactory(List.class, new ListTestFactory());
+
+        List<String> strings = pv.giveRed(new TypeTag(List.class, new TypeTag(String.class)));
+        List<Integer> ints = pv.giveRed(new TypeTag(List.class, new TypeTag(int.class)));
+
+        assertEquals("r", strings.get(0));
+        assertEquals(42, (int)ints.get(0));
+    }
+
+    private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
         private String red;
         private String black;
 
-        public TestFactory() { red = ""; black = ""; }
+        public AppendingStringTestFactory() { red = ""; black = ""; }
 
         @Override public String createRed(TypeTag tag, PrefabValues prefabValues) { red += "r"; return red; }
         @Override public String createBlack(TypeTag tag, PrefabValues prefabValues) { black += "b"; return black; }
+    }
+
+    private static class ListTestFactory implements PrefabValueFactory<List> {
+        @Override
+        @SuppressWarnings("unchecked")
+        public List createRed(TypeTag tag, PrefabValues prefabValues) {
+            List result = new ArrayList<>();
+            result.add(prefabValues.giveRed(tag.getGenericTypes().get(0)));
+            return result;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public List createBlack(TypeTag tag, PrefabValues prefabValues) {
+            List result = new ArrayList<>();
+            result.add(prefabValues.giveBlack(tag.getGenericTypes().get(0)));
+            return result;
+        }
     }
 }
