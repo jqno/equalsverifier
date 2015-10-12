@@ -74,13 +74,6 @@ public class ClassAccessor<T> {
     }
 
     /**
-     * Getter.
-     */
-    public PrefabValues getPrefabValues() {
-        return prefabValues;
-    }
-
-    /**
      * Determines whether T has a particular annotation.
      *
      * @param annotation The annotation we want to find.

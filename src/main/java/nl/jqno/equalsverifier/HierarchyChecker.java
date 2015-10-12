@@ -84,7 +84,7 @@ class HierarchyChecker<T> implements Checker {
         Object equalSuper = getEqualSuper(reference);
 
         T shallow = referenceAccessor.copy();
-        ObjectAccessor.of(shallow).shallowScramble(classAccessor.getPrefabValues());
+        ObjectAccessor.of(shallow).shallowScramble(config.getPrefabValues());
 
         Formatter symmetryFormatter = Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper);
         assertTrue(symmetryFormatter, reference.equals(equalSuper) && equalSuper.equals(reference));

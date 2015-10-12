@@ -61,11 +61,6 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getPrefabValues() {
-        assertSame(prefabValues, pointContainerAccessor.getPrefabValues());
-    }
-
-    @Test
     public void hasAnnotation() {
         ClassAccessor<?> accessor = new ClassAccessor<>(AnnotatedWithRuntime.class, prefabValues, TestSupportedAnnotations.values(), false);
         assertTrue(accessor.hasAnnotation(TYPE_RUNTIME_RETENTION));

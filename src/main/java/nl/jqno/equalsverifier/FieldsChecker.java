@@ -36,7 +36,7 @@ class FieldsChecker<T> implements Checker {
 
     public FieldsChecker(Configuration<T> config) {
         this.classAccessor = config.createClassAccessor();
-        this.prefabValues = classAccessor.getPrefabValues();
+        this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
