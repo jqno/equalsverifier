@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import java.util.Map;
+
 public class PrefabValues {
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
@@ -31,21 +33,34 @@ public class PrefabValues {
         return this.<T>giveTuple(tag).getBlack();
     }
 
-    private <T> Tuple<T> giveTuple(TypeTag tag) {
+    <T> Tuple<T> giveTuple(TypeTag tag) {
         Class<T> type = tag.getType();
 
         if (!cache.contains(tag)) {
             if (factoryCache.contains(type)) {
                 PrefabValueFactory<T> factory = factoryCache.get(type);
                 Tuple<T> tuple = factory.createValues(tag, this);
-                cache.put(tag, tuple.getRed(), tuple.getBlack());
+                addToCache(tag, tuple);
             }
             else {
                 throw new IllegalStateException();
             }
         }
 
-
         return cache.getTuple(tag);
+    }
+
+    void addToCache(TypeTag tag, Tuple<?> tuple) {
+        cache.put(tag, tuple.getRed(), tuple.getBlack());
+    }
+
+    // When this method is removed, make Cache.cache private
+    // CHECKSTYLE: ignore MethodName for 1 line.
+    nl.jqno.equalsverifier.internal.PrefabValues $toOld() {
+        nl.jqno.equalsverifier.internal.PrefabValues result = new nl.jqno.equalsverifier.internal.PrefabValues();
+        for (Map.Entry<TypeTag, Tuple> e : cache.cache.entrySet()) {
+            result.put(e.getKey().getType(), e.getValue().getRed(), e.getValue().getBlack());
+        }
+        return result;
     }
 }

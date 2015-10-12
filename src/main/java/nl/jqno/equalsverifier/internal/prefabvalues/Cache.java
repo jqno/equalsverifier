@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Cache {
-    private final Map<TypeTag, Tuple> cache = new HashMap<>();
+    final Map<TypeTag, Tuple> cache = new HashMap<>();
 
     public <T> void put(TypeTag tag, T red, T black) {
         cache.put(tag, new Tuple<>(red, black));
