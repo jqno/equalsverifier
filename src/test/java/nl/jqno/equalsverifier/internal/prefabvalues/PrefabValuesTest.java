@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,6 +26,7 @@ import static org.junit.Assert.assertEquals;
 
 public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
+    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private PrefabValues pv = new PrefabValues();
 
     @Before
@@ -59,8 +61,20 @@ public class PrefabValuesTest {
 
     @Test
     public void giveBlackFromCache() {
-        pv.giveRed(STRING_TAG);
+        pv.giveBlack(STRING_TAG);
         assertEquals("b", pv.giveBlack(STRING_TAG));
+    }
+
+    @Test
+    public void giveRedFromFallbackFactory() {
+        Point actual = pv.giveRed(POINT_TAG);
+        assertEquals(new Point(42, 42), actual);
+    }
+
+    @Test
+    public void giveBlackFromFallbackFactory() {
+        Point actual = pv.giveBlack(POINT_TAG);
+        assertEquals(new Point(1337, 1337), actual);
     }
 
     @Test

@@ -20,6 +20,7 @@ import java.util.Map;
 public class PrefabValues {
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
+    private final PrefabValueFactory fallbackFactory = new FallbackFactory();
 
     public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
@@ -37,14 +38,11 @@ public class PrefabValues {
         Class<T> type = tag.getType();
 
         if (!cache.contains(tag)) {
-            if (factoryCache.contains(type)) {
-                PrefabValueFactory<T> factory = factoryCache.get(type);
-                Tuple<T> tuple = factory.createValues(tag, this);
-                addToCache(tag, tuple);
-            }
-            else {
-                throw new IllegalStateException();
-            }
+            @SuppressWarnings("unchecked")
+            PrefabValueFactory<T> factory = factoryCache.contains(type) ? factoryCache.get(type) : fallbackFactory;
+
+            Tuple<T> tuple = factory.createValues(tag, this);
+            addToCache(tag, tuple);
         }
 
         return cache.getTuple(tag);
