@@ -15,12 +15,13 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class PrefabValues {
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
-    private final PrefabValueFactory fallbackFactory = new FallbackFactory();
+    private final FallbackFactory fallbackFactory = new FallbackFactory();
 
     public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
@@ -34,18 +35,25 @@ public class PrefabValues {
         return this.<T>giveTuple(tag).getBlack();
     }
 
-    <T> Tuple<T> giveTuple(TypeTag tag) {
-        Class<T> type = tag.getType();
+    private <T> Tuple<T> giveTuple(TypeTag tag) {
+        return giveTuple(tag, new LinkedHashSet<TypeTag>());
+    }
 
+    /* default */ <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (!cache.contains(tag)) {
-            @SuppressWarnings("unchecked")
-            PrefabValueFactory<T> factory = factoryCache.contains(type) ? factoryCache.get(type) : fallbackFactory;
-
-            Tuple<T> tuple = factory.createValues(tag, this);
+            Tuple<T> tuple = createTuple(tag, typeStack);
             addToCache(tag, tuple);
         }
-
         return cache.getTuple(tag);
+    }
+
+    private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        Class<T> type = tag.getType();
+        if (factoryCache.contains(type)) {
+            PrefabValueFactory<T> factory = factoryCache.get(type);
+            return factory.createValues(tag, this);
+        }
+        return fallbackFactory.createValues(tag, this, typeStack);
     }
 
     void addToCache(TypeTag tag, Tuple<?> tuple) {

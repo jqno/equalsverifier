@@ -17,28 +17,37 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedHashSet;
 
-class FallbackFactory<T> implements PrefabValueFactory<T> {
-    @Override
-    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues) {
+class FallbackFactory {
+    public <T> Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        if (typeStack.contains(tag)) {
+            throw new RecursionException(null);
+        }
+
+        @SuppressWarnings("unchecked")
+        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
+        clone.add(tag);
+
         Class<T> type = tag.getType();
         if (type.isEnum()) {
             return giveEnumInstances(tag);
         }
         if (type.isArray()) {
-            return giveArrayInstances(tag, prefabValues);
+            return giveArrayInstances(tag, prefabValues, clone);
         }
 
-        traverseFields(tag, prefabValues);
+        traverseFields(tag, prefabValues, clone);
         return giveInstances(type, prefabValues);
     }
 
-    private Tuple<T> giveEnumInstances(TypeTag tag) {
+    private <T> Tuple<T> giveEnumInstances(TypeTag tag) {
         Class<T> type = tag.getType();
         T[] enumConstants = type.getEnumConstants();
 
@@ -53,10 +62,10 @@ class FallbackFactory<T> implements PrefabValueFactory<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private Tuple<T> giveArrayInstances(TypeTag tag, PrefabValues prefabValues) {
+    private <T> Tuple<T> giveArrayInstances(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
-        Tuple<?> tuple = prefabValues.giveTuple(new TypeTag(componentType));
+        Tuple<?> tuple = prefabValues.giveTuple(new TypeTag(componentType), typeStack);
 
         T red = (T)Array.newInstance(componentType, 1);
         Array.set(red, 0, tuple.getRed());
@@ -66,19 +75,19 @@ class FallbackFactory<T> implements PrefabValueFactory<T> {
         return new Tuple<>(red, black);
     }
 
-    private void traverseFields(TypeTag tag, PrefabValues prefabValues) {
+    private void traverseFields(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         Class<?> type = tag.getType();
         for (Field field : FieldIterable.of(type)) {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                Tuple<?> tuple = prefabValues.giveTuple(TypeTag.of(field));
+                Tuple<?> tuple = prefabValues.giveTuple(TypeTag.of(field), typeStack);
                 prefabValues.addToCache(tag, tuple);
             }
         }
     }
 
-    private Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
+    private <T> Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
         ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues.$toOld(), false);
         T red = accessor.getRedObject();
         T black = accessor.getBlackObject();

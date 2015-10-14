@@ -15,7 +15,9 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
@@ -23,6 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+
+import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
@@ -33,20 +37,22 @@ public class FallbackFactoryTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private FallbackFactory<?> factory;
+    private FallbackFactory factory;
     private PrefabValues prefabValues;
+    private LinkedHashSet<TypeTag> typeStack;
 
     @Before
     public void setUp() {
-        factory = new FallbackFactory<>();
+        factory = new FallbackFactory();
         prefabValues = new PrefabValues();
         prefabValues.addFactory(int.class, new SimpleFactory<>(42, 1337));
+        typeStack = new LinkedHashSet<>();
     }
 
     @Test
     public void dontGiveEmptyEnum() {
         thrown.expect(ReflectionException.class);
-        new FallbackFactory<>().createValues(new TypeTag(EmptyEnum.class), new PrefabValues());
+        new FallbackFactory().createValues(new TypeTag(EmptyEnum.class), prefabValues, typeStack);
     }
 
     @Test
@@ -61,7 +67,7 @@ public class FallbackFactoryTest {
 
     @Test
     public void giveArray() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues);
+        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues, typeStack);
         assertArrayEquals(new int[] { 42 }, (int[])tuple.getRed());
         assertArrayEquals(new int[] { 1337 }, (int[])tuple.getBlack());
     }
@@ -73,8 +79,14 @@ public class FallbackFactoryTest {
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
     }
 
+    @Test
+    public void giveRecursiveClass() {
+        thrown.expect(RecursionException.class);
+        factory.createValues(new TypeTag(Node.class), prefabValues, typeStack);
+    }
+
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlack) {
-        Tuple<?> tuple = factory.createValues(new TypeTag(type), prefabValues);
+        Tuple<?> tuple = factory.createValues(new TypeTag(type), prefabValues, typeStack);
         assertEquals(expectedRed, tuple.getRed());
         assertEquals(expectedBlack, tuple.getBlack());
     }
