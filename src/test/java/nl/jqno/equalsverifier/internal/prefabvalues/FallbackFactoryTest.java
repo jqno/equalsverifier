@@ -15,9 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
@@ -30,6 +32,8 @@ import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
@@ -68,8 +72,8 @@ public class FallbackFactoryTest {
     @Test
     public void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues, typeStack);
-        assertArrayEquals(new int[] { 42 }, (int[])tuple.getRed());
-        assertArrayEquals(new int[] { 1337 }, (int[])tuple.getBlack());
+        assertArrayEquals(new int[]{ 42 }, (int[])tuple.getRed());
+        assertArrayEquals(new int[]{ 1337 }, (int[])tuple.getBlack());
     }
 
     @Test
@@ -80,9 +84,22 @@ public class FallbackFactoryTest {
     }
 
     @Test
-    public void giveRecursiveClass() {
-        thrown.expect(RecursionException.class);
+    public void dontGiveRecursiveClass() {
+        thrown.expect(TypeTagRecursionException.class);
         factory.createValues(new TypeTag(Node.class), prefabValues, typeStack);
+    }
+
+    @Test
+    public void dontGiveTwoStepRecursiveClass() {
+        thrown.expect(TypeTagRecursionException.class);
+        thrown.expectMessage(allOf(containsString("TwoStepNodeA"), containsString("TwoStepNodeB")));
+        factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack);
+    }
+
+    @Test
+    public void dontGiveRecursiveArray() {
+        thrown.expect(TypeTagRecursionException.class);
+        factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlack) {
