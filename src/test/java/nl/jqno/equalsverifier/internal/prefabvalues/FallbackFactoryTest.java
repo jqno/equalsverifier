@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
@@ -48,7 +49,7 @@ public class FallbackFactoryTest {
     @Before
     public void setUp() {
         factory = new FallbackFactory();
-        prefabValues = new PrefabValues();
+        prefabValues = new PrefabValues(new StaticFieldValueStash());
         prefabValues.addFactory(int.class, new SimpleFactory<>(42, 1337));
         typeStack = new LinkedHashSet<>();
     }
@@ -79,7 +80,7 @@ public class FallbackFactoryTest {
     @Test
     public void giveClassWithFields() {
         assertCorrectTuple(IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
-        // assertEquals(-100, IntContainer.staticI);
+        // assertEquals(-100, IntContainer.staticI); // This issue is handled by PrefabValues, not FallbackFactory.
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
     }
 

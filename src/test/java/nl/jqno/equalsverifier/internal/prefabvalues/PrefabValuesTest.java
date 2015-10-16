@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +28,8 @@ import static org.junit.Assert.assertEquals;
 public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private PrefabValues pv = new PrefabValues();
+    private StaticFieldValueStash stash = new StaticFieldValueStash();
+    private PrefabValues pv = new PrefabValues(stash);
 
     @Before
     public void setUp() {
@@ -78,6 +80,14 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void fallbackDoesNotAffectStaticFields() {
+        int expected = StaticContainer.staticInt;
+        pv.giveRed(new TypeTag(StaticContainer.class));
+        stash.restoreAll();
+        assertEquals(expected, StaticContainer.staticInt);
+    }
+
+    @Test
     public void stringListIsSeparateFromIntegerList() {
         pv.addFactory(List.class, new ListTestFactory());
 
@@ -115,5 +125,10 @@ public class PrefabValuesTest {
 
             return new Tuple<>(red, black);
         }
+    }
+
+    private static class StaticContainer {
+        static int staticInt = 2;
+        int regularInt = 3;
     }
 }

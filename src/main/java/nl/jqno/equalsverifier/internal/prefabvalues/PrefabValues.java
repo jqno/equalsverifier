@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+
 import java.util.LinkedHashSet;
 import java.util.Map;
 
@@ -22,6 +24,11 @@ public class PrefabValues {
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
     private final FallbackFactory fallbackFactory = new FallbackFactory();
+    private final StaticFieldValueStash stash;
+
+    public PrefabValues(StaticFieldValueStash stash) {
+        this.stash = stash;
+    }
 
     public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
@@ -53,6 +60,7 @@ public class PrefabValues {
             PrefabValueFactory<T> factory = factoryCache.get(type);
             return factory.createValues(tag, this);
         }
+        stash.backup(type);
         return fallbackFactory.createValues(tag, this, typeStack);
     }
 
