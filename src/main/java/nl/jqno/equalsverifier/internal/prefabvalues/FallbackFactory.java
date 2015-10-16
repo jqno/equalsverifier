@@ -65,12 +65,13 @@ class FallbackFactory {
     private <T> Tuple<T> giveArrayInstances(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
-        Tuple<?> tuple = prefabValues.giveTuple(new TypeTag(componentType), typeStack);
+        TypeTag componentTag = new TypeTag(componentType);
+        prefabValues.realizeCacheFor(componentTag, typeStack);
 
         T red = (T)Array.newInstance(componentType, 1);
-        Array.set(red, 0, tuple.getRed());
+        Array.set(red, 0, prefabValues.giveRed(componentTag));
         T black = (T)Array.newInstance(componentType, 1);
-        Array.set(black, 0, tuple.getBlack());
+        Array.set(black, 0, prefabValues.giveBlack(componentTag));
 
         return new Tuple<>(red, black);
     }
@@ -81,7 +82,7 @@ class FallbackFactory {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                prefabValues.giveTuple(TypeTag.of(field), typeStack);
+                prefabValues.realizeCacheFor(TypeTag.of(field), typeStack);
             }
         }
     }

@@ -35,23 +35,27 @@ public class PrefabValues {
     }
 
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRed();
+        return this.<T>giveTuple(tag, emptyStack()).getRed();
     }
 
     public <T> T giveBlack(TypeTag tag) {
-        return this.<T>giveTuple(tag).getBlack();
+        return this.<T>giveTuple(tag, emptyStack()).getBlack();
     }
 
-    private <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, new LinkedHashSet<TypeTag>());
+    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
+        return cache.getTuple(tag);
     }
 
-    /* default */ <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+    private LinkedHashSet<TypeTag> emptyStack() {
+        return new LinkedHashSet<>();
+    }
+
+    /* default */ <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (!cache.contains(tag)) {
             Tuple<T> tuple = createTuple(tag, typeStack);
             addToCache(tag, tuple);
         }
-        return cache.getTuple(tag);
     }
 
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
@@ -64,7 +68,7 @@ public class PrefabValues {
         return fallbackFactory.createValues(tag, this, typeStack);
     }
 
-    void addToCache(TypeTag tag, Tuple<?> tuple) {
+    private void addToCache(TypeTag tag, Tuple<?> tuple) {
         cache.put(tag, tuple.getRed(), tuple.getBlack());
     }
 
