@@ -81,8 +81,7 @@ class FallbackFactory {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                Tuple<?> tuple = prefabValues.giveTuple(TypeTag.of(field), typeStack);
-                prefabValues.addToCache(tag, tuple);
+                prefabValues.giveTuple(TypeTag.of(field), typeStack);
             }
         }
     }
