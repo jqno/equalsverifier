@@ -16,18 +16,27 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
+    private static final TypeTag INT_TAG = new TypeTag(int.class);
+    private static final TypeTag STRING_ARRAY_TAG = new TypeTag(String[].class);
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     private StaticFieldValueStash stash = new StaticFieldValueStash();
     private PrefabValues pv = new PrefabValues(stash);
 
@@ -77,6 +86,79 @@ public class PrefabValuesTest {
     public void giveBlackFromFallbackFactory() {
         Point actual = pv.giveBlack(POINT_TAG);
         assertEquals(new Point(1337, 1337), actual);
+    }
+
+    @Test
+    public void giveOtherWhenValueIsKnown() {
+        Point red = pv.giveRed(POINT_TAG);
+        Point black = pv.giveBlack(POINT_TAG);
+        assertEquals(black, pv.giveOther(POINT_TAG, red));
+        assertEquals(red, pv.giveOther(POINT_TAG, black));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsCloneOfKnown() {
+        Point red = new Point(42, 42);
+        Point black = new Point(1337, 1337);
+        assertEquals(black, pv.giveOther(POINT_TAG, red));
+        assertEquals(red, pv.giveOther(POINT_TAG, black));
+
+        // Sanity check
+        assertEquals(red, pv.giveRed(POINT_TAG));
+        assertEquals(black, pv.giveBlack(POINT_TAG));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsUnknown() {
+        Point value = new Point(-1, -1);
+        Point expected = pv.giveRed(POINT_TAG);
+        assertEquals(expected, pv.giveOther(POINT_TAG, value));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsPrimitive() {
+        int expected = pv.giveRed(INT_TAG);
+        assertEquals(expected, (int)pv.giveOther(INT_TAG, -10));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsNull() {
+        Point expected = pv.giveRed(POINT_TAG);
+        assertEquals(expected, pv.giveOther(POINT_TAG, null));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsKnownArray() {
+        String[] red = pv.giveRed(STRING_ARRAY_TAG);
+        String[] black = pv.giveBlack(STRING_ARRAY_TAG);
+        assertArrayEquals(black, pv.giveOther(STRING_ARRAY_TAG, red));
+        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, black));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsCloneOfKnownArray() {
+        String[] red = { "r" };
+        String[] black = { "b" };
+        assertArrayEquals(black, pv.giveOther(STRING_ARRAY_TAG, red));
+        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, black));
+
+        // Sanity check
+        assertArrayEquals(red, pv.<String[]>giveRed(STRING_ARRAY_TAG));
+        assertArrayEquals(black, pv.<String[]>giveBlack(STRING_ARRAY_TAG));
+    }
+
+    @Test
+    public void giveOtherWhenValueIsUnknownArray() {
+        String[] value = { "hello world" };
+        String[] expected = pv.giveRed(STRING_ARRAY_TAG);
+        assertArrayEquals(expected, pv.giveOther(STRING_ARRAY_TAG, value));
+    }
+
+    @Test
+    public void giveOtherWhenTagDoesntMatchValue() {
+        thrown.expect(ReflectionException.class);
+        thrown.expectMessage("TypeTag does not match value.");
+        pv.giveOther(POINT_TAG, "not a Point");
     }
 
     @Test

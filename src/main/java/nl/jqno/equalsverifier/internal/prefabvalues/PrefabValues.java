@@ -16,11 +16,16 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
 public class PrefabValues {
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
+
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
     private final FallbackFactory fallbackFactory = new FallbackFactory();
@@ -40,6 +45,31 @@ public class PrefabValues {
 
     public <T> T giveBlack(TypeTag tag) {
         return this.<T>giveTuple(tag, emptyStack()).getBlack();
+    }
+
+    public <T> T giveOther(TypeTag tag, T value) {
+        Class<T> type = tag.getType();
+        if (value != null && !type.isAssignableFrom(value.getClass()) && !wraps(type, value.getClass())) {
+            throw new ReflectionException("TypeTag does not match value.");
+        }
+
+        Tuple<T> tuple = giveTuple(tag, emptyStack());
+        if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
+            return tuple.getBlack();
+        }
+        if (!type.isArray() && tuple.getRed().equals(value)) {
+            return tuple.getBlack();
+        }
+        return tuple.getRed();
+    }
+
+    private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
+        return PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
+    }
+
+    private boolean arraysAreDeeplyEqual(Object x, Object y) {
+        // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
+        return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
     }
 
     private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
@@ -79,6 +109,19 @@ public class PrefabValues {
         for (Map.Entry<TypeTag, Tuple> e : cache.cache.entrySet()) {
             result.put(e.getKey().getType(), e.getValue().getRed(), e.getValue().getBlack());
         }
+        return result;
+    }
+
+    private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
+        Map<Class<?>, Class<?>> result = new HashMap<>();
+        result.put(boolean.class, Boolean.class);
+        result.put(byte.class, Byte.class);
+        result.put(char.class, Character.class);
+        result.put(double.class, Double.class);
+        result.put(float.class, Float.class);
+        result.put(int.class, Integer.class);
+        result.put(long.class, Long.class);
+        result.put(short.class, Short.class);
         return result;
     }
 }
