@@ -35,6 +35,14 @@ public class PrefabValues {
         this.stash = stash;
     }
 
+    public void backupToStash(Class<?> type) {
+        stash.backup(type);
+    }
+
+    public void restoreFromStash() {
+        stash.restoreAll();
+    }
+
     public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
     }

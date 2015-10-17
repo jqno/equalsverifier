@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Rule;
@@ -37,7 +37,7 @@ public class PrefabValuesTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private StaticFieldValueStash stash = new StaticFieldValueStash();
+    private MockStaticFieldValueStash stash = new MockStaticFieldValueStash();
     private PrefabValues pv = new PrefabValues(stash);
 
     @Before
@@ -178,6 +178,18 @@ public class PrefabValuesTest {
 
         assertEquals("r", strings.get(0));
         assertEquals(42, (int)ints.get(0));
+    }
+
+    @Test
+    public void backupDelegatesToStash() {
+        pv.backupToStash(String.class);
+        assertEquals(String.class, stash.lastBackuppedType);
+    }
+
+    @Test
+    public void restoreDelegatesToStash() {
+        pv.restoreFromStash();
+        assertTrue(stash.restoreCalled);
     }
 
     private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
