@@ -47,6 +47,10 @@ public class PrefabValues {
         factoryCache.put(type, factory);
     }
 
+    public <T> void addFactory(Class<T> type, T red, T black) {
+        factoryCache.put(type, new SimpleFactory<>(red, black));
+    }
+
     public <T> T giveRed(TypeTag tag) {
         return this.<T>giveTuple(tag, emptyStack()).getRed();
     }

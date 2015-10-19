@@ -43,7 +43,7 @@ public class PrefabValuesTest {
     @Before
     public void setUp() {
         pv.addFactory(String.class, new AppendingStringTestFactory());
-        pv.addFactory(int.class, new SimpleFactory<>(42, 1337));
+        pv.addFactory(int.class, 42, 1337);
     }
 
     @Test

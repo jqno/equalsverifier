@@ -50,7 +50,7 @@ public class FallbackFactoryTest {
     public void setUp() {
         factory = new FallbackFactory();
         prefabValues = new PrefabValues(new StaticFieldValueStash());
-        prefabValues.addFactory(int.class, new SimpleFactory<>(42, 1337));
+        prefabValues.addFactory(int.class, 42, 1337);
         typeStack = new LinkedHashSet<>();
     }
 

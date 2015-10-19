@@ -97,7 +97,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveType() {
-        prefabValues.addFactory(Node.class, new SimpleFactory<>(new Node(), new Node()));
+        prefabValues.addFactory(Node.class, new Node(), new Node());
         prefabValues.giveRed(NODE_TAG);
     }
 
@@ -109,7 +109,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveArrayType() {
-        prefabValues.addFactory(NodeArray.class, new SimpleFactory<>(new NodeArray(), new NodeArray()));
+        prefabValues.addFactory(NodeArray.class, new NodeArray(), new NodeArray());
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -121,7 +121,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void addTwoStepRecursiveType() {
-        prefabValues.addFactory(TwoStepNodeB.class, new SimpleFactory<>(new TwoStepNodeB(), new TwoStepNodeB()));
+        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -133,7 +133,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void twoStepRecursiveArrayType() {
-        prefabValues.addFactory(TwoStepNodeArrayB.class, new SimpleFactory<>(new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
+        prefabValues.addFactory(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
