@@ -16,6 +16,8 @@
 package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -31,7 +33,9 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertThat;
 
 public class ConditionalPrefabValueBuilderTest {
     @Rule
@@ -69,8 +73,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .instantiate(classes(int.class, int.class, int.class), objects(2009, 5, 1))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(GregorianCalendar.class), is(new GregorianCalendar(1999, 11, 31)));
-        assertThat(prefabValues.getBlack(GregorianCalendar.class), is(new GregorianCalendar(2009, 5, 1)));
+        assertThat(prefabValues.<GregorianCalendar>giveRed(TypeTag.make(GregorianCalendar.class)), is(new GregorianCalendar(1999, 11, 31)));
+        assertThat(prefabValues.<GregorianCalendar>giveBlack(TypeTag.make(GregorianCalendar.class)), is(new GregorianCalendar(2009, 5, 1)));
     }
 
     @Test
@@ -105,18 +109,18 @@ public class ConditionalPrefabValueBuilderTest {
 
     @Test
     public void prefabValuesContainsInstances_whenPrefabValuesAreProvided() {
-        prefabValues.put(String.class, "red", "black");
+        prefabValues.addFactory(String.class, "red", "black");
 
         ConditionalPrefabValueBuilder.of(StringsContainer.class.getName())
                 .instantiate(classes(String.class, String.class), prefabValues)
                 .instantiate(classes(String.class, String.class), prefabValues)
                 .addTo(prefabValues);
 
-        StringsContainer red = prefabValues.getRed(StringsContainer.class);
-        StringsContainer black = prefabValues.getBlack(StringsContainer.class);
+        StringsContainer red = prefabValues.giveRed(TypeTag.make(StringsContainer.class));
+        StringsContainer black = prefabValues.giveBlack(TypeTag.make(StringsContainer.class));
         assertNotEquals(red, black);
-        assertEquals(red.s, prefabValues.getRed(String.class));
-        assertEquals(black.s, prefabValues.getBlack(String.class));
+        assertEquals(red.s, prefabValues.giveRed(TypeTag.make(String.class)));
+        assertEquals(black.s, prefabValues.giveBlack(TypeTag.make(String.class)));
     }
 
     @Test
@@ -129,7 +133,7 @@ public class ConditionalPrefabValueBuilderTest {
 
     @Test
     public void nothingHappens_whenTypeDoesNotExist_givenConstructorWithPrefabValues() {
-        prefabValues.put(String.class, "red", "black");
+        prefabValues.addFactory(String.class, "red", "black");
 
         ConditionalPrefabValueBuilder.of("this.type.does.not.exist")
                 .instantiate(classes(String.class, String.class), prefabValues)
@@ -140,7 +144,7 @@ public class ConditionalPrefabValueBuilderTest {
     }
     @Test
     public void nothingHappens_whenNonExistingConstructorOverloadIsCalled_givenPrefabValues() {
-        prefabValues.put(String.class, "red", "black");
+        prefabValues.addFactory(String.class, "red", "black");
 
         ConditionalPrefabValueBuilder.of(StringsContainer.class.getName())
                 .instantiate(classes(String.class, String.class), prefabValues)
@@ -152,7 +156,7 @@ public class ConditionalPrefabValueBuilderTest {
 
     @Test
     public void throwsBug_whenInstantiateIsCalledMoreThanTwice_givenPrefabValues() {
-        prefabValues.put(String.class, "red", "black");
+        prefabValues.addFactory(String.class, "red", "black");
 
         ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getName())
                 .instantiate(classes(String.class, String.class), prefabValues)
@@ -169,8 +173,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .callFactory("valueOf", classes(int.class), objects(1337))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(Integer.class), is(Integer.valueOf(42)));
-        assertThat(prefabValues.getBlack(Integer.class), is(1337));
+        assertThat(prefabValues.<Integer>giveRed(TypeTag.make(Integer.class)), is(Integer.valueOf(42)));
+        assertThat(prefabValues.<Integer>giveBlack(TypeTag.make(Integer.class)), is(1337));
     }
 
     @Test
@@ -220,8 +224,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(List.class), is((List)Collections.emptyList()));
-        assertThat(prefabValues.getBlack(List.class), is((List)Collections.singletonList(1)));
+        assertThat(prefabValues.<List>giveRed(TypeTag.make(List.class)), is((List) Collections.emptyList()));
+        assertThat(prefabValues.<List>giveBlack(TypeTag.make(List.class)), is((List)Collections.singletonList(1)));
     }
 
     @Test
@@ -281,8 +285,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .withConstant("TEN")
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(BigDecimal.class), is(BigDecimal.ONE));
-        assertThat(prefabValues.getBlack(BigDecimal.class), is(BigDecimal.TEN));
+        assertThat(prefabValues.<BigDecimal>giveRed(TypeTag.make(BigDecimal.class)), is(BigDecimal.ONE));
+        assertThat(prefabValues.<BigDecimal>giveRed(TypeTag.make(BigDecimal.class)), is(BigDecimal.TEN));
     }
 
     @Test
@@ -323,8 +327,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .instantiate(classes(int.class), objects(1337))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(ConditionalInterface.class), is((ConditionalInterface)new ConditionalConcreteClass(42)));
-        assertThat(prefabValues.getBlack(ConditionalInterface.class), is((ConditionalInterface)new ConditionalConcreteClass(1337)));
+        assertThat(prefabValues.giveRed(TypeTag.make(ConditionalInterface.class)), is((Object)new ConditionalConcreteClass(42)));
+        assertThat(prefabValues.giveBlack(TypeTag.make(ConditionalInterface.class)), is((Object)new ConditionalConcreteClass(1337)));
     }
 
     @Test
@@ -335,8 +339,8 @@ public class ConditionalPrefabValueBuilderTest {
                 .instantiate(classes(int.class), objects(1337))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.getRed(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(42)));
-        assertThat(prefabValues.getBlack(ConditionalAbstractClass.class), is((ConditionalAbstractClass)new ConditionalConcreteClass(1337)));
+        assertThat(prefabValues.giveRed(TypeTag.make(ConditionalAbstractClass.class)), is((Object)new ConditionalConcreteClass(42)));
+        assertThat(prefabValues.giveBlack(TypeTag.make(ConditionalAbstractClass.class)), is((Object)new ConditionalConcreteClass(1337)));
     }
 
     @Test
@@ -374,7 +378,7 @@ public class ConditionalPrefabValueBuilderTest {
 
         public PrefabValuesThrowsWhenCalled() { super(null); }
 
-        @Override
+        // @Override
         public <T> void put(Class<T> type, T red, T black) {
             putIsCalled = true;
         }

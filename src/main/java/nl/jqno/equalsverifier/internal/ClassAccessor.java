@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

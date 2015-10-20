@@ -17,6 +17,8 @@ package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 
@@ -119,18 +121,12 @@ class AbstractDelegationChecker<T> implements Checker {
 
     @SuppressWarnings("unchecked")
     private <S> S getRedPrefabValue(Class<?> c) {
-        if (prefabValues.contains(c)) {
-            return (S)prefabValues.getRed(c);
-        }
-        return null;
+        return (S)prefabValues.giveRed(TypeTag.make(c));
     }
 
     @SuppressWarnings("unchecked")
     private <S> S getBlackPrefabValue(Class<?> c) {
-        if (prefabValues.contains(c)) {
-            return (S)prefabValues.getBlack(c);
-        }
-        return null;
+        return (S)prefabValues.giveBlack(TypeTag.make(c));
     }
 
     private Object safelyGetInstance(Class<?> c) {

@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.internal.*;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;

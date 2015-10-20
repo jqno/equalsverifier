@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+
 import java.lang.reflect.Field;
 
 /**

@@ -17,6 +17,8 @@ package nl.jqno.equalsverifier.internal;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -193,10 +195,6 @@ public class FieldAccessor {
         return true;
     }
 
-    private static void createPrefabValues(PrefabValues prefabValues, Class<?> type) {
-        prefabValues.putFor(type);
-    }
-
     private interface FieldModifier {
         void modify() throws IllegalAccessException;
     }
@@ -271,15 +269,8 @@ public class FieldAccessor {
         @Override
         public void modify() throws IllegalAccessException {
             Class<?> type = field.getType();
-            if (prefabValues.contains(type)) {
-                Object newValue = prefabValues.getOther(type, field.get(object));
-                field.set(object, newValue);
-            }
-            else {
-                createPrefabValues(prefabValues, type);
-                Object newValue = prefabValues.getOther(type, field.get(object));
-                field.set(object, newValue);
-            }
+            Object newValue = prefabValues.giveOther(TypeTag.make(type), field.get(object));
+            field.set(object, newValue);
         }
     }
 }

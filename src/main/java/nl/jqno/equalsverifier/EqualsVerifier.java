@@ -18,8 +18,8 @@ package nl.jqno.equalsverifier;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.PrefabValues;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -236,7 +236,7 @@ public final class EqualsVerifier<T> {
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
         }
-        config.getPrefabValues().put(otherType, red, black);
+        config.getPrefabValues().addFactory(otherType, red, black);
         return this;
     }
 

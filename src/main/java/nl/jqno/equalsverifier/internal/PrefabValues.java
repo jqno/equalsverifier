@@ -242,10 +242,10 @@ public class PrefabValues {
     }
 
     private <T> void createAndPutInstances(Class<T> type) {
-        ClassAccessor<T> accessor = ClassAccessor.of(type, this, false);
-        T red = accessor.getRedObject();
-        T black = accessor.getBlackObject();
-        put(type, red, black);
+//        ClassAccessor<T> accessor = ClassAccessor.of(type, this, false);
+//        T red = accessor.getRedObject();
+//        T black = accessor.getBlackObject();
+//        put(type, red, black);
     }
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {

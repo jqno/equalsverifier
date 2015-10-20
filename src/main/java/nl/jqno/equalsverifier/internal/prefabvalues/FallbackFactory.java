@@ -88,7 +88,7 @@ class FallbackFactory {
     }
 
     private <T> Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
-        ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues.$toOld(), false);
+        ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues, false);
         T red = accessor.getRedObject();
         T black = accessor.getBlackObject();
         return new Tuple<>(red, black);

@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
@@ -100,7 +101,7 @@ public class ObjectAccessorScramblingTest {
 
     @Test
     public void scramblePrivateFinalPoint() {
-        prefabValues.put(Point.class, new Point(1, 2), new Point(2, 3));
+        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3));
         FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
         Point before = foo.p;
 
