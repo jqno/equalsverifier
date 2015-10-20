@@ -19,7 +19,7 @@ import nl.jqno.equalsverifier.Configuration;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
@@ -80,7 +80,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
         EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
         MockStaticFieldValueStash mockStash = new MockStaticFieldValueStash();
-        PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitives(mockStash);
+        PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories(mockStash);
 
         // Mock EqualsVerifier's StaticFieldValueStash
         ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);

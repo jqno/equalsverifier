@@ -67,7 +67,7 @@ public class RecursionTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenFieldIsARecursiveType() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getName());
+        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
         EqualsVerifier.forClass(NodeContainer.class)
                 .verify();
     }

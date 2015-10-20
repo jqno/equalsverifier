@@ -242,10 +242,16 @@ public class PrefabValues {
     }
 
     private <T> void createAndPutInstances(Class<T> type) {
-//        ClassAccessor<T> accessor = ClassAccessor.of(type, this, false);
-//        T red = accessor.getRedObject();
-//        T black = accessor.getBlackObject();
-//        put(type, red, black);
+        nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues p =
+                new nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues(new StaticFieldValueStash());
+        for (Map.Entry<Class<?>, Tuple<?>> e : values.entrySet()) {
+            p.addFactory((Class<Object>)e.getKey(), e.getValue().red, e.getValue().black);
+        }
+
+        ClassAccessor<T> accessor = ClassAccessor.of(type, p, false);
+        T red = accessor.getRedObject();
+        T black = accessor.getBlackObject();
+        put(type, red, black);
     }
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {

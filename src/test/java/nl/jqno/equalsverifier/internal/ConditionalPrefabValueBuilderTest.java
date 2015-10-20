@@ -124,14 +124,6 @@ public class ConditionalPrefabValueBuilderTest {
     }
 
     @Test
-    public void throwsBug_whenRequiredPrefabValuesAreNotAvailable() {
-        ConditionalPrefabValueBuilder builder = ConditionalPrefabValueBuilder.of(StringsContainer.class.getName());
-
-        thrown.expect(EqualsVerifierBugException.class);
-        builder.instantiate(classes(String.class, String.class), prefabValues);
-    }
-
-    @Test
     public void nothingHappens_whenTypeDoesNotExist_givenConstructorWithPrefabValues() {
         prefabValues.addFactory(String.class, "red", "black");
 
@@ -286,7 +278,7 @@ public class ConditionalPrefabValueBuilderTest {
                 .addTo(prefabValues);
 
         assertThat(prefabValues.<BigDecimal>giveRed(TypeTag.make(BigDecimal.class)), is(BigDecimal.ONE));
-        assertThat(prefabValues.<BigDecimal>giveRed(TypeTag.make(BigDecimal.class)), is(BigDecimal.TEN));
+        assertThat(prefabValues.<BigDecimal>giveBlack(TypeTag.make(BigDecimal.class)), is(BigDecimal.TEN));
     }
 
     @Test
