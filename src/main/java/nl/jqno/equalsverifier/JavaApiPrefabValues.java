@@ -78,22 +78,22 @@ public final class JavaApiPrefabValues {
 
     private void addPrimitiveClasses() {
         prefabValues.addFactory(boolean.class, true, false);
-        prefabValues.addFactory(byte.class, (byte) 1, (byte) 2);
+        prefabValues.addFactory(byte.class, (byte)1, (byte)2);
         prefabValues.addFactory(char.class, 'a', 'b');
         prefabValues.addFactory(double.class, 0.5D, 1.0D);
         prefabValues.addFactory(float.class, 0.5F, 1.0F);
         prefabValues.addFactory(int.class, 1, 2);
         prefabValues.addFactory(long.class, 1L, 2L);
-        prefabValues.addFactory(short.class, (short) 1, (short) 2);
+        prefabValues.addFactory(short.class, (short)1, (short)2);
 
         prefabValues.addFactory(Boolean.class, true, false);
-        prefabValues.addFactory(Byte.class, (byte) 1, (byte) 2);
+        prefabValues.addFactory(Byte.class, (byte)1, (byte)2);
         prefabValues.addFactory(Character.class, 'a', 'b');
         prefabValues.addFactory(Double.class, 0.5D, 1.0D);
         prefabValues.addFactory(Float.class, 0.5F, 1.0F);
         prefabValues.addFactory(Integer.class, 1, 2);
         prefabValues.addFactory(Long.class, 1L, 2L);
-        prefabValues.addFactory(Short.class, (short) 1, (short) 2);
+        prefabValues.addFactory(Short.class, (short)1, (short)2);
 
         prefabValues.addFactory(Object.class, new Object(), new Object());
         prefabValues.addFactory(Class.class, Class.class, Object.class);
@@ -199,16 +199,22 @@ public final class JavaApiPrefabValues {
 
     private void addJavaFxClasses() {
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableList")
-                .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.giveRed(TypeTag.make(List.class))))
-                .callFactory("javafx.collections.FXCollections", "observableList", classes(List.class), objects(prefabValues.giveBlack(TypeTag.make(List.class))))
+                .callFactory("javafx.collections.FXCollections", "observableList",
+                        classes(List.class), objects(prefabValues.giveRed(TypeTag.make(List.class))))
+                .callFactory("javafx.collections.FXCollections", "observableList",
+                        classes(List.class), objects(prefabValues.giveBlack(TypeTag.make(List.class))))
                 .addTo(prefabValues);
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableMap")
-                .callFactory("javafx.collections.FXCollections", "observableMap", classes(Map.class), objects(prefabValues.giveRed(TypeTag.make(Map.class))))
-                .callFactory("javafx.collections.FXCollections", "observableMap", classes(Map.class), objects(prefabValues.giveBlack(TypeTag.make(Map.class))))
+                .callFactory("javafx.collections.FXCollections", "observableMap",
+                        classes(Map.class), objects(prefabValues.giveRed(TypeTag.make(Map.class))))
+                .callFactory("javafx.collections.FXCollections", "observableMap",
+                        classes(Map.class), objects(prefabValues.giveBlack(TypeTag.make(Map.class))))
                 .addTo(prefabValues);
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableSet")
-                .callFactory("javafx.collections.FXCollections", "observableSet", classes(Set.class), objects(prefabValues.giveRed(TypeTag.make(Set.class))))
-                .callFactory("javafx.collections.FXCollections", "observableSet", classes(Set.class), objects(prefabValues.giveBlack(TypeTag.make(Set.class))))
+                .callFactory("javafx.collections.FXCollections", "observableSet",
+                        classes(Set.class), objects(prefabValues.giveRed(TypeTag.make(Set.class))))
+                .callFactory("javafx.collections.FXCollections", "observableSet",
+                        classes(Set.class), objects(prefabValues.giveBlack(TypeTag.make(Set.class))))
                 .addTo(prefabValues);
         ConditionalPrefabValueBuilder.of("javafx.beans.property.BooleanProperty")
                 .withConcreteClass("javafx.beans.property.SimpleBooleanProperty")

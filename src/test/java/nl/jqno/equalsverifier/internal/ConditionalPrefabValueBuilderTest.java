@@ -216,7 +216,7 @@ public class ConditionalPrefabValueBuilderTest {
                 .callFactory("java.util.Collections", "singletonList", classes(Object.class), objects(1))
                 .addTo(prefabValues);
 
-        assertThat(prefabValues.<List>giveRed(TypeTag.make(List.class)), is((List) Collections.emptyList()));
+        assertThat(prefabValues.<List>giveRed(TypeTag.make(List.class)), is((List)Collections.emptyList()));
         assertThat(prefabValues.<List>giveBlack(TypeTag.make(List.class)), is((List)Collections.singletonList(1)));
     }
 

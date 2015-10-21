@@ -53,7 +53,7 @@ public final class TypeTag {
     }
 
     /**
-     * Temporary factory
+     * Temporary factory.
      */
     public static TypeTag make(Class<?> type) {
         return new TypeTag(type);
