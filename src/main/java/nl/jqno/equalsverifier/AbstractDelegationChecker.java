@@ -76,7 +76,7 @@ class AbstractDelegationChecker<T> implements Checker {
         for (Field field : FieldIterable.of(type)) {
             Class<?> c = field.getType();
             Object instance = safelyGetInstance(c);
-            Object copy = safelyGetInstance(c);
+            Object copy = safelyCopyInstance(instance);
             if (instance != null && copy != null) {
                 checkAbstractMethods(c, instance, copy, true);
             }
@@ -140,6 +140,15 @@ class AbstractDelegationChecker<T> implements Checker {
         catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null.
             return null;
+        }
+    }
+
+    private Object safelyCopyInstance(Object o) {
+        try {
+            return ObjectAccessor.of(o).copy();
+        }
+        catch (Throwable ignored) {
+            return o;
         }
     }
 
