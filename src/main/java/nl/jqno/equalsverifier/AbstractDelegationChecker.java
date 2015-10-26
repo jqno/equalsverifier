@@ -76,8 +76,8 @@ class AbstractDelegationChecker<T> implements Checker {
         for (Field field : FieldIterable.of(type)) {
             Class<?> c = field.getType();
             Object instance = safelyGetInstance(c);
-            Object copy = safelyCopyInstance(instance);
-            if (instance != null && copy != null) {
+            if (instance != null) {
+                Object copy = safelyCopyInstance(instance);
                 checkAbstractMethods(c, instance, copy, true);
             }
         }
