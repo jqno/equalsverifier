@@ -34,10 +34,10 @@ import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends IntegrationTestBase {
-    private static final Object INSTANCE_1 = new Object();
-    private static final Object INSTANCE_2 = new Object();
-    private static final Object STATIC = new Object();
-    private static final Object STATIC_FINAL = new Object();
+    private static final String INSTANCE_1 = "instance 1";
+    private static final String INSTANCE_2 = "instance 2";
+    private static final String STATIC = "static";
+    private static final String STATIC_FINAL = "static final";
 
     @Test
     public void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
@@ -98,11 +98,11 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     static final class CorrectEquals {
-        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
-        private static Object staticValue = STATIC;
-        private final Object instanceValue;
+        private static final String STATIC_FINAL_VALUE = STATIC_FINAL;
+        private static String staticValue = STATIC;
+        private final String instanceValue;
 
-        public CorrectEquals(Object instanceValue) { this.instanceValue = instanceValue; }
+        public CorrectEquals(String instanceValue) { this.instanceValue = instanceValue; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
@@ -127,8 +127,8 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     abstract static class SuperContainer {
-        private static final Object STATIC_FINAL_VALUE = STATIC_FINAL;
-        private static Object staticValue = STATIC;
+        private static final String STATIC_FINAL_VALUE = STATIC_FINAL;
+        private static String staticValue = STATIC;
 
         private final CorrectEquals foo;
 
