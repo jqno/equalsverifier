@@ -109,7 +109,7 @@ public class PrefabValues {
         Class<T> type = tag.getType();
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
-            return factory.createValues(tag, this);
+            return factory.createValues(tag, this, typeStack);
         }
         stash.backup(type);
         return fallbackFactory.createValues(tag, this, typeStack);

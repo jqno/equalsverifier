@@ -16,14 +16,20 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import java.util.Collection;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 public abstract class CollectionFactory<T extends Collection> implements PrefabValueFactory<T> {
     public abstract T createEmpty();
 
     @Override
-    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues) {
+    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        @SuppressWarnings("unchecked")
+        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
+        clone.add(tag);
+
         TypeTag entryTag = determineActualTypeTagFor(0, tag);
+        prefabValues.realizeCacheFor(entryTag, typeStack);
 
         T red = createEmpty();
         red.add(prefabValues.giveRed(entryTag));

@@ -38,6 +38,7 @@ public class CollectionFactoryTest {
     private static final CollectionFactory<Set> SET_FACTORY = new StubSetPrefabValueFactory();
 
     private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private String red;
     private String black;
     private Object redObject;
@@ -54,28 +55,28 @@ public class CollectionFactoryTest {
 
     @Test
     public void createListsOfString() {
-        Tuple<List> tuple = LIST_FACTORY.createValues(STRINGLIST_TYPETAG, prefabValues);
+        Tuple<List> tuple = LIST_FACTORY.createValues(STRINGLIST_TYPETAG, prefabValues, typeStack);
         assertEquals(listOf(red), tuple.getRed());
         assertEquals(listOf(black), tuple.getBlack());
     }
 
     @Test
     public void createSetsOfString() {
-        Tuple<Set> tuple = SET_FACTORY.createValues(STRINGSET_TYPETAG, prefabValues);
+        Tuple<Set> tuple = SET_FACTORY.createValues(STRINGSET_TYPETAG, prefabValues, typeStack);
         assertEquals(setOf(red), tuple.getRed());
         assertEquals(setOf(black), tuple.getBlack());
     }
 
     @Test
     public void createListsOfWildcard() {
-        Tuple<List> tuple = LIST_FACTORY.createValues(WILDCARDLIST_TYPETAG, prefabValues);
+        Tuple<List> tuple = LIST_FACTORY.createValues(WILDCARDLIST_TYPETAG, prefabValues, typeStack);
         assertEquals(listOf(redObject), tuple.getRed());
         assertEquals(listOf(blackObject), tuple.getBlack());
     }
 
     @Test
     public void createRawLists() {
-        Tuple<List> tuple = LIST_FACTORY.createValues(RAWLIST_TYPETAG, prefabValues);
+        Tuple<List> tuple = LIST_FACTORY.createValues(RAWLIST_TYPETAG, prefabValues, typeStack);
         assertEquals(listOf(redObject), tuple.getRed());
         assertEquals(listOf(blackObject), tuple.getBlack());
     }

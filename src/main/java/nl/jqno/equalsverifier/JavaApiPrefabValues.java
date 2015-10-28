@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
+import nl.jqno.equalsverifier.internal.prefabvalues.CollectionFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -41,6 +42,7 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
  *
  * @author Jan Ouwens
  */
+@SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC_ANON", justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
     private PrefabValues prefabValues;
 
@@ -127,7 +129,12 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
-        addCollectionToPrefabValues(List.class, new ArrayList(), new ArrayList());
+        prefabValues.addFactory(List.class, new CollectionFactory<List>() {
+            @Override
+            public List createEmpty() {
+                return new ArrayList<>();
+            }
+        });
         addCollectionToPrefabValues(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
         addCollectionToPrefabValues(LinkedList.class, new LinkedList(), new LinkedList());
         addCollectionToPrefabValues(ArrayList.class, new ArrayList(), new ArrayList());

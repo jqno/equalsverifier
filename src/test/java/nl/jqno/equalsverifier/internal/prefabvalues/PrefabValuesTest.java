@@ -24,6 +24,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -49,9 +50,9 @@ public class PrefabValuesTest {
     @Test
     public void sanityTestFactoryIncreasesStringLength() {
         AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertEquals("r", f.createValues(null, null).getRed());
-        assertEquals("rr", f.createValues(null, null).getRed());
-        assertEquals("rrr", f.createValues(null, null).getRed());
+        assertEquals("r", f.createValues(null, null, null).getRed());
+        assertEquals("rr", f.createValues(null, null, null).getRed());
+        assertEquals("rrr", f.createValues(null, null, null).getRed());
     }
 
     @Test
@@ -199,7 +200,7 @@ public class PrefabValuesTest {
         public AppendingStringTestFactory() { red = ""; black = ""; }
 
         @Override
-        public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues) {
+        public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
             red += "r"; black += "b";
             return new Tuple<>(red, black);
         }
@@ -208,7 +209,7 @@ public class PrefabValuesTest {
     private static class ListTestFactory implements PrefabValueFactory<List> {
         @Override
         @SuppressWarnings("unchecked")
-        public Tuple<List> createValues(TypeTag tag, PrefabValues prefabValues) {
+        public Tuple<List> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
             List red = new ArrayList<>();

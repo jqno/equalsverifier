@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import java.util.LinkedHashSet;
+
 public class SimpleFactory<T> implements PrefabValueFactory<T> {
     private Tuple<T> tuple;
 
@@ -23,7 +25,7 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues) {
+    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         return tuple;
     }
 }
