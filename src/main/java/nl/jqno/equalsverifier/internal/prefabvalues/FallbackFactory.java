@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -27,10 +26,6 @@ import java.util.LinkedHashSet;
 
 class FallbackFactory {
     public <T> Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        if (typeStack.contains(tag)) {
-            throw new TypeTagRecursionException(typeStack);
-        }
-
         @SuppressWarnings("unchecked")
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
         clone.add(tag);
