@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
@@ -84,14 +85,22 @@ public final class TypeTag {
         }
         if (type instanceof GenericArrayType) {
             GenericArrayType gat = (GenericArrayType)type;
-            Type t = gat.getGenericComponentType();
-            return new TypeTag(GenericArray.class, resolve(t));
+            TypeTag tag = resolve(gat.getGenericComponentType());
+            String arrayTypeName = "[L" + tag.getType().getName() + ";";
+            Class<?> arrayType;
+            try {
+                arrayType = Class.forName(arrayTypeName);
+            }
+            catch (ClassNotFoundException e) {
+                throw new ReflectionException("Can't find type " + arrayTypeName);
+            }
+            return new TypeTag(arrayType, tag.getGenericTypes());
         }
         if (type instanceof WildcardType) {
             return new TypeTag(Wildcard.class);
         }
         if (type instanceof java.lang.reflect.TypeVariable) {
-            return new TypeTag(TypeTag.TypeVariable.class);
+            return new TypeTag(TypeVariable.class);
         }
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
@@ -164,9 +173,4 @@ public final class TypeTag {
      * Represents a variable type parameter like {@code List<T>}.
      */
     public static final class TypeVariable {}
-
-    /**
-     * Represents a generic array type parameter like {@code List<T>[]}.
-     */
-    public static final class GenericArray {}
 }

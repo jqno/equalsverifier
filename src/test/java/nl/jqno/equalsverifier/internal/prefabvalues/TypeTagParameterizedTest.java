@@ -70,7 +70,7 @@ public class TypeTagParameterizedTest<T> {
                                         new TypeTag(Float.class)))) },
                 { "rawMapField", new TypeTag(Map.class) },
                 { "fieldWithWildcardParameter", new TypeTag(List.class, new TypeTag(TypeTag.Wildcard.class)) },
-                { "fieldWithGenericArrayParameter", new TypeTag(TypeTag.GenericArray.class, new TypeTag(Class.class, new TypeTag(String.class))) },
+                { "fieldWithGenericArrayParameter", new TypeTag(Class[].class, new TypeTag(String.class)) },
                 { "fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)) },
                 { "primitiveField", new TypeTag(int.class) },
                 { "arrayField", new TypeTag(String[].class) }
