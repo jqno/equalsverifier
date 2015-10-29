@@ -244,6 +244,11 @@ public class TypeHelper {
         public Interface[] interfaces = new Interface[] { null };
     }
 
+    public static final class GenericListContainer {
+        public List<String> stringList = new ArrayList<>();
+        public List<Integer> integerList = new ArrayList<>();
+    }
+
     public static final class ObjectContainer {
         public Object field = new Object();
     }

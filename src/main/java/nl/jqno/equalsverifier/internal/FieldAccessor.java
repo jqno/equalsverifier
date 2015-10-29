@@ -268,8 +268,7 @@ public class FieldAccessor {
 
         @Override
         public void modify() throws IllegalAccessException {
-            Class<?> type = field.getType();
-            Object newValue = prefabValues.giveOther(TypeTag.make(type), field.get(object));
+            Object newValue = prefabValues.giveOther(TypeTag.of(field), field.get(object));
             field.set(object, newValue);
         }
     }

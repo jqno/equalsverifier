@@ -398,6 +398,14 @@ public class FieldAccessorTest {
     }
 
     @Test
+    public void changeGenericField() {
+        GenericListContainer foo = new GenericListContainer();
+        doChangeField(foo, "stringList");
+        doChangeField(foo, "integerList");
+        assertNotEquals(foo.stringList, foo.integerList);
+    }
+
+    @Test
     public void addPrefabValues() {
         PointContainer foo = new PointContainer(new Point(1, 2));
         prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
