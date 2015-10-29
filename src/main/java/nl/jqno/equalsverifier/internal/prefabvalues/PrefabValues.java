@@ -119,16 +119,6 @@ public class PrefabValues {
         cache.put(tag, tuple.getRed(), tuple.getBlack());
     }
 
-    // When this method is removed, make Cache.cache private
-    // CHECKSTYLE: ignore MethodName for 1 line.
-    nl.jqno.equalsverifier.internal.PrefabValues $toOld() {
-        nl.jqno.equalsverifier.internal.PrefabValues result = new nl.jqno.equalsverifier.internal.PrefabValues();
-        for (Map.Entry<TypeTag, Tuple> e : cache.cache.entrySet()) {
-            result.put(e.getKey().getType(), e.getValue().getRed(), e.getValue().getBlack());
-        }
-        return result;
-    }
-
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
         Map<Class<?>, Class<?>> result = new HashMap<>();
         result.put(boolean.class, Boolean.class);

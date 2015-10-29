@@ -16,25 +16,13 @@
 package nl.jqno.equalsverifier.testhelpers;
 
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 public final class PrefabValuesFactory {
     private PrefabValuesFactory() {}
 
-    public static nl.jqno.equalsverifier.internal.PrefabValues withPrimitives(StaticFieldValueStash stash) {
-        nl.jqno.equalsverifier.internal.PrefabValues result = new nl.jqno.equalsverifier.internal.PrefabValues(stash);
-        result.put(boolean.class, true, false);
-        result.put(byte.class, (byte)1, (byte)2);
-        result.put(char.class, 'a', 'b');
-        result.put(double.class, 0.5D, 1.0D);
-        result.put(float.class, 0.5F, 1.0F);
-        result.put(int.class, 1, 2);
-        result.put(long.class, 1L, 2L);
-        result.put(short.class, (short)1, (short)2);
-        return result;
-    }
-
-    public static nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues withPrimitiveFactories(StaticFieldValueStash stash) {
-        nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues result = new nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues(stash);
+    public static PrefabValues withPrimitiveFactories(StaticFieldValueStash stash) {
+        PrefabValues result = new PrefabValues(stash);
         result.addFactory(boolean.class, true, false);
         result.addFactory(byte.class, (byte)1, (byte)2);
         result.addFactory(char.class, 'a', 'b');
