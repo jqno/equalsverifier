@@ -24,8 +24,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
 
-class FallbackFactory {
-    public <T> Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+class FallbackFactory<T> implements PrefabValueFactory<T> {
+    @Override
+    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         @SuppressWarnings("unchecked")
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
         clone.add(tag);
@@ -42,7 +43,7 @@ class FallbackFactory {
         return giveInstances(type, prefabValues);
     }
 
-    private <T> Tuple<T> giveEnumInstances(TypeTag tag) {
+    private Tuple<T> giveEnumInstances(TypeTag tag) {
         Class<T> type = tag.getType();
         T[] enumConstants = type.getEnumConstants();
 
@@ -57,7 +58,7 @@ class FallbackFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Tuple<T> giveArrayInstances(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+    private Tuple<T> giveArrayInstances(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
@@ -82,7 +83,7 @@ class FallbackFactory {
         }
     }
 
-    private <T> Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
+    private Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
         ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues, false);
         T red = accessor.getRedObject();
         T black = accessor.getBlackObject();

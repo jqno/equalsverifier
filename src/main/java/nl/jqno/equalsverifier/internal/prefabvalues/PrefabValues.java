@@ -29,7 +29,7 @@ public class PrefabValues {
 
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
-    private final FallbackFactory fallbackFactory = new FallbackFactory();
+    private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
     private final StaticFieldValueStash stash;
 
     public PrefabValues(StaticFieldValueStash stash) {
@@ -112,7 +112,10 @@ public class PrefabValues {
             return factory.createValues(tag, this, typeStack);
         }
         stash.backup(type);
-        return fallbackFactory.createValues(tag, this, typeStack);
+
+        @SuppressWarnings("unchecked")
+        Tuple<T> result = (Tuple<T>)fallbackFactory.createValues(tag, this, typeStack);
+        return result;
     }
 
     private void addToCache(TypeTag tag, Tuple<?> tuple) {

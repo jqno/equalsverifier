@@ -42,13 +42,13 @@ public class FallbackFactoryTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private FallbackFactory factory;
+    private FallbackFactory<?> factory;
     private PrefabValues prefabValues;
     private LinkedHashSet<TypeTag> typeStack;
 
     @Before
     public void setUp() {
-        factory = new FallbackFactory();
+        factory = new FallbackFactory<>();
         prefabValues = new PrefabValues(new StaticFieldValueStash());
         prefabValues.addFactory(int.class, 42, 1337);
         typeStack = new LinkedHashSet<>();
@@ -57,7 +57,7 @@ public class FallbackFactoryTest {
     @Test
     public void dontGiveEmptyEnum() {
         thrown.expect(ReflectionException.class);
-        new FallbackFactory().createValues(new TypeTag(EmptyEnum.class), prefabValues, typeStack);
+        new FallbackFactory<>().createValues(new TypeTag(EmptyEnum.class), prefabValues, typeStack);
     }
 
     @Test
