@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -103,7 +103,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveType() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         prefabValues.giveRed(NODE_TAG);
     }
 
@@ -115,7 +115,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveArrayType() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -127,7 +127,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddTwoStepRecursiveType() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -139,7 +139,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddTwoStepRecursiveArrayType() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 

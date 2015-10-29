@@ -16,8 +16,8 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -86,20 +86,20 @@ public class FallbackFactoryTest {
 
     @Test
     public void dontGiveRecursiveClass() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         factory.createValues(new TypeTag(Node.class), prefabValues, typeStack);
     }
 
     @Test
     public void dontGiveTwoStepRecursiveClass() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         thrown.expectMessage(allOf(containsString("TwoStepNodeA"), containsString("TwoStepNodeB")));
         factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack);
     }
 
     @Test
     public void dontGiveRecursiveArray() {
-        thrown.expect(TypeTagRecursionException.class);
+        thrown.expect(RecursionException.class);
         factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack);
     }
 

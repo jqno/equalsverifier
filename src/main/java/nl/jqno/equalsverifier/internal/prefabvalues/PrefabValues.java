@@ -16,8 +16,8 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.exceptions.TypeTagRecursionException;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -103,7 +103,7 @@ public class PrefabValues {
 
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (typeStack.contains(tag)) {
-            throw new TypeTagRecursionException(typeStack);
+            throw new RecursionException(typeStack);
         }
 
         Class<T> type = tag.getType();
