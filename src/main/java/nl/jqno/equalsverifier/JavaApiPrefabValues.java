@@ -44,6 +44,10 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
  */
 @SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC_ANON", justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
+    private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
+        @Override public int compare(Object o1, Object o2) { return Integer.compare(o1.hashCode(), o2.hashCode()); }
+    };
+
     private PrefabValues prefabValues;
 
     /**
@@ -124,20 +128,25 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
-        addCollectionToPrefabValues(Collection.class, new ArrayList(), new ArrayList());
+        prefabValues.addFactory(Collection.class, new CollectionFactory<Collection>() {
+            @Override public Collection createEmpty() { return new ArrayList<>(); }
+        });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
         prefabValues.addFactory(List.class, new CollectionFactory<List>() {
-            @Override
-            public List createEmpty() {
-                return new ArrayList<>();
-            }
+            @Override public List createEmpty() { return new ArrayList<>(); }
         });
-        addCollectionToPrefabValues(CopyOnWriteArrayList.class, new CopyOnWriteArrayList(), new CopyOnWriteArrayList());
-        addCollectionToPrefabValues(LinkedList.class, new LinkedList(), new LinkedList());
-        addCollectionToPrefabValues(ArrayList.class, new ArrayList(), new ArrayList());
+        prefabValues.addFactory(CopyOnWriteArrayList.class, new CollectionFactory<CopyOnWriteArrayList>() {
+            @Override public CopyOnWriteArrayList createEmpty() { return new CopyOnWriteArrayList<>(); }
+        });
+        prefabValues.addFactory(LinkedList.class, new CollectionFactory<LinkedList>() {
+            @Override public LinkedList createEmpty() { return new LinkedList<>(); }
+        });
+        prefabValues.addFactory(ArrayList.class, new CollectionFactory<ArrayList>() {
+            @Override public ArrayList createEmpty() { return new ArrayList<>(); }
+        });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -158,11 +167,21 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addSets() {
-        addCollectionToPrefabValues(Set.class, new HashSet(), new HashSet());
-        addCollectionToPrefabValues(SortedSet.class, new TreeSet(), new TreeSet());
-        addCollectionToPrefabValues(NavigableSet.class, new TreeSet(), new TreeSet());
-        addCollectionToPrefabValues(CopyOnWriteArraySet.class, new CopyOnWriteArraySet(), new CopyOnWriteArraySet());
-        addCollectionToPrefabValues(TreeSet.class, new TreeSet(), new TreeSet());
+        prefabValues.addFactory(Set.class, new CollectionFactory<Set>() {
+            @Override public Set createEmpty() { return new HashSet(); }
+        });
+        prefabValues.addFactory(SortedSet.class, new CollectionFactory<SortedSet>() {
+            @Override public SortedSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
+        });
+        prefabValues.addFactory(NavigableSet.class, new CollectionFactory<NavigableSet>() {
+            @Override public NavigableSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
+        });
+        prefabValues.addFactory(CopyOnWriteArraySet.class, new CollectionFactory<CopyOnWriteArraySet>() {
+            @Override public CopyOnWriteArraySet createEmpty() { return new CopyOnWriteArraySet<>(); }
+        });
+        prefabValues.addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
+            @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
+        });
         prefabValues.addFactory(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 
         BitSet redBitSet = new BitSet();
@@ -366,12 +385,6 @@ public final class JavaApiPrefabValues {
                 .instantiate(classes(int.class, int.class), objects(6, 1))
                 .instantiate(classes(int.class, int.class), objects(7, 26))
                 .addTo(prefabValues);
-    }
-
-    private <T extends Collection<Object>> void addCollectionToPrefabValues(Class<T> type, T red, T black) {
-        red.add("red");
-        black.add("black");
-        prefabValues.addFactory(type, red, black);
     }
 
     private <T extends Map<Object, Object>> void addMapToPrefabValues(Class<T> type, T red, T black) {
