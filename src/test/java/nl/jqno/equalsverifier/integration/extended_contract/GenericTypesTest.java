@@ -20,22 +20,27 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class GenericTypesTest {
     @Test
-    public void succeed_whenEqualsLooksAtFieldsGenericContent() {
+    public void succeed_whenEqualsLooksAtListFieldsGenericContent() {
         EqualsVerifier.forClass(ListContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtSetFieldsGenericContent() {
+        EqualsVerifier.forClass(SetContainer.class)
                 .verify();
     }
 
     static final class ListContainer {
         private final List<Point> list;
 
-        public ListContainer(List<Point> list) {
-            this.list = list;
-        }
+        public ListContainer(List<Point> list) { this.list = list; }
 
         @Override
         public boolean equals(Object obj) {
@@ -59,14 +64,35 @@ public class GenericTypesTest {
             return true;
         }
 
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ListContainer: " + list; }
+    }
+
+    static final class SetContainer {
+        private final Set<Point> set;
+
+        public SetContainer(Set<Point> set) { this.set = set; }
         @Override
-        public int hashCode() {
-            return defaultHashCode(this);
+        public boolean equals(Object obj) {
+            if (!(obj instanceof SetContainer)) {
+                return false;
+            }
+            SetContainer other = (SetContainer)obj;
+            if (set == null || other.set == null) {
+                return set == other.set;
+            }
+            if (set.size() != other.set.size()) {
+                return false;
+            }
+            for (Point p : set) {
+                if (!other.set.contains(p)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        @Override
-        public String toString() {
-            return "ListContainer: " + list;
-        }
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "SetContainer: " + set; }
     }
 }
