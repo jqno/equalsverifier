@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-final class Tuple<T> {
+public final class Tuple<T> {
     private final T red;
     private final T black;
 
