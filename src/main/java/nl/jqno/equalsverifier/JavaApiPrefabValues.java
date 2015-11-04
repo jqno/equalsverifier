@@ -161,7 +161,6 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(ConcurrentNavigableMap.class, new MapFactory<ConcurrentNavigableMap>() {
             @Override public ConcurrentNavigableMap createEmpty() { return new ConcurrentSkipListMap<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
         prefabValues.addFactory(ConcurrentHashMap.class, new MapFactory<ConcurrentHashMap>() {
             @Override public ConcurrentHashMap createEmpty() { return new ConcurrentHashMap<>(); }
         });
@@ -183,6 +182,8 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(WeakHashMap.class, new MapFactory<WeakHashMap>() {
             @Override public WeakHashMap createEmpty() { return new WeakHashMap<>(); }
         });
+
+        prefabValues.addFactory(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -202,6 +203,7 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
             @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
+
         prefabValues.addFactory(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
 
         BitSet redBitSet = new BitSet();
