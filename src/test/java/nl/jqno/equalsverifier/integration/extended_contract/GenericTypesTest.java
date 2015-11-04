@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
@@ -34,6 +35,12 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtSetFieldsGenericContent() {
         EqualsVerifier.forClass(SetContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtMapFieldsGenericContent() {
+        EqualsVerifier.forClass(MapContainer.class)
                 .verify();
     }
 
@@ -94,5 +101,37 @@ public class GenericTypesTest {
 
         @Override public int hashCode() { return defaultHashCode(this); }
         @Override public String toString() { return "SetContainer: " + set; }
+    }
+
+    static final class MapContainer {
+        private final Map<Point, Point> map;
+
+        public MapContainer(Map<Point, Point> map) { this.map = map; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof MapContainer)) {
+                return false;
+            }
+            MapContainer other = (MapContainer)obj;
+            if (map == null || other.map == null) {
+                return map == other.map;
+            }
+            if (map.size() != other.map.size()) {
+                return false;
+            }
+            for (Map.Entry<Point, Point> e : map.entrySet()) {
+                if (!other.map.containsKey(e.getKey())) {
+                    return false;
+                }
+                if (!other.map.get(e.getKey()).equals(e.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "MapContainer: " + map; }
     }
 }
