@@ -15,23 +15,27 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import java.util.Collection;
 import java.util.LinkedHashSet;
+import java.util.Map;
 
-public abstract class CollectionFactory<T extends Collection> extends AbstractCollectionFactory<T> {
+public abstract class MapFactory<T extends Map> extends AbstractCollectionFactory<T> {
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         @SuppressWarnings("unchecked")
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
         clone.add(tag);
 
-        TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        prefabValues.realizeCacheFor(entryTag, typeStack);
+        TypeTag keyTag = determineActualTypeTagFor(0, tag);
+        TypeTag valueTag = determineActualTypeTagFor(1, tag);
+        prefabValues.realizeCacheFor(keyTag, typeStack);
+        prefabValues.realizeCacheFor(valueTag, typeStack);
 
+        // Use red for key and black for value in the Red map to avoid having identical keys and values.
+        // But don't do it in the Black map, or they may cancel each other out again.
         T red = createEmpty();
-        red.add(prefabValues.giveRed(entryTag));
+        red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         T black = createEmpty();
-        black.add(prefabValues.giveBlack(entryTag));
+        black.put(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
 
         return new Tuple<>(red, black);
     }
