@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -41,6 +42,18 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtMapFieldsGenericContent() {
         EqualsVerifier.forClass(MapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtListOfTFieldsGenericContent() {
+        EqualsVerifier.forClass(ListOfTContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
+        EqualsVerifier.forClass(ArrayOfTContainer.class)
                 .verify();
     }
 
@@ -133,5 +146,67 @@ public class GenericTypesTest {
 
         @Override public int hashCode() { return defaultHashCode(this); }
         @Override public String toString() { return "MapContainer: " + map; }
+    }
+
+    static final class ListOfTContainer<T> {
+        private final List<T> list;
+
+        public ListOfTContainer(List<T> list) { this.list = list; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ListOfTContainer)) {
+                return false;
+            }
+            ListOfTContainer other = (ListOfTContainer)obj;
+            if (list == null || other.list == null) {
+                return list == other.list;
+            }
+            if (list.size() != other.list.size()) {
+                return false;
+            }
+            for (int i = 0; i < list.size(); i++) {
+                T x = list.get(i);
+                Object y = other.list.get(i);
+                if (!x.equals(y)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ListOfTContainer: " + list; }
+    }
+
+    static final class ArrayOfTContainer<T> {
+        private final T[] array;
+
+        public ArrayOfTContainer(T[] array) { this.array = array; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ArrayOfTContainer)) {
+                return false;
+            }
+            ArrayOfTContainer other = (ArrayOfTContainer)obj;
+            if (array == null || other.array == null) {
+                return array == other.array;
+            }
+            if (array.length != other.array.length) {
+                return false;
+            }
+            for (int i = 0; i < array.length; i++) {
+                T x = array[i];
+                Object y = other.array[i];
+                if (!x.equals(y)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return Arrays.hashCode(array); }
+        @Override public String toString() { return "ArrayOfTContainer: " + array; }
     }
 }
