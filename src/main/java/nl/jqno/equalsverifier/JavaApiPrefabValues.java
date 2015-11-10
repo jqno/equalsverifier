@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
 
@@ -273,13 +274,22 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
+    @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
-        ConditionalPrefabValueBuilder.of("javafx.collections.ObservableList")
-                .callFactory("javafx.collections.FXCollections", "observableList",
-                        classes(List.class), objects(prefabValues.giveRed(TypeTag.make(List.class))))
-                .callFactory("javafx.collections.FXCollections", "observableList",
-                        classes(List.class), objects(prefabValues.giveBlack(TypeTag.make(List.class))))
-                .addTo(prefabValues);
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableList"), new AbstractPrefabValueFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
+                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.collections.ObservableList");
+                TypeTag listTag = new TypeTag(List.class, determineActualTypeTagFor(0, tag));
+
+                Object red = ci.callFactory("javafx.collections.FXCollections", "observableList",
+                        classes(List.class), objects(pf.giveRed(listTag)));
+                Object black = ci.callFactory("javafx.collections.FXCollections", "observableList",
+                        classes(List.class), objects(pf.giveBlack(listTag)));
+
+                return new Tuple(red, black);
+            }
+        });
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableMap")
                 .callFactory("javafx.collections.FXCollections", "observableMap",
                         classes(Map.class), objects(prefabValues.giveRed(TypeTag.make(Map.class))))
