@@ -17,9 +17,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import java.util.List;
 
-abstract class AbstractCollectionFactory<T> implements PrefabValueFactory<T> {
-    public abstract T createEmpty();
-
+public abstract class AbstractPrefabValueFactory<T> implements PrefabValueFactory<T> {
     protected TypeTag determineActualTypeTagFor(int n, TypeTag typeTag) {
         TypeTag objectTypeTag = new TypeTag(Object.class);
 

@@ -18,7 +18,9 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-public abstract class MapFactory<T extends Map> extends AbstractCollectionFactory<T> {
+public abstract class MapFactory<T extends Map> extends AbstractPrefabValueFactory<T> {
+    public abstract T createEmpty();
+
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         @SuppressWarnings("unchecked")
