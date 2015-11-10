@@ -42,6 +42,17 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenEqualsLooksAtObservableSetFieldsGenericContent() {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> type = compile(JAVAFX_OBSERVABLESET_CONTAINER_CLASS_NAME, JAVAFX_OBSERVABLESET_CONTAINER_CLASS);
+        EqualsVerifier.forClass(type)
+                .verify();
+    }
+
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME = "JavaFXObservableListContainer";
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS =
@@ -118,6 +129,46 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n                if (!other.map.get(e.getKey()).equals(e.getValue())) {" +
             "\n                        return false;" +
             "\n                }" +
+            "\n        }" +
+            "\n        return true;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
+
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
+    private static final String JAVAFX_OBSERVABLESET_CONTAINER_CLASS_NAME = "JavaFXObservableSetContainer";
+    private static final String JAVAFX_OBSERVABLESET_CONTAINER_CLASS =
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\nimport nl.jqno.equalsverifier.testhelpers.types.Point;" +
+            "\nimport javafx.collections.ObservableSet;" +
+            "\n" +
+            "\npublic final class JavaFXObservableSetContainer {" +
+            "\n    private final ObservableSet<Point> set;" +
+            "\n    " +
+            "\n    public JavaFXObservableSetContainer(ObservableSet<Point> set) {" +
+            "\n        this.set = set;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof JavaFXObservableSetContainer)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        JavaFXObservableSetContainer other = (JavaFXObservableSetContainer)obj;" +
+            "\n        if (set == null || other.set == null) {" +
+            "\n            return set == other.set;" +
+            "\n        }" +
+            "\n        if (set.size() != other.set.size()) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        for (Point p : set) {" +
+            "\n            if (!other.set.contains(p)) {" +
+            "\n                return false;" +
+            "\n            }" +
             "\n        }" +
             "\n        return true;" +
             "\n    }" +
