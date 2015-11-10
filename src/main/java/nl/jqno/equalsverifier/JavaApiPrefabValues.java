@@ -290,12 +290,20 @@ public final class JavaApiPrefabValues {
                 return new Tuple(red, black);
             }
         });
-        ConditionalPrefabValueBuilder.of("javafx.collections.ObservableMap")
-                .callFactory("javafx.collections.FXCollections", "observableMap",
-                        classes(Map.class), objects(prefabValues.giveRed(TypeTag.make(Map.class))))
-                .callFactory("javafx.collections.FXCollections", "observableMap",
-                        classes(Map.class), objects(prefabValues.giveBlack(TypeTag.make(Map.class))))
-                .addTo(prefabValues);
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableMap"), new AbstractPrefabValueFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues pf , LinkedHashSet typeStack) {
+                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.collections.ObservableMap");
+                TypeTag mapTag = new TypeTag(Map.class, determineActualTypeTagFor(0, tag), determineActualTypeTagFor(1, tag));
+
+                Object red = ci.callFactory("javafx.collections.FXCollections", "observableMap",
+                        classes(Map.class), objects(pf.giveRed(mapTag)));
+                Object black = ci.callFactory("javafx.collections.FXCollections", "observableMap",
+                        classes(Map.class), objects(pf.giveBlack(mapTag)));
+
+                return new Tuple(red, black);
+            }
+        });
         ConditionalPrefabValueBuilder.of("javafx.collections.ObservableSet")
                 .callFactory("javafx.collections.FXCollections", "observableSet",
                         classes(Set.class), objects(prefabValues.giveRed(TypeTag.make(Set.class))))

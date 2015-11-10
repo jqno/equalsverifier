@@ -31,6 +31,17 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenEqualsLooksAtObservableMapFieldsGenericContent() {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> type = compile(JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS_NAME, JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS);
+        EqualsVerifier.forClass(type)
+                .verify();
+    }
+
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME = "JavaFXObservableListContainer";
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS =
@@ -63,6 +74,50 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n            if (!x.equals(y)) {" +
             "\n                return false;" +
             "\n            }" +
+            "\n        }" +
+            "\n        return true;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
+
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
+    private static final String JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS_NAME = "JavaFXObservableMapContainer";
+    private static final String JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS =
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\nimport nl.jqno.equalsverifier.testhelpers.types.Point;" +
+            "\nimport java.util.Map;" +
+            "\nimport javafx.collections.ObservableMap;" +
+            "\n" +
+            "\npublic final class JavaFXObservableMapContainer {" +
+            "\n    private final ObservableMap<Point, Point> map;" +
+            "\n    " +
+            "\n    public JavaFXObservableMapContainer(ObservableMap<Point, Point> map) {" +
+            "\n        this.map = map;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof JavaFXObservableMapContainer)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        JavaFXObservableMapContainer other = (JavaFXObservableMapContainer)obj;" +
+            "\n        if (map == null || other.map == null) {" +
+            "\n                return map == other.map;" +
+            "\n        }" +
+            "\n        if (map.size() != other.map.size()) {" +
+            "\n                return false;" +
+            "\n        }" +
+            "\n        for (Map.Entry<Point, Point> e : map.entrySet()) {" +
+            "\n                if (!other.map.containsKey(e.getKey())) {" +
+            "\n                        return false;" +
+            "\n                }" +
+            "\n                if (!other.map.get(e.getKey()).equals(e.getValue())) {" +
+            "\n                        return false;" +
+            "\n                }" +
             "\n        }" +
             "\n        return true;" +
             "\n    }" +
