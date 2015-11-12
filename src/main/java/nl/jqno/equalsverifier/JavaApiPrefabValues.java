@@ -342,13 +342,17 @@ public final class JavaApiPrefabValues {
                 .withConcreteClass("javafx.beans.property.SimpleIntegerProperty")
                 .instantiate(classes(int.class), objects(2))
                 .addTo(prefabValues);
-        Class<?> observableList = forName("javafx.collections.ObservableList");
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.ListProperty")
-                .withConcreteClass("javafx.beans.property.SimpleListProperty")
-                .instantiate(classes(observableList), prefabValues)
-                .withConcreteClass("javafx.beans.property.SimpleListProperty")
-                .instantiate(classes(observableList), prefabValues)
-                .addTo(prefabValues);
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.ListProperty"), new AbstractPrefabValueFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+                Class<?> observableList = forName("javafx.collections.ObservableList");
+                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleListProperty");
+                TypeTag listTag = new TypeTag(observableList, determineActualTypeTagFor(0, tag));
+                Object red = ci.instantiate(classes(observableList), objects(prefabValues.giveRed(listTag)));
+                Object black = ci.instantiate(classes(observableList), objects(prefabValues.giveBlack(listTag)));
+                return new Tuple(red, black);
+            }
+        });
         ConditionalPrefabValueBuilder.of("javafx.beans.property.LongProperty")
                 .withConcreteClass("javafx.beans.property.SimpleLongProperty")
                 .instantiate(classes(long.class), objects(1L))

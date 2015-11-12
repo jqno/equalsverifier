@@ -53,6 +53,17 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenEqualsLooksAtListPropertyFieldsGenericContent() {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> type = compile(JAVAFX_LISTPROPERTY_CONTAINER_CLASS_NAME, JAVAFX_LISTPROPERTY_CONTAINER_CLASS);
+        EqualsVerifier.forClass(type)
+                .verify();
+    }
+
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME = "JavaFXObservableListContainer";
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS =
@@ -171,6 +182,42 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n            }" +
             "\n        }" +
             "\n        return true;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
+
+    private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS_NAME = "JavaFXListPropertyContainer";
+    private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS =
+            "\nimport javafx.beans.property.ListProperty;" +
+            "\nimport nl.jqno.equalsverifier.testhelpers.types.Point;" +
+            "\nimport java.util.Objects;" +
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\n" +
+            "\npublic final class JavaFXListPropertyContainer {" +
+            "\n    private final ListProperty<Point> p;" +
+            "\n    " +
+            "\n    public JavaFXListPropertyContainer(ListProperty<Point> p) {" +
+            "\n        this.p = p;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof JavaFXListPropertyContainer)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        JavaFXListPropertyContainer other = (JavaFXListPropertyContainer)obj;" +
+            "\n        if (p != null && other.p != null && p.size() > 0 && other.p.size() > 0) {" +
+            "\n            Point x = p.getValue().get(0);" +
+            "\n            Point y = other.p.getValue().get(0);" +
+            "\n            if (!x.equals(y)) {" +
+            "\n                return false;" +
+            "\n            }" +
+            "\n        }" +
+            "\n        return Objects.equals(p, other.p);" +
             "\n    }" +
             "\n    " +
             "\n    @Override" +
