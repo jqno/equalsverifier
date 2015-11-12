@@ -359,26 +359,34 @@ public final class JavaApiPrefabValues {
                 .withConcreteClass("javafx.beans.property.SimpleLongProperty")
                 .instantiate(classes(long.class), objects(2L))
                 .addTo(prefabValues);
-        Class<?> observableMap = forName("javafx.collections.ObservableMap");
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.MapProperty")
-                .withConcreteClass("javafx.beans.property.SimpleMapProperty")
-                .instantiate(classes(observableMap), prefabValues)
-                .withConcreteClass("javafx.beans.property.SimpleMapProperty")
-                .instantiate(classes(observableMap), prefabValues)
-                .addTo(prefabValues);
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.MapProperty"), new AbstractPrefabValueFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+                Class<?> observableMap = forName("javafx.collections.ObservableMap");
+                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleMapProperty");
+                TypeTag mapTag = new TypeTag(observableMap, determineActualTypeTagFor(0, tag), determineActualTypeTagFor(1, tag));
+                Object red = ci.instantiate(classes(observableMap), objects(prefabValues.giveRed(mapTag)));
+                Object black = ci.instantiate(classes(observableMap), objects(prefabValues.giveBlack(mapTag)));
+                return new Tuple(red, black);
+            }
+        });
         ConditionalPrefabValueBuilder.of("javafx.beans.property.ObjectProperty")
                 .withConcreteClass("javafx.beans.property.SimpleObjectProperty")
                 .instantiate(classes(Object.class), objects(new Object()))
                 .withConcreteClass("javafx.beans.property.SimpleObjectProperty")
                 .instantiate(classes(Object.class), objects(new Object()))
                 .addTo(prefabValues);
-        Class<?> observableSet = forName("javafx.collections.ObservableSet");
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.SetProperty")
-                .withConcreteClass("javafx.beans.property.SimpleSetProperty")
-                .instantiate(classes(observableSet), prefabValues)
-                .withConcreteClass("javafx.beans.property.SimpleSetProperty")
-                .instantiate(classes(observableSet), prefabValues)
-                .addTo(prefabValues);
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.SetProperty"), new AbstractPrefabValueFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+                Class<?> observableSet = forName("javafx.collections.ObservableSet");
+                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleSetProperty");
+                TypeTag setTag = new TypeTag(observableSet, determineActualTypeTagFor(0, tag));
+                Object red = ci.instantiate(classes(observableSet), objects(prefabValues.giveRed(setTag)));
+                Object black = ci.instantiate(classes(observableSet), objects(prefabValues.giveBlack(setTag)));
+                return new Tuple(red, black);
+            }
+        });
         ConditionalPrefabValueBuilder.of("javafx.beans.property.StringProperty")
                 .withConcreteClass("javafx.beans.property.SimpleStringProperty")
                 .instantiate(classes(String.class), objects("one"))

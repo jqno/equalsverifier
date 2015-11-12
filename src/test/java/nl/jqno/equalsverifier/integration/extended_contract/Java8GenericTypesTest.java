@@ -64,6 +64,28 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenEqualsLooksAtMapPropertyFieldsGenericContent() {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> type = compile(JAVAFX_MAPPROPERTY_CONTAINER_CLASS_NAME, JAVAFX_MAPPROPERTY_CONTAINER_CLASS);
+        EqualsVerifier.forClass(type)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtSetPropertyFieldsGenericContent() {
+        if (!isJava8Available()) {
+            return;
+        }
+
+        Class<?> type = compile(JAVAFX_SETPROPERTY_CONTAINER_CLASS_NAME, JAVAFX_SETPROPERTY_CONTAINER_CLASS);
+        EqualsVerifier.forClass(type)
+                .verify();
+    }
+
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME = "JavaFXObservableListContainer";
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS =
@@ -214,6 +236,76 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n            Point x = p.getValue().get(0);" +
             "\n            Point y = other.p.getValue().get(0);" +
             "\n            if (!x.equals(y)) {" +
+            "\n                return false;" +
+            "\n            }" +
+            "\n        }" +
+            "\n        return Objects.equals(p, other.p);" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
+
+    private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS_NAME = "JavaFXMapPropertyContainer";
+    private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS =
+            "\nimport javafx.beans.property.MapProperty;" +
+            "\nimport nl.jqno.equalsverifier.testhelpers.types.Point;" +
+            "\nimport java.util.Objects;" +
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\n" +
+            "\npublic final class JavaFXMapPropertyContainer {" +
+            "\n    private final MapProperty<Point, Point> p;" +
+            "\n    " +
+            "\n    public JavaFXMapPropertyContainer(MapProperty<Point, Point> p) {" +
+            "\n        this.p = p;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof JavaFXMapPropertyContainer)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        JavaFXMapPropertyContainer other = (JavaFXMapPropertyContainer)obj;" +
+            "\n        if (p != null && other.p != null && p.size() > 0 && other.p.size() > 0) {" +
+            "\n            Point x = p.getValue().keySet().iterator().next(); " +
+            "\n            if (!other.p.getValue().containsKey(x)) {" +
+            "\n                return false;" +
+            "\n            }" +
+            "\n        }" +
+            "\n        return Objects.equals(p, other.p);" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public int hashCode() {" +
+            "\n        return defaultHashCode(this);" +
+            "\n    }" +
+            "\n}";
+
+    private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS_NAME = "JavaFXSetPropertyContainer";
+    private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS =
+            "\nimport javafx.beans.property.SetProperty;" +
+            "\nimport nl.jqno.equalsverifier.testhelpers.types.Point;" +
+            "\nimport java.util.Objects;" +
+            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
+            "\n" +
+            "\npublic final class JavaFXSetPropertyContainer {" +
+            "\n    private final SetProperty<Point> p;" +
+            "\n    " +
+            "\n    public JavaFXSetPropertyContainer(SetProperty<Point> p) {" +
+            "\n        this.p = p;" +
+            "\n    }" +
+            "\n    " +
+            "\n    @Override" +
+            "\n    public boolean equals(Object obj) {" +
+            "\n        if (!(obj instanceof JavaFXSetPropertyContainer)) {" +
+            "\n            return false;" +
+            "\n        }" +
+            "\n        JavaFXSetPropertyContainer other = (JavaFXSetPropertyContainer)obj;" +
+            "\n        if (p != null && other.p != null && p.size() > 0 && other.p.size() > 0) {" +
+            "\n            Point x = p.getValue().iterator().next(); " +
+            "\n            if (!other.p.getValue().contains(x)) {" +
             "\n                return false;" +
             "\n            }" +
             "\n        }" +
