@@ -212,6 +212,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS_NAME = "JavaFXListPropertyContainer";
     private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS =
             "\nimport javafx.beans.property.ListProperty;" +
@@ -248,6 +249,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS_NAME = "JavaFXMapPropertyContainer";
     private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS =
             "\nimport javafx.beans.property.MapProperty;" +
@@ -283,6 +285,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
+    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS_NAME = "JavaFXSetPropertyContainer";
     private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS =
             "\nimport javafx.beans.property.SetProperty;" +

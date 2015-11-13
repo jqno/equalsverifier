@@ -344,12 +344,12 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
         prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.ListProperty"), new AbstractPrefabValueFactory() {
             @Override
-            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
                 Class<?> observableList = forName("javafx.collections.ObservableList");
                 ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleListProperty");
                 TypeTag listTag = new TypeTag(observableList, determineActualTypeTagFor(0, tag));
-                Object red = ci.instantiate(classes(observableList), objects(prefabValues.giveRed(listTag)));
-                Object black = ci.instantiate(classes(observableList), objects(prefabValues.giveBlack(listTag)));
+                Object red = ci.instantiate(classes(observableList), objects(pf.giveRed(listTag)));
+                Object black = ci.instantiate(classes(observableList), objects(pf.giveBlack(listTag)));
                 return new Tuple(red, black);
             }
         });
@@ -361,12 +361,12 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
         prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.MapProperty"), new AbstractPrefabValueFactory() {
             @Override
-            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
                 Class<?> observableMap = forName("javafx.collections.ObservableMap");
                 ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleMapProperty");
                 TypeTag mapTag = new TypeTag(observableMap, determineActualTypeTagFor(0, tag), determineActualTypeTagFor(1, tag));
-                Object red = ci.instantiate(classes(observableMap), objects(prefabValues.giveRed(mapTag)));
-                Object black = ci.instantiate(classes(observableMap), objects(prefabValues.giveBlack(mapTag)));
+                Object red = ci.instantiate(classes(observableMap), objects(pf.giveRed(mapTag)));
+                Object black = ci.instantiate(classes(observableMap), objects(pf.giveBlack(mapTag)));
                 return new Tuple(red, black);
             }
         });
@@ -378,12 +378,12 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
         prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.SetProperty"), new AbstractPrefabValueFactory() {
             @Override
-            public Tuple createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet typeStack) {
+            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
                 Class<?> observableSet = forName("javafx.collections.ObservableSet");
                 ConditionalInstantiator ci = new ConditionalInstantiator("javafx.beans.property.SimpleSetProperty");
                 TypeTag setTag = new TypeTag(observableSet, determineActualTypeTagFor(0, tag));
-                Object red = ci.instantiate(classes(observableSet), objects(prefabValues.giveRed(setTag)));
-                Object black = ci.instantiate(classes(observableSet), objects(prefabValues.giveBlack(setTag)));
+                Object red = ci.instantiate(classes(observableSet), objects(pf.giveRed(setTag)));
+                Object black = ci.instantiate(classes(observableSet), objects(pf.giveBlack(setTag)));
                 return new Tuple(red, black);
             }
         });
