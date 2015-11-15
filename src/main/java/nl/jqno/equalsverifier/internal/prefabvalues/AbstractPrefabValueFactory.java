@@ -15,22 +15,35 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractPrefabValueFactory<T> implements PrefabValueFactory<T> {
-    protected TypeTag determineActualTypeTagFor(int n, TypeTag typeTag) {
-        TypeTag objectTypeTag = new TypeTag(Object.class);
+    private static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
 
+    protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
+        List<TypeTag> genericTypes = new ArrayList<>();
+        for (TypeTag tag : source.getGenericTypes()) {
+            genericTypes.add(makeConcrete(tag));
+        }
+        return new TypeTag(type, genericTypes.toArray(new TypeTag[genericTypes.size()]));
+    }
+
+    protected TypeTag determineActualTypeTagFor(int n, TypeTag typeTag) {
         List<TypeTag> genericTypes = typeTag.getGenericTypes();
         if (genericTypes.size() <= n) {
-            return objectTypeTag;
+            return OBJECT_TYPE_TAG;
         }
 
         TypeTag innerTag = genericTypes.get(n);
-        if (innerTag.getType().equals(TypeTag.Wildcard.class)) {
-            return objectTypeTag;
+        return makeConcrete(innerTag);
+    }
+
+    private TypeTag makeConcrete(TypeTag tag) {
+        if (tag.getType().equals(TypeTag.Wildcard.class)) {
+            return OBJECT_TYPE_TAG;
         }
 
-        return innerTag;
+        return tag;
     }
 }

@@ -68,6 +68,7 @@ public class ConditionalInstantiator {
                 return null;
             }
             Constructor<?> c = type.getConstructor(paramTypes);
+            c.setAccessible(true);
             return c.newInstance(paramValues);
         }
         catch (Exception e) {
