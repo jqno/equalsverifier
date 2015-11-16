@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractPrefabValueFactory<T> implements PrefabValueFactory<T> {
-    private static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
+    public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
         List<TypeTag> genericTypes = new ArrayList<>();

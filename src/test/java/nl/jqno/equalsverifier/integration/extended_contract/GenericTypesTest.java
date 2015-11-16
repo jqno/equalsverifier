@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
@@ -54,6 +56,18 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
         EqualsVerifier.forClass(ArrayOfTContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtImmutableListFieldsGenericContent() {
+        EqualsVerifier.forClass(ImmutableListContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
+        EqualsVerifier.forClass(ImmutableMapContainer.class)
                 .verify();
     }
 
@@ -208,5 +222,68 @@ public class GenericTypesTest {
 
         @Override public int hashCode() { return Arrays.hashCode(array); }
         @Override public String toString() { return "ArrayOfTContainer: " + array; }
+    }
+
+    static final class ImmutableListContainer {
+        private final ImmutableList<Point> list;
+
+        public ImmutableListContainer(ImmutableList<Point> list) { this.list = list; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ImmutableListContainer)) {
+                return false;
+            }
+            ImmutableListContainer other = (ImmutableListContainer)obj;
+            if (list == null || other.list == null) {
+                return list == other.list;
+            }
+            if (list.size() != other.list.size()) {
+                return false;
+            }
+            for (int i = 0; i < list.size(); i++) {
+                Point x = list.get(i);
+                Point y = other.list.get(i);
+                if (!x.equals(y)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ImmutableListContainer: " + list; }
+    }
+
+    static final class ImmutableMapContainer {
+        private final ImmutableMap<Point, Point> map;
+
+        public ImmutableMapContainer(ImmutableMap<Point, Point> map) { this.map = map; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ImmutableMapContainer)) {
+                return false;
+            }
+            ImmutableMapContainer other = (ImmutableMapContainer)obj;
+            if (map == null || other.map == null) {
+                return map == other.map;
+            }
+            if (map.size() != other.map.size()) {
+                return false;
+            }
+            for (Map.Entry<Point, Point> e : map.entrySet()) {
+                if (!other.map.containsKey(e.getKey())) {
+                    return false;
+                }
+                if (!other.map.get(e.getKey()).equals(e.getValue())) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ImmutableMapContainer: " + map; }
     }
 }

@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxCollectionFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxPropertyFactory;
 
@@ -32,6 +33,8 @@ import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory.Kind.COLLECTION;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory.Kind.MAP;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
@@ -336,15 +339,12 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
+    @SuppressWarnings("unchecked")
     private void addGoogleGuavaClasses() {
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableList")
-                .callFactory("of", classes(Object.class), objects("red"))
-                .callFactory("of", classes(Object.class), objects("black"))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableMap")
-                .callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
-                .callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
-                .addTo(prefabValues);
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableList"),
+                new GuavaCollectionFactory("ImmutableList", COLLECTION));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMap"),
+                new GuavaCollectionFactory("ImmutableMap", MAP));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSet")
                 .callFactory("of", classes(Object.class), objects("red"))
                 .callFactory("of", classes(Object.class), objects("black"))
