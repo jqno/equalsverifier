@@ -314,10 +314,8 @@ public final class JavaApiPrefabValues {
                 new GuavaCollectionFactory("ImmutableList", COLLECTION));
         prefabValues.addFactory(forName("com.google.common.collect.ImmutableMap"),
                 new GuavaCollectionFactory("ImmutableMap", MAP));
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSet")
-                .callFactory("of", classes(Object.class), objects("red"))
-                .callFactory("of", classes(Object.class), objects("black"))
-                .addTo(prefabValues);
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSet"),
+                new GuavaCollectionFactory("ImmutableSet", COLLECTION));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMap")
                 .callFactory("of", classes(Comparable.class, Object.class), objects("red", "value"))
                 .callFactory("of", classes(Comparable.class, Object.class), objects("black", "value"))
@@ -326,26 +324,18 @@ public final class JavaApiPrefabValues {
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
                 .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableMultiset")
-                .callFactory("of", classes(Object.class), objects("red"))
-                .callFactory("of", classes(Object.class), objects("black"))
-                .addTo(prefabValues);
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMultiset"),
+                new GuavaCollectionFactory("ImmutableMultiset", COLLECTION));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
                 .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableListMultimap")
-                .callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
-                .callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSetMultimap")
-                .callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
-                .callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableBiMap")
-                .callFactory("of", classes(Object.class, Object.class), objects("red", "value"))
-                .callFactory("of", classes(Object.class, Object.class), objects("black", "value"))
-                .addTo(prefabValues);
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableListMultimap"),
+                new GuavaCollectionFactory("ImmutableListMultimap", MAP));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSetMultimap"),
+                new GuavaCollectionFactory("ImmutableSetMultimap", MAP));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBiMap"),
+                new GuavaCollectionFactory("ImmutableBiMap", MAP));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("red", "X", "value"))
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("black", "X", "value"))
