@@ -276,48 +276,15 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableList"), new AbstractPrefabValueFactory() {
-            @Override
-            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
-                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.collections.ObservableList");
-                TypeTag listTag = new TypeTag(List.class, determineActualTypeTagFor(0, tag));
-
-                Object red = ci.callFactory("javafx.collections.FXCollections", "observableList",
-                        classes(List.class), objects(pf.giveRed(listTag)));
-                Object black = ci.callFactory("javafx.collections.FXCollections", "observableList",
-                        classes(List.class), objects(pf.giveBlack(listTag)));
-
-                return new Tuple(red, black);
-            }
-        });
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableMap"), new AbstractPrefabValueFactory() {
-            @Override
-            public Tuple createValues(TypeTag tag, PrefabValues pf , LinkedHashSet typeStack) {
-                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.collections.ObservableMap");
-                TypeTag mapTag = new TypeTag(Map.class, determineActualTypeTagFor(0, tag), determineActualTypeTagFor(1, tag));
-
-                Object red = ci.callFactory("javafx.collections.FXCollections", "observableMap",
-                        classes(Map.class), objects(pf.giveRed(mapTag)));
-                Object black = ci.callFactory("javafx.collections.FXCollections", "observableMap",
-                        classes(Map.class), objects(pf.giveBlack(mapTag)));
-
-                return new Tuple(red, black);
-            }
-        });
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableSet"), new AbstractPrefabValueFactory() {
-            @Override
-            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
-                ConditionalInstantiator ci = new ConditionalInstantiator("javafx.collections.ObservableSet");
-                TypeTag setTag = new TypeTag(Set.class, determineActualTypeTagFor(0, tag));
-
-                Object red = ci.callFactory("javafx.collections.FXCollections", "observableSet",
-                        classes(Set.class), objects(pf.giveRed(setTag)));
-                Object black = ci.callFactory("javafx.collections.FXCollections", "observableSet",
-                        classes(Set.class), objects(pf.giveBlack(setTag)));
-
-                return new Tuple(red, black);
-            }
-        });
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableList"),
+                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableList", List.class,
+                        "javafx.collections.FXCollections", "observableList"));
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableMap"),
+                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableMap", Map.class,
+                        "javafx.collections.FXCollections", "observableMap"));
+        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableSet"),
+                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableSet", Set.class,
+                        "javafx.collections.FXCollections", "observableSet"));
         ConditionalPrefabValueBuilder.of("javafx.beans.property.BooleanProperty")
                 .withConcreteClass("javafx.beans.property.SimpleBooleanProperty")
                 .instantiate(classes(boolean.class), objects(true))
