@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +30,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class SingleParamTagCopyingInstantiatingReflectiveFactoryTest {
+public class JavaFxCollectionFactoryTest {
     private PrefabValues prefabValues;
 
     @Before
@@ -40,8 +44,8 @@ public class SingleParamTagCopyingInstantiatingReflectiveFactoryTest {
         TypeTag tag = new TypeTag(GenericContainer.class, new TypeTag(String.class));
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
-        PrefabValueFactory<GenericContainer> factory =
-                new SingleParamTagCopyingInstantiatingReflectiveFactory<>(GenericContainer.class.getName(), List.class);
+        PrefabValueFactory<GenericContainer> factory = new JavaFxCollectionFactory<>(
+                GenericContainer.class.getName(), List.class, GenericContainerFactory.class.getName(), "createGenericContainer");
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
@@ -54,8 +58,8 @@ public class SingleParamTagCopyingInstantiatingReflectiveFactoryTest {
         TypeTag tag = new TypeTag(GenericMultiContainer.class, new TypeTag(String.class), new TypeTag(Point.class));
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
-        PrefabValueFactory<GenericMultiContainer> factory =
-                new SingleParamTagCopyingInstantiatingReflectiveFactory<>(GenericMultiContainer.class.getName(), Map.class);
+        PrefabValueFactory<GenericMultiContainer> factory = new JavaFxCollectionFactory<>(
+                GenericMultiContainer.class.getName(), Map.class, GenericContainerFactory.class.getName(), "createGenericMultiContainer");
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
@@ -79,6 +83,16 @@ public class SingleParamTagCopyingInstantiatingReflectiveFactoryTest {
 
         public GenericMultiContainer(Map<K, V> t) {
             this.t = t;
+        }
+    }
+
+    private static final class GenericContainerFactory {
+        public static <T> GenericContainer<T> createGenericContainer(List<T> t) {
+            return new GenericContainer<>(t);
+        }
+
+        public static <K, V> GenericMultiContainer<K, V> createGenericMultiContainer(Map<K, V> t) {
+            return new GenericMultiContainer<>(t);
         }
     }
 }

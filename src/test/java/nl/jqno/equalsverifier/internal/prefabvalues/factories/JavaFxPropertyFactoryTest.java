@@ -13,10 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +30,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class SingleParamTagCopyingStaticMethodCallingReflectiveFactoryTest {
+public class JavaFxPropertyFactoryTest {
     private PrefabValues prefabValues;
 
     @Before
@@ -41,8 +45,7 @@ public class SingleParamTagCopyingStaticMethodCallingReflectiveFactoryTest {
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
         PrefabValueFactory<GenericContainer> factory =
-                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory<>(GenericContainer.class.getName(), List.class,
-                        GenericContainerFactory.class.getName(), "createGenericContainer");
+                new JavaFxPropertyFactory<>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
@@ -56,8 +59,7 @@ public class SingleParamTagCopyingStaticMethodCallingReflectiveFactoryTest {
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
         PrefabValueFactory<GenericMultiContainer> factory =
-                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory<>(GenericMultiContainer.class.getName(), Map.class,
-                        GenericContainerFactory.class.getName(), "createGenericMultiContainer");
+                new JavaFxPropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
@@ -81,16 +83,6 @@ public class SingleParamTagCopyingStaticMethodCallingReflectiveFactoryTest {
 
         public GenericMultiContainer(Map<K, V> t) {
             this.t = t;
-        }
-    }
-
-    private static final class GenericContainerFactory {
-        public static <T> GenericContainer<T> createGenericContainer(List<T> t) {
-            return new GenericContainer<>(t);
-        }
-
-        public static <K, V> GenericMultiContainer<K, V> createGenericMultiContainer(Map<K, V> t) {
-            return new GenericMultiContainer<>(t);
         }
     }
 }

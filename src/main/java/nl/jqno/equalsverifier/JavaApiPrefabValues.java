@@ -16,9 +16,10 @@
 package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxCollectionFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxPropertyFactory;
 
 import javax.naming.Reference;
 import java.io.File;
@@ -276,15 +277,12 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableList"),
-                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableList", List.class,
-                        "javafx.collections.FXCollections", "observableList"));
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableMap"),
-                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableMap", Map.class,
-                        "javafx.collections.FXCollections", "observableMap"));
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.collections.ObservableSet"),
-                new SingleParamTagCopyingStaticMethodCallingReflectiveFactory("javafx.collections.ObservableSet", Set.class,
-                        "javafx.collections.FXCollections", "observableSet"));
+        prefabValues.addFactory(forName("javafx.collections.ObservableList"),
+                new JavaFxCollectionFactory("ObservableList", List.class, "observableList"));
+        prefabValues.addFactory(forName("javafx.collections.ObservableMap"),
+                new JavaFxCollectionFactory("ObservableMap", Map.class, "observableMap"));
+        prefabValues.addFactory(forName("javafx.collections.ObservableSet"),
+                new JavaFxCollectionFactory("ObservableSet", Set.class, "observableSet"));
         ConditionalPrefabValueBuilder.of("javafx.beans.property.BooleanProperty")
                 .withConcreteClass("javafx.beans.property.SimpleBooleanProperty")
                 .instantiate(classes(boolean.class), objects(true))
@@ -310,8 +308,8 @@ public final class JavaApiPrefabValues {
                 .instantiate(classes(int.class), objects(2))
                 .addTo(prefabValues);
         Class<?> observableList = forName("javafx.collections.ObservableList");
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.ListProperty"),
-                new SingleParamTagCopyingInstantiatingReflectiveFactory("javafx.beans.property.SimpleListProperty", observableList));
+        prefabValues.addFactory(forName("javafx.beans.property.ListProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleListProperty", observableList));
         ConditionalPrefabValueBuilder.of("javafx.beans.property.LongProperty")
                 .withConcreteClass("javafx.beans.property.SimpleLongProperty")
                 .instantiate(classes(long.class), objects(1L))
@@ -319,8 +317,8 @@ public final class JavaApiPrefabValues {
                 .instantiate(classes(long.class), objects(2L))
                 .addTo(prefabValues);
         Class<?> observableMap = forName("javafx.collections.ObservableMap");
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.MapProperty"),
-                new SingleParamTagCopyingInstantiatingReflectiveFactory("javafx.beans.property.SimpleMapProperty", observableMap));
+        prefabValues.addFactory(forName("javafx.beans.property.MapProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleMapProperty", observableMap));
         ConditionalPrefabValueBuilder.of("javafx.beans.property.ObjectProperty")
                 .withConcreteClass("javafx.beans.property.SimpleObjectProperty")
                 .instantiate(classes(Object.class), objects(new Object()))
@@ -328,8 +326,8 @@ public final class JavaApiPrefabValues {
                 .instantiate(classes(Object.class), objects(new Object()))
                 .addTo(prefabValues);
         Class<?> observableSet = forName("javafx.collections.ObservableSet");
-        prefabValues.addFactory(ConditionalInstantiator.forName("javafx.beans.property.SetProperty"),
-                new SingleParamTagCopyingInstantiatingReflectiveFactory("javafx.beans.property.SimpleSetProperty", observableSet));
+        prefabValues.addFactory(forName("javafx.beans.property.SetProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleSetProperty", observableSet));
         ConditionalPrefabValueBuilder.of("javafx.beans.property.StringProperty")
                 .withConcreteClass("javafx.beans.property.SimpleStringProperty")
                 .instantiate(classes(String.class), objects("one"))

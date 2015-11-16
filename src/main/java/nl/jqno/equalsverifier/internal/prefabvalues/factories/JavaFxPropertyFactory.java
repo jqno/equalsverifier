@@ -13,38 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.prefabvalues.AbstractPrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
-public final class SingleParamTagCopyingStaticMethodCallingReflectiveFactory<T> extends AbstractPrefabValueFactory<T> {
+public final class JavaFxPropertyFactory<T> extends AbstractPrefabValueFactory<T> {
     private final String typeName;
-    private final Class<?> singleParameterRawType;
-    private final String factoryTypeName;
-    private final String factoryMethod;
+    private final Class<?> parameterRawType;
 
-    public SingleParamTagCopyingStaticMethodCallingReflectiveFactory(String typeName, Class<?> singleParameterRawType,
-            String factoryTypeName, String factoryMethod) {
+    public JavaFxPropertyFactory(String typeName, Class<?> parameterRawType) {
         this.typeName = typeName;
-        this.singleParameterRawType = singleParameterRawType;
-        this.factoryTypeName = factoryTypeName;
-        this.factoryMethod = factoryMethod;
+        this.parameterRawType = parameterRawType;
     }
 
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         ConditionalInstantiator ci = new ConditionalInstantiator(typeName);
-        TypeTag singleParameterTag = copyGenericTypesInto(singleParameterRawType, tag);
-
-        Object red = ci.callFactory(factoryTypeName, factoryMethod,
-                classes(singleParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
-        Object black = ci.callFactory(factoryTypeName, factoryMethod,
-                classes(singleParameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+        TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
+        Object red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+        Object black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
 
         @SuppressWarnings("unchecked")
         Tuple<T> result = new Tuple<>((T)red, (T)black);
