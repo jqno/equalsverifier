@@ -18,6 +18,9 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -94,7 +97,7 @@ public class PrefabValues {
         return new LinkedHashSet<>();
     }
 
-    /* default */ <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+    public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (!cache.contains(tag)) {
             Tuple<T> tuple = createTuple(tag, typeStack);
             addToCache(tag, tuple);

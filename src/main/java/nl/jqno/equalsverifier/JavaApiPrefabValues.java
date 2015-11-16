@@ -18,9 +18,7 @@ package nl.jqno.equalsverifier;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxCollectionFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.JavaFxPropertyFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
 
 import javax.naming.Reference;
 import java.io.File;

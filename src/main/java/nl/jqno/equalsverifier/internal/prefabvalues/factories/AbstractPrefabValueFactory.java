@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.prefabvalues.factories;
+
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.ArrayList;
 import java.util.List;

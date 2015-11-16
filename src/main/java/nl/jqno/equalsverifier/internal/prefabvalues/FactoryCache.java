@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+
 import java.util.HashMap;
 import java.util.Map;
 

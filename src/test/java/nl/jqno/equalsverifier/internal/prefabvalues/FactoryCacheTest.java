@@ -15,6 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
