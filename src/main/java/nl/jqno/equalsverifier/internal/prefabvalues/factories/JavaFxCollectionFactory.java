@@ -25,7 +25,7 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
-public final class JavaFxCollectionFactory<T> extends AbstractPrefabValueFactory<T> {
+public final class JavaFxCollectionFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private static final String PACKAGE_NAME = "javafx.collections.";
     private static final String FACTORY_TYPE = PACKAGE_NAME + "FXCollections";
 

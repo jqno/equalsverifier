@@ -24,7 +24,7 @@ import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 
-public final class GuavaCollectionFactory<T> extends AbstractPrefabValueFactory<T> {
+public final class GuavaCollectionFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private static final String PACKAGE_NAME = "com.google.common.collect.";
     private static final String FACTORY_METHOD = "of";
 

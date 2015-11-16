@@ -22,7 +22,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-public abstract class MapFactory<T extends Map> extends AbstractPrefabValueFactory<T> {
+public abstract class MapFactory<T extends Map> extends AbstractReflectiveGenericFactory<T> {
     public abstract T createEmpty();
 
     @Override

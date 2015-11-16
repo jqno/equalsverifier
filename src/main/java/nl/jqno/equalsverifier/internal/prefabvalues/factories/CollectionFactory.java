@@ -22,7 +22,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-public abstract class CollectionFactory<T extends Collection> extends AbstractPrefabValueFactory<T> {
+public abstract class CollectionFactory<T extends Collection> extends AbstractReflectiveGenericFactory<T> {
     public abstract T createEmpty();
 
     @Override

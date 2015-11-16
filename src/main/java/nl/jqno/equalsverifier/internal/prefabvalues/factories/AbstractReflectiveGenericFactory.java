@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractPrefabValueFactory<T> implements PrefabValueFactory<T> {
+public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValueFactory<T> {
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
