@@ -286,57 +286,26 @@ public final class JavaApiPrefabValues {
                 new JavaFxCollectionFactory("ObservableMap", Map.class, "observableMap"));
         prefabValues.addFactory(forName("javafx.collections.ObservableSet"),
                 new JavaFxCollectionFactory("ObservableSet", Set.class, "observableSet"));
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.BooleanProperty")
-                .withConcreteClass("javafx.beans.property.SimpleBooleanProperty")
-                .instantiate(classes(boolean.class), objects(true))
-                .withConcreteClass("javafx.beans.property.SimpleBooleanProperty")
-                .instantiate(classes(boolean.class), objects(false))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.DoubleProperty")
-                .withConcreteClass("javafx.beans.property.SimpleDoubleProperty")
-                .instantiate(classes(double.class), objects(1.0D))
-                .withConcreteClass("javafx.beans.property.SimpleDoubleProperty")
-                .instantiate(classes(double.class), objects(2.0D))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.FloatProperty")
-                .withConcreteClass("javafx.beans.property.SimpleFloatProperty")
-                .instantiate(classes(float.class), objects(1.0F))
-                .withConcreteClass("javafx.beans.property.SimpleFloatProperty")
-                .instantiate(classes(float.class), objects(2.0F))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.IntegerProperty")
-                .withConcreteClass("javafx.beans.property.SimpleIntegerProperty")
-                .instantiate(classes(int.class), objects(1))
-                .withConcreteClass("javafx.beans.property.SimpleIntegerProperty")
-                .instantiate(classes(int.class), objects(2))
-                .addTo(prefabValues);
-        Class<?> observableList = forName("javafx.collections.ObservableList");
+        prefabValues.addFactory(forName("javafx.beans.property.BooleanProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleBooleanProperty", boolean.class));
+        prefabValues.addFactory(forName("javafx.beans.property.DoubkeProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleDoubkeProperty", double.class));
+        prefabValues.addFactory(forName("javafx.beans.property.FloatProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleFloatProperty", float.class));
+        prefabValues.addFactory(forName("javafx.beans.property.IntegerProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleIntegerProperty", int.class));
         prefabValues.addFactory(forName("javafx.beans.property.ListProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleListProperty", observableList));
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.LongProperty")
-                .withConcreteClass("javafx.beans.property.SimpleLongProperty")
-                .instantiate(classes(long.class), objects(1L))
-                .withConcreteClass("javafx.beans.property.SimpleLongProperty")
-                .instantiate(classes(long.class), objects(2L))
-                .addTo(prefabValues);
-        Class<?> observableMap = forName("javafx.collections.ObservableMap");
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleListProperty", forName("javafx.collections.ObservableList")));
+        prefabValues.addFactory(forName("javafx.beans.property.LongProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleLongProperty", long.class));
         prefabValues.addFactory(forName("javafx.beans.property.MapProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleMapProperty", observableMap));
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.ObjectProperty")
-                .withConcreteClass("javafx.beans.property.SimpleObjectProperty")
-                .instantiate(classes(Object.class), objects(new Object()))
-                .withConcreteClass("javafx.beans.property.SimpleObjectProperty")
-                .instantiate(classes(Object.class), objects(new Object()))
-                .addTo(prefabValues);
-        Class<?> observableSet = forName("javafx.collections.ObservableSet");
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleMapProperty", forName("javafx.collections.ObservableMap")));
+        prefabValues.addFactory(forName("javafx.beans.property.ObjectProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleObjectProperty", Object.class));
         prefabValues.addFactory(forName("javafx.beans.property.SetProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleSetProperty", observableSet));
-        ConditionalPrefabValueBuilder.of("javafx.beans.property.StringProperty")
-                .withConcreteClass("javafx.beans.property.SimpleStringProperty")
-                .instantiate(classes(String.class), objects("one"))
-                .withConcreteClass("javafx.beans.property.SimpleStringProperty")
-                .instantiate(classes(String.class), objects("two"))
-                .addTo(prefabValues);
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleSetProperty", forName("javafx.collections.ObservableSet")));
+        prefabValues.addFactory(forName("javafx.beans.property.StringProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleStringProperty", String.class));
     }
 
     @SuppressWarnings("unchecked")
