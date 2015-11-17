@@ -32,7 +32,7 @@ public final class GuavaCollectionFactory<T> extends AbstractReflectiveGenericFa
     private final Kind kind;
 
     public enum Kind {
-        COLLECTION, MAP
+        COLLECTION, SORTED_COLLECTION, MAP, SORTED_MAP
     }
 
     public GuavaCollectionFactory(String typeName, Kind kind) {
@@ -58,8 +58,12 @@ public final class GuavaCollectionFactory<T> extends AbstractReflectiveGenericFa
         switch (kind) {
             case COLLECTION:
                 return classes(Object.class);
+            case SORTED_COLLECTION:
+                return classes(Comparable.class);
             case MAP:
                 return classes(Object.class, Object.class);
+            case SORTED_MAP:
+                return classes(Comparable.class, Object.class);
             default:
                 return classes();
         }
@@ -68,11 +72,13 @@ public final class GuavaCollectionFactory<T> extends AbstractReflectiveGenericFa
     private Tuple<Object[]> values(PrefabValues prefabValues, TypeTag tag) {
         switch (kind) {
             case COLLECTION:
+            case SORTED_COLLECTION:
                 TypeTag genericType = determineActualTypeTagFor(0, tag);
                 return new Tuple<>(
                         new Object[] { prefabValues.giveRed(genericType) },
                         new Object[] { prefabValues.giveBlack(genericType) });
             case MAP:
+            case SORTED_MAP:
                 TypeTag keyType = determineActualTypeTagFor(0, tag);
                 TypeTag valueType = determineActualTypeTagFor(1, tag);
                 return new Tuple<>(

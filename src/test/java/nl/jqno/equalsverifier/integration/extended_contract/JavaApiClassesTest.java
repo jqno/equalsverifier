@@ -55,6 +55,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     }
 
     static final class CollectionInterfacesContainer {
+        private final Iterable<String> iterable;
         private final Collection<String> collection;
         private final List<String> list;
         private final Set<String> set;
@@ -70,12 +71,12 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public CollectionInterfacesContainer(Collection<String> collection, List<String> list,
+        public CollectionInterfacesContainer(Iterable<String> iterable, Collection<String> collection, List<String> list,
                 Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
                 Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
                 Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap,
                 ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
-            this.collection = collection; this.list = list;
+            this.iterable = iterable; this.collection = collection; this.list = list;
             this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
             this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
             this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap;
@@ -91,6 +92,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         }
 
         private void callAbstractMethodsOnInterface() {
+            callIterator(iterable);
             callIterator(collection);
             callIterator(list);
             callIterator(set, sortedSet, navigableSet);
@@ -98,8 +100,8 @@ public class JavaApiClassesTest extends IntegrationTestBase {
             callKeySet(map, sortedMap, navigableMap, concurrentNavigableMap);
         }
 
-        private void callIterator(Collection<?>... collections) {
-            for (Collection<?> c : collections) {
+        private void callIterator(Iterable<?>... collections) {
+            for (Iterable<?> c : collections) {
                 if (c != null) {
                     c.iterator();
                 }

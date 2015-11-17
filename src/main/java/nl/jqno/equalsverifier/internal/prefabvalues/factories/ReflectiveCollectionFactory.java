@@ -25,7 +25,7 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
-public final class JavaFxCollectionFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public final class ReflectiveCollectionFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private static final String PACKAGE_NAME = "javafx.collections.";
     private static final String FACTORY_TYPE = PACKAGE_NAME + "FXCollections";
 
@@ -34,11 +34,11 @@ public final class JavaFxCollectionFactory<T> extends AbstractReflectiveGenericF
     private final String factoryType;
     private final String factoryMethod;
 
-    public JavaFxCollectionFactory(String typeName, Class<?> singleParameterRawType, String factoryMethod) {
+    public ReflectiveCollectionFactory(String typeName, Class<?> singleParameterRawType, String factoryMethod) {
         this(PACKAGE_NAME + typeName, singleParameterRawType, FACTORY_TYPE, factoryMethod);
     }
 
-    public JavaFxCollectionFactory(String typeName, Class<?> parameterRawType, String factoryType, String factoryMethod) {
+    public ReflectiveCollectionFactory(String typeName, Class<?> parameterRawType, String factoryType, String factoryMethod) {
         this.typeName = typeName;
         this.parameterRawType = parameterRawType;
         this.factoryType = factoryType;

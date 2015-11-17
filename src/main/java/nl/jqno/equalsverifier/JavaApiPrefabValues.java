@@ -31,7 +31,6 @@ import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory.Kind.COLLECTION;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory.Kind.MAP;
 
 /**
@@ -129,6 +128,9 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
+        prefabValues.addFactory(Iterable.class, new CollectionFactory() {
+            @Override public Collection createEmpty() { return new ArrayList<>(); }
+        });
         prefabValues.addFactory(Collection.class, new CollectionFactory<Collection>() {
             @Override public Collection createEmpty() { return new ArrayList<>(); }
         });
@@ -279,11 +281,11 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
         prefabValues.addFactory(forName("javafx.collections.ObservableList"),
-                new JavaFxCollectionFactory("ObservableList", List.class, "observableList"));
+                new ReflectiveCollectionFactory("ObservableList", List.class, "observableList"));
         prefabValues.addFactory(forName("javafx.collections.ObservableMap"),
-                new JavaFxCollectionFactory("ObservableMap", Map.class, "observableMap"));
+                new ReflectiveCollectionFactory("ObservableMap", Map.class, "observableMap"));
         prefabValues.addFactory(forName("javafx.collections.ObservableSet"),
-                new JavaFxCollectionFactory("ObservableSet", Set.class, "observableSet"));
+                new ReflectiveCollectionFactory("ObservableSet", Set.class, "observableSet"));
         prefabValues.addFactory(forName("javafx.beans.property.BooleanProperty"),
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleBooleanProperty", boolean.class));
         prefabValues.addFactory(forName("javafx.beans.property.DoubkeProperty"),
@@ -308,22 +310,24 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addGoogleGuavaClasses() {
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableList"),
-                new GuavaCollectionFactory("ImmutableList", COLLECTION));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMap"),
-                new GuavaCollectionFactory("ImmutableMap", MAP));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSet"),
-                new GuavaCollectionFactory("ImmutableSet", COLLECTION));
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMap")
-                .callFactory("of", classes(Comparable.class, Object.class), objects("red", "value"))
-                .callFactory("of", classes(Comparable.class, Object.class), objects("black", "value"))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedSet")
-                .callFactory("of", classes(Comparable.class), objects("red"))
-                .callFactory("of", classes(Comparable.class), objects("black"))
-                .addTo(prefabValues);
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMultiset"),
-                new GuavaCollectionFactory("ImmutableMultiset", COLLECTION));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableList"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableList", Collection.class,
+                "com.google.common.collect.ImmutableList", "copyOf"));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMap"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableMap", Map.class,
+                "com.google.common.collect.ImmutableMap", "copyOf"));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSet"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableSet", Collection.class,
+                "com.google.common.collect.ImmutableSet", "copyOf"));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSortedMap"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableSortedMap", Map.class,
+                "com.google.common.collect.ImmutableSortedMap", "copyOf"));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSortedSet"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableSortedSet", Collection.class,
+                "com.google.common.collect.ImmutableSortedSet", "copyOf"));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMultiset"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableMultiset", Iterable.class,
+                "com.google.common.collect.ImmutableMultiset", "copyOf"));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
@@ -332,8 +336,9 @@ public final class JavaApiPrefabValues {
                 new GuavaCollectionFactory("ImmutableListMultimap", MAP));
         prefabValues.addFactory(forName("com.google.common.collect.ImmutableSetMultimap"),
                 new GuavaCollectionFactory("ImmutableSetMultimap", MAP));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBiMap"),
-                new GuavaCollectionFactory("ImmutableBiMap", MAP));
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionFactory(
+                "com.google.common.collect.ImmutableBimap", Map.class,
+                "com.google.common.collect.ImmutableBimap", "copyOf"));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("red", "X", "value"))
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("black", "X", "value"))
