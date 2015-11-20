@@ -27,13 +27,19 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
 public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
-    private final Class<?> parameterRawType;
+    private final Class<?> declaredParameterRawType;
+    private final Class<?> actualParameterRawType;
     private final String factoryType;
     private final String factoryMethod;
 
     public ReflectiveCollectionCopyFactory(String typeName, Class<?> parameterRawType, String factoryType, String factoryMethod) {
+        this(typeName, parameterRawType, parameterRawType, factoryType, factoryMethod);
+    }
+
+    public ReflectiveCollectionCopyFactory(String typeName, Class<?> declaredParameterRawType, Class<?> actualParameterRawType, String factoryType, String factoryMethod) {
         this.typeName = typeName;
-        this.parameterRawType = parameterRawType;
+        this.declaredParameterRawType = declaredParameterRawType;
+        this.actualParameterRawType = actualParameterRawType;
         this.factoryType = factoryType;
         this.factoryMethod = factoryMethod;
     }
@@ -41,12 +47,12 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         ConditionalInstantiator ci = new ConditionalInstantiator(typeName);
-        TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
+        TypeTag singleParameterTag = copyGenericTypesInto(actualParameterRawType, tag);
 
         Object red = ci.callFactory(factoryType, factoryMethod,
-                classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+                classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
         Object black = ci.callFactory(factoryType, factoryMethod,
-                classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+                classes(declaredParameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
 
         @SuppressWarnings("unchecked")
         Tuple<T> result = new Tuple<>((T)red, (T)black);

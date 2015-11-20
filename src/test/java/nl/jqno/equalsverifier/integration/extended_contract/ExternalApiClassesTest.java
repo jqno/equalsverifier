@@ -38,6 +38,12 @@ public class ExternalApiClassesTest {
     }
 
     @Test
+    public void succeed_whenClassUsesGoogleGuavaBiMap() {
+        EqualsVerifier.forClass(GuavaBiMapContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
         EqualsVerifier.forClass(GuavaImmutableContainer.class)
                 .verify();
@@ -101,6 +107,20 @@ public class ExternalApiClassesTest {
             this.sortedSetMultimap = sortedSetMultimap; this.arrayListMultimap = arrayListMultimap; this.hashMultimap = hashMultimap;
             this.linkedListMultimap = linkedListMultimap; this.linkedHashMultimap = linkedHashMultimap; this.treeMultimap = treeMultimap;
             this.immutableListMultimap = immutableListMultimap; this.immutableSetMultimap = immutableSetMultimap;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaBiMapContainer {
+        private final BiMap<?, ?> biMap;
+        private final HashBiMap<?, ?> hashBiMap;
+        private final EnumHashBiMap<?, ?> enumHashBiMap;
+
+        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumHashBiMap<?, ?> enumHashBiMap) {
+            this.biMap = biMap; this.hashBiMap = hashBiMap; this.enumHashBiMap = enumHashBiMap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

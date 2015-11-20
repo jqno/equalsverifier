@@ -44,7 +44,7 @@ public class ReflectiveCollectionCopyFactoryTest {
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
         PrefabValueFactory<GenericContainer> factory = new ReflectiveCollectionCopyFactory<>(
-                GenericContainer.class.getName(), List.class, GenericContainerFactory.class.getName(), "createGenericContainer");
+                GenericContainer.class.getName(), List.class, List.class, GenericContainerFactory.class.getName(), "createGenericContainer");
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
@@ -58,7 +58,7 @@ public class ReflectiveCollectionCopyFactoryTest {
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
         PrefabValueFactory<GenericMultiContainer> factory = new ReflectiveCollectionCopyFactory<>(
-                GenericMultiContainer.class.getName(), Map.class, GenericContainerFactory.class.getName(), "createGenericMultiContainer");
+                GenericMultiContainer.class.getName(), Map.class, Map.class, GenericContainerFactory.class.getName(), "createGenericMultiContainer");
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);

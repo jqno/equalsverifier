@@ -85,6 +85,7 @@ public final class JavaApiPrefabValues {
         addJavaFxClasses();
         addGoogleGuavaMultisetCollectionsClasses();
         addGoogleGuavaMultimapCollectionsClasses();
+        addGoogleGuavaBiMapCollectionsClasses();
         addGoogleGuavaImmutableClasses();
         addNewGoogleGuavaClasses();
         addJodaTimeClasses();
@@ -327,6 +328,12 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("ImmutableSetMultimap", forName("com.google.common.collect.Multimap"));
     }
 
+    private void addGoogleGuavaBiMapCollectionsClasses() {
+        addNewGuavaMap("BiMap", "HashBiMap");
+        addNewGuavaMap("HashBiMap", "HashBiMap");
+        addCopiedGuavaCollection("EnumHashBiMap", forName("java.util.Map"), forName("java.util.EnumMap"), "create");
+    }
+
     private void addGoogleGuavaImmutableClasses() {
         addCopiedGuavaCollection("ImmutableList", Collection.class);
         addCopiedGuavaCollection("ImmutableMap", Map.class);
@@ -437,10 +444,14 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection(name, copyFrom, "copyOf");
     }
 
-    @SuppressWarnings("unchecked")
     private void addCopiedGuavaCollection(String name, Class<?> copyFrom, String copyMethodName) {
+        addCopiedGuavaCollection(name, copyFrom, copyFrom, copyMethodName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addCopiedGuavaCollection(String name, Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
         String className = GUAVA_PACKAGE + name;
         prefabValues.addFactory(forName(className),
-                new ReflectiveCollectionCopyFactory(className, copyFrom, className, copyMethodName));
+                new ReflectiveCollectionCopyFactory(className, declaredCopyFrom, actualCopyFrom, className, copyMethodName));
     }
 }
