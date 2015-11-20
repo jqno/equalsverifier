@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
@@ -328,11 +329,26 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("ImmutableSetMultimap", forName("com.google.common.collect.Multimap"));
     }
 
+    @SuppressWarnings("unchecked")
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addNewGuavaMap("BiMap", "HashBiMap");
         addNewGuavaMap("HashBiMap", "HashBiMap");
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
+
+        prefabValues.addFactory(forName("com.google.common.collect.EnumBiMap"), new AbstractReflectiveGenericFactory() {
+            @Override
+            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
+                return new Tuple(create(Dummy.RED, Dummy.BLACK), create(Dummy.BLACK, Dummy.BLACK));
+            }
+
+            private Object create(Dummy key, Dummy value) {
+                Map<Dummy, Dummy> original = new EnumMap<>(Dummy.class);
+                original.put(key, value);
+                return new ConditionalInstantiator("com.google.common.collect.EnumBiMap")
+                        .callFactory("create", classes(Map.class), objects(original));
+            }
+        });
     }
 
     private void addGoogleGuavaImmutableClasses() {

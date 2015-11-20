@@ -118,13 +118,14 @@ public class ExternalApiClassesTest {
     static final class GuavaBiMapContainer {
         private final BiMap<?, ?> biMap;
         private final HashBiMap<?, ?> hashBiMap;
+        private final EnumBiMap<?, ?> enumBiMap;
         private final EnumHashBiMap<?, ?> enumHashBiMap;
         private final ImmutableBiMap<?, ?> immutableBiMap;
 
-        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumHashBiMap<?, ?> enumHashBiMap,
-                ImmutableBiMap<?, ?> immutableBiMap) {
-            this.biMap = biMap; this.hashBiMap = hashBiMap; this.enumHashBiMap = enumHashBiMap;
-            this.immutableBiMap = immutableBiMap;
+        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumBiMap<?, ?> enumBiMap,
+                EnumHashBiMap<?, ?> enumHashBiMap, ImmutableBiMap<?, ?> immutableBiMap) {
+            this.biMap = biMap; this.hashBiMap = hashBiMap; this.enumBiMap = enumBiMap;
+            this.enumHashBiMap = enumHashBiMap; this.immutableBiMap = immutableBiMap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
