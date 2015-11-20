@@ -17,7 +17,9 @@ package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
-import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
 
 import javax.naming.Reference;
@@ -81,7 +83,8 @@ public final class JavaApiPrefabValues {
         addQueues();
         addJava8ApiClasses();
         addJavaFxClasses();
-        addTraditionalGoogleGuavaClasses();
+        addGoogleGuavaMultisetCollectionsClasses();
+        addGoogleGuavaImmutableClasses();
         addNewGoogleGuavaClasses();
         addJodaTimeClasses();
     }
@@ -309,17 +312,25 @@ public final class JavaApiPrefabValues {
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleStringProperty", String.class));
     }
 
-    private void addTraditionalGoogleGuavaClasses() {
-        addGuavaCollection("ImmutableList", Collection.class);
-        addGuavaCollection("ImmutableMap", Map.class);
-        addGuavaCollection("ImmutableSet", Collection.class);
-        addGuavaCollection("ImmutableSortedMap", Map.class);
-        addGuavaCollection("ImmutableSortedSet", Collection.class);
+    private void addGoogleGuavaMultisetCollectionsClasses() {
+        addNewGuavaCollection("Multiset", "HashMultiset");
+        addNewGuavaCollection("HashMultiset", "HashMultiset");
+        addNewGuavaCollection("TreeMultiset", "TreeMultiset", OBJECT_COMPARATOR);
+        addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
+        addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
+        addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
+    }
+
+    private void addGoogleGuavaImmutableClasses() {
+        addCopiedGuavaCollection("ImmutableList", Collection.class);
+        addCopiedGuavaCollection("ImmutableMap", Map.class);
+        addCopiedGuavaCollection("ImmutableSet", Collection.class);
+        addCopiedGuavaCollection("ImmutableSortedMap", Map.class);
+        addCopiedGuavaCollection("ImmutableSortedSet", Collection.class);
     }
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        addGuavaCollection("ImmutableMultiset", Iterable.class);
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
@@ -380,8 +391,24 @@ public final class JavaApiPrefabValues {
         }
     }
 
+    private <T> void addNewGuavaCollection(String declaredType, String actualType) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveCollectionFactory<T> factory =
+                ReflectiveCollectionFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
+        prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addNewGuavaCollection(String declaredType, String actualType, final Comparator<Object> comparator) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveCollectionFactory<T> factory =
+                ReflectiveCollectionFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
+        prefabValues.addFactory(type, factory);
+    }
+
     @SuppressWarnings("unchecked")
-    private void addGuavaCollection(String name, Class<?> copyFrom) {
+    private void addCopiedGuavaCollection(String name, Class<?> copyFrom) {
         String className = GUAVA_PACKAGE + name;
         prefabValues.addFactory(forName(className),
                 new ReflectiveCollectionCopyFactory(className, copyFrom, className, "copyOf"));

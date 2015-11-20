@@ -26,14 +26,20 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class ExternalApiClassesTest {
     @Test
-    public void succeed_whenClassUsesTraditionalCollectionGoogleGuavaClass() {
-        EqualsVerifier.forClass(GuavaTraditionalContainer.class)
+    public void succeed_whenClassUsesGoogleGuavaMultiset() {
+        EqualsVerifier.forClass(GuavaMultisetContainer.class)
                 .verify();
     }
 
     @Test
-    public void succeed_whenClassUsesNewCollectionGoogleGuavaClass() {
-        EqualsVerifier.forClass(GuavaNewContainer.class)
+    public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
+        EqualsVerifier.forClass(GuavaImmutableContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesOtherGoogleGuavaClass() {
+        EqualsVerifier.forClass(GuavaOtherContainer.class)
                 .verify();
     }
 
@@ -44,7 +50,28 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-    static final class GuavaTraditionalContainer {
+    static final class GuavaMultisetContainer {
+        private final Multiset<?> multiset;
+        private final HashMultiset<?> hashMultiset;
+        private final TreeMultiset<?> treeMultiset;
+        private final LinkedHashMultiset<?> linkedHashMultiset;
+        private final ConcurrentHashMultiset<?> concurrentHashMultiset;
+        private final ImmutableMultiset<?> immutableMultiset;
+
+        public GuavaMultisetContainer(Multiset<?> multiset, HashMultiset<?> hashMultiset, TreeMultiset<?> treeMultiset,
+                LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset concurrentHashMultiset,
+                ImmutableMultiset<?> immutableMultiset) {
+            this.multiset = multiset; this.hashMultiset = hashMultiset; this.treeMultiset = treeMultiset;
+            this.linkedHashMultiset = linkedHashMultiset; this.concurrentHashMultiset = concurrentHashMultiset;
+            this.immutableMultiset = immutableMultiset;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaImmutableContainer {
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
         private final ImmutableSet<?> iSet;
@@ -52,7 +79,7 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedSet<?> iSortedSet;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaTraditionalContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
+        public GuavaImmutableContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
                 ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet) {
             this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
             this.iSortedSet = iSortedSet;
@@ -63,8 +90,7 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-    static final class GuavaNewContainer {
-        private final ImmutableMultiset<?> iMultiset;
+    static final class GuavaOtherContainer {
         private final ImmutableSortedMultiset<?> iSortedMultiset;
         private final ImmutableListMultimap<?, ?> iListMultimap;
         private final ImmutableSetMultimap<?, ?> iSetMultimap;
@@ -74,11 +100,11 @@ public class ExternalApiClassesTest {
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaNewContainer(ImmutableMultiset<?> iMultiset,
+        public GuavaOtherContainer(
                 ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
                 ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
                 Range<?> range, Optional<?> optional) {
-            this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset;
+            this.iSortedMultiset = iSortedMultiset;
             this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap;
             this.iTable = iTable; this.range = range; this.optional = optional;
         }
