@@ -289,8 +289,8 @@ public final class JavaApiPrefabValues {
         addJavaFxCollection("ObservableSet", Set.class, "observableSet");
         prefabValues.addFactory(forName("javafx.beans.property.BooleanProperty"),
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleBooleanProperty", boolean.class));
-        prefabValues.addFactory(forName("javafx.beans.property.DoubkeProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleDoubkeProperty", double.class));
+        prefabValues.addFactory(forName("javafx.beans.property.DoubleProperty"),
+                new JavaFxPropertyFactory("javafx.beans.property.SimpleDoubleProperty", double.class));
         prefabValues.addFactory(forName("javafx.beans.property.FloatProperty"),
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleFloatProperty", float.class));
         prefabValues.addFactory(forName("javafx.beans.property.IntegerProperty"),
