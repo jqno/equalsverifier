@@ -331,7 +331,8 @@ public final class JavaApiPrefabValues {
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addNewGuavaMap("BiMap", "HashBiMap");
         addNewGuavaMap("HashBiMap", "HashBiMap");
-        addCopiedGuavaCollection("EnumHashBiMap", forName("java.util.Map"), forName("java.util.EnumMap"), "create");
+        addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
+        addCopiedGuavaCollection("ImmutableBiMap", Map.class);
     }
 
     private void addGoogleGuavaImmutableClasses() {
@@ -344,9 +345,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionCopyFactory(
-                "com.google.common.collect.ImmutableBimap", Map.class,
-                "com.google.common.collect.ImmutableBimap", "copyOf"));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("red", "X", "value"))
                 .callFactory("of", classes(Object.class, Object.class, Object.class), objects("black", "X", "value"))

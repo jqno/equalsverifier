@@ -119,9 +119,12 @@ public class ExternalApiClassesTest {
         private final BiMap<?, ?> biMap;
         private final HashBiMap<?, ?> hashBiMap;
         private final EnumHashBiMap<?, ?> enumHashBiMap;
+        private final ImmutableBiMap<?, ?> immutableBiMap;
 
-        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumHashBiMap<?, ?> enumHashBiMap) {
+        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumHashBiMap<?, ?> enumHashBiMap,
+                ImmutableBiMap<?, ?> immutableBiMap) {
             this.biMap = biMap; this.hashBiMap = hashBiMap; this.enumHashBiMap = enumHashBiMap;
+            this.immutableBiMap = immutableBiMap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -149,16 +152,12 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
-        private final ImmutableBiMap<?, ?> iBiMap;
         private final ImmutableTable<?, ?, ?> iTable;
         private final Range<?> range;
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaOtherContainer(
-                ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
-                Range<?> range, Optional<?> optional) {
-            this.iBiMap = immutableBiMap;
+        public GuavaOtherContainer(ImmutableTable<?, ?, ?> iTable, Range<?> range, Optional<?> optional) {
             this.iTable = iTable; this.range = range; this.optional = optional;
         }
 
