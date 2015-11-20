@@ -61,7 +61,7 @@ public class ExternalApiClassesTest {
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
     }
-    
+
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaNewContainer {
         private final ImmutableMultiset<?> iMultiset;

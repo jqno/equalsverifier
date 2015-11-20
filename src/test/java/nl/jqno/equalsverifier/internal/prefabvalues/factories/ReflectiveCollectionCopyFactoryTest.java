@@ -29,7 +29,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class ReflectiveCollectionFactoryTest {
+public class ReflectiveCollectionCopyFactoryTest {
     private PrefabValues prefabValues;
 
     @Before
@@ -43,7 +43,7 @@ public class ReflectiveCollectionFactoryTest {
         TypeTag tag = new TypeTag(GenericContainer.class, new TypeTag(String.class));
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
-        PrefabValueFactory<GenericContainer> factory = new ReflectiveCollectionFactory<>(
+        PrefabValueFactory<GenericContainer> factory = new ReflectiveCollectionCopyFactory<>(
                 GenericContainer.class.getName(), List.class, GenericContainerFactory.class.getName(), "createGenericContainer");
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
@@ -57,7 +57,7 @@ public class ReflectiveCollectionFactoryTest {
         TypeTag tag = new TypeTag(GenericMultiContainer.class, new TypeTag(String.class), new TypeTag(Point.class));
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
-        PrefabValueFactory<GenericMultiContainer> factory = new ReflectiveCollectionFactory<>(
+        PrefabValueFactory<GenericMultiContainer> factory = new ReflectiveCollectionCopyFactory<>(
                 GenericMultiContainer.class.getName(), Map.class, GenericContainerFactory.class.getName(), "createGenericMultiContainer");
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 

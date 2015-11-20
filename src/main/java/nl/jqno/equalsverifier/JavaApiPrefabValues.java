@@ -328,7 +328,7 @@ public final class JavaApiPrefabValues {
                 new GuavaCollectionFactory("ImmutableListMultimap", MAP));
         prefabValues.addFactory(forName("com.google.common.collect.ImmutableSetMultimap"),
                 new GuavaCollectionFactory("ImmutableSetMultimap", MAP));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionFactory(
+        prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionCopyFactory(
                 "com.google.common.collect.ImmutableBimap", Map.class,
                 "com.google.common.collect.ImmutableBimap", "copyOf"));
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
@@ -384,13 +384,13 @@ public final class JavaApiPrefabValues {
     private void addGuavaCollection(String name, Class<?> copyFrom) {
         String className = GUAVA_PACKAGE + name;
         prefabValues.addFactory(forName(className),
-                new ReflectiveCollectionFactory(className, copyFrom, className, "copyOf"));
+                new ReflectiveCollectionCopyFactory(className, copyFrom, className, "copyOf"));
     }
 
     @SuppressWarnings("unchecked")
     private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
         String className = JAVAFX_PACKAGE + name;
         prefabValues.addFactory(forName(className),
-                new ReflectiveCollectionFactory(className, copyFrom, JAVAFX_PACKAGE + "FXCollections", factoryMethod));
+                new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_PACKAGE + "FXCollections", factoryMethod));
     }
 }
