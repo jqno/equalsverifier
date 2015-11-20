@@ -44,6 +44,9 @@ import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollec
  */
 @SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC_ANON", justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
+    private static final String JAVAFX_PACKAGE = "javafx.collections.";
+    private static final String GUAVA_PACKAGE = "com.google.common.collect.";
+
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
         @Override public int compare(Object o1, Object o2) { return Integer.compare(o1.hashCode(), o2.hashCode()); }
     };
@@ -78,7 +81,8 @@ public final class JavaApiPrefabValues {
         addQueues();
         addJava8ApiClasses();
         addJavaFxClasses();
-        addGoogleGuavaClasses();
+        addTraditionalGoogleGuavaClasses();
+        addNewGoogleGuavaClasses();
         addJodaTimeClasses();
     }
 
@@ -280,12 +284,9 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
-        prefabValues.addFactory(forName("javafx.collections.ObservableList"),
-                new ReflectiveCollectionFactory("ObservableList", List.class, "observableList"));
-        prefabValues.addFactory(forName("javafx.collections.ObservableMap"),
-                new ReflectiveCollectionFactory("ObservableMap", Map.class, "observableMap"));
-        prefabValues.addFactory(forName("javafx.collections.ObservableSet"),
-                new ReflectiveCollectionFactory("ObservableSet", Set.class, "observableSet"));
+        addJavaFxCollection("ObservableList", List.class, "observableList");
+        addJavaFxCollection("ObservableMap", Map.class, "observableMap");
+        addJavaFxCollection("ObservableSet", Set.class, "observableSet");
         prefabValues.addFactory(forName("javafx.beans.property.BooleanProperty"),
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleBooleanProperty", boolean.class));
         prefabValues.addFactory(forName("javafx.beans.property.DoubkeProperty"),
@@ -308,26 +309,17 @@ public final class JavaApiPrefabValues {
                 new JavaFxPropertyFactory("javafx.beans.property.SimpleStringProperty", String.class));
     }
 
+    private void addTraditionalGoogleGuavaClasses() {
+        addGuavaCollection("ImmutableList", Collection.class);
+        addGuavaCollection("ImmutableMap", Map.class);
+        addGuavaCollection("ImmutableSet", Collection.class);
+        addGuavaCollection("ImmutableSortedMap", Map.class);
+        addGuavaCollection("ImmutableSortedSet", Collection.class);
+    }
+
     @SuppressWarnings("unchecked")
-    private void addGoogleGuavaClasses() {
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableList"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableList", Collection.class,
-                "com.google.common.collect.ImmutableList", "copyOf"));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMap"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableMap", Map.class,
-                "com.google.common.collect.ImmutableMap", "copyOf"));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSet"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableSet", Collection.class,
-                "com.google.common.collect.ImmutableSet", "copyOf"));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSortedMap"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableSortedMap", Map.class,
-                "com.google.common.collect.ImmutableSortedMap", "copyOf"));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSortedSet"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableSortedSet", Collection.class,
-                "com.google.common.collect.ImmutableSortedSet", "copyOf"));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableMultiset"), new ReflectiveCollectionFactory(
-                "com.google.common.collect.ImmutableMultiset", Iterable.class,
-                "com.google.common.collect.ImmutableMultiset", "copyOf"));
+    private void addNewGoogleGuavaClasses() {
+        addGuavaCollection("ImmutableMultiset", Iterable.class);
         ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
@@ -386,5 +378,19 @@ public final class JavaApiPrefabValues {
             result.put(this, toString());
             return result;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addGuavaCollection(String name, Class<?> copyFrom) {
+        String className = GUAVA_PACKAGE + name;
+        prefabValues.addFactory(forName(className),
+                new ReflectiveCollectionFactory(className, copyFrom, className, "copyOf"));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
+        String className = JAVAFX_PACKAGE + name;
+        prefabValues.addFactory(forName(className),
+                new ReflectiveCollectionFactory(className, copyFrom, JAVAFX_PACKAGE + "FXCollections", factoryMethod));
     }
 }

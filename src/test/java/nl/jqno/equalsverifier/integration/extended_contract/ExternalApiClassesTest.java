@@ -26,8 +26,14 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class ExternalApiClassesTest {
     @Test
-    public void succeed_whenClassUsesGoogleGuavaClass() {
-        EqualsVerifier.forClass(GuavaContainer.class)
+    public void succeed_whenClassUsesTraditionalCollectionGoogleGuavaClass() {
+        EqualsVerifier.forClass(GuavaTraditionalContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesNewCollectionGoogleGuavaClass() {
+        EqualsVerifier.forClass(GuavaNewContainer.class)
                 .verify();
     }
 
@@ -38,12 +44,26 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-    static final class GuavaContainer {
+    static final class GuavaTraditionalContainer {
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
         private final ImmutableSet<?> iSet;
         private final ImmutableSortedMap<?, ?> iSortedMap;
         private final ImmutableSortedSet<?> iSortedSet;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaTraditionalContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
+                ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet) {
+            this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
+            this.iSortedSet = iSortedSet;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+    
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaNewContainer {
         private final ImmutableMultiset<?> iMultiset;
         private final ImmutableSortedMultiset<?> iSortedMultiset;
         private final ImmutableListMultimap<?, ?> iListMultimap;
@@ -54,13 +74,11 @@ public class ExternalApiClassesTest {
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
-                ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet, ImmutableMultiset<?> iMultiset,
+        public GuavaNewContainer(ImmutableMultiset<?> iMultiset,
                 ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
                 ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
                 Range<?> range, Optional<?> optional) {
-            this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
-            this.iSortedSet = iSortedSet; this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset;
+            this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset;
             this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap;
             this.iTable = iTable; this.range = range; this.optional = optional;
         }

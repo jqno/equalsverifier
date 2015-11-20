@@ -26,17 +26,10 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
 public final class ReflectiveCollectionFactory<T> extends AbstractReflectiveGenericFactory<T> {
-    private static final String PACKAGE_NAME = "javafx.collections.";
-    private static final String FACTORY_TYPE = PACKAGE_NAME + "FXCollections";
-
     private final String typeName;
     private final Class<?> parameterRawType;
     private final String factoryType;
     private final String factoryMethod;
-
-    public ReflectiveCollectionFactory(String typeName, Class<?> singleParameterRawType, String factoryMethod) {
-        this(PACKAGE_NAME + typeName, singleParameterRawType, FACTORY_TYPE, factoryMethod);
-    }
 
     public ReflectiveCollectionFactory(String typeName, Class<?> parameterRawType, String factoryType, String factoryMethod) {
         this.typeName = typeName;
