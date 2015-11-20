@@ -46,7 +46,8 @@ import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollec
  */
 @SuppressFBWarnings(value = "SIC_INNER_SHOULD_BE_STATIC_ANON", justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
-    private static final String JAVAFX_PACKAGE = "javafx.collections.";
+    private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
+    private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
 
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
@@ -290,26 +291,16 @@ public final class JavaApiPrefabValues {
         addJavaFxCollection("ObservableList", List.class, "observableList");
         addJavaFxCollection("ObservableMap", Map.class, "observableMap");
         addJavaFxCollection("ObservableSet", Set.class, "observableSet");
-        prefabValues.addFactory(forName("javafx.beans.property.BooleanProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleBooleanProperty", boolean.class));
-        prefabValues.addFactory(forName("javafx.beans.property.DoubleProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleDoubleProperty", double.class));
-        prefabValues.addFactory(forName("javafx.beans.property.FloatProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleFloatProperty", float.class));
-        prefabValues.addFactory(forName("javafx.beans.property.IntegerProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleIntegerProperty", int.class));
-        prefabValues.addFactory(forName("javafx.beans.property.ListProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleListProperty", forName("javafx.collections.ObservableList")));
-        prefabValues.addFactory(forName("javafx.beans.property.LongProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleLongProperty", long.class));
-        prefabValues.addFactory(forName("javafx.beans.property.MapProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleMapProperty", forName("javafx.collections.ObservableMap")));
-        prefabValues.addFactory(forName("javafx.beans.property.ObjectProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleObjectProperty", Object.class));
-        prefabValues.addFactory(forName("javafx.beans.property.SetProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleSetProperty", forName("javafx.collections.ObservableSet")));
-        prefabValues.addFactory(forName("javafx.beans.property.StringProperty"),
-                new JavaFxPropertyFactory("javafx.beans.property.SimpleStringProperty", String.class));
+        addJavaFxProperty("BooleanProperty", "SimpleBooleanProperty", boolean.class);
+        addJavaFxProperty("DoubleProperty", "SimpleDoubleProperty", double.class);
+        addJavaFxProperty("FloatProperty", "SimpleFloatProperty", float.class);
+        addJavaFxProperty("IntegerProperty", "SimpleIntegerProperty", int.class);
+        addJavaFxProperty("ListProperty", "SimpleListProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList"));
+        addJavaFxProperty("LongProperty", "SimpleLongProperty", long.class);
+        addJavaFxProperty("MapProperty", "SimpleMapProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap"));
+        addJavaFxProperty("ObjectProperty", "SimpleObjectProperty", Object.class);
+        addJavaFxProperty("SetProperty", "SimpleSetProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
+        addJavaFxProperty("StringProperty", "SimpleStringProperty", String.class);
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
@@ -391,6 +382,19 @@ public final class JavaApiPrefabValues {
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
+        String className = JAVAFX_COLLECTIONS_PACKAGE + name;
+        prefabValues.addFactory(forName(className),
+                new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
+        prefabValues.addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
+                new JavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
+    }
+
     private <T> void addNewGuavaCollection(String declaredType, String actualType) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
@@ -412,12 +416,5 @@ public final class JavaApiPrefabValues {
         String className = GUAVA_PACKAGE + name;
         prefabValues.addFactory(forName(className),
                 new ReflectiveCollectionCopyFactory(className, copyFrom, className, "copyOf"));
-    }
-
-    @SuppressWarnings("unchecked")
-    private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
-        String className = JAVAFX_PACKAGE + name;
-        prefabValues.addFactory(forName(className),
-                new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_PACKAGE + "FXCollections", factoryMethod));
     }
 }
