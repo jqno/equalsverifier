@@ -52,18 +52,19 @@ public class ExternalApiClassesTest {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaMultisetContainer {
         private final Multiset<?> multiset;
+        private final SortedMultiset<?> sortedMultiset;
         private final HashMultiset<?> hashMultiset;
         private final TreeMultiset<?> treeMultiset;
         private final LinkedHashMultiset<?> linkedHashMultiset;
         private final ConcurrentHashMultiset<?> concurrentHashMultiset;
         private final ImmutableMultiset<?> immutableMultiset;
 
-        public GuavaMultisetContainer(Multiset<?> multiset, HashMultiset<?> hashMultiset, TreeMultiset<?> treeMultiset,
-                LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset concurrentHashMultiset,
-                ImmutableMultiset<?> immutableMultiset) {
-            this.multiset = multiset; this.hashMultiset = hashMultiset; this.treeMultiset = treeMultiset;
-            this.linkedHashMultiset = linkedHashMultiset; this.concurrentHashMultiset = concurrentHashMultiset;
-            this.immutableMultiset = immutableMultiset;
+        public GuavaMultisetContainer(Multiset<?> multiset, SortedMultiset<?> sortedMultiset, HashMultiset<?> hashMultiset,
+                TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset,
+                ConcurrentHashMultiset concurrentHashMultiset, ImmutableMultiset<?> immutableMultiset) {
+            this.multiset = multiset; this.sortedMultiset = sortedMultiset; this.hashMultiset = hashMultiset;
+            this.treeMultiset = treeMultiset; this.linkedHashMultiset = linkedHashMultiset;
+            this.concurrentHashMultiset = concurrentHashMultiset; this.immutableMultiset = immutableMultiset;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

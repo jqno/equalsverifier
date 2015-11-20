@@ -305,6 +305,7 @@ public final class JavaApiPrefabValues {
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
         addNewGuavaCollection("Multiset", "HashMultiset");
+        addNewGuavaCollection("SortedMultiset", "TreeMultiset", OBJECT_COMPARATOR);
         addNewGuavaCollection("HashMultiset", "HashMultiset");
         addNewGuavaCollection("TreeMultiset", "TreeMultiset", OBJECT_COMPARATOR);
         addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
