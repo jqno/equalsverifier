@@ -64,13 +64,14 @@ public class ExternalApiClassesTest {
         private final LinkedHashMultiset<?> linkedHashMultiset;
         private final ConcurrentHashMultiset<?> concurrentHashMultiset;
         private final ImmutableMultiset<?> immutableMultiset;
+        private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
         public GuavaMultisetContainer(Multiset<?> multiset, SortedMultiset<?> sortedMultiset, HashMultiset<?> hashMultiset,
-                TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset,
-                ConcurrentHashMultiset concurrentHashMultiset, ImmutableMultiset<?> immutableMultiset) {
+                TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset concurrentHashMultiset,
+                ImmutableMultiset<?> immutableMultiset, ImmutableSortedMultiset<?> immutableSortedMultiset) {
             this.multiset = multiset; this.sortedMultiset = sortedMultiset; this.hashMultiset = hashMultiset;
-            this.treeMultiset = treeMultiset; this.linkedHashMultiset = linkedHashMultiset;
-            this.concurrentHashMultiset = concurrentHashMultiset; this.immutableMultiset = immutableMultiset;
+            this.treeMultiset = treeMultiset; this.linkedHashMultiset = linkedHashMultiset; this.concurrentHashMultiset = concurrentHashMultiset;
+            this.immutableMultiset = immutableMultiset; this.immutableSortedMultiset = immutableSortedMultiset;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -127,7 +128,6 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
-        private final ImmutableSortedMultiset<?> iSortedMultiset;
         private final ImmutableBiMap<?, ?> iBiMap;
         private final ImmutableTable<?, ?, ?> iTable;
         private final Range<?> range;
@@ -135,10 +135,8 @@ public class ExternalApiClassesTest {
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaOtherContainer(
-                ImmutableSortedMultiset<?> iSortedMultiset,
                 ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
                 Range<?> range, Optional<?> optional) {
-            this.iSortedMultiset = iSortedMultiset;
             this.iBiMap = immutableBiMap;
             this.iTable = iTable; this.range = range; this.optional = optional;
         }

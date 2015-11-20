@@ -310,6 +310,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
         addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
+        addCopiedGuavaCollection("ImmutableSortedMultiset", forName("com.google.common.collect.SortedMultiset"), "copyOfSorted");
     }
 
     private void addGoogleGuavaMultimapCollectionsClasses() {
@@ -336,10 +337,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableSortedMultiset")
-                .callFactory("of", classes(Comparable.class), objects("red"))
-                .callFactory("of", classes(Comparable.class), objects("black"))
-                .addTo(prefabValues);
         prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionCopyFactory(
                 "com.google.common.collect.ImmutableBimap", Map.class,
                 "com.google.common.collect.ImmutableBimap", "copyOf"));
@@ -436,10 +433,14 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(type, factory);
     }
 
-    @SuppressWarnings("unchecked")
     private void addCopiedGuavaCollection(String name, Class<?> copyFrom) {
+        addCopiedGuavaCollection(name, copyFrom, "copyOf");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addCopiedGuavaCollection(String name, Class<?> copyFrom, String copyMethodName) {
         String className = GUAVA_PACKAGE + name;
         prefabValues.addFactory(forName(className),
-                new ReflectiveCollectionCopyFactory(className, copyFrom, className, "copyOf"));
+                new ReflectiveCollectionCopyFactory(className, copyFrom, className, copyMethodName));
     }
 }
