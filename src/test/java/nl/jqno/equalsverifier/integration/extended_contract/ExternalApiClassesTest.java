@@ -32,6 +32,12 @@ public class ExternalApiClassesTest {
     }
 
     @Test
+    public void succeed_whenClassUsesGoogleGuavaMultimap() {
+        EqualsVerifier.forClass(GuavaMultimapContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
         EqualsVerifier.forClass(GuavaImmutableContainer.class)
                 .verify();
@@ -72,6 +78,35 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaMultimapContainer {
+        private final Multimap<?, ?> multimap;
+        private final ListMultimap<?, ?> listMultimap;
+        private final SetMultimap<?, ?> setMultimap;
+        private final SortedSetMultimap<?, ?> sortedSetMultimap;
+        private final ArrayListMultimap<?, ?> arrayListMultimap;
+        private final HashMultimap<?, ?> hashMultimap;
+        private final LinkedListMultimap<?, ?> linkedListMultimap;
+        private final LinkedHashMultimap<?, ?> linkedHashMultimap;
+        private final TreeMultimap<?, ?> treeMultimap;
+        private final ImmutableListMultimap<?, ?> immutableListMultimap;
+        private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaMultimapContainer(Multimap<?, ?> multimap, ListMultimap<?, ?> listMultimap, SetMultimap<?, ?> setMultimap,
+                SortedSetMultimap<?, ?> sortedSetMultimap, ArrayListMultimap<?, ?> arrayListMultimap, HashMultimap<?, ?> hashMultimap,
+                LinkedListMultimap<?, ?> linkedListMultimap, LinkedHashMultimap<?, ?> linkedHashMultimap, TreeMultimap<?, ?> treeMultimap,
+                ImmutableListMultimap<?, ?> immutableListMultimap, ImmutableSetMultimap<?, ?> immutableSetMultimap) {
+            this.multimap = multimap; this.listMultimap = listMultimap; this.setMultimap = setMultimap;
+            this.sortedSetMultimap = sortedSetMultimap; this.arrayListMultimap = arrayListMultimap; this.hashMultimap = hashMultimap;
+            this.linkedListMultimap = linkedListMultimap; this.linkedHashMultimap = linkedHashMultimap; this.treeMultimap = treeMultimap;
+            this.immutableListMultimap = immutableListMultimap; this.immutableSetMultimap = immutableSetMultimap;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaImmutableContainer {
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
@@ -93,8 +128,6 @@ public class ExternalApiClassesTest {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
         private final ImmutableSortedMultiset<?> iSortedMultiset;
-        private final ImmutableListMultimap<?, ?> iListMultimap;
-        private final ImmutableSetMultimap<?, ?> iSetMultimap;
         private final ImmutableBiMap<?, ?> iBiMap;
         private final ImmutableTable<?, ?, ?> iTable;
         private final Range<?> range;
@@ -102,11 +135,11 @@ public class ExternalApiClassesTest {
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaOtherContainer(
-                ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
-                ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
+                ImmutableSortedMultiset<?> iSortedMultiset,
+                ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
                 Range<?> range, Optional<?> optional) {
             this.iSortedMultiset = iSortedMultiset;
-            this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap;
+            this.iBiMap = immutableBiMap;
             this.iTable = iTable; this.range = range; this.optional = optional;
         }
 

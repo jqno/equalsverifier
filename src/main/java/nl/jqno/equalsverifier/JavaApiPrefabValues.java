@@ -33,7 +33,6 @@ import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.GuavaCollectionFactory.Kind.MAP;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
@@ -85,6 +84,7 @@ public final class JavaApiPrefabValues {
         addJava8ApiClasses();
         addJavaFxClasses();
         addGoogleGuavaMultisetCollectionsClasses();
+        addGoogleGuavaMultimapCollectionsClasses();
         addGoogleGuavaImmutableClasses();
         addNewGoogleGuavaClasses();
         addJodaTimeClasses();
@@ -286,7 +286,6 @@ public final class JavaApiPrefabValues {
                 .addTo(prefabValues);
     }
 
-    @SuppressWarnings("unchecked")
     private void addJavaFxClasses() {
         addJavaFxCollection("ObservableList", List.class, "observableList");
         addJavaFxCollection("ObservableMap", Map.class, "observableMap");
@@ -313,6 +312,20 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
     }
 
+    private void addGoogleGuavaMultimapCollectionsClasses() {
+        addNewGuavaMap("Multimap", "ArrayListMultimap");
+        addNewGuavaMap("ListMultimap", "ArrayListMultimap");
+        addNewGuavaMap("SetMultimap", "HashMultimap");
+        addNewGuavaMap("SortedSetMultimap", "TreeMultimap", OBJECT_COMPARATOR);
+        addNewGuavaMap("ArrayListMultiMap", "ArrayListMultimap");
+        addNewGuavaMap("HashMultimap", "HashMultimap");
+        addNewGuavaMap("LinkedListMultimap", "LinkedListMultimap");
+        addNewGuavaMap("LinkedHashMultimap", "LinkedHashMultimap");
+        addNewGuavaMap("TreeMultimap", "TreeMultimap", OBJECT_COMPARATOR);
+        addCopiedGuavaCollection("ImmutableListMultimap", forName("com.google.common.collect.Multimap"));
+        addCopiedGuavaCollection("ImmutableSetMultimap", forName("com.google.common.collect.Multimap"));
+    }
+
     private void addGoogleGuavaImmutableClasses() {
         addCopiedGuavaCollection("ImmutableList", Collection.class);
         addCopiedGuavaCollection("ImmutableMap", Map.class);
@@ -327,10 +340,6 @@ public final class JavaApiPrefabValues {
                 .callFactory("of", classes(Comparable.class), objects("red"))
                 .callFactory("of", classes(Comparable.class), objects("black"))
                 .addTo(prefabValues);
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableListMultimap"),
-                new GuavaCollectionFactory("ImmutableListMultimap", MAP));
-        prefabValues.addFactory(forName("com.google.common.collect.ImmutableSetMultimap"),
-                new GuavaCollectionFactory("ImmutableSetMultimap", MAP));
         prefabValues.addFactory(forName("com.google.common.collect.ImmutableBimap"), new ReflectiveCollectionCopyFactory(
                 "com.google.common.collect.ImmutableBimap", Map.class,
                 "com.google.common.collect.ImmutableBimap", "copyOf"));
@@ -409,6 +418,21 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
+        prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addNewGuavaMap(String declaredType, String actualType) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveMapFactory<T> factory = ReflectiveMapFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
+        prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addNewGuavaMap(String declaredType, String actualType, final Comparator<Object> comparator) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveMapFactory<T> factory =
+                ReflectiveMapFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
         prefabValues.addFactory(type, factory);
     }
 

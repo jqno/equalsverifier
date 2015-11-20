@@ -52,7 +52,7 @@ public abstract class ReflectiveMapFactory<T> extends AbstractReflectiveGenericF
             @Override
             protected Object createEmpty() {
                 return new ConditionalInstantiator(typeName)
-                        .callFactory(methodName, classes(Comparator.class), objects(parameterValue));
+                        .callFactory(methodName, classes(Comparator.class, Comparator.class), objects(parameterValue, parameterValue));
             }
         };
     }
