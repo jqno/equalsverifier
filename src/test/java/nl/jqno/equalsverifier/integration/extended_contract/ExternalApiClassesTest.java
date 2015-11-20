@@ -72,6 +72,7 @@ public class ExternalApiClassesTest {
         private final ImmutableMultiset<?> immutableMultiset;
         private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaMultisetContainer(Multiset<?> multiset, SortedMultiset<?> sortedMultiset, HashMultiset<?> hashMultiset,
                 TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset concurrentHashMultiset,
                 ImmutableMultiset<?> immutableMultiset, ImmutableSortedMultiset<?> immutableSortedMultiset) {

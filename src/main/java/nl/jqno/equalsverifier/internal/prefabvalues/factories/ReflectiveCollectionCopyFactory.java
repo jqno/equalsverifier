@@ -36,7 +36,8 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
         this(typeName, parameterRawType, parameterRawType, factoryType, factoryMethod);
     }
 
-    public ReflectiveCollectionCopyFactory(String typeName, Class<?> declaredParameterRawType, Class<?> actualParameterRawType, String factoryType, String factoryMethod) {
+    public ReflectiveCollectionCopyFactory(String typeName, Class<?> declaredParameterRawType, Class<?> actualParameterRawType,
+            String factoryType, String factoryMethod) {
         this.typeName = typeName;
         this.declaredParameterRawType = declaredParameterRawType;
         this.actualParameterRawType = actualParameterRawType;
