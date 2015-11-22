@@ -87,6 +87,7 @@ public final class JavaApiPrefabValues {
         addGoogleGuavaMultisetCollectionsClasses();
         addGoogleGuavaMultimapCollectionsClasses();
         addGoogleGuavaBiMapCollectionsClasses();
+        addGoogleGuavaTableCollectionClasses();
         addGoogleGuavaImmutableClasses();
         addNewGoogleGuavaClasses();
         addJodaTimeClasses();
@@ -351,6 +352,14 @@ public final class JavaApiPrefabValues {
         });
     }
 
+    private void addGoogleGuavaTableCollectionClasses() {
+        addNewGuavaTable("Table", "HashBasedTable");
+        addNewGuavaTable("HashBasedTable", "HashBasedTable");
+        addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
+        addCopiedGuavaCollection("ArrayTable", forName("com.google.common.collect.Table"), "create");
+        addCopiedGuavaCollection("ImmutableTable", forName("com.google.common.collect.Table"));
+    }
+
     private void addGoogleGuavaImmutableClasses() {
         addCopiedGuavaCollection("ImmutableList", Collection.class);
         addCopiedGuavaCollection("ImmutableMap", Map.class);
@@ -361,10 +370,6 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.ImmutableTable")
-                .callFactory("of", classes(Object.class, Object.class, Object.class), objects("red", "X", "value"))
-                .callFactory("of", classes(Object.class, Object.class, Object.class), objects("black", "X", "value"))
-                .addTo(prefabValues);
         ConditionalPrefabValueBuilder.of("com.google.common.collect.Range")
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2))
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4))
@@ -431,7 +436,7 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(type, factory);
     }
 
-    private <T> void addNewGuavaCollection(String declaredType, String actualType, final Comparator<Object> comparator) {
+    private <T> void addNewGuavaCollection(String declaredType, String actualType, Comparator<Object> comparator) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
@@ -446,11 +451,27 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(type, factory);
     }
 
-    private <T> void addNewGuavaMap(String declaredType, String actualType, final Comparator<Object> comparator) {
+    private <T> void addNewGuavaMap(String declaredType, String actualType, Comparator<Object> comparator) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveMapFactory<T> factory =
                 ReflectiveMapFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
+        prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addNewGuavaTable(String declaredType, String actualType, Comparator<Object> comparator) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveGuavaTableFactory<T> factory =
+                ReflectiveGuavaTableFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
+        prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addNewGuavaTable(String declaredType, String actualType) {
+        @SuppressWarnings("unchecked")
+        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        ReflectiveGuavaTableFactory<T> factory =
+                ReflectiveGuavaTableFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
         prefabValues.addFactory(type, factory);
     }
 

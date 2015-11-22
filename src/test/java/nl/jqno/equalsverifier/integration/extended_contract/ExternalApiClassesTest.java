@@ -44,6 +44,12 @@ public class ExternalApiClassesTest {
     }
 
     @Test
+    public void succeed_whenClassUsesGoogleGuavaTable() {
+        EqualsVerifier.forClass(GuavaTableContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
         EqualsVerifier.forClass(GuavaImmutableContainer.class)
                 .verify();
@@ -133,6 +139,28 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaTableContainer {
+        private final Table<?, ?, ?> table;
+        private final HashBasedTable<?, ?, ?> hashBasedTable;
+        private final TreeBasedTable<?, ?, ?> treeBasedTable;
+        private final ArrayTable<?, ?, ?> arrayTable;
+        private final ImmutableTable<?, ?, ?> immutableTable;
+
+        public GuavaTableContainer(Table<?, ?, ?> table, HashBasedTable<?, ?, ?> hashBasedTable,
+                TreeBasedTable<?, ?, ?> treeBasedTable, ArrayTable<?, ?, ?> arrayTable,
+                ImmutableTable<?, ?, ?> immutableTable) {
+            this.table = table;
+            this.hashBasedTable = hashBasedTable;
+            this.treeBasedTable = treeBasedTable;
+            this.arrayTable = arrayTable;
+            this.immutableTable = immutableTable;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaImmutableContainer {
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
@@ -153,13 +181,12 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
-        private final ImmutableTable<?, ?, ?> iTable;
         private final Range<?> range;
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaOtherContainer(ImmutableTable<?, ?, ?> iTable, Range<?> range, Optional<?> optional) {
-            this.iTable = iTable; this.range = range; this.optional = optional;
+        public GuavaOtherContainer(Range<?> range, Optional<?> optional) {
+            this.range = range; this.optional = optional;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
