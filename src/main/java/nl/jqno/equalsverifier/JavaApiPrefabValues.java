@@ -313,7 +313,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
         addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
-        addCopiedGuavaCollection("ImmutableSortedMultiset", forName("com.google.common.collect.SortedMultiset"), "copyOfSorted");
+        addCopiedGuavaCollection("ImmutableSortedMultiset", forName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
     }
 
     private void addGoogleGuavaMultimapCollectionsClasses() {
@@ -326,8 +326,8 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("LinkedListMultimap", "LinkedListMultimap");
         addNewGuavaMap("LinkedHashMultimap", "LinkedHashMultimap");
         addNewGuavaMap("TreeMultimap", "TreeMultimap", OBJECT_COMPARATOR);
-        addCopiedGuavaCollection("ImmutableListMultimap", forName("com.google.common.collect.Multimap"));
-        addCopiedGuavaCollection("ImmutableSetMultimap", forName("com.google.common.collect.Multimap"));
+        addCopiedGuavaCollection("ImmutableListMultimap", forName(GUAVA_PACKAGE + "Multimap"));
+        addCopiedGuavaCollection("ImmutableSetMultimap", forName(GUAVA_PACKAGE + "Multimap"));
     }
 
     @SuppressWarnings("unchecked")
@@ -337,7 +337,7 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
 
-        prefabValues.addFactory(forName("com.google.common.collect.EnumBiMap"), new AbstractReflectiveGenericFactory() {
+        prefabValues.addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new AbstractReflectiveGenericFactory() {
             @Override
             public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
                 return new Tuple(create(Dummy.RED, Dummy.BLACK), create(Dummy.BLACK, Dummy.BLACK));
@@ -346,7 +346,7 @@ public final class JavaApiPrefabValues {
             private Object create(Dummy key, Dummy value) {
                 Map<Dummy, Dummy> original = new EnumMap<>(Dummy.class);
                 original.put(key, value);
-                return new ConditionalInstantiator("com.google.common.collect.EnumBiMap")
+                return new ConditionalInstantiator(GUAVA_PACKAGE + "EnumBiMap")
                         .callFactory("create", classes(Map.class), objects(original));
             }
         });
@@ -356,8 +356,8 @@ public final class JavaApiPrefabValues {
         addNewGuavaTable("Table", "HashBasedTable");
         addNewGuavaTable("HashBasedTable", "HashBasedTable");
         addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
-        addCopiedGuavaCollection("ArrayTable", forName("com.google.common.collect.Table"), "create");
-        addCopiedGuavaCollection("ImmutableTable", forName("com.google.common.collect.Table"));
+        addCopiedGuavaCollection("ArrayTable", forName(GUAVA_PACKAGE + "Table"), "create");
+        addCopiedGuavaCollection("ImmutableTable", forName(GUAVA_PACKAGE + "Table"));
     }
 
     private void addGoogleGuavaImmutableClasses() {
@@ -370,7 +370,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        ConditionalPrefabValueBuilder.of("com.google.common.collect.Range")
+        ConditionalPrefabValueBuilder.of(GUAVA_PACKAGE + "Range")
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2))
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4))
                 .addTo(prefabValues);
