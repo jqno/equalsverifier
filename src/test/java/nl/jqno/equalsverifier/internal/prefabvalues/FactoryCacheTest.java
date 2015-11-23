@@ -45,6 +45,12 @@ public class FactoryCacheTest {
     }
 
     @Test
+    public void putNullAndGetNothingBack() {
+        cache.put(null, STRING_FACTORY);
+        assertNull(cache.get(null));
+    }
+
+    @Test
     public void contains() {
         cache.put(STRING_CLASS, STRING_FACTORY);
         assertTrue(cache.contains(STRING_CLASS));

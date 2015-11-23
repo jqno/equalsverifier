@@ -183,6 +183,11 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void addingNullDoesntBreakAnything() {
+        pv.addFactory(null, new ListTestFactory());
+    }
+
+    @Test
     public void backupDelegatesToStash() {
         pv.backupToStash(String.class);
         assertEquals(String.class, stash.lastBackuppedType);

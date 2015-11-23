@@ -24,7 +24,9 @@ class FactoryCache {
     private final Map<Class<?>, PrefabValueFactory<?>> cache = new HashMap<>();
 
     public <T> void put(Class<T> type, PrefabValueFactory<T> factory) {
-        cache.put(type, factory);
+        if (type != null) {
+            cache.put(type, factory);
+        }
     }
 
     @SuppressWarnings("unchecked")
