@@ -374,10 +374,9 @@ public final class JavaApiPrefabValues {
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2))
                 .callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4))
                 .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("com.google.common.base.Optional")
-                .callFactory("of", classes(Object.class), objects("red"))
-                .callFactory("of", classes(Object.class), objects("black"))
-                .addTo(prefabValues);
+
+        String optional = "com.google.common.base.Optional";
+        prefabValues.addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
     }
 
     private void addJodaTimeClasses() {
