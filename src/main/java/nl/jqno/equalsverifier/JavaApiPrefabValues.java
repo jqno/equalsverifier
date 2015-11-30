@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.ConditionalPrefabValueBuilder;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
