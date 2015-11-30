@@ -272,22 +272,22 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJava8ApiClasses() {
-        ConditionalPrefabValueBuilder.of("java.time.ZoneId")
-                .callFactory("of", classes(String.class), objects("+1"))
-                .callFactory("of", classes(String.class), objects("-10"))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("java.time.format.DateTimeFormatter")
-                .withConstant("ISO_TIME")
-                .withConstant("ISO_DATE")
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("java.util.concurrent.CompletableFuture")
-                .instantiate(classes(), objects())
-                .instantiate(classes(), objects())
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("java.util.concurrent.locks.StampedLock")
-                .instantiate(classes(), objects())
-                .instantiate(classes(), objects())
-                .addTo(prefabValues);
+        ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
+        addValues(prefabValues, zoneId.resolve(),
+                zoneId.callFactory("of", classes(String.class), objects("+1")),
+                zoneId.callFactory("of", classes(String.class), objects("-10")));
+        ConditionalInstantiator dateTimeFormatter = new ConditionalInstantiator("java.time.format.DateTimeFormatter");
+        addValues(prefabValues, dateTimeFormatter.resolve(),
+                dateTimeFormatter.returnConstant("ISO_TIME"),
+                dateTimeFormatter.returnConstant("ISO_DATE"));
+        ConditionalInstantiator completableFuture = new ConditionalInstantiator("java.util.concurrent.CompletableFuture");
+        addValues(prefabValues, completableFuture.resolve(),
+                completableFuture.instantiate(classes(), objects()),
+                completableFuture.instantiate(classes(), objects()));
+        ConditionalInstantiator stampedLock = new ConditionalInstantiator("java.util.concurrent.locks.StampedLock");
+        addValues(prefabValues, stampedLock.resolve(),
+                stampedLock.instantiate(classes(), objects()),
+                stampedLock.instantiate(classes(), objects()));
     }
 
     private void addJavaFxClasses() {
