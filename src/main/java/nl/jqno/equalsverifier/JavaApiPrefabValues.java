@@ -272,19 +272,19 @@ public final class JavaApiPrefabValues {
 
     private void addJava8ApiClasses() {
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
-        addValues(prefabValues, zoneId.resolve(),
+        addValues(zoneId.resolve(),
                 zoneId.callFactory("of", classes(String.class), objects("+1")),
                 zoneId.callFactory("of", classes(String.class), objects("-10")));
         ConditionalInstantiator dateTimeFormatter = new ConditionalInstantiator("java.time.format.DateTimeFormatter");
-        addValues(prefabValues, dateTimeFormatter.resolve(),
+        addValues(dateTimeFormatter.resolve(),
                 dateTimeFormatter.returnConstant("ISO_TIME"),
                 dateTimeFormatter.returnConstant("ISO_DATE"));
         ConditionalInstantiator completableFuture = new ConditionalInstantiator("java.util.concurrent.CompletableFuture");
-        addValues(prefabValues, completableFuture.resolve(),
+        addValues(completableFuture.resolve(),
                 completableFuture.instantiate(classes(), objects()),
                 completableFuture.instantiate(classes(), objects()));
         ConditionalInstantiator stampedLock = new ConditionalInstantiator("java.util.concurrent.locks.StampedLock");
-        addValues(prefabValues, stampedLock.resolve(),
+        addValues(stampedLock.resolve(),
                 stampedLock.instantiate(classes(), objects()),
                 stampedLock.instantiate(classes(), objects()));
     }
@@ -371,7 +371,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
         ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
-        addValues(prefabValues, range.resolve(),
+        addValues(range.resolve(),
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2)),
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
 
@@ -381,23 +381,23 @@ public final class JavaApiPrefabValues {
 
     private void addJodaTimeClasses() {
         ConditionalInstantiator chronology = new ConditionalInstantiator(JODA_PACKAGE + "Chronology");
-        addValues(prefabValues, chronology.resolve(),
+        addValues(chronology.resolve(),
                 chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()),
                 chronology.callFactory(JODA_PACKAGE + "chrono.ISOChronology", "getInstanceUTC", classes(), objects()));
         ConditionalInstantiator dateTimeZone = new ConditionalInstantiator(JODA_PACKAGE + "DateTimeZone");
-        addValues(prefabValues, dateTimeZone.resolve(),
+        addValues(dateTimeZone.resolve(),
                 dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)),
                 dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(-10)));
         ConditionalInstantiator periodType = new ConditionalInstantiator(JODA_PACKAGE + "PeriodType");
-        addValues(prefabValues, periodType.resolve(),
+        addValues(periodType.resolve(),
                 periodType.callFactory("days", classes(), objects()),
                 periodType.callFactory("hours", classes(), objects()));
         ConditionalInstantiator yearMonth = new ConditionalInstantiator(JODA_PACKAGE + "YearMonth");
-        addValues(prefabValues, yearMonth.resolve(),
+        addValues(yearMonth.resolve(),
                 yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)),
                 yearMonth.instantiate(classes(int.class, int.class), objects(2014, 7)));
         ConditionalInstantiator monthDay = new ConditionalInstantiator(JODA_PACKAGE + "MonthDay");
-        addValues(prefabValues, monthDay.resolve(),
+        addValues(monthDay.resolve(),
                 monthDay.instantiate(classes(int.class, int.class), objects(6, 1)),
                 monthDay.instantiate(classes(int.class, int.class), objects(6, 26)));
     }
@@ -413,7 +413,7 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void addValues(PrefabValues prefabValues, Class<T> type, Object red, Object black) {
+    private <T> void addValues(Class<T> type, Object red, Object black) {
         prefabValues.addFactory(type, (T)red, (T)black);
     }
 
