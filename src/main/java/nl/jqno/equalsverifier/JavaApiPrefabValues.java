@@ -49,6 +49,7 @@ public final class JavaApiPrefabValues {
     private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
+    private static final String JODA_PACKAGE = "org.joda.time.";
 
     private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
         @Override public int compare(Object o1, Object o2) { return Integer.compare(o1.hashCode(), o2.hashCode()); }
@@ -380,28 +381,26 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJodaTimeClasses() {
-        ConditionalPrefabValueBuilder.of("org.joda.time.Chronology")
-                .withConcreteClass("org.joda.time.chrono.GregorianChronology")
-                .callFactory("getInstanceUTC", classes(), objects())
-                .withConcreteClass("org.joda.time.chrono.ISOChronology")
-                .callFactory("getInstanceUTC", classes(), objects())
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("org.joda.time.DateTimeZone")
-                .callFactory("forOffsetHours", classes(int.class), objects(+1))
-                .callFactory("forOffsetHours", classes(int.class), objects(-10))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("org.joda.time.PeriodType")
-                .callFactory("days", classes(), objects())
-                .callFactory("hours", classes(), objects())
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("org.joda.time.YearMonth")
-                .instantiate(classes(int.class, int.class), objects(2009, 6))
-                .instantiate(classes(int.class, int.class), objects(2014, 7))
-                .addTo(prefabValues);
-        ConditionalPrefabValueBuilder.of("org.joda.time.MonthDay")
-                .instantiate(classes(int.class, int.class), objects(6, 1))
-                .instantiate(classes(int.class, int.class), objects(7, 26))
-                .addTo(prefabValues);
+        ConditionalInstantiator chronology = new ConditionalInstantiator(JODA_PACKAGE + "Chronology");
+        addValues(prefabValues, chronology.resolve(),
+                chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()),
+                chronology.callFactory(JODA_PACKAGE + "chrono.ISOChronology", "getInstanceUTC", classes(), objects()));
+        ConditionalInstantiator dateTimeZone = new ConditionalInstantiator(JODA_PACKAGE + "DateTimeZone");
+        addValues(prefabValues, dateTimeZone.resolve(),
+                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)),
+                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(-10)));
+        ConditionalInstantiator periodType = new ConditionalInstantiator(JODA_PACKAGE + "PeriodType");
+        addValues(prefabValues, periodType.resolve(),
+                periodType.callFactory("days", classes(), objects()),
+                periodType.callFactory("hours", classes(), objects()));
+        ConditionalInstantiator yearMonth = new ConditionalInstantiator(JODA_PACKAGE + "YearMonth");
+        addValues(prefabValues, yearMonth.resolve(),
+                yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)),
+                yearMonth.instantiate(classes(int.class, int.class), objects(2014, 7)));
+        ConditionalInstantiator monthDay = new ConditionalInstantiator(JODA_PACKAGE + "MonthDay");
+        addValues(prefabValues, monthDay.resolve(),
+                monthDay.instantiate(classes(int.class, int.class), objects(6, 1)),
+                monthDay.instantiate(classes(int.class, int.class), objects(6, 26)));
     }
 
     private enum Dummy {
