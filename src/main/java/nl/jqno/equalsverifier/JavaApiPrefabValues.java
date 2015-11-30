@@ -370,10 +370,10 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private void addNewGoogleGuavaClasses() {
-        ConditionalPrefabValueBuilder.of(GUAVA_PACKAGE + "Range")
-                .callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2))
-                .callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4))
-                .addTo(prefabValues);
+        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
+        addValues(prefabValues, range.resolve(),
+                range.callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2)),
+                range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
 
         String optional = "com.google.common.base.Optional";
         prefabValues.addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
@@ -412,6 +412,11 @@ public final class JavaApiPrefabValues {
             result.put(this, toString());
             return result;
         }
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> void addValues(PrefabValues prefabValues, Class<T> type, Object red, Object black) {
+        prefabValues.addFactory(type, (T)red, (T)black);
     }
 
     @SuppressWarnings("unchecked")
