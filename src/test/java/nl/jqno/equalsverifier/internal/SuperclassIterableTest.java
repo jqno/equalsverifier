@@ -33,32 +33,64 @@ public class SuperclassIterableTest {
     }
 
     @Test
-    public void simpleClass() {
+    public void simpleClassExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleClass.class)) {
+            actual.add(type);
+        }
+        assertEquals(asList(), actual);
+    }
+
+    @Test
+    public void simpleClassIncludeSelf() {
+        for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleClass.class)) {
             actual.add(type);
         }
         assertEquals(asList(SimpleClass.class), actual);
     }
 
     @Test
-    public void hierarchy() {
+    public void hierarchyExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleSubSubclass.class)) {
+            actual.add(type);
+        }
+        assertEquals(asList(SimpleSubclass.class, SimpleClass.class), actual);
+    }
+
+    @Test
+    public void hierarchyIncludeSelf() {
+        for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubSubclass.class)) {
             actual.add(type);
         }
         assertEquals(asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
     }
 
     @Test
-    public void anInterface() {
+    public void interfaceExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleInterface.class)) {
+            actual.add(type);
+        }
+        assertEquals(asList(), actual);
+    }
+
+    @Test
+    public void interfaceIncludeSelf() {
+        for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleInterface.class)) {
             actual.add(type);
         }
         assertEquals(asList(SimpleInterface.class), actual);
     }
 
     @Test
-    public void subInterface() {
+    public void subInterfaceExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleSubInterface.class)) {
+            actual.add(type);
+        }
+        assertEquals(asList(), actual);
+    }
+
+    @Test
+    public void subInterfaceIncludeSelf() {
+        for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubInterface.class)) {
             actual.add(type);
         }
         assertEquals(asList(SimpleSubInterface.class), actual);
