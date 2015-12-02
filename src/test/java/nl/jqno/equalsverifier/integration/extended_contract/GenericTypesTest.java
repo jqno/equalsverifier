@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static java.util.Collections.singletonList;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class GenericTypesTest {
@@ -68,6 +69,15 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtNonCollectionGenericContent_givenPrefabValues() {
+        SparseArray<Point> red = new SparseArray<>(singletonList(new Point(1, 2)));
+        SparseArray<Point> black = new SparseArray<>(singletonList(new Point(3, 4)));
+        EqualsVerifier.forClass(SparseArrayContainer.class)
+                .withPrefabValues(SparseArray.class, red, black)
                 .verify();
     }
 
@@ -285,5 +295,64 @@ public class GenericTypesTest {
 
         @Override public int hashCode() { return defaultHashCode(this); }
         @Override public String toString() { return "ImmutableMapContainer: " + map; }
+    }
+
+    static final class SparseArray<T> {
+        private final List<T> items;
+
+        public SparseArray(List<T> items) {
+            this.items = items;
+        }
+
+        public int size() {
+            return items.size();
+        }
+
+        public T get(int i) {
+            return items.get(i);
+        }
+
+        // There are no equals and hashCode
+    }
+
+    static final class SparseArrayContainer {
+        private final SparseArray<Point> sparseArray;
+
+        public SparseArrayContainer(SparseArray<Point> sparseArray) {
+            this.sparseArray = sparseArray;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof SparseArrayContainer)) {
+                return false;
+            }
+            SparseArrayContainer other = (SparseArrayContainer)obj;
+            if (sparseArray == null || other.sparseArray == null) {
+                return sparseArray == other.sparseArray;
+            }
+            if (sparseArray.size() != other.sparseArray.size()) {
+                return false;
+            }
+            for (int i = 0; i < sparseArray.size(); i++) {
+                Point a = sparseArray.get(i);
+                Point b = other.sparseArray.get(i);
+                if (!a.equals(b)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            if (sparseArray != null) {
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    result += 59 * sparseArray.get(i).hashCode();
+                }
+            }
+            return result;
+        }
     }
 }
