@@ -270,7 +270,10 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
+    @SuppressWarnings("unchecked")
     private void addJava8ApiClasses() {
+        String optional = "java.util.Optional";
+        prefabValues.addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
                 zoneId.callFactory("of", classes(String.class), objects("+1")),
