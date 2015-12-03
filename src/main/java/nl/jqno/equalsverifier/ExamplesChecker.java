@@ -70,10 +70,28 @@ class ExamplesChecker<T> implements Checker {
     private void checkSingle(T reference) {
         final T copy = ObjectAccessor.of(reference, type).copy();
 
+        checkGenerics(reference);
         checkReflexivity(reference);
         checkNonNullity(reference);
         checkTypeCheck(reference);
         checkHashCode(reference, copy);
+    }
+
+    private void checkGenerics(T reference) {
+        try {
+            reference.equals(reference);
+        }
+        catch (ClassCastException e) {
+            String msg = e.getMessage();
+            String genericType = msg.substring(msg.lastIndexOf(' ') + 1, msg.length());
+            String genericSimpleType = genericType.substring(genericType.lastIndexOf(".") + 1, genericType.length());
+            fail(Formatter.of("Generics: one of " + type.getSimpleName() + "'s fields has a generic parameter of type " +
+                    genericType + ".\n  This type will look like Something<" + genericSimpleType + ">. " +
+                    "Please add prefab values for this type 'Something'." +
+                    "\n  This error occurs because " + type.getSimpleName() +
+                    "'s equals method directly dereferences this generic parameter."),
+                    e);
+        }
     }
 
     private void checkReflexivity(T reference) {

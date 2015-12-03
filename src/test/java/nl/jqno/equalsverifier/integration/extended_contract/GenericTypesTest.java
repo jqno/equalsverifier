@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
@@ -29,7 +30,7 @@ import java.util.Set;
 import static java.util.Collections.singletonList;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class GenericTypesTest {
+public class GenericTypesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtListFieldsGenericContent() {
         EqualsVerifier.forClass(ListContainer.class)
@@ -69,6 +70,13 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsLooksAtNonCollectionGenericContent() {
+        expectFailure("Generics", "add prefab values for", SparseArrayContainer.class.getSimpleName(), Point.class.getName());
+        EqualsVerifier.forClass(SparseArrayContainer.class)
                 .verify();
     }
 
