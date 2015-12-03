@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static java.util.Collections.singletonList;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class GenericTypesTest extends IntegrationTestBase {
@@ -75,8 +76,9 @@ public class GenericTypesTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenEqualsLooksAtNonCollectionGenericContent() {
-        expectFailure("Generics", "add prefab values for", SparseArrayContainer.class.getSimpleName(), Point.class.getName());
-        EqualsVerifier.forClass(SparseArrayContainer.class)
+        expectFailure("Generics", "add prefab values for", "equals method",
+                SparseArrayEqualsContainer.class.getSimpleName(), Point.class.getName());
+        EqualsVerifier.forClass(SparseArrayEqualsContainer.class)
                 .verify();
     }
 
@@ -84,8 +86,31 @@ public class GenericTypesTest extends IntegrationTestBase {
     public void succeed_whenEqualsLooksAtNonCollectionGenericContent_givenPrefabValues() {
         SparseArray<Point> red = new SparseArray<>(singletonList(new Point(1, 2)));
         SparseArray<Point> black = new SparseArray<>(singletonList(new Point(3, 4)));
-        EqualsVerifier.forClass(SparseArrayContainer.class)
+        EqualsVerifier.forClass(SparseArrayEqualsContainer.class)
                 .withPrefabValues(SparseArray.class, red, black)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenHashCodeLooksAtNonCollectionGenericContent() {
+        expectFailure("Generics", "add prefab values for", "hashCode method",
+                SparseArrayHashCodeContainer.class.getSimpleName(), Point.class.getName());
+        EqualsVerifier.forClass(SparseArrayHashCodeContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenHashCodeLooksAtNonCollectionGenericContent_givenPrefabValues() {
+        SparseArray<Point> red = new SparseArray<>(singletonList(new Point(1, 2)));
+        SparseArray<Point> black = new SparseArray<>(singletonList(new Point(3, 4)));
+        EqualsVerifier.forClass(SparseArrayHashCodeContainer.class)
+                .withPrefabValues(SparseArray.class, red, black)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenToStringLooksAtNonCollectionGenericContent() {
+        EqualsVerifier.forClass(SparseArrayToStringContainer.class)
                 .verify();
     }
 
@@ -323,19 +348,19 @@ public class GenericTypesTest extends IntegrationTestBase {
         // There are no equals and hashCode
     }
 
-    static final class SparseArrayContainer {
+    static final class SparseArrayEqualsContainer {
         private final SparseArray<Point> sparseArray;
 
-        public SparseArrayContainer(SparseArray<Point> sparseArray) {
+        public SparseArrayEqualsContainer(SparseArray<Point> sparseArray) {
             this.sparseArray = sparseArray;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof SparseArrayContainer)) {
+            if (!(obj instanceof SparseArrayEqualsContainer)) {
                 return false;
             }
-            SparseArrayContainer other = (SparseArrayContainer)obj;
+            SparseArrayEqualsContainer other = (SparseArrayEqualsContainer)obj;
             if (sparseArray == null || other.sparseArray == null) {
                 return sparseArray == other.sparseArray;
             }
@@ -358,6 +383,52 @@ public class GenericTypesTest extends IntegrationTestBase {
             if (sparseArray != null) {
                 for (int i = 0; i < sparseArray.size(); i++) {
                     result += 59 * sparseArray.get(i).hashCode();
+                }
+            }
+            return result;
+        }
+    }
+
+    static final class SparseArrayHashCodeContainer {
+        private final SparseArray<Point> sparseArray;
+
+        public SparseArrayHashCodeContainer(SparseArray<Point> sparseArray) {
+            this.sparseArray = sparseArray;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            if (sparseArray != null) {
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    result += 59 * sparseArray.get(i).hashCode();
+                }
+            }
+            return result;
+        }
+    }
+
+    static final class SparseArrayToStringContainer {
+        private final SparseArray<Point> sparseArray;
+
+        public SparseArrayToStringContainer(SparseArray<Point> sparseArray) {
+            this.sparseArray = sparseArray;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+
+        @Override
+        public String toString() {
+            String result = SparseArrayToStringContainer.class.getSimpleName() + ": ";
+            if (sparseArray != null) {
+                for (int i = 0; i < sparseArray.size(); i++) {
+                    result += sparseArray.get(i) + ", ";
                 }
             }
             return result;

@@ -82,16 +82,26 @@ class ExamplesChecker<T> implements Checker {
             reference.equals(reference);
         }
         catch (ClassCastException e) {
-            String msg = e.getMessage();
-            String genericType = msg.substring(msg.lastIndexOf(' ') + 1, msg.length());
-            String genericSimpleType = genericType.substring(genericType.lastIndexOf(".") + 1, genericType.length());
-            fail(Formatter.of("Generics: one of " + type.getSimpleName() + "'s fields has a generic parameter of type " +
-                    genericType + ".\n  This type will look like Something<" + genericSimpleType + ">. " +
-                    "Please add prefab values for this type 'Something'." +
-                    "\n  This error occurs because " + type.getSimpleName() +
-                    "'s equals method directly dereferences this generic parameter."),
-                    e);
+            fail(buildGenericsErrorMessage("equals", e), e);
         }
+
+        try {
+            reference.hashCode();
+        }
+        catch (ClassCastException e) {
+            fail(buildGenericsErrorMessage("hashCode", e), e);
+        }
+    }
+
+    private Formatter buildGenericsErrorMessage(String method, ClassCastException e) {
+        String msg = e.getMessage();
+        String genericType = msg.substring(msg.lastIndexOf(' ') + 1, msg.length());
+        String genericSimpleType = genericType.substring(genericType.lastIndexOf(".") + 1, genericType.length());
+        return Formatter.of("Generics: one of " + type.getSimpleName() + "'s fields has a generic parameter of type " +
+                genericType + ".\n  This type will look like Something<" + genericSimpleType + ">. " +
+                "Please add prefab values for this type 'Something'." +
+                "\n  This error occurs because " + type.getSimpleName() + "'s " +
+                method + " method directly dereferences this generic parameter.");
     }
 
     private void checkReflexivity(T reference) {
