@@ -57,10 +57,6 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
         };
     }
 
-    protected String getTypeName() {
-        return typeName;
-    }
-
     protected abstract Object createEmpty();
 
     @Override
