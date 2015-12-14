@@ -219,8 +219,7 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
             @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
-
-        prefabValues.addFactory(EnumSet.class, EnumSet.of(Dummy.RED), EnumSet.of(Dummy.BLACK));
+        prefabValues.addFactory(EnumSet.class, new ReflectiveEnumSetFactory());
 
         BitSet redBitSet = new BitSet();
         BitSet blackBitSet = new BitSet();
