@@ -199,8 +199,7 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(WeakHashMap.class, new MapFactory<WeakHashMap>() {
             @Override public WeakHashMap createEmpty() { return new WeakHashMap<>(); }
         });
-
-        prefabValues.addFactory(EnumMap.class, Dummy.RED.map(), Dummy.BLACK.map());
+        prefabValues.addFactory(EnumMap.class, new ReflectiveEnumMapFactory());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
