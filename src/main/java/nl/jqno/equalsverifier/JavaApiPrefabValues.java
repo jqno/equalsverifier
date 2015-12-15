@@ -115,6 +115,7 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(Object.class, new Object(), new Object());
         prefabValues.addFactory(Class.class, Class.class, Object.class);
         prefabValues.addFactory(String.class, "one", "two");
+        prefabValues.addFactory(Enum.class, Dummy.RED, Dummy.BLACK);
     }
 
     @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")

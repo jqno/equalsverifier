@@ -20,8 +20,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag.Wildcard;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveEnumSetFactory.Dummy;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.EnumSet;
@@ -33,6 +33,11 @@ public class ReflectiveEnumSetFactoryTest {
     private final ReflectiveEnumSetFactory factory = new ReflectiveEnumSetFactory();
     private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
     private final LinkedHashSet<TypeTag> emptyTypeStack = new LinkedHashSet<>();
+
+    @Before
+    public void setUp() {
+        prefabValues.addFactory(Enum.class, TwoElementEnum.ONE, TwoElementEnum.TWO);
+    }
 
     @Test
     public void createSpecificEnumSet() {
@@ -48,8 +53,8 @@ public class ReflectiveEnumSetFactoryTest {
         TypeTag tag = new TypeTag(EnumSet.class, new TypeTag(Wildcard.class));
         Tuple<EnumSet> tuple = factory.createValues(tag, prefabValues, emptyTypeStack);
 
-        assertEquals(EnumSet.of(Dummy.RED), tuple.getRed());
-        assertEquals(EnumSet.of(Dummy.BLACK), tuple.getBlack());
+        assertEquals(EnumSet.of(TwoElementEnum.ONE), tuple.getRed());
+        assertEquals(EnumSet.of(TwoElementEnum.TWO), tuple.getBlack());
     }
 
     @Test
@@ -57,7 +62,7 @@ public class ReflectiveEnumSetFactoryTest {
         TypeTag tag = new TypeTag(EnumSet.class);
         Tuple<EnumSet> tuple = factory.createValues(tag, prefabValues, emptyTypeStack);
 
-        assertEquals(EnumSet.of(Dummy.RED), tuple.getRed());
-        assertEquals(EnumSet.of(Dummy.BLACK), tuple.getBlack());
+        assertEquals(EnumSet.of(TwoElementEnum.ONE), tuple.getRed());
+        assertEquals(EnumSet.of(TwoElementEnum.TWO), tuple.getBlack());
     }
 }
