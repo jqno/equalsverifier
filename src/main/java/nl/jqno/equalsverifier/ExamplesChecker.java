@@ -26,6 +26,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.util.FieldIterable;
 import nl.jqno.equalsverifier.util.Formatter;
 import nl.jqno.equalsverifier.util.ObjectAccessor;
+import nl.jqno.equalsverifier.util.exceptions.AssertionException;
 
 class ExamplesChecker<T> implements Checker {
 	private final Class<T> type;
@@ -96,7 +97,11 @@ class ExamplesChecker<T> implements Checker {
 		class SomethingElse {}
 		SomethingElse somethingElse = new SomethingElse();
 		try {
-			reference.equals(somethingElse);
+			assertFalse(Formatter.of("Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check."),
+					reference.equals(somethingElse));
+		}
+		catch (AssertionException e) {
+			throw e;
 		}
 		catch (ClassCastException e) {
 			fail(Formatter.of("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."), e);

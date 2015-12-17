@@ -35,21 +35,7 @@ public class NonNullityTest extends IntegrationTestBase {
 		EqualsVerifier.forClass(NullReturnsTrue.class)
 				.verify();
 	}
-	
-	@Test
-	public void fail_whenEqualsDoesNotTypeCheck() {
-		expectFailureWithCause(ClassCastException.class, "Type-check: equals throws ClassCastException");
-		EqualsVerifier.forClass(NoTypeCheck.class)
-				.verify();
-	}
-	
-	@Test
-	public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
-		expectFailureWithCause(IllegalStateException.class, "Type-check: equals throws IllegalStateException");
-		EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class)
-				.verify();
-	}
-	
+
 	static final class NullPointerExceptionThrower extends Point {
 		public NullPointerExceptionThrower(int x, int y) { super(x, y); }
 		
@@ -71,39 +57,6 @@ public class NonNullityTest extends IntegrationTestBase {
 				return true;
 			}
 			return super.equals(obj);
-		}
-	}
-	
-	static final class NoTypeCheck {
-		private int i;
-		
-		public NoTypeCheck(int i) { this.i = i; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			if (obj == null) {
-				return false;
-			}
-			return i == ((NoTypeCheck)obj).i;
-		}
-	}
-	
-	static final class NoTypeCheckButNoClassCastExceptionEither {
-		private int i;
-		
-		public NoTypeCheckButNoClassCastExceptionEither(int i) { this.i = i; }
-		
-		@Override
-		public boolean equals(Object obj) {
-			try {
-				if (obj == null) {
-					return false;
-				}
-				return i == ((NoTypeCheckButNoClassCastExceptionEither)obj).i;
-			}
-			catch (ClassCastException e) {
-				throw new IllegalStateException(e);
-			}
 		}
 	}
 }
