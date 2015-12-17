@@ -122,20 +122,33 @@ public class AnnotationAccessor {
 		ClassLoader classLoader = getClassLoaderFor(type);
 		Type asmType = Type.getType(type);
 		String url = asmType.getInternalName() + ".class";
-		InputStream is = classLoader.getResourceAsStream(url);
-		
-		Visitor v = new Visitor(inheriting);
+
+		InputStream is = null;
 		try {
-			ClassReader cr = new ClassReader(is);
-			cr.accept(v, 0);
-		}
-		catch (IOException e) {
-			if (ignoreFailure) {
-				shortCircuit = true;
+			is = classLoader.getResourceAsStream(url);
+
+			Visitor v = new Visitor(inheriting);
+			try {
+				ClassReader cr = new ClassReader(is);
+				cr.accept(v, 0);
 			}
-			else {
-				throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
-						".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
+			catch (IOException e) {
+				if (ignoreFailure) {
+					shortCircuit = true;
+				} else {
+					throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
+							".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
+				}
+			}
+		}
+		finally {
+			if (is != null) {
+				try {
+					is.close();
+				}
+				catch (IOException e) {
+					// Should never happen
+				}
 			}
 		}
 	}
