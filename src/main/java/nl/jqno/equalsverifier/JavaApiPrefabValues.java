@@ -56,6 +56,8 @@ public final class JavaApiPrefabValues {
 
     private PrefabValues prefabValues;
 
+    private enum Dummy { RED, BLACK }
+
     /**
      * Private constructor. Use {@link #addTo(PrefabValues)}.
      */
@@ -338,20 +340,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("HashBiMap", "HashBiMap");
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
-
-        prefabValues.addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new AbstractReflectiveGenericFactory() {
-            @Override
-            public Tuple createValues(TypeTag tag, PrefabValues pf, LinkedHashSet typeStack) {
-                return new Tuple(create(Dummy.RED, Dummy.BLACK), create(Dummy.BLACK, Dummy.BLACK));
-            }
-
-            private Object create(Dummy key, Dummy value) {
-                Map<Dummy, Dummy> original = new EnumMap<>(Dummy.class);
-                original.put(key, value);
-                return new ConditionalInstantiator(GUAVA_PACKAGE + "EnumBiMap")
-                        .callFactory("create", classes(Map.class), objects(original));
-            }
-        });
+        prefabValues.addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
     }
 
     private void addGoogleGuavaTableCollectionClasses() {
@@ -402,16 +391,6 @@ public final class JavaApiPrefabValues {
         addValues(monthDay.resolve(),
                 monthDay.instantiate(classes(int.class, int.class), objects(6, 1)),
                 monthDay.instantiate(classes(int.class, int.class), objects(6, 26)));
-    }
-
-    private enum Dummy {
-        RED, BLACK;
-
-        public EnumMap<Dummy, String> map() {
-            EnumMap<Dummy, String> result = new EnumMap<>(Dummy.class);
-            result.put(this, toString());
-            return result;
-        }
     }
 
     @SuppressWarnings("unchecked")
