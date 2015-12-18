@@ -329,6 +329,7 @@ class FieldsChecker<T> implements Checker {
             checkReflexivityFor(referenceAccessor, changedAccessor);
         }
 
+        // CHECKSTYLE: ignore CyclomaticComplexity for 30 lines.
         private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Class<?> fieldType = changedAccessor.getFieldType();
             if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
@@ -341,7 +342,7 @@ class FieldsChecker<T> implements Checker {
                 return;
             }
             ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
-            if (fieldType.equals(Object.class) || !fieldTypeAccessor.declaresEquals()) {
+            if (fieldType.equals(Object.class) || fieldType.isInterface() || !fieldTypeAccessor.declaresEquals()) {
                 return;
             }
 

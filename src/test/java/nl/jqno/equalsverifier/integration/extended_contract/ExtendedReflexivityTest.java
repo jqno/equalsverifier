@@ -58,6 +58,12 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterfaceWithEquals() {
+        EqualsVerifier.forClass(FieldIsInterfaceWithEquals.class)
+                .verify();
+    }
+
     static final class UsesEqualsMethod {
         private final String s;
 
@@ -112,5 +118,18 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
 
         interface Interface {}
+    }
+
+    static final class FieldIsInterfaceWithEquals {
+        @SuppressWarnings("unused")
+        private final InterfaceWithEquals field;
+
+        public FieldIsInterfaceWithEquals(InterfaceWithEquals field) { this.field = field; }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+
+        interface InterfaceWithEquals {
+            boolean equals(Object obj);
+        }
     }
 }
