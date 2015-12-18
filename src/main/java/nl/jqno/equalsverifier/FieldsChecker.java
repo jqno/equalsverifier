@@ -329,23 +329,21 @@ class FieldsChecker<T> implements Checker {
             checkReflexivityFor(referenceAccessor, changedAccessor);
         }
 
-        // CHECKSTYLE: ignore CyclomaticComplexity for 30 lines.
         private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Class<?> fieldType = changedAccessor.getFieldType();
             if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
                 return;
             }
-            if (fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray()) {
+            if (fieldType.equals(Object.class) || typeIsExempt(fieldType)) {
                 return;
             }
             if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
                 return;
             }
             ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
-            if (fieldType.equals(Object.class) || fieldType.isInterface() || !fieldTypeAccessor.declaresEquals()) {
+            if (!fieldTypeAccessor.declaresEquals()) {
                 return;
             }
-
             Object value = changedAccessor.get();
             if (value.getClass().isSynthetic()) {
                 // Sometimes not the fieldType, but its content, is synthetic.
@@ -361,6 +359,10 @@ class FieldsChecker<T> implements Checker {
             Object left = referenceAccessor.getObject();
             Object right = changedAccessor.getObject();
             assertEquals(f, left, right);
+        }
+
+        private boolean typeIsExempt(Class<?> fieldType) {
+            return fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray() || fieldType.isInterface();
         }
 
         private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
