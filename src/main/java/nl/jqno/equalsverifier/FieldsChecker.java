@@ -323,7 +323,7 @@ class FieldsChecker<T> implements Checker {
 				return;
 			}
 			ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
-			if (fieldType.equals(Object.class) || !fieldTypeAccessor.declaresEquals()) {
+			if (fieldType.equals(Object.class) || fieldType.isInterface() || !fieldTypeAccessor.declaresEquals()) {
 				return;
 			}
 			
