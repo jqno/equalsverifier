@@ -61,8 +61,8 @@ public class TypeTagTest {
 
     @Test
     public void testToString() {
-        assertEquals("TypeTag: String", new TypeTag(String.class).toString());
-        assertEquals("TypeTag: List<TypeTag: String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
-        assertEquals("TypeTag: Map<TypeTag: Integer, TypeTag: List<TypeTag: String>>", SOME_LONG_TYPETAG.toString());
+        assertEquals("String", new TypeTag(String.class).toString());
+        assertEquals("List<String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
+        assertEquals("Map<Integer, List<String>>", SOME_LONG_TYPETAG.toString());
     }
 }
