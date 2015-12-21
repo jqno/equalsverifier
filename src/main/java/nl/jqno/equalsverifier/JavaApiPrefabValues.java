@@ -96,48 +96,48 @@ public final class JavaApiPrefabValues {
     }
 
     private void addPrimitiveClasses() {
-        prefabValues.addFactory(boolean.class, true, false);
-        prefabValues.addFactory(byte.class, (byte)1, (byte)2);
-        prefabValues.addFactory(char.class, 'a', 'b');
-        prefabValues.addFactory(double.class, 0.5D, 1.0D);
-        prefabValues.addFactory(float.class, 0.5F, 1.0F);
-        prefabValues.addFactory(int.class, 1, 2);
-        prefabValues.addFactory(long.class, 1L, 2L);
-        prefabValues.addFactory(short.class, (short)1, (short)2);
+        addValues(boolean.class, true, false);
+        addValues(byte.class, (byte)1, (byte)2);
+        addValues(char.class, 'a', 'b');
+        addValues(double.class, 0.5D, 1.0D);
+        addValues(float.class, 0.5F, 1.0F);
+        addValues(int.class, 1, 2);
+        addValues(long.class, 1L, 2L);
+        addValues(short.class, (short)1, (short)2);
 
-        prefabValues.addFactory(Boolean.class, true, false);
-        prefabValues.addFactory(Byte.class, (byte)1, (byte)2);
-        prefabValues.addFactory(Character.class, 'a', 'b');
-        prefabValues.addFactory(Double.class, 0.5D, 1.0D);
-        prefabValues.addFactory(Float.class, 0.5F, 1.0F);
-        prefabValues.addFactory(Integer.class, 1, 2);
-        prefabValues.addFactory(Long.class, 1L, 2L);
-        prefabValues.addFactory(Short.class, (short)1, (short)2);
+        addValues(Boolean.class, true, false);
+        addValues(Byte.class, (byte)1, (byte)2);
+        addValues(Character.class, 'a', 'b');
+        addValues(Double.class, 0.5D, 1.0D);
+        addValues(Float.class, 0.5F, 1.0F);
+        addValues(Integer.class, 1, 2);
+        addValues(Long.class, 1L, 2L);
+        addValues(Short.class, (short)1, (short)2);
 
-        prefabValues.addFactory(Object.class, new Object(), new Object());
-        prefabValues.addFactory(Class.class, Class.class, Object.class);
-        prefabValues.addFactory(String.class, "one", "two");
-        prefabValues.addFactory(Enum.class, Dummy.RED, Dummy.BLACK);
+        addValues(Object.class, new Object(), new Object());
+        addValues(Class.class, Class.class, Object.class);
+        addValues(String.class, "one", "two");
+        addValues(Enum.class, Dummy.RED, Dummy.BLACK);
     }
 
     @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")
     private void addClasses() {
-        prefabValues.addFactory(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
-        prefabValues.addFactory(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
-        prefabValues.addFactory(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-        prefabValues.addFactory(Date.class, new Date(0), new Date(1));
-        prefabValues.addFactory(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
-        prefabValues.addFactory(File.class, new File(""), new File("/"));
-        prefabValues.addFactory(Formatter.class, new Formatter(), new Formatter());
-        prefabValues.addFactory(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-        prefabValues.addFactory(Locale.class, new Locale("nl"), new Locale("hu"));
-        prefabValues.addFactory(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
-        prefabValues.addFactory(Reference.class, new Reference("one"), new Reference("two"));
-        prefabValues.addFactory(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"));
-        prefabValues.addFactory(Scanner.class, new Scanner("one"), new Scanner("two"));
-        prefabValues.addFactory(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
-        prefabValues.addFactory(Throwable.class, new Throwable(), new Throwable());
-        prefabValues.addFactory(UUID.class, new UUID(0, -1), new UUID(1, 0));
+        addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
+        addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
+        addValues(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
+        addValues(Date.class, new Date(0), new Date(1));
+        addValues(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
+        addValues(File.class, new File(""), new File("/"));
+        addValues(Formatter.class, new Formatter(), new Formatter());
+        addValues(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
+        addValues(Locale.class, new Locale("nl"), new Locale("hu"));
+        addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
+        addValues(Reference.class, new Reference("one"), new Reference("two"));
+        addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"));
+        addValues(Scanner.class, new Scanner("one"), new Scanner("two"));
+        addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
+        addValues(Throwable.class, new Throwable(), new Throwable());
+        addValues(UUID.class, new UUID(0, -1), new UUID(1, 0));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -226,7 +226,7 @@ public final class JavaApiPrefabValues {
         BitSet redBitSet = new BitSet();
         BitSet blackBitSet = new BitSet();
         blackBitSet.set(0);
-        prefabValues.addFactory(BitSet.class, redBitSet, blackBitSet);
+        addValues(BitSet.class, redBitSet, blackBitSet);
     }
 
     @SuppressWarnings("rawtypes")
@@ -268,7 +268,7 @@ public final class JavaApiPrefabValues {
             @SuppressWarnings("unchecked")
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>());
+        addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
     @SuppressWarnings("unchecked")
