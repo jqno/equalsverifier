@@ -142,86 +142,86 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
-        prefabValues.addFactory(Iterable.class, new CollectionFactory() {
+        addFactory(Iterable.class, new CollectionFactory() {
             @Override public Collection createEmpty() { return new ArrayList<>(); }
         });
-        prefabValues.addFactory(Collection.class, new CollectionFactory<Collection>() {
+        addFactory(Collection.class, new CollectionFactory<Collection>() {
             @Override public Collection createEmpty() { return new ArrayList<>(); }
         });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
-        prefabValues.addFactory(List.class, new CollectionFactory<List>() {
+        addFactory(List.class, new CollectionFactory<List>() {
             @Override public List createEmpty() { return new ArrayList<>(); }
         });
-        prefabValues.addFactory(CopyOnWriteArrayList.class, new CollectionFactory<CopyOnWriteArrayList>() {
+        addFactory(CopyOnWriteArrayList.class, new CollectionFactory<CopyOnWriteArrayList>() {
             @Override public CopyOnWriteArrayList createEmpty() { return new CopyOnWriteArrayList<>(); }
         });
-        prefabValues.addFactory(LinkedList.class, new CollectionFactory<LinkedList>() {
+        addFactory(LinkedList.class, new CollectionFactory<LinkedList>() {
             @Override public LinkedList createEmpty() { return new LinkedList<>(); }
         });
-        prefabValues.addFactory(ArrayList.class, new CollectionFactory<ArrayList>() {
+        addFactory(ArrayList.class, new CollectionFactory<ArrayList>() {
             @Override public ArrayList createEmpty() { return new ArrayList<>(); }
         });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addMaps() {
-        prefabValues.addFactory(Map.class, new MapFactory<Map>() {
+        addFactory(Map.class, new MapFactory<Map>() {
             @Override public Map createEmpty() { return new HashMap<>(); }
         });
-        prefabValues.addFactory(SortedMap.class, new MapFactory<SortedMap>() {
+        addFactory(SortedMap.class, new MapFactory<SortedMap>() {
             @Override public SortedMap createEmpty() { return new TreeMap<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(NavigableMap.class, new MapFactory<NavigableMap>() {
+        addFactory(NavigableMap.class, new MapFactory<NavigableMap>() {
             @Override public NavigableMap createEmpty() { return new TreeMap<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(ConcurrentNavigableMap.class, new MapFactory<ConcurrentNavigableMap>() {
+        addFactory(ConcurrentNavigableMap.class, new MapFactory<ConcurrentNavigableMap>() {
             @Override public ConcurrentNavigableMap createEmpty() { return new ConcurrentSkipListMap<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(ConcurrentHashMap.class, new MapFactory<ConcurrentHashMap>() {
+        addFactory(ConcurrentHashMap.class, new MapFactory<ConcurrentHashMap>() {
             @Override public ConcurrentHashMap createEmpty() { return new ConcurrentHashMap<>(); }
         });
-        prefabValues.addFactory(HashMap.class, new MapFactory<HashMap>() {
+        addFactory(HashMap.class, new MapFactory<HashMap>() {
             @Override public HashMap createEmpty() { return new HashMap<>(); }
         });
-        prefabValues.addFactory(Hashtable.class, new MapFactory<Hashtable>() {
+        addFactory(Hashtable.class, new MapFactory<Hashtable>() {
             @Override public Hashtable createEmpty() { return new Hashtable<>(); }
         });
-        prefabValues.addFactory(LinkedHashMap.class, new MapFactory<LinkedHashMap>() {
+        addFactory(LinkedHashMap.class, new MapFactory<LinkedHashMap>() {
             @Override public LinkedHashMap createEmpty() { return new LinkedHashMap<>(); }
         });
-        prefabValues.addFactory(Properties.class, new MapFactory<Properties>() {
+        addFactory(Properties.class, new MapFactory<Properties>() {
             @Override public Properties createEmpty() { return new Properties(); }
         });
-        prefabValues.addFactory(TreeMap.class, new MapFactory<TreeMap>() {
+        addFactory(TreeMap.class, new MapFactory<TreeMap>() {
             @Override public TreeMap createEmpty() { return new TreeMap<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(WeakHashMap.class, new MapFactory<WeakHashMap>() {
+        addFactory(WeakHashMap.class, new MapFactory<WeakHashMap>() {
             @Override public WeakHashMap createEmpty() { return new WeakHashMap<>(); }
         });
-        prefabValues.addFactory(EnumMap.class, new ReflectiveEnumMapFactory());
+        addFactory(EnumMap.class, new ReflectiveEnumMapFactory());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addSets() {
-        prefabValues.addFactory(Set.class, new CollectionFactory<Set>() {
+        addFactory(Set.class, new CollectionFactory<Set>() {
             @Override public Set createEmpty() { return new HashSet(); }
         });
-        prefabValues.addFactory(SortedSet.class, new CollectionFactory<SortedSet>() {
+        addFactory(SortedSet.class, new CollectionFactory<SortedSet>() {
             @Override public SortedSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(NavigableSet.class, new CollectionFactory<NavigableSet>() {
+        addFactory(NavigableSet.class, new CollectionFactory<NavigableSet>() {
             @Override public NavigableSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(CopyOnWriteArraySet.class, new CollectionFactory<CopyOnWriteArraySet>() {
+        addFactory(CopyOnWriteArraySet.class, new CollectionFactory<CopyOnWriteArraySet>() {
             @Override public CopyOnWriteArraySet createEmpty() { return new CopyOnWriteArraySet<>(); }
         });
-        prefabValues.addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
+        addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
             @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
-        prefabValues.addFactory(EnumSet.class, new ReflectiveEnumSetFactory());
+        addFactory(EnumSet.class, new ReflectiveEnumSetFactory());
 
         BitSet redBitSet = new BitSet();
         BitSet blackBitSet = new BitSet();
@@ -231,25 +231,25 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("rawtypes")
     private void addQueues() {
-        prefabValues.addFactory(Queue.class, new CollectionFactory<Queue>() {
+        addFactory(Queue.class, new CollectionFactory<Queue>() {
             @Override public Queue createEmpty() { return new ArrayBlockingQueue<>(1); }
         });
-        prefabValues.addFactory(BlockingQueue.class, new CollectionFactory<BlockingQueue>() {
+        addFactory(BlockingQueue.class, new CollectionFactory<BlockingQueue>() {
             @Override public BlockingQueue createEmpty() { return new ArrayBlockingQueue<>(1); }
         });
-        prefabValues.addFactory(Deque.class, new CollectionFactory<Deque>() {
+        addFactory(Deque.class, new CollectionFactory<Deque>() {
             @Override public Deque createEmpty() { return new ArrayDeque<>(1); }
         });
-        prefabValues.addFactory(BlockingDeque.class, new CollectionFactory<BlockingDeque>() {
+        addFactory(BlockingDeque.class, new CollectionFactory<BlockingDeque>() {
             @Override public BlockingDeque createEmpty() { return new LinkedBlockingDeque<>(1); }
         });
-        prefabValues.addFactory(ArrayBlockingQueue.class, new CollectionFactory<ArrayBlockingQueue>() {
+        addFactory(ArrayBlockingQueue.class, new CollectionFactory<ArrayBlockingQueue>() {
             @Override public ArrayBlockingQueue createEmpty() { return new ArrayBlockingQueue<>(1); }
         });
-        prefabValues.addFactory(ConcurrentLinkedQueue.class, new CollectionFactory<ConcurrentLinkedQueue>() {
+        addFactory(ConcurrentLinkedQueue.class, new CollectionFactory<ConcurrentLinkedQueue>() {
             @Override public ConcurrentLinkedQueue createEmpty() { return new ConcurrentLinkedQueue<>(); }
         });
-        prefabValues.addFactory(DelayQueue.class, new PrefabValueFactory<DelayQueue>() {
+        addFactory(DelayQueue.class, new PrefabValueFactory<DelayQueue>() {
             @SuppressWarnings("unchecked")
             @Override
             public Tuple<DelayQueue> createValues(TypeTag tag, PrefabValues pf, LinkedHashSet<TypeTag> typeStack) {
@@ -261,10 +261,10 @@ public final class JavaApiPrefabValues {
                 return new Tuple<>(red, black);
             }
         });
-        prefabValues.addFactory(LinkedBlockingQueue.class, new CollectionFactory<LinkedBlockingQueue>() {
+        addFactory(LinkedBlockingQueue.class, new CollectionFactory<LinkedBlockingQueue>() {
             @Override public LinkedBlockingQueue createEmpty() { return new LinkedBlockingQueue<>(1); }
         });
-        prefabValues.addFactory(PriorityBlockingQueue.class, new CollectionFactory<PriorityBlockingQueue>() {
+        addFactory(PriorityBlockingQueue.class, new CollectionFactory<PriorityBlockingQueue>() {
             @SuppressWarnings("unchecked")
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
@@ -274,7 +274,8 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addJava8ApiClasses() {
         String optional = "java.util.Optional";
-        prefabValues.addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
+
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
                 zoneId.callFactory("of", classes(String.class), objects("+1")),
@@ -340,7 +341,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("HashBiMap", "HashBiMap");
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
-        prefabValues.addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
+        addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
     }
 
     private void addGoogleGuavaTableCollectionClasses() {
@@ -367,7 +368,7 @@ public final class JavaApiPrefabValues {
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
 
         String optional = "com.google.common.base.Optional";
-        prefabValues.addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
     }
 
     private void addJodaTimeClasses() {
@@ -398,16 +399,20 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(type, (T)red, (T)black);
     }
 
+    private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
+        prefabValues.addFactory(type, factory);
+    }
+
     @SuppressWarnings("unchecked")
     private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
         String className = JAVAFX_COLLECTIONS_PACKAGE + name;
-        prefabValues.addFactory(forName(className),
+        addFactory(forName(className),
                 new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
     }
 
     @SuppressWarnings("unchecked")
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
-        prefabValues.addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
+        addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
                 new JavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
     }
 
@@ -416,7 +421,7 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaCollection(String declaredType, String actualType, Comparator<Object> comparator) {
@@ -424,14 +429,14 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaMap(String declaredType, String actualType) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveMapFactory<T> factory = ReflectiveMapFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaMap(String declaredType, String actualType, Comparator<Object> comparator) {
@@ -439,7 +444,7 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveMapFactory<T> factory =
                 ReflectiveMapFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaTable(String declaredType, String actualType, Comparator<Object> comparator) {
@@ -447,7 +452,7 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveGuavaTableFactory<T> factory =
                 ReflectiveGuavaTableFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaTable(String declaredType, String actualType) {
@@ -455,7 +460,7 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveGuavaTableFactory<T> factory =
                 ReflectiveGuavaTableFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        prefabValues.addFactory(type, factory);
+        addFactory(type, factory);
     }
 
     private void addCopiedGuavaCollection(String name, Class<?> copyFrom) {
@@ -469,7 +474,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addCopiedGuavaCollection(String name, Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
         String className = GUAVA_PACKAGE + name;
-        prefabValues.addFactory(forName(className),
+        addFactory(forName(className),
                 new ReflectiveCollectionCopyFactory(className, declaredCopyFrom, actualCopyFrom, className, copyMethodName));
     }
 }
