@@ -175,8 +175,8 @@ public class PrefabValuesTest {
     public void stringListIsSeparateFromIntegerList() {
         pv.addFactory(List.class, new ListTestFactory());
 
-        List<String> strings = pv.giveRed(new TypeTag(List.class, new TypeTag(String.class)));
-        List<Integer> ints = pv.giveRed(new TypeTag(List.class, new TypeTag(int.class)));
+        List<String> strings = pv.giveRed(new TypeTag(List.class, STRING_TAG));
+        List<Integer> ints = pv.giveRed(new TypeTag(List.class, INT_TAG));
 
         assertEquals("r", strings.get(0));
         assertEquals(42, (int)ints.get(0));
@@ -185,6 +185,13 @@ public class PrefabValuesTest {
     @Test
     public void addingNullDoesntBreakAnything() {
         pv.addFactory(null, new ListTestFactory());
+    }
+
+    @Test
+    public void addingATypeTwiceOverrulesTheExistingOne() {
+        pv.addFactory(int.class, -1, -2);
+        assertEquals(-1, pv.giveRed(INT_TAG));
+        assertEquals(-2, pv.giveBlack(INT_TAG));
     }
 
     @Test
