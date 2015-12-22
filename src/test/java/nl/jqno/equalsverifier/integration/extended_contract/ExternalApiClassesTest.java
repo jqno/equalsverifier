@@ -75,16 +75,17 @@ public class ExternalApiClassesTest {
         private final TreeMultiset<?> treeMultiset;
         private final LinkedHashMultiset<?> linkedHashMultiset;
         private final ConcurrentHashMultiset<?> concurrentHashMultiset;
+        private final EnumMultiset<?> enumMultiset;
         private final ImmutableMultiset<?> immutableMultiset;
         private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaMultisetContainer(Multiset<?> multiset, SortedMultiset<?> sortedMultiset, HashMultiset<?> hashMultiset,
                 TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset concurrentHashMultiset,
-                ImmutableMultiset<?> immutableMultiset, ImmutableSortedMultiset<?> immutableSortedMultiset) {
+                EnumMultiset<?> enumMultiset, ImmutableMultiset<?> immutableMultiset, ImmutableSortedMultiset<?> immutableSortedMultiset) {
             this.multiset = multiset; this.sortedMultiset = sortedMultiset; this.hashMultiset = hashMultiset;
             this.treeMultiset = treeMultiset; this.linkedHashMultiset = linkedHashMultiset; this.concurrentHashMultiset = concurrentHashMultiset;
-            this.immutableMultiset = immutableMultiset; this.immutableSortedMultiset = immutableSortedMultiset;
+            this.enumMultiset = enumMultiset; this.immutableMultiset = immutableMultiset; this.immutableSortedMultiset = immutableSortedMultiset;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

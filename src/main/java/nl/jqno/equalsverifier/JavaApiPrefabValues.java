@@ -317,6 +317,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaCollection("TreeMultiset", "TreeMultiset", OBJECT_COMPARATOR);
         addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
         addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
+        addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
         addCopiedGuavaCollection("ImmutableSortedMultiset", forName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
     }
