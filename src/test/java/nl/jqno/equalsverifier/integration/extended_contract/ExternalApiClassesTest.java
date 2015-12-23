@@ -174,10 +174,15 @@ public class ExternalApiClassesTest {
     static final class GuavaRegularCollectionsContainer {
         private final EvictingQueue<?> evictingQueue;
         private final MinMaxPriorityQueue<?> minMaxPriorityQueue;
+        private final RangeSet<?> rangeSet;
+        private final ImmutableRangeSet<?> immutableRangeSet;
+        private final TreeRangeSet<?> treeRangeSet;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaRegularCollectionsContainer(EvictingQueue<?> evictingQueue, MinMaxPriorityQueue<?> minMaxPriorityQueue) {
+        public GuavaRegularCollectionsContainer(EvictingQueue<?> evictingQueue, MinMaxPriorityQueue<?> minMaxPriorityQueue,
+                RangeSet<?> rangeSet, ImmutableRangeSet<?> immutableRangeSet, TreeRangeSet<?> treeRangeSet) {
             this.evictingQueue = evictingQueue; this.minMaxPriorityQueue = minMaxPriorityQueue;
+            this.rangeSet = rangeSet; this.immutableRangeSet = immutableRangeSet; this.treeRangeSet = treeRangeSet;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

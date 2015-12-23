@@ -360,6 +360,13 @@ public final class JavaApiPrefabValues {
     private void addGoogleGuavaRegularCollectionsClasses() {
         addNewGuavaCollection("EvictingQueue", "EvictingQueue", int.class, 10);
         addNewGuavaCollection("MinMaxPriorityQueue", "MinMaxPriorityQueue");
+
+        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
+        ConditionalInstantiator rangeSet = new ConditionalInstantiator(GUAVA_PACKAGE + "RangeSet");
+        ConditionalInstantiator immutableRangeSet = new ConditionalInstantiator(GUAVA_PACKAGE + "ImmutableRangeSet");
+        addCopiedGuavaCollection("ImmutableRangeSet", range.resolve(), "of");
+        addCopiedGuavaCollection("TreeRangeSet", rangeSet.resolve(), immutableRangeSet.resolve(), "create");
+        addCopiedGuavaCollection("RangeSet", "TreeRangeSet", rangeSet.resolve(), immutableRangeSet.resolve(), "create");
     }
 
     private void addGoogleGuavaImmutableClasses() {
