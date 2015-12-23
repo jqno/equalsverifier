@@ -103,6 +103,7 @@ public class ExternalApiClassesTest {
         private final LinkedListMultimap<?, ?> linkedListMultimap;
         private final LinkedHashMultimap<?, ?> linkedHashMultimap;
         private final TreeMultimap<?, ?> treeMultimap;
+        private final ImmutableMultimap<?, ?> immutableMultimap;
         private final ImmutableListMultimap<?, ?> immutableListMultimap;
         private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
 
@@ -110,11 +111,13 @@ public class ExternalApiClassesTest {
         public GuavaMultimapContainer(Multimap<?, ?> multimap, ListMultimap<?, ?> listMultimap, SetMultimap<?, ?> setMultimap,
                 SortedSetMultimap<?, ?> sortedSetMultimap, ArrayListMultimap<?, ?> arrayListMultimap, HashMultimap<?, ?> hashMultimap,
                 LinkedListMultimap<?, ?> linkedListMultimap, LinkedHashMultimap<?, ?> linkedHashMultimap, TreeMultimap<?, ?> treeMultimap,
-                ImmutableListMultimap<?, ?> immutableListMultimap, ImmutableSetMultimap<?, ?> immutableSetMultimap) {
+                ImmutableMultimap<?, ?> immutableMultimap, ImmutableListMultimap<?, ?> immutableListMultimap,
+                ImmutableSetMultimap<?, ?> immutableSetMultimap) {
             this.multimap = multimap; this.listMultimap = listMultimap; this.setMultimap = setMultimap;
             this.sortedSetMultimap = sortedSetMultimap; this.arrayListMultimap = arrayListMultimap; this.hashMultimap = hashMultimap;
             this.linkedListMultimap = linkedListMultimap; this.linkedHashMultimap = linkedHashMultimap; this.treeMultimap = treeMultimap;
-            this.immutableListMultimap = immutableListMultimap; this.immutableSetMultimap = immutableSetMultimap;
+            this.immutableMultimap = immutableMultimap; this.immutableListMultimap = immutableListMultimap;
+            this.immutableSetMultimap = immutableSetMultimap;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -163,6 +166,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaImmutableContainer {
+        private final ImmutableCollection<?> iCollection;
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
         private final ImmutableSet<?> iSet;
@@ -170,9 +174,11 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedSet<?> iSortedSet;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaImmutableContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
-                ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet) {
-            this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
+        public GuavaImmutableContainer(ImmutableCollection<?> immutableCollection, ImmutableList<?> immutableList,
+                ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet, ImmutableSortedMap<?, ?> iSortedMap,
+                ImmutableSortedSet<?> iSortedSet) {
+            this.iCollection = immutableCollection; this.iList = immutableList;
+            this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
             this.iSortedSet = iSortedSet;
         }
 

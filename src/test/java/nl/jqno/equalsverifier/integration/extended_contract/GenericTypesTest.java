@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -59,6 +60,12 @@ public class GenericTypesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
         EqualsVerifier.forClass(ArrayOfTContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtImmutableCollectionFieldsGenericContent() {
+        EqualsVerifier.forClass(ImmutableCollectionContainer.class)
                 .verify();
     }
 
@@ -265,6 +272,35 @@ public class GenericTypesTest extends IntegrationTestBase {
 
         @Override public int hashCode() { return Arrays.hashCode(array); }
         @Override public String toString() { return "ArrayOfTContainer: " + array; }
+    }
+
+    static final class ImmutableCollectionContainer {
+        private final ImmutableCollection<Point> coll;
+
+        public ImmutableCollectionContainer(ImmutableCollection<Point> coll) { this.coll = coll; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ImmutableCollectionContainer)) {
+                return false;
+            }
+            ImmutableCollectionContainer other = (ImmutableCollectionContainer)obj;
+            if (coll == null || other.coll == null) {
+                return coll == other.coll;
+            }
+            if (coll.size() != other.coll.size()) {
+                return false;
+            }
+            for (Point p : coll) {
+                if (!other.coll.contains(p)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ImmutableCollectionContainer: " + coll; }
     }
 
     static final class ImmutableListContainer {

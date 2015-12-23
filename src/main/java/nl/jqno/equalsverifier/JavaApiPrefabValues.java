@@ -334,6 +334,9 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("TreeMultimap", "TreeMultimap", OBJECT_COMPARATOR);
         addCopiedGuavaCollection("ImmutableListMultimap", forName(GUAVA_PACKAGE + "Multimap"));
         addCopiedGuavaCollection("ImmutableSetMultimap", forName(GUAVA_PACKAGE + "Multimap"));
+
+        ConditionalInstantiator ci = new ConditionalInstantiator(GUAVA_PACKAGE + "Multimap");
+        addCopiedGuavaCollection("ImmutableMultimap", "ImmutableListMultimap", ci.resolve(), ci.resolve(), "copyOf");
     }
 
     @SuppressWarnings("unchecked")
@@ -354,6 +357,7 @@ public final class JavaApiPrefabValues {
     }
 
     private void addGoogleGuavaImmutableClasses() {
+        addCopiedGuavaCollection("ImmutableCollection", "ImmutableList", Collection.class, Collection.class, "copyOf");
         addCopiedGuavaCollection("ImmutableList", Collection.class);
         addCopiedGuavaCollection("ImmutableMap", Map.class);
         addCopiedGuavaCollection("ImmutableSet", Collection.class);
@@ -472,10 +476,16 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection(name, copyFrom, copyFrom, copyMethodName);
     }
 
-    @SuppressWarnings("unchecked")
     private void addCopiedGuavaCollection(String name, Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
-        String className = GUAVA_PACKAGE + name;
-        addFactory(forName(className),
+        addCopiedGuavaCollection(name, name, declaredCopyFrom, actualCopyFrom, copyMethodName);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void addCopiedGuavaCollection(String declaredName, String actualName,
+            Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
+
+        String className = GUAVA_PACKAGE + actualName;
+        addFactory(forName(GUAVA_PACKAGE + declaredName),
                 new ReflectiveCollectionCopyFactory(className, declaredCopyFrom, actualCopyFrom, className, copyMethodName));
     }
 }
