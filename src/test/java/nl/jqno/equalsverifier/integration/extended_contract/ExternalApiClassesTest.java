@@ -56,6 +56,12 @@ public class ExternalApiClassesTest {
     }
 
     @Test
+    public void succeed_whenClassUsesGoogleGuavaRegularCollection() {
+        EqualsVerifier.forClass(GuavaRegularCollectionsContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassUsesOtherGoogleGuavaClass() {
         EqualsVerifier.forClass(GuavaOtherContainer.class)
                 .verify();
@@ -158,6 +164,20 @@ public class ExternalApiClassesTest {
             this.treeBasedTable = treeBasedTable;
             this.arrayTable = arrayTable;
             this.immutableTable = immutableTable;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaRegularCollectionsContainer {
+        private final EvictingQueue<?> evictingQueue;
+        private final MinMaxPriorityQueue<?> minMaxPriorityQueue;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaRegularCollectionsContainer(EvictingQueue<?> evictingQueue, MinMaxPriorityQueue<?> minMaxPriorityQueue) {
+            this.evictingQueue = evictingQueue; this.minMaxPriorityQueue = minMaxPriorityQueue;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

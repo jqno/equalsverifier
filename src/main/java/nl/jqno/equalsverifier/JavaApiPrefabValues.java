@@ -90,6 +90,7 @@ public final class JavaApiPrefabValues {
         addGoogleGuavaMultimapCollectionsClasses();
         addGoogleGuavaBiMapCollectionsClasses();
         addGoogleGuavaTableCollectionClasses();
+        addGoogleGuavaRegularCollectionsClasses();
         addGoogleGuavaImmutableClasses();
         addNewGoogleGuavaClasses();
         addJodaTimeClasses();
@@ -312,9 +313,9 @@ public final class JavaApiPrefabValues {
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
         addNewGuavaCollection("Multiset", "HashMultiset");
-        addNewGuavaCollection("SortedMultiset", "TreeMultiset", OBJECT_COMPARATOR);
+        addNewGuavaCollection("SortedMultiset", "TreeMultiset", Comparator.class, OBJECT_COMPARATOR);
         addNewGuavaCollection("HashMultiset", "HashMultiset");
-        addNewGuavaCollection("TreeMultiset", "TreeMultiset", OBJECT_COMPARATOR);
+        addNewGuavaCollection("TreeMultiset", "TreeMultiset", Comparator.class, OBJECT_COMPARATOR);
         addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
         addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
         addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
@@ -354,6 +355,11 @@ public final class JavaApiPrefabValues {
         addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
         addCopiedGuavaCollection("ArrayTable", forName(GUAVA_PACKAGE + "Table"), "create");
         addCopiedGuavaCollection("ImmutableTable", forName(GUAVA_PACKAGE + "Table"));
+    }
+
+    private void addGoogleGuavaRegularCollectionsClasses() {
+        addNewGuavaCollection("EvictingQueue", "EvictingQueue", int.class, 10);
+        addNewGuavaCollection("MinMaxPriorityQueue", "MinMaxPriorityQueue");
     }
 
     private void addGoogleGuavaImmutableClasses() {
@@ -429,11 +435,11 @@ public final class JavaApiPrefabValues {
         addFactory(type, factory);
     }
 
-    private <T> void addNewGuavaCollection(String declaredType, String actualType, Comparator<Object> comparator) {
+    private <T, U> void addNewGuavaCollection(String declaredType, String actualType, Class<U> parameterType, U parameterValue) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
-                ReflectiveCollectionFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
+                ReflectiveCollectionFactory.callFactoryMethodWithParameter(GUAVA_PACKAGE + actualType, "create", parameterType, parameterValue);
         addFactory(type, factory);
     }
 

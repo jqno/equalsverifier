@@ -23,7 +23,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Comparator;
 import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
@@ -46,13 +45,13 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
         };
     }
 
-    public static <T> ReflectiveCollectionFactory<T> callFactoryMethodWithComparator(
-            final String typeName, final String methodName, final Object parameterValue) {
+    public static <T> ReflectiveCollectionFactory<T> callFactoryMethodWithParameter(
+            final String typeName, final String methodName, final Class<?> parameterType, final Object parameterValue) {
         return new ReflectiveCollectionFactory<T>(typeName) {
             @Override
             protected Object createEmpty() {
                 return new ConditionalInstantiator(typeName)
-                        .callFactory(methodName, classes(Comparator.class), objects(parameterValue));
+                        .callFactory(methodName, classes(parameterType), objects(parameterValue));
             }
         };
     }
