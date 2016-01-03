@@ -95,6 +95,7 @@ public class ArrayTest extends IntegrationTestBase {
         EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class)
                 .verify();
     }
+
     @Test
     public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
         thrown.expect(AssertionError.class);
