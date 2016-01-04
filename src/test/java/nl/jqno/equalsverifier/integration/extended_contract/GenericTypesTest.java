@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -78,6 +79,12 @@ public class GenericTypesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtBiMapFieldsGenericContent() {
+        EqualsVerifier.forClass(BiMapContainer.class)
                 .verify();
     }
 
@@ -366,6 +373,39 @@ public class GenericTypesTest extends IntegrationTestBase {
         @Override public String toString() { return "ImmutableMapContainer: " + map; }
     }
 
+    static final class BiMapContainer {
+        private final BiMap<Point, Point> map;
+
+        public BiMapContainer(BiMap<Point, Point> map) { this.map = map; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof BiMapContainer)) {
+                return false;
+            }
+            BiMapContainer other = (BiMapContainer)obj;
+            if (map == null || other.map == null) {
+                return map == other.map;
+            }
+            if (map.size() != other.map.size()) {
+                return false;
+            }
+            for (Map.Entry<Point, Point> e : map.entrySet()) {
+                Point thisKey = e.getKey();
+                Point thisValue = e.getValue();
+                if (!other.map.containsKey(thisKey)) {
+                    return false;
+                }
+                if (!other.map.get(thisKey).equals(thisValue)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "BiMapContainer: " + map; }
+    }
     static final class SparseArray<T> {
         private final List<T> items;
 
