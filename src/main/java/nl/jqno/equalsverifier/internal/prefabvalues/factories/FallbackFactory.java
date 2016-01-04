@@ -27,6 +27,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that instantiates types
+ * "by force".
+ *
+ * It instantiates the type using bytecode magic, bypassing the constructor.
+ * Then it uses {@link PrefabValues} to fill up all the fields, recursively.
+ */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {

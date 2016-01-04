@@ -15,23 +15,41 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+/**
+ * Container for two values of the same type: a "red" one and a "black" one.
+ */
 public final class Tuple<T> {
     private final T red;
     private final T black;
 
+    /**
+     * Constructor.
+     *
+     * @param red The red value.
+     * @param black The black value.
+     */
     public Tuple(T red, T black) {
         this.red = red;
         this.black = black;
     }
 
+    /**
+     * Returns the red value.
+     */
     public T getRed() {
         return red;
     }
 
+    /**
+     * Returns the black value.
+     */
     public T getBlack() {
         return black;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Tuple)) {
@@ -41,6 +59,9 @@ public final class Tuple<T> {
         return red.equals(other.red) && black.equals(other.black);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = 37;

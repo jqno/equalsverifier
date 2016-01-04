@@ -29,6 +29,11 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that creates instances of
+ * Guava's Table using reflection (since Guava may not be on the classpath)
+ * while taking generics into account.
+ */
 public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
 

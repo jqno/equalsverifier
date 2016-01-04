@@ -25,6 +25,10 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that instantiates objects using
+ * reflection, while taking generics into account.
+ */
 public class ReflectiveGenericContainerFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
 

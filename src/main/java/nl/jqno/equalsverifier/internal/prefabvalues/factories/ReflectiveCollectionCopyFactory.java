@@ -25,6 +25,10 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that reflectively instantiates
+ * collections by copying them from a collection that was already instantiated.
+ */
 public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
     private final Class<?> declaredParameterRawType;

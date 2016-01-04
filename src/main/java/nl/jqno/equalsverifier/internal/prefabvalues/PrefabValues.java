@@ -27,6 +27,15 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
+/**
+ * Container and creator of prefabricated instances of objects and classes.
+ *
+ * Only creates values ones, and caches them once they've been created. Takes
+ * generics into account; i.e., {@code List<Integer>} is different from
+ * {@code List<String>}.
+ *
+ * @author Jan Ouwens
+ */
 public class PrefabValues {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
 
@@ -35,34 +44,88 @@ public class PrefabValues {
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
     private final StaticFieldValueStash stash;
 
+    /**
+     *  Constructor.
+     */
     public PrefabValues(StaticFieldValueStash stash) {
         this.stash = stash;
     }
 
+    /**
+     * Backs up the values of all static member fields of the given type.
+     *
+     * @param type The type for which to store the values of static member
+     *          fields.
+     */
     public void backupToStash(Class<?> type) {
         stash.backup(type);
     }
 
+    /**
+     * Restores the values of all static member fields, for all types for which
+     * they were stored at once.
+     */
     public void restoreFromStash() {
         stash.restoreAll();
     }
 
+    /**
+     * Associates the factory that can create instances of the given type,
+     * with the specified class.
+     *
+     * @param <T> The type of value to which the factory is associated.
+     * @param type The class of the values.
+     * @param factory The factory.
+     */
     public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         factoryCache.put(type, factory);
     }
 
+    /**
+     * Associates the specified values with the specified class.
+     *
+     * @param <T> The type of value to put into this {@link PrefabValues}.
+     * @param type The class of the values.
+     * @param red A value of type T.
+     * @param black Another value of type T.
+     */
     public <T> void addFactory(Class<T> type, T red, T black) {
         factoryCache.put(type, new SimpleFactory<>(red, black));
     }
 
+    /**
+     * Returns the "red" prefabricated value of the sepcified type.
+     *
+     * It's always a different value from the "black" one.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     */
     public <T> T giveRed(TypeTag tag) {
         return this.<T>giveTuple(tag, emptyStack()).getRed();
     }
 
+    /**
+     * Returns the "black" prefabricated value of the sepcified type.
+     *
+     * It's always a different value from the "red" one.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     */
     public <T> T giveBlack(TypeTag tag) {
         return this.<T>giveTuple(tag, emptyStack()).getBlack();
     }
 
+    /**
+     * Returns a prefabricated value of the specified type, that is different
+     * from the specified value.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     * @param value A value that is different from the value that will be
+     *              returned.
+     */
     public <T> T giveOther(TypeTag tag, T value) {
         Class<T> type = tag.getType();
         if (value != null && !type.isAssignableFrom(value.getClass()) && !wraps(type, value.getClass())) {
@@ -97,6 +160,14 @@ public class PrefabValues {
         return new LinkedHashSet<>();
     }
 
+    /**
+     * Makes sure that values for the specified type are present in the cache,
+     * but doesn't return them.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     * @param typeStack Keeps track of recursion in the type.
+     */
     public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (!cache.contains(tag)) {
             Tuple<T> tuple = createTuple(tag, typeStack);

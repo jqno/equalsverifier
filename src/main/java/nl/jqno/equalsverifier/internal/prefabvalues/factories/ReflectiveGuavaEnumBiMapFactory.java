@@ -30,6 +30,11 @@ import java.util.Map;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that creates instances of
+ * Guava's EnumBiMap using reflection (since Guava may not be on the classpath)
+ * while taking generics into account.
+ */
 public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private static final String TYPE_NAME = "com.google.common.collect.EnumBiMap";
 

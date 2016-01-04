@@ -26,6 +26,10 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
+/**
+ * Implementation of {@link PrefabValueFactory} that instantiates EnumSets
+ * using reflection, while taking generics into account.
+ */
 public class ReflectiveEnumSetFactory extends AbstractReflectiveGenericFactory<EnumSet> {
     @Override
     public Tuple<EnumSet> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
