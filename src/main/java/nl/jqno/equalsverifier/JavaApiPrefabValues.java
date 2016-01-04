@@ -431,7 +431,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unchecked")
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
         addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
-                new JavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
+                new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
     }
 
     private <T> void addNewGuavaCollection(String declaredType, String actualType) {

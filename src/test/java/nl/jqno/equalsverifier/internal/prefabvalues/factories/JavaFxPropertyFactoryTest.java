@@ -44,7 +44,7 @@ public class JavaFxPropertyFactoryTest {
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
         PrefabValueFactory<GenericContainer> factory =
-                new JavaFxPropertyFactory<>(GenericContainer.class.getName(), List.class);
+                new ReflectiveJavaFxPropertyFactory<>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
@@ -58,7 +58,7 @@ public class JavaFxPropertyFactoryTest {
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
         PrefabValueFactory<GenericMultiContainer> factory =
-                new JavaFxPropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
+                new ReflectiveJavaFxPropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);

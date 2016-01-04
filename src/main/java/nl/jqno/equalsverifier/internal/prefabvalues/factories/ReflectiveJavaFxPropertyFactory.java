@@ -25,11 +25,11 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 
-public final class JavaFxPropertyFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public final class ReflectiveJavaFxPropertyFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
     private final Class<?> parameterRawType;
 
-    public JavaFxPropertyFactory(String typeName, Class<?> parameterRawType) {
+    public ReflectiveJavaFxPropertyFactory(String typeName, Class<?> parameterRawType) {
         this.typeName = typeName;
         this.parameterRawType = parameterRawType;
     }
