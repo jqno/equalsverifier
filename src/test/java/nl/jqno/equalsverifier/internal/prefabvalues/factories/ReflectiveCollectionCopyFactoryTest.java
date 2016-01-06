@@ -24,6 +24,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertEquals;
 
 public class ReflectiveCollectionCopyFactoryTest {
     private PrefabValues prefabValues;
+    private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
 
     @Before
     public void setUp() {
@@ -45,7 +47,7 @@ public class ReflectiveCollectionCopyFactoryTest {
 
         PrefabValueFactory<GenericContainer> factory = new ReflectiveCollectionCopyFactory<>(
                 GenericContainer.class.getName(), List.class, List.class, GenericContainerFactory.class.getName(), "createGenericContainer");
-        Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
+        Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, typeStack);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
         assertEquals(prefabValues.giveBlack(listTag), tuple.getBlack().t);
@@ -59,7 +61,7 @@ public class ReflectiveCollectionCopyFactoryTest {
 
         PrefabValueFactory<GenericMultiContainer> factory = new ReflectiveCollectionCopyFactory<>(
                 GenericMultiContainer.class.getName(), Map.class, Map.class, GenericContainerFactory.class.getName(), "createGenericMultiContainer");
-        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
+        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, typeStack);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
         assertEquals(prefabValues.giveBlack(mapTag), tuple.getBlack().t);

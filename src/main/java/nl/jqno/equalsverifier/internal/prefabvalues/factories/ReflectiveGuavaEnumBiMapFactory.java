@@ -46,8 +46,8 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
 
         TypeTag keyTag = makeSureItsAnEnum(determineActualTypeTagFor(0, tag));
         TypeTag valueTag = makeSureItsAnEnum(determineActualTypeTagFor(1, tag));
-        prefabValues.realizeCacheFor(keyTag, typeStack);
-        prefabValues.realizeCacheFor(valueTag, typeStack);
+        prefabValues.realizeCacheFor(keyTag, clone);
+        prefabValues.realizeCacheFor(valueTag, clone);
 
         T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));

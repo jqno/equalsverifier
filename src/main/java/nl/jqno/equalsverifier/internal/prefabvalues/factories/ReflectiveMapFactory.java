@@ -75,8 +75,8 @@ public abstract class ReflectiveMapFactory<T> extends AbstractReflectiveGenericF
 
         TypeTag keyTag = determineActualTypeTagFor(0, tag);
         TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, typeStack);
-        prefabValues.realizeCacheFor(valueTag, typeStack);
+        prefabValues.realizeCacheFor(keyTag, clone);
+        prefabValues.realizeCacheFor(valueTag, clone);
 
         T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));

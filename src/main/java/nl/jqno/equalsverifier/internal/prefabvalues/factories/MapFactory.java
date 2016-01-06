@@ -37,8 +37,8 @@ public abstract class MapFactory<T extends Map> extends AbstractReflectiveGeneri
 
         TypeTag keyTag = determineActualTypeTagFor(0, tag);
         TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, typeStack);
-        prefabValues.realizeCacheFor(valueTag, typeStack);
+        prefabValues.realizeCacheFor(keyTag, clone);
+        prefabValues.realizeCacheFor(valueTag, clone);
 
         // Use red for key and black for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Black map, or they may cancel each other out again.

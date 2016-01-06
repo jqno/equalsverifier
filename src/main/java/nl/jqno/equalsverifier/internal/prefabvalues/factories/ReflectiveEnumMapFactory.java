@@ -43,8 +43,8 @@ public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<E
             keyTag = new TypeTag(Enum.class);
         }
         TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, typeStack);
-        prefabValues.realizeCacheFor(valueTag, typeStack);
+        prefabValues.realizeCacheFor(keyTag, clone);
+        prefabValues.realizeCacheFor(valueTag, clone);
 
         EnumMap red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         EnumMap black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));

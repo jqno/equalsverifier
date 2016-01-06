@@ -43,7 +43,7 @@ public class ReflectiveEnumSetFactory extends AbstractReflectiveGenericFactory<E
         if (entryTag.getType().equals(Object.class)) {
             entryTag = new TypeTag(Enum.class);
         }
-        prefabValues.realizeCacheFor(entryTag, typeStack);
+        prefabValues.realizeCacheFor(entryTag, clone);
 
         EnumSet red = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveRed(entryTag)));
         EnumSet black = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveBlack(entryTag)));

@@ -36,7 +36,7 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
         clone.add(tag);
 
         TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        prefabValues.realizeCacheFor(entryTag, typeStack);
+        prefabValues.realizeCacheFor(entryTag, clone);
 
         T red = createEmpty();
         red.add(prefabValues.giveRed(entryTag));

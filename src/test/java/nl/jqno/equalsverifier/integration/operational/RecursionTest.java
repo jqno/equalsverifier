@@ -15,15 +15,19 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
+import com.google.common.collect.ImmutableList;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class RecursionTest extends IntegrationTestBase {
@@ -120,6 +124,15 @@ public class RecursionTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
+        expectFailure(RECURSIVE_DATASTRUCTURE, ImmutableListTree.class.getSimpleName(),
+                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
+                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()); // I'd prefer not to have this last one though.
+        EqualsVerifier.forClass(ImmutableListTree.class)
+                .verify();
+    }
+
     static class Node {
         final Node node;
 
@@ -198,5 +211,14 @@ public class RecursionTest extends IntegrationTestBase {
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class ImmutableListTree {
+        final ImmutableList<ImmutableListTree> tree;
+
+        public ImmutableListTree(ImmutableList<ImmutableListTree> tree) { this.tree = tree; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 }

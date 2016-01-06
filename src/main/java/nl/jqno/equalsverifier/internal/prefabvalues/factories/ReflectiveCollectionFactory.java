@@ -73,7 +73,7 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
         clone.add(tag);
 
         TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        prefabValues.realizeCacheFor(entryTag, typeStack);
+        prefabValues.realizeCacheFor(entryTag, clone);
 
         T red = createWith(prefabValues.giveRed(entryTag));
         T black = createWith(prefabValues.giveBlack(entryTag));

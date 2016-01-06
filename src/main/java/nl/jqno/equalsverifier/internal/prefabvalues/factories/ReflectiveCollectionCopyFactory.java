@@ -51,8 +51,13 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
 
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        @SuppressWarnings("unchecked")
+        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
+        clone.add(tag);
+
         ConditionalInstantiator ci = new ConditionalInstantiator(typeName);
         TypeTag singleParameterTag = copyGenericTypesInto(actualParameterRawType, tag);
+        prefabValues.realizeCacheFor(singleParameterTag, clone);
 
         Object red = ci.callFactory(factoryType, factoryMethod,
                 classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));

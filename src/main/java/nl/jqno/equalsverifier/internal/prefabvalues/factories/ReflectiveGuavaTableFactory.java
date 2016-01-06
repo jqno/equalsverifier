@@ -73,9 +73,9 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
         TypeTag columnTag = determineActualTypeTagFor(0, tag);
         TypeTag rowTag = determineActualTypeTagFor(1, tag);
         TypeTag valueTag = determineActualTypeTagFor(2, tag);
-        prefabValues.realizeCacheFor(columnTag, typeStack);
-        prefabValues.realizeCacheFor(rowTag, typeStack);
-        prefabValues.realizeCacheFor(valueTag, typeStack);
+        prefabValues.realizeCacheFor(columnTag, clone);
+        prefabValues.realizeCacheFor(rowTag, clone);
+        prefabValues.realizeCacheFor(valueTag, clone);
 
         T red = createWith(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(columnTag), prefabValues.giveBlack(rowTag), prefabValues.giveBlack(valueTag));
