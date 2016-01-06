@@ -41,23 +41,13 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag keyTag = makeSureItsAnEnum(determineActualTypeTagFor(0, tag));
-        TypeTag valueTag = makeSureItsAnEnum(determineActualTypeTagFor(1, tag));
-        prefabValues.realizeCacheFor(keyTag, clone);
-        prefabValues.realizeCacheFor(valueTag, clone);
+        TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
+        TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone, Enum.class);
 
         T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
 
         return new Tuple<>(red, black);
-    }
-
-    private TypeTag makeSureItsAnEnum(TypeTag tag) {
-        if (tag.getType().equals(Object.class)) {
-            return new TypeTag(Enum.class);
-        }
-        return tag;
     }
 
     private T createWith(Object key, Object value) {

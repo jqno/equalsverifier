@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.ArrayList;
@@ -41,6 +42,21 @@ public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValue
             genericTypes.add(makeConcrete(tag));
         }
         return new TypeTag(type, genericTypes.toArray(new TypeTag[genericTypes.size()]));
+    }
+
+    protected TypeTag determineAndCacheActualTypeTag(int n, TypeTag tag, PrefabValues prefabValues,
+            LinkedHashSet<TypeTag> typeStack) {
+        return determineAndCacheActualTypeTag(n, tag, prefabValues, typeStack, null);
+    }
+
+    protected TypeTag determineAndCacheActualTypeTag(int n, TypeTag tag, PrefabValues prefabValues,
+            LinkedHashSet<TypeTag> typeStack, Class<?> bottomType) {
+        TypeTag result = determineActualTypeTagFor(n, tag);
+        if (bottomType != null && result.getType().equals(Object.class)) {
+            result = new TypeTag(bottomType);
+        }
+        prefabValues.realizeCacheFor(result, typeStack);
+        return result;
     }
 
     protected TypeTag determineActualTypeTagFor(int n, TypeTag typeTag) {

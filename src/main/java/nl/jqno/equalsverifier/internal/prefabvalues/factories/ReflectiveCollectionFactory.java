@@ -69,9 +69,7 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        prefabValues.realizeCacheFor(entryTag, clone);
+        TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
 
         T red = createWith(prefabValues.giveRed(entryTag));
         T black = createWith(prefabValues.giveBlack(entryTag));

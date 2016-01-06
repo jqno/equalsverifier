@@ -70,11 +70,8 @@ public abstract class ReflectiveMapFactory<T> extends AbstractReflectiveGenericF
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag keyTag = determineActualTypeTagFor(0, tag);
-        TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, clone);
-        prefabValues.realizeCacheFor(valueTag, clone);
+        TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
+        TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
         T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));

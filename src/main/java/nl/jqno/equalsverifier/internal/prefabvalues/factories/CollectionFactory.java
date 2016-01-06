@@ -32,9 +32,7 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        prefabValues.realizeCacheFor(entryTag, clone);
+        TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
 
         T red = createEmpty();
         red.add(prefabValues.giveRed(entryTag));

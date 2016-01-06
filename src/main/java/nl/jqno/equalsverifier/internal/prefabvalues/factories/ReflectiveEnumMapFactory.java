@@ -35,14 +35,8 @@ public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<E
     @Override
     public Tuple<EnumMap> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag keyTag = determineActualTypeTagFor(0, tag);
-        if (keyTag.getType().equals(Object.class)) {
-            keyTag = new TypeTag(Enum.class);
-        }
-        TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, clone);
-        prefabValues.realizeCacheFor(valueTag, clone);
+        TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
+        TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
         EnumMap red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         EnumMap black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));

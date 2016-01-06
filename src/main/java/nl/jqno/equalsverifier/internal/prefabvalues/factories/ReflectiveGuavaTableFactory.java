@@ -67,13 +67,9 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag columnTag = determineActualTypeTagFor(0, tag);
-        TypeTag rowTag = determineActualTypeTagFor(1, tag);
-        TypeTag valueTag = determineActualTypeTagFor(2, tag);
-        prefabValues.realizeCacheFor(columnTag, clone);
-        prefabValues.realizeCacheFor(rowTag, clone);
-        prefabValues.realizeCacheFor(valueTag, clone);
+        TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
+        TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
+        TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, prefabValues, clone);
 
         T red = createWith(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
         T black = createWith(prefabValues.giveBlack(columnTag), prefabValues.giveBlack(rowTag), prefabValues.giveBlack(valueTag));

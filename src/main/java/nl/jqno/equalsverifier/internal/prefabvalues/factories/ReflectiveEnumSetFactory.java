@@ -33,15 +33,10 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 public class ReflectiveEnumSetFactory extends AbstractReflectiveGenericFactory<EnumSet> {
     @Override
     public Tuple<EnumSet> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
         ConditionalInstantiator ci = new ConditionalInstantiator(EnumSet.class.getName());
 
-        TypeTag entryTag = determineActualTypeTagFor(0, tag);
-        if (entryTag.getType().equals(Object.class)) {
-            entryTag = new TypeTag(Enum.class);
-        }
-        prefabValues.realizeCacheFor(entryTag, clone);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
 
         EnumSet red = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveRed(entryTag)));
         EnumSet black = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveBlack(entryTag)));

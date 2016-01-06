@@ -32,11 +32,8 @@ public abstract class MapFactory<T extends Map> extends AbstractReflectiveGeneri
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-
-        TypeTag keyTag = determineActualTypeTagFor(0, tag);
-        TypeTag valueTag = determineActualTypeTagFor(1, tag);
-        prefabValues.realizeCacheFor(keyTag, clone);
-        prefabValues.realizeCacheFor(valueTag, clone);
+        TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
+        TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
         // Use red for key and black for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Black map, or they may cancel each other out again.
