@@ -34,9 +34,7 @@ import java.util.Map;
 public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<EnumMap> {
     @Override
     public Tuple<EnumMap> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        @SuppressWarnings("unchecked")
-        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
-        clone.add(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         TypeTag keyTag = determineActualTypeTagFor(0, tag);
         if (keyTag.getType().equals(Object.class)) {

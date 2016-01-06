@@ -31,9 +31,7 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
 
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        @SuppressWarnings("unchecked")
-        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
-        clone.add(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         TypeTag entryTag = determineActualTypeTagFor(0, tag);
         prefabValues.realizeCacheFor(entryTag, clone);

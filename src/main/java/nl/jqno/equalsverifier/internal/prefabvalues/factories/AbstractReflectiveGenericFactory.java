@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 /**
@@ -26,6 +27,13 @@ import java.util.List;
  */
 public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValueFactory<T> {
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
+
+    protected LinkedHashSet<TypeTag> cloneWith(LinkedHashSet<TypeTag> typeStack, TypeTag tag) {
+        @SuppressWarnings("unchecked")
+        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
+        clone.add(tag);
+        return clone;
+    }
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
         List<TypeTag> genericTypes = new ArrayList<>();

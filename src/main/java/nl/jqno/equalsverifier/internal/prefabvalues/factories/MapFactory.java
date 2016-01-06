@@ -31,9 +31,7 @@ public abstract class MapFactory<T extends Map> extends AbstractReflectiveGeneri
 
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        @SuppressWarnings("unchecked")
-        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
-        clone.add(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         TypeTag keyTag = determineActualTypeTagFor(0, tag);
         TypeTag valueTag = determineActualTypeTagFor(1, tag);

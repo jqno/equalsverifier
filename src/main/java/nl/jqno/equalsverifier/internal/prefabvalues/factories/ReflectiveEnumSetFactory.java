@@ -33,9 +33,7 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 public class ReflectiveEnumSetFactory extends AbstractReflectiveGenericFactory<EnumSet> {
     @Override
     public Tuple<EnumSet> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-        @SuppressWarnings("unchecked")
-        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>)typeStack.clone();
-        clone.add(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         ConditionalInstantiator ci = new ConditionalInstantiator(EnumSet.class.getName());
 
