@@ -71,15 +71,15 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
 
-        T red = createWith(prefabValues.giveRed(entryTag));
-        T black = createWith(prefabValues.giveBlack(entryTag));
+        Object red = createWith(prefabValues.giveRed(entryTag));
+        Object black = createWith(prefabValues.giveBlack(entryTag));
 
-        return new Tuple<>(red, black);
+        return Tuple.of(red, black);
     }
 
-    private T createWith(Object value) {
+    private Object createWith(Object value) {
         Class<?> type = ConditionalInstantiator.forName(typeName);
-        T result = (T)createEmpty();
+        Object result = createEmpty();
         try {
             Method add = type.getMethod("add", Object.class);
             add.invoke(result, value);

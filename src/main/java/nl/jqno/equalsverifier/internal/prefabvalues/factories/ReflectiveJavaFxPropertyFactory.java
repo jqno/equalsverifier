@@ -45,9 +45,6 @@ public final class ReflectiveJavaFxPropertyFactory<T> extends AbstractReflective
         Object red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
         Object black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
 
-        @SuppressWarnings("unchecked")
-        Tuple<T> result = new Tuple<>((T)red, (T)black);
-
-        return result;
+        return Tuple.of(red, black);
     }
 }

@@ -44,13 +44,13 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone, Enum.class);
 
-        T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
-        T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+        Object red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+        Object black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
 
-        return new Tuple<>(red, black);
+        return Tuple.of(red, black);
     }
 
-    private T createWith(Object key, Object value) {
+    private Object createWith(Object key, Object value) {
         @SuppressWarnings("unchecked")
         Map map = new HashMap();
         try {
@@ -62,8 +62,6 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
         }
 
         ConditionalInstantiator ci = new ConditionalInstantiator(TYPE_NAME);
-        @SuppressWarnings("unchecked")
-        T result = (T)ci.callFactory("create", classes(Map.class), objects(map));
-        return result;
+        return ci.callFactory("create", classes(Map.class), objects(map));
     }
 }

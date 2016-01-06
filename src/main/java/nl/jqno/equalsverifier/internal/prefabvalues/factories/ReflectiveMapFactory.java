@@ -73,15 +73,15 @@ public abstract class ReflectiveMapFactory<T> extends AbstractReflectiveGenericF
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
-        T red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
-        T black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+        Object red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+        Object black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
 
-        return new Tuple<>(red, black);
+        return Tuple.of(red, black);
     }
 
-    private T createWith(Object key, Object value) {
+    private Object createWith(Object key, Object value) {
         Class<?> type = ConditionalInstantiator.forName(typeName);
-        T result = (T)createEmpty();
+        Object result = createEmpty();
         try {
             Method add = type.getMethod("put", Object.class, Object.class);
             add.invoke(result, key, value);

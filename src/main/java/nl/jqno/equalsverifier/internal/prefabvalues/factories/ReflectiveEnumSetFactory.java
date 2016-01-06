@@ -41,9 +41,6 @@ public class ReflectiveEnumSetFactory extends AbstractReflectiveGenericFactory<E
         EnumSet red = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveRed(entryTag)));
         EnumSet black = (EnumSet)ci.callFactory("of", classes(Enum.class), objects(prefabValues.giveBlack(entryTag)));
 
-        @SuppressWarnings("unchecked")
-        Tuple<EnumSet> result = new Tuple<>(red, black);
-
-        return result;
+        return new Tuple<>(red, black);
     }
 }

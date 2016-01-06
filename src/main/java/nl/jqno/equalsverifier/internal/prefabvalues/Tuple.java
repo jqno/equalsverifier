@@ -34,6 +34,18 @@ public final class Tuple<T> {
     }
 
     /**
+     * Factory method that turns two untyped values into a typed tuple.
+     *
+     * @param red The red value.
+     * @param black The black value.
+     * @param <U> The assumed type of the values.
+     */
+    @SuppressWarnings("unchecked")
+    public static <U> Tuple<U> of(Object red, Object black) {
+        return new Tuple<>((U)red, (U)black);
+    }
+
+    /**
      * Returns the red value.
      */
     public T getRed() {

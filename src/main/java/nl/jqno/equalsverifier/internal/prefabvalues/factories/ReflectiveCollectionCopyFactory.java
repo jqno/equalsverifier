@@ -62,9 +62,6 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
         Object black = ci.callFactory(factoryType, factoryMethod,
                 classes(declaredParameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
 
-        @SuppressWarnings("unchecked")
-        Tuple<T> result = new Tuple<>((T)red, (T)black);
-
-        return result;
+        return Tuple.of(red, black);
     }
 }

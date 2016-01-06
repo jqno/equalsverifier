@@ -71,15 +71,15 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
         TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, prefabValues, clone);
 
-        T red = createWith(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
-        T black = createWith(prefabValues.giveBlack(columnTag), prefabValues.giveBlack(rowTag), prefabValues.giveBlack(valueTag));
+        Object red = createWith(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
+        Object black = createWith(prefabValues.giveBlack(columnTag), prefabValues.giveBlack(rowTag), prefabValues.giveBlack(valueTag));
 
-        return new Tuple<>(red, black);
+        return Tuple.of(red, black);
     }
 
-    private T createWith(Object column, Object row, Object value) {
+    private Object createWith(Object column, Object row, Object value) {
         Class<?> type = ConditionalInstantiator.forName(typeName);
-        T result = (T)createEmpty();
+        Object result = createEmpty();
         try {
             Method add = type.getMethod("put", Object.class, Object.class, Object.class);
             add.invoke(result, column, row, value);

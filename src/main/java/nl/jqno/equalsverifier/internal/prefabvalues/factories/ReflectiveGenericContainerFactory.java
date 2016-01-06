@@ -36,14 +36,14 @@ public class ReflectiveGenericContainerFactory<T> extends AbstractReflectiveGene
         this.typeName = typeName;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         TypeTag internalTag = determineActualTypeTagFor(0, tag);
-        T red = (T)new ConditionalInstantiator(typeName)
+        Object red = new ConditionalInstantiator(typeName)
                 .callFactory("of", classes(Object.class), objects(prefabValues.giveRed(internalTag)));
-        T black = (T)new ConditionalInstantiator(typeName)
+        Object black = new ConditionalInstantiator(typeName)
                 .callFactory("of", classes(Object.class), objects(prefabValues.giveBlack(internalTag)));
-        return new Tuple<>(red, black);
+
+        return Tuple.of(red, black);
     }
 }
