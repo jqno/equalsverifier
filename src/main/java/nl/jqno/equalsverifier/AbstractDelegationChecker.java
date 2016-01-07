@@ -26,12 +26,14 @@ import static nl.jqno.equalsverifier.internal.Assert.fail;
 
 class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
+    private final TypeTag typeTag;
     private final PrefabValues prefabValues;
     private final ClassAccessor<T> classAccessor;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public AbstractDelegationChecker(Configuration<T> config) {
         this.type = config.getType();
+        this.typeTag = new TypeTag(type);
         this.prefabValues = config.getPrefabValues();
         this.classAccessor = config.createClassAccessor();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
@@ -43,11 +45,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        T instance = this.getRedPrefabValue(type);
+        T instance = this.getRedPrefabValue(typeTag);
         if (instance == null) {
             instance = classAccessor.getRedObject();
         }
-        T copy = this.getBlackPrefabValue(type);
+        T copy = this.getBlackPrefabValue(typeTag);
         if (copy == null) {
             copy = classAccessor.getBlackObject();
         }
@@ -74,11 +76,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
-            Class<?> c = field.getType();
-            Object instance = safelyGetInstance(c);
+            TypeTag tag = TypeTag.of(field);
+            Object instance = safelyGetInstance(tag);
             if (instance != null) {
                 Object copy = safelyCopyInstance(instance);
-                checkAbstractMethods(c, instance, copy, true);
+                checkAbstractMethods(tag.getType(), instance, copy, true);
             }
         }
     }
@@ -100,11 +102,11 @@ class AbstractDelegationChecker<T> implements Checker {
             return;
         }
 
-        Object instance = getRedPrefabValue(superclass);
+        Object instance = getRedPrefabValue(new TypeTag(superclass));
         if (instance == null) {
             instance = superAccessor.getRedObject();
         }
-        Object copy = getBlackPrefabValue(type);
+        Object copy = getBlackPrefabValue(typeTag);
         if (copy == null) {
             copy = superAccessor.getBlackObject();
         }
@@ -120,22 +122,22 @@ class AbstractDelegationChecker<T> implements Checker {
     }
 
     @SuppressWarnings("unchecked")
-    private <S> S getRedPrefabValue(Class<?> c) {
-        return (S)prefabValues.giveRed(TypeTag.make(c));
+    private <S> S getRedPrefabValue(TypeTag tag) {
+        return (S)prefabValues.giveRed(tag);
     }
 
     @SuppressWarnings("unchecked")
-    private <S> S getBlackPrefabValue(Class<?> c) {
-        return (S)prefabValues.giveBlack(TypeTag.make(c));
+    private <S> S getBlackPrefabValue(TypeTag tag) {
+        return (S)prefabValues.giveBlack(tag);
     }
 
-    private Object safelyGetInstance(Class<?> c) {
-        Object result = getRedPrefabValue(c);
+    private Object safelyGetInstance(TypeTag tag) {
+        Object result = getRedPrefabValue(tag);
         if (result != null) {
             return result;
         }
         try {
-            return Instantiator.of(c).instantiate();
+            return Instantiator.of(tag.getType()).instantiate();
         }
         catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null.
