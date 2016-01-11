@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -64,5 +65,33 @@ public class TypeTagTest {
         assertEquals("String", new TypeTag(String.class).toString());
         assertEquals("List<String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
         assertEquals("Map<Integer, List<String>>", SOME_LONG_TYPETAG.toString());
+    }
+
+    @Test
+    public void matchTypeVariables() throws Exception {
+        final Field f = Container.class.getDeclaredField("stringContainer");
+        final Field g = Container.class.getDeclaredField("ts");
+        final Field t = Container.class.getDeclaredField("t");
+        final Field a = Container.class.getDeclaredField("tarr");
+
+        TypeTag fTag = TypeTag.of(f);
+        assertEquals(new TypeTag(Container.class, new TypeTag(String.class)), fTag);
+        assertEquals(new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)), TypeTag.of(g));
+        assertEquals(new TypeTag(TypeTag.TypeVariable.class), TypeTag.of(t));
+        assertEquals(new TypeTag(TypeTag.TypeVariable[].class), TypeTag.of(a));
+
+        assertEquals("T", Container.class.getTypeParameters()[0].getName());
+        assertEquals(new TypeTag(List.class, new TypeTag(String.class)), TypeTag.of(g, fTag));
+        assertEquals(new TypeTag(String.class), TypeTag.of(t, fTag));
+        assertEquals(new TypeTag(String[].class), TypeTag.of(a, fTag));
+    }
+
+    @SuppressWarnings("unused")
+    static class Container<T> {
+        Container<String> stringContainer;
+
+        List<T> ts;
+        T t;
+        T[] tarr;
     }
 }
