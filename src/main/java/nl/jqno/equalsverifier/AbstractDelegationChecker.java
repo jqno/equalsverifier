@@ -33,7 +33,7 @@ class AbstractDelegationChecker<T> implements Checker {
 
     public AbstractDelegationChecker(Configuration<T> config) {
         this.type = config.getType();
-        this.typeTag = new TypeTag(type);
+        this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
         this.classAccessor = config.createClassAccessor();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
