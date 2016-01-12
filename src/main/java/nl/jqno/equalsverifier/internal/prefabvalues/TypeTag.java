@@ -29,6 +29,11 @@ import java.util.*;
  * @author Jan Ouwens
  */
 public final class TypeTag {
+    /**
+     *  Null object for TypeTag.
+     */
+    public static final TypeTag NULL = new TypeTag(NullType.class);
+
     private final Class<?> type;
     private final List<TypeTag> genericTypes;
 
@@ -57,7 +62,7 @@ public final class TypeTag {
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field) {
-        return resolve(field.getGenericType(), new TypeTag(Object.class));
+        return resolve(field.getGenericType(), NULL);
     }
 
     public static TypeTag of(Field field, TypeTag enclosingType) {
@@ -187,4 +192,6 @@ public final class TypeTag {
      * Represents a variable type parameter like {@code List<T>}.
      */
     public static final class TypeVariable {}
+
+    private static final class NullType {}
 }

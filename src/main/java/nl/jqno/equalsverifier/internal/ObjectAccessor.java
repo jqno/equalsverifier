@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 
@@ -148,11 +149,14 @@ public final class ObjectAccessor<T> {
      * These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
      */
-    public void scramble(PrefabValues prefabValues) {
+    public void scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type)) {
             FieldAccessor accessor = new FieldAccessor(object, field);
-            accessor.changeField(prefabValues);
+            accessor.changeField(prefabValues, enclosingType);
         }
     }
 
@@ -170,11 +174,14 @@ public final class ObjectAccessor<T> {
      * These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
      */
-    public void shallowScramble(PrefabValues prefabValues) {
+    public void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.ofIgnoringSuper(type)) {
             FieldAccessor accessor = new FieldAccessor(object, field);
-            accessor.changeField(prefabValues);
+            accessor.changeField(prefabValues, enclosingType);
         }
     }
 }

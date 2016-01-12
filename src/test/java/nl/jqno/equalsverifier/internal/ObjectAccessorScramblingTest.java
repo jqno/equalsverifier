@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
@@ -61,7 +62,7 @@ public class ObjectAccessorScramblingTest {
         Point3D modified = new Point3D(2, 3, 4);
         Point3D reference = copy(modified);
 
-        ObjectAccessor.of(modified).shallowScramble(prefabValues);
+        ObjectAccessor.of(modified).shallowScramble(prefabValues, TypeTag.NULL);
 
         assertFalse(modified.equals(reference));
         modified.z = 4;
@@ -115,7 +116,7 @@ public class ObjectAccessorScramblingTest {
     }
 
     private void doScramble(Object object) {
-        ObjectAccessor.of(object).scramble(prefabValues);
+        ObjectAccessor.of(object).scramble(prefabValues, TypeTag.NULL);
     }
 
     static final class StringContainer {

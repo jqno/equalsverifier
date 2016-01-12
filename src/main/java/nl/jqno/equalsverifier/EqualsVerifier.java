@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -415,9 +416,10 @@ public final class EqualsVerifier<T> {
             return;
         }
 
+        TypeTag tag = config.getTypeTag();
         ClassAccessor<T> classAccessor = config.createClassAccessor();
-        unequalExamples.add(classAccessor.getRedObject());
-        unequalExamples.add(classAccessor.getBlackObject());
+        unequalExamples.add(classAccessor.getRedObject(tag));
+        unequalExamples.add(classAccessor.getBlackObject(tag));
     }
 
     private void verifyWithExamples() {

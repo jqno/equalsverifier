@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
@@ -331,9 +332,9 @@ public class FieldAccessorTest {
         assertTrue(reference.equals(changed));
 
         for (Field field : FieldIterable.of(AllTypesContainer.class)) {
-            new FieldAccessor(changed, field).changeField(prefabValues);
+            new FieldAccessor(changed, field).changeField(prefabValues, TypeTag.NULL);
             assertFalse("On field: " + field.getName(), reference.equals(changed));
-            new FieldAccessor(reference, field).changeField(prefabValues);
+            new FieldAccessor(reference, field).changeField(prefabValues, TypeTag.NULL);
             assertTrue("On field: " + field.getName(), reference.equals(changed));
         }
     }
@@ -376,9 +377,9 @@ public class FieldAccessorTest {
         assertTrue(reference.equals(changed));
 
         for (Field field : FieldIterable.of(AllArrayTypesContainer.class)) {
-            new FieldAccessor(changed, field).changeField(prefabValues);
+            new FieldAccessor(changed, field).changeField(prefabValues, TypeTag.NULL);
             assertFalse("On field: " + field.getName(), reference.equals(changed));
-            new FieldAccessor(reference, field).changeField(prefabValues);
+            new FieldAccessor(reference, field).changeField(prefabValues, TypeTag.NULL);
             assertTrue("On field: " + field.getName(), reference.equals(changed));
         }
     }
@@ -452,7 +453,7 @@ public class FieldAccessorTest {
     }
 
     private void doChangeField(Object object, String fieldName) {
-        getAccessorFor(object, fieldName).changeField(prefabValues);
+        getAccessorFor(object, fieldName).changeField(prefabValues, TypeTag.NULL);
     }
 
     private FieldAccessor getAccessorFor(Object object, String fieldName) {

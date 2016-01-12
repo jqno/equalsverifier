@@ -21,6 +21,7 @@ import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
@@ -33,14 +34,14 @@ public class FieldInspectorTest {
 
     @Test
     public void objectsAreReset_whenEachIterationBegins() {
-        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
         inspector.check(new ResetObjectForEachIterationCheck());
     }
 
     @Test
     public void objectsAreReset_whenEachIterationBegins_givenNullObjects() {
-        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
         inspector.checkWithNull(new ResetObjectForEachIterationCheck());
     }
@@ -60,8 +61,8 @@ public class FieldInspectorTest {
                 assertEquals(originalChanged, changedAccessor.getObject());
             }
 
-            referenceAccessor.changeField(prefabValues);
-            changedAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, TypeTag.NULL);
+            changedAccessor.changeField(prefabValues, TypeTag.NULL);
         }
     }
 }

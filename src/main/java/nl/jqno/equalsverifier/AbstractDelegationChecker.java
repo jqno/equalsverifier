@@ -47,11 +47,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
         T instance = this.getRedPrefabValue(typeTag);
         if (instance == null) {
-            instance = classAccessor.getRedObject();
+            instance = classAccessor.getRedObject(typeTag);
         }
         T copy = this.getBlackPrefabValue(typeTag);
         if (copy == null) {
-            copy = classAccessor.getBlackObject();
+            copy = classAccessor.getBlackObject(typeTag);
         }
         checkAbstractDelegation(instance, copy);
 
@@ -104,11 +104,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
         Object instance = getRedPrefabValue(new TypeTag(superclass));
         if (instance == null) {
-            instance = superAccessor.getRedObject();
+            instance = superAccessor.getRedObject(typeTag);
         }
         Object copy = getBlackPrefabValue(typeTag);
         if (copy == null) {
-            copy = superAccessor.getBlackObject();
+            copy = superAccessor.getBlackObject(typeTag);
         }
         checkAbstractMethods(superclass, instance, copy, false);
     }
