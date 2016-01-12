@@ -80,6 +80,7 @@ public class TypeTagTest {
         assertEquals(new TypeTag(TypeTag.TypeVariable.class), TypeTag.of(t));
         assertEquals(new TypeTag(TypeTag.TypeVariable[].class), TypeTag.of(a));
 
+
         assertEquals("T", Container.class.getTypeParameters()[0].getName());
         assertEquals(new TypeTag(List.class, new TypeTag(String.class)), TypeTag.of(g, fTag));
         assertEquals(new TypeTag(String.class), TypeTag.of(t, fTag));

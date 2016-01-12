@@ -107,6 +107,10 @@ public final class TypeTag {
     private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
         java.lang.reflect.TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
         Map<String, TypeTag> lookup = new HashMap<>();
+        if (enclosingType.getGenericTypes().size() == 0) {
+            return lookup;
+        }
+
         for (int i = 0; i < typeParameters.length; i++) {
             String name = typeParameters[i].getName();
             TypeTag tag = enclosingType.getGenericTypes().get(i);

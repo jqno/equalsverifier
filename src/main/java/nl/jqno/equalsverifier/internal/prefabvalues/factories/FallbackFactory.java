@@ -88,7 +88,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                prefabValues.realizeCacheFor(TypeTag.of(field), typeStack);
+                prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
             }
         }
     }
