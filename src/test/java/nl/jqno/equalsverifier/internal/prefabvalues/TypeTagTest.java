@@ -68,31 +68,47 @@ public class TypeTagTest {
     }
 
     @Test
-    public void matchTypeVariables() throws Exception {
-        final Field f = Container.class.getDeclaredField("stringContainer");
-        final Field g = Container.class.getDeclaredField("ts");
-        final Field t = Container.class.getDeclaredField("t");
-        final Field a = Container.class.getDeclaredField("tarr");
+    public void matchParameterizedField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
 
-        TypeTag fTag = TypeTag.of(f, TypeTag.NULL);
-        assertEquals(new TypeTag(Container.class, new TypeTag(String.class)), fTag);
-        assertEquals(new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)), TypeTag.of(g, TypeTag.NULL));
-        assertEquals(new TypeTag(TypeTag.TypeVariable.class), TypeTag.of(t, TypeTag.NULL));
-        assertEquals(new TypeTag(TypeTag.TypeVariable[].class), TypeTag.of(a, TypeTag.NULL));
+        Field f = Container.class.getDeclaredField("t");
+        TypeTag actual = TypeTag.of(f, enclosingType);
 
+        assertEquals(new TypeTag(String.class), actual);
+    }
 
-        assertEquals("T", Container.class.getTypeParameters()[0].getName());
-        assertEquals(new TypeTag(List.class, new TypeTag(String.class)), TypeTag.of(g, fTag));
-        assertEquals(new TypeTag(String.class), TypeTag.of(t, fTag));
-        assertEquals(new TypeTag(String[].class), TypeTag.of(a, fTag));
+    @Test
+    public void matchParameterizedGenericField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("ts");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(List.class, new TypeTag(String.class)), actual);
+    }
+
+    @Test
+    public void matchParameterizedArrayField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("tarr");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(String[].class), actual);
+    }
+
+    @SuppressWarnings("unused")
+    static class ContainerContainer {
+        Container<String> stringContainer;
     }
 
     @SuppressWarnings("unused")
     static class Container<T> {
-        Container<String> stringContainer;
-
-        List<T> ts;
         T t;
+        List<T> ts;
         T[] tarr;
     }
 }
