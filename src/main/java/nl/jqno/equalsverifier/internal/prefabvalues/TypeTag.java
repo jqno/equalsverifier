@@ -56,15 +56,14 @@ public final class TypeTag {
     }
 
     /**
-     * Resolves a TypeTag from the type of a {@link Field} instance.
+     * Resolves a TypeTag from the type of a {@link Field} instance, using an
+     * enclosing type to determine any generic parameters the field may contain.
      *
      * @param field The field to resolve.
+     * @param enclosingType The type that contains the field, used to determine
+     *                      any generic parameters it may contain.
      * @return The TypeTag for the given field.
      */
-    public static TypeTag of(Field field) {
-        return resolve(field.getGenericType(), NULL);
-    }
-
     public static TypeTag of(Field field, TypeTag enclosingType) {
         return resolve(field.getGenericType(), enclosingType);
     }

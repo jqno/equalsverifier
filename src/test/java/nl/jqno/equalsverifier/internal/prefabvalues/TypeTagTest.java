@@ -74,11 +74,11 @@ public class TypeTagTest {
         final Field t = Container.class.getDeclaredField("t");
         final Field a = Container.class.getDeclaredField("tarr");
 
-        TypeTag fTag = TypeTag.of(f);
+        TypeTag fTag = TypeTag.of(f, TypeTag.NULL);
         assertEquals(new TypeTag(Container.class, new TypeTag(String.class)), fTag);
-        assertEquals(new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)), TypeTag.of(g));
-        assertEquals(new TypeTag(TypeTag.TypeVariable.class), TypeTag.of(t));
-        assertEquals(new TypeTag(TypeTag.TypeVariable[].class), TypeTag.of(a));
+        assertEquals(new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)), TypeTag.of(g, TypeTag.NULL));
+        assertEquals(new TypeTag(TypeTag.TypeVariable.class), TypeTag.of(t, TypeTag.NULL));
+        assertEquals(new TypeTag(TypeTag.TypeVariable[].class), TypeTag.of(a, TypeTag.NULL));
 
 
         assertEquals("T", Container.class.getTypeParameters()[0].getName());

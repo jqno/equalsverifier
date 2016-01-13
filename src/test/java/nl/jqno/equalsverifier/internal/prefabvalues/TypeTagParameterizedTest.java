@@ -79,7 +79,7 @@ public class TypeTagParameterizedTest<T> {
 
     @Test
     public void correctness() {
-        TypeTag actual = TypeTag.of(getField(fieldName));
+        TypeTag actual = TypeTag.of(getField(fieldName), TypeTag.NULL);
         assertEquals(expected, actual);
     }
 

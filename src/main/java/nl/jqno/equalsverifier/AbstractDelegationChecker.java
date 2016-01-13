@@ -76,7 +76,7 @@ class AbstractDelegationChecker<T> implements Checker {
 
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
-            TypeTag tag = TypeTag.of(field);
+            TypeTag tag = TypeTag.of(field, typeTag);
             Object instance = safelyGetInstance(tag);
             if (instance != null) {
                 Object copy = safelyCopyInstance(instance);
