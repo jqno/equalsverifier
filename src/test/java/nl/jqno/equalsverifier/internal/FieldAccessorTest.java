@@ -407,6 +407,13 @@ public class FieldAccessorTest {
     }
 
     @Test
+    public void changeTypeVariableGenericField() {
+        GenericTypeVariableListContainer<String> foo = new GenericTypeVariableListContainer<>();
+        doChangeField(foo, "tList", new TypeTag(GenericTypeVariableListContainerContainer.class, new TypeTag(String.class)));
+        assertFalse(foo.tList.isEmpty());
+    }
+
+    @Test
     public void addPrefabValues() {
         PointContainer foo = new PointContainer(new Point(1, 2));
         prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
@@ -453,7 +460,11 @@ public class FieldAccessorTest {
     }
 
     private void doChangeField(Object object, String fieldName) {
-        getAccessorFor(object, fieldName).changeField(prefabValues, TypeTag.NULL);
+        doChangeField(object, fieldName, TypeTag.NULL);
+    }
+
+    private void doChangeField(Object object, String fieldName, TypeTag enclosingType) {
+        getAccessorFor(object, fieldName).changeField(prefabValues, enclosingType);
     }
 
     private FieldAccessor getAccessorFor(Object object, String fieldName) {

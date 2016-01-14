@@ -123,7 +123,7 @@ public class ObjectAccessorScramblingTest {
         assertTrue(foo.points.ts.isEmpty());
 
         doScramble(foo);
-        
+
         assertFalse(foo.strings.ts.isEmpty());
         assertEquals(String.class, foo.strings.ts.get(0).getClass());
         assertFalse(foo.points.ts.isEmpty());

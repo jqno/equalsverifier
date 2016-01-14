@@ -249,6 +249,14 @@ public class TypeHelper {
         public List<Integer> integerList = new ArrayList<>();
     }
 
+    public static final class GenericTypeVariableListContainer<T> {
+        public List<T> tList = new ArrayList<>();
+    }
+
+    public static final class GenericTypeVariableListContainerContainer {
+        public GenericTypeVariableListContainer<String> field = new GenericTypeVariableListContainer<>();
+    }
+
     public static final class ObjectContainer {
         public Object field = new Object();
     }
