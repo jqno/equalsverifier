@@ -24,6 +24,9 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 public class ObjectAccessorScramblingTest {
@@ -111,6 +114,22 @@ public class ObjectAccessorScramblingTest {
         assertFalse(before.equals(foo.p));
     }
 
+    @Test
+    public void scrambleNestedGenerics() {
+        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3));
+        GenericContainerContainer foo = new GenericContainerContainer();
+
+        assertTrue(foo.strings.ts.isEmpty());
+        assertTrue(foo.points.ts.isEmpty());
+
+        doScramble(foo);
+        
+        assertFalse(foo.strings.ts.isEmpty());
+        assertEquals(String.class, foo.strings.ts.get(0).getClass());
+        assertFalse(foo.points.ts.isEmpty());
+        assertEquals(Point.class, foo.points.ts.get(0).getClass());
+    }
+
     private <T> T copy(T object) {
         return ObjectAccessor.of(object).copy();
     }
@@ -129,5 +148,18 @@ public class ObjectAccessorScramblingTest {
 
     static final class FinalAssignedPointContainer {
         private final Point p = new Point(2, 3);
+    }
+
+    static final class GenericContainerContainer {
+        private final GenericContainer<String> strings = new GenericContainer<>(new ArrayList<String>());
+        private final GenericContainer<Point> points = new GenericContainer<>(new ArrayList<Point>());
+    }
+
+    static final class GenericContainer<T> {
+        private List<T> ts;
+
+        public GenericContainer(List<T> ts) {
+            this.ts = ts;
+        }
     }
 }
