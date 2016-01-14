@@ -100,6 +100,17 @@ public class TypeTagTest {
         assertEquals(new TypeTag(String[].class), actual);
     }
 
+    @Test
+    public void matchNestedParameterizedGenericField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("tss");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))), actual);
+    }
+
     @SuppressWarnings("unused")
     static class ContainerContainer {
         Container<String> stringContainer;
@@ -110,5 +121,6 @@ public class TypeTagTest {
         T t;
         List<T> ts;
         T[] tarr;
+        List<List<T>> tss;
     }
 }
