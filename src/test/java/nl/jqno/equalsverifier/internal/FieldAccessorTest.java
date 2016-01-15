@@ -409,7 +409,7 @@ public class FieldAccessorTest {
     @Test
     public void changeTypeVariableGenericField() {
         GenericTypeVariableListContainer<String> foo = new GenericTypeVariableListContainer<>();
-        doChangeField(foo, "tList", new TypeTag(GenericTypeVariableListContainerContainer.class, new TypeTag(String.class)));
+        doChangeField(foo, "tList", new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertFalse(foo.tList.isEmpty());
     }
 

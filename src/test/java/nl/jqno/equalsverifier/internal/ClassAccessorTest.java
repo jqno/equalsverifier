@@ -207,6 +207,14 @@ public class ClassAccessorTest {
     }
 
     @Test
+    public void getRedObjectGeneric() {
+        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
+        GenericTypeVariableListContainer foo =
+                accessor.getRedObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+        assertEquals(String.class, foo.tList.get(0).getClass());
+    }
+
+    @Test
     public void getRedAccessor() {
         PointContainer foo = pointContainerAccessor.getRedObject(TypeTag.NULL);
         ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor(TypeTag.NULL);
@@ -218,6 +226,14 @@ public class ClassAccessorTest {
         assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject(TypeTag.NULL));
     }
 
+    @Test
+    public void getBlackObjectGeneric() {
+        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
+        GenericTypeVariableListContainer foo =
+                accessor.getBlackObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+        assertEquals(String.class, foo.tList.get(0).getClass());
+    }
+    
     @Test
     public void getBlackAccessor() {
         PointContainer foo = pointContainerAccessor.getBlackObject(TypeTag.NULL);
