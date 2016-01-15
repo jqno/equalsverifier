@@ -253,10 +253,6 @@ public class TypeHelper {
         public List<T> tList = new ArrayList<>();
     }
 
-    public static final class GenericTypeVariableListContainerContainer {
-        public GenericTypeVariableListContainer<String> field = new GenericTypeVariableListContainer<>();
-    }
-
     public static final class ObjectContainer {
         public Object field = new Object();
     }

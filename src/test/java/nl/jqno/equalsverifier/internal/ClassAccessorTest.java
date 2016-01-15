@@ -233,7 +233,7 @@ public class ClassAccessorTest {
                 accessor.getBlackObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertEquals(String.class, foo.tList.get(0).getClass());
     }
-    
+
     @Test
     public void getBlackAccessor() {
         PointContainer foo = pointContainerAccessor.getBlackObject(TypeTag.NULL);
