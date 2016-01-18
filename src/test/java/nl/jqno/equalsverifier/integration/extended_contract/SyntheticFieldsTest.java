@@ -15,13 +15,10 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.nullSafeHashCode;
 import nl.jqno.equalsverifier.EqualsVerifier;
-
 import org.junit.Test;
+
+import static nl.jqno.equalsverifier.testhelpers.Util.*;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
@@ -34,6 +31,12 @@ public class SyntheticFieldsTest {
 	@Test
 	public void succeed_whenClassHasAFieldThatHasASyntheticField() {
 		EqualsVerifier.forClass(OuterContainer.class)
+				.verify();
+	}
+	
+	@Test
+	public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
+		EqualsVerifier.forClass(CoberturaContainer.class)
 				.verify();
 	}
 	
@@ -72,6 +75,39 @@ public class SyntheticFieldsTest {
 		@Override
 		public int hashCode() {
 			return nullSafeHashCode(outer);
+		}
+	}
+	
+	public static final class CoberturaContainer {
+		public static transient int[] __cobertura_counters;
+		private final int i;
+		
+		public CoberturaContainer(int i) {
+			this.i = i;
+		}
+		
+		static {
+			__cobertura_init();
+		}
+		
+		public static void __cobertura_init() {
+			__cobertura_counters = new int[1];
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			__cobertura_counters[0] += 1;
+			if (!(obj instanceof CoberturaContainer)) {
+				return false;
+			}
+			CoberturaContainer p = (CoberturaContainer)obj;
+			return p.i == i;
+		}
+		
+		@Override
+		public int hashCode() {
+			__cobertura_counters[0] += 1;
+			return defaultHashCode(this);
 		}
 	}
 }

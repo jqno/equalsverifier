@@ -18,11 +18,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DifferentAccessModifiersFieldContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DifferentAccessModifiersSubFieldContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptySubFieldContainer;
@@ -142,6 +140,17 @@ public class FieldIterableTest {
 		assertFalse(iterable.iterator().hasNext());
 	}
 	
+	@Test
+	public void ignoreNonSyntheticCoberturaFields() {
+		FieldIterable iterable = FieldIterable.of(CoberturaContainer.class);
+		List<Field> fields = new ArrayList<Field>();
+		for (Field f : iterable) {
+			fields.add(f);
+		}
+		assertEquals(1, fields.size());
+		assertEquals("i", fields.get(0).getName());
+	}
+	
 	@SuppressWarnings("serial")
 	private static final Set<Field> FIELD_CONTAINER_FIELDS = new HashSet<Field>() {{
 		Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
@@ -179,4 +188,13 @@ public class FieldIterableTest {
 		addAll(FIELD_CONTAINER_FIELDS);
 		addAll(SUB_FIELD_CONTAINER_FIELDS);
 	}};
+	
+	public static final class CoberturaContainer {
+		public static transient int[] __cobertura_counters;
+		private final int i;
+		
+		public CoberturaContainer(int i) {
+			this.i = i;
+		}
+	}
 }

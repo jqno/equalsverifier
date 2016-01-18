@@ -62,7 +62,7 @@ public class FieldIterable implements Iterable<Field> {
 		this.type = type;
 		this.includeSuperclasses = includeSuperclasses;
 	}
-
+	
 	/**
 	 * Returns an iterator over all declared fields of the class and all of its
 	 * superclasses.
@@ -74,7 +74,7 @@ public class FieldIterable implements Iterable<Field> {
 	public Iterator<Field> iterator() {
 		return createFieldList().iterator();
 	}
-
+	
 	private List<Field> createFieldList() {
 		List<Field> result = new ArrayList<Field>();
 		
@@ -88,12 +88,12 @@ public class FieldIterable implements Iterable<Field> {
 		
 		return result;
 	}
-
+	
 	private List<Field> addFieldsFor(Class<?> type) {
 		List<Field> result = new ArrayList<Field>();
 		
 		for (Field field : type.getDeclaredFields()) {
-			if (!field.isSynthetic()) {
+			if (!field.isSynthetic() && !"__cobertura_counters".equals(field.getName())) {
 				result.add(field);
 			}
 		}
