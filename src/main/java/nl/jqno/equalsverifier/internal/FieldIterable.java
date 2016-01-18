@@ -93,7 +93,7 @@ public final class FieldIterable implements Iterable<Field> {
         List<Field> result = new ArrayList<>();
 
         for (Field field : c.getDeclaredFields()) {
-            if (!field.isSynthetic()) {
+            if (!field.isSynthetic() && !"__cobertura_counters".equals(field.getName())) {
                 result.add(field);
             }
         }

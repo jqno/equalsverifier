@@ -21,10 +21,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -139,6 +136,17 @@ public class FieldIterableTest {
         assertFalse(iterable.iterator().hasNext());
     }
 
+    @Test
+    public void ignoreNonSyntheticCoberturaFields() {
+        FieldIterable iterable = FieldIterable.of(CoberturaContainer.class);
+        List<Field> fields = new ArrayList<>();
+        for (Field f : iterable) {
+            fields.add(f);
+        }
+        assertEquals(1, fields.size());
+        assertEquals("i", fields.get(0).getName());
+    }
+
     private static Set<Field> createFieldContainerFields() {
         Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersFieldContainer> type = DifferentAccessModifiersFieldContainer.class;
@@ -178,5 +186,15 @@ public class FieldIterableTest {
         result.addAll(FIELD_CONTAINER_FIELDS);
         result.addAll(SUB_FIELD_CONTAINER_FIELDS);
         return result;
+    }
+
+    public static final class CoberturaContainer {
+        // CHECKSTYLE: ignore StaticVariableName for 1 line.
+        public static transient int[] __cobertura_counters;
+        private final int i;
+
+        public CoberturaContainer(int i) {
+            this.i = i;
+        }
     }
 }

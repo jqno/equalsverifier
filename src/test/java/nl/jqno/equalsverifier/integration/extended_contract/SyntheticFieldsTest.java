@@ -43,6 +43,12 @@ public class SyntheticFieldsTest {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
+        EqualsVerifier.forClass(CoberturaContainer.class)
+                .verify();
+    }
+
     /* non-static */ final class Outer {
         private final Inner inner;
 
@@ -80,6 +86,36 @@ public class SyntheticFieldsTest {
         @Override
         public int hashCode() {
             return Objects.hashCode(outer);
+        }
+    }
+
+    public static final class CoberturaContainer {
+        // CHECKSTYLE: ignore StaticVariableName for 1 line.
+        public static transient int[] __cobertura_counters;
+        private final int i;
+
+        public CoberturaContainer(int i) {
+            this.i = i;
+        }
+
+        static {
+            __cobertura_counters = new int[1];
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            __cobertura_counters[0] += 1;
+            if (!(obj instanceof CoberturaContainer)) {
+                return false;
+            }
+            CoberturaContainer p = (CoberturaContainer)obj;
+            return p.i == i;
+        }
+
+        @Override
+        public int hashCode() {
+            __cobertura_counters[0] += 1;
+            return defaultHashCode(this);
         }
     }
 }
