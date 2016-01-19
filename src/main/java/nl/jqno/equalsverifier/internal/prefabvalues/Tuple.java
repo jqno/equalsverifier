@@ -67,7 +67,7 @@ public final class Tuple<T> {
         if (!(obj instanceof Tuple)) {
             return false;
         }
-        Tuple other = (Tuple)obj;
+        Tuple<?> other = (Tuple<?>)obj;
         return red.equals(other.red) && black.equals(other.black);
     }
 

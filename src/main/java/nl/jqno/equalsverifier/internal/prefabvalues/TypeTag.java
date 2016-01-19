@@ -71,7 +71,7 @@ public final class TypeTag {
     private static TypeTag resolve(Type type, TypeTag enclosingType) {
         List<TypeTag> nestedTags = new ArrayList<>();
         if (type instanceof Class) {
-            return new TypeTag((Class)type, nestedTags);
+            return new TypeTag((Class<?>)type, nestedTags);
         }
         if (type instanceof ParameterizedType) {
             ParameterizedType pt = (ParameterizedType)type;
@@ -79,7 +79,7 @@ public final class TypeTag {
             for (Type typeArg : typeArgs) {
                 nestedTags.add(resolve(typeArg, enclosingType));
             }
-            return new TypeTag((Class)pt.getRawType(), nestedTags);
+            return new TypeTag((Class<?>)pt.getRawType(), nestedTags);
         }
         if (type instanceof GenericArrayType) {
             GenericArrayType gat = (GenericArrayType)type;
@@ -99,7 +99,7 @@ public final class TypeTag {
         }
         if (type instanceof java.lang.reflect.TypeVariable) {
             Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
-            String typeVariable = ((java.lang.reflect.TypeVariable)type).getName();
+            String typeVariable = ((java.lang.reflect.TypeVariable<?>)type).getName();
             if (typeVariableLookup.containsKey(typeVariable)) {
                 return typeVariableLookup.get(typeVariable);
             }
