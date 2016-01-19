@@ -161,8 +161,8 @@ public class FieldAccessor {
      *          prefabValues, the new value will be taken from it.
      * @throws ReflectionException If the operation fails.
      */
-    public void changeField(PrefabValues prefabValues) {
-        modify(new FieldChanger(prefabValues));
+    public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
+        modify(new FieldChanger(prefabValues, enclosingType));
     }
 
     private void modify(FieldModifier modifier) {
@@ -261,14 +261,16 @@ public class FieldAccessor {
 
     private class FieldChanger implements FieldModifier {
         private final PrefabValues prefabValues;
+        private final TypeTag enclosingType;
 
-        public FieldChanger(PrefabValues prefabValues) {
+        public FieldChanger(PrefabValues prefabValues, TypeTag enclosingType) {
             this.prefabValues = prefabValues;
+            this.enclosingType = enclosingType;
         }
 
         @Override
         public void modify() throws IllegalAccessException {
-            Object newValue = prefabValues.giveOther(TypeTag.of(field), field.get(object));
+            Object newValue = prefabValues.giveOther(TypeTag.of(field, enclosingType), field.get(object));
             field.set(object, newValue);
         }
     }

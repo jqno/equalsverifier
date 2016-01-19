@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -28,6 +29,7 @@ import static nl.jqno.equalsverifier.internal.Assert.*;
 class HierarchyChecker<T> implements Checker {
     private final Configuration<T> config;
     private final Class<T> type;
+    private final TypeTag typeTag;
     private final ClassAccessor<T> classAccessor;
     private final Class<? extends T> redefinedSubclass;
     private final boolean typeIsFinal;
@@ -42,6 +44,7 @@ class HierarchyChecker<T> implements Checker {
         }
 
         this.type = config.getType();
+        this.typeTag = config.getTypeTag();
         this.classAccessor = config.createClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
@@ -66,7 +69,7 @@ class HierarchyChecker<T> implements Checker {
         }
 
         if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
-            T reference = classAccessor.getRedObject();
+            T reference = classAccessor.getRedObject(typeTag);
             Object equalSuper = getEqualSuper(reference);
 
             Formatter formatter = Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.",
@@ -74,8 +77,8 @@ class HierarchyChecker<T> implements Checker {
             assertFalse(formatter, reference.equals(equalSuper) || equalSuper.equals(reference));
         }
         else {
-            checkSuperProperties(classAccessor.getRedAccessor());
-            checkSuperProperties(classAccessor.getDefaultValuesAccessor());
+            checkSuperProperties(classAccessor.getRedAccessor(typeTag));
+            checkSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag));
         }
     }
 
@@ -84,7 +87,7 @@ class HierarchyChecker<T> implements Checker {
         Object equalSuper = getEqualSuper(reference);
 
         T shallow = referenceAccessor.copy();
-        ObjectAccessor.of(shallow).shallowScramble(config.getPrefabValues());
+        ObjectAccessor.of(shallow).shallowScramble(config.getPrefabValues(), typeTag);
 
         Formatter symmetryFormatter = Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper);
         assertTrue(symmetryFormatter, reference.equals(equalSuper) && equalSuper.equals(reference));
@@ -111,7 +114,7 @@ class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor();
+        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
         T reference = referenceAccessor.get();
         T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 
@@ -139,7 +142,7 @@ class HierarchyChecker<T> implements Checker {
             fail(Formatter.of("Subclass: %% has a final equals method.\nNo need to supply a redefined subclass.", type.getSimpleName()));
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor();
+        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
         T reference = referenceAccessor.get();
         T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
         assertFalse(Formatter.of("Subclass:\n  %%\nequals subclass instance\n  %%", reference, redefinedSub),

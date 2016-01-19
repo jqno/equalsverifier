@@ -21,6 +21,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -64,5 +65,62 @@ public class TypeTagTest {
         assertEquals("String", new TypeTag(String.class).toString());
         assertEquals("List<String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
         assertEquals("Map<Integer, List<String>>", SOME_LONG_TYPETAG.toString());
+    }
+
+    @Test
+    public void matchParameterizedField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("t");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(String.class), actual);
+    }
+
+    @Test
+    public void matchParameterizedGenericField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("ts");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(List.class, new TypeTag(String.class)), actual);
+    }
+
+    @Test
+    public void matchParameterizedArrayField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("tarr");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(String[].class), actual);
+    }
+
+    @Test
+    public void matchNestedParameterizedGenericField() throws Exception {
+        Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
+        TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
+
+        Field f = Container.class.getDeclaredField("tss");
+        TypeTag actual = TypeTag.of(f, enclosingType);
+
+        assertEquals(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))), actual);
+    }
+
+    @SuppressWarnings("unused")
+    static class ContainerContainer {
+        Container<String> stringContainer;
+    }
+
+    @SuppressWarnings("unused")
+    static class Container<T> {
+        T t;
+        List<T> ts;
+        T[] tarr;
+        List<List<T>> tss;
     }
 }

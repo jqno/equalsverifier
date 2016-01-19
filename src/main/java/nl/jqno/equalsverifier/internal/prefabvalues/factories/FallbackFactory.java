@@ -50,7 +50,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         }
 
         traverseFields(tag, prefabValues, clone);
-        return giveInstances(type, prefabValues);
+        return giveInstances(tag, prefabValues);
     }
 
     private Tuple<T> giveEnumInstances(TypeTag tag) {
@@ -88,15 +88,15 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                prefabValues.realizeCacheFor(TypeTag.of(field), typeStack);
+                prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
             }
         }
     }
 
-    private Tuple<T> giveInstances(Class<T> type, PrefabValues prefabValues) {
-        ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues, false);
-        T red = accessor.getRedObject();
-        T black = accessor.getBlackObject();
+    private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
+        ClassAccessor<T> accessor = ClassAccessor.of(tag.<T>getType(), prefabValues, false);
+        T red = accessor.getRedObject(tag);
+        T black = accessor.getBlackObject(tag);
         return new Tuple<>(red, black);
     }
 }

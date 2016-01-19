@@ -19,10 +19,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Represents a generic type, including raw type and generic type parameters.
@@ -32,6 +29,11 @@ import java.util.List;
  * @author Jan Ouwens
  */
 public final class TypeTag {
+    /**
+     *  Null object for TypeTag.
+     */
+    public static final TypeTag NULL = new TypeTag(NullType.class);
+
     private final Class<?> type;
     private final List<TypeTag> genericTypes;
 
@@ -54,16 +56,19 @@ public final class TypeTag {
     }
 
     /**
-     * Resolves a TypeTag from the type of a {@link Field} instance.
+     * Resolves a TypeTag from the type of a {@link Field} instance, using an
+     * enclosing type to determine any generic parameters the field may contain.
      *
      * @param field The field to resolve.
+     * @param enclosingType The type that contains the field, used to determine
+     *                      any generic parameters it may contain.
      * @return The TypeTag for the given field.
      */
-    public static TypeTag of(Field field) {
-        return resolve(field.getGenericType());
+    public static TypeTag of(Field field, TypeTag enclosingType) {
+        return resolve(field.getGenericType(), enclosingType);
     }
 
-    private static TypeTag resolve(Type type) {
+    private static TypeTag resolve(Type type, TypeTag enclosingType) {
         List<TypeTag> nestedTags = new ArrayList<>();
         if (type instanceof Class) {
             return new TypeTag((Class)type, nestedTags);
@@ -72,13 +77,13 @@ public final class TypeTag {
             ParameterizedType pt = (ParameterizedType)type;
             Type[] typeArgs = pt.getActualTypeArguments();
             for (Type typeArg : typeArgs) {
-                nestedTags.add(resolve(typeArg));
+                nestedTags.add(resolve(typeArg, enclosingType));
             }
             return new TypeTag((Class)pt.getRawType(), nestedTags);
         }
         if (type instanceof GenericArrayType) {
             GenericArrayType gat = (GenericArrayType)type;
-            TypeTag tag = resolve(gat.getGenericComponentType());
+            TypeTag tag = resolve(gat.getGenericComponentType(), enclosingType);
             String arrayTypeName = "[L" + tag.getType().getName() + ";";
             Class<?> arrayType;
             try {
@@ -93,9 +98,29 @@ public final class TypeTag {
             return new TypeTag(Wildcard.class);
         }
         if (type instanceof java.lang.reflect.TypeVariable) {
+            Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
+            String typeVariable = ((java.lang.reflect.TypeVariable)type).getName();
+            if (typeVariableLookup.containsKey(typeVariable)) {
+                return typeVariableLookup.get(typeVariable);
+            }
             return new TypeTag(TypeVariable.class);
         }
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
+    }
+
+    private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
+        java.lang.reflect.TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
+        Map<String, TypeTag> lookup = new HashMap<>();
+        if (enclosingType.getGenericTypes().size() == 0) {
+            return lookup;
+        }
+
+        for (int i = 0; i < typeParameters.length; i++) {
+            String name = typeParameters[i].getName();
+            TypeTag tag = enclosingType.getGenericTypes().get(i);
+            lookup.put(name, tag);
+        }
+        return lookup;
     }
 
     /**
@@ -166,4 +191,6 @@ public final class TypeTag {
      * Represents a variable type parameter like {@code List<T>}.
      */
     public static final class TypeVariable {}
+
+    private static final class NullType {}
 }

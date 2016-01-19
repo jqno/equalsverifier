@@ -33,7 +33,7 @@ class AbstractDelegationChecker<T> implements Checker {
 
     public AbstractDelegationChecker(Configuration<T> config) {
         this.type = config.getType();
-        this.typeTag = new TypeTag(type);
+        this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
         this.classAccessor = config.createClassAccessor();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
@@ -47,11 +47,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
         T instance = this.getRedPrefabValue(typeTag);
         if (instance == null) {
-            instance = classAccessor.getRedObject();
+            instance = classAccessor.getRedObject(typeTag);
         }
         T copy = this.getBlackPrefabValue(typeTag);
         if (copy == null) {
-            copy = classAccessor.getBlackObject();
+            copy = classAccessor.getBlackObject(typeTag);
         }
         checkAbstractDelegation(instance, copy);
 
@@ -76,7 +76,7 @@ class AbstractDelegationChecker<T> implements Checker {
 
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
-            TypeTag tag = TypeTag.of(field);
+            TypeTag tag = TypeTag.of(field, typeTag);
             Object instance = safelyGetInstance(tag);
             if (instance != null) {
                 Object copy = safelyCopyInstance(instance);
@@ -104,11 +104,11 @@ class AbstractDelegationChecker<T> implements Checker {
 
         Object instance = getRedPrefabValue(new TypeTag(superclass));
         if (instance == null) {
-            instance = superAccessor.getRedObject();
+            instance = superAccessor.getRedObject(typeTag);
         }
         Object copy = getBlackPrefabValue(typeTag);
         if (copy == null) {
-            copy = superAccessor.getBlackObject();
+            copy = superAccessor.getBlackObject(typeTag);
         }
         checkAbstractMethods(superclass, instance, copy, false);
     }

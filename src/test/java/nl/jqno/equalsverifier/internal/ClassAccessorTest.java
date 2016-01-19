@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.internal;
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
@@ -202,46 +203,62 @@ public class ClassAccessorTest {
 
     @Test
     public void getRedObject() {
-        assertObjectHasNoNullFields(pointContainerAccessor.getRedObject());
+        assertObjectHasNoNullFields(pointContainerAccessor.getRedObject(TypeTag.NULL));
+    }
+
+    @Test
+    public void getRedObjectGeneric() {
+        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
+        GenericTypeVariableListContainer foo =
+                accessor.getRedObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+        assertEquals(String.class, foo.tList.get(0).getClass());
     }
 
     @Test
     public void getRedAccessor() {
-        PointContainer foo = pointContainerAccessor.getRedObject();
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor();
+        PointContainer foo = pointContainerAccessor.getRedObject(TypeTag.NULL);
+        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
     @Test
     public void getBlackObject() {
-        assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject());
+        assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject(TypeTag.NULL));
+    }
+
+    @Test
+    public void getBlackObjectGeneric() {
+        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
+        GenericTypeVariableListContainer foo =
+                accessor.getBlackObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+        assertEquals(String.class, foo.tList.get(0).getClass());
     }
 
     @Test
     public void getBlackAccessor() {
-        PointContainer foo = pointContainerAccessor.getBlackObject();
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor();
+        PointContainer foo = pointContainerAccessor.getBlackObject(TypeTag.NULL);
+        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
     @Test
     public void redAndBlackNotEqual() {
-        PointContainer red = pointContainerAccessor.getRedObject();
-        PointContainer black = pointContainerAccessor.getBlackObject();
+        PointContainer red = pointContainerAccessor.getRedObject(TypeTag.NULL);
+        PointContainer black = pointContainerAccessor.getBlackObject(TypeTag.NULL);
         assertFalse(red.equals(black));
     }
 
     @Test
     public void getDefaultValuesAccessor() {
-        PointContainer foo = pointContainerAccessor.getDefaultValuesObject();
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getDefaultValuesAccessor();
+        PointContainer foo = pointContainerAccessor.getDefaultValuesObject(TypeTag.NULL);
+        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getDefaultValuesAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
     @Test
     public void getDefaultValuesObject() {
         ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
-        DefaultValues foo = accessor.getDefaultValuesObject();
+        DefaultValues foo = accessor.getDefaultValuesObject(TypeTag.NULL);
         assertEquals(0, foo.i);
         assertEquals(null, foo.s);
         assertFalse(foo.t == null);
@@ -249,32 +266,32 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateAllTypes() {
-        ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(AllTypesContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test
     public void instantiateArrayTypes() {
-        ClassAccessor.of(AllArrayTypesContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(AllArrayTypesContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test
     public void instantiateRecursiveApiTypes() {
-        ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test
     public void instantiateCollectionImplementations() {
-        ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test
     public void instantiateInterfaceField() {
-        ClassAccessor.of(InterfaceContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(InterfaceContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test
     public void instantiateAbstractClassField() {
-        ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject();
+        ClassAccessor.of(AbstractClassContainer.class, prefabValues, false).getRedObject(TypeTag.NULL);
     }
 
     @Test

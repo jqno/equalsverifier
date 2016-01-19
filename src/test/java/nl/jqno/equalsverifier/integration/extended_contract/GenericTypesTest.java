@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static java.util.Collections.singletonList;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
@@ -89,36 +88,14 @@ public class GenericTypesTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenEqualsLooksAtNonCollectionGenericContent() {
-        expectFailure("Generics", "add prefab values for", "equals method",
-                SparseArrayEqualsContainer.class.getSimpleName(), Point.class.getName());
+    public void succeed_whenEqualsLooksAtNonCollectionGenericContent() {
         EqualsVerifier.forClass(SparseArrayEqualsContainer.class)
                 .verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtNonCollectionGenericContent_givenPrefabValues() {
-        SparseArray<Point> red = new SparseArray<>(singletonList(new Point(1, 2)));
-        SparseArray<Point> black = new SparseArray<>(singletonList(new Point(3, 4)));
-        EqualsVerifier.forClass(SparseArrayEqualsContainer.class)
-                .withPrefabValues(SparseArray.class, red, black)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenHashCodeLooksAtNonCollectionGenericContent() {
-        expectFailure("Generics", "add prefab values for", "hashCode method",
-                SparseArrayHashCodeContainer.class.getSimpleName(), Point.class.getName());
+    public void succeed_whenHashCodeLooksAtNonCollectionGenericContent() {
         EqualsVerifier.forClass(SparseArrayHashCodeContainer.class)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenHashCodeLooksAtNonCollectionGenericContent_givenPrefabValues() {
-        SparseArray<Point> red = new SparseArray<>(singletonList(new Point(1, 2)));
-        SparseArray<Point> black = new SparseArray<>(singletonList(new Point(3, 4)));
-        EqualsVerifier.forClass(SparseArrayHashCodeContainer.class)
-                .withPrefabValues(SparseArray.class, red, black)
                 .verify();
     }
 
