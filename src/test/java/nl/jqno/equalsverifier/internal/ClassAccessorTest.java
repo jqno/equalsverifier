@@ -207,6 +207,7 @@ public class ClassAccessorTest {
     }
 
     @Test
+    @SuppressWarnings("rawtypes")
     public void getRedObjectGeneric() {
         ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
         GenericTypeVariableListContainer foo =
@@ -227,6 +228,7 @@ public class ClassAccessorTest {
     }
 
     @Test
+    @SuppressWarnings("rawtypes")
     public void getBlackObjectGeneric() {
         ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues, false);
         GenericTypeVariableListContainer foo =

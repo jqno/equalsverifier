@@ -75,8 +75,9 @@ public class InstantiatorTest {
     }
 
     @Test
+    @SuppressWarnings("rawtypes")
     public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
-        Instantiator<List> instantiator = Instantiator.of(List.class);
+        Instantiator instantiator = Instantiator.of(List.class);
         instantiator.instantiateAnonymousSubclass();
     }
 }

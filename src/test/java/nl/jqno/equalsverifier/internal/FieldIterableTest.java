@@ -191,6 +191,7 @@ public class FieldIterableTest {
     public static final class CoberturaContainer {
         // CHECKSTYLE: ignore StaticVariableName for 1 line.
         public static transient int[] __cobertura_counters;
+        @SuppressWarnings("unused")
         private final int i;
 
         public CoberturaContainer(int i) {
