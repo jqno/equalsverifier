@@ -36,7 +36,7 @@ public class TypeTagParameterizedTest<T> {
     @SuppressWarnings("unused") private final Map<String, Integer> fieldWithTwoTypeParameters = null;
     @SuppressWarnings("unused") private final Map<String, List<String>> fieldWithNestedTypeParameters = null;
     @SuppressWarnings("unused") private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters = null;
-    @SuppressWarnings({ "unused", "raw" }) private final Map rawMapField = null;
+    @SuppressWarnings({ "unused", "rawtypes" }) private final Map rawMapField = null;
     @SuppressWarnings("unused") private final List<?> fieldWithWildcardParameter = null;
     @SuppressWarnings("unused") private final Class<String>[] fieldWithGenericArrayParameter = null;
     @SuppressWarnings("unused") private final List<T> fieldWithTypeVariable = null;
