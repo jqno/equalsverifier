@@ -206,7 +206,7 @@ public class GenericTypesTest extends IntegrationTestBase {
             if (!(obj instanceof ListOfTContainer)) {
                 return false;
             }
-            ListOfTContainer other = (ListOfTContainer)obj;
+            ListOfTContainer<?> other = (ListOfTContainer<?>)obj;
             if (list == null || other.list == null) {
                 return list == other.list;
             }
@@ -237,7 +237,7 @@ public class GenericTypesTest extends IntegrationTestBase {
             if (!(obj instanceof ArrayOfTContainer)) {
                 return false;
             }
-            ArrayOfTContainer other = (ArrayOfTContainer)obj;
+            ArrayOfTContainer<?> other = (ArrayOfTContainer<?>)obj;
             if (array == null || other.array == null) {
                 return array == other.array;
             }
