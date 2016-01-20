@@ -151,7 +151,7 @@ public final class JavaApiPrefabValues {
         });
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("rawtypes")
     private void addLists() {
         addFactory(List.class, new CollectionFactory<List>() {
             @Override public List createEmpty() { return new ArrayList<>(); }
@@ -230,7 +230,7 @@ public final class JavaApiPrefabValues {
         addValues(BitSet.class, redBitSet, blackBitSet);
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addQueues() {
         addFactory(Queue.class, new CollectionFactory<Queue>() {
             @Override public Queue createEmpty() { return new ArrayBlockingQueue<>(1); }
@@ -266,13 +266,12 @@ public final class JavaApiPrefabValues {
             @Override public LinkedBlockingQueue createEmpty() { return new LinkedBlockingQueue<>(1); }
         });
         addFactory(PriorityBlockingQueue.class, new CollectionFactory<PriorityBlockingQueue>() {
-            @SuppressWarnings("unchecked")
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
         String optional = "java.util.Optional";
         addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
@@ -340,7 +339,7 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("ImmutableMultimap", "ImmutableListMultimap", ci.resolve(), ci.resolve(), "copyOf");
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addNewGuavaMap("BiMap", "HashBiMap");
         addNewGuavaMap("HashBiMap", "HashBiMap");
@@ -378,7 +377,7 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection("ImmutableSortedSet", Collection.class);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addNewGoogleGuavaClasses() {
         ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
         addValues(range.resolve(),
@@ -421,14 +420,14 @@ public final class JavaApiPrefabValues {
         prefabValues.addFactory(type, factory);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
         String className = JAVAFX_COLLECTIONS_PACKAGE + name;
         addFactory(forName(className),
                 new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
         addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
                 new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
@@ -493,7 +492,7 @@ public final class JavaApiPrefabValues {
         addCopiedGuavaCollection(name, name, declaredCopyFrom, actualCopyFrom, copyMethodName);
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCopiedGuavaCollection(String declaredName, String actualName,
             Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
 

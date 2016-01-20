@@ -511,7 +511,6 @@ public final class EqualsVerifier<T> {
          *          supplied equal examples.
          * @return An instance of {@link EqualsVerifier}.
          */
-        @SuppressWarnings("unchecked")
         public EqualsVerifier<T> andUnequalExample(T example) {
             return andUnequalExamples(example);
         }
