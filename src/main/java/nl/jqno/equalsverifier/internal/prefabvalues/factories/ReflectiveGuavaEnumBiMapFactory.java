@@ -50,8 +50,8 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
         return Tuple.of(red, black);
     }
 
+    @SuppressWarnings("rawtypes")
     private Object createWith(Object key, Object value) {
-        @SuppressWarnings("unchecked")
         Map map = new HashMap();
         try {
             Method add = Map.class.getMethod("put", Object.class, Object.class);

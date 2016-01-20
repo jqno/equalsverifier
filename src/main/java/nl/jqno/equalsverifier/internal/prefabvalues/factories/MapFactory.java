@@ -26,6 +26,7 @@ import java.util.Map;
  * Implementation of {@link PrefabValueFactory} that specializes in creating
  * implementations of {@link Map}, taking generics into account.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class MapFactory<T extends Map> extends AbstractReflectiveGenericFactory<T> {
     public abstract T createEmpty();
 

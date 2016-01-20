@@ -26,6 +26,7 @@ import java.util.LinkedHashSet;
  * Implementation of {@link PrefabValueFactory} that specializes in creating
  * implementations of {@link Collection}, taking generics into account.
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 public abstract class CollectionFactory<T extends Collection> extends AbstractReflectiveGenericFactory<T> {
     public abstract T createEmpty();
 

@@ -31,6 +31,7 @@ import java.util.Map;
  * Implementation of {@link PrefabValueFactory} that instantiates EnumMaps
  * using reflection, while taking generics into account.
  */
+@SuppressWarnings({"rawtypes"})
 public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<EnumMap> {
     @Override
     public Tuple<EnumMap> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
@@ -44,8 +45,8 @@ public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<E
         return new Tuple<>(red, black);
     }
 
+    @SuppressWarnings("unchecked")
     private EnumMap createWith(Object key, Object value) {
-        @SuppressWarnings("unchecked")
         Map result = new HashMap();
         try {
             Method add = Map.class.getMethod("put", Object.class, Object.class);
