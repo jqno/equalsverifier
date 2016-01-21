@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
 
 public class SuperclassIterableTest {
@@ -37,7 +39,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.of(SimpleClass.class)) {
             actual.add(type);
         }
-        assertEquals(asList(), actual);
+        assertEquals(emptyList(), actual);
     }
 
     @Test
@@ -45,7 +47,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleClass.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleClass.class), actual);
+        assertEquals(singletonList(SimpleClass.class), actual);
     }
 
     @Test
@@ -69,7 +71,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.of(SimpleInterface.class)) {
             actual.add(type);
         }
-        assertEquals(asList(), actual);
+        assertEquals(emptyList(), actual);
     }
 
     @Test
@@ -77,7 +79,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleInterface.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleInterface.class), actual);
+        assertEquals(singletonList(SimpleInterface.class), actual);
     }
 
     @Test
@@ -85,7 +87,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.of(SimpleSubInterface.class)) {
             actual.add(type);
         }
-        assertEquals(asList(), actual);
+        assertEquals(emptyList(), actual);
     }
 
     @Test
@@ -93,7 +95,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubInterface.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleSubInterface.class), actual);
+        assertEquals(singletonList(SimpleSubInterface.class), actual);
     }
 
     static class SimpleClass {}

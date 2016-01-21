@@ -166,7 +166,7 @@ public final class TypeTag {
      */
     @Override
     public String toString() {
-        StringBuffer s = new StringBuffer("");
+        StringBuilder s = new StringBuilder("");
         s.append(type.getSimpleName());
         if (genericTypes.size() >= 1) {
             s.append("<");

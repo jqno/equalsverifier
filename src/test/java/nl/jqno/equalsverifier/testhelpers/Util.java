@@ -38,7 +38,7 @@ public final class Util {
                 if (isRelevant(here, f)) {
                     f.setAccessible(true);
                     Object x = f.get(here);
-                    Object y = there == null ? null : f.get(there);
+                    Object y = f.get(there);
                     equals &= Objects.equals(x, y);
                 }
             }

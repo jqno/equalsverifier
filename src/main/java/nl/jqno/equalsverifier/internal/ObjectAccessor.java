@@ -63,7 +63,7 @@ public final class ObjectAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
-        return new ObjectAccessor<T>(object, type);
+        return new ObjectAccessor<>(object, type);
     }
 
     /**

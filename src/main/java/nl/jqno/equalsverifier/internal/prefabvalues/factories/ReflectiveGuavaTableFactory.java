@@ -79,6 +79,9 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
 
     private Object createWith(Object column, Object row, Object value) {
         Class<?> type = ConditionalInstantiator.forName(typeName);
+        if (type == null) {
+            return null;
+        }
         Object result = createEmpty();
         try {
             Method add = type.getMethod("put", Object.class, Object.class, Object.class);

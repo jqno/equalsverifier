@@ -71,13 +71,13 @@ public class TypeHelper {
             result &= _long == other._long;
             result &= _short == other._short;
             result &= _Boolean == other._Boolean;
-            result &= _Byte == other._Byte;
+            result &= Objects.equals(_Byte, other._Byte);
             result &= _Char == other._Char;
             result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
             result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
-            result &= _Int == other._Int;
-            result &= _Long == other._Long;
-            result &= _Short == other._Short;
+            result &= Objects.equals(_Int, other._Int);
+            result &= Objects.equals(_Long, other._Long);
+            result &= Objects.equals(_Short, other._Short);
             result &= _enum == other._enum;
             result &= Arrays.equals(_array, other._array);
             result &= Objects.equals(_object, other._object);

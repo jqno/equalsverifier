@@ -79,6 +79,9 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
 
     private Object createWith(Object value) {
         Class<?> type = ConditionalInstantiator.forName(typeName);
+        if (type == null) {
+            return null;
+        }
         Object result = createEmpty();
         try {
             Method add = type.getMethod("add", Object.class);
