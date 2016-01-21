@@ -188,21 +188,21 @@ public class TypeHelper {
         SynchronousQueue<?> synchronousQueue;
     }
 
+    @SuppressWarnings("unused")
     public static class DifferentAccessModifiersFieldContainer {
-        @SuppressWarnings("unused")
         public static final int L = 0;
         protected static final int K = 0;
         static final int J = 0;
         private static final int I = 0;
-        @SuppressWarnings("unused")
+
         public final int l = 0;
         protected final int k = 0;
         final int j = 0;
         private final int i = 0;
     }
 
+    @SuppressWarnings("unused")
     public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
-        @SuppressWarnings("unused")
         public final String d = "";
         protected final String c = "";
         final String b = "";
@@ -302,6 +302,7 @@ public class TypeHelper {
 
     public enum EmptyEnum {}
 
+    @SuppressWarnings("unused")
     public static final class EnumContainer {
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;
