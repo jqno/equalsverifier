@@ -29,6 +29,7 @@ import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class ReflectiveEnumMapFactoryTest {
     private static final Object RED_OBJECT = new Object();
     private static final Object BLACK_OBJECT = new Object();

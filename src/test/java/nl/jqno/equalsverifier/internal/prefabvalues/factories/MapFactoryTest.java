@@ -29,6 +29,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class MapFactoryTest {
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);

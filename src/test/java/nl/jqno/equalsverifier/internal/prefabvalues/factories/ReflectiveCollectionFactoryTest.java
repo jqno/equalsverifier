@@ -31,6 +31,7 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class ReflectiveCollectionFactoryTest {
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGLIST_TYPETAG = new TypeTag(List.class, STRING_TYPETAG);
@@ -96,13 +97,15 @@ public class ReflectiveCollectionFactoryTest {
         }
     }
 
-    private <T> List<T> listOf(T... values) {
+    @SafeVarargs
+    private final <T> List<T> listOf(T... values) {
         List<T> result = new ArrayList<>();
         Collections.addAll(result, values);
         return result;
     }
 
-    private <T> Set<T> setOf(T... values) {
+    @SafeVarargs
+    private final <T> Set<T> setOf(T... values) {
         Set<T> result = new HashSet<>();
         Collections.addAll(result, values);
         return result;

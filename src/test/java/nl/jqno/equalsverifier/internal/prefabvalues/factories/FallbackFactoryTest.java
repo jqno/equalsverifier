@@ -113,7 +113,7 @@ public class FallbackFactoryTest {
     }
 
     private static final class IntContainer {
-        private static int staticI = -100;
+        @SuppressWarnings("unused") private static int staticI = -100;
         private static final int STATIC_FINAL_I = -10;
         @SuppressWarnings("unused") private final int finalI;
         @SuppressWarnings("unused") private int i;

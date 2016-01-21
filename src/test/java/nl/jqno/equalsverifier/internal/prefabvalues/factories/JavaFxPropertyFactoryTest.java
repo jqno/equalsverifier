@@ -29,6 +29,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class JavaFxPropertyFactoryTest {
     private PrefabValues prefabValues;
 
@@ -72,16 +73,14 @@ public class JavaFxPropertyFactoryTest {
     private static final class GenericContainer<T> {
         private final List<T> t;
 
-        public GenericContainer(List<T> t) {
-            this.t = t;
-        }
+        @SuppressWarnings("unused")
+        public GenericContainer(List<T> t) { this.t = t; }
     }
 
     private static final class GenericMultiContainer<K, V> {
         private final Map<K, V> t;
 
-        public GenericMultiContainer(Map<K, V> t) {
-            this.t = t;
-        }
+        @SuppressWarnings("unused")
+        public GenericMultiContainer(Map<K, V> t) { this.t = t; }
     }
 }

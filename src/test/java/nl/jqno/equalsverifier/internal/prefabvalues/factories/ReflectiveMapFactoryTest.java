@@ -32,6 +32,7 @@ import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
 import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class ReflectiveMapFactoryTest {
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);

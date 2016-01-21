@@ -29,6 +29,7 @@ import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class ReflectiveEnumSetFactoryTest {
     private final ReflectiveEnumSetFactory factory = new ReflectiveEnumSetFactory();
     private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());

@@ -30,6 +30,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings("rawtypes")
 public class ReflectiveCollectionCopyFactoryTest {
     private PrefabValues prefabValues;
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
@@ -88,10 +89,12 @@ public class ReflectiveCollectionCopyFactoryTest {
     }
 
     private static final class GenericContainerFactory {
+        @SuppressWarnings("unused")
         public static <T> GenericContainer<T> createGenericContainer(List<T> t) {
             return new GenericContainer<>(t);
         }
 
+        @SuppressWarnings("unused")
         public static <K, V> GenericMultiContainer<K, V> createGenericMultiContainer(Map<K, V> t) {
             return new GenericMultiContainer<>(t);
         }

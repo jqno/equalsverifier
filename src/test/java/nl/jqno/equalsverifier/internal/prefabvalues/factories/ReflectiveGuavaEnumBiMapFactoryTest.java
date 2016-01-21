@@ -28,6 +28,7 @@ import java.util.LinkedHashSet;
 
 import static org.junit.Assert.assertEquals;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ReflectiveGuavaEnumBiMapFactoryTest {
     private final ReflectiveGuavaEnumBiMapFactory factory = new ReflectiveGuavaEnumBiMapFactory();
     private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
