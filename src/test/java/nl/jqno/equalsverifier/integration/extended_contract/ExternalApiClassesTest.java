@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014-2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,44 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class ExternalApiClassesTest {
     @Test
-    public void succeed_whenClassUsesGoogleGuavaClass() {
-        EqualsVerifier.forClass(GuavaContainer.class)
+    public void succeed_whenClassUsesGoogleGuavaMultiset() {
+        EqualsVerifier.forClass(GuavaMultisetContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesGoogleGuavaMultimap() {
+        EqualsVerifier.forClass(GuavaMultimapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesGoogleGuavaBiMap() {
+        EqualsVerifier.forClass(GuavaBiMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesGoogleGuavaTable() {
+        EqualsVerifier.forClass(GuavaTableContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
+        EqualsVerifier.forClass(GuavaImmutableContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesGoogleGuavaRegularCollection() {
+        EqualsVerifier.forClass(GuavaRegularCollectionsContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassUsesOtherGoogleGuavaClass() {
+        EqualsVerifier.forClass(GuavaOtherContainer.class)
                 .verify();
     }
 
@@ -38,31 +74,151 @@ public class ExternalApiClassesTest {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-    static final class GuavaContainer {
+    static final class GuavaMultisetContainer {
+        private final Multiset<?> multiset;
+        private final SortedMultiset<?> sortedMultiset;
+        private final HashMultiset<?> hashMultiset;
+        private final TreeMultiset<?> treeMultiset;
+        private final LinkedHashMultiset<?> linkedHashMultiset;
+        private final ConcurrentHashMultiset<?> concurrentHashMultiset;
+        private final EnumMultiset<?> enumMultiset;
+        private final ImmutableMultiset<?> immutableMultiset;
+        private final ImmutableSortedMultiset<?> immutableSortedMultiset;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaMultisetContainer(Multiset<?> multiset, SortedMultiset<?> sortedMultiset, HashMultiset<?> hashMultiset,
+                TreeMultiset<?> treeMultiset, LinkedHashMultiset<?> linkedHashMultiset, ConcurrentHashMultiset<?> concurrentHashMultiset,
+                EnumMultiset<?> enumMultiset, ImmutableMultiset<?> immutableMultiset, ImmutableSortedMultiset<?> immutableSortedMultiset) {
+            this.multiset = multiset; this.sortedMultiset = sortedMultiset; this.hashMultiset = hashMultiset;
+            this.treeMultiset = treeMultiset; this.linkedHashMultiset = linkedHashMultiset; this.concurrentHashMultiset = concurrentHashMultiset;
+            this.enumMultiset = enumMultiset; this.immutableMultiset = immutableMultiset; this.immutableSortedMultiset = immutableSortedMultiset;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaMultimapContainer {
+        private final Multimap<?, ?> multimap;
+        private final ListMultimap<?, ?> listMultimap;
+        private final SetMultimap<?, ?> setMultimap;
+        private final SortedSetMultimap<?, ?> sortedSetMultimap;
+        private final ArrayListMultimap<?, ?> arrayListMultimap;
+        private final HashMultimap<?, ?> hashMultimap;
+        private final LinkedListMultimap<?, ?> linkedListMultimap;
+        private final LinkedHashMultimap<?, ?> linkedHashMultimap;
+        private final TreeMultimap<?, ?> treeMultimap;
+        private final ImmutableMultimap<?, ?> immutableMultimap;
+        private final ImmutableListMultimap<?, ?> immutableListMultimap;
+        private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaMultimapContainer(Multimap<?, ?> multimap, ListMultimap<?, ?> listMultimap, SetMultimap<?, ?> setMultimap,
+                SortedSetMultimap<?, ?> sortedSetMultimap, ArrayListMultimap<?, ?> arrayListMultimap, HashMultimap<?, ?> hashMultimap,
+                LinkedListMultimap<?, ?> linkedListMultimap, LinkedHashMultimap<?, ?> linkedHashMultimap, TreeMultimap<?, ?> treeMultimap,
+                ImmutableMultimap<?, ?> immutableMultimap, ImmutableListMultimap<?, ?> immutableListMultimap,
+                ImmutableSetMultimap<?, ?> immutableSetMultimap) {
+            this.multimap = multimap; this.listMultimap = listMultimap; this.setMultimap = setMultimap;
+            this.sortedSetMultimap = sortedSetMultimap; this.arrayListMultimap = arrayListMultimap; this.hashMultimap = hashMultimap;
+            this.linkedListMultimap = linkedListMultimap; this.linkedHashMultimap = linkedHashMultimap; this.treeMultimap = treeMultimap;
+            this.immutableMultimap = immutableMultimap; this.immutableListMultimap = immutableListMultimap;
+            this.immutableSetMultimap = immutableSetMultimap;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaBiMapContainer {
+        private final BiMap<?, ?> biMap;
+        private final HashBiMap<?, ?> hashBiMap;
+        private final EnumBiMap<?, ?> enumBiMap;
+        private final EnumHashBiMap<?, ?> enumHashBiMap;
+        private final ImmutableBiMap<?, ?> immutableBiMap;
+
+        public GuavaBiMapContainer(BiMap<?, ?> biMap, HashBiMap<?, ?> hashBiMap, EnumBiMap<?, ?> enumBiMap,
+                EnumHashBiMap<?, ?> enumHashBiMap, ImmutableBiMap<?, ?> immutableBiMap) {
+            this.biMap = biMap; this.hashBiMap = hashBiMap; this.enumBiMap = enumBiMap;
+            this.enumHashBiMap = enumHashBiMap; this.immutableBiMap = immutableBiMap;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaTableContainer {
+        private final Table<?, ?, ?> table;
+        private final HashBasedTable<?, ?, ?> hashBasedTable;
+        private final TreeBasedTable<?, ?, ?> treeBasedTable;
+        private final ArrayTable<?, ?, ?> arrayTable;
+        private final ImmutableTable<?, ?, ?> immutableTable;
+
+        public GuavaTableContainer(Table<?, ?, ?> table, HashBasedTable<?, ?, ?> hashBasedTable,
+                TreeBasedTable<?, ?, ?> treeBasedTable, ArrayTable<?, ?, ?> arrayTable,
+                ImmutableTable<?, ?, ?> immutableTable) {
+            this.table = table;
+            this.hashBasedTable = hashBasedTable;
+            this.treeBasedTable = treeBasedTable;
+            this.arrayTable = arrayTable;
+            this.immutableTable = immutableTable;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaRegularCollectionsContainer {
+        private final EvictingQueue<?> evictingQueue;
+        private final MinMaxPriorityQueue<?> minMaxPriorityQueue;
+        private final RangeSet<?> rangeSet;
+        private final ImmutableRangeSet<?> immutableRangeSet;
+        private final TreeRangeSet<?> treeRangeSet;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaRegularCollectionsContainer(EvictingQueue<?> evictingQueue, MinMaxPriorityQueue<?> minMaxPriorityQueue,
+                RangeSet<?> rangeSet, ImmutableRangeSet<?> immutableRangeSet, TreeRangeSet<?> treeRangeSet) {
+            this.evictingQueue = evictingQueue; this.minMaxPriorityQueue = minMaxPriorityQueue;
+            this.rangeSet = rangeSet; this.immutableRangeSet = immutableRangeSet; this.treeRangeSet = treeRangeSet;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaImmutableContainer {
+        private final ImmutableCollection<?> iCollection;
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
         private final ImmutableSet<?> iSet;
         private final ImmutableSortedMap<?, ?> iSortedMap;
         private final ImmutableSortedSet<?> iSortedSet;
-        private final ImmutableMultiset<?> iMultiset;
-        private final ImmutableSortedMultiset<?> iSortedMultiset;
-        private final ImmutableListMultimap<?, ?> iListMultimap;
-        private final ImmutableSetMultimap<?, ?> iSetMultimap;
-        private final ImmutableBiMap<?, ?> iBiMap;
-        private final ImmutableTable<?, ?, ?> iTable;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public GuavaImmutableContainer(ImmutableCollection<?> immutableCollection, ImmutableList<?> immutableList,
+                ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet, ImmutableSortedMap<?, ?> iSortedMap,
+                ImmutableSortedSet<?> iSortedSet) {
+            this.iCollection = immutableCollection; this.iList = immutableList;
+            this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
+            this.iSortedSet = iSortedSet;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class GuavaOtherContainer {
         private final Range<?> range;
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaContainer(ImmutableList<?> immutableList, ImmutableMap<?, ?> immutableMap, ImmutableSet<?> immutableSet,
-                ImmutableSortedMap<?, ?> iSortedMap, ImmutableSortedSet<?> iSortedSet, ImmutableMultiset<?> iMultiset,
-                ImmutableSortedMultiset<?> iSortedMultiset, ImmutableListMultimap<?, ?> iListMultimap,
-                ImmutableSetMultimap<?, ?> iSetMultimap, ImmutableBiMap<?, ?> immutableBiMap, ImmutableTable<?, ?, ?> iTable,
-                Range<?> range, Optional<?> optional) {
-            this.iList = immutableList; this.iMap = immutableMap; this.iSet = immutableSet; this.iSortedMap = iSortedMap;
-            this.iSortedSet = iSortedSet; this.iMultiset = iMultiset; this.iSortedMultiset = iSortedMultiset;
-            this.iListMultimap = iListMultimap; this.iSetMultimap = iSetMultimap; this.iBiMap = immutableBiMap;
-            this.iTable = iTable; this.range = range; this.optional = optional;
+        public GuavaOtherContainer(Range<?> range, Optional<?> optional) {
+            this.range = range; this.optional = optional;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Field;
@@ -112,8 +113,7 @@ class CachedHashCodeInitializer<T> {
     }
 
     private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
-        Class<?> currentClass = type;
-        while (!currentClass.equals(Object.class)) {
+        for (Class<?> currentClass : SuperclassIterable.ofIncludeSelf(type)) {
             try {
                 Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
                 if (!Modifier.isPublic(method.getModifiers()) && method.getReturnType().equals(int.class)) {
@@ -124,7 +124,6 @@ class CachedHashCodeInitializer<T> {
             catch (NoSuchMethodException ignore) {
                 // Method not found; continue.
             }
-            currentClass = currentClass.getSuperclass();
         }
         throw new IllegalArgumentException(
                 "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " + calculateHashCodeMethodName + "()'");

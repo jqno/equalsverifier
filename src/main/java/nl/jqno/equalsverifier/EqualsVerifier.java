@@ -18,8 +18,9 @@ package nl.jqno.equalsverifier;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.PrefabValues;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -236,7 +237,7 @@ public final class EqualsVerifier<T> {
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
         }
-        config.getPrefabValues().put(otherType, red, black);
+        config.getPrefabValues().addFactory(otherType, red, black);
         return this;
     }
 
@@ -415,9 +416,10 @@ public final class EqualsVerifier<T> {
             return;
         }
 
+        TypeTag tag = config.getTypeTag();
         ClassAccessor<T> classAccessor = config.createClassAccessor();
-        unequalExamples.add(classAccessor.getRedObject());
-        unequalExamples.add(classAccessor.getBlackObject());
+        unequalExamples.add(classAccessor.getRedObject(tag));
+        unequalExamples.add(classAccessor.getBlackObject(tag));
     }
 
     private void verifyWithExamples() {
@@ -509,7 +511,6 @@ public final class EqualsVerifier<T> {
          *          supplied equal examples.
          * @return An instance of {@link EqualsVerifier}.
          */
-        @SuppressWarnings("unchecked")
         public EqualsVerifier<T> andUnequalExample(T example) {
             return andUnequalExamples(example);
         }

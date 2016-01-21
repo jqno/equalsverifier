@@ -16,12 +16,15 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.PrefabValues;
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.*;
 
 public final class Configuration<T> {
     private final Class<T> type;
+    private final TypeTag typeTag;
     private final PrefabValues prefabValues;
 
     private final Set<String> ignoredFields;
@@ -37,6 +40,7 @@ public final class Configuration<T> {
                           Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
 
         this.type = type;
+        this.typeTag = new TypeTag(type);
         this.prefabValues = prefabValues;
         this.ignoredFields = ignoredFields;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
@@ -47,12 +51,16 @@ public final class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<>(type, new PrefabValues(), new HashSet<String>(),
+        return new Configuration<>(type, new PrefabValues(new StaticFieldValueStash()), new HashSet<String>(),
                 CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
     }
 
     public Class<T> getType() {
         return type;
+    }
+
+    public TypeTag getTypeTag() {
+        return typeTag;
     }
 
     public PrefabValues getPrefabValues() {

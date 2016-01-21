@@ -19,20 +19,23 @@ import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 
 class FieldInspector<T> {
     private final ClassAccessor<T> classAccessor;
+    private final TypeTag typeTag;
 
-    public FieldInspector(ClassAccessor<T> classAccessor) {
+    public FieldInspector(ClassAccessor<T> classAccessor, TypeTag typeTag) {
         this.classAccessor = classAccessor;
+        this.typeTag = typeTag;
     }
 
     public void check(FieldCheck check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = classAccessor.getRedAccessor();
-            ObjectAccessor<T> changed = classAccessor.getRedAccessor();
+            ObjectAccessor<T> reference = classAccessor.getRedAccessor(typeTag);
+            ObjectAccessor<T> changed = classAccessor.getRedAccessor(typeTag);
 
             check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
         }
@@ -40,8 +43,8 @@ class FieldInspector<T> {
 
     public void checkWithNull(FieldCheck check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor();
-            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor();
+            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(typeTag);
+            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(typeTag);
 
             check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
         }

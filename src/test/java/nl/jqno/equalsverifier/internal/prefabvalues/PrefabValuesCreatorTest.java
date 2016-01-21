@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013 Jan Ouwens
+ * Copyright 2010-2013, 2015 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal;
+package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -34,6 +34,14 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 public class PrefabValuesCreatorTest {
+    private static final TypeTag POINT_TAG = new TypeTag(Point.class);
+    private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
+    private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
+    private static final TypeTag NODE_TAG = new TypeTag(Node.class);
+    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
+    private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
+    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
@@ -43,126 +51,120 @@ public class PrefabValuesCreatorTest {
     @Before
     public void setup() {
         stash = new MockStaticFieldValueStash();
-        prefabValues = PrefabValuesFactory.withPrimitives(stash);
+        prefabValues = PrefabValuesFactory.withPrimitiveFactories(stash);
     }
 
     @Test
     public void stashed() {
-        prefabValues.putFor(Point.class);
+        prefabValues.giveRed(POINT_TAG);
         assertEquals(Point.class, stash.lastBackuppedType);
     }
 
     @Test
     public void simple() {
-        prefabValues.putFor(Point.class);
-        Point red = prefabValues.getRed(Point.class);
-        Point black = prefabValues.getBlack(Point.class);
+        Point red = prefabValues.giveRed(POINT_TAG);
+        Point black = prefabValues.giveBlack(POINT_TAG);
         assertFalse(red.equals(black));
     }
 
     @Test
     public void createSecondTimeIsNoOp() {
-        prefabValues.putFor(Point.class);
-        Point red = prefabValues.getRed(Point.class);
-        Point black = prefabValues.getBlack(Point.class);
+        Point red = prefabValues.giveRed(POINT_TAG);
+        Point black = prefabValues.giveBlack(POINT_TAG);
 
-        prefabValues.putFor(Point.class);
-
-        assertSame(red, prefabValues.getRed(Point.class));
-        assertSame(black, prefabValues.getBlack(Point.class));
+        assertSame(red, prefabValues.giveRed(POINT_TAG));
+        assertSame(black, prefabValues.giveBlack(POINT_TAG));
     }
 
     @Test
     public void createEnum() {
-        prefabValues.putFor(Enum.class);
-        assertNotNull(prefabValues.getRed(Enum.class));
-        assertNotNull(prefabValues.getBlack(Enum.class));
+        assertNotNull(prefabValues.giveRed(ENUM_TAG));
+        assertNotNull(prefabValues.giveBlack(ENUM_TAG));
     }
 
     @Test
     public void createOneElementEnum() {
-        prefabValues.putFor(OneElementEnum.class);
-        assertNotNull(prefabValues.getRed(OneElementEnum.class));
-        assertNotNull(prefabValues.getBlack(OneElementEnum.class));
+        assertNotNull(prefabValues.giveRed(ONE_ELT_ENUM_TAG));
+        assertNotNull(prefabValues.giveBlack(ONE_ELT_ENUM_TAG));
     }
 
     @Test
     public void createEmptyEnum() {
         thrown.expect(ReflectionException.class);
         thrown.expectMessage("Enum EmptyEnum has no elements");
-        prefabValues.putFor(EmptyEnum.class);
+        prefabValues.giveRed(new TypeTag(EmptyEnum.class));
     }
 
     @Test
     public void oneStepRecursiveType() {
-        prefabValues.put(Node.class, new Node(), new Node());
-        prefabValues.putFor(Node.class);
+        prefabValues.addFactory(Node.class, new Node(), new Node());
+        prefabValues.giveRed(NODE_TAG);
     }
 
     @Test
     public void dontAddOneStepRecursiveType() {
         thrown.expect(RecursionException.class);
-        prefabValues.putFor(Node.class);
+        prefabValues.giveRed(NODE_TAG);
     }
 
     @Test
     public void oneStepRecursiveArrayType() {
-        prefabValues.put(NodeArray.class, new NodeArray(), new NodeArray());
-        prefabValues.putFor(NodeArray.class);
+        prefabValues.addFactory(NodeArray.class, new NodeArray(), new NodeArray());
+        prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
     @Test
     public void dontAddOneStepRecursiveArrayType() {
         thrown.expect(RecursionException.class);
-        prefabValues.putFor(NodeArray.class);
+        prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
     @Test
     public void addTwoStepRecursiveType() {
-        prefabValues.put(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
-        prefabValues.putFor(TwoStepNodeA.class);
+        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
+        prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
     public void dontAddTwoStepRecursiveType() {
         thrown.expect(RecursionException.class);
-        prefabValues.putFor(TwoStepNodeA.class);
+        prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
     public void twoStepRecursiveArrayType() {
-        prefabValues.put(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
-        prefabValues.putFor(TwoStepNodeArrayA.class);
+        prefabValues.addFactory(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
+        prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
     @Test
     public void dontAddTwoStepRecursiveArrayType() {
         thrown.expect(RecursionException.class);
-        prefabValues.putFor(TwoStepNodeArrayA.class);
+        prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
     @Test
     public void sameClassTwiceButNoRecursion() {
-        prefabValues.putFor(NotRecursiveA.class);
+        prefabValues.giveRed(new TypeTag(NotRecursiveA.class));
     }
 
     @Test
     public void recursiveWithAnotherFieldFirst() {
         thrown.expectMessage(containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
         thrown.expectMessage(not(containsString(RecursiveThisIsTheOtherField.class.getSimpleName())));
-        prefabValues.putFor(RecursiveWithAnotherFieldFirst.class);
+        prefabValues.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class));
     }
 
     @Test
     public void exceptionMessage() {
         thrown.expectMessage(TwoStepNodeA.class.getSimpleName());
         thrown.expectMessage(TwoStepNodeB.class.getSimpleName());
-        prefabValues.putFor(TwoStepNodeA.class);
+        prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
     public void skipStaticFinal() {
-        prefabValues.putFor(StaticFinalContainer.class);
+        prefabValues.giveRed(new TypeTag(StaticFinalContainer.class));
     }
 
     static class StaticFinalContainer {

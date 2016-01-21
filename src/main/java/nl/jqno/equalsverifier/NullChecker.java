@@ -41,7 +41,7 @@ class NullChecker<T> implements Checker {
             return;
         }
 
-        FieldInspector<T> inspector = new FieldInspector<T>(classAccessor);
+        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
         inspector.check(new NullPointerExceptionFieldCheck());
     }
 

@@ -28,7 +28,7 @@ import org.junit.rules.ExpectedException;
 import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -215,7 +215,7 @@ public class AnnotationAccessorTest {
 
         @Override
         public Iterable<String> descriptors() {
-            return Arrays.asList(AnnotationWithClassValues.class.getSimpleName());
+            return Collections.singletonList(AnnotationWithClassValues.class.getSimpleName());
         }
 
         @Override

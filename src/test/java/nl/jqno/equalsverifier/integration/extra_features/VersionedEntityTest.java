@@ -136,6 +136,7 @@ public class VersionedEntityTest extends IntegrationTestBase {
 
     public static final class StringVersionedEntity {
         private final long id;
+        @SuppressWarnings("unused")
         private final String s;
 
         public StringVersionedEntity(long id, String s) { this.id = id; this.s = s; }

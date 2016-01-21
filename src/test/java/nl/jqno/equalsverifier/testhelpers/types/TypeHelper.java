@@ -71,13 +71,13 @@ public class TypeHelper {
             result &= _long == other._long;
             result &= _short == other._short;
             result &= _Boolean == other._Boolean;
-            result &= _Byte == other._Byte;
+            result &= Objects.equals(_Byte, other._Byte);
             result &= _Char == other._Char;
             result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
             result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
-            result &= _Int == other._Int;
-            result &= _Long == other._Long;
-            result &= _Short == other._Short;
+            result &= Objects.equals(_Int, other._Int);
+            result &= Objects.equals(_Long, other._Long);
+            result &= Objects.equals(_Short, other._Short);
             result &= _enum == other._enum;
             result &= Arrays.equals(_array, other._array);
             result &= Objects.equals(_object, other._object);
@@ -188,21 +188,21 @@ public class TypeHelper {
         SynchronousQueue<?> synchronousQueue;
     }
 
+    @SuppressWarnings("unused")
     public static class DifferentAccessModifiersFieldContainer {
-        @SuppressWarnings("unused")
         public static final int L = 0;
         protected static final int K = 0;
         static final int J = 0;
         private static final int I = 0;
-        @SuppressWarnings("unused")
+
         public final int l = 0;
         protected final int k = 0;
         final int j = 0;
         private final int i = 0;
     }
 
+    @SuppressWarnings("unused")
     public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
-        @SuppressWarnings("unused")
         public final String d = "";
         protected final String c = "";
         final String b = "";
@@ -242,6 +242,15 @@ public class TypeHelper {
     public static final class AbstractAndInterfaceArrayContainer {
         public AbstractClass[] abstractClasses = new AbstractClass[] { null };
         public Interface[] interfaces = new Interface[] { null };
+    }
+
+    public static final class GenericListContainer {
+        public List<String> stringList = new ArrayList<>();
+        public List<Integer> integerList = new ArrayList<>();
+    }
+
+    public static final class GenericTypeVariableListContainer<T> {
+        public List<T> tList = new ArrayList<>();
     }
 
     public static final class ObjectContainer {
@@ -293,6 +302,7 @@ public class TypeHelper {
 
     public enum EmptyEnum {}
 
+    @SuppressWarnings("unused")
     public static final class EnumContainer {
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;

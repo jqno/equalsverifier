@@ -17,6 +17,8 @@ package nl.jqno.equalsverifier.internal;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -159,8 +161,8 @@ public class FieldAccessor {
      *          prefabValues, the new value will be taken from it.
      * @throws ReflectionException If the operation fails.
      */
-    public void changeField(PrefabValues prefabValues) {
-        modify(new FieldChanger(prefabValues));
+    public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
+        modify(new FieldChanger(prefabValues, enclosingType));
     }
 
     private void modify(FieldModifier modifier) {
@@ -191,10 +193,6 @@ public class FieldAccessor {
             return false;
         }
         return true;
-    }
-
-    private static void createPrefabValues(PrefabValues prefabValues, Class<?> type) {
-        prefabValues.putFor(type);
     }
 
     private interface FieldModifier {
@@ -263,23 +261,17 @@ public class FieldAccessor {
 
     private class FieldChanger implements FieldModifier {
         private final PrefabValues prefabValues;
+        private final TypeTag enclosingType;
 
-        public FieldChanger(PrefabValues prefabValues) {
+        public FieldChanger(PrefabValues prefabValues, TypeTag enclosingType) {
             this.prefabValues = prefabValues;
+            this.enclosingType = enclosingType;
         }
 
         @Override
         public void modify() throws IllegalAccessException {
-            Class<?> type = field.getType();
-            if (prefabValues.contains(type)) {
-                Object newValue = prefabValues.getOther(type, field.get(object));
-                field.set(object, newValue);
-            }
-            else {
-                createPrefabValues(prefabValues, type);
-                Object newValue = prefabValues.getOther(type, field.get(object));
-                field.set(object, newValue);
-            }
+            Object newValue = prefabValues.giveOther(TypeTag.of(field, enclosingType), field.get(object));
+            field.set(object, newValue);
         }
     }
 }

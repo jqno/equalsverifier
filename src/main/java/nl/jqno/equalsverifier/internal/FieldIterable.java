@@ -80,10 +80,10 @@ public final class FieldIterable implements Iterable<Field> {
 
         result.addAll(addFieldsFor(type));
 
-        Class<?> i = type.getSuperclass();
-        while (includeSuperclasses && i != null && i != Object.class) {
-            result.addAll(addFieldsFor(i));
-            i = i.getSuperclass();
+        if (includeSuperclasses) {
+            for (Class<?> c : SuperclassIterable.of(type)) {
+                result.addAll(addFieldsFor(c));
+            }
         }
 
         return result;

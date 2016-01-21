@@ -16,7 +16,12 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
-import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.FieldAccessor;
+import nl.jqno.equalsverifier.internal.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
@@ -24,19 +29,19 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class FieldInspectorTest {
-    private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitives(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitiveFactories(new StaticFieldValueStash());
     private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
 
     @Test
     public void objectsAreReset_whenEachIterationBegins() {
-        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
         inspector.check(new ResetObjectForEachIterationCheck());
     }
 
     @Test
     public void objectsAreReset_whenEachIterationBegins_givenNullObjects() {
-        FieldInspector<Point> inspector = new FieldInspector<>(accessor);
+        FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
         inspector.checkWithNull(new ResetObjectForEachIterationCheck());
     }
@@ -56,8 +61,8 @@ public class FieldInspectorTest {
                 assertEquals(originalChanged, changedAccessor.getObject());
             }
 
-            referenceAccessor.changeField(prefabValues);
-            changedAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, TypeTag.NULL);
+            changedAccessor.changeField(prefabValues, TypeTag.NULL);
         }
     }
 }

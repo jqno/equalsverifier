@@ -19,6 +19,8 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.internal.*;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -28,6 +30,7 @@ import java.util.Set;
 import static nl.jqno.equalsverifier.internal.Assert.*;
 
 class FieldsChecker<T> implements Checker {
+    private final TypeTag typeTag;
     private final ClassAccessor<T> classAccessor;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
@@ -35,8 +38,9 @@ class FieldsChecker<T> implements Checker {
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public FieldsChecker(Configuration<T> config) {
+        this.typeTag = config.getTypeTag();
         this.classAccessor = config.createClassAccessor();
-        this.prefabValues = classAccessor.getPrefabValues();
+        this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
@@ -44,7 +48,7 @@ class FieldsChecker<T> implements Checker {
 
     @Override
     public void check() {
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor);
+        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, typeTag);
 
         if (!classAccessor.isEqualsInheritedFromObject()) {
             inspector.check(new ArrayFieldCheck());
@@ -84,10 +88,10 @@ class FieldsChecker<T> implements Checker {
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             checkSymmetry(referenceAccessor, changedAccessor);
 
-            changedAccessor.changeField(prefabValues);
+            changedAccessor.changeField(prefabValues, typeTag);
             checkSymmetry(referenceAccessor, changedAccessor);
 
-            referenceAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, typeTag);
             checkSymmetry(referenceAccessor, changedAccessor);
         }
 
@@ -119,17 +123,17 @@ class FieldsChecker<T> implements Checker {
         }
 
         private Object buildB1(FieldAccessor accessor) {
-            accessor.changeField(prefabValues);
+            accessor.changeField(prefabValues, typeTag);
             return accessor.getObject();
         }
 
         private Object buildB2(Object a1, Field referenceField) {
             Object result = ObjectAccessor.of(a1).copy();
             ObjectAccessor<?> objectAccessor = ObjectAccessor.of(result);
-            objectAccessor.fieldAccessorFor(referenceField).changeField(prefabValues);
+            objectAccessor.fieldAccessorFor(referenceField).changeField(prefabValues, typeTag);
             for (Field field : FieldIterable.of(result.getClass())) {
                 if (!field.equals(referenceField)) {
-                    objectAccessor.fieldAccessorFor(field).changeField(prefabValues);
+                    objectAccessor.fieldAccessorFor(field).changeField(prefabValues, typeTag);
                 }
             }
             return result;
@@ -169,7 +173,7 @@ class FieldsChecker<T> implements Checker {
 
             boolean equalToItself = reference.equals(changed);
 
-            changedAccessor.changeField(prefabValues);
+            changedAccessor.changeField(prefabValues, typeTag);
 
             boolean equalsChanged = !reference.equals(changed);
             boolean hashCodeChanged =
@@ -178,7 +182,7 @@ class FieldsChecker<T> implements Checker {
             assertEqualsAndHashCodeRelyOnSameFields(equalsChanged, hashCodeChanged, reference, changed, fieldName);
             assertFieldShouldBeIgnored(equalToItself, equalsChanged, referenceAccessor, fieldName);
 
-            referenceAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, typeTag);
         }
 
         private void assertEqualsAndHashCodeRelyOnSameFields(boolean equalsChanged, boolean hashCodeChanged,
@@ -324,8 +328,8 @@ class FieldsChecker<T> implements Checker {
         }
 
         private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            referenceAccessor.changeField(prefabValues);
-            changedAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, typeTag);
+            changedAccessor.changeField(prefabValues, typeTag);
             checkReflexivityFor(referenceAccessor, changedAccessor);
         }
 
@@ -402,7 +406,7 @@ class FieldsChecker<T> implements Checker {
             Object reference = referenceAccessor.getObject();
             Object changed = changedAccessor.getObject();
 
-            changedAccessor.changeField(prefabValues);
+            changedAccessor.changeField(prefabValues, typeTag);
 
             boolean equalsChanged = !reference.equals(changed);
 
@@ -410,7 +414,7 @@ class FieldsChecker<T> implements Checker {
                 fail(Formatter.of("Mutability: equals depends on mutable field %%.", referenceAccessor.getFieldName()));
             }
 
-            referenceAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, typeTag);
         }
     }
 
@@ -420,7 +424,7 @@ class FieldsChecker<T> implements Checker {
             Object reference = referenceAccessor.getObject();
             Object changed = changedAccessor.getObject();
 
-            changedAccessor.changeField(prefabValues);
+            changedAccessor.changeField(prefabValues, typeTag);
 
             boolean equalsChanged = !reference.equals(changed);
             boolean fieldIsTransient = referenceAccessor.fieldIsTransient() ||
@@ -430,7 +434,7 @@ class FieldsChecker<T> implements Checker {
                 fail(Formatter.of("Transient field %% should not be included in equals/hashCode contract.", referenceAccessor.getFieldName()));
             }
 
-            referenceAccessor.changeField(prefabValues);
+            referenceAccessor.changeField(prefabValues, typeTag);
         }
     }
 }

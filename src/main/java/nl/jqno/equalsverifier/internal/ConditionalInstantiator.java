@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.Constructor;
@@ -61,6 +62,7 @@ public class ConditionalInstantiator {
      *         parameter values, or null if the type does not exist.
      * @throws ReflectionException If instantiation fails.
      */
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     public Object instantiate(Class<?>[] paramTypes, Object[] paramValues) {
         try {
             Class<?> type = resolve();
@@ -68,6 +70,7 @@ public class ConditionalInstantiator {
                 return null;
             }
             Constructor<?> c = type.getConstructor(paramTypes);
+            c.setAccessible(true);
             return c.newInstance(paramValues);
         }
         catch (Exception e) {
@@ -111,6 +114,7 @@ public class ConditionalInstantiator {
      * @throws ReflectionException
      *          If the call to the factory method fails.
      */
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     public Object callFactory(String factoryTypeName, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
         try {
             Class<?> type = resolve();
@@ -119,6 +123,7 @@ public class ConditionalInstantiator {
             }
             Class<?> factoryType = Class.forName(factoryTypeName);
             Method factory = factoryType.getMethod(factoryMethod, paramTypes);
+            factory.setAccessible(true);
             return factory.invoke(null, paramValues);
         }
         catch (Exception e) {
@@ -135,6 +140,7 @@ public class ConditionalInstantiator {
      * @throws ReflectionException
      *          If resolving the constant fails.
      */
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     public Object returnConstant(String constantName) {
         try {
             Class<?> type = resolve();
@@ -142,6 +148,7 @@ public class ConditionalInstantiator {
                 return null;
             }
             Field field = type.getField(constantName);
+            field.setAccessible(true);
             return field.get(null);
         }
         catch (Exception e) {

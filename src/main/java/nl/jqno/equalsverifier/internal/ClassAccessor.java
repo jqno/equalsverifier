@@ -20,6 +20,8 @@ import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -71,13 +73,6 @@ public class ClassAccessor<T> {
      */
     public Class<T> getType() {
         return type;
-    }
-
-    /**
-     * Getter.
-     */
-    public PrefabValues getPrefabValues() {
-        return prefabValues;
     }
 
     /**
@@ -243,44 +238,56 @@ public class ClassAccessor<T> {
 
     /**
      * Returns an instance of T that is not equal to the instance of T returned
-     * by {@link #getBlackObject()}.
+     * by {@link #getBlackObject(TypeTag)}.
      *
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
      * @return An instance of T.
      */
-    public T getRedObject() {
-        return getRedAccessor().get();
+    public T getRedObject(TypeTag enclosingType) {
+        return getRedAccessor(enclosingType).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getRedObject()}.
+     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      *
-     * @return An {@link ObjectAccessor} for {@link #getRedObject()}.
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
+     * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      */
-    public ObjectAccessor<T> getRedAccessor() {
+    public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType) {
         ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues);
+        result.scramble(prefabValues, enclosingType);
         return result;
     }
 
     /**
      * Returns an instance of T that is not equal to the instance of T returned
-     * by {@link #getRedObject()}.
+     * by {@link #getRedObject(TypeTag)}.
      *
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
      * @return An instance of T.
      */
-    public T getBlackObject() {
-        return getBlackAccessor().get();
+    public T getBlackObject(TypeTag enclosingType) {
+        return getBlackAccessor(enclosingType).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getBlackObject()}.
+     * Returns an {@link ObjectAccessor} for {@link #getBlackObject(TypeTag)}.
      *
-     * @return An {@link ObjectAccessor} for {@link #getBlackObject()}.
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
+     * @return An {@link ObjectAccessor} for {@link #getBlackObject(TypeTag)}.
      */
-    public ObjectAccessor<T> getBlackAccessor() {
+    public ObjectAccessor<T> getBlackAccessor(TypeTag enclosingType) {
         ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues);
-        result.scramble(prefabValues);
+        result.scramble(prefabValues, enclosingType);
+        result.scramble(prefabValues, enclosingType);
         return result;
     }
 
@@ -289,24 +296,32 @@ public class ClassAccessor<T> {
      * default values. I.e., 0 for ints, and null for objects (except when the
      * field is marked with a NonNull annotation).
      *
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
      * @return An instance of T where all the fields are initialized to their
      *          default values.
      */
-    public T getDefaultValuesObject() {
-        return getDefaultValuesAccessor().get();
+    public T getDefaultValuesObject(TypeTag enclosingType) {
+        return getDefaultValuesAccessor(enclosingType).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     * Returns an {@link ObjectAccessor} for
+     * {@link #getDefaultValuesObject(TypeTag)}.
      *
-     * @return An {@link ObjectAccessor} for {@link #getDefaultValuesObject()}.
+     * @param enclosingType Describes the type that contains this object as a
+     *                      field, to determine any generic parameters it may
+     *                      contain.
+     * @return An {@link ObjectAccessor} for
+     *          {@link #getDefaultValuesObject(TypeTag)}.
      */
-    public ObjectAccessor<T> getDefaultValuesAccessor() {
+    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType) {
         ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
             if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
                 FieldAccessor accessor = result.fieldAccessorFor(field);
-                accessor.changeField(prefabValues);
+                accessor.changeField(prefabValues, enclosingType);
             }
         }
         return result;

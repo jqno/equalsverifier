@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
+import nl.jqno.equalsverifier.internal.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import org.objectweb.asm.*;
 
@@ -101,10 +102,8 @@ public class AnnotationAccessor {
 
     private void visit() {
         visitType(type, false);
-        Class<?> i = type.getSuperclass();
-        while (i != null && i != Object.class) {
-            visitType(i, true);
-            i = i.getSuperclass();
+        for (Class<?> c : SuperclassIterable.of(type)) {
+            visitType(c, true);
         }
     }
 

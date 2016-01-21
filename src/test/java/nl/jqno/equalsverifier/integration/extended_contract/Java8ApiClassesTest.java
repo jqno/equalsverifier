@@ -53,18 +53,21 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
             "\nimport java.time.ZonedDateTime;" +
             "\nimport java.time.ZoneId;" +
             "\nimport java.time.format.DateTimeFormatter;" +
+            "\nimport java.util.Optional;" +
             "\nimport java.util.concurrent.CompletableFuture;" +
             "\nimport java.util.concurrent.locks.StampedLock;" +
             "\n" +
             "\npublic final class Java8ApiClassesContainer {" +
+            "\n    private final Optional optional;" +
             "\n    private final ZonedDateTime zonedDateTime;" +
             "\n    private final ZoneId zoneId;" +
             "\n    private final DateTimeFormatter dateTimeFormatter;" +
             "\n    private final CompletableFuture completableFuture;" +
             "\n    private final StampedLock stampedLock;" +
             "\n    " +
-            "\n    public Java8ApiClassesContainer(ZonedDateTime zonedDateTime, ZoneId zoneId, DateTimeFormatter dateTimeFormatter," +
-            "\n            CompletableFuture completableFuture, StampedLock stampedLock) {" +
+            "\n    public Java8ApiClassesContainer(Optional optional, ZonedDateTime zonedDateTime, ZoneId zoneId," +
+            "\n            DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {" +
+            "\n        this.optional = optional;" +
             "\n        this.zonedDateTime = zonedDateTime;" +
             "\n        this.zoneId = zoneId;" +
             "\n        this.dateTimeFormatter = dateTimeFormatter;" +

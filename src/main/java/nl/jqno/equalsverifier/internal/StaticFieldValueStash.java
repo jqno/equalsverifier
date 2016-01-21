@@ -33,6 +33,10 @@ public class StaticFieldValueStash {
      * @param type The type for which to store the values of its static fields.
      */
     public void backup(Class<?> type) {
+        for (Class<?> c : SuperclassIterable.of(type)) {
+            backup(c);
+        }
+
         if (stash.containsKey(type)) {
             return;
         }
