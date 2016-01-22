@@ -55,11 +55,21 @@ class NullChecker<T> implements Checker {
             if (NonnullAnnotationChecker.fieldIsNonnull(classAccessor, field)) {
                 return;
             }
-            final Object reference = referenceAccessor.getObject();
-            final Object changed = changedAccessor.getObject();
 
-            changedAccessor.defaultField();
+            if (referenceAccessor.fieldIsStatic()) {
+                Object saved = referenceAccessor.get();
+                referenceAccessor.defaultStaticField();
+                performTests(field, referenceAccessor.getObject(), changedAccessor.getObject());
+                referenceAccessor.set(saved);
+            }
+            else {
+                changedAccessor.defaultField();
+                performTests(field, referenceAccessor.getObject(), changedAccessor.getObject());
+                referenceAccessor.defaultField();
+            }
+        }
 
+        private void performTests(Field field, final Object reference, final Object changed) {
             handle("equals", field, new Runnable() {
                 @Override
                 @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
@@ -82,8 +92,6 @@ class NullChecker<T> implements Checker {
                     config.getCachedHashCodeInitializer().getInitializedHashCode(changed);
                 }
             });
-
-            referenceAccessor.defaultField();
         }
 
         private void handle(String testedMethodName, Field field, Runnable r) {
