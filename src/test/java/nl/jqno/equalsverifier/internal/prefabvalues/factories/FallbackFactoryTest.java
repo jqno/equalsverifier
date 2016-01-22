@@ -82,7 +82,8 @@ public class FallbackFactoryTest {
     @Test
     public void giveClassWithFields() {
         assertCorrectTuple(IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
-        // assertEquals(-100, IntContainer.staticI); // This issue is handled by PrefabValues, not FallbackFactory.
+        // Assert that static fields are untouched
+        assertEquals(-100, IntContainer.staticI);
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
     }
 
