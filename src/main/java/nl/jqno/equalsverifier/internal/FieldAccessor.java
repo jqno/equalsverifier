@@ -166,7 +166,7 @@ public class FieldAccessor {
     }
 
     private void modify(FieldModifier modifier) {
-        if (!canBeModifiedReflectively()) {
+        if (!canBeModifiedReflectively() || Modifier.isStatic(field.getModifiers())) {
             return;
         }
 
