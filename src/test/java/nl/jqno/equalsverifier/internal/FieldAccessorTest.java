@@ -38,7 +38,7 @@ public class FieldAccessorTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         JavaApiPrefabValues.addTo(prefabValues);
     }
 

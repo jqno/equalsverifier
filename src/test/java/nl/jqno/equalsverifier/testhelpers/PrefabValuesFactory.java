@@ -15,14 +15,13 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 public final class PrefabValuesFactory {
     private PrefabValuesFactory() {}
 
-    public static PrefabValues withPrimitiveFactories(StaticFieldValueStash stash) {
-        PrefabValues result = new PrefabValues(stash);
+    public static PrefabValues withPrimitiveFactories() {
+        PrefabValues result = new PrefabValues();
         result.addFactory(boolean.class, true, false);
         result.addFactory(byte.class, (byte)1, (byte)2);
         result.addFactory(char.class, 'a', 'b');

@@ -16,7 +16,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -41,7 +40,7 @@ public class CollectionFactoryTest {
     private static final CollectionFactory<List> LIST_FACTORY = new StubListPrefabValueFactory();
     private static final CollectionFactory<Set> SET_FACTORY = new StubSetPrefabValueFactory();
 
-    private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private String red;
     private String black;

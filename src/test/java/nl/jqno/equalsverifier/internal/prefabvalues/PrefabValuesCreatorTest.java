@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
@@ -45,19 +44,11 @@ public class PrefabValuesCreatorTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private MockStaticFieldValueStash stash;
     private PrefabValues prefabValues;
 
     @Before
     public void setup() {
-        stash = new MockStaticFieldValueStash();
-        prefabValues = PrefabValuesFactory.withPrimitiveFactories(stash);
-    }
-
-    @Test
-    public void stashed() {
-        prefabValues.giveRed(POINT_TAG);
-        assertEquals(Point.class, stash.lastBackuppedType);
+        prefabValues = PrefabValuesFactory.withPrimitiveFactories();
     }
 
     @Test

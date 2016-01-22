@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -52,7 +51,7 @@ public class FallbackFactoryTest {
     @Before
     public void setUp() {
         factory = new FallbackFactory<>();
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         prefabValues.addFactory(int.class, 42, 1337);
         typeStack = new LinkedHashSet<>();
     }

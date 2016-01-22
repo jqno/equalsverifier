@@ -34,7 +34,7 @@ public class ObjectAccessorScramblingTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         JavaApiPrefabValues.addTo(prefabValues);
     }
 
