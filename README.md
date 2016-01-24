@@ -4,8 +4,8 @@ For documentation, please see the [project's website](http://www.jqno.nl/equalsv
 
 Pull requests are welcome! If you open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it.
 
-[![Build Status](https://travis-ci.org/jqno/equalsverifier.png)](https://travis-ci.org/jqno/equalsverifier)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/badge.png)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
+[![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
+[![Build Status](https://img.shields.io/travis/jqno/equalsverifier.svg?style=plastic)](https://travis-ci.org/jqno/equalsverifier)
 
 
 Build
