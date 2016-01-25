@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -34,7 +33,7 @@ public class ReflectiveEnumMapFactoryTest {
     private static final Object RED_OBJECT = new Object();
     private static final Object BLACK_OBJECT = new Object();
     private final ReflectiveEnumMapFactory factory = new ReflectiveEnumMapFactory();
-    private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> emptyTypeStack = new LinkedHashSet<>();
     private final EnumMap<TwoElementEnum, Object> expectedRed = new EnumMap<>(TwoElementEnum.class);
     private final EnumMap<TwoElementEnum, Object> expectedBlack = new EnumMap<>(TwoElementEnum.class);

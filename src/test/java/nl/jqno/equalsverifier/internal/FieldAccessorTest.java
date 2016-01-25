@@ -38,7 +38,7 @@ public class FieldAccessorTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         JavaApiPrefabValues.addTo(prefabValues);
     }
 
@@ -297,6 +297,13 @@ public class FieldAccessorTest {
         PrivateObjectContainer foo = new PrivateObjectContainer();
         doNullField(foo, FIELD_NAME);
         assertNull(foo.get());
+    }
+
+    @Test
+    public void defaultStaticField() throws NoSuchFieldException {
+        StaticContainer foo = new StaticContainer();
+        getAccessorFor(foo, "field").defaultStaticField();
+        assertNull(StaticContainer.field);
     }
 
     @Test

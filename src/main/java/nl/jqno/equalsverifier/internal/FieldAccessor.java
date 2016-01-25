@@ -127,46 +127,67 @@ public class FieldAccessor {
     /**
      * Tries to set the field to the specified value.
      *
+     * Includes static fields but ignores fields that can't be modified
+     * reflectively.
+     *
      * @param value The value that the field should get.
      * @throws ReflectionException If the operation fails.
      */
     public void set(Object value) {
-        modify(new FieldSetter(value));
+        modify(new FieldSetter(value), true);
     }
 
     /**
-     * Tries to make the field null.
+     * Tries to make the field null. Ignores static fields and fields that
+     * can't be modified reflectively.
      *
      * @throws ReflectionException If the operation fails.
      */
     public void defaultField() {
-        modify(new FieldDefaulter());
+        modify(new FieldDefaulter(), false);
+    }
+
+    /**
+     * Tries to make the field null. Includes static fields but ignores fields
+     * that can't be modified reflectively.
+     *
+     * @throws ReflectionException If the operation fails.
+     */
+    public void defaultStaticField() {
+        modify(new FieldDefaulter(), true);
     }
 
     /**
      * Copies field's value to the corresponding field in the specified object.
      *
+     * Ignores static fields and fields that can't be modified reflectively.
+     *
      * @param to The object into which to copy the field.
      * @throws ReflectionException If the operation fails.
      */
     public void copyTo(Object to) {
-        modify(new FieldCopier(to));
+        modify(new FieldCopier(to), false);
     }
 
     /**
      * Changes the field's value to something else. The new value will never be
      * null. Other than that, the precise value is undefined.
      *
+     * Ignores static fields and fields that can't be modified reflectively.
+     *
      * @param prefabValues If the field is of a type contained within
      *          prefabValues, the new value will be taken from it.
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        modify(new FieldChanger(prefabValues, enclosingType));
+        modify(new FieldChanger(prefabValues, enclosingType), false);
     }
 
-    private void modify(FieldModifier modifier) {
+    private void modify(FieldModifier modifier, boolean includeStatic) {
         if (!canBeModifiedReflectively()) {
+            return;
+        }
+        if (!includeStatic && fieldIsStatic()) {
             return;
         }
 

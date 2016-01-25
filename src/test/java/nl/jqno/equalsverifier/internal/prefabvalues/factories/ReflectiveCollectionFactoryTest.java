@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -44,7 +43,7 @@ public class ReflectiveCollectionFactoryTest {
     private static final ReflectiveCollectionFactory<List> LIST_FACTORY = new StubReflectiveCollectionFactory<>("java.util.ArrayList");
     private static final ReflectiveCollectionFactory<Set> SET_FACTORY = new StubReflectiveCollectionFactory<>("java.util.HashSet");
 
-    private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private String red;
     private String black;

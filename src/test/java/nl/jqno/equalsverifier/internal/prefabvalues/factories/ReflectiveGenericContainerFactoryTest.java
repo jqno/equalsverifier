@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import com.google.common.base.Optional;
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -41,7 +40,7 @@ public class ReflectiveGenericContainerFactoryTest {
     private static final ReflectiveGenericContainerFactory<Optional> OPTIONAL_FACTORY =
             new ReflectiveGenericContainerFactory<>("com.google.common.base.Optional");
 
-    private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private String red;
     private String black;

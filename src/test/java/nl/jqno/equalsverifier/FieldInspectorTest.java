@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
@@ -29,7 +28,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public class FieldInspectorTest {
-    private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitiveFactories(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitiveFactories();
     private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, false);
 
     @Test

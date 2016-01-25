@@ -16,7 +16,6 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -51,7 +50,7 @@ public final class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<>(type, new PrefabValues(new StaticFieldValueStash()), new HashSet<String>(),
+        return new Configuration<>(type, new PrefabValues(), new HashSet<String>(),
                 CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
     }
 

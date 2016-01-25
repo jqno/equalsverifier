@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.InternalException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
@@ -360,9 +359,7 @@ public final class EqualsVerifier<T> {
      *          {@link EqualsVerifier}'s preconditions do not hold.
      */
     public void verify() {
-        PrefabValues prefabValues = config.getPrefabValues();
         try {
-            prefabValues.backupToStash(config.getType());
             performVerification();
         }
         catch (InternalException e) {
@@ -370,9 +367,6 @@ public final class EqualsVerifier<T> {
         }
         catch (Throwable e) {
             handleError(e, e);
-        }
-        finally {
-            prefabValues.restoreFromStash();
         }
     }
 

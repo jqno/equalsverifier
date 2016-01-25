@@ -51,7 +51,7 @@ public class ClassAccessorTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         JavaApiPrefabValues.addTo(prefabValues);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, false);

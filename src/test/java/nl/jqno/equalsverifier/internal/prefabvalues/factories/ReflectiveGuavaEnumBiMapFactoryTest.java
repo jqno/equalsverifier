@@ -16,7 +16,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import com.google.common.collect.EnumBiMap;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -31,7 +30,7 @@ import static org.junit.Assert.assertEquals;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ReflectiveGuavaEnumBiMapFactoryTest {
     private final ReflectiveGuavaEnumBiMapFactory factory = new ReflectiveGuavaEnumBiMapFactory();
-    private final PrefabValues prefabValues = new PrefabValues(new StaticFieldValueStash());
+    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> emptyTypeStack = new LinkedHashSet<>();
     private EnumBiMap<TwoElementEnum, TwoElementEnum> expectedRed;
     private EnumBiMap<TwoElementEnum, TwoElementEnum> expectedBlack;

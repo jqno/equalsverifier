@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
@@ -42,32 +41,6 @@ public class PrefabValues {
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache = new FactoryCache();
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
-    private final StaticFieldValueStash stash;
-
-    /**
-     *  Constructor.
-     */
-    public PrefabValues(StaticFieldValueStash stash) {
-        this.stash = stash;
-    }
-
-    /**
-     * Backs up the values of all static member fields of the given type.
-     *
-     * @param type The type for which to store the values of static member
-     *          fields.
-     */
-    public void backupToStash(Class<?> type) {
-        stash.backup(type);
-    }
-
-    /**
-     * Restores the values of all static member fields, for all types for which
-     * they were stored at once.
-     */
-    public void restoreFromStash() {
-        stash.restoreAll();
-    }
 
     /**
      * Associates the factory that can create instances of the given type,
@@ -185,7 +158,6 @@ public class PrefabValues {
             PrefabValueFactory<T> factory = factoryCache.get(type);
             return factory.createValues(tag, this, typeStack);
         }
-        stash.backup(type);
 
         @SuppressWarnings("unchecked")
         Tuple<T> result = (Tuple<T>)fallbackFactory.createValues(tag, this, typeStack);

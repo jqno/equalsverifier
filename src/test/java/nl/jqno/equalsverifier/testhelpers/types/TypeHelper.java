@@ -262,7 +262,7 @@ public class TypeHelper {
     }
 
     public static final class StaticContainer {
-        static Object field = new Object();
+        public static Object field = new Object();
     }
 
     public static final class TransientContainer {

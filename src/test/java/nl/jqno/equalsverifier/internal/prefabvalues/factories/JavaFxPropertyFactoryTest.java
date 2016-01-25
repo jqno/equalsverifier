@@ -16,7 +16,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.StaticFieldValueStash;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -35,7 +34,7 @@ public class JavaFxPropertyFactoryTest {
 
     @Before
     public void setUp() {
-        prefabValues = new PrefabValues(new StaticFieldValueStash());
+        prefabValues = new PrefabValues();
         JavaApiPrefabValues.addTo(prefabValues);
     }
 

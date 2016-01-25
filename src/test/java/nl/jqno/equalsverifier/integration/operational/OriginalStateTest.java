@@ -21,7 +21,6 @@ import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.MockStaticFieldValueStash;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import org.junit.Test;
 
@@ -30,7 +29,6 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends IntegrationTestBase {
@@ -79,8 +77,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     @Test
     public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
         EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-        MockStaticFieldValueStash mockStash = new MockStaticFieldValueStash();
-        PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories(mockStash);
+        PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories();
 
         // Mock EqualsVerifier's StaticFieldValueStash
         ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);
@@ -92,9 +89,6 @@ public class OriginalStateTest extends IntegrationTestBase {
         // Make sure the exception actually occurs, on a check that actually mutates the fields.
         expectFailure("Mutability");
         ev.verify();
-
-        // Assert
-        assertTrue(mockStash.restoreCalled);
     }
 
     static final class CorrectEquals {

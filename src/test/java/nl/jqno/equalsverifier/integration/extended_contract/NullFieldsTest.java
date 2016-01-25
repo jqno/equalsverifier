@@ -46,6 +46,13 @@ public class NullFieldsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void fail_whenEqualsThrowsNpeOnStaticField() {
+        expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
+        EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenHashCodeThrowsNpe() {
         expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
         EqualsVerifier.forClass(HashCodeThrowsNpe.class)
@@ -124,6 +131,21 @@ public class NullFieldsTest extends IntegrationTestBase {
             }
             EqualsThrowsNpeOnOther p = (EqualsThrowsNpeOnOther)obj;
             return p.color.equals(color);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class EqualsThrowsNpeOnStatic {
+        private static Color color = Color.INDIGO;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EqualsThrowsNpeOnStatic)) {
+                return false;
+            }
+            EqualsThrowsNpeOnStatic p = (EqualsThrowsNpeOnStatic)obj;
+            return color.equals(p.color);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
