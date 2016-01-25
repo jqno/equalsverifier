@@ -300,6 +300,13 @@ public class FieldAccessorTest {
     }
 
     @Test
+    public void defaultStaticField() throws NoSuchFieldException {
+        StaticContainer foo = new StaticContainer();
+        getAccessorFor(foo, "field").defaultStaticField();
+        assertNull(StaticContainer.field);
+    }
+
+    @Test
     public void copyToPrimitiveField() {
         int value = 10;
 
