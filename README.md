@@ -6,6 +6,7 @@ Pull requests are welcome! If you open one, please also [register an issue](http
 
 [![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
 [![Build Status](https://img.shields.io/travis/jqno/equalsverifier.svg?style=plastic)](https://travis-ci.org/jqno/equalsverifier)
+[![Coveralls](https://img.shields.io/coveralls/jqno/equalsverifier.svg?style=plastic)](https://coveralls.io/r/jqno/equalsverifier)
 
 
 Build
