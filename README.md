@@ -4,6 +4,7 @@ For documentation, please see the [project's website](http://www.jqno.nl/equalsv
 
 Pull requests are welcome! If you open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it.
 
+[![Apache License 2.0](https://img.shields.io/:license-Apache%20License%202.0-blue.svg?style=plastic)](https://github.com/jqno/equalsverifier/blob/master/LICENSE.md)
 [![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
 [![Build Status](https://img.shields.io/travis/jqno/equalsverifier.svg?style=plastic)](https://travis-ci.org/jqno/equalsverifier)
 [![Coveralls](https://img.shields.io/coveralls/jqno/equalsverifier.svg?style=plastic)](https://coveralls.io/r/jqno/equalsverifier)
