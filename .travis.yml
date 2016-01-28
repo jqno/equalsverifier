@@ -1,7 +1,7 @@
 language: java
-before_install: mvn dependency:resolve dependency:resolve-plugins
-install: mvn verify
-after_success: mvn clean test jacoco:report coveralls:report
+install: mvn dependency:resolve dependency:resolve-plugins
+script: mvn clean verify
+after_success: mvn jacoco:report coveralls:report
 jdk:
   - oraclejdk8
   - oraclejdk7
