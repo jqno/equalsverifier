@@ -106,6 +106,7 @@ public class TransitivityTest extends IntegrationTestBase {
     public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
         expectFailure("Transitivity");
         EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
