@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jan Ouwens
+ * Copyright 2015-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,20 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier.forClass(UsesDoubleEqualSign.class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenEqualsUsesDoubleEqualSignForBoxedPrimitives() {
+        expectFailure("Reflexivity", "== used instead of .equals()", "integerField");
+        EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedPrimitives_givenDoubleEqualWarningIsSuppressed() {
+        EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
                 .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
@@ -93,6 +107,23 @@ public class ExtendedReflexivityTest extends IntegrationTestBase {
             }
             UsesDoubleEqualSign other = (UsesDoubleEqualSign)obj;
             return stringField == other.stringField;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class UsesDoubleEqualSignOnBoxedPrimitive {
+        private final Integer integerField;
+
+        public UsesDoubleEqualSignOnBoxedPrimitive(Integer i) { this.integerField = i; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof UsesDoubleEqualSignOnBoxedPrimitive)) {
+                return false;
+            }
+            UsesDoubleEqualSignOnBoxedPrimitive other = (UsesDoubleEqualSignOnBoxedPrimitive)obj;
+            return integerField == other.integerField;
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

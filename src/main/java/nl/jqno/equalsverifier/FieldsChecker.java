@@ -338,7 +338,7 @@ class FieldsChecker<T> implements Checker {
             if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
                 return;
             }
-            if (fieldType.equals(Object.class) || typeIsExempt(fieldType)) {
+            if (fieldType.equals(Object.class) || fieldType.isInterface()) {
                 return;
             }
             if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
@@ -363,10 +363,6 @@ class FieldsChecker<T> implements Checker {
             Object left = referenceAccessor.getObject();
             Object right = changedAccessor.getObject();
             assertEquals(f, left, right);
-        }
-
-        private boolean typeIsExempt(Class<?> fieldType) {
-            return fieldType.isPrimitive() || fieldType.isEnum() || fieldType.isArray() || fieldType.isInterface();
         }
 
         private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
