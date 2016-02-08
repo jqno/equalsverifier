@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -35,7 +35,7 @@ public class OutputTest extends IntegrationTestBase {
 
     private static final String[] BLACKLISTED_EXCEPTIONS = {
             AssertionError.class.getSimpleName(),
-            InternalException.class.getSimpleName(),
+            MessagingException.class.getSimpleName(),
             RecursionException.class.getSimpleName(),
             AssertionException.class.getSimpleName(),
             ReflectionException.class.getSimpleName()
@@ -62,7 +62,7 @@ public class OutputTest extends IntegrationTestBase {
     @Test
     public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
         expectMessageIsValid();
-        expectMessageContains(UnsupportedOperationException.class.getName(), MESSAGE);
+        expectMessageContains(UnsupportedOperationException.class.getSimpleName(), MESSAGE);
         expectMessageDoesNotContain("null");
         expectCause(UnsupportedOperationException.class, MESSAGE);
 
@@ -72,7 +72,7 @@ public class OutputTest extends IntegrationTestBase {
     @Test
     public void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
         expectMessageIsValid();
-        expectMessageContains(IllegalStateException.class.getName());
+        expectMessageContains(IllegalStateException.class.getSimpleName());
         expectMessageDoesNotContain("null");
         expectCause(IllegalStateException.class);
 

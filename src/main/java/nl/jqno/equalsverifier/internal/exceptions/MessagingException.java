@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013 Jan Ouwens
+ * Copyright 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,30 +16,29 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
 /**
- * Exception internal to the EqualsVerifier project. Using this exception,
- * EqualsVerifier can distinguish between exceptions thrown internally, and
- * exceptions thrown by external code (e.g., in tested equals methods).
- *
- * This is an abstract class; the subclasses indicate the type of exception
- * that is signalled by the EqualsVerifier internals.
+ * Superclass for exceptions that exist only to send a message to the user when
+ * something goes wrong. These exceptions do not need to be included as a cause
+ * in the final stack trace. If they have a cause, this cause will serve
+ * directly as the cause for the final stack trace, instead of the exception
+ * itself.
  *
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public abstract class InternalException extends RuntimeException {
-    public InternalException() {
+public abstract class MessagingException extends RuntimeException {
+    public MessagingException() {
         super();
     }
 
-    public InternalException(String message) {
+    public MessagingException(String message) {
         super(message);
     }
 
-    public InternalException(Throwable cause) {
+    public MessagingException(Throwable cause) {
         super(cause);
     }
 
-    public InternalException(String message, Throwable cause) {
+    public MessagingException(String message, Throwable cause) {
         super(message, cause);
     }
 }

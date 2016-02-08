@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014, 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public class EqualsVerifierBugException extends InternalException {
+public class EqualsVerifierBugException extends RuntimeException {
 
     private static final String BUG = "This is a bug in EqualsVerifier. Please report this in the issue tracker at http://www.jqno.nl/equalsverifier";
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014, 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,13 @@ public class IntegrationTestBase {
             if (cause == null) {
                 return actual == null;
             }
-            return cause.isInstance(actual);
+            while (actual != null) {
+                if (cause.isInstance(actual)) {
+                    return true;
+                }
+                actual = actual.getCause();
+            }
+            return false;
         }
 
         @Override

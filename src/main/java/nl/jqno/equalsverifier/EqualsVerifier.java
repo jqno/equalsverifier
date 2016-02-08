@@ -18,7 +18,7 @@ package nl.jqno.equalsverifier;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.exceptions.InternalException;
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
@@ -362,7 +362,7 @@ public final class EqualsVerifier<T> {
         try {
             performVerification();
         }
-        catch (InternalException e) {
+        catch (MessagingException e) {
             handleError(e, e.getCause());
         }
         catch (Throwable e) {
@@ -374,7 +374,7 @@ public final class EqualsVerifier<T> {
         boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
         Formatter message = Formatter.of(
                 "%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-                showCauseExceptionInMessage ? trueCause.getClass().getName() + ": " : "",
+                showCauseExceptionInMessage ? trueCause.getClass().getSimpleName() + ": " : "",
                 messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
 
         AssertionError error = new AssertionError(message.format());

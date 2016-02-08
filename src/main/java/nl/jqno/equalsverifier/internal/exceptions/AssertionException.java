@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jan Ouwens
+ * Copyright 2013, 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import nl.jqno.equalsverifier.internal.Formatter;
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public class AssertionException extends InternalException {
+public class AssertionException extends MessagingException {
     public AssertionException(Formatter message) {
         super(message.format());
     }

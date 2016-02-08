@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Jan Ouwens
+ * Copyright 2013, 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
  * @author Jan Ouwens
  */
 @SuppressWarnings("serial")
-public class ReflectionException extends InternalException {
+public class ReflectionException extends RuntimeException {
     public ReflectionException(String message) {
         super(message);
     }
