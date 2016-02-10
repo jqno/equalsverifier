@@ -31,10 +31,8 @@ import java.util.*;
  * {@link java.lang.Object} class.
  * <p>
  * Use, within unit test method, as follows:<br>
- * - Create an instance of {@link EqualsVerifier}. Either call
- * {@link #forExamples(Object, Object, Object...)} to supply at least two
- * instances of the class under test that are not equal to one another, or
- * call {@link #forClass(Class)} to supply a reference to the class itself to
+ * - Create an instance of {@link EqualsVerifier}.
+ * Call {@link #forClass(Class)} to supply a reference to the class itself to
  * let the {@link EqualsVerifier} instantiate objects. Also,
  * {@link #forRelaxedEqualExamples(Object, Object, Object...)} can be used if
  * the class under test has relaxed equality rules, for example, if the
@@ -109,8 +107,7 @@ public final class EqualsVerifier<T> {
     private Configuration<T> config;
 
     /**
-     * Private constructor. Call {@link #forClass(Class)},
-     * {@link #forExamples(Object, Object, Object...)} or
+     * Private constructor. Call {@link #forClass(Class)} or
      * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
      */
     private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
