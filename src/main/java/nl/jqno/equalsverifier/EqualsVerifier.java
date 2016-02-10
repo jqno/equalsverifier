@@ -108,9 +108,8 @@ public final class EqualsVerifier<T> {
      * Private constructor. Call {@link #forClass(Class)} or
      * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
      */
-    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-        this.config = Configuration.of(type).withEqualExamples(equalExamples).withUnequalExamples(unequalExamples);
-
+    private EqualsVerifier(Configuration<T> config) {
+        this.config = config;
         JavaApiPrefabValues.addTo(config.getPrefabValues());
     }
 
@@ -121,10 +120,8 @@ public final class EqualsVerifier<T> {
      *          tested.
      */
     public static <T> EqualsVerifier<T> forClass(Class<T> type) {
-        List<T> equalExamples = new ArrayList<>();
-        List<T> unequalExamples = new ArrayList<>();
-
-        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
+        Configuration<T> config = Configuration.of(type);
+        return new EqualsVerifier<>(config);
     }
 
     /**
@@ -500,7 +497,11 @@ public final class EqualsVerifier<T> {
                     throw new IllegalArgumentException("An equal example also appears as unequal example.");
                 }
             }
-            return new EqualsVerifier<>(type, equalExamples, unequalExamples)
+
+            Configuration<T> config = Configuration.of(type)
+                    .withEqualExamples(equalExamples)
+                    .withUnequalExamples(unequalExamples);
+            return new EqualsVerifier<>(config)
                     .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
         }
     }
