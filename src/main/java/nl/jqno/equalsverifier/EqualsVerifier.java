@@ -383,7 +383,6 @@ public final class EqualsVerifier<T> {
 
     private void verifyWithExamples() {
         Checker[] checkers = {
-            new PreconditionChecker<>(config),
             new ExamplesChecker<>(config),
             new HierarchyChecker<>(config),
             new FieldsChecker<>(config)

@@ -42,6 +42,8 @@ class ExamplesChecker<T> implements Checker {
 
     @Override
     public void check() {
+        checkPreconditions();
+
         for (int i = 0; i < equalExamples.size(); i++) {
             T reference = equalExamples.get(i);
             checkSingle(reference);
@@ -55,6 +57,13 @@ class ExamplesChecker<T> implements Checker {
 
         for (T reference : unequalExamples) {
             checkSingle(reference);
+        }
+    }
+
+    private void checkPreconditions() {
+        for (T example : equalExamples) {
+            assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
+                    type.isAssignableFrom(example.getClass()));
         }
     }
 
