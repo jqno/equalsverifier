@@ -102,8 +102,6 @@ import java.util.*;
  * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
-    private final List<T> equalExamples;
-    private final List<T> unequalExamples;
     private Configuration<T> config;
 
     /**
@@ -111,9 +109,7 @@ public final class EqualsVerifier<T> {
      * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
      */
     private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-        this.config = Configuration.of(type);
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
+        this.config = Configuration.of(type).withEqualExamples(equalExamples).withUnequalExamples(unequalExamples);
 
         JavaApiPrefabValues.addTo(config.getPrefabValues());
     }
@@ -375,20 +371,23 @@ public final class EqualsVerifier<T> {
     }
 
     private void ensureUnequalExamples() {
-        if (unequalExamples.size() > 0) {
+        if (config.getUnequalExamples().size() > 0) {
             return;
         }
 
         TypeTag tag = config.getTypeTag();
         ClassAccessor<T> classAccessor = config.createClassAccessor();
+
+        List<T> unequalExamples = new ArrayList<>();
         unequalExamples.add(classAccessor.getRedObject(tag));
         unequalExamples.add(classAccessor.getBlackObject(tag));
+        config = config.withUnequalExamples(unequalExamples);
     }
 
     private void verifyWithExamples() {
         Checker[] checkers = {
-            new PreconditionChecker<>(config, equalExamples, unequalExamples),
-            new ExamplesChecker<>(config, equalExamples, unequalExamples),
+            new PreconditionChecker<>(config),
+            new ExamplesChecker<>(config),
             new HierarchyChecker<>(config),
             new FieldsChecker<>(config)
         };

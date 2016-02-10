@@ -33,10 +33,10 @@ class ExamplesChecker<T> implements Checker {
     private final List<T> unequalExamples;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ExamplesChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
+    public ExamplesChecker(Configuration<T> config) {
         this.type = config.getType();
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
+        this.equalExamples = config.getEqualExamples();
+        this.unequalExamples = config.getUnequalExamples();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
