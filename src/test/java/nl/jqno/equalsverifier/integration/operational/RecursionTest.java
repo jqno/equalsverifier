@@ -55,13 +55,6 @@ public class RecursionTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsExamples() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-        EqualsVerifier.forExamples(red, black)
-                .verify();
-    }
-
-    @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
         EqualsVerifier.forClass(Node.class)
                 .withPrefabValues(Node.class, red, black)

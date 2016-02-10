@@ -33,15 +33,17 @@ class ExamplesChecker<T> implements Checker {
     private final List<T> unequalExamples;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ExamplesChecker(Configuration<T> config, List<T> equalExamples, List<T> unequalExamples) {
+    public ExamplesChecker(Configuration<T> config) {
         this.type = config.getType();
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
+        this.equalExamples = config.getEqualExamples();
+        this.unequalExamples = config.getUnequalExamples();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
     @Override
     public void check() {
+        checkPreconditions();
+
         for (int i = 0; i < equalExamples.size(); i++) {
             T reference = equalExamples.get(i);
             checkSingle(reference);
@@ -55,6 +57,13 @@ class ExamplesChecker<T> implements Checker {
 
         for (T reference : unequalExamples) {
             checkSingle(reference);
+        }
+    }
+
+    private void checkPreconditions() {
+        for (T example : equalExamples) {
+            assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
+                    type.isAssignableFrom(example.getClass()));
         }
     }
 

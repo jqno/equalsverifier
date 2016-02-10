@@ -45,16 +45,6 @@ public class OriginalStateTest extends IntegrationTestBase {
     }
 
     @Test
-    public void instanceValueReturnsToOriginalState_whenEqualsVerifierIsFinished_givenForExamplesIsUsed() {
-        CorrectEquals one = new CorrectEquals(INSTANCE_1);
-        CorrectEquals two = new CorrectEquals(INSTANCE_2);
-        EqualsVerifier.forExamples(one, two).verify();
-
-        assertEquals(INSTANCE_1, one.instanceValue);
-        assertEquals(INSTANCE_2, two.instanceValue);
-    }
-
-    @Test
     public void staticValueReturnsToOriginalStateRecursively_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEqualsContainer.class).verify();
         assertEquals(STATIC, CorrectEquals.staticValue);

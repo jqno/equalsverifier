@@ -60,16 +60,6 @@ public class NullFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenEqualsThrowsNpeOnThissField_givenExamples() {
-        EqualsThrowsNpeOnThis blue = new EqualsThrowsNpeOnThis(Color.BLUE);
-        EqualsThrowsNpeOnThis yellow = new EqualsThrowsNpeOnThis(Color.YELLOW);
-
-        EqualsVerifier.forExamples(blue, yellow)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
-    }
-
-    @Test
     public void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
                 .suppress(Warning.NULL_FIELDS)

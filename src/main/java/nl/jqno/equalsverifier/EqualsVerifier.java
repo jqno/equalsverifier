@@ -31,10 +31,8 @@ import java.util.*;
  * {@link java.lang.Object} class.
  * <p>
  * Use, within unit test method, as follows:<br>
- * - Create an instance of {@link EqualsVerifier}. Either call
- * {@link #forExamples(Object, Object, Object...)} to supply at least two
- * instances of the class under test that are not equal to one another, or
- * call {@link #forClass(Class)} to supply a reference to the class itself to
+ * - Create an instance of {@link EqualsVerifier}.
+ * Call {@link #forClass(Class)} to supply a reference to the class itself to
  * let the {@link EqualsVerifier} instantiate objects. Also,
  * {@link #forRelaxedEqualExamples(Object, Object, Object...)} can be used if
  * the class under test has relaxed equality rules, for example, if the
@@ -104,20 +102,14 @@ import java.util.*;
  * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
-    private final List<T> equalExamples;
-    private final List<T> unequalExamples;
     private Configuration<T> config;
 
     /**
-     * Private constructor. Call {@link #forClass(Class)},
-     * {@link #forExamples(Object, Object, Object...)} or
+     * Private constructor. Call {@link #forClass(Class)} or
      * {@link #forRelaxedEqualExamples(Object, Object, Object...)} instead.
      */
-    private EqualsVerifier(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
-        this.config = Configuration.of(type);
-        this.equalExamples = equalExamples;
-        this.unequalExamples = unequalExamples;
-
+    private EqualsVerifier(Configuration<T> config) {
+        this.config = config;
         JavaApiPrefabValues.addTo(config.getPrefabValues());
     }
 
@@ -128,38 +120,8 @@ public final class EqualsVerifier<T> {
      *          tested.
      */
     public static <T> EqualsVerifier<T> forClass(Class<T> type) {
-        List<T> equalExamples = new ArrayList<>();
-        List<T> unequalExamples = new ArrayList<>();
-
-        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
-    }
-
-    /**
-     * Factory method. Use when it is necessary or desired to give explicit
-     * examples of instances of T. It's theoretically possible that
-     * {@link #forClass(Class)} doesn't generate the examples that expose a
-     * certain weakness in the {@code equals} implementation. In such cases,
-     * this method can be used.
-     *
-     * @param first An instance of T.
-     * @param second Another instance of T, which is unequal to {@code first}.
-     * @param more More instances of T, all of which are unequal to one
-     *          another and to {@code first} and {@code second}. May also
-     *          contain instances of subclasses of T.
-     */
-    @SafeVarargs
-    public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
-        List<T> equalExamples = new ArrayList<>();
-        List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
-
-        if (listContainsDuplicates(unequalExamples)) {
-            throw new IllegalArgumentException("Two objects are equal to each other.");
-        }
-
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)first.getClass();
-
-        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
+        Configuration<T> config = Configuration.of(type);
+        return new EqualsVerifier<>(config);
     }
 
     /**
@@ -406,20 +368,22 @@ public final class EqualsVerifier<T> {
     }
 
     private void ensureUnequalExamples() {
-        if (unequalExamples.size() > 0) {
+        if (config.getUnequalExamples().size() > 0) {
             return;
         }
 
         TypeTag tag = config.getTypeTag();
         ClassAccessor<T> classAccessor = config.createClassAccessor();
+
+        List<T> unequalExamples = new ArrayList<>();
         unequalExamples.add(classAccessor.getRedObject(tag));
         unequalExamples.add(classAccessor.getBlackObject(tag));
+        config = config.withUnequalExamples(unequalExamples);
     }
 
     private void verifyWithExamples() {
         Checker[] checkers = {
-            new PreconditionChecker<>(config, equalExamples, unequalExamples),
-            new ExamplesChecker<>(config, equalExamples, unequalExamples),
+            new ExamplesChecker<>(config),
             new HierarchyChecker<>(config),
             new FieldsChecker<>(config)
         };
@@ -532,7 +496,11 @@ public final class EqualsVerifier<T> {
                     throw new IllegalArgumentException("An equal example also appears as unequal example.");
                 }
             }
-            return new EqualsVerifier<>(type, equalExamples, unequalExamples)
+
+            Configuration<T> config = Configuration.of(type)
+                    .withEqualExamples(equalExamples)
+                    .withUnequalExamples(unequalExamples);
+            return new EqualsVerifier<>(config)
                     .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
         }
     }
