@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2014 Jan Ouwens
+ * Copyright 2009-2010, 2014, 2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,26 +74,6 @@ public class MutableStateTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassHasAMutableEnumField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(EnumMutableField.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenClassHasAMutableEnumField_givenNullAsAnExample() {
-        EnumMutableField red = new EnumMutableField(null);
-        EnumMutableField black = new EnumMutableField(EnumMutableField.Enum.BLACK);
-
-        expectFailure(MUTABILITY, FIELD_NAME);
-        EqualsVerifier.forExamples(red, black)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassHasAMutableEnumField_givenNullAsAnExampleAndWarningIsSuppressed() {
-        EnumMutableField red = new EnumMutableField(null);
-        EnumMutableField black = new EnumMutableField(EnumMutableField.Enum.BLACK);
-
-        EqualsVerifier.forExamples(red, black)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .verify();
     }

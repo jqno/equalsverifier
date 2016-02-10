@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2013-2015 Jan Ouwens
+ * Copyright 2009-2010, 2013-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,9 @@ public class RelaxedEqualsTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenObjectsWithDifferentFieldsAreEqual() {
-        expectException(IllegalArgumentException.class, "Two objects are equal to each other");
-        EqualsVerifier.forExamples(a, b);
+        expectFailure("Significant fields");
+        EqualsVerifier.forClass(Multiple.class)
+                .verify();
     }
 
     @Test

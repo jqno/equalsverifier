@@ -135,34 +135,6 @@ public final class EqualsVerifier<T> {
     }
 
     /**
-     * Factory method. Use when it is necessary or desired to give explicit
-     * examples of instances of T. It's theoretically possible that
-     * {@link #forClass(Class)} doesn't generate the examples that expose a
-     * certain weakness in the {@code equals} implementation. In such cases,
-     * this method can be used.
-     *
-     * @param first An instance of T.
-     * @param second Another instance of T, which is unequal to {@code first}.
-     * @param more More instances of T, all of which are unequal to one
-     *          another and to {@code first} and {@code second}. May also
-     *          contain instances of subclasses of T.
-     */
-    @SafeVarargs
-    public static <T> EqualsVerifier<T> forExamples(T first, T second, T... more) {
-        List<T> equalExamples = new ArrayList<>();
-        List<T> unequalExamples = buildListOfAtLeastTwo(first, second, more);
-
-        if (listContainsDuplicates(unequalExamples)) {
-            throw new IllegalArgumentException("Two objects are equal to each other.");
-        }
-
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)first.getClass();
-
-        return new EqualsVerifier<>(type, equalExamples, unequalExamples);
-    }
-
-    /**
      * Factory method. Asks for a list of equal, but not identical, instances
      * of T.
      *
