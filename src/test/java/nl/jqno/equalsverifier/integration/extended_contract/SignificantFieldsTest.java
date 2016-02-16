@@ -45,7 +45,6 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -66,14 +65,12 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenATransientFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenAStaticFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -101,7 +98,6 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenNoFieldsAreAdded_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(NoFieldsAdded.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
