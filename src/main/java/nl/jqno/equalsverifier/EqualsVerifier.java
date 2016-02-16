@@ -241,6 +241,10 @@ public final class EqualsVerifier<T> {
         return this;
     }
 
+    public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
+        return this;
+    }
+
     /**
      * Signals that T is part of an inheritance hierarchy where {@code equals}
      * is overridden. Call this method if T has overridden {@code equals} and

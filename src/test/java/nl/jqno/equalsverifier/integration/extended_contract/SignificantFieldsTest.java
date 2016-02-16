@@ -21,6 +21,7 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -161,6 +162,36 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("thisFieldDoesNotExist");
+    }
+
+    @Test@Ignore
+    public void succeed_whenAFieldIsUnused_givenTheUsedFieldsAreSpecified() {
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x", "y")
+                .verify();
+    }
+
+    @Test@Ignore
+    public void fail_whenAllFieldsAreUsed_givenTheUsedFieldsAreSpecifiedButWeMissedOne() {
+        expectFailure("Significant fields", "equals should not use", "y", "but it does");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("x")
+                .verify();
+    }
+
+    @Test@Ignore
+    public void fail_whenAFieldIsUnused_givenTheUnusedFieldIsAlsoSpecified() {
+        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x", "y", "colorNotUsed")
+                .verify();
+    }
+
+    @Test@Ignore
+    public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
+        expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("thisFieldDoesNotExist");
     }
 
     @Test
