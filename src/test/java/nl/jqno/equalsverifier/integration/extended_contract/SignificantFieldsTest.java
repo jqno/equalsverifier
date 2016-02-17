@@ -194,6 +194,22 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .withOnlyTheseFields("thisFieldDoesNotExist");
     }
 
+    @Test@Ignore
+    public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
+        expectException(IllegalArgumentException.class, "Only field", "x", "is also ignored");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("x")
+                .withIgnoredFields("x");
+    }
+
+    @Test@Ignore
+    public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
+        expectException(IllegalArgumentException.class, "Only field", "x", "is also ignored");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withIgnoredFields("x")
+                .withOnlyTheseFields("x");
+    }
+
     @Test
     public void succeed_whenAUsedFieldHasUnusedStaticFinalMembers_givenAllFieldsarningIsSuppressed() {
         EqualsVerifier.forClass(IndirectStaticFinalContainer.class)
