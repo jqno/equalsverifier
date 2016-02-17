@@ -21,7 +21,6 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -194,17 +193,17 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .withOnlyTheseFields("thisFieldDoesNotExist");
     }
 
-    @Test@Ignore
+    @Test
     public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
-        expectException(IllegalArgumentException.class, "Only field", "x", "is also ignored");
+        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withOnlyTheseFields("x")
                 .withIgnoredFields("x");
     }
 
-    @Test@Ignore
+    @Test
     public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
-        expectException(IllegalArgumentException.class, "Only field", "x", "is also ignored");
+        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("x")
                 .withOnlyTheseFields("x");
