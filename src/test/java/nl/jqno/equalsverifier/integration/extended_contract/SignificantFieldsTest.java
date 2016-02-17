@@ -45,7 +45,6 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -66,14 +65,12 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenATransientFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
     @Test
     public void succeed_whenAStaticFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneStaticFieldUnusedColorPoint.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -101,7 +98,6 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     @Test
     public void succeed_whenNoFieldsAreAdded_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(NoFieldsAdded.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -165,6 +161,52 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("thisFieldDoesNotExist");
+    }
+
+    @Test
+    public void succeed_whenAFieldIsUnused_givenTheUsedFieldsAreSpecified() {
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x", "y")
+                .verify();
+    }
+
+    @Test
+    public void fail_whenAllFieldsAreUsed_givenTheUsedFieldsAreSpecifiedButWeMissedOne() {
+        expectFailure("Significant fields", "equals should not use", "y", "but it does");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("x")
+                .verify();
+    }
+
+    @Test
+    public void fail_whenAFieldIsUnused_givenTheUnusedFieldIsAlsoSpecified() {
+        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x", "y", "colorNotUsed")
+                .verify();
+    }
+
+    @Test
+    public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
+        expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("thisFieldDoesNotExist");
+    }
+
+    @Test
+    public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
+        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withOnlyTheseFields("x")
+                .withIgnoredFields("x");
+    }
+
+    @Test
+    public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
+        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withIgnoredFields("x")
+                .withOnlyTheseFields("x");
     }
 
     @Test
