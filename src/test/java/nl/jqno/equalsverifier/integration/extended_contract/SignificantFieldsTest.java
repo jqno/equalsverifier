@@ -187,7 +187,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
         expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)

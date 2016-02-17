@@ -226,29 +226,38 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
-        config = config.withIgnoredFields(Arrays.asList(fields));
-
+        List<String> ignoredFields = Arrays.asList(fields);
         Set<String> actualFieldNames = new HashSet<>();
         for (Field field : FieldIterable.of(config.getType())) {
             actualFieldNames.add(field.getName());
         }
-        for (String field : config.getIgnoredFields()) {
+        for (String field : ignoredFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
             }
         }
 
+        config = config.withIgnoredFields(ignoredFields);
         return this;
     }
 
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
-        List<String> specifiedFields = Arrays.asList(fields);
         List<String> ignoredFields = new ArrayList<>();
+        Set<String> specifiedFields = new HashSet<>(Arrays.asList(fields));
+        Set<String> actualFieldNames = new HashSet<>();
         for (Field f : FieldIterable.of(config.getType())) {
-            if (!specifiedFields.contains(f.getName())) {
-                ignoredFields.add(f.getName());
+            String name = f.getName();
+            actualFieldNames.add(name);
+            if (!specifiedFields.contains(name)) {
+                ignoredFields.add(name);
             }
         }
+        for (String field : specifiedFields) {
+            if (!actualFieldNames.contains(field)) {
+                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
+
         config = config.withIgnoredFields(ignoredFields);
         return this;
     }
