@@ -164,14 +164,14 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .withIgnoredFields("thisFieldDoesNotExist");
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenAFieldIsUnused_givenTheUsedFieldsAreSpecified() {
         EqualsVerifier.forClass(OneFieldUnused.class)
                 .withOnlyTheseFields("x", "y")
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void fail_whenAllFieldsAreUsed_givenTheUsedFieldsAreSpecifiedButWeMissedOne() {
         expectFailure("Significant fields", "equals should not use", "y", "but it does");
         EqualsVerifier.forClass(FinalPoint.class)
@@ -179,7 +179,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void fail_whenAFieldIsUnused_givenTheUnusedFieldIsAlsoSpecified() {
         expectFailure("Significant fields", "equals does not use", "colorNotUsed");
         EqualsVerifier.forClass(OneFieldUnused.class)

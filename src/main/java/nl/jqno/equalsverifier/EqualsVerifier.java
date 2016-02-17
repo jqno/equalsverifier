@@ -226,7 +226,7 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
-        config = config.withIgnoredFields(fields);
+        config = config.withIgnoredFields(Arrays.asList(fields));
 
         Set<String> actualFieldNames = new HashSet<>();
         for (Field field : FieldIterable.of(config.getType())) {
@@ -242,6 +242,14 @@ public final class EqualsVerifier<T> {
     }
 
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
+        List<String> specifiedFields = Arrays.asList(fields);
+        List<String> ignoredFields = new ArrayList<>();
+        for (Field f : FieldIterable.of(config.getType())) {
+            if (!specifiedFields.contains(f.getName())) {
+                ignoredFields.add(f.getName());
+            }
+        }
+        config = config.withIgnoredFields(ignoredFields);
         return this;
     }
 

@@ -90,8 +90,8 @@ public final class Configuration<T> {
         return Collections.unmodifiableList(unequalExamples);
     }
 
-    public Configuration<T> withIgnoredFields(String[] value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, new HashSet<>(Arrays.asList(value)),
+    public Configuration<T> withIgnoredFields(List<String> value) {
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, new HashSet<>(value),
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
