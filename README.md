@@ -61,7 +61,4 @@ Project structure
 
 Disclaimer
 ---
-
-For license information, see `LICENSE.TXT`.
-
 Copyright 2009-2016 Jan Ouwens
