@@ -26,8 +26,8 @@ import org.junit.rules.ExpectedException;
 
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.classes;
+import static nl.jqno.equalsverifier.internal.Util.objects;
 
 public class AbstractReflectiveGenericFactoryTest {
     @Rule

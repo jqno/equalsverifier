@@ -23,8 +23,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.*;
 
 /**
  * Implementation of {@link PrefabValueFactory} that creates instances of
@@ -75,7 +74,7 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
     }
 
     private Object createWith(Object column, Object row, Object value) {
-        Class<?> type = ConditionalInstantiator.forName(typeName);
+        Class<?> type = classForName(typeName);
         Object result = createEmpty();
         invoke(type, result, "put", classes(Object.class, Object.class, Object.class), objects(column, row, value));
         return result;

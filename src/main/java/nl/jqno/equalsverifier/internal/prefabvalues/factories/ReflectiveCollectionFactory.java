@@ -22,8 +22,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.*;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates collections
@@ -76,7 +75,7 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
 
     private Object createWith(Object value) {
         Object result = createEmpty();
-        invoke(ConditionalInstantiator.forName(typeName), result, "add", classes(Object.class), objects(value));
+        invoke(classForName(typeName), result, "add", classes(Object.class), objects(value));
         return result;
     }
 }

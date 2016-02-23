@@ -22,6 +22,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import static nl.jqno.equalsverifier.internal.Util.classForName;
+
 /**
  * Allows instantiation of classes that may or may not be present on the classpath.
  *
@@ -47,7 +49,7 @@ public class ConditionalInstantiator {
      * @return The corresponding class object if the type exists; null otherwise.
      */
     public Class<?> resolve() {
-        return forName(fullyQualifiedClassName);
+        return classForName(fullyQualifiedClassName);
     }
 
     /**
@@ -153,41 +155,6 @@ public class ConditionalInstantiator {
         }
         catch (Exception e) {
             throw new ReflectionException(e);
-        }
-    }
-
-    /**
-     * Helper method to create an array of Classes.
-     *
-     * @param classes The classes to construct an array out of.
-     * @return An array with the given classes.
-     */
-    public static Class<?>[] classes(Class<?>... classes) {
-        return classes;
-    }
-
-    /**
-     * Helper method to create an array of Objects.
-     *
-     * @param objects The objects to construct an array out of.
-     * @return An array with the given objects.
-     */
-    public static Object[] objects(Object... objects) {
-        return objects;
-    }
-
-    /**
-     * Helper method to resolve a Class of a given name.
-     *
-     * @param className The fully qualified name of the class to resolve.
-     * @return The corresponding class if it exists, null otherwise.
-     */
-    public static Class<?> forName(String className) {
-        try {
-            return Class.forName(className);
-        }
-        catch (ClassNotFoundException e) {
-            return null;
         }
     }
 }
