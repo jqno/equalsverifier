@@ -20,9 +20,15 @@ import org.junit.Test;
 
 import java.util.GregorianCalendar;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.Assert.*;
 
 public class UtilTest {
+    @Test
+    public void coverTheConstructor() {
+        coverThePrivateConstructor(Util.class);
+    }
+
     @Test
     public void forNameReturnsClass_whenTypeExists() {
         Class<?> actual = Util.classForName("java.util.GregorianCalendar");
