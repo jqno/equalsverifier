@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static nl.jqno.equalsverifier.internal.Util.classForName;
+
 /**
  * Descriptions of the annotations that EqualsVerifier supports.
  *
@@ -89,13 +91,13 @@ public enum SupportedAnnotations implements Annotation {
         public boolean validate(AnnotationProperties properties) {
             try {
                 Type t = Type.getType(properties.getDescriptor());
-                Class<?> type = Class.forName(t.getClassName());
+                Class<?> type = classForName(t.getClassName());
                 AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, type, false);
                 boolean hasNonnullAnnotation = accessor.typeHas(NONNULL);
                 boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
                 return hasNonnullAnnotation && hasValidTypeQualifierDefault;
             }
-            catch (ClassNotFoundException | UnsupportedClassVersionError ignored) {
+            catch (UnsupportedClassVersionError ignored) {
                 return false;
             }
         }
