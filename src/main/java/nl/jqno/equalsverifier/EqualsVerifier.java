@@ -242,6 +242,16 @@ public final class EqualsVerifier<T> {
         return this;
     }
 
+    /**
+     * Signals that all given fields, and <em>only</em> the given fields, are
+     * relevant for the {@code equals} contract. {@code EqualsVerifier} will
+     * fail if one of these fields does not affect the outcome of
+     * {@code equals}, and it will fail if a field that isn't listed here, does
+     * affect the outcome of {@code equals}.
+     *
+     * @param fields Fields that should be ignored.
+     * @return {@code this}, for easy method chaining.
+     */
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
         checkIgnoredFields();
         List<String> ignoredFields = new ArrayList<>();
