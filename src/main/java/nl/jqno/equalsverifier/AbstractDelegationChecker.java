@@ -71,9 +71,9 @@ class AbstractDelegationChecker<T> implements Checker {
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
             TypeTag tag = TypeTag.of(field, typeTag);
-            Object instance = safelyGetInstance(tag);
+            Object instance = prefabValues.giveRed(tag);
             if (instance != null) {
-                Object copy = safelyCopyInstance(instance);
+                Object copy = prefabValues.giveBlack(tag);
                 checkAbstractMethods(tag.getType(), instance, copy, true);
             }
         }
@@ -107,29 +107,6 @@ class AbstractDelegationChecker<T> implements Checker {
                 isEqualsAbstract ? "equals" : "hashCode",
                 isEqualsAbstract ? "hashCode" : "equals",
                 bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
-    }
-
-    private Object safelyGetInstance(TypeTag tag) {
-        Object result = prefabValues.giveRed(tag);
-        if (result != null) {
-            return result;
-        }
-        try {
-            return Instantiator.of(tag.getType()).instantiate();
-        }
-        catch (Exception ignored) {
-            // If it fails for some reason, any reason, just return null.
-            return null;
-        }
-    }
-
-    private Object safelyCopyInstance(Object o) {
-        try {
-            return ObjectAccessor.of(o).copy();
-        }
-        catch (Throwable ignored) {
-            return o;
-        }
     }
 
     @SuppressFBWarnings(value = "DE_MIGHT_IGNORE", justification = "These exceptions will re-occur and be handled later.")
