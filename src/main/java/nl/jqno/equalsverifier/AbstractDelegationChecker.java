@@ -45,14 +45,8 @@ class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        T instance = this.getRedPrefabValue(typeTag);
-        if (instance == null) {
-            instance = classAccessor.getRedObject(typeTag);
-        }
-        T copy = this.getBlackPrefabValue(typeTag);
-        if (copy == null) {
-            copy = classAccessor.getBlackObject(typeTag);
-        }
+        T instance = prefabValues.giveRed(typeTag);
+        T copy = prefabValues.giveBlack(typeTag);
         checkAbstractDelegation(instance, copy);
 
         checkAbstractDelegationInSuper();
@@ -102,14 +96,8 @@ class AbstractDelegationChecker<T> implements Checker {
             return;
         }
 
-        Object instance = getRedPrefabValue(new TypeTag(superclass));
-        if (instance == null) {
-            instance = superAccessor.getRedObject(typeTag);
-        }
-        Object copy = getBlackPrefabValue(typeTag);
-        if (copy == null) {
-            copy = superAccessor.getBlackObject(typeTag);
-        }
+        Object instance = prefabValues.giveRed(new TypeTag(superclass));
+        Object copy = prefabValues.giveBlack(typeTag);
         checkAbstractMethods(superclass, instance, copy, false);
     }
 
@@ -121,18 +109,8 @@ class AbstractDelegationChecker<T> implements Checker {
                 bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
     }
 
-    @SuppressWarnings("unchecked")
-    private <S> S getRedPrefabValue(TypeTag tag) {
-        return (S)prefabValues.giveRed(tag);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <S> S getBlackPrefabValue(TypeTag tag) {
-        return (S)prefabValues.giveBlack(tag);
-    }
-
     private Object safelyGetInstance(TypeTag tag) {
-        Object result = getRedPrefabValue(tag);
+        Object result = prefabValues.giveRed(tag);
         if (result != null) {
             return result;
         }
