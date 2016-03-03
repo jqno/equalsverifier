@@ -45,14 +45,8 @@ class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        T instance = this.getRedPrefabValue(typeTag);
-        if (instance == null) {
-            instance = classAccessor.getRedObject(typeTag);
-        }
-        T copy = this.getBlackPrefabValue(typeTag);
-        if (copy == null) {
-            copy = classAccessor.getBlackObject(typeTag);
-        }
+        T instance = prefabValues.giveRed(typeTag);
+        T copy = prefabValues.giveBlack(typeTag);
         checkAbstractDelegation(instance, copy);
 
         checkAbstractDelegationInSuper();
@@ -77,9 +71,9 @@ class AbstractDelegationChecker<T> implements Checker {
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
             TypeTag tag = TypeTag.of(field, typeTag);
-            Object instance = safelyGetInstance(tag);
+            Object instance = prefabValues.giveRed(tag);
             if (instance != null) {
-                Object copy = safelyCopyInstance(instance);
+                Object copy = prefabValues.giveBlack(tag);
                 checkAbstractMethods(tag.getType(), instance, copy, true);
             }
         }
@@ -102,14 +96,8 @@ class AbstractDelegationChecker<T> implements Checker {
             return;
         }
 
-        Object instance = getRedPrefabValue(new TypeTag(superclass));
-        if (instance == null) {
-            instance = superAccessor.getRedObject(typeTag);
-        }
-        Object copy = getBlackPrefabValue(typeTag);
-        if (copy == null) {
-            copy = superAccessor.getBlackObject(typeTag);
-        }
+        Object instance = prefabValues.giveRed(new TypeTag(superclass));
+        Object copy = prefabValues.giveBlack(typeTag);
         checkAbstractMethods(superclass, instance, copy, false);
     }
 
@@ -119,39 +107,6 @@ class AbstractDelegationChecker<T> implements Checker {
                 isEqualsAbstract ? "equals" : "hashCode",
                 isEqualsAbstract ? "hashCode" : "equals",
                 bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
-    }
-
-    @SuppressWarnings("unchecked")
-    private <S> S getRedPrefabValue(TypeTag tag) {
-        return (S)prefabValues.giveRed(tag);
-    }
-
-    @SuppressWarnings("unchecked")
-    private <S> S getBlackPrefabValue(TypeTag tag) {
-        return (S)prefabValues.giveBlack(tag);
-    }
-
-    private Object safelyGetInstance(TypeTag tag) {
-        Object result = getRedPrefabValue(tag);
-        if (result != null) {
-            return result;
-        }
-        try {
-            return Instantiator.of(tag.getType()).instantiate();
-        }
-        catch (Exception ignored) {
-            // If it fails for some reason, any reason, just return null.
-            return null;
-        }
-    }
-
-    private Object safelyCopyInstance(Object o) {
-        try {
-            return ObjectAccessor.of(o).copy();
-        }
-        catch (Throwable ignored) {
-            return o;
-        }
     }
 
     @SuppressFBWarnings(value = "DE_MIGHT_IGNORE", justification = "These exceptions will re-occur and be handled later.")

@@ -15,17 +15,17 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
+import static nl.jqno.equalsverifier.internal.Util.classes;
+import static nl.jqno.equalsverifier.internal.Util.objects;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates EnumMaps
@@ -48,13 +48,7 @@ public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<E
     @SuppressWarnings("unchecked")
     private EnumMap createWith(Object key, Object value) {
         Map result = new HashMap();
-        try {
-            Method add = Map.class.getMethod("put", Object.class, Object.class);
-            add.invoke(result, key, value);
-        }
-        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionException(e);
-        }
+        invoke(Map.class, result, "put", classes(Object.class, Object.class), objects(key, value));
         return new EnumMap<>(result);
     }
 }

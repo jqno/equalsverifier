@@ -16,19 +16,16 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.classes;
+import static nl.jqno.equalsverifier.internal.Util.objects;
 
 /**
  * Implementation of {@link PrefabValueFactory} that creates instances of
@@ -53,13 +50,7 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
     @SuppressWarnings("rawtypes")
     private Object createWith(Object key, Object value) {
         Map map = new HashMap();
-        try {
-            Method add = Map.class.getMethod("put", Object.class, Object.class);
-            add.invoke(map, key, value);
-        }
-        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionException(e);
-        }
+        invoke(Map.class, map, "put", classes(Object.class, Object.class), objects(key, value));
 
         ConditionalInstantiator ci = new ConditionalInstantiator(TYPE_NAME);
         return ci.callFactory("create", classes(Map.class), objects(map));

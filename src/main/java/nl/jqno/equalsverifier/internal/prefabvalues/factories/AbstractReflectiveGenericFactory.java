@@ -15,9 +15,12 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -75,5 +78,15 @@ public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValue
         }
 
         return tag;
+    }
+
+    protected void invoke(Class<?> type, Object receiver, String methodName, Class<?>[] classes, Object[] values) {
+        try {
+            Method method = type.getMethod(methodName, classes);
+            method.invoke(receiver, values);
+        }
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            throw new ReflectionException(e);
+        }
     }
 }

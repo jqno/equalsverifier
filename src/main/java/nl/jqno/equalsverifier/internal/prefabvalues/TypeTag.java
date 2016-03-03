@@ -16,10 +16,11 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 import java.lang.reflect.*;
 import java.util.*;
+
+import static nl.jqno.equalsverifier.internal.Util.classForName;
 
 /**
  * Represents a generic type, including raw type and generic type parameters.
@@ -85,13 +86,7 @@ public final class TypeTag {
             GenericArrayType gat = (GenericArrayType)type;
             TypeTag tag = resolve(gat.getGenericComponentType(), enclosingType);
             String arrayTypeName = "[L" + tag.getType().getName() + ";";
-            Class<?> arrayType;
-            try {
-                arrayType = Class.forName(arrayTypeName);
-            }
-            catch (ClassNotFoundException e) {
-                throw new ReflectionException("Can't find type " + arrayTypeName);
-            }
+            Class<?> arrayType = classForName(arrayTypeName);
             return new TypeTag(arrayType, tag.getGenericTypes());
         }
         if (type instanceof WildcardType) {

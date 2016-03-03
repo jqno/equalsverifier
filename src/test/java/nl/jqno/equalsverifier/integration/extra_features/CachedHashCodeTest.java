@@ -403,14 +403,14 @@ public class CachedHashCodeTest extends IntegrationTestBase {
 
         @Override
         public final int hashCode() {
-            if (cachedHashCode == 0) {
-                cachedHashCode = calcHashCode();
-            }
-            return cachedHashCode;
+            return calcHashCode();
         }
 
         private int calcHashCode() {
-            return name.hashCode();
+            if (cachedHashCode == 0) {
+                cachedHashCode = name.hashCode();
+            }
+            return cachedHashCode;
         }
     }
 

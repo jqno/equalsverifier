@@ -16,17 +16,13 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.*;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates collections
@@ -78,18 +74,8 @@ public abstract class ReflectiveCollectionFactory<T> extends AbstractReflectiveG
     }
 
     private Object createWith(Object value) {
-        Class<?> type = ConditionalInstantiator.forName(typeName);
-        if (type == null) {
-            return null;
-        }
         Object result = createEmpty();
-        try {
-            Method add = type.getMethod("add", Object.class);
-            add.invoke(result, value);
-        }
-        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionException(e);
-        }
+        invoke(classForName(typeName), result, "add", classes(Object.class), objects(value));
         return result;
     }
 }

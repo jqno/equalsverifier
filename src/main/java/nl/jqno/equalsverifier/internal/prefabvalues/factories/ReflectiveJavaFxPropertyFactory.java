@@ -22,8 +22,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.classes;
+import static nl.jqno.equalsverifier.internal.Util.objects;
 
 /**
  * Implementation of {@link PrefabValueFactory} that specializes in JavaFX

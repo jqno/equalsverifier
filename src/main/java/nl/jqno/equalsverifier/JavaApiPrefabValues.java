@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.*;
+import static nl.jqno.equalsverifier.internal.Util.*;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
@@ -274,7 +274,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
         String optional = "java.util.Optional";
-        addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional));
 
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
@@ -302,11 +302,11 @@ public final class JavaApiPrefabValues {
         addJavaFxProperty("DoubleProperty", "SimpleDoubleProperty", double.class);
         addJavaFxProperty("FloatProperty", "SimpleFloatProperty", float.class);
         addJavaFxProperty("IntegerProperty", "SimpleIntegerProperty", int.class);
-        addJavaFxProperty("ListProperty", "SimpleListProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList"));
+        addJavaFxProperty("ListProperty", "SimpleListProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList"));
         addJavaFxProperty("LongProperty", "SimpleLongProperty", long.class);
-        addJavaFxProperty("MapProperty", "SimpleMapProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap"));
+        addJavaFxProperty("MapProperty", "SimpleMapProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap"));
         addJavaFxProperty("ObjectProperty", "SimpleObjectProperty", Object.class);
-        addJavaFxProperty("SetProperty", "SimpleSetProperty", forName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
+        addJavaFxProperty("SetProperty", "SimpleSetProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
         addJavaFxProperty("StringProperty", "SimpleStringProperty", String.class);
     }
 
@@ -319,7 +319,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
         addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
-        addCopiedGuavaCollection("ImmutableSortedMultiset", forName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
+        addCopiedGuavaCollection("ImmutableSortedMultiset", classForName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
     }
 
     private void addGoogleGuavaMultimapCollectionsClasses() {
@@ -332,8 +332,8 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("LinkedListMultimap", "LinkedListMultimap");
         addNewGuavaMap("LinkedHashMultimap", "LinkedHashMultimap");
         addNewGuavaMap("TreeMultimap", "TreeMultimap", OBJECT_COMPARATOR);
-        addCopiedGuavaCollection("ImmutableListMultimap", forName(GUAVA_PACKAGE + "Multimap"));
-        addCopiedGuavaCollection("ImmutableSetMultimap", forName(GUAVA_PACKAGE + "Multimap"));
+        addCopiedGuavaCollection("ImmutableListMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
+        addCopiedGuavaCollection("ImmutableSetMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
 
         ConditionalInstantiator ci = new ConditionalInstantiator(GUAVA_PACKAGE + "Multimap");
         addCopiedGuavaCollection("ImmutableMultimap", "ImmutableListMultimap", ci.resolve(), ci.resolve(), "copyOf");
@@ -345,15 +345,15 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("HashBiMap", "HashBiMap");
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
-        addFactory(forName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
+        addFactory(classForName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
     }
 
     private void addGoogleGuavaTableCollectionClasses() {
         addNewGuavaTable("Table", "HashBasedTable");
         addNewGuavaTable("HashBasedTable", "HashBasedTable");
         addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
-        addCopiedGuavaCollection("ArrayTable", forName(GUAVA_PACKAGE + "Table"), "create");
-        addCopiedGuavaCollection("ImmutableTable", forName(GUAVA_PACKAGE + "Table"));
+        addCopiedGuavaCollection("ArrayTable", classForName(GUAVA_PACKAGE + "Table"), "create");
+        addCopiedGuavaCollection("ImmutableTable", classForName(GUAVA_PACKAGE + "Table"));
     }
 
     private void addGoogleGuavaRegularCollectionsClasses() {
@@ -385,7 +385,7 @@ public final class JavaApiPrefabValues {
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
 
         String optional = "com.google.common.base.Optional";
-        addFactory(forName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional));
     }
 
     private void addJodaTimeClasses() {
@@ -423,19 +423,19 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
         String className = JAVAFX_COLLECTIONS_PACKAGE + name;
-        addFactory(forName(className),
+        addFactory(classForName(className),
                 new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
-        addFactory(forName(JAVAFX_PROPERTY_PACKAGE + declaredType),
+        addFactory(classForName(JAVAFX_PROPERTY_PACKAGE + declaredType),
                 new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
     }
 
     private <T> void addNewGuavaCollection(String declaredType, String actualType) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
         addFactory(type, factory);
@@ -443,7 +443,7 @@ public final class JavaApiPrefabValues {
 
     private <T, U> void addNewGuavaCollection(String declaredType, String actualType, Class<U> parameterType, U parameterValue) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethodWithParameter(GUAVA_PACKAGE + actualType, "create", parameterType, parameterValue);
         addFactory(type, factory);
@@ -451,14 +451,14 @@ public final class JavaApiPrefabValues {
 
     private <T> void addNewGuavaMap(String declaredType, String actualType) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveMapFactory<T> factory = ReflectiveMapFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
         addFactory(type, factory);
     }
 
     private <T> void addNewGuavaMap(String declaredType, String actualType, Comparator<Object> comparator) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveMapFactory<T> factory =
                 ReflectiveMapFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
         addFactory(type, factory);
@@ -466,7 +466,7 @@ public final class JavaApiPrefabValues {
 
     private <T> void addNewGuavaTable(String declaredType, String actualType, Comparator<Object> comparator) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveGuavaTableFactory<T> factory =
                 ReflectiveGuavaTableFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
         addFactory(type, factory);
@@ -474,7 +474,7 @@ public final class JavaApiPrefabValues {
 
     private <T> void addNewGuavaTable(String declaredType, String actualType) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)forName(GUAVA_PACKAGE + declaredType);
+        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveGuavaTableFactory<T> factory =
                 ReflectiveGuavaTableFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
         addFactory(type, factory);
@@ -497,7 +497,7 @@ public final class JavaApiPrefabValues {
             Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
 
         String className = GUAVA_PACKAGE + actualName;
-        addFactory(forName(GUAVA_PACKAGE + declaredName),
+        addFactory(classForName(GUAVA_PACKAGE + declaredName),
                 new ReflectiveCollectionCopyFactory(className, declaredCopyFrom, actualCopyFrom, className, copyMethodName));
     }
 }

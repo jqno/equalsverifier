@@ -26,8 +26,8 @@ import org.junit.Test;
 
 import java.util.*;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.classes;
+import static nl.jqno.equalsverifier.internal.Util.objects;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("rawtypes")

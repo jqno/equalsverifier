@@ -16,18 +16,14 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Comparator;
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.classes;
-import static nl.jqno.equalsverifier.internal.ConditionalInstantiator.objects;
+import static nl.jqno.equalsverifier.internal.Util.*;
 
 /**
  * Implementation of {@link PrefabValueFactory} that creates instances of
@@ -78,18 +74,9 @@ public abstract class ReflectiveGuavaTableFactory<T> extends AbstractReflectiveG
     }
 
     private Object createWith(Object column, Object row, Object value) {
-        Class<?> type = ConditionalInstantiator.forName(typeName);
-        if (type == null) {
-            return null;
-        }
+        Class<?> type = classForName(typeName);
         Object result = createEmpty();
-        try {
-            Method add = type.getMethod("put", Object.class, Object.class, Object.class);
-            add.invoke(result, column, row, value);
-        }
-        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionException(e);
-        }
+        invoke(type, result, "put", classes(Object.class, Object.class, Object.class), objects(column, row, value));
         return result;
     }
 }
