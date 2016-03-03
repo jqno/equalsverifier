@@ -150,7 +150,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5</version>
+                <version>3.5.1</version>
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
@@ -299,7 +299,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.5</version>
+                <version>2.6</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -371,12 +371,12 @@ limitations under the License.
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.16</version>
+                    <version>2.17</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.10.1</version>
+                            <version>6.16.1</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -384,7 +384,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.0.3</version>
                 </plugin>
             </plugins>
         </pluginManagement>
