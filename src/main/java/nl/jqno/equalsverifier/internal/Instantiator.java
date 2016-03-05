@@ -16,13 +16,14 @@
 package nl.jqno.equalsverifier.internal;
 
 import net.bytebuddy.ByteBuddy;
-import net.bytebuddy.NamingStrategy;
-import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 import java.lang.reflect.Modifier;
+
+import static nl.jqno.equalsverifier.internal.Util.classForName;
 
 /**
  * Instantiates objects of a given class.
@@ -54,7 +55,7 @@ public final class Instantiator<T> {
      */
     public static <T> Instantiator<T> of(Class<T> type) {
         if (Modifier.isAbstract(type.getModifiers())) {
-            return new Instantiator<>(createDynamicSubclass(type));
+            return new Instantiator<>(giveDynamicSubclass(type));
         }
         return new Instantiator<>(type);
     }
@@ -78,33 +79,28 @@ public final class Instantiator<T> {
      * @return An instance of an anonymous subclass of T.
      */
     public T instantiateAnonymousSubclass() {
-        Class<T> proxyClass = createDynamicSubclass(type);
+        Class<T> proxyClass = giveDynamicSubclass(type);
         return objenesis.newInstance(proxyClass);
     }
 
     @SuppressWarnings("unchecked")
-    private static <S> Class<S> createDynamicSubclass(Class<S> superclass) {
-        DynamicType.Builder<S> builder = createBuilder(superclass);
-
+    private static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
         boolean isSystemClass = superclass.getName().startsWith("java");
         String namePrefix = isSystemClass ? "$" : "";
-        ClassLoader classLoader = isSystemClass ? Instantiator.class.getClassLoader() : superclass.getClassLoader();
+        String name = namePrefix + superclass.getName() + "$$DynamicSubclass";
 
-        return (Class<S>)builder
-                .name(new NamingStrategy.Fixed(namePrefix + superclass.getName() + "$$DynamicSubclass"))
+        Class<S> existsAlready = (Class<S>)classForName(name);
+        if (existsAlready != null) {
+            return existsAlready;
+        }
+
+        ClassLoader classLoader = isSystemClass ? Instantiator.class.getClassLoader() : superclass.getClassLoader();
+        return (Class<S>)new ByteBuddy()
+                .with(TypeValidation.DISABLED)
+                .subclass(superclass)
+                .name(name)
                 .make()
                 .load(classLoader, ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
-    }
-
-    @SuppressWarnings("unchecked")
-    private static <S> DynamicType.Builder<S> createBuilder(Class<S> superclass) {
-        ByteBuddy byteBuddy = new ByteBuddy();
-        if (superclass.isInterface()) {
-            return (DynamicType.Builder<S>)byteBuddy.subclass(Object.class).implement(superclass);
-        }
-        else {
-            return byteBuddy.subclass(superclass);
-        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010,2012 Jan Ouwens
+ * Copyright 2010,2012,2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -79,5 +79,13 @@ public class InstantiatorTest {
     public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
         Instantiator instantiator = Instantiator.of(List.class);
         instantiator.instantiateAnonymousSubclass();
+    }
+
+    @Test
+    public void instantiateTheSameSubclass() {
+        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Class<?> expected = instantiator.instantiateAnonymousSubclass().getClass();
+        Class<?> actual = instantiator.instantiateAnonymousSubclass().getClass();
+        assertEquals(expected, actual);
     }
 }
