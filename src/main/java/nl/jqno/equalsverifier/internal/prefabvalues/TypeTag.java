@@ -90,7 +90,14 @@ public final class TypeTag {
             return new TypeTag(arrayType, tag.getGenericTypes());
         }
         if (type instanceof WildcardType) {
-            return new TypeTag(Wildcard.class);
+            WildcardType wt = (WildcardType)type;
+            for (Type b : wt.getLowerBounds()) {
+                return resolve(b, enclosingType);
+            }
+            for (Type b : wt.getUpperBounds()) {
+                return resolve(b, enclosingType);
+            }
+            return new TypeTag(Object.class);
         }
         if (type instanceof java.lang.reflect.TypeVariable) {
             Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
