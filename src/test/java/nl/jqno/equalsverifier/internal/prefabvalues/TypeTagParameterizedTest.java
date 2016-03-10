@@ -73,10 +73,11 @@ public class TypeTagParameterizedTest<T> {
                                         new TypeTag(Float.class)))) },
                 { "rawMapField", new TypeTag(Map.class) },
                 { "fieldWithWildcardParameter", new TypeTag(List.class, new TypeTag(Object.class)) },
-                { "fieldWithExtendingWildcard", new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(TypeTag.TypeVariable.class))) },
+                { "fieldWithExtendingWildcard", new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class))) },
                 { "fieldWithSuperingWildcard", new TypeTag(List.class, new TypeTag(Point.class)) },
                 { "fieldWithGenericArrayParameter", new TypeTag(Class[].class, new TypeTag(String.class)) },
-                { "fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(TypeTag.TypeVariable.class)) },
+                { "fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(Object.class)) },
+                // See TypeTagTest for fieldWithBoundedTypeVariable
                 { "primitiveField", new TypeTag(int.class) },
                 { "arrayField", new TypeTag(String[].class) }
         });

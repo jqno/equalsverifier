@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -111,6 +112,22 @@ public class TypeTagTest {
         assertEquals(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))), actual);
     }
 
+    @Test
+    public void correctnessOfBoundedTypeVariable() throws NoSuchFieldException {
+        Field field = BoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        TypeTag expected = new TypeTag(Point.class);
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void correctnessOfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
+        Field field = RecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertEquals(expected, actual);
+    }
+
     @SuppressWarnings("unused")
     static class ContainerContainer {
         Container<String> stringContainer;
@@ -122,5 +139,17 @@ public class TypeTagTest {
         List<T> ts;
         T[] tarr;
         List<List<T>> tss;
+    }
+
+    @SuppressWarnings("unused")
+    static class BoundedTypeVariable<T extends Point> {
+        private T fieldWithBoundedTypeVariable;
+
+    }
+
+    @SuppressWarnings("unused")
+    static class RecursiveBoundedTypeVariable<T extends Comparable<T>> {
+        private T fieldWithBoundedTypeVariable;
+
     }
 }

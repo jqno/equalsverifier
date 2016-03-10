@@ -66,10 +66,10 @@ public final class TypeTag {
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field, TypeTag enclosingType) {
-        return resolve(field.getGenericType(), enclosingType);
+        return resolve(field.getGenericType(), enclosingType, false);
     }
 
-    private static TypeTag resolve(Type type, TypeTag enclosingType) {
+    private static TypeTag resolve(Type type, TypeTag enclosingType, boolean shortCircuitRecursiveTypeBound) {
         List<TypeTag> nestedTags = new ArrayList<>();
         if (type instanceof Class) {
             return new TypeTag((Class<?>)type, nestedTags);
@@ -78,13 +78,13 @@ public final class TypeTag {
             ParameterizedType pt = (ParameterizedType)type;
             Type[] typeArgs = pt.getActualTypeArguments();
             for (Type typeArg : typeArgs) {
-                nestedTags.add(resolve(typeArg, enclosingType));
+                nestedTags.add(resolve(typeArg, enclosingType, shortCircuitRecursiveTypeBound));
             }
             return new TypeTag((Class<?>)pt.getRawType(), nestedTags);
         }
         if (type instanceof GenericArrayType) {
             GenericArrayType gat = (GenericArrayType)type;
-            TypeTag tag = resolve(gat.getGenericComponentType(), enclosingType);
+            TypeTag tag = resolve(gat.getGenericComponentType(), enclosingType, false);
             String arrayTypeName = "[L" + tag.getType().getName() + ";";
             Class<?> arrayType = classForName(arrayTypeName);
             return new TypeTag(arrayType, tag.getGenericTypes());
@@ -92,20 +92,26 @@ public final class TypeTag {
         if (type instanceof WildcardType) {
             WildcardType wt = (WildcardType)type;
             for (Type b : wt.getLowerBounds()) {
-                return resolve(b, enclosingType);
+                return resolve(b, enclosingType, false);
             }
             for (Type b : wt.getUpperBounds()) {
-                return resolve(b, enclosingType);
+                return resolve(b, enclosingType, false);
             }
             return new TypeTag(Object.class);
         }
         if (type instanceof java.lang.reflect.TypeVariable) {
+            java.lang.reflect.TypeVariable<?> tvt = (java.lang.reflect.TypeVariable<?>)type;
             Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
-            String typeVariable = ((java.lang.reflect.TypeVariable<?>)type).getName();
-            if (typeVariableLookup.containsKey(typeVariable)) {
-                return typeVariableLookup.get(typeVariable);
+            String typeVariableName = tvt.getName();
+            if (typeVariableLookup.containsKey(typeVariableName)) {
+                return typeVariableLookup.get(typeVariableName);
             }
-            return new TypeTag(TypeVariable.class);
+            for (Type b : tvt.getBounds()) {
+                if (!shortCircuitRecursiveTypeBound) {
+                    return resolve(b, enclosingType, true);
+                }
+            }
+            return new TypeTag(Object.class);
         }
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
