@@ -83,8 +83,8 @@ public final class TypeTag {
         if (type instanceof WildcardType) {
             return processWildcard((WildcardType)type, enclosingType);
         }
-        if (type instanceof java.lang.reflect.TypeVariable) {
-            return processTypeVariable((java.lang.reflect.TypeVariable<?>)type, enclosingType, shortCircuitRecursiveTypeBound);
+        if (type instanceof TypeVariable) {
+            return processTypeVariable((TypeVariable<?>)type, enclosingType, shortCircuitRecursiveTypeBound);
         }
         throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
@@ -119,7 +119,7 @@ public final class TypeTag {
         return new TypeTag(Object.class);
     }
 
-    private static TypeTag processTypeVariable(java.lang.reflect.TypeVariable<?> type, TypeTag enclosingType,
+    private static TypeTag processTypeVariable(TypeVariable<?> type, TypeTag enclosingType,
                 boolean shortCircuitRecursiveTypeBound) {
         Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
         String typeVariableName = type.getName();
@@ -135,7 +135,7 @@ public final class TypeTag {
     }
 
     private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
-        java.lang.reflect.TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
+        TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
         Map<String, TypeTag> lookup = new HashMap<>();
         if (enclosingType.getGenericTypes().size() == 0) {
             return lookup;
@@ -207,16 +207,6 @@ public final class TypeTag {
         }
         return s.toString();
     }
-
-    /**
-     * Represents a wildcard type parameter like {@code List<?>}.
-     */
-    public static final class Wildcard {}
-
-    /**
-     * Represents a variable type parameter like {@code List<T>}.
-     */
-    public static final class TypeVariable {}
 
     private static final class NullType {}
 }

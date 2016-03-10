@@ -56,7 +56,7 @@ public class ReflectiveGuavaEnumBiMapFactoryTest {
 
     @Test
     public void createWildcardEnumSet() {
-        TypeTag tag = new TypeTag(EnumBiMap.class, new TypeTag(TypeTag.Wildcard.class), new TypeTag(TypeTag.Wildcard.class));
+        TypeTag tag = new TypeTag(EnumBiMap.class, new TypeTag(Object.class), new TypeTag(Object.class));
         Tuple<?> tuple = factory.createValues(tag, prefabValues, emptyTypeStack);
 
         assertEquals(expectedRed, tuple.getRed());

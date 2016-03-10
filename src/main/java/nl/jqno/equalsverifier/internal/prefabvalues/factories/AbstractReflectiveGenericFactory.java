@@ -42,7 +42,7 @@ public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValue
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
         List<TypeTag> genericTypes = new ArrayList<>();
         for (TypeTag tag : source.getGenericTypes()) {
-            genericTypes.add(makeConcrete(tag));
+            genericTypes.add(tag);
         }
         return new TypeTag(type, genericTypes.toArray(new TypeTag[genericTypes.size()]));
     }
@@ -68,16 +68,7 @@ public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValue
             return OBJECT_TYPE_TAG;
         }
 
-        TypeTag innerTag = genericTypes.get(n);
-        return makeConcrete(innerTag);
-    }
-
-    private TypeTag makeConcrete(TypeTag tag) {
-        if (tag.getType().equals(TypeTag.Wildcard.class)) {
-            return OBJECT_TYPE_TAG;
-        }
-
-        return tag;
+        return genericTypes.get(n);
     }
 
     protected void invoke(Class<?> type, Object receiver, String methodName, Class<?>[] classes, Object[] values) {
