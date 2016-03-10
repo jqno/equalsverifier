@@ -39,7 +39,8 @@ public class TypeTagParameterizedTest<T> {
     @SuppressWarnings("unused") private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters = null;
     @SuppressWarnings({ "unused", "rawtypes" }) private final Map rawMapField = null;
     @SuppressWarnings("unused") private final List<?> fieldWithWildcardParameter = null;
-    @SuppressWarnings("unused") private final List<? extends Comparable<T>> fieldWithExtendingWildcard = null;
+    @SuppressWarnings("unused") private final List<? extends Comparable<T>> fieldWithExtendingWildcardWithTypeVariable = null;
+    @SuppressWarnings("unused") private final List<? extends Comparable<?>> fieldWithExtendingWildcardWithWildcard = null;
     @SuppressWarnings("unused") private final List<? super Point> fieldWithSuperingWildcard = null;
     @SuppressWarnings("unused") private final Class<String>[] fieldWithGenericArrayParameter = null;
     @SuppressWarnings("unused") private final List<T> fieldWithTypeVariable = null;
@@ -73,7 +74,8 @@ public class TypeTagParameterizedTest<T> {
                                         new TypeTag(Float.class)))) },
                 { "rawMapField", new TypeTag(Map.class) },
                 { "fieldWithWildcardParameter", new TypeTag(List.class, new TypeTag(Object.class)) },
-                { "fieldWithExtendingWildcard", new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class))) },
+                { "fieldWithExtendingWildcardWithTypeVariable", new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class))) },
+                { "fieldWithExtendingWildcardWithWildcard", new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class))) },
                 { "fieldWithSuperingWildcard", new TypeTag(List.class, new TypeTag(Point.class)) },
                 { "fieldWithGenericArrayParameter", new TypeTag(Class[].class, new TypeTag(String.class)) },
                 { "fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(Object.class)) },
