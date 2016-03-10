@@ -128,6 +128,14 @@ public class TypeTagTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void correctnessOfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
+        Field field = RecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
+        TypeTag actual = TypeTag.of(field, TypeTag.NULL);
+        assertEquals(expected, actual);
+    }
+
     @SuppressWarnings("unused")
     static class ContainerContainer {
         Container<String> stringContainer;
@@ -144,12 +152,15 @@ public class TypeTagTest {
     @SuppressWarnings("unused")
     static class BoundedTypeVariable<T extends Point> {
         private T fieldWithBoundedTypeVariable;
-
     }
 
     @SuppressWarnings("unused")
     static class RecursiveBoundedTypeVariable<T extends Comparable<T>> {
         private T fieldWithBoundedTypeVariable;
+    }
 
+    @SuppressWarnings("unused")
+    static class RecursiveBoundedWildcardTypeVariable<T extends Comparable<? super T>> {
+        private T fieldWithBoundedTypeVariable;
     }
 }

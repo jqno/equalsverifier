@@ -81,7 +81,7 @@ public final class TypeTag {
             return processGenericArray((GenericArrayType)type, enclosingType);
         }
         if (type instanceof WildcardType) {
-            return processWildcard((WildcardType)type, enclosingType);
+            return processWildcard((WildcardType)type, enclosingType, shortCircuitRecursiveTypeBound);
         }
         if (type instanceof TypeVariable) {
             return processTypeVariable((TypeVariable<?>)type, enclosingType, shortCircuitRecursiveTypeBound);
@@ -109,12 +109,13 @@ public final class TypeTag {
         return new TypeTag(arrayType, tag.getGenericTypes());
     }
 
-    private static TypeTag processWildcard(WildcardType type, TypeTag enclosingType) {
+    private static TypeTag processWildcard(WildcardType type, TypeTag enclosingType,
+                boolean shortCircuitRecursiveTypeBound) {
         for (Type b : type.getLowerBounds()) {
-            return resolve(b, enclosingType, false);
+            return resolve(b, enclosingType, shortCircuitRecursiveTypeBound);
         }
         for (Type b : type.getUpperBounds()) {
-            return resolve(b, enclosingType, false);
+            return resolve(b, enclosingType, shortCircuitRecursiveTypeBound);
         }
         return new TypeTag(Object.class);
     }
