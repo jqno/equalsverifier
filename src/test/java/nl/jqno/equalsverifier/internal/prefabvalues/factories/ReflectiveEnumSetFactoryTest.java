@@ -18,7 +18,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag.Wildcard;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +49,7 @@ public class ReflectiveEnumSetFactoryTest {
 
     @Test
     public void createWildcardEnumSet() {
-        TypeTag tag = new TypeTag(EnumSet.class, new TypeTag(Wildcard.class));
+        TypeTag tag = new TypeTag(EnumSet.class, new TypeTag(Object.class));
         Tuple<EnumSet> tuple = factory.createValues(tag, prefabValues, emptyTypeStack);
 
         assertEquals(EnumSet.of(TwoElementEnum.ONE), tuple.getRed());

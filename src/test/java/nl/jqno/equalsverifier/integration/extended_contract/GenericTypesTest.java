@@ -105,6 +105,18 @@ public class GenericTypesTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
+        EqualsVerifier.forClass(TypeVariableExtendsContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
+        EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class)
+                .verify();
+    }
+
     static final class ListContainer {
         private final List<Point> list;
 
@@ -486,5 +498,23 @@ public class GenericTypesTest extends IntegrationTestBase {
             }
             return result;
         }
+    }
+
+    @SuppressWarnings("unused")
+    static final class TypeVariableExtendsContainer<I extends Comparable<I>> {
+        private final I id;
+
+        protected TypeVariableExtendsContainer(I id) { this.id = id; }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    static final class TypeVariableExtendsWithSuperContainer<I extends Comparable<? super I>> {
+        private final I id;
+
+        protected TypeVariableExtendsWithSuperContainer(I id) { this.id = id; }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 }

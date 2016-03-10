@@ -36,8 +36,7 @@ public class ReflectiveMapFactoryTest {
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
-    private static final TypeTag WILDCARD_TYPETAG = new TypeTag(TypeTag.Wildcard.class);
-    private static final TypeTag WILDCARDMAP_TYPETAG = new TypeTag(Map.class, WILDCARD_TYPETAG, WILDCARD_TYPETAG);
+    private static final TypeTag WILDCARDMAP_TYPETAG = new TypeTag(Map.class, OBJECT_TYPETAG, OBJECT_TYPETAG);
     private static final TypeTag RAWMAP_TYPETAG = new TypeTag(Map.class);
 
     private static final ReflectiveMapFactory<Map> MAP_FACTORY = new StubMapPrefabValueFactory("java.util.HashMap");

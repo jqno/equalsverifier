@@ -20,7 +20,6 @@ import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag.Wildcard;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,8 +35,7 @@ public class ReflectiveCollectionFactoryTest {
     private static final TypeTag STRINGLIST_TYPETAG = new TypeTag(List.class, STRING_TYPETAG);
     private static final TypeTag STRINGSET_TYPETAG = new TypeTag(Set.class, STRING_TYPETAG);
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
-    private static final TypeTag WILDCARD_TYPETAG = new TypeTag(Wildcard.class);
-    private static final TypeTag WILDCARDLIST_TYPETAG = new TypeTag(List.class, WILDCARD_TYPETAG);
+    private static final TypeTag WILDCARDLIST_TYPETAG = new TypeTag(List.class, OBJECT_TYPETAG);
     private static final TypeTag RAWLIST_TYPETAG = new TypeTag(List.class);
 
     private static final ReflectiveCollectionFactory<List> LIST_FACTORY = new StubReflectiveCollectionFactory<>("java.util.ArrayList");
