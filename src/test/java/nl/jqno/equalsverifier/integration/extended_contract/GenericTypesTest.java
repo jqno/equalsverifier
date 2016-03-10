@@ -22,7 +22,6 @@ import com.google.common.collect.ImmutableMap;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -106,13 +105,13 @@ public class GenericTypesTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsContainer.class)
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class)
                 .verify();
