@@ -35,7 +35,7 @@ public interface PrefabValueFactory<T> {
      *          of the type tag.
      * @param typeStack A stack of {@link TypeTag}s that require tag in order
      *          to be created. Used for recursion detection.
-     * @return A "red" instance of {@link T}.
+     * @return A "red" instance of {@code T}.
      */
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack);
 }
