@@ -20,7 +20,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -127,7 +126,7 @@ public class RecursionTest extends IntegrationTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
         EqualsVerifier.forClass(StaticFinalNodeContainer.class)
                 .verify();
