@@ -89,6 +89,12 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveTuple() {
+        Tuple<Point> actual = pv.giveTuple(POINT_TAG);
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337)), actual);
+    }
+
+    @Test
     public void giveOtherWhenValueIsKnown() {
         Point red = pv.giveRed(POINT_TAG);
         Point black = pv.giveBlack(POINT_TAG);
