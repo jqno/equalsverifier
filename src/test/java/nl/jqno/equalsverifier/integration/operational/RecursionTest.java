@@ -126,6 +126,12 @@ public class RecursionTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
+        EqualsVerifier.forClass(StaticFinalNodeContainer.class)
+                .verify();
+    }
+
     static class Node {
         final Node node;
 
@@ -210,6 +216,17 @@ public class RecursionTest extends IntegrationTestBase {
         final ImmutableList<ImmutableListTree> tree;
 
         public ImmutableListTree(ImmutableList<ImmutableListTree> tree) { this.tree = tree; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    static final class StaticFinalNodeContainer {
+        private static final Node NODE = new Node(null);
+        private final int i;
+
+        public StaticFinalNodeContainer(int i) { this.i = i; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }

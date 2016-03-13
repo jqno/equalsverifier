@@ -16,8 +16,11 @@
 package nl.jqno.equalsverifier;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.FieldIterable;
+import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
@@ -71,11 +74,22 @@ class AbstractDelegationChecker<T> implements Checker {
     private void checkAbstractDelegationInFields() {
         for (Field field : FieldIterable.of(type)) {
             TypeTag tag = TypeTag.of(field, typeTag);
-            Object instance = prefabValues.giveRed(tag);
-            if (instance != null) {
-                Object copy = prefabValues.giveBlack(tag);
+            Tuple<?> tuple = safelyGetTuple(tag);
+            if (tuple != null) {
+                Object instance = tuple.getRed();
+                Object copy = tuple.getBlack();
                 checkAbstractMethods(tag.getType(), instance, copy, true);
             }
+        }
+    }
+
+    private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
+        try {
+            return prefabValues.giveTuple(tag);
+        }
+        catch (Exception ignored) {
+            // If it fails for some reason, any reason, just return null so we can skip the test.
+            return null;
         }
     }
 

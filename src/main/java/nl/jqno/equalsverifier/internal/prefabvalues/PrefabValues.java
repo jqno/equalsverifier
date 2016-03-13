@@ -67,7 +67,7 @@ public class PrefabValues {
     }
 
     /**
-     * Returns the "red" prefabricated value of the sepcified type.
+     * Returns the "red" prefabricated value of the specified type.
      *
      * It's always a different value from the "black" one.
      *
@@ -75,11 +75,11 @@ public class PrefabValues {
      *            parameters.
      */
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag, emptyStack()).getRed();
+        return this.<T>giveTuple(tag).getRed();
     }
 
     /**
-     * Returns the "black" prefabricated value of the sepcified type.
+     * Returns the "black" prefabricated value of the specified type.
      *
      * It's always a different value from the "red" one.
      *
@@ -87,7 +87,19 @@ public class PrefabValues {
      *            parameters.
      */
     public <T> T giveBlack(TypeTag tag) {
-        return this.<T>giveTuple(tag, emptyStack()).getBlack();
+        return this.<T>giveTuple(tag).getBlack();
+    }
+
+    /**
+     * Returns a tuple of two different prefabricated values of the specified
+     * type.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     */
+    public <T> Tuple<T> giveTuple(TypeTag tag) {
+        realizeCacheFor(tag, emptyStack());
+        return cache.getTuple(tag);
     }
 
     /**
@@ -105,7 +117,7 @@ public class PrefabValues {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag, emptyStack());
+        Tuple<T> tuple = giveTuple(tag);
         if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
             return tuple.getBlack();
         }
@@ -122,11 +134,6 @@ public class PrefabValues {
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
         // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
         return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
-    }
-
-    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, typeStack);
-        return cache.getTuple(tag);
     }
 
     private LinkedHashSet<TypeTag> emptyStack() {
