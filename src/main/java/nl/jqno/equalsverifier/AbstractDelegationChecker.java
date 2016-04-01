@@ -106,13 +106,6 @@ class AbstractDelegationChecker<T> implements Checker {
         if (equalsIsAbstract != hashCodeIsAbstract) {
             fail(buildSingleAbstractMethodErrorMessage(superclass, equalsIsAbstract, false));
         }
-        if (equalsIsAbstract && hashCodeIsAbstract) {
-            return;
-        }
-
-        Object instance = prefabValues.giveRed(new TypeTag(superclass));
-        Object copy = prefabValues.giveBlack(typeTag);
-        checkAbstractMethods(superclass, instance, copy, false);
     }
 
     private Formatter buildSingleAbstractMethodErrorMessage(Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {

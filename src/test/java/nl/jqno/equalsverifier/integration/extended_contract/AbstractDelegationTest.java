@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2013-2015 Jan Ouwens
+ * Copyright 2010, 2013-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,23 +132,19 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     }
 
     @Test
-    public void failGracefully_whenEqualsInSuperclassCallsAnAbstractMethodEvenThoughItsImplementedHere() {
-        expectFailureWithCause(AbstractMethodError.class, ABSTRACT_DELEGATION, EQUALS_DELEGATES,
-                AbstractEqualsDelegator.class.getSimpleName());
+    public void succeed_evenThoughEqualsInSuperclassCallsAnAbstractMethod() {
         EqualsVerifier.forClass(AbstractEqualsDelegatorImpl.class)
                 .verify();
     }
 
     @Test
-    public void failGracefully_whenHashCodeInSuperclassCallsAnAbstractMethodEvenThoughItsImplementedHere() {
-        expectFailureWithCause(AbstractMethodError.class, ABSTRACT_DELEGATION, HASHCODE_DELEGATES,
-                AbstractHashCodeDelegator.class.getSimpleName());
+    public void succeed_evenThoughHashCodeInSuperclassCallsAnAbstractMethod() {
         EqualsVerifier.forClass(AbstractHashCodeDelegatorImpl.class)
                 .verify();
     }
 
     @Test
-    public void succeed_whenToStringInSuperclassCallsAnAbstractMethod() {
+    public void succeed_evenThoughToStringInSuperclassCallsAnAbstractMethod() {
         EqualsVerifier.forClass(AbstractToStringDelegatorImpl.class)
                 .verify();
     }
@@ -218,7 +214,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static class AbstractEqualsDelegatorImpl extends AbstractEqualsDelegator {
+    static final class AbstractEqualsDelegatorImpl extends AbstractEqualsDelegator {
         public AbstractEqualsDelegatorImpl(int i) { super(i); }
 
         @Override
@@ -242,7 +238,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
         }
     }
 
-    static class AbstractHashCodeDelegatorImpl extends AbstractHashCodeDelegator {
+    static final class AbstractHashCodeDelegatorImpl extends AbstractHashCodeDelegator {
         public AbstractHashCodeDelegatorImpl(int i) { super(i); }
 
         @Override
