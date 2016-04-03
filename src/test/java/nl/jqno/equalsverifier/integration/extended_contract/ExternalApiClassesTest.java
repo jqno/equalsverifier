@@ -21,10 +21,18 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
 import org.junit.Test;
 
+import javax.naming.Reference;
+
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class ExternalApiClassesTest {
+    @Test
+    public void succeed_whenClassUsesJavaxClasses() {
+        EqualsVerifier.forClass(JavaxContainer.class)
+                .verify();
+    }
+
     @Test
     public void succeed_whenClassUsesGoogleGuavaMultiset() {
         EqualsVerifier.forClass(GuavaMultisetContainer.class)
@@ -71,6 +79,18 @@ public class ExternalApiClassesTest {
     public void succeed_whenClassUsesJodaTimeClass() {
         EqualsVerifier.forClass(JodaTimeContainer.class)
                 .verify();
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class JavaxContainer {
+        private final Reference ref;
+
+        public JavaxContainer(Reference ref) {
+            this.ref = ref;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode

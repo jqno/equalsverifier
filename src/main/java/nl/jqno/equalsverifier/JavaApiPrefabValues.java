@@ -22,7 +22,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
 
-import javax.naming.Reference;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -86,6 +85,7 @@ public final class JavaApiPrefabValues {
         addQueues();
         addJava8ApiClasses();
         addJavaFxClasses();
+        addJavaxApiClasses();
         addGoogleGuavaMultisetCollectionsClasses();
         addGoogleGuavaMultimapCollectionsClasses();
         addGoogleGuavaBiMapCollectionsClasses();
@@ -133,7 +133,6 @@ public final class JavaApiPrefabValues {
         addValues(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
         addValues(Locale.class, new Locale("nl"), new Locale("hu"));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
-        addValues(Reference.class, new Reference("one"), new Reference("two"));
         addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"));
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"));
         addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
@@ -308,6 +307,13 @@ public final class JavaApiPrefabValues {
         addJavaFxProperty("ObjectProperty", "SimpleObjectProperty", Object.class);
         addJavaFxProperty("SetProperty", "SimpleSetProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
         addJavaFxProperty("StringProperty", "SimpleStringProperty", String.class);
+    }
+
+    private void addJavaxApiClasses() {
+        ConditionalInstantiator reference = new ConditionalInstantiator("javax.naming.Reference");
+        addValues(reference.resolve(),
+                reference.instantiate(classes(String.class), objects("one")),
+                reference.instantiate(classes(String.class), objects("two")));
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
