@@ -15,7 +15,6 @@
  */
 package nl.jqno.equalsverifier;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
@@ -83,7 +82,6 @@ class HierarchyChecker<T> implements Checker {
         }
     }
 
-    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
     private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
         T reference = referenceAccessor.get();
         Object equalSuper = getEqualSuper(reference);
@@ -92,20 +90,12 @@ class HierarchyChecker<T> implements Checker {
         ObjectAccessor.of(shallowCopy).shallowScramble(config.getPrefabValues(), typeTag);
 
         try {
-            reference.equals(equalSuper);
-            equalSuper.equals(reference);
-            equalSuper.hashCode();
+            checkSuperProperties(reference, equalSuper, shallowCopy);
         }
         catch (AbstractMethodError ignored) {
             // In this case, we'll assume all super properties hold.
             // The problems we test for, can never occur anyway if you can't instantiate a super instance.
-            return;
         }
-        catch (Exception ignored) {
-            // Ignore any other exceptions; they will come up again in the following checks.
-        }
-
-        checkSuperProperties(reference, equalSuper, shallowCopy);
     }
 
     private void checkSuperProperties(T reference, Object equalSuper, T shallow) {

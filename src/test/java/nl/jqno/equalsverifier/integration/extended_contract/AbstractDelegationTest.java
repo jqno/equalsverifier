@@ -230,7 +230,13 @@ public class AbstractDelegationTest extends IntegrationTestBase {
 
         abstract int theAnswer();
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public boolean equals(Object obj) {
+            if (!(obj instanceof AbstractHashCodeDelegator)) {
+                return false;
+            }
+            AbstractHashCodeDelegator other = (AbstractHashCodeDelegator)obj;
+            return i == other.i;
+        }
 
         @Override
         public int hashCode() {
