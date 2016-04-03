@@ -51,8 +51,6 @@ class AbstractDelegationChecker<T> implements Checker {
         T instance = prefabValues.giveRed(typeTag);
         T copy = prefabValues.giveBlack(typeTag);
         checkAbstractDelegation(instance, copy);
-
-        checkAbstractDelegationInSuper();
     }
 
     private void checkAbstractEqualsAndHashCode() {
@@ -95,24 +93,6 @@ class AbstractDelegationChecker<T> implements Checker {
 
     private void checkAbstractDelegation(T instance, T copy) {
         checkAbstractMethods(type, instance, copy, false);
-    }
-
-    private void checkAbstractDelegationInSuper() {
-        Class<? super T> superclass = type.getSuperclass();
-        ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-
-        boolean equalsIsAbstract = superAccessor.isEqualsAbstract();
-        boolean hashCodeIsAbstract = superAccessor.isHashCodeAbstract();
-        if (equalsIsAbstract != hashCodeIsAbstract) {
-            fail(buildSingleAbstractMethodErrorMessage(superclass, equalsIsAbstract, false));
-        }
-        if (equalsIsAbstract && hashCodeIsAbstract) {
-            return;
-        }
-
-        Object instance = prefabValues.giveRed(new TypeTag(superclass));
-        Object copy = prefabValues.giveBlack(typeTag);
-        checkAbstractMethods(superclass, instance, copy, false);
     }
 
     private Formatter buildSingleAbstractMethodErrorMessage(Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {

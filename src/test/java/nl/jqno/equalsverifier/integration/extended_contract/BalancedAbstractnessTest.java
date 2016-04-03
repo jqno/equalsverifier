@@ -66,17 +66,13 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenOnlyEqualsIsAbstractInSuperclass() {
-        expectFailure(ABSTRACT_DELEGATION, EQUALS_IS_ABSTRACT, HASHCODE_IS_NOT, BOTH_SHOULD_BE_SAME,
-                AbstractEqualsButNotHashCode.class.getSimpleName());
+    public void succeed_whenOnlyEqualsIsAbstractInSuperclass() {
         EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class)
                 .verify();
     }
 
     @Test
-    public void fail_whenOnlyHashCodeIsAbstractInSuperclass() {
-        expectFailure(ABSTRACT_DELEGATION, HASHCODE_IS_ABSTRACT, EQUALS_IS_NOT, BOTH_SHOULD_BE_SAME,
-                AbstractHashCodeButNotEquals.class.getSimpleName());
+    public void succeed_whenOnlyHashCodeIsAbstractInSuperclass() {
         EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class)
                 .verify();
     }
@@ -127,7 +123,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
         public abstract boolean equals(Object obj);
     }
 
-    static class SubclassOfAbstractEqualsButNotHashCode extends AbstractEqualsButNotHashCode {
+    static final class SubclassOfAbstractEqualsButNotHashCode extends AbstractEqualsButNotHashCode {
         private final int foo;
 
         public SubclassOfAbstractEqualsButNotHashCode(int foo) { this.foo = foo; }
@@ -141,7 +137,7 @@ public class BalancedAbstractnessTest extends IntegrationTestBase {
         public abstract int hashCode();
     }
 
-    static class SubclassOfAbstractHashCodeButNotEquals extends AbstractHashCodeButNotEquals {
+    static final class SubclassOfAbstractHashCodeButNotEquals extends AbstractHashCodeButNotEquals {
         private final int foo;
 
         public SubclassOfAbstractHashCodeButNotEquals(int foo) { this.foo = foo; }

@@ -77,18 +77,28 @@ class HierarchyChecker<T> implements Checker {
             assertFalse(formatter, reference.equals(equalSuper) || equalSuper.equals(reference));
         }
         else {
-            checkSuperProperties(classAccessor.getRedAccessor(typeTag));
-            checkSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag));
+            safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
+            safelyCheckSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag));
         }
     }
 
-    private void checkSuperProperties(ObjectAccessor<T> referenceAccessor) {
+    private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
         T reference = referenceAccessor.get();
         Object equalSuper = getEqualSuper(reference);
 
-        T shallow = referenceAccessor.copy();
-        ObjectAccessor.of(shallow).shallowScramble(config.getPrefabValues(), typeTag);
+        T shallowCopy = referenceAccessor.copy();
+        ObjectAccessor.of(shallowCopy).shallowScramble(config.getPrefabValues(), typeTag);
 
+        try {
+            checkSuperProperties(reference, equalSuper, shallowCopy);
+        }
+        catch (AbstractMethodError ignored) {
+            // In this case, we'll assume all super properties hold.
+            // The problems we test for, can never occur anyway if you can't instantiate a super instance.
+        }
+    }
+
+    private void checkSuperProperties(T reference, Object equalSuper, T shallow) {
         Formatter symmetryFormatter = Formatter.of("Symmetry:\n  %%\ndoes not equal superclass instance\n  %%", reference, equalSuper);
         assertTrue(symmetryFormatter, reference.equals(equalSuper) && equalSuper.equals(reference));
 
