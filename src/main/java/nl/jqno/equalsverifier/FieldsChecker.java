@@ -257,12 +257,15 @@ class FieldsChecker<T> implements Checker {
 
         private Object arrayCopy(Object array) {
             Class<?> componentType = array.getClass().getComponentType();
-            Object result = Array.newInstance(componentType, 1);
-            if (componentType.isArray()) {
-                Array.set(result, 0, arrayCopy(Array.get(array, 0)));
-            }
-            else {
-                Array.set(result, 0, Array.get(array, 0));
+            int length = Array.getLength(array);
+            Object result = Array.newInstance(componentType, length);
+            for (int i = 0; i < length; i++) {
+                if (componentType.isArray()) {
+                    Array.set(result, i, arrayCopy(Array.get(array, i)));
+                }
+                else {
+                    Array.set(result, i, Array.get(array, i));
+                }
             }
             return result;
         }

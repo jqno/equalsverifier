@@ -144,6 +144,18 @@ public class ArrayTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void succeed_whenArrayLengthIsInvariant() {
+        int[] a = { 1, 2, 3 };
+        int[] b = { 4, 5, 6 };
+        int[][] x = { a, a, a };
+        int[][] y = { b, b, b };
+        EqualsVerifier.forClass(Invariant.class)
+                .withPrefabValues(int[].class, a, b)
+                .withPrefabValues(int[][].class, x, y)
+                .verify();
+    }
+
     static final class PrimitiveArrayRegularEquals {
         private final int[] array;
 
@@ -445,5 +457,35 @@ public class ArrayTest extends IntegrationTestBase {
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    public static final class Invariant {
+        private final int[] array;
+        private final int[][] multiArray;
+
+        public Invariant(int[] array, int[][] multiArray) {
+            this.array = array;
+            this.multiArray = multiArray;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            assert array == null || array.length == 3 : "Invariant broken";
+            assert multiArray == null || multiArray.length == 3 : "Invariant broken";
+
+            if (!(obj instanceof Invariant)) {
+                return false;
+            }
+            Invariant other = (Invariant)obj;
+            return Arrays.equals(array, other.array) && Arrays.deepEquals(multiArray, other.multiArray);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 41;
+            result = 41 * result + Arrays.hashCode(array);
+            result = 41 * result + Arrays.deepHashCode(multiArray);
+            return result;
+        }
     }
 }
