@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2015 Jan Ouwens
+ * Copyright 2011, 2015-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,6 +86,9 @@ public class AnnotationAccessor {
         process();
         Set<Annotation> annotations = fieldAnnotations.get(fieldName);
         if (annotations == null) {
+            if (ignoreFailure) {
+                return false;
+            }
             throw new ReflectionException("Class " + type.getName() + " does not have field " + fieldName);
         }
         return annotations.contains(annotation);

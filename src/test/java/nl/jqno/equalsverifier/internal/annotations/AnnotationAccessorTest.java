@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2013, 2015 Jan Ouwens
+ * Copyright 2011, 2013, 2015-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,10 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.Instantiator;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
@@ -168,6 +172,20 @@ public class AnnotationAccessorTest {
         // Checks if the short circuit works
         assertFalse(accessor.typeHas(TYPE_CLASS_RETENTION));
         assertFalse(accessor.fieldHas("x", FIELD_CLASS_RETENTION));
+    }
+
+    @Test
+    public void generatedClassWithGeneratedFieldWithSuppressedWarning() {
+        class Super {}
+        Class<?> sub = new ByteBuddy()
+                .with(TypeValidation.DISABLED)
+                .subclass(Super.class)
+                .defineField("dynamicField", int.class, Visibility.PRIVATE)
+                .make()
+                .load(Super.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .getLoaded();
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), sub, true);
+        assertFalse(accessor.fieldHas("dynamicField", FIELD_RUNTIME_RETENTION));
     }
 
     @Test
