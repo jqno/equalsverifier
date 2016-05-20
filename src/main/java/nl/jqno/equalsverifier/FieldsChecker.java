@@ -189,7 +189,9 @@ class FieldsChecker<T> implements Checker {
                     Object reference, Object changed, String fieldName) {
 
             if (equalsChanged != hashCodeChanged) {
-                if (!skipTestBecause0AndNullBothHaveA0HashCode) {
+                boolean skipEqualsHasMoreThanHashCodeTest =
+                        warningsToSuppress.contains(Warning.STRICT_HASHCODE) || skipTestBecause0AndNullBothHaveA0HashCode;
+                if (!skipEqualsHasMoreThanHashCodeTest) {
                     Formatter formatter = Formatter.of(
                             "Significant fields: equals relies on %%, but hashCode does not." +
                             "\n  %% has hashCode %%\n  %% has hashCode %%",

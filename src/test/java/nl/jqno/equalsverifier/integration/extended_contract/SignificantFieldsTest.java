@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2010, 2012-2015 Jan Ouwens
+ * Copyright 2009-2010, 2012-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SignificantFieldsTest extends IntegrationTestBase {
@@ -36,9 +37,38 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_whenEqualsUsesAFieldAndHashCodeDoesnt_givenStrictHashCodeWarningIsSuppressed() {
+        EqualsVerifier.forClass(ExtraFieldInEquals.class)
+                .suppress(Warning.STRICT_HASHCODE)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenHashCodeIsConstant() {
+        expectFailure("Significant fields", "equals relies on", "but hashCode does not");
+        EqualsVerifier.forClass(ConstantHashCode.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenHashCodeIsConstant_givenStrictHashCodeWarningIsSuppressed() {
+        EqualsVerifier.forClass(ConstantHashCode.class)
+                .suppress(Warning.STRICT_HASHCODE)
+                .verify();
+    }
+
+    @Test
     public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt() {
         expectFailure("Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
         EqualsVerifier.forClass(ExtraFieldInHashCode.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt_givenStrictHashCodeWarningIsSuppressed() {
+        expectFailure("Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
+        EqualsVerifier.forClass(ExtraFieldInHashCode.class)
+                .suppress(Warning.STRICT_HASHCODE)
                 .verify();
     }
 
@@ -256,6 +286,19 @@ public class SignificantFieldsTest extends IntegrationTestBase {
         expectFailure("Significant fields", "hashCode relies on", "s", "equals does not", "These objects are equal, but probably shouldn't be");
         EqualsVerifier.forClass(BugWhenFieldIsNull.class)
                 .verify();
+    }
+
+    static final class ConstantHashCode {
+        private final int x;
+        private final int y;
+
+        public ConstantHashCode(int x, int y) { this.x = x; this.y = y; }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class ExtraFieldInEquals {

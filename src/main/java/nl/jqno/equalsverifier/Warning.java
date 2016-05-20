@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013, 2015 Jan Ouwens
+ * Copyright 2010-2013, 2015-2016 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -149,6 +149,21 @@ public enum Warning {
      * to disable the check for {@link NullPointerException}.
      */
     NULL_FIELDS,
+
+    /**
+     * Disables the check that all fields used in {@code equals} must also be
+     * used in {@code hashCode}.
+     * <p>
+     * This is useful when bringing legacy systems under test, where you don't
+     * want to change the existing {@code hashCode} behaviour but you do want
+     * to use EqualsVerifier.
+     * <p>
+     * Note that {@code hashCode}s with higher distributions give better
+     * performance when used in collections such as {@link java.util.HashMap}.
+     * Therefore, if possible, you should use all fields that are used in
+     * {@code equals}, in {@code hashCode} as well.
+     */
+    STRICT_HASHCODE,
 
     /**
      * Disables some of the stricter inheritance tests; use at your own risk!
