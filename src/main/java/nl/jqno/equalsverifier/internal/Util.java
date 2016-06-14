@@ -30,7 +30,8 @@ public final class Util {
         try {
             return Class.forName(className);
         }
-        catch (ClassNotFoundException e) {
+        catch (ClassNotFoundException | VerifyError e) {
+            // Catching VerifyError fixes issue #147. I don't know how to unit test it.
             return null;
         }
     }
