@@ -84,7 +84,7 @@ public final class Instantiator<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
+    private static synchronized <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
         boolean isSystemClass = superclass.getName().startsWith("java");
         String namePrefix = isSystemClass ? "$" : "";
         String name = namePrefix + superclass.getName() + "$$DynamicSubclass";
