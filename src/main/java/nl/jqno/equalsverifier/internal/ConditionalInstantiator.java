@@ -31,6 +31,7 @@ import static nl.jqno.equalsverifier.internal.Util.classForName;
  */
 public class ConditionalInstantiator {
     private final String fullyQualifiedClassName;
+    private final boolean throwExceptions;
 
     /**
      * Constructor.
@@ -40,7 +41,22 @@ public class ConditionalInstantiator {
      *          instantiate.
      */
     public ConditionalInstantiator(String fullyQualifiedClassName) {
+        this(fullyQualifiedClassName, true);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param fullyQualifiedClassName
+     *          The fully-qualified name of the class that we intend to
+     *          instantiate.
+     * @param throwExceptions
+     *          Whether to throw exceptions when the class can't be
+     *          instantiated.
+     */
+    public ConditionalInstantiator(String fullyQualifiedClassName, boolean throwExceptions) {
         this.fullyQualifiedClassName = fullyQualifiedClassName;
+        this.throwExceptions = throwExceptions;
     }
 
     /**
@@ -76,7 +92,7 @@ public class ConditionalInstantiator {
             return c.newInstance(paramValues);
         }
         catch (Exception e) {
-            throw new ReflectionException(e);
+            return handleException(e);
         }
     }
 
@@ -129,7 +145,7 @@ public class ConditionalInstantiator {
             return factory.invoke(null, paramValues);
         }
         catch (Exception e) {
-            throw new ReflectionException(e);
+            return handleException(e);
         }
     }
 
@@ -154,7 +170,16 @@ public class ConditionalInstantiator {
             return field.get(null);
         }
         catch (Exception e) {
+            return handleException(e);
+        }
+    }
+
+    private Object handleException(Exception e) {
+        if (throwExceptions) {
             throw new ReflectionException(e);
+        }
+        else {
+            return null;
         }
     }
 }

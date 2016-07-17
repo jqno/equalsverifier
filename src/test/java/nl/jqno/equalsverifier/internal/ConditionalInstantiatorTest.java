@@ -51,7 +51,7 @@ public class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
 
         Class<?> actual = ci.resolve();
-        assertNull(actual);
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
@@ -79,6 +79,14 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
+    public void nullIsReturned_whenInvalidConstructorParametersAreProvided_givenFalse() {
+        ci = new ConditionalInstantiator("java.util.GregorianCalendar", false);
+
+        Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
     public void objectIsInstantiatedCorrectly_whenValidFactoryMethodAndParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
         Object expected = Integer.valueOf(42);
@@ -103,11 +111,27 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
+    public void nullIsReturned_whenInvalidMethodNameIsProvided_givenFalse() {
+        ci = new ConditionalInstantiator("java.lang.Integer", false);
+
+        Object actual = ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42));
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
     public void throwsIse_whenInvalidFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
         thrown.expect(ReflectionException.class);
         ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+    }
+
+    @Test
+    public void nullIsReturned_whenInvalidFactoryMethodParametersAreProvided_givenFalse() {
+        ci = new ConditionalInstantiator("java.lang.Integer", false);
+
+        Object actual = ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
@@ -127,11 +151,19 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist() {
+    public void throwsIse_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
         ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+    }
+
+    @Test
+    public void nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist_givenFalse() {
+        ci = new ConditionalInstantiator("java.util.List", false);
+
+        Object actual = ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
@@ -143,11 +175,27 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
+    public void nullIsReturned_whenInvalidExternalFactoryMethodNameIsProvided_givenFalse() {
+        ci = new ConditionalInstantiator("java.util.List", false);
+
+        Object actual = ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
+        assertThat(actual, is(nullValue()));
+    }
+
+    @Test
     public void throwsIse_whenInvalidExternalFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
         thrown.expect(ReflectionException.class);
         ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
+    }
+
+    @Test
+    public void nullIsReturned_whenInvalidExternalFactoryMethodParametersAreProvided_givenFalse() {
+        ci = new ConditionalInstantiator("java.util.List", false);
+
+        Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
+        assertThat(actual, is(nullValue()));
     }
 
     @Test
@@ -172,5 +220,13 @@ public class ConditionalInstantiatorTest {
 
         thrown.expect(ReflectionException.class);
         ci.returnConstant("FORTY-TWO");
+    }
+
+    @Test
+    public void nullIsReturned_whenConstantDoesNotExist_givenFalse() {
+        ci = new ConditionalInstantiator("java.math.BigDecimal", false);
+
+        Object actual = ci.returnConstant("FORTY-TWO");
+        assertThat(actual, is(nullValue()));
     }
 }

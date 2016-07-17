@@ -385,7 +385,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addNewGoogleGuavaClasses() {
-        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
+        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range", false);
         addValues(range.resolve(),
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2)),
                 range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
