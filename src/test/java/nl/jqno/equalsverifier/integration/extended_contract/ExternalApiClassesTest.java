@@ -22,6 +22,7 @@ import org.joda.time.*;
 import org.junit.Test;
 
 import javax.naming.Reference;
+import java.math.BigDecimal;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
@@ -194,13 +195,13 @@ public class ExternalApiClassesTest {
     static final class GuavaRegularCollectionsContainer {
         private final EvictingQueue<?> evictingQueue;
         private final MinMaxPriorityQueue<?> minMaxPriorityQueue;
-        private final RangeSet<?> rangeSet;
-        private final ImmutableRangeSet<?> immutableRangeSet;
-        private final TreeRangeSet<?> treeRangeSet;
+        private final RangeSet<Instant> rangeSet;
+        private final ImmutableRangeSet<String> immutableRangeSet;
+        private final TreeRangeSet<BigDecimal> treeRangeSet;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaRegularCollectionsContainer(EvictingQueue<?> evictingQueue, MinMaxPriorityQueue<?> minMaxPriorityQueue,
-                RangeSet<?> rangeSet, ImmutableRangeSet<?> immutableRangeSet, TreeRangeSet<?> treeRangeSet) {
+                RangeSet<Instant> rangeSet, ImmutableRangeSet<String> immutableRangeSet, TreeRangeSet<BigDecimal> treeRangeSet) {
             this.evictingQueue = evictingQueue; this.minMaxPriorityQueue = minMaxPriorityQueue;
             this.rangeSet = rangeSet; this.immutableRangeSet = immutableRangeSet; this.treeRangeSet = treeRangeSet;
         }
@@ -233,11 +234,11 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
-        private final Range<?> range;
+        private final Range<Integer> range;
         private final Optional<?> optional;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaOtherContainer(Range<?> range, Optional<?> optional) {
+        public GuavaOtherContainer(Range<Integer> range, Optional<?> optional) {
             this.range = range; this.optional = optional;
         }
 

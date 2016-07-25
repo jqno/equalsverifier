@@ -37,7 +37,7 @@ public class ReflectiveGenericContainerFactoryTest {
     private static final TypeTag RAWMAP_TYPETAG = new TypeTag(Map.class);
 
     private static final ReflectiveGenericContainerFactory<Optional> OPTIONAL_FACTORY =
-            new ReflectiveGenericContainerFactory<>("com.google.common.base.Optional");
+            new ReflectiveGenericContainerFactory<>("com.google.common.base.Optional", "of", Object.class);
 
     private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();

@@ -31,19 +31,28 @@ import static nl.jqno.equalsverifier.internal.Util.objects;
  */
 public class ReflectiveGenericContainerFactory<T> extends AbstractReflectiveGenericFactory<T> {
     private final String typeName;
+    private final String factoryMethod;
+    private final Class<?> parameterType;
 
-    public ReflectiveGenericContainerFactory(String typeName) {
+    public ReflectiveGenericContainerFactory(String typeName, String factoryMethod, final Class<?> parameterType) {
         this.typeName = typeName;
+        this.factoryMethod = factoryMethod;
+        this.parameterType = parameterType;
     }
 
     @Override
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         TypeTag internalTag = determineActualTypeTagFor(0, tag);
-        Object red = new ConditionalInstantiator(typeName)
-                .callFactory("of", classes(Object.class), objects(prefabValues.giveRed(internalTag)));
-        Object black = new ConditionalInstantiator(typeName)
-                .callFactory("of", classes(Object.class), objects(prefabValues.giveBlack(internalTag)));
+
+        Object red = createWith(prefabValues.giveRed(internalTag));
+        Object black = createWith(prefabValues.giveBlack(internalTag));
 
         return Tuple.of(red, black);
+    }
+
+    @SuppressWarnings("rawtypes")
+    private Object createWith(Object value) {
+        ConditionalInstantiator ci = new ConditionalInstantiator(typeName);
+        return ci.callFactory(factoryMethod, classes(parameterType), objects(value));
     }
 }

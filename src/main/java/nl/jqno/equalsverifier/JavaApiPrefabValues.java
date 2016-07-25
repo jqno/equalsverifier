@@ -273,7 +273,7 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
         String optional = "java.util.Optional";
-        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
 
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
@@ -385,13 +385,12 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addNewGoogleGuavaClasses() {
-        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range", false);
-        addValues(range.resolve(),
-                range.callFactory("open", classes(Comparable.class, Comparable.class), objects(1, 2)),
-                range.callFactory("open", classes(Comparable.class, Comparable.class), objects(3, 4)));
+        String rangeFqcn = GUAVA_PACKAGE + "Range";
+        ConditionalInstantiator range = new ConditionalInstantiator(rangeFqcn, false);
+        addFactory(range.resolve(), new ReflectiveGenericContainerFactory(rangeFqcn, "atLeast", Comparable.class));
 
         String optional = "com.google.common.base.Optional";
-        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional));
+        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
     }
 
     private void addJodaTimeClasses() {
