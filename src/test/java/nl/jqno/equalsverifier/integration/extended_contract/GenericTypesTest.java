@@ -15,10 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import com.google.common.collect.BiMap;
-import com.google.common.collect.ImmutableCollection;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -84,6 +81,12 @@ public class GenericTypesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtBiMapFieldsGenericContent() {
         EqualsVerifier.forClass(BiMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsLooksAtRangeEndpointGenericContent() {
+        EqualsVerifier.forClass(RangeContainer.class)
                 .verify();
     }
 
@@ -362,6 +365,32 @@ public class GenericTypesTest extends IntegrationTestBase {
         @Override public String toString() { return "ImmutableMapContainer: " + map; }
     }
 
+    static final class RangeContainer {
+        private final Range<String> range;
+
+        public RangeContainer(Range<String> coll) { this.range = coll; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof RangeContainer)) {
+                return false;
+            }
+            RangeContainer other = (RangeContainer)obj;
+            if (range == null || other.range == null) {
+                return range == other.range;
+            }
+            String lower = range.lowerEndpoint();
+            String otherLower = other.range.lowerEndpoint();
+            if (!lower.equals(otherLower)) {
+                return false;
+            }
+            return range.equals(other.range);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "ImmutableCollectionContainer: " + range; }
+    }
+
     static final class BiMapContainer {
         private final BiMap<Point, Point> map;
 
@@ -395,6 +424,7 @@ public class GenericTypesTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
         @Override public String toString() { return "BiMapContainer: " + map; }
     }
+
     static final class SparseArray<T> {
         private final List<T> items;
 
