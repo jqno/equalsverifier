@@ -333,7 +333,7 @@ public final class JavaApiPrefabValues {
         addNewGuavaMap("ListMultimap", "ArrayListMultimap");
         addNewGuavaMap("SetMultimap", "HashMultimap");
         addNewGuavaMap("SortedSetMultimap", "TreeMultimap", OBJECT_COMPARATOR);
-        addNewGuavaMap("ArrayListMultiMap", "ArrayListMultimap");
+        addNewGuavaMap("ArrayListMultimap", "ArrayListMultimap");
         addNewGuavaMap("HashMultimap", "HashMultimap");
         addNewGuavaMap("LinkedListMultimap", "LinkedListMultimap");
         addNewGuavaMap("LinkedHashMultimap", "LinkedHashMultimap");
