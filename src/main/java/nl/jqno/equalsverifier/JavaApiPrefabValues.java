@@ -164,6 +164,12 @@ public final class JavaApiPrefabValues {
         addFactory(ArrayList.class, new CollectionFactory<ArrayList>() {
             @Override public ArrayList createEmpty() { return new ArrayList<>(); }
         });
+        addFactory(Vector.class, new CollectionFactory<Vector>() {
+            @Override public Vector createEmpty() { return new Vector<>(); }
+        });
+        addFactory(Stack.class, new CollectionFactory<Stack>() {
+            @Override public Stack createEmpty() { return new Stack<>(); }
+        });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

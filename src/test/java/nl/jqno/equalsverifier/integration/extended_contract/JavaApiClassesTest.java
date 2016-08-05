@@ -68,18 +68,20 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final SortedMap<String, String> sortedMap;
         private final NavigableMap<String, String> navigableMap;
         private final ConcurrentNavigableMap<String, String> concurrentNavigableMap;
+        private final Vector<String> vector;
+        private final Stack<String> stack;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CollectionInterfacesContainer(Iterable<String> iterable, Collection<String> collection, List<String> list,
                 Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
                 Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
                 Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap,
-                ConcurrentNavigableMap<String, String> concurrentNavigableMap) {
+                ConcurrentNavigableMap<String, String> concurrentNavigableMap, Vector<String> vector, Stack<String> stack) {
             this.iterable = iterable; this.collection = collection; this.list = list;
             this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
             this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
             this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap;
-            this.concurrentNavigableMap = concurrentNavigableMap;
+            this.concurrentNavigableMap = concurrentNavigableMap; this.vector = vector; this.stack = stack;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -96,6 +98,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
             callIterator(list);
             callIterator(set, sortedSet, navigableSet);
             callIterator(queue, blockingQueue, deque, blockingDeque);
+            callIterator(vector, stack);
             callKeySet(map, sortedMap, navigableMap, concurrentNavigableMap);
         }
 
