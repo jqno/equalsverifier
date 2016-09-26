@@ -92,6 +92,9 @@ public enum SupportedAnnotations implements Annotation {
             try {
                 Type t = Type.getType(properties.getDescriptor());
                 Class<?> type = classForName(t.getClassName());
+                if (type == null) {
+                    return false;
+                }
                 AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, type, false);
                 boolean hasNonnullAnnotation = accessor.typeHas(NONNULL);
                 boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
