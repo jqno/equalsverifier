@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,6 +35,8 @@ public class CollectionFactoryTest {
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
     private static final TypeTag WILDCARDLIST_TYPETAG = new TypeTag(List.class, OBJECT_TYPETAG);
     private static final TypeTag RAWLIST_TYPETAG = new TypeTag(List.class);
+    private static final TypeTag ONEELEMENTENUM_TYPETAG = new TypeTag(OneElementEnum.class);
+    private static final TypeTag ONEELEMENTENUMSET_TYPETAG = new TypeTag(Set.class, ONEELEMENTENUM_TYPETAG);
 
     private static final CollectionFactory<List> LIST_FACTORY = new StubListPrefabValueFactory();
     private static final CollectionFactory<Set> SET_FACTORY = new StubSetPrefabValueFactory();
@@ -44,6 +47,7 @@ public class CollectionFactoryTest {
     private String black;
     private Object redObject;
     private Object blackObject;
+    private OneElementEnum redEnum;
 
     @Before
     public void setUp() {
@@ -52,6 +56,7 @@ public class CollectionFactoryTest {
         black = prefabValues.giveBlack(STRING_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);
         blackObject = prefabValues.giveBlack(OBJECT_TYPETAG);
+        redEnum = prefabValues.giveBlack(ONEELEMENTENUM_TYPETAG);
     }
 
     @Test
@@ -80,6 +85,13 @@ public class CollectionFactoryTest {
         Tuple<List> tuple = LIST_FACTORY.createValues(RAWLIST_TYPETAG, prefabValues, typeStack);
         assertEquals(listOf(redObject), tuple.getRed());
         assertEquals(listOf(blackObject), tuple.getBlack());
+    }
+
+    @Test
+    public void createSetOfOneElementEnum() {
+        Tuple<Set> tuple = SET_FACTORY.createValues(ONEELEMENTENUMSET_TYPETAG, prefabValues, typeStack);
+        assertEquals(setOf(redEnum), tuple.getRed());
+        assertEquals(setOf(), tuple.getBlack());
     }
 
     private static class StubListPrefabValueFactory extends CollectionFactory<List> {
