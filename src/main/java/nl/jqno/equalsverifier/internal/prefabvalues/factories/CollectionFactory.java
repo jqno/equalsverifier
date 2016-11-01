@@ -36,9 +36,14 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
 
         T red = createEmpty();
-        red.add(prefabValues.giveRed(entryTag));
+        Object redElem = prefabValues.giveRed(entryTag);
+        red.add(redElem);
+
         T black = createEmpty();
-        black.add(prefabValues.giveBlack(entryTag));
+        Object blackElem = prefabValues.giveBlack(entryTag);
+        if (!redElem.equals(blackElem)) {
+            black.add(blackElem);
+        }
 
         return new Tuple<>(red, black);
     }
