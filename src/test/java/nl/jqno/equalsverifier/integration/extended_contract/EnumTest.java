@@ -19,6 +19,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
+import java.util.Set;
+
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
@@ -30,21 +32,27 @@ public class EnumTest {
     }
 
     @Test
-    public void ignoreSingleValueEnum() {
+    public void succeed_whenClassHasASingletonEnumButIgnoresIt() {
         EqualsVerifier.forClass(SingletonContainer.class)
                 .verify();
     }
 
     @Test
-    public void useSingleValueEnum() {
+    public void succeed_whenClassHasASingletonEnumAndUsesItInEquals() {
         EqualsVerifier.forClass(SingletonUser.class)
                 .verify();
     }
 
     @Test
-    public void useSingleValueEnumWithoutNullCheck() {
+    public void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NullThrowingSingletonUser.class)
                 .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasSingletonCollection() {
+        EqualsVerifier.forClass(SingletonCollectionContainer.class)
                 .verify();
     }
 
@@ -102,5 +110,14 @@ public class EnumTest {
         public int hashCode() {
             return singleton.hashCode();
         }
+    }
+
+    static final class SingletonCollectionContainer {
+        private final Set<Singleton> singletonSet;
+
+        public SingletonCollectionContainer(Set<Singleton> singletonSet) { this.singletonSet = singletonSet; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 }

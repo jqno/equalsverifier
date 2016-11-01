@@ -41,7 +41,7 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
 
         T black = createEmpty();
         Object blackElem = prefabValues.giveBlack(entryTag);
-        if (!redElem.equals(blackElem)) {
+        if (!redElem.equals(blackElem)) { // This happens with single-element enums
             black.add(blackElem);
         }
 
