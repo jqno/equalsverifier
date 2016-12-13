@@ -150,6 +150,13 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_evenThoughEqualsInSuperclassCallsAnAbstractMethod_givenUsingGetClass() {
+        EqualsVerifier.forClass(AbstractEqualsUsingGetClassDelegatorImpl.class)
+                .usingGetClass()
+                .verify();
+    }
+
+    @Test
     public void originalMessageIsIncludedInErrorMessage_whenEqualsVerifierSignalsAnAbstractDelegationIssue() {
         expectFailure("This is AbstractMethodError's original message");
         EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class)
@@ -283,6 +290,40 @@ public class AbstractDelegationTest extends IntegrationTestBase {
         @Override
         int theAnswer() {
             return 0;
+        }
+    }
+
+    abstract static class AbstractEqualsUsingGetClassDelegator {
+        private final int i;
+
+        public AbstractEqualsUsingGetClassDelegator(int i) { this.i = i; }
+
+        abstract boolean theAnswer();
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (theAnswer()) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            AbstractEqualsUsingGetClassDelegator other = (AbstractEqualsUsingGetClassDelegator)obj;
+            return i == other.i;
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class AbstractEqualsUsingGetClassDelegatorImpl extends AbstractEqualsUsingGetClassDelegator {
+        public AbstractEqualsUsingGetClassDelegatorImpl(int i) { super(i); }
+
+        @Override
+        public boolean theAnswer() {
+            return false;
         }
     }
 

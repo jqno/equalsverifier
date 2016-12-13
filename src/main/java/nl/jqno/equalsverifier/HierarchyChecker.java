@@ -74,7 +74,13 @@ class HierarchyChecker<T> implements Checker {
 
             Formatter formatter = Formatter.of("Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.",
                     reference, equalSuper);
-            assertFalse(formatter, reference.equals(equalSuper) || equalSuper.equals(reference));
+            try {
+                assertFalse(formatter, reference.equals(equalSuper) || equalSuper.equals(reference));
+            }
+            catch (AbstractMethodError ignored) {
+                // In this case, we'll assume all super properties hold.
+                // The problems we test for, can never occur anyway if you can't instantiate a super instance.
+            }
         }
         else {
             safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
