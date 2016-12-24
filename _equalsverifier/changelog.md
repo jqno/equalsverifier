@@ -81,7 +81,7 @@ Version 2.0
 -----------
 _March 6, 2016_
 
-If you're upgrading from EqualsVerifier 1, please see the [migration guide]({{ pcurl('equalsverifier/migration1to2') }}).
+If you're upgrading from EqualsVerifier 1, please see the [migration guide](/equalsverifier/migration1to2).
 
 * ...no longer use EqualsVerifier with Java 6.
 * ...no longer use `EqualsVerifier.forExamples`. Use `#forClass` or `#forRelaxedEqualExamples` instead.
@@ -218,7 +218,7 @@ Version 1.4
 -----------
 _December 27, 2013_
 
-* ...have confidence that EqualsVerifier covers 100% of your `equals` and `hashCode` methods. ([FAQ]({{ pcurl('equalsverifier/faq#coverage') }}))
+* ...have confidence that EqualsVerifier covers 100% of your `equals` and `hashCode` methods. ([FAQ](/equalsverifier/faq#coverage))
 * ...specifically ignore certain fields using `#allFieldsShouldBeUsedExcept()`. ([Issue 82](https://github.com/jqno/equalsverifier/issues/82))
 * ...test classes that have an array field, but that don't declare an `equals` method.
 * ...get clearer error messages around abstract delegation. This clarifies especially classes that contain Joda-Time `LocalDate` fields.
@@ -326,7 +326,7 @@ _November 15, 2010_
 * ... test `equals` methods that use a call to `getClass()`, instead of an `instanceof` check, to determine the type of the object passed in, by calling the `#useGetClass()` method on EqualsVerifier.
 * ... get a warning when you use a transient field in your `equals` or `hashCode` method. Don't worry; you can suppress this warning too.
 * ... stop worrying about adding prefab values for certain Java API classes, like `Date`, `GregorianCalendar`, or `Pattern`, to avoid that pesky recursion warning.
-* ... get a link to the [Error messages]({{ pcurl('equalsverifier/errormessages') }}) page to get more help, when EqualsVerifier finds an error.
+* ... get a link to the [Error messages](/equalsverifier/errormessages) page to get more help, when EqualsVerifier finds an error.
 * ... enjoy many javadoc improvements (including the one in [Issue 32](https://github.com/jqno/equalsverifier/issues/32)).
 * Also, the back end is almost completely re-written.
 
