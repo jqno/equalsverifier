@@ -243,3 +243,8 @@ defaults:
       comments: false
       share: true
       related: false
+
+collections:
+  equalsverifier:
+    output: true
+    permalink: /:path/
