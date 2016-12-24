@@ -7,10 +7,10 @@
 
 # Site Settings
 locale                   : "en"
-title                    : "Site Title"
+title                    : "EqualsVerifier"
 title_separator          : "-"
-name                     : "Your Name"
-description              : "An amazing website."
+name                     : "Jan Ouwens"
+description              : "EqualsVerifier"
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : /equalsverifier
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -77,19 +77,19 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person."
-  location         : "Somewhere"
-  email            :
-  uri              :
+  name             :
+  avatar           :
+  bio              : "EqualsVerifier can be used in Java unit tests to verify whether the contract for the equals and hashCode methods is met."
+  location         :
+  email            : https://groups.google.com/forum/?fromgroups#!forum/equalsverifier
+  uri              : http://www.jqno.nl/about
   bitbucket        :
   codepen          :
   dribbble         :
   flickr           :
   facebook         :
   foursquare       :
-  github           :
+  github           : jqno/equalsverifier
   google_plus      :
   keybase          :
   instagram        :
@@ -97,10 +97,10 @@ author:
   linkedin         :
   pinterest        :
   soundcloud       :
-  stackoverflow    : # "123456/username" (the last part of your profile url, e.g. http://stackoverflow.com/users/123456/username)
+  stackoverflow    : equalsverifier
   steam            :
   tumblr           :
-  twitter          :
+  twitter          : jqno
   vine             :
   weibo            :
   xing             :

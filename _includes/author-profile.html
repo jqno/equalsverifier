@@ -34,17 +34,17 @@
         </li>
       {% endif %}
 
-      {% if author.uri %}
+      {% if author.github %}
         <li>
-          <a href="{{ author.uri }}" itemprop="url">
-            <i class="fa fa-fw fa-chain" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].website_label | default: "Website" }}
+          <a href="https://github.com/{{ author.github }}" itemprop="sameAs">
+            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
           </a>
         </li>
       {% endif %}
 
       {% if author.email %}
         <li>
-          <a href="mailto:{{ author.email }}">
+          <a href="{{ author.email }}">
             <meta itemprop="email" content="{{ author.email }}" />
             <i class="fa fa-fw fa-envelope-square" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].email_label | default: "Email" }}
           </a>
@@ -55,14 +55,6 @@
         <li>
           <a href="https://keybase.io/{{ author.keybase }}" itemprop="sameAs">
             <i class="fa fa-fw fa-key" aria-hidden="true"></i> Keybase
-          </a>
-        </li>
-      {% endif %}
-
-      {% if author.twitter %}
-        <li>
-          <a href="https://twitter.com/{{ author.twitter }}" itemprop="sameAs">
-            <i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
           </a>
         </li>
       {% endif %}
@@ -123,17 +115,9 @@
         </li>
       {% endif %}
 
-      {% if author.github %}
-        <li>
-          <a href="https://github.com/{{ author.github }}" itemprop="sameAs">
-            <i class="fa fa-fw fa-github" aria-hidden="true"></i> GitHub
-          </a>
-        </li>
-      {% endif %}
-
       {% if author.stackoverflow %}
         <li>
-          <a href="https://www.stackoverflow.com/users/{{ author.stackoverflow }}" itemprop="sameAs">
+          <a href="https://www.stackoverflow.com/questions/tagged/{{ author.stackoverflow }}" itemprop="sameAs">
             <i class="fa fa-fw fa-stack-overflow" aria-hidden="true"></i> Stackoverflow
           </a>
         </li>
@@ -231,6 +215,24 @@
         <li>
           <a href="https://vine.co/u/{{ author.vine }}" itemprop="sameAs">
             <i class="fa fa-fw fa-vine" aria-hidden="true"></i> Vine
+          </a>
+        </li>
+      {% endif %}
+
+      <br/>
+
+      {% if author.uri %}
+        <li>
+          <a href="{{ author.uri }}" itemprop="url">
+            <i class="fa fa-fw fa-chain" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].website_label | default: "Website" }}
+          </a>
+        </li>
+      {% endif %}
+
+      {% if author.twitter %}
+        <li>
+          <a href="https://twitter.com/{{ author.twitter }}" itemprop="sameAs">
+            <i class="fa fa-fw fa-twitter-square" aria-hidden="true"></i> Twitter
           </a>
         </li>
       {% endif %}
