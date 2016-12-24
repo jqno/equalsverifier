@@ -14,13 +14,17 @@
   {% assign category_hashes = (page_categories | split: ',' | sort:0) %}
 
   <p class="page__taxonomy">
-    <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].categories_label | default: "Categories:" }} </strong>
-    <span itemprop="keywords">
-    {% for hash in category_hashes %}
-      {% assign keyValue = hash | split: '#' %}
-      {% capture category_word %}{{ keyValue[1] | strip_newlines }}{% endcapture %}
-      <a href="{{ category_word | slugify | prepend: path_type | prepend: site.category_archive.path | absolute_url }}" class="page__taxonomy-item" rel="tag">{{ category_word }}</a>{% unless forloop.last %}<span class="sep">, </span>{% endunless %}
-    {% endfor %}
-    </span>
+    <div class="page__column-left">
+      <strong><i class="fa fa-fw fa-folder-open" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].categories_label }} </strong>
+    </div>
+    <div class="page__column-right">
+      <span itemprop="keywords">
+        {% for hash in category_hashes %}
+          {% assign keyValue = hash | split: '#' %}
+          {% capture category_word %}{{ keyValue[1] | strip_newlines }}{% endcapture %}
+          <a href="{{ category_word | slugify | prepend: path_type | prepend: site.category_archive.path | absolute_url }}" class="page__taxonomy-item" rel="tag">{{ category_word }}</a>
+        {% endfor %}
+      </span>
+    </div>
   </p>
 {% endif %}

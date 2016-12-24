@@ -399,3 +399,17 @@
   font-size: $type-size-6;
   text-transform: uppercase;
 }
+
+
+/*
+   Columns
+   ========================================================================== */
+
+.page__column-left {
+  float: left;
+  width: 14%;
+}
+
+.page__column-right {
+  margin-left: 14%;
+}
