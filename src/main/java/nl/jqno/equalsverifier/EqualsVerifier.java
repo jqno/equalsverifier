@@ -27,79 +27,22 @@ import java.util.*;
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the
  * contract for the {@code equals} and {@code hashCode} methods in a class is
- * met. The contracts are described in the Javadoc comments for the
- * {@link java.lang.Object} class.
+ * met.
  * <p>
- * Use, within unit test method, as follows:<br>
- * - Create an instance of {@link EqualsVerifier}.
- * Call {@link #forClass(Class)} to supply a reference to the class that
- * contains the {@code equals} method to test. Also,
- * {@link #forRelaxedEqualExamples(Object, Object, Object...)} can be used if
- * the class under test has relaxed equality rules, for example, if the
- * contents of two fields of the same type can be interchanged without breaking
- * equality.<br>
- * - If the class under test is designed for inheritance, and the
- * {@code equals} and {@code hashCode} methods can be overridden, an instance
- * of the class is not permitted to be equal to an instance of a subclass, even
- * though all the relevant fields are equal. Call
- * {@link #withRedefinedSubclass(Class)} to supply a reference to such a
- * subclass, or call {@link #suppress(Warning...)} with
- * {@link Warning#STRICT_INHERITANCE} to disable the check.<br>
- * - Call {@link #suppress(Warning...)} to suppress warnings given by
- * {@code EqualsVerifier}.<br>
- * - Call {@link #verify()} to perform the actual verifications.
+ * The contracts are described in the Javadoc comments for
+ * {@link java.lang.Object#equals(Object)} and
+ * {@link java.lang.Object#hashCode()}
  * <p>
- * Example use:
- *
- * <pre>{@code
- * EqualsVerifier.forClass(My.class).verify();
- * }</pre>
- *
- * Or, if you prefer to use a {@code getClass()} check instead of an
- * {@code instanceof} check in the body of your {@code equals} method:
- *
- * <pre>{@code
- * EqualsVerifier.forClass(My.class)
- *     .usingGetClass()
- *     .verify();
- * }</pre>
- *
- * With some warnings suppressed:
- *
- * <pre>{@code
- * EqualsVerifier.forClass(My.class)
- *     .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
- *     .verify();
- * }</pre>
- *
- * The following properties are verified:<br>
- * - Preconditions for {@link EqualsVerifier} itself.<br>
- * - Reflexivity and symmetry of the {@code equals} method.<br>
- * - Symmetry and transitivity of the {@code equals} method within an
- * inheritance hierarchy, when applicable.<br>
- * - Consistency (by repeatedly calling {@code equals}).<br>
- * - "Non-nullity".<br>
- * - That {@code equals}, {@code hashCode} and {@code toString} not be able to
- * throw {@link NullPointerException}. (Optional)<br>
- * - The {@code hashCode} contract.<br>
- * - That {@code equals} and {@code hashCode} be defined in terms of
- * the same fields.<br>
- * - The finality of the fields in terms of which {@code equals} and
- * {@code hashCode} are defined. (Optional)<br>
- * - The finality of the class under test and of the {@code equals} method
- * itself, when applicable.<br>
- * - That transient fields not be included in the {@code equals} contract for
- * the class. (Optional)
+ * To get started, use {@code EqualsVerifier} as follows:
+ * <p>
+ * {@code EqualsVerifier.forClass(My.class).verify();}
  * <p>
  * For more information, see the documentation at
- * http://www.jqno.nl/equalsverifier/
+ * http://www.jqno.nl/equalsverifier
  *
  * @author Jan Ouwens
  *
  * @param <T> The class under test.
- *
- * @see java.lang.Object#equals(Object)
- * @see java.lang.Object#hashCode()
  */
 public final class EqualsVerifier<T> {
     private Configuration<T> config;
