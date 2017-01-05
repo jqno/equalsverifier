@@ -224,6 +224,23 @@ public final class EqualsVerifier<T> {
     }
 
     /**
+     * Signals that all given fields can never be null, and {@code
+     * EqualsVerifier} therefore doesn't have to verify that proper null checks
+     * are in place for these fields.
+     *
+     * This can be used instead of {link #suppress(Warning...)}, which provides
+     * the same behaviour for all fields, when only some fields are never null
+     * but others are.
+     *
+     * @param fields Fields that can never be null.
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> withNonnullFields(String... fields) {
+        config = config.withNonnullFields(Arrays.asList(fields));
+        return this;
+    }
+
+    /**
      * Signals that T is part of an inheritance hierarchy where {@code equals}
      * is overridden. Call this method if T has overridden {@code equals} and
      * {@code hashCode}, and one or more of T's superclasses have as well.

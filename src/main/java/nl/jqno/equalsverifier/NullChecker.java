@@ -49,6 +49,9 @@ class NullChecker<T> implements Checker {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Field field = referenceAccessor.getField();
+            if (config.getNonnullFields().contains(field.getName())) {
+                return;
+            }
             if (field.getType().isPrimitive()) {
                 return;
             }

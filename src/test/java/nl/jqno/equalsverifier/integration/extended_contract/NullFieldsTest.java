@@ -92,6 +92,27 @@ public class NullFieldsTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void fail_whenClassHasNullChecksForOnlySomeFields() {
+        expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "o");
+        EqualsVerifier.forClass(MixedNullFields.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasNullChecksForOnlySomeFields_givenTheOtherFieldIsFlagged() {
+        EqualsVerifier.forClass(MixedNullFields.class)
+                .withNonnullFields("o")
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasNullChecksForOnlySomeFields_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(MixedNullFields.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
     static final class EqualsThrowsNpeOnThis {
         private final Color color;
 
@@ -209,5 +230,30 @@ public class NullFieldsTest extends IntegrationTestBase {
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class MixedNullFields {
+        private final Object o;
+        private final Object p;
+
+        public MixedNullFields(Object o, Object p) {
+            if (o == null) {
+                throw new NullPointerException("o");
+            }
+            this.o = o;
+            this.p = p;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof MixedNullFields)) {
+                return false;
+            }
+            MixedNullFields other = (MixedNullFields)obj;
+            return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "Mixed[" + o + ", " + p + "]"; }
     }
 }

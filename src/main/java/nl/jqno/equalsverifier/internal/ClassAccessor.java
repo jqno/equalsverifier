@@ -25,6 +25,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor}
@@ -303,7 +305,7 @@ public class ClassAccessor<T> {
      *          default values.
      */
     public T getDefaultValuesObject(TypeTag enclosingType) {
-        return getDefaultValuesAccessor(enclosingType).get();
+        return getDefaultValuesAccessor(enclosingType, new HashSet<String>()).get();
     }
 
     /**
@@ -313,13 +315,14 @@ public class ClassAccessor<T> {
      * @param enclosingType Describes the type that contains this object as a
      *                      field, to determine any generic parameters it may
      *                      contain.
+     * @param nonnullFields Fields which are not allowed to be set to null.
      * @return An {@link ObjectAccessor} for
      *          {@link #getDefaultValuesObject(TypeTag)}.
      */
-    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType) {
+    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields) {
         ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
-            if (NonnullAnnotationChecker.fieldIsNonnull(this, field)) {
+            if (NonnullAnnotationChecker.fieldIsNonnull(this, field) || nonnullFields.contains(field.getName())) {
                 FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues, enclosingType);
             }

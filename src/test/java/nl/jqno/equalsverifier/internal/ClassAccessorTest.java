@@ -37,6 +37,8 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
 import static org.junit.Assert.*;
@@ -48,6 +50,7 @@ public class ClassAccessorTest {
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
+    private ClassAccessor<DefaultValues> defaultValuesClassAccessor;
 
     @Before
     public void setup() {
@@ -55,6 +58,7 @@ public class ClassAccessorTest {
         JavaApiPrefabValues.addTo(prefabValues);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, false);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, false);
+        defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues, false);
     }
 
     @Test
@@ -251,10 +255,21 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getDefaultValuesAccessor() {
-        PointContainer foo = pointContainerAccessor.getDefaultValuesObject(TypeTag.NULL);
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getDefaultValuesAccessor(TypeTag.NULL);
-        assertEquals(foo, objectAccessor.get());
+    public void getDefaultValuesAccessor_withNoNonnullValues() {
+        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, new HashSet<String>());
+        DefaultValues foo = objectAccessor.get();
+        assertEquals(null, foo.s);
+        // The rest is tested in getDefaultValuesObject
+    }
+
+    @Test
+    public void getDefaultValuesAccessor_withOneNonnullValue() {
+        Set<String> nonnullFields = new HashSet<>();
+        nonnullFields.add("s");
+        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, nonnullFields);
+        DefaultValues foo = objectAccessor.get();
+        assertFalse(foo.s == null);
+        // The rest is tested in getDefaultValuesObject
     }
 
     @Test
