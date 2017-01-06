@@ -77,7 +77,7 @@ limitations under the License.
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <encoding>UTF-8</encoding>
-        <jacoco.version>0.7.7.201606060606</jacoco.version>
+        <jacoco.version>0.7.8</jacoco.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
         <findbugs.effort>Max</findbugs.effort>
         <findbugs.threshold>Low</findbugs.threshold>
@@ -87,22 +87,22 @@ limitations under the License.
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>2.4</version>
+            <version>2.5</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.5.8</version>
+            <version>1.6.2</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>5.1</version>
+            <version>5.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
-            <version>3.0.1</version>
+            <version>3.0.1u2</version>
             <scope>provided</scope>
         </dependency>
 
@@ -116,7 +116,7 @@ limitations under the License.
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.4</version>
+            <version>3.5</version>
             <scope>test</scope>
         </dependency>
 
@@ -146,7 +146,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
+                <version>3.6.0</version>
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
@@ -294,7 +294,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -356,7 +356,7 @@ limitations under the License.
             <plugin>
               <groupId>org.eluder.coveralls</groupId>
               <artifactId>coveralls-maven-plugin</artifactId>
-              <version>4.1.0</version>
+              <version>4.3.0</version>
             </plugin>
         </plugins>
 
@@ -371,7 +371,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.1.9</version>
+                    <version>1.1.11</version>
                 </plugin>
 
                 <plugin>
@@ -382,7 +382,7 @@ limitations under the License.
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.16.1</version>
+                            <version>6.19</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -390,7 +390,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.3</version>
+                    <version>3.0.4</version>
                 </plugin>
             </plugins>
         </pluginManagement>
