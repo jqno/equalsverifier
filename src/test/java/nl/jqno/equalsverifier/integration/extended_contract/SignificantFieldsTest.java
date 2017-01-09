@@ -225,7 +225,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 
     @Test
     public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
-        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withOnlyTheseFields("x")
                 .withIgnoredFields("x");
@@ -233,7 +233,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
 
     @Test
     public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
-        expectException(IllegalStateException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("x")
                 .withOnlyTheseFields("x");

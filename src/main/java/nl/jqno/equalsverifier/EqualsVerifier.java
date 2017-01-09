@@ -115,6 +115,7 @@ public final class EqualsVerifier<T> {
         EnumSet<Warning> ws = config.getWarningsToSuppress();
         Collections.addAll(ws, warnings);
         config = config.withWarningsToSuppress(ws);
+        checkNonnullFields();
         return this;
     }
 
@@ -171,15 +172,7 @@ public final class EqualsVerifier<T> {
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
         checkIgnoredFields();
         List<String> ignoredFields = Arrays.asList(fields);
-        Set<String> actualFieldNames = new HashSet<>();
-        for (Field field : FieldIterable.of(config.getType())) {
-            actualFieldNames.add(field.getName());
-        }
-        for (String field : ignoredFields) {
-            if (!actualFieldNames.contains(field)) {
-                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
-            }
-        }
+        validateFieldNamesExist(ignoredFields);
 
         config = config.withIgnoredFields(ignoredFields);
         return this;
@@ -217,12 +210,6 @@ public final class EqualsVerifier<T> {
         return this;
     }
 
-    private void checkIgnoredFields() {
-        if (!config.getIgnoredFields().isEmpty()) {
-            throw new IllegalStateException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        }
-    }
-
     /**
      * Signals that all given fields can never be null, and {@code
      * EqualsVerifier} therefore doesn't have to verify that proper null checks
@@ -236,7 +223,10 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withNonnullFields(String... fields) {
-        config = config.withNonnullFields(Arrays.asList(fields));
+        List<String> nonnullFields = Arrays.asList(fields);
+        validateFieldNamesExist(nonnullFields);
+        config = config.withNonnullFields(nonnullFields);
+        checkNonnullFields();
         return this;
     }
 
@@ -310,6 +300,30 @@ public final class EqualsVerifier<T> {
                 new CachedHashCodeInitializer<>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
         config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
         return this;
+    }
+
+    private void checkNonnullFields() {
+        if (!config.getNonnullFields().isEmpty() && config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
+            throw new IllegalArgumentException("You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        }
+    }
+
+    private void checkIgnoredFields() {
+        if (!config.getIgnoredFields().isEmpty()) {
+            throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        }
+    }
+
+    private void validateFieldNamesExist(List<String> givenFields) {
+        Set<String> actualFieldNames = new HashSet<>();
+        for (Field field : FieldIterable.of(config.getType())) {
+            actualFieldNames.add(field.getName());
+        }
+        for (String field : givenFields) {
+            if (!actualFieldNames.contains(field)) {
+                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
     }
 
     /**
