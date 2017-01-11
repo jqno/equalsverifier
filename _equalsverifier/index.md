@@ -8,6 +8,8 @@ EqualsVerifier 2.0 requires Java 7 or higher. EqualsVerifier 1.x requires Java 6
 
 If you are upgrading from version 1 to version 2, please see the [migration guide](/equalsverifier/migration1to2).
 
+Read the new [quick start guide](/equalsverifier/quickstart).
+
 ### Get EqualsVerifier.
 * Maven users, add this to your POM:
 
