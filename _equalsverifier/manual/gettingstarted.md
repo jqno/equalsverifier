@@ -33,6 +33,6 @@ These problems might not seem like a big deal, and to be honest, you might never
 
 That's why EqualsVerifier's philosophy is to be super-strict by default. In fact, it can be frustratingly strict. But there's a lot of ways to tweak EqualsVerifier to make it behave just the way you want it to. Here are the most common ones:
 
-* 1
+* [Making things final](/equalsverifier/manual/final)
 * 2
 
