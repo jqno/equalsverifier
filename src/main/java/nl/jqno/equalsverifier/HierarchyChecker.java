@@ -180,12 +180,14 @@ class HierarchyChecker<T> implements Checker {
         else {
             Formatter equalsFormatter = Formatter.of(
                     "Subclass: equals is not final." +
-                    "\nSupply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.");
+                    "\nMake your class or your equals method final," +
+                    " or supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.");
             assertTrue(equalsFormatter, equalsIsFinal);
 
             Formatter hashCodeFormatter = Formatter.of(
                     "Subclass: hashCode is not final." +
-                    "\nSupply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.");
+                    "\nMake your class or your hashCode method final," +
+                    " or supply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
     }
