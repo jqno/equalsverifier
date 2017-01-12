@@ -35,6 +35,7 @@ class FieldsChecker<T> implements Checker {
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> ignoredFields;
+    private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public FieldsChecker(Configuration<T> config) {
@@ -43,6 +44,7 @@ class FieldsChecker<T> implements Checker {
         this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
+        this.nonnullFields = config.getNonnullFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -69,7 +71,7 @@ class FieldsChecker<T> implements Checker {
         inspector.check(new TransitivityFieldCheck());
 
         if (!warningsToSuppress.contains(Warning.NULL_FIELDS)) {
-            inspector.checkWithNull(new SignificantFieldCheck(true));
+            inspector.checkWithNull(nonnullFields, new SignificantFieldCheck(true));
         }
     }
 
@@ -374,9 +376,10 @@ class FieldsChecker<T> implements Checker {
         }
 
         private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+            Field field = referenceAccessor.getField();
             boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
-            boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField());
-            boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS);
+            boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, field);
+            boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS) || nonnullFields.contains(field.getName());
             if (fieldIsPrimitive || !ignoreNull) {
                 referenceAccessor.defaultField();
                 changedAccessor.defaultField();

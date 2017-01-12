@@ -25,6 +25,9 @@ import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.Assert.assertEquals;
 
 public class FieldInspectorTest {
@@ -41,8 +44,9 @@ public class FieldInspectorTest {
     @Test
     public void objectsAreReset_whenEachIterationBegins_givenNullObjects() {
         FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
+        Set<String> nullFields = new HashSet<>();
 
-        inspector.checkWithNull(new ResetObjectForEachIterationCheck());
+        inspector.checkWithNull(nullFields, new ResetObjectForEachIterationCheck());
     }
 
     private final class ResetObjectForEachIterationCheck implements FieldCheck {

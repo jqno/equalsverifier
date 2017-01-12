@@ -22,6 +22,7 @@ import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 import java.lang.reflect.Field;
+import java.util.Set;
 
 class FieldInspector<T> {
     private final ClassAccessor<T> classAccessor;
@@ -41,10 +42,10 @@ class FieldInspector<T> {
         }
     }
 
-    public void checkWithNull(FieldCheck check) {
+    public void checkWithNull(Set<String> nonnullFields, FieldCheck check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(typeTag);
-            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(typeTag);
+            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields);
+            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields);
 
             check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
         }
