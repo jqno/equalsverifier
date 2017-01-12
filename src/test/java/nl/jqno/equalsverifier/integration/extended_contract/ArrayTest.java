@@ -145,6 +145,12 @@ public class ArrayTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_whenStaticArrayIsUninitialized() {
+        EqualsVerifier.forClass(UninitializedStaticArrayContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenArrayLengthIsInvariant() {
         int[] a = { 1, 2, 3 };
         int[] b = { 4, 5, 6 };
@@ -454,6 +460,14 @@ public class ArrayTest extends IntegrationTestBase {
 
     static final class EmptyStaticFinalArrayContainer {
         public static final EmptyStaticFinalArrayContainer[] EMPTY = {};
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    static final class UninitializedStaticArrayContainer {
+        public static int[] uninitialized;
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
