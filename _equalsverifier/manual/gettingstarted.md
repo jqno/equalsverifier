@@ -2,6 +2,7 @@
 title: Getting Started
 ---
 ## Get EqualsVerifier
+EqualsVerifier 2.0 requires Java 7 or higher. EqualsVerifier 1.x requires Java 6 or higher.
 
 * Maven users, add this to your POM:
 
@@ -9,7 +10,7 @@ title: Getting Started
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>2.1.8</version>
+    <version>2.2</version>
     <scope>test</scope>
 </dependency>
 {% endhighlight %}

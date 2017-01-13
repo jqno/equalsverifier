@@ -1,7 +1,7 @@
 # main links
 main:
-  - title: "Need help?"
-    url: /help
+  - title: "Manual"
+    url: /manual
   - title: "Error messages explained"
     url: /errormessages
   - title: "Blog"
