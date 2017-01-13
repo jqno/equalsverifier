@@ -9,7 +9,7 @@ EqualsVerifier helps you. Testing `equals` can be as simple as:
 {% highlight java %}
 @Test
 public void equalsContract() {
-    EqualsVerifier.forClass(My.class).verify();
+    EqualsVerifier.forClass(Foo.class).verify();
 }
 {% endhighlight %}
 

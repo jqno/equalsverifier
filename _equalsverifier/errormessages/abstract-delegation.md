@@ -1,8 +1,8 @@
 ---
 title: Abstract delegation
 ---
-    Abstract delegation: MyClass's equals method delegates to an abstract method
-    Abstract delegation: MyClass's hashCode method delegates to an abstract method
+    Abstract delegation: Foo's equals method delegates to an abstract method
+    Abstract delegation: Foo's hashCode method delegates to an abstract method
 
 This error can occur when the class under test, one of its fields, or its superclass, is abstract, and their `equals` or `hashCode` method calls an abstract method.
 

@@ -18,7 +18,7 @@ Example use:
 {% highlight java %}
 @Test
 public void equalsContract() {
-    EqualsVerifier.forClass(My.class).verify();
+    EqualsVerifier.forClass(Foo.class).verify();
 }
 {% endhighlight %}
 
@@ -27,7 +27,7 @@ Or, with some warnings suppressed:
 {% highlight java %}
 @Test
 public void equalsContract() {
-    EqualsVerifier.forClass(My.class)
+    EqualsVerifier.forClass(Foo.class)
             .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
             .verify();
 }

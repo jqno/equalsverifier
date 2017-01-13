@@ -23,7 +23,7 @@ If that's not an option, you're probably adding state in your subclasses that yo
 As a last resort, you can suppress the warning like this:
 
 {% highlight java %}
-EqualsVerifier.forClass(My.class)
+EqualsVerifier.forClass(Foo.class)
     .suppress(Warning.STRICT_INHERITANCE)
     .verify();
 {% endhighlight %}

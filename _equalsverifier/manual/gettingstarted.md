@@ -24,7 +24,7 @@ EqualsVerifier doesn't have any dependencies of its own.
 {% highlight java %}
 @Test
 public void equalsContract() {
-    EqualsVerifier.forClass(My.class).verify();
+    EqualsVerifier.forClass(Foo.class).verify();
 }
 {% endhighlight %}
 

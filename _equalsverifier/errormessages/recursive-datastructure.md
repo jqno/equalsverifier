@@ -16,7 +16,7 @@ EqualsVerifier will recursively try to instantiate objects of every class it enc
 Example:
 
 {% highlight java %}
-EqualsVerifier.forClass(MyClass.class)
+EqualsVerifier.forClass(Foo.class)
     .withPrefabValues(Foo.class, new Foo(1), new Foo(2))
     .verify();
 {% endhighlight %}
