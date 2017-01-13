@@ -36,5 +36,5 @@ That's why EqualsVerifier's philosophy is to be super-strict by default. In fact
 
 * [Making things final](/equalsverifier/manual/final)
 * [Immutability](/equalsverifier/manual/immutability)
-* [instanceof or getClass()](/equalsverifier/manual/instaneof-or-getclass)
+* [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)
 
