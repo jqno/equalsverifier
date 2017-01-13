@@ -5,5 +5,6 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 
 * [Getting started](/equalsverifier/manual/gettingstarted)
 * [Making things final](/equalsverifier/manual/final)
+* [Immutability](/equalsverifier/manual/immutability)
 * [Adding state in subclasses](/equalsverifier/manual/adding-state)
 
