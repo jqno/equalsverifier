@@ -143,7 +143,8 @@ class HierarchyChecker<T> implements Checker {
         }
         else {
             Formatter formatter = Formatter.of(
-                    "Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\nConsider making the class final.",
+                    "Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\n" +
+                            "Maybe you forgot to add usingGetClass(). Otherwise, consider making the class final.",
                     reference);
             assertTrue(formatter, reference.equals(equalSub));
         }
