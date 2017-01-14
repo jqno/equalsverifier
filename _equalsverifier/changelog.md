@@ -8,6 +8,12 @@ title: Changelog
 
 <a name="2.x"></a>
 
+Version 2.2
+-----------
+* ...be more specific about which fields may be null, using `withNonnullFields`. ([Issue 134](https://github.com/jqno/equalsverifier/issues/134))
+* ...have an uninitialized static array in your class without getting a NullPointerException. ([Issue 165](https://github.com/jqno/equalsverifier/issues/165))
+* ...see more helpful error messages.
+
 Version 2.1.8
 -------------
 * ...test classes that implement an abstract class that calls an abstract method in its `equals` or `hashCode` methods, when EqualsVerifier is called with `usingGetClass`. ([Issue 161](https://github.com/jqno/equalsverifier/issues/161))
