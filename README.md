@@ -61,4 +61,4 @@ Project structure
 
 Disclaimer
 ---
-Copyright 2009-2016 Jan Ouwens
+Copyright 2009-2017 Jan Ouwens
