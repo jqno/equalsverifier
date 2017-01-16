@@ -13,13 +13,19 @@ public void equalsContract() {
 }
 {% endhighlight %}
 
+And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` methods.
+
 
 Sounds great, how do I use it?
 ---
 * If you want to get started quickly, read the [getting started](/equalsverifier/manual/gettingstarted) page.
 * If you want to learn more, read the [manual](/equalsverifier/manual).
-* If you want to know if you should update, read the [changelog](/equalsverifier/changelog).
-* If you want to migrate from version 1 to version 2, read the [migration guide](/equalsverifier/migration1to2).
+
+If you're interested, there's more to read:
+
+* The [FAQ](/equalsverifier/faq)
+* The [changelog](/equalsverifier/changelog).
+* The [migration guide](/equalsverifier/migration1to2), if you're migrating from version 1.x to 2.x.
 
 
 Fork me on GitHub!
