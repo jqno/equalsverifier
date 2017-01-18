@@ -7,5 +7,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Making things final](/equalsverifier/manual/final)
 * [Immutability](/equalsverifier/manual/immutability)
 * [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)
-* [Adding state to subclasses](/equalsverifier/manual/adding-state)
+* [Handling inheritance](/equalsverifier/manual/inheritance)
 

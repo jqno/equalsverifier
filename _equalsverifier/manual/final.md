@@ -18,7 +18,7 @@ The reason for these messages is that it's very easy for your junior team member
 
 The easiest way to make sure this kind of behaviour doesn't happen, is by making either your class or your `equals` method final.
 
-If that's not an option, you're probably adding state in your subclasses that you want to include in `equals`. This is actually very hard to get right, and I talk more about it [here](/equalsverifier/manual/adding-state).
+If that's not an option, you're probably adding state in your subclasses that you want to include in `equals`. This is actually very hard to get right, and I talk more about it [here](/equalsverifier/manual/inheritance).
 
 As a last resort, you can suppress the warning like this:
 
