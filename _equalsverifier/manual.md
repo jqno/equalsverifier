@@ -8,5 +8,6 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Immutability](/equalsverifier/manual/immutability)
 * [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)
 * [Dealing with null](/equalsverifier/manual/null)
+* [Ignoring fields](/equalsverifier/manual/ignoring-fields)
 * [Handling inheritance](/equalsverifier/manual/inheritance)
 
