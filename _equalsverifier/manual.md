@@ -10,4 +10,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Dealing with null](/equalsverifier/manual/null)
 * [Ignoring fields](/equalsverifier/manual/ignoring-fields)
 * [Handling inheritance](/equalsverifier/manual/inheritance)
+* [Cached hashCodes](/equalsverifier/manual/caching-hashcodes)
 
