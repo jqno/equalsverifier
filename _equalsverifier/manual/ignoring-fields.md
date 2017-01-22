@@ -19,6 +19,12 @@ It accepts a varargs argument, so you can specify as many fields as you like. If
 If you do this, EqualsVerifier assumes that the fields `bar` and `baz` don't participate in `equals`. If EqualsVerifier notices that they do despite this, EqualsVerifier will fail the test.
 
 
+### Transient fields
+Java has the `transient` keyword to exclude fields from serialization, and [JPA](/equalsverifier/manual/jpa-entities) has the `@Transient` annotation to exclude fields from being persisted. In both cases, these fields should not participate in `equals`. EqualsVerifier acknowledges this, and will ignore these fields. This means you don't have to call `withIgnoredFields` for these fields.
+
+If these fields do participate in `equals`, EqualsVerifier fails the test.
+
+
 ### Including fields
 If your class has a lot of fields, but it determines equality based on only a few of them, you can also turn it around and specify precisely the fields you want:
 
