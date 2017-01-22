@@ -32,3 +32,13 @@ Now only `bar` and `baz` can participate in `equals`. EqualsVerifier fails the t
 
 Like `withIgnoredFields`, `withOnlyTheseFields` accepts a varargs argument, so you can specify as few or as many fields as you need.
 
+
+### Disable it all
+If you don't care whether all fields are used in `equals` or not, you can also disable the checks altogether:
+
+{% highlight java %}
+EqualsVerifier.forClass(Foo.class)
+    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+    .verify();
+{% endhighlight %}
+
