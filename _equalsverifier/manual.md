@@ -13,4 +13,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [JPA entities](/equalsverifier/manual/jpa-entities)
 * [Cached hashCodes](/equalsverifier/manual/caching-hashcodes)
 * [Relaxed equality](/equalsverifier/manual/relaxed-equality)
+* [Dealing with legacy systems](/equalsverifier/manual/legacy-systems)
 
