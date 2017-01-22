@@ -8,7 +8,9 @@ JPA entities are mutable by design. Since adding `.suppress(Warning.NONFINAL_FIE
 
 
 ### Transient fields
-Since fields marked with the `@Transient` annotation are not persisted, they should generally not participate in `equals` and `hashCode` either. Therefore, EqualsVerifier will implicitly call [`withIgnoredFields`](/equalsverifier/manual/ignoring-fields) for these fields. If they do participate, EqualsVerifier will fail the test.
+Since fields marked with the `@Transient` annotation are not persisted, they should generally not participate in `equals` and `hashCode` either. Therefore, EqualsVerifier will implicitly call [`withIgnoredFields`](/equalsverifier/manual/ignoring-fields) for these fields.
+
+If they do participate, EqualsVerifier will fail the test. This behavior can be avoided by suppressing `Warning.TRANSIENT_FIELDS`.
 
 
 ### IDs and new objects

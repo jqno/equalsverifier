@@ -22,7 +22,7 @@ If you do this, EqualsVerifier assumes that the fields `bar` and `baz` don't par
 ### Transient fields
 Java has the `transient` keyword to exclude fields from serialization, and [JPA](/equalsverifier/manual/jpa-entities) has the `@Transient` annotation to exclude fields from being persisted. In both cases, these fields should not participate in `equals`. EqualsVerifier acknowledges this, and will ignore these fields. This means you don't have to call `withIgnoredFields` for these fields.
 
-If these fields do participate in `equals`, EqualsVerifier fails the test.
+If these fields do participate in `equals`, EqualsVerifier fails the test. This behavior can be avoided by suppressing `Warning.TRANSIENT_FIELDS`.
 
 
 ### Including fields
