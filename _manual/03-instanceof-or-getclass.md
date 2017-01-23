@@ -1,5 +1,6 @@
 ---
 title: "`instanceof` or `getClass()`"
+permalink: /manual/instanceof-or-getclass/
 ---
 An `equals` method needs to check the type of its argument, and there's two ways to do that: either with an `instanceof` check, or with a `getClass()` check:
 

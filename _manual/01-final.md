@@ -1,5 +1,6 @@
 ---
 title: Making things final
+permalink: /manual/final/
 ---
 The first error message that EqualsVerifier is likely to give you, is either this:
 

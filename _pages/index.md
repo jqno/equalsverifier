@@ -18,7 +18,7 @@ And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` metho
 
 Sounds great, how do I use it?
 ---
-* If you want to get started quickly, read the [getting started](/equalsverifier/manual/gettingstarted) page.
+* If you want to get started quickly, read the [getting started](/equalsverifier/manual/getting-started) page.
 * If you want to learn more, read the [manual](/equalsverifier/manual).
 
 If you're interested, there's more to read:

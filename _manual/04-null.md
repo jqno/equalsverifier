@@ -1,5 +1,6 @@
 ---
 title: Dealing with null
+permalink: /manual/null/
 ---
 `equals` methods are not allowed to throw exceptions. This includes NullPointerExceptions. EqualsVerifier checks this as well, but that means that you may have to do some work.
 

@@ -1,5 +1,6 @@
 ---
 title: Immutability
+permalink: /manual/immutability/
 ---
 EqualsVerifier often asks you to make your fields final:
 

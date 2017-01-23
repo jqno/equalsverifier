@@ -1,5 +1,6 @@
 ---
 title: JPA entities
+permalink: /manual/jpa-entities/
 ---
 EqualsVerifier has some support for JPA entities.
 

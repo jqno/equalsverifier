@@ -1,5 +1,6 @@
 ---
 title: FAQ
+permalink: /faq/
 ---
 * [Philosophy](#philosophy)
     * [Can EqualsVerifier give false positives?](#falsepositives)

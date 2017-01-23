@@ -1,5 +1,6 @@
 ---
 title: Dealing with legacy systems
+permalink: /manual/legacy-systems/
 ---
 When you're bringing a legacy system under test, you often don't want to mess with things that already work: it's more important to get some decent coverage. Once you have that, you can go back and make improvements.
 

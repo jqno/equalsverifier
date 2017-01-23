@@ -1,5 +1,6 @@
 ---
 title: Relaxed equality
+permalink: /manual/relaxed-equality/
 ---
 Sometimes, simply comparing all the values of the fields is not the best way to define `equals`. The famous example of this is rational numbers, where <sup>1</sup>/<sub>2</sub> and <sup>2</sup>/<sub>4</sub> are equal, even though they have different fields. EqualsVerifier calls this 'relaxed equality'.
 

@@ -1,5 +1,6 @@
 ---
 title: Handling inheritance
+permalink: /manual/inheritance/
 ---
 Sometimes you want to override a class, add a field, and override `equals` to look at the new field. If you don't forget to call `super.equals()` it should be fine, right? Well, it depends.
 

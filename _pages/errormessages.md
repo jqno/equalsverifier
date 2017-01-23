@@ -1,5 +1,6 @@
 ---
 title: Error messages explained
+permalink: /errormessages/
 ---
 ## Introduction
 

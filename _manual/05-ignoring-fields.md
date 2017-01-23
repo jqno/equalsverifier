@@ -1,5 +1,6 @@
 ---
 title: Ignoring fields
+permalink: /manual/ignoring-fields/
 ---
 By default, EqualsVerifier assumes that all (non-static) fields of your class participate in `equals` and `hashCode`.
 

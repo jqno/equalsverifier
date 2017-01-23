@@ -1,5 +1,6 @@
 ---
 title: Caching hashCodes
+permalink: /manual/caching-hashcodes/
 ---
 Normally, a hashCode is calculated every time you call the `hashCode()` method. That's usually not a problem, since the calculation is usually not very complex.
 
