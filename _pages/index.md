@@ -23,13 +23,14 @@ Sounds great, how do I use it?
 
 If you're interested, there's more to read:
 
-* The [FAQ](/equalsverifier/faq)
+* The [FAQ](/equalsverifier/faq).
 * The [changelog](/equalsverifier/changelog).
 * The [migration guide](/equalsverifier/migration1to2), if you're migrating from version 1.x to 2.x.
+* The [inspiration](/equalsverifier/inspiration) for EqualsVerifier.
 
 
 Fork me on GitHub!
-------------------
+---
 The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier).
 
 Pull Requests are welcome! But please also [open an issue](https://github.com/jqno/equalsverifier/issues) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier) so we can discuss it.
