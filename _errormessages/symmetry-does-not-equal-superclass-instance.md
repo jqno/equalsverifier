@@ -20,3 +20,6 @@ Unfortunately, EqualsVerifier cannot guess which scenario applies for any given 
 
 EqualsVerifier defaults to the latter case, i.e. the one where only behaviour is added. In my experience, this is the case that occurs more often. Moreover, it often happens without the programmer even realising it! For example, Hibernate creates a subclass of every entity class.
 A subclass that adds state, needs more ceremony: you'll have to add a `canEqual` method. Not many people know about this "trick", so it makes sense that this scenario occurs less often "in the wild". Therefore, this is the scenario that needs a custom setting: `#withRedefinedSuperclass()`.
+
+You can read more about how EqualsVerifier handles inheritance in [the manual](/equalsverifier/manual/inheritance).
+

@@ -7,6 +7,9 @@ There are three ways to solve this:
 
 * Make your field final. This is the preferred solution.
 * Add an `@Immutable` annotation to your class if you _know_ that the class is immutable, but the fields cannot be final for some reason.
-* Suppress `Warning.NONFINAL_FIELDS` if your class has to be mutable.
+* Suppress `Warning.NONFINAL_FIELDS` if your class has to be mutable. This is not recommended.
 
 Note: Unfortunately, EqualsVerifier cannnot detect if your fields are truly immutable, which is what's actually needed here. It can only see if fields are final, or if the class has an `@Immutable` annotation. 
+
+Read more about this subject in the manual's page on [immutability](/equalsverifier/manual/immutability).
+

@@ -1,9 +1,11 @@
 ---
 title: "ClassCastException: java.lang.Object cannot be cast to ..."
 ---
-There can be two causes for this error message. First, maybe you really did cast an `Object` to something it's not. Can't find the cast? Call EqualsVerifier with the `.debug()` method to see a full stacktrace.
+There can be two causes for this error message. First, maybe you really did cast an `Object` to something it's not.
 
-Second, it might be a generics problem. In this case, it will always be `java.lang.Object` that cannot be cast to some other class. Consider the following (partial) class:
+Second, it might be a generics problem. In this case, it will always be `java.lang.Object` that cannot be cast to some other class. This issue was solved in EqualsVerifier 2.0. If you haven't [upgraded](/equalsverifier/migration1to2) yet, please do so if you can! If not, continue reading.
+
+Consider the following (partial) class:
 
 {% highlight java %}
 final class StringReference {

@@ -36,5 +36,4 @@ EqualsVerifier.forClass(CachedHashCode.class)
     .withCachedHashCode("cachedHashCode", "calculateHashCode", new CachedHashCode());
 {% endhighlight %}
 
-In order to be able to fully test that the hashCode is initialized correctly, it is necessary to put the actual hashCode calculation in a separate method, as seen above, and also to provide a manually constructed object that serves as an example.
-
+For more help on how to use `withCachedHashCode`, read the [manual page about it](/equalsverifier/manual/caching-hashcodes).

@@ -83,6 +83,7 @@ public boolean equals(Object obj) {
 }
 {% endhighlight %}
 
-EqualsVerifier will never execute the second `if` statement's block, simply because it doesn't test for all possible values. It can't it would take far too long. (For our `Point` class, assuming that `x` and `y` are `int`, it would take more than 2<sup>32</sup>*2<sup>32</sup> comparisons.)
+EqualsVerifier will never execute the second `if` statement's block, simply because it doesn't test for all possible values. It can't; it would take far too long. (For our `Point` class, assuming that `x` and `y` are `int`, it would take more than 2<sup>32</sup>*2<sup>32</sup> comparisons.)
 
-Of course, this is a contrived example (and many more are possible, for example using random numbers or environment variables). However, if you really do need non-standard branches in your `equals` method, you will have to test them manually; not just because EqualsVerifier doesn't _cover_ them, but because EqualsVerfier also doesn't _test_ them. But really, don't try to make your `equals` methods too clever; they're hard enough as they are.
+Of course, this is a contrived example (and many more are possible, for example using random numbers or environment variables). However, if you really do need non-standard branches in your `equals` method, you will have to test them manually; not just because EqualsVerifier doesn't _cover_ them, but because EqualsVerfier also doesn't _test_ them.
+

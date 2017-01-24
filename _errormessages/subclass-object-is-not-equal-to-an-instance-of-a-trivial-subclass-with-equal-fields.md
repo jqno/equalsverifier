@@ -51,3 +51,8 @@ EqualsVerifier.forClass(Foo.class)
     .withRedefinedSubclass(SomeSubclass.class)
     .verify();
 {% endhighlight %}
+
+Obligatory RTFM comment
+-----------------------
+You can read more about [handling inheritance in the manual](/equalsverifier/manual/inheritance).
+

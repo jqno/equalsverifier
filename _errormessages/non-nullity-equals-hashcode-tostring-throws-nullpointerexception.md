@@ -17,4 +17,9 @@ return Objects.equals(foo, other.foo);
 return foo == null ? other.foo == null : foo.equals(other.foo);
 {% endhighlight %}
 
-* If you're certain the field can never be null (for instance, because the class's constructor explicitly checks for it), you can suppress `Warning.NULL_FIELDS` in your call to EqualsVerifier.
+* If you're certain the field can never be null (for instance, because the class's constructor explicitly checks for it), you can add `.withNonnullFields("foo")` to your call to EqualsVerifier
+
+* If this problem occurs for many fields in the same class, you can suppress `Warning.NULL_FIELDS` in your call to EqualsVerifier.
+
+You can read more about dealing with null in the [manual page about null](/equalsverifier/manual/null).
+
