@@ -29,5 +29,7 @@ EqualsVerifier.forClass(Foo.class)
     .verify();
 {% endhighlight %}
 
-If you do that, you should be aware that you do run the risk of unpleasant bugs caused by symmetry or transitivity issues.
+If you do that, you should keep in mind that you can define a perfect `equals` method, but a subclass can still always break the `equals` contract, even for its superclass (which contains your perfect `equals` method)! It's very easy to override `equals` in a such way that breaks symmetry or transitivity with its superclass, even if you don't do it on purpose.
+
+This is why EqualsVerifier makes such a big deal of this, and why suppressing `Warning.STRICT_INHERITANCE` is a last resort.
 
