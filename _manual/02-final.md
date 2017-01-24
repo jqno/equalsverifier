@@ -4,14 +4,14 @@ permalink: /manual/final/
 ---
 The first error message that EqualsVerifier is likely to give you, is either this:
 
-> Subclass: equals is not final.<br>
-> Make your class or your equals method final, or supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.
+    Subclass: equals is not final.<br>
+    Make your class or your equals method final, or supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.
 
 or this:
 
-> Subclass: object is not equal to an instance of a trivial subclass with equal fields:<br>
-> &nbsp;&nbsp;Foo@123456<br>
-> Consider making the class final.
+    Subclass: object is not equal to an instance of a trivial subclass with equal fields:<br>
+      Foo@123456<br>
+    Consider making the class final.
 
 The reason for these messages is that it's very easy for your junior team member, or even for your six-months-later self, to make a subclass of your very carefully crafted class, which does something to mess up the symmetry or transitivity requirements of `equals`. When that happens, you risk unexpected behaviour, like not being able to look up a class in a `HashMap`.
 

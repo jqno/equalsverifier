@@ -4,7 +4,7 @@ permalink: /manual/immutability/
 ---
 EqualsVerifier often asks you to make your fields final:
 
-> Mutability: equals depends on mutable field foo.
+    Mutability: equals depends on mutable field foo.
 
 This is because of `equals`'s consistency requirement: if you call `equals` on the same objects twice, you expect the same results twice. If you change the values of the fields in between, the result of calling `equals` will change, too.
 

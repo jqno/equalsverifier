@@ -6,7 +6,7 @@ permalink: /manual/null/
 
 To be safe, EqualsVerifier requires you to add null checks for non-primitive fields you reference in your `equals` or `hashCode` method. If you don't, you will get the following error message:
 
-> Non-nullity: equals throws NullPointerException on field o.
+    Non-nullity: equals throws NullPointerException on field o.
 
 Adding a null check is easy: instead of `x.equals(other.x)`, you write `Objects.equals(x, other.x)`.
 
