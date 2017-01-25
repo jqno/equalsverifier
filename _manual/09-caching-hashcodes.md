@@ -12,13 +12,13 @@ You can instruct EqualsVerifier to work with cached hashCodes, but it takes some
 
 1. First, your class must contain a `private int` field that contains the cached hashCode.
 
-1. Second, the class must have a method that can initialize and/or update the hashCode. This method can have no parameters, it cannot be public, and it must return the hashCode as an `int`. That means that the method can't assign to the field that contains the cached hashCode. The assignment has to happen in the constructor.
+1. Second, the class must have a method that can calculate the hashCode. This method can have no parameters, it cannot be public, and it must return the hashCode as an `int`. That means that the method can't assign to the field that contains the cached hashCode. The assignment has to happen in the constructor. It also means you can't do the calculation in the `hashCode()` method.
 
 1. Finally, you must give EqualsVerifier an example of an object with a correctly initialized hashCode. EqualsVerifier uses this to make sure that your class isn't cheating, and that the method from the second point is actually used to assign to the field from the first point.
 
 These three elements must be passed to EqualsVerifier's `withCachedHashCode` method.
 
-All of this is pretty cumbersome, but it's necessary for technical reasons. You can correctly implement cached hashCodes in different ways, but EqualsVerifier can only test them if they're implemented in this particular way.
+All of this is pretty cumbersome, but it's necessary for technical reasons. There certainly are easier ways to correctly implement cached hashCodes, but EqualsVerifier can only test them if they're implemented in this particular way.
 
 Here is an example of a class which implements a cached hashCode in a way that EqualsVerifier can deal with:
 
@@ -70,5 +70,5 @@ EqualsVerifier.forClass(ObjectWithCachedHashCode.class)
         .verify();
 {% endhighlight %}
 
-The code for this (suppressing a warning with a very long name, passing a `null` value) is intentionally left a bit ugly, to urge you to do this only when it's absolutely necessary ;).
+The code for this (suppressing a warning with a very long name, passing a `null` value) is intentionally left a bit ugly, to urge you to do this only when it's absolutely necessary 😉.
 

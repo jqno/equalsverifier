@@ -2,7 +2,7 @@
 title: What does EqualsVerifier do?
 permalink: /manual/what/
 ---
-EqualsVerifier tests you `equals` and `hashCode` methods by repeatedly calling them with different values.
+EqualsVerifier tests your `equals` and `hashCode` methods by calling them repeatedly with different values.
 
 It checks the following properties:
 
@@ -29,7 +29,7 @@ The way EqualsVerifier achieves this, is through a lot of reflection and a littl
 
 First, it creates an instance of your class, without calling the constructor, in the same way that mocking frameworks do. This gives an object where all the fields are `0` or `null`. If the class isn't final, it also generates a subclass for the class to test with. Then, EqualsVerifier invents values for all the fields, and assigns these using reflection.
 
-EqualsVerifier then calls `equals` and `hashCode` repeatedly on various permutations of these objects to see if they return the values it expects.
+Next, EqualsVerifier calls `equals` and `hashCode` repeatedly on various permutations of these objects to see if they return the values it expects.
 
 Finally, it also uses reflection to look at the signature of `equals`, to see if it actually overrides `equals` instead of overload it.
 

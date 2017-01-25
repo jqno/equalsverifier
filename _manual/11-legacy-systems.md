@@ -6,7 +6,7 @@ When you're bringing a legacy system under test, you often don't want to mess wi
 
 That means that even though EqualsVerifier might fail on some (or many) of your classes, you don't want to change their `equals` methods just yet, because some part of the codebase might depend on that faulty implementation. At the same time, you do want to use EqualsVerifier, because you want to increase test coverage.
 
-For these situations, there are certain classes of warnings that you can suppress:
+For these situations, there are several types of warnings that you can suppress:
 
 * `Warning.ALL_FIELDS_SHOULD_BE_USED`: disables what it says it disables. You can be more specific with the methods `withIgnoredFields` and `withOnlyTheseFields`. Read more about this topic on the [page about ignoring fields](/equalsverifier/manual/ignoring-fields).
 * `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY`: allows the behavior in JPA where `equals` behaves differently when the id is set than when it is not set. Read more about this topic on the [page about JPA entities](/equalsverifier/manual/jpa-entities).

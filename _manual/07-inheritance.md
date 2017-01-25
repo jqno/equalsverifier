@@ -4,7 +4,7 @@ permalink: /manual/inheritance/
 ---
 Sometimes you want to override a class, add a field, and override `equals` to look at the new field. If you don't forget to call `super.equals()` it should be fine, right? Well, it depends.
 
-If you [use `getClass`](/equalsverifier/manual/instanceof-or-getclass), and you're not concerned with the Liskov substitution principle, you're probably fine.
+If you [use `getClass`](/equalsverifier/manual/instanceof-or-getclass), and you're not concerned with the Liskov substitution principle, you're fine and you can probably stop reading.
 
 However, if you use `instanceof`, you have to take care that you don't break the symmetry requirement of `equals`. The classic example of that, is that you have a Point class with `x` and `y` coordinates, and you create a ColorPoint subclass that adds colour. If you just call `super.equals()`, you will end up in a situation where symmetry is broken:
 
@@ -12,8 +12,8 @@ However, if you use `instanceof`, you have to take care that you don't break the
 Point p = new Point(1, 1);
 ColorPoint cp = new ColorPoint(1, 1, RED);
 
-p.equals(cp) // returns true
-cp.equals(p) // returns false
+System.out.println(p.equals(cp)) // prints true
+System.out.println(cp.equals(p)) // prints false
 {% endhighlight %}
 
 If you want to know how to solve this, I recommend that you read Odersky, Spoon & Venners's excellent article [How to write an equality method in Java](http://www.artima.com/lejava/articles/equality.html). In the "Pitfall 4" section, they describe how you can add a `canEqual` method to solve this issue, while maintaining the Liskov Substitution Principle.
@@ -26,7 +26,7 @@ EqualsVerifier.forClass(Point.class)
     .verify();
 {% endhighlight %}
 
-By calling `withRedefinedSubclass`, you tell EqualsVerifier that you've designed your class to be overridden, and that you intend for the subclasses to add state. In other words, that Point can't be final, and neither can its `equals` method. For EqualsVerifier to test this, it needs access to a subclass where this is the case. Since it can't invent one by itself, you have to give it one. In this case, we already have one: ColorPoint. Note that this doesn't mean that ColorPoints `equals` method is also tested. You still need to do that separately:
+By calling `withRedefinedSubclass`, you tell EqualsVerifier that you've designed your class to be overridden, and that you intend for the subclasses to add state. In other words, you tell EqualsVerifier that Point can't be final, and neither can its `equals` method. For EqualsVerifier to test this, it needs access to a subclass where this is the case. Since it can't invent one by itself, you have to give it one. In this case, we already have one: ColorPoint. Note that this doesn't mean that ColorPoints `equals` method is also tested. You still need to do that separately:
 
 {% highlight java %}
 EqualsVerifier.forClass(ColorPoint.class)
@@ -49,5 +49,5 @@ EqualsVerifier.forClass(ColorPoint.class)
 
 Then of course, you also need to test EnhancedColorPoint.
 
-All of this is quite complicated, and often not necessary. This is why EqualsVerifier suggests by default that you [make things final](/equalsverifier/manual/final).
+All of this is quite complicated, and often not necessary. This is why EqualsVerifier suggests by default that you [make things final](/equalsverifier/manual/final) instead.
 

@@ -33,9 +33,9 @@ public boolean equals(Object obj) {
 
 You might see an error message such as this one:
 
-> Reflexivity: object does not equal an identical copy of itself:<br>
-> &nbsp;&nbsp;Foo@123456<br>
-> If this is intentional, consider suppressing Warning.IDENTICAL_COPY
+    Reflexivity: object does not equal an identical copy of itself:
+      Foo@123456
+    If this is intentional, consider suppressing Warning.IDENTICAL_COPY
 
 In that case, you can call `suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)`.
 

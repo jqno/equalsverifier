@@ -16,7 +16,8 @@ class Rational {
             return false;
         }
         Rational other = (Rational)obj;
-        return (numerator / denominator) == (other.numerator / other.denominator);  // awfully bad implementation but you get the idea
+        return (numerator / denominator) == (other.numerator / other.denominator);
+                              // awfully bad implementation but you get the idea
     }
 
     // leaving out everything else for brevity

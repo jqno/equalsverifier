@@ -2,9 +2,9 @@
 title: Dealing with null
 permalink: /manual/null/
 ---
-`equals` methods are not allowed to throw exceptions. This includes NullPointerExceptions. EqualsVerifier checks this as well, but that means that you may have to do some work.
+`equals` methods are not allowed to throw exceptions. This includes NullPointerExceptions, and EqualsVerifier checks this. This has some consequences, though.
 
-To be safe, EqualsVerifier requires you to add null checks for non-primitive fields you reference in your `equals` or `hashCode` method. If you don't, you will get the following error message:
+For safety, EqualsVerifier requires you to add null checks for non-primitive fields you reference in your `equals` or `hashCode` method. If you don't, you will get the following error message:
 
     Non-nullity: equals throws NullPointerException on field o.
 
@@ -15,7 +15,7 @@ However, you might not want to add a null check, for example because your class 
 ### Annotations
 You can mark your fields with a `@Nonnull` annotation. EqualsVerifier recognizes annotations named `@Nonnull`, `@NonNull` and `@NotNull`. This should cover the annotations from all the popular annotations providers, like FindBugs and Eclipse.
 
-In addition, EqualsVerifier supports FindBugs's deprecated `@DefaultAnnotation`, and [JSR305's default annotations](http://stackoverflow.com/questions/11776302/how-to-indicate-that-member-fields-are-nonnull-by-default). In these two cases, EqualsVerifier also supports the `@CheckForNull` annotation to reverse the process for a single field.
+In addition, EqualsVerifier supports FindBugs's deprecated `@DefaultAnnotation` and [JSR305's default annotations](http://stackoverflow.com/questions/11776302/how-to-indicate-that-member-fields-are-nonnull-by-default). In these two cases, EqualsVerifier also supports the `@CheckForNull` annotation to reverse the process for a single field.
 
 If you already use these annotations for static analysis purposes, this is obviously the preferred way to deal with nulls in EqualsVerifier as well.
 
