@@ -4,7 +4,7 @@ permalink: /manual/
 ---
 These pages will quickly get you up and running with EqualsVerifier, and help you configure it in situations where the default behaviour is too strict.
 
-* [What does EqualsVerifier do?](/equalsverifier/manual/what)
+* [Why, what, how?](/equalsverifier/manual/why-what-how)
 * [Getting started](/equalsverifier/manual/getting-started)
 * [Making things final](/equalsverifier/manual/final)
 * [Immutability](/equalsverifier/manual/immutability)
