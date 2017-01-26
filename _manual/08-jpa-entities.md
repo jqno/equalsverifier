@@ -41,3 +41,60 @@ In that case, you can call `suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY
 
 (`Warning.IDENTICAL_COPY`, which the error message suggests, is not appropriate in this case because that is meant for classes which have no state at all.)
 
+
+### Abstract superclass
+A frequent pattern is to have an abstract superclass for all entities, and implement `equals` and `hashCode` there for all concrete entity implementations. Usually the objects are compared by their ids only. The fields are left out of the comparison, even is the object is new.
+
+In that case, the easiest way to make it work, is by making the `equals` and `hashCode` methods in the abstract class final, like this:
+
+{% highlight java %}
+@MappedSuperclass
+abstract class AbstractEntity {
+    @Id
+    @Column(...)
+    private Long id;
+
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public final boolean equals(Object obj) {
+        if (!(obj instanceof AbstractEntity)) {
+            return false;
+        }
+        return Objects.equals(getId(), ((AbstractEntity)obj).getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return Objects.hashCode(getId());
+    }
+}
+
+@Entity
+class Foo extends AbstractEntity {
+    @Column(...)
+    private String name;
+}
+{% endhighlight %}
+
+You con't have to tell EqualsVerifier anything about inheritance this way. You do have to tell it to only inspect `id` when testing `Foo`, though:
+
+{% highlight java %}
+@Test
+public void testAbstractEntity() {
+    EqualsVerifier.forClass(AbstractEntity.class)
+            .verify();
+}
+
+@Test
+public void testFoo() {
+    EqualsVerifier.forClass(Foo.class)
+            .withOnlyTheseFields("id")
+            .verify();
+}
+{% endhighlight %}
+
+If you want to have an abstract superclass implementing `equals`, but also include the subclass's fields in it, I recommend reading the [page about inheritance](/equalsverifier/manual/inheritance) and taking it from there.
+
