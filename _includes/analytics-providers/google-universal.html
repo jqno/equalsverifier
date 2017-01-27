@@ -5,5 +5,7 @@
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
   ga('create', '{{ site.analytics.google.tracking_id }}', 'auto');
+  ga('set', 'forceSSL', true);
+  ga('set', 'anonymizeIp', true);
   ga('send', 'pageview');
 </script>
