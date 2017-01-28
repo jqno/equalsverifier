@@ -16,12 +16,12 @@ EqualsVerifier will recursively try to instantiate objects of every class it enc
 Example:
 
 {% highlight java %}
-EqualsVerifier.forClass(MyClass.class)
-    .withPrefabValues(Foo.class, new Foo(1), new Foo(2))
+EqualsVerifier.forClass(Foo.class)
+    .withPrefabValues(Bar.class, new Bar(1), new Bar(2))
     .verify();
 {% endhighlight %}
 
-If `com.example.Foo` is a interface or an abstract class, it's fine to use instances from any implementation of `com.example.Foo`.
+If `Bar` is an interface or an abstract class, it's fine to use instances from any implementation of `Foo`.
 
 If you are using `withIgnoredFields`, you still have to add prefab values. EqualsVerifier will instantiate all fields, even if they are ignored, because it can't know if these fields aren't called in `equals` or `hashCode` anyway. For example, a class could contain a cache that is consulted in the `equals` method, even if it's not part of the equals contract.
 

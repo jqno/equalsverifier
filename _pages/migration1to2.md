@@ -1,7 +1,6 @@
 ---
 title: Migration guide 1 to 2
----
-Migration guide 1 to 2
+permalink: /migration1to2/
 ---
 When migrating from EqualsVerifier 1 to 2, there are a few things you should be aware of. (See also the [changelog](/equalsverifier/changelog)).
 

@@ -1,11 +1,12 @@
 ---
 title: Error messages explained
+permalink: /errormessages/
 ---
 ## Introduction
 
-Did EqualsVerifier give an error message that you didn't understand? I do what I can, but unfortunately Java stacktraces leave little room for explanation sometimes. This page should help make sense of some of EqualsVerifier's error messages.
+Did EqualsVerifier give an error message that you didn't understand? I try to make the error messages as clear as possible, but unfortunately Java's stacktraces leave little room for explanation sometimes. This page should help make sense of some of EqualsVerifier's error messages.
 
-Since EqualsVerifier relies on your classes' `toString` method when generating error messages, overriding `toString` helps with getting better error messages from EqualsVerifier. I recommend including the name of the class, and a summary of all the fields relevant to the equals contract. For example:
+Before you continue, please check your class's `toString` method. Since EqualsVerifier relies on `toString` when generating error messages, overriding it helps with getting better error messages. I recommend including the name of the class, and a summary of all the fields relevant to the equals contract. For example:
 
 {% highlight java %}
 @Override public String toString() {
@@ -14,9 +15,8 @@ Since EqualsVerifier relies on your classes' `toString` method when generating e
 // "Point: x=1, y=2"
 {% endhighlight %}
 
-This is not a complete list. I'll add to it as needed, so if you need help with an error message, please file an issue in the Issue tracker or let me know on the discussion group, and I'll add an explanation as soon as possible.
-
 ## The error messages
+This is not a complete list. I'll add to it as needed, so if you need help with an error message, please [file an issue](https://github.com/jqno/equalsverifier/issues) or let me know on the [discussion group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), and I'll add an explanation as soon as possible.
 
 * [Abstract delegation](/equalsverifier/errormessages/abstract-delegation)
 * [ClassCastException: java.lang.Object cannot be cast to …](/equalsverifier/errormessages/classcastexception)
