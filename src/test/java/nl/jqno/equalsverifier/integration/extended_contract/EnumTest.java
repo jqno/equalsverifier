@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 Jan Ouwens
+ * Copyright 2014, 2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
+import java.util.Map;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -53,6 +54,12 @@ public class EnumTest {
     @Test
     public void succeed_whenClassHasSingletonCollection() {
         EqualsVerifier.forClass(SingletonCollectionContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasMapWithSingletonKey() {
+        EqualsVerifier.forClass(SingletonKeyMapContainer.class)
                 .verify();
     }
 
@@ -116,6 +123,15 @@ public class EnumTest {
         private final Set<Singleton> singletonSet;
 
         public SingletonCollectionContainer(Set<Singleton> singletonSet) { this.singletonSet = singletonSet; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class SingletonKeyMapContainer {
+        private final Map<Singleton, Object> singletonKeyMap;
+
+        public SingletonKeyMapContainer(Map<Singleton, Object> singletonKeyMap) { this.singletonKeyMap = singletonKeyMap; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
