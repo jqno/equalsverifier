@@ -9,6 +9,10 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.2.1
+-------------
+* ...use single value enums as key in a `Map`. ([Issue 166](https://github.com/jqno/equalsverifier/issues/166))
+
 Version 2.2
 -----------
 * ...be more specific about which fields may be null, using `withNonnullFields`. ([Issue 134](https://github.com/jqno/equalsverifier/issues/134))
@@ -21,7 +25,7 @@ Version 2.1.8
 
 Version 2.1.7
 -------------
-* ...use single value enums again ([Issue 157](https://github.com/jqno/equalsverifier/pull/157); thanks Stephan!)
+* ...use single value enums again. ([Issue 157](https://github.com/jqno/equalsverifier/pull/157); thanks Stephan!)
 
 Version 2.1.6
 -------------
