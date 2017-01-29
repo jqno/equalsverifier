@@ -70,7 +70,7 @@ public class ReflexivityTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
+    public void succeed_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
         EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
                 .suppress(Warning.IDENTICAL_COPY, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
@@ -79,7 +79,8 @@ public class ReflexivityTest extends IntegrationTestBase {
     @Test
     public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
         expectFailure("Unnecessary suppression", "IDENTICAL_COPY");
-        EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY)
+        EqualsVerifier.forClass(FinalPoint.class)
+                .suppress(Warning.IDENTICAL_COPY)
                 .verify();
     }
 
