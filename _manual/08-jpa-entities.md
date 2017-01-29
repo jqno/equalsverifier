@@ -79,7 +79,7 @@ class Foo extends AbstractEntity {
 }
 {% endhighlight %}
 
-You con't have to tell EqualsVerifier anything about inheritance this way. You do have to tell it to only inspect `id` when testing `Foo`, though:
+You don't have to tell EqualsVerifier anything about inheritance this way. You do have to tell it to only inspect `id` when testing `Foo`, though:
 
 {% highlight java %}
 @Test
