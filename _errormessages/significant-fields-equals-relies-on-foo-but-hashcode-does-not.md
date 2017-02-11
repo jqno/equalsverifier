@@ -1,9 +1,11 @@
 ---
 title: "Significant fields: equals relies on foo, but hashCode does not"
 ---
-The cause for this message is usually the obvious one.
+The cause for this message is usually the obvious one, and is easily fixed either by adding it to `hashCode()` or removing it from `equals()`.
 
-If it's not, then it might be caused by a cached hashCode field, similar to the one in `java.lang.String`. For example, given the following (abridged) class:
+If that doesn't help, or if that's not desired, you can tell EqualsVerifier to ignore it by [calling `withIgnoredFields`](/equalsverifier/manual/ignoring-fields).
+
+Another special case is when one of the fields is a cached hashCode field, similar to the one in `java.lang.String`. For example, given the following (abridged) class:
 
 {% highlight java %}
 class CachedHashCode {
