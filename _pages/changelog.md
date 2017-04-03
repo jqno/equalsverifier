@@ -11,25 +11,35 @@ permalink: /changelog/
 
 Version 2.2.2
 -------------
+_April 3, 2017_
+
 * ...avoid adding prefab values for `java.net.InetAddress`. ([Issue 168](https://github.com/jqno/equalsverifier/issues/168))
 * ...get less "Cannot inject classes into the bootstrap class loader" errors. ([Also issue 168](https://github.com/jqno/equalsverifier/issues/168))
 
 Version 2.2.1
 -------------
+_January 29, 2017_
+
 * ...use single value enums as key in a `Map`. ([Issue 166](https://github.com/jqno/equalsverifier/issues/166))
 
 Version 2.2
 -----------
+_January 14, 2017_
+
 * ...be more specific about which fields may be null, using `withNonnullFields`. ([Issue 134](https://github.com/jqno/equalsverifier/issues/134))
 * ...have an uninitialized static array in your class without getting a NullPointerException. ([Issue 165](https://github.com/jqno/equalsverifier/issues/165))
 * ...see more helpful error messages.
 
 Version 2.1.8
 -------------
+_December 13, 2016_
+
 * ...test classes that implement an abstract class that calls an abstract method in its `equals` or `hashCode` methods, when EqualsVerifier is called with `usingGetClass`. ([Issue 161](https://github.com/jqno/equalsverifier/issues/161))
 
 Version 2.1.7
 -------------
+_November 18, 2016_
+
 * ...use single value enums again. ([Issue 157](https://github.com/jqno/equalsverifier/pull/157); thanks Stephan!)
 
 Version 2.1.6
