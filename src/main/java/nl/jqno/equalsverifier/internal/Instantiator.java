@@ -1,5 +1,5 @@
 /*
- * Copyright 2010,2012,2015 Jan Ouwens
+ * Copyright 2010,2012,2015,2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 
 import static nl.jqno.equalsverifier.internal.Util.classForName;
 
@@ -34,6 +36,8 @@ import static nl.jqno.equalsverifier.internal.Util.classForName;
  *          anonymous subclass of this class.
  */
 public final class Instantiator<T> {
+    private static final List<String> FORBIDDEN_PACKAGES = Arrays.asList("java.", "javax.", "sun.", "com.sun.");
+
     private final Class<T> type;
     private Objenesis objenesis;
 
@@ -85,7 +89,7 @@ public final class Instantiator<T> {
 
     @SuppressWarnings("unchecked")
     private static synchronized <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
-        boolean isSystemClass = superclass.getName().startsWith("java");
+        boolean isSystemClass = isSystemClass(superclass.getName());
         String namePrefix = isSystemClass ? "$" : "";
         String name = namePrefix + superclass.getName() + "$$DynamicSubclass";
 
@@ -102,5 +106,14 @@ public final class Instantiator<T> {
                 .make()
                 .load(classLoader, ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
+    }
+
+    private static boolean isSystemClass(String className) {
+        for (String prefix : FORBIDDEN_PACKAGES) {
+            if (className.startsWith(prefix)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
