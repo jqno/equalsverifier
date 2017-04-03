@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2016 Jan Ouwens
+ * Copyright 2010-2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,6 +138,12 @@ public final class JavaApiPrefabValues {
         addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
         addValues(Throwable.class, new Throwable(), new Throwable());
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0));
+
+        // Constructing InetAddress reflectively, because it might throw a awkward exception otherwise.
+        ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
+        addValues(inetAddress.resolve(),
+                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

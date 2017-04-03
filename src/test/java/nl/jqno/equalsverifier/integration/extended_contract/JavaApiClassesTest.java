@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2015 Jan Ouwens
+ * Copyright 2009-2015,2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.BlockingDeque;
@@ -133,14 +134,15 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final Pattern pattern;
         private final SimpleDateFormat simpleDateFormat;
         private final UUID uuid;
+        private final InetAddress inetAddress;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
                 Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-                SimpleDateFormat simpleDateFormat, UUID uuid) {
+                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress) {
             this.string = string; this.integer = integer; this.type = type; this.arrayList = arrayList; this.bitset = bitset;
             this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-            this.simpleDateFormat = simpleDateFormat; this.uuid = uuid;
+            this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
