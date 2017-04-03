@@ -9,6 +9,11 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.2.2
+-------------
+* ...avoid adding prefab values for `java.net.InetAddress`. ([Issue 168](https://github.com/jqno/equalsverifier/issues/168))
+* ...get less "Cannot inject classes into the bootstrap class loader" errors. ([Also issue 168](https://github.com/jqno/equalsverifier/issues/168))
+
 Version 2.2.1
 -------------
 * ...use single value enums as key in a `Map`. ([Issue 166](https://github.com/jqno/equalsverifier/issues/166))
