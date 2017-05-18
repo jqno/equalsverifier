@@ -83,6 +83,13 @@ limitations under the License.
         <findbugs.threshold>Low</findbugs.threshold>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>repo-for-signedjar-dependency</id>
+            <url>file://${basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.objenesis</groupId>
@@ -117,6 +124,12 @@ limitations under the License.
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.5</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-signedjar-test</artifactId>
+            <version>0.1</version>
             <scope>test</scope>
         </dependency>
 
