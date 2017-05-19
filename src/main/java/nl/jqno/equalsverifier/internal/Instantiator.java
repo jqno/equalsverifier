@@ -98,13 +98,13 @@ public final class Instantiator<T> {
             return existsAlready;
         }
 
-        ClassLoader classLoader = isSystemClass ? Instantiator.class.getClassLoader() : superclass.getClassLoader();
+        Class<?> context = isSystemClass ? Instantiator.class : superclass;
         return (Class<S>)new ByteBuddy()
                 .with(TypeValidation.DISABLED)
                 .subclass(superclass)
                 .name(name)
                 .make()
-                .load(classLoader, ClassLoadingStrategy.Default.INJECTION)
+                .load(context.getClassLoader(), ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain()))
                 .getLoaded();
     }
 
