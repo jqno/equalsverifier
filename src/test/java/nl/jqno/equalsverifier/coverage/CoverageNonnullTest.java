@@ -24,6 +24,7 @@ public class CoverageNonnullTest {
     @Test
     public void lombokCoverage() {
         EqualsVerifier.forClass(LombokNonnullStringContainer.class)
+                .withIgnoredAnnotations(Nonnull.class)
                 .verify();
 
         // Also cover the constructor

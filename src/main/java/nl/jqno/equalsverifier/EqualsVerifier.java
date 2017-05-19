@@ -231,6 +231,22 @@ public final class EqualsVerifier<T> {
     }
 
     /**
+     * Signals that all given annotations are to be ignored by EqualsVerifier.
+     *
+     * For instance, EqualsVerifier normally doesn't perform null verifications
+     * on fields marked with an {@code @Nonnull} annotation. However, if this
+     * method is called with a {@code Nonnull.class} parameter, the null
+     * verifications will be performed after all.
+     *
+     * @param annotations Annotations to ignore.
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> withIgnoredAnnotations(Class<?>... annotations) {
+        config = config.withIgnoredAnnotations(Arrays.asList(annotations));
+        return this;
+    }
+
+    /**
      * Signals that T is part of an inheritance hierarchy where {@code equals}
      * is overridden. Call this method if T has overridden {@code equals} and
      * {@code hashCode}, and one or more of T's superclasses have as well.
