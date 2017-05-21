@@ -150,6 +150,13 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
+        expectException(IllegalArgumentException.class, "Class", "java.lang.String", "is not an annotation");
+        EqualsVerifier.forClass(ImmutableByAnnotation.class)
+                .withIgnoredAnnotations(String.class);
+    }
+
+    @Test
     public void fail_whenReadingAnnotationsFromDynamicClass() {
         FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
         expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");

@@ -242,7 +242,9 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredAnnotations(Class<?>... annotations) {
-        config = config.withIgnoredAnnotations(Arrays.asList(annotations));
+        List<Class<?>> ignoredAnnotations = Arrays.asList(annotations);
+        validateAnnotationsAreValid(ignoredAnnotations);
+        config = config.withIgnoredAnnotations(ignoredAnnotations);
         return this;
     }
 
@@ -338,6 +340,14 @@ public final class EqualsVerifier<T> {
         for (String field : givenFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
+    }
+
+    private void validateAnnotationsAreValid(List<Class<?>> givenAnnotations) {
+        for (Class<?> annotation : givenAnnotations) {
+            if (!annotation.isAnnotation()) {
+                throw new IllegalArgumentException("Class " + annotation.getCanonicalName() + " is not an annotation.");
             }
         }
     }
