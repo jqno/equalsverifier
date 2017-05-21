@@ -18,6 +18,7 @@ package nl.jqno.equalsverifier.internal.annotations;
 import org.objectweb.asm.Type;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -95,7 +96,8 @@ public enum SupportedAnnotations implements Annotation {
                 if (type == null) {
                     return false;
                 }
-                AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, type, false);
+                AnnotationAccessor accessor =
+                        new AnnotationAccessor(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, type, new HashSet<Class<?>>(), false);
                 boolean hasNonnullAnnotation = accessor.typeHas(NONNULL);
                 boolean hasValidTypeQualifierDefault = accessor.typeHas(JSR305_TYPE_QUALIFIER_DEFAULT);
                 return hasNonnullAnnotation && hasValidTypeQualifierDefault;

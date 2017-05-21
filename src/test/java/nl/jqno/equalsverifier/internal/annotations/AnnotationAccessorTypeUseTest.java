@@ -18,6 +18,8 @@ package nl.jqno.equalsverifier.internal.annotations;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 import org.junit.Test;
 
+import java.util.HashSet;
+
 import static org.junit.Assert.assertTrue;
 
 public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
@@ -36,7 +38,7 @@ public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
         }
 
         Class<?> java8Class = compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
-        AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, false);
+        AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, new HashSet<Class<?>>(), false);
         assertTrue(accessor.fieldHas("s", SupportedAnnotations.NONNULL));
     }
 

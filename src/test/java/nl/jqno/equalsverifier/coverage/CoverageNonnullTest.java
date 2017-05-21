@@ -47,6 +47,8 @@ public class CoverageNonnullTest {
      *     }
      * }
      */
+    // CHECKSTYLE: ignore LocalFinalVariableName for 30 lines.
+    // CHECKSTYLE: ignore NeedBraces for 30 lines.
     public static final class LombokNonnullStringContainer {
         @Nonnull
         private final String s;
@@ -61,7 +63,7 @@ public class CoverageNonnullTest {
         public boolean equals(final java.lang.Object o) {
             if (o == this) return true;
             if (!(o instanceof CoverageNonnullTest.LombokNonnullStringContainer)) return false;
-            final LombokNonnullStringContainer other = (LombokNonnullStringContainer) o;
+            final LombokNonnullStringContainer other = (LombokNonnullStringContainer)o;
             final java.lang.Object this$s = this.s;
             final java.lang.Object other$s = other.s;
             if (this$s == null ? other$s != null : !this$s.equals(other$s)) return false;

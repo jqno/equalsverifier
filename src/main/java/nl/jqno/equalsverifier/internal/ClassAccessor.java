@@ -41,18 +41,21 @@ public class ClassAccessor<T> {
     private final Class<T> type;
     private final PrefabValues prefabValues;
     private final Annotation[] supportedAnnotations;
+    private Set<Class<?>> ignoredAnnotations;
     private final boolean ignoreAnnotationFailure;
     private final AnnotationAccessor annotationAccessor;
 
     /**
-     * Private constructor. Call {@link #of(Class, PrefabValues, boolean)} instead.
+     * Private constructor. Call {@link #of(Class, PrefabValues, Set, boolean)} instead.
      */
-    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations, boolean ignoreAnnotationFailure) {
+    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations,
+            Set<Class<?>> ignoredAnnotations, boolean ignoreAnnotationFailure) {
         this.type = type;
         this.prefabValues = prefabValues;
         this.supportedAnnotations = supportedAnnotations;
+        this.ignoredAnnotations = ignoredAnnotations;
         this.ignoreAnnotationFailure = ignoreAnnotationFailure;
-        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoreAnnotationFailure);
+        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoredAnnotations, ignoreAnnotationFailure);
     }
 
     /**
@@ -66,8 +69,9 @@ public class ClassAccessor<T> {
      * @param ignoreAnnotationFailure Ignore when processing annotations fails.
      * @return A {@link ClassAccessor} for T.
      */
-    public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues, boolean ignoreAnnotationFailure) {
-        return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoreAnnotationFailure);
+    public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues,
+            Set<Class<?>> ignoredAnnotations, boolean ignoreAnnotationFailure) {
+        return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoredAnnotations, ignoreAnnotationFailure);
     }
 
     /**
@@ -96,7 +100,7 @@ public class ClassAccessor<T> {
     public boolean outerClassHasAnnotation(Annotation annotation) {
         Class<?> outer = type.getDeclaringClass();
         while (outer != null) {
-            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, outer, ignoreAnnotationFailure);
+            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, outer, ignoredAnnotations, ignoreAnnotationFailure);
             if (accessor.typeHas(annotation)) {
                 return true;
             }
@@ -120,7 +124,7 @@ public class ClassAccessor<T> {
 
             String className = pkg.getName() + ".package-info";
             Class<?> packageType = Class.forName(className);
-            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoreAnnotationFailure);
+            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoredAnnotations, ignoreAnnotationFailure);
             return accessor.typeHas(annotation);
         }
         catch (ClassNotFoundException e) {
@@ -235,7 +239,7 @@ public class ClassAccessor<T> {
      * @return An accessor for T's superclass.
      */
     public ClassAccessor<? super T> getSuperAccessor() {
-        return ClassAccessor.of(type.getSuperclass(), prefabValues, ignoreAnnotationFailure);
+        return ClassAccessor.of(type.getSuperclass(), prefabValues, ignoredAnnotations, ignoreAnnotationFailure);
     }
 
     /**

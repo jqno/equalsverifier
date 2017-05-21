@@ -135,6 +135,21 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
+        expectFailure("Mutability");
+        EqualsVerifier.forClass(ImmutableByAnnotation.class)
+                .withIgnoredAnnotations(Immutable.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
+        EqualsVerifier.forClass(ImmutableByAnnotation.class)
+                .withIgnoredAnnotations(javax.annotation.concurrent.Immutable.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenReadingAnnotationsFromDynamicClass() {
         FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
         expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
