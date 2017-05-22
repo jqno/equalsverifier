@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
@@ -27,7 +27,7 @@ import java.lang.reflect.Field;
 
 import static nl.jqno.equalsverifier.internal.Assert.fail;
 
-class AbstractDelegationChecker<T> implements Checker {
+public class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;

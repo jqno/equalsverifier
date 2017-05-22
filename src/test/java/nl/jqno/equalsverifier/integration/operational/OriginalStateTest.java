@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.integration.operational;
 
-import nl.jqno.equalsverifier.Configuration;
+import nl.jqno.equalsverifier.internal.checkers.Configuration;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;

@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 
 import java.lang.reflect.Field;
 
 import static nl.jqno.equalsverifier.internal.Assert.fail;
 
-class NullChecker<T> implements Checker {
+public class NullChecker<T> implements Checker {
     private final Configuration<T> config;
     private final ClassAccessor<T> classAccessor;
 
@@ -45,7 +45,7 @@ class NullChecker<T> implements Checker {
         inspector.check(new NullPointerExceptionFieldCheck());
     }
 
-    private class NullPointerExceptionFieldCheck implements FieldCheck {
+    private class NullPointerExceptionFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Field field = referenceAccessor.getField();
@@ -55,7 +55,7 @@ class NullChecker<T> implements Checker {
             if (field.getType().isPrimitive()) {
                 return;
             }
-            if (NonnullAnnotationChecker.fieldIsNonnull(classAccessor, field)) {
+            if (NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, field)) {
                 return;
             }
 

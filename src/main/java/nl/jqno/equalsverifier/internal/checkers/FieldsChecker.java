@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
-import nl.jqno.equalsverifier.FieldInspector.FieldCheck;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.*;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -30,7 +30,7 @@ import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.Assert.*;
 
-class FieldsChecker<T> implements Checker {
+public class FieldsChecker<T> implements Checker {
     private final TypeTag typeTag;
     private final ClassAccessor<T> classAccessor;
     private final PrefabValues prefabValues;
@@ -86,7 +86,7 @@ class FieldsChecker<T> implements Checker {
         return accessor.getFieldName().equals(cachedHashCodeInitializer.getCachedHashCodeFieldName());
     }
 
-    private class SymmetryFieldCheck implements FieldCheck {
+    private class SymmetryFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             checkSymmetry(referenceAccessor, changedAccessor);
@@ -106,7 +106,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class TransitivityFieldCheck implements FieldCheck {
+    private class TransitivityFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Object a1 = referenceAccessor.getObject();
@@ -153,7 +153,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class SignificantFieldCheck implements FieldCheck {
+    private class SignificantFieldCheck implements FieldInspector.FieldCheck {
         private final boolean skipTestBecause0AndNullBothHaveA0HashCode;
 
         public SignificantFieldCheck(boolean skipTestBecause0AndNullBothHaveA0HashCode) {
@@ -170,7 +170,7 @@ class FieldsChecker<T> implements Checker {
             Object changed = changedAccessor.getObject();
             String fieldName = referenceAccessor.getFieldName();
 
-            if (referenceAccessor.get() == null && NonnullAnnotationChecker.fieldIsNonnull(classAccessor, referenceAccessor.getField())) {
+            if (referenceAccessor.get() == null && NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, referenceAccessor.getField())) {
                 return;
             }
 
@@ -231,7 +231,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class ArrayFieldCheck implements FieldCheck {
+    private class ArrayFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Class<?> arrayType = referenceAccessor.getFieldType();
@@ -299,7 +299,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class FloatAndDoubleFieldCheck implements FieldCheck {
+    private class FloatAndDoubleFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Class<?> type = referenceAccessor.getFieldType();
@@ -326,7 +326,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class ReflexivityFieldCheck implements FieldCheck {
+    private class ReflexivityFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
@@ -379,7 +379,7 @@ class FieldsChecker<T> implements Checker {
         private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Field field = referenceAccessor.getField();
             boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
-            boolean fieldIsNonNull = NonnullAnnotationChecker.fieldIsNonnull(classAccessor, field);
+            boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, field);
             boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS) || nonnullFields.contains(field.getName());
             if (fieldIsPrimitive || !ignoreNull) {
                 referenceAccessor.defaultField();
@@ -404,7 +404,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class MutableStateFieldCheck implements FieldCheck {
+    private class MutableStateFieldCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             if (isCachedHashCodeField(referenceAccessor)) {
@@ -426,7 +426,7 @@ class FieldsChecker<T> implements Checker {
         }
     }
 
-    private class TransientFieldsCheck implements FieldCheck {
+    private class TransientFieldsCheck implements FieldInspector.FieldCheck {
         @Override
         public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
             Object reference = referenceAccessor.getObject();

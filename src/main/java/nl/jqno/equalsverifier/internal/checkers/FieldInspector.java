@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.FieldAccessor;

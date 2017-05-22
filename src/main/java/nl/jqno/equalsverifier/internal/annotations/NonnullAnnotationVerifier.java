@@ -16,6 +16,7 @@
 package nl.jqno.equalsverifier.internal.annotations;
 
 import nl.jqno.equalsverifier.internal.ClassAccessor;
+import nl.jqno.equalsverifier.internal.annotations.Annotation;
 
 import java.lang.reflect.Field;
 
@@ -25,8 +26,8 @@ import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.*
  * Utility class that checks whether a field is marked with an Nonnull
  * annotation of some sort.
  */
-public final class NonnullAnnotationChecker {
-    private NonnullAnnotationChecker() {}
+public final class NonnullAnnotationVerifier {
+    private NonnullAnnotationVerifier() {}
 
     /**
      * Checks whether the given field is marked with an Nonnull annotation,

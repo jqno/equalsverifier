@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.Formatter;
 
 import java.util.EnumSet;
 
 import static nl.jqno.equalsverifier.internal.Assert.*;
 
-class CachedHashCodeChecker<T> implements Checker {
+public class CachedHashCodeChecker<T> implements Checker {
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final EnumSet<Warning> warningsToSuppress;
 

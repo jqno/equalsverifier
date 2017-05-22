@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 
@@ -25,7 +26,7 @@ import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.Assert.fail;
 
-class SignatureChecker<T> implements Checker {
+public class SignatureChecker<T> implements Checker {
     private final Class<T> type;
     private final ClassAccessor<T> classAccessor;
     private final Set<Warning> warningsToSuppress;

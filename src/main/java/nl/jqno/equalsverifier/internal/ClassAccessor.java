@@ -17,7 +17,7 @@ package nl.jqno.equalsverifier.internal;
 
 import nl.jqno.equalsverifier.internal.annotations.Annotation;
 import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationChecker;
+import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -328,7 +328,7 @@ public class ClassAccessor<T> {
     public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields) {
         ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
-            if (NonnullAnnotationChecker.fieldIsNonnull(this, field) || nonnullFields.contains(field.getName())) {
+            if (NonnullAnnotationVerifier.fieldIsNonnull(this, field) || nonnullFields.contains(field.getName())) {
                 FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues, enclosingType);
             }

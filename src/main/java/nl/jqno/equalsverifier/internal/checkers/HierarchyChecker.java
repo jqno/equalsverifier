@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.internal.checkers;
 
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.ObjectAccessor;
@@ -26,7 +27,7 @@ import java.lang.reflect.Modifier;
 
 import static nl.jqno.equalsverifier.internal.Assert.*;
 
-class HierarchyChecker<T> implements Checker {
+public class HierarchyChecker<T> implements Checker {
     private final Configuration<T> config;
     private final Class<T> type;
     private final TypeTag typeTag;

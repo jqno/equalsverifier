@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal;
 
-import nl.jqno.equalsverifier.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;

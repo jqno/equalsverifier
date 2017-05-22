@@ -20,9 +20,9 @@ import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 
-public class NonnullAnnotationCheckerTest extends IntegrationTestBase {
+public class NonnullAnnotationVerifierTest extends IntegrationTestBase {
     @Test
     public void coverConstructor() {
-        coverThePrivateConstructor(NonnullAnnotationChecker.class);
+        coverThePrivateConstructor(NonnullAnnotationVerifier.class);
     }
 }
