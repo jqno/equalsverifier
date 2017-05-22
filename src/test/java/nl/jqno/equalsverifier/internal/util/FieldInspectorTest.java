@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.checkers;
+package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.checkers.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.util.FieldInspector.FieldCheck;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;

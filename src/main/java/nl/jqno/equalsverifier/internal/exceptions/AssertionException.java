@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Signals that an EqualsVerfier assertion has failed.

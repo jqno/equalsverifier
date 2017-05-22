@@ -16,15 +16,16 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 public class SignatureChecker<T> implements Checker {
     private final Class<T> type;

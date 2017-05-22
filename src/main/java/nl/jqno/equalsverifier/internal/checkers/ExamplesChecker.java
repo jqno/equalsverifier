@@ -16,16 +16,18 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 
-import static nl.jqno.equalsverifier.internal.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 public class ExamplesChecker<T> implements Checker {
     private final Class<T> type;

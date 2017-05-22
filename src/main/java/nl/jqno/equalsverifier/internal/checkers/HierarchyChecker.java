@@ -16,16 +16,18 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import static nl.jqno.equalsverifier.internal.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 public class HierarchyChecker<T> implements Checker {
     private final Configuration<T> config;

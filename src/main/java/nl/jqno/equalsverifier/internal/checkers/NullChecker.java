@@ -17,14 +17,16 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.FieldInspector;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Field;
 
-import static nl.jqno.equalsverifier.internal.Assert.fail;
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 public class NullChecker<T> implements Checker {
     private final Configuration<T> config;

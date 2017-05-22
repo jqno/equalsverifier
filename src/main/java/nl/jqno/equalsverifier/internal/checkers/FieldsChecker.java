@@ -16,7 +16,6 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -25,6 +24,10 @@ import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.FieldInspector;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
@@ -32,7 +35,7 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Set;
 
-import static nl.jqno.equalsverifier.internal.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 public class FieldsChecker<T> implements Checker {
     private final TypeTag typeTag;
