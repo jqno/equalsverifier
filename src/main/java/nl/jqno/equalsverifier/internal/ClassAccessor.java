@@ -66,6 +66,8 @@ public class ClassAccessor<T> {
      *          the same as T.
      * @param prefabValues Prefabricated values with which to fill instantiated
      *          objects.
+     * @param ignoredAnnotations A collection of type descriptors for
+     *          annotations to ignore.
      * @param ignoreAnnotationFailure Ignore when processing annotations fails.
      * @return A {@link ClassAccessor} for T.
      */
