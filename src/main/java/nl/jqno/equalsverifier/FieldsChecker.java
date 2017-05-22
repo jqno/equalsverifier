@@ -25,6 +25,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.Assert.*;
@@ -354,7 +355,7 @@ class FieldsChecker<T> implements Checker {
             if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
                 return;
             }
-            ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, true);
+            ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<String>(), true);
             if (!fieldTypeAccessor.declaresEquals()) {
                 return;
             }

@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -231,6 +232,27 @@ public final class EqualsVerifier<T> {
     }
 
     /**
+     * Signals that all given annotations are to be ignored by EqualsVerifier.
+     *
+     * For instance, EqualsVerifier normally doesn't perform null verifications
+     * on fields marked with an {@code @Nonnull} annotation. However, if this
+     * method is called with a {@code Nonnull.class} parameter, the null
+     * verifications will be performed after all.
+     *
+     * @param annotations Annotations to ignore.
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifier<T> withIgnoredAnnotations(Class<?>... annotations) {
+        validateAnnotationsAreValid(annotations);
+        List<String> ignoredAnnotationDescriptors = new ArrayList<>();
+        for (Class<?> ignoredAnnotation : annotations) {
+            ignoredAnnotationDescriptors.add(Type.getDescriptor(ignoredAnnotation));
+        }
+        config = config.withIgnoredAnnotations(ignoredAnnotationDescriptors);
+        return this;
+    }
+
+    /**
      * Signals that T is part of an inheritance hierarchy where {@code equals}
      * is overridden. Call this method if T has overridden {@code equals} and
      * {@code hashCode}, and one or more of T's superclasses have as well.
@@ -322,6 +344,14 @@ public final class EqualsVerifier<T> {
         for (String field : givenFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
+    }
+
+    private void validateAnnotationsAreValid(Class<?>... givenAnnotations) {
+        for (Class<?> annotation : givenAnnotations) {
+            if (!annotation.isAnnotation()) {
+                throw new IllegalArgumentException("Class " + annotation.getCanonicalName() + " is not an annotation.");
             }
         }
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2015-2016 Jan Ouwens
+ * Copyright 2011, 2015-2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import java.util.*;
 public class AnnotationAccessor {
     private final Annotation[] supportedAnnotations;
     private final Class<?> type;
+    private final Set<String> ignoredAnnotations;
     private final boolean ignoreFailure;
     private final Set<Annotation> classAnnotations = new HashSet<>();
     private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<>();
@@ -44,12 +45,15 @@ public class AnnotationAccessor {
      *
      * @param supportedAnnotations Collection of annotations to query.
      * @param type The class whose annotations need to be queried.
+     * @param ignoredAnnotations A collection of type descriptors for
+     *          annotations to ignore.
      * @param ignoreFailure Ignore when processing annotations fails when the
      *          class file cannot be read.
      */
-    public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, boolean ignoreFailure) {
+    public AnnotationAccessor(Annotation[] supportedAnnotations, Class<?> type, Set<String> ignoredAnnotations, boolean ignoreFailure) {
         this.supportedAnnotations = Arrays.copyOf(supportedAnnotations, supportedAnnotations.length);
         this.type = type;
+        this.ignoredAnnotations = ignoredAnnotations;
         this.ignoreFailure = ignoreFailure;
     }
 
@@ -205,11 +209,14 @@ public class AnnotationAccessor {
 
         @Override
         public void visitEnd() {
+            if (ignoredAnnotations.contains(annotationDescriptor)) {
+                return;
+            }
             for (Annotation annotation : supportedAnnotations) {
                 if (!inheriting || annotation.inherits()) {
                     for (String descriptor : annotation.descriptors()) {
                         String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
-                        if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties)) {
+                        if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, ignoredAnnotations)) {
                             annotations.add(annotation);
                         }
                     }

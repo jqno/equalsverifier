@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
@@ -164,7 +163,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         public ImmutableByAnnotation(int i) { this.i = i; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return Util.defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity

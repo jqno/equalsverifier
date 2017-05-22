@@ -31,6 +31,7 @@ public final class Configuration<T> {
 
     private final Set<String> ignoredFields;
     private final Set<String> nonnullFields;
+    private final Set<String> ignoredAnnotations;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
     private final Class<? extends T> redefinedSubclass;
@@ -39,9 +40,9 @@ public final class Configuration<T> {
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, PrefabValues prefabValues, List<T> equalExamples, List<T> unequalExamples,
-                          Set<String> ignoredFields, Set<String> nonnullFields, CachedHashCodeInitializer<T> cachedHashCodeInitializer,
-                          boolean hasRedefinedSuperclass, Class<? extends T> redefinedSubclass, boolean usingGetClass,
-                          EnumSet<Warning> warningsToSuppress) {
+                          Set<String> ignoredFields, Set<String> nonnullFields, Set<String> ignoredAnnotations,
+                          CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
+                          Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
 
         this.type = type;
         this.typeTag = new TypeTag(type);
@@ -50,6 +51,7 @@ public final class Configuration<T> {
         this.unequalExamples = unequalExamples;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
+        this.ignoredAnnotations = ignoredAnnotations;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
         this.hasRedefinedSuperclass = hasRedefinedSuperclass;
         this.redefinedSubclass = redefinedSubclass;
@@ -58,8 +60,9 @@ public final class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<>(type, new PrefabValues(), new ArrayList<T>(), new ArrayList<T>(), new HashSet<String>(), new HashSet<String>(),
-                CachedHashCodeInitializer.<T>passthrough(), false, null, false, EnumSet.noneOf(Warning.class));
+        return new Configuration<>(type, new PrefabValues(), new ArrayList<T>(), new ArrayList<T>(), new HashSet<String>(),
+                new HashSet<String>(), new HashSet<String>(), CachedHashCodeInitializer.<T>passthrough(),
+                false, null, false, EnumSet.noneOf(Warning.class));
     }
 
     public Class<T> getType() {
@@ -75,7 +78,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withEqualExamples(List<T> value) {
-        return new Configuration<>(type, prefabValues, value, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, value, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -84,7 +87,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withUnequalExamples(List<T> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, value, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, value, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -93,7 +96,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withIgnoredFields(List<String> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, new HashSet<>(value), nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, new HashSet<>(value), nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -103,7 +106,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withNonnullFields(List<String> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, new HashSet<>(value),
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, new HashSet<>(value), ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -111,8 +114,17 @@ public final class Configuration<T> {
         return Collections.unmodifiableSet(nonnullFields);
     }
 
+    public Configuration<T> withIgnoredAnnotations(List<String> value) {
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, new HashSet<>(value),
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
+
+    public Set<String> getIgnoredAnnotations() {
+        return Collections.unmodifiableSet(ignoredAnnotations);
+    }
+
     public Configuration<T> withCachedHashCodeInitializer(CachedHashCodeInitializer<T> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 value, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -121,7 +133,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withRedefinedSuperclass() {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, true, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
@@ -130,7 +142,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withRedefinedSubclass(Class<? extends T> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, value, usingGetClass, warningsToSuppress);
     }
 
@@ -139,7 +151,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withUsingGetClass() {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, true, warningsToSuppress);
     }
 
@@ -148,7 +160,7 @@ public final class Configuration<T> {
     }
 
     public Configuration<T> withWarningsToSuppress(EnumSet<Warning> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields,
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, ignoredAnnotations,
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, value);
     }
 
@@ -157,6 +169,6 @@ public final class Configuration<T> {
     }
 
     public ClassAccessor<T> createClassAccessor() {
-        return ClassAccessor.of(type, prefabValues, warningsToSuppress.contains(Warning.ANNOTATION));
+        return ClassAccessor.of(type, prefabValues, ignoredAnnotations, warningsToSuppress.contains(Warning.ANNOTATION));
     }
 }

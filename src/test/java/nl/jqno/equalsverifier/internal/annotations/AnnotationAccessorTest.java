@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2013, 2015-2016 Jan Ouwens
+ * Copyright 2011, 2013, 2015-2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,12 +47,15 @@ public class AnnotationAccessorTest {
     private static final String BOTH_RETENTIONS = "bothRetentions";
     private static final String NO_RETENTION = "noRetention";
 
+    private static final Set<String> NO_INGORED_ANNOTATIONS = new HashSet<>();
+
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), LoadedBySystemClassLoader.class, false);
+        AnnotationAccessor accessor =
+                new AnnotationAccessor(TestSupportedAnnotations.values(), LoadedBySystemClassLoader.class, NO_INGORED_ANNOTATIONS, false);
         accessor.typeHas(null);
     }
 
@@ -133,7 +136,8 @@ public class AnnotationAccessorTest {
     @Test
     public void annotationsArrayParametersAreFoundOnClass() {
         AnnotationWithClassValuesDescriptor annotation = new AnnotationWithClassValuesDescriptor();
-        AnnotationAccessor accessor = new AnnotationAccessor(new Annotation[] { annotation }, AnnotationWithClassValuesContainer.class, false);
+        AnnotationAccessor accessor =
+                new AnnotationAccessor(new Annotation[] { annotation }, AnnotationWithClassValuesContainer.class, NO_INGORED_ANNOTATIONS, false);
 
         boolean annotationPresent = accessor.typeHas(annotation);
 
@@ -155,7 +159,7 @@ public class AnnotationAccessorTest {
     @Test
     public void dynamicClassThrowsException() {
         Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, NO_INGORED_ANNOTATIONS, false);
 
         thrown.expect(ReflectionException.class);
         thrown.expectMessage(containsString("Cannot read class file"));
@@ -166,7 +170,7 @@ public class AnnotationAccessorTest {
     @Test
     public void dynamicClassWithSuppressedWarning() {
         Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, true);
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, NO_INGORED_ANNOTATIONS, true);
         assertFalse(accessor.typeHas(TYPE_CLASS_RETENTION));
 
         // Checks if the short circuit works
@@ -184,13 +188,14 @@ public class AnnotationAccessorTest {
                 .make()
                 .load(Super.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
                 .getLoaded();
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), sub, true);
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), sub, NO_INGORED_ANNOTATIONS, true);
         assertFalse(accessor.fieldHas("dynamicField", FIELD_RUNTIME_RETENTION));
     }
 
     @Test
     public void regularClassWithSuppressedWarningStillProcessesAnnotation() {
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), AnnotatedWithClass.class, true);
+        AnnotationAccessor accessor =
+                new AnnotationAccessor(TestSupportedAnnotations.values(), AnnotatedWithClass.class, NO_INGORED_ANNOTATIONS, true);
         assertTrue(accessor.typeHas(TYPE_CLASS_RETENTION));
     }
 
@@ -219,12 +224,12 @@ public class AnnotationAccessorTest {
     }
 
     private boolean findTypeAnnotationFor(Class<?> type, Annotation annotation) {
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, NO_INGORED_ANNOTATIONS, false);
         return accessor.typeHas(annotation);
     }
 
     private boolean findFieldAnnotationFor(Class<?> type, String fieldName, Annotation annotation) {
-        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, false);
+        AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), type, NO_INGORED_ANNOTATIONS, false);
         return accessor.fieldHas(fieldName, annotation);
     }
 
@@ -242,7 +247,7 @@ public class AnnotationAccessorTest {
         }
 
         @Override
-        public boolean validate(AnnotationProperties descriptor) {
+        public boolean validate(AnnotationProperties descriptor, Set<String> ignoredAnnotations) {
             this.properties = descriptor;
             return true;
         }
