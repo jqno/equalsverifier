@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
@@ -135,28 +134,6 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
-        expectFailure("Mutability");
-        EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .withIgnoredAnnotations(Immutable.class)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
-        EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .withIgnoredAnnotations(javax.annotation.concurrent.Immutable.class)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
-        expectException(IllegalArgumentException.class, "Class", "java.lang.String", "is not an annotation");
-        EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .withIgnoredAnnotations(String.class);
-    }
-
-    @Test
     public void fail_whenReadingAnnotationsFromDynamicClass() {
         FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
         expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
@@ -186,7 +163,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         public ImmutableByAnnotation(int i) { this.i = i; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return Util.defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity

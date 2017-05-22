@@ -41,7 +41,7 @@ public class ClassAccessor<T> {
     private final Class<T> type;
     private final PrefabValues prefabValues;
     private final Annotation[] supportedAnnotations;
-    private Set<Class<?>> ignoredAnnotations;
+    private final Set<String> ignoredAnnotations;
     private final boolean ignoreAnnotationFailure;
     private final AnnotationAccessor annotationAccessor;
 
@@ -49,7 +49,7 @@ public class ClassAccessor<T> {
      * Private constructor. Call {@link #of(Class, PrefabValues, Set, boolean)} instead.
      */
     ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations,
-            Set<Class<?>> ignoredAnnotations, boolean ignoreAnnotationFailure) {
+            Set<String> ignoredAnnotations, boolean ignoreAnnotationFailure) {
         this.type = type;
         this.prefabValues = prefabValues;
         this.supportedAnnotations = supportedAnnotations;
@@ -70,7 +70,7 @@ public class ClassAccessor<T> {
      * @return A {@link ClassAccessor} for T.
      */
     public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues,
-            Set<Class<?>> ignoredAnnotations, boolean ignoreAnnotationFailure) {
+            Set<String> ignoredAnnotations, boolean ignoreAnnotationFailure) {
         return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoredAnnotations, ignoreAnnotationFailure);
     }
 

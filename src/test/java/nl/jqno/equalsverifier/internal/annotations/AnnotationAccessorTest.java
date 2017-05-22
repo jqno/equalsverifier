@@ -47,7 +47,7 @@ public class AnnotationAccessorTest {
     private static final String BOTH_RETENTIONS = "bothRetentions";
     private static final String NO_RETENTION = "noRetention";
 
-    private static final Set<Class<?>> NO_INGORED_ANNOTATIONS = new HashSet<>();
+    private static final Set<String> NO_INGORED_ANNOTATIONS = new HashSet<>();
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -247,7 +247,7 @@ public class AnnotationAccessorTest {
         }
 
         @Override
-        public boolean validate(AnnotationProperties descriptor) {
+        public boolean validate(AnnotationProperties descriptor, Set<String> ignoredAnnotations) {
             this.properties = descriptor;
             return true;
         }

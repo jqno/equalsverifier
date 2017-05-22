@@ -355,7 +355,7 @@ class FieldsChecker<T> implements Checker {
             if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
                 return;
             }
-            ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<Class<?>>(), true);
+            ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<String>(), true);
             if (!fieldTypeAccessor.declaresEquals()) {
                 return;
             }

@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -242,9 +243,12 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredAnnotations(Class<?>... annotations) {
-        List<Class<?>> ignoredAnnotations = Arrays.asList(annotations);
-        validateAnnotationsAreValid(ignoredAnnotations);
-        config = config.withIgnoredAnnotations(ignoredAnnotations);
+        validateAnnotationsAreValid(annotations);
+        List<String> ignoredAnnotationDescriptors = new ArrayList<>();
+        for (Class<?> ignoredAnnotation : annotations) {
+            ignoredAnnotationDescriptors.add(Type.getDescriptor(ignoredAnnotation));
+        }
+        config = config.withIgnoredAnnotations(ignoredAnnotationDescriptors);
         return this;
     }
 
@@ -344,7 +348,7 @@ public final class EqualsVerifier<T> {
         }
     }
 
-    private void validateAnnotationsAreValid(List<Class<?>> givenAnnotations) {
+    private void validateAnnotationsAreValid(Class<?>... givenAnnotations) {
         for (Class<?> annotation : givenAnnotations) {
             if (!annotation.isAnnotation()) {
                 throw new IllegalArgumentException("Class " + annotation.getCanonicalName() + " is not an annotation.");

@@ -31,7 +31,7 @@ public final class Configuration<T> {
 
     private final Set<String> ignoredFields;
     private final Set<String> nonnullFields;
-    private final Set<Class<?>> ignoredAnnotations;
+    private final Set<String> ignoredAnnotations;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
     private final Class<? extends T> redefinedSubclass;
@@ -40,7 +40,7 @@ public final class Configuration<T> {
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, PrefabValues prefabValues, List<T> equalExamples, List<T> unequalExamples,
-                          Set<String> ignoredFields, Set<String> nonnullFields, Set<Class<?>> ignoredAnnotations,
+                          Set<String> ignoredFields, Set<String> nonnullFields, Set<String> ignoredAnnotations,
                           CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                           Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress) {
 
@@ -61,7 +61,7 @@ public final class Configuration<T> {
 
     public static <T> Configuration<T> of(Class<T> type) {
         return new Configuration<>(type, new PrefabValues(), new ArrayList<T>(), new ArrayList<T>(), new HashSet<String>(),
-                new HashSet<String>(), new HashSet<Class<?>>(), CachedHashCodeInitializer.<T>passthrough(),
+                new HashSet<String>(), new HashSet<String>(), CachedHashCodeInitializer.<T>passthrough(),
                 false, null, false, EnumSet.noneOf(Warning.class));
     }
 
@@ -114,12 +114,12 @@ public final class Configuration<T> {
         return Collections.unmodifiableSet(nonnullFields);
     }
 
-    public Configuration<T> withIgnoredAnnotations(List<Class<?>> value) {
+    public Configuration<T> withIgnoredAnnotations(List<String> value) {
         return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, ignoredFields, nonnullFields, new HashSet<>(value),
                 cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
     }
 
-    public Set<Class<?>> getIgnoredAnnotations() {
+    public Set<String> getIgnoredAnnotations() {
         return Collections.unmodifiableSet(ignoredAnnotations);
     }
 

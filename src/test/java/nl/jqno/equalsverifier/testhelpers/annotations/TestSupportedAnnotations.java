@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.annotations.AnnotationProperties;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public enum TestSupportedAnnotations implements Annotation {
     // Type's closing ; is added by AnnotationAccessor.
@@ -42,7 +43,7 @@ public enum TestSupportedAnnotations implements Annotation {
     PACKAGE_ANNOTATION(false, "PackageAnnotation"),
     INAPPLICABLE(false, "Inapplicable") {
         @Override
-        public boolean validate(AnnotationProperties properties) {
+        public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations) {
             return false;
         }
     };
@@ -66,7 +67,7 @@ public enum TestSupportedAnnotations implements Annotation {
     }
 
     @Override
-    public boolean validate(AnnotationProperties properties) {
+    public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations) {
         return true;
     }
 }

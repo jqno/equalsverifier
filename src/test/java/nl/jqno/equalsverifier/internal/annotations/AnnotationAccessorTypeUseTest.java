@@ -38,7 +38,7 @@ public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
         }
 
         Class<?> java8Class = compile(JAVA_8_CLASS_NAME, JAVA_8_CLASS);
-        AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, new HashSet<Class<?>>(), false);
+        AnnotationAccessor accessor = new AnnotationAccessor(SupportedAnnotations.values(), java8Class, new HashSet<String>(), false);
         assertTrue(accessor.fieldHas("s", SupportedAnnotations.NONNULL));
     }
 

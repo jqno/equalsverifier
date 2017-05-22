@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2015 Jan Ouwens
+ * Copyright 2011, 2015, 2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package nl.jqno.equalsverifier.internal.annotations;
+
+import java.util.Set;
 
 /**
  * Describes an annotation that can be recognised by EqualsVerifier.
@@ -52,7 +54,9 @@ public interface Annotation {
      * Validates the annotation based on its properties.
      *
      * @param properties An object that contains information about the annotation.
+     * @param ignoredAnnotations A collection of type descriptors for annotations
+     *          to ignore.
      * @return True if the annotation is valid and can be used as intended.
      */
-    public boolean validate(AnnotationProperties properties);
+    public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations);
 }

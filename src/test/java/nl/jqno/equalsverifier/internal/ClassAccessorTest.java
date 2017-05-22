@@ -45,7 +45,7 @@ import static org.junit.Assert.*;
 
 public class ClassAccessorTest {
 
-    private static final Set<Class<?>> NO_INGORED_ANNOTATIONS = new HashSet<>();
+    private static final Set<String> NO_INGORED_ANNOTATIONS = new HashSet<>();
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
