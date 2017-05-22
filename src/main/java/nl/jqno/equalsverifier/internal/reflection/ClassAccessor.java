@@ -15,13 +15,13 @@
  */
 package nl.jqno.equalsverifier.internal.reflection;
 
-import nl.jqno.equalsverifier.internal.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.annotations.AnnotationAccessor;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
-import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;

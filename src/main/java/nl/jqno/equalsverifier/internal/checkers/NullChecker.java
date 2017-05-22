@@ -17,9 +17,9 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.FieldInspector;
 import nl.jqno.equalsverifier.internal.util.Formatter;

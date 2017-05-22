@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.annotations;
+package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;

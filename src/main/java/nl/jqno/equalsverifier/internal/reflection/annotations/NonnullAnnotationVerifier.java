@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal.annotations;
+package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 
 import java.lang.reflect.Field;
 
-import static nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations.*;
+import static nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations.*;
 
 /**
  * Utility class that checks whether a field is marked with an Nonnull
