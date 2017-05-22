@@ -16,8 +16,8 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

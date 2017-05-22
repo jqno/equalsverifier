@@ -15,13 +15,13 @@
  */
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import org.objectweb.asm.Type;
 
 import java.lang.reflect.Field;

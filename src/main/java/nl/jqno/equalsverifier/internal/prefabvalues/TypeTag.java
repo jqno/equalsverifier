@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
 import java.lang.reflect.*;
 import java.util.*;
 
-import static nl.jqno.equalsverifier.internal.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 
 /**
  * Represents a generic type, including raw type and generic type parameters.

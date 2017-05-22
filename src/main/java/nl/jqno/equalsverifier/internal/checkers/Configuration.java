@@ -16,9 +16,9 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 
 import java.util.*;
 

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;

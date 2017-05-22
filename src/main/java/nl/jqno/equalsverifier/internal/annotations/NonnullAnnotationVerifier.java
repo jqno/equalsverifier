@@ -15,8 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 
 import java.lang.reflect.Field;
 

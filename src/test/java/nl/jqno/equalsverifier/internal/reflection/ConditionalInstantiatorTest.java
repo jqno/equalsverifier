@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import org.junit.Rule;
@@ -24,11 +24,12 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.GregorianCalendar;
 
-import static nl.jqno.equalsverifier.internal.Util.classes;
-import static nl.jqno.equalsverifier.internal.Util.objects;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";

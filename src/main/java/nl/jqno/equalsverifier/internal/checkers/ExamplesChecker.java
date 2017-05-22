@@ -16,10 +16,10 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 import java.lang.reflect.Field;
 import java.util.List;

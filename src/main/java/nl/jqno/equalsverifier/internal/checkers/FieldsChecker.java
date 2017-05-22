@@ -16,11 +16,15 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.*;
+import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;

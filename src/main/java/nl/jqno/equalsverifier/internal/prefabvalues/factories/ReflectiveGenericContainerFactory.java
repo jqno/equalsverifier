@@ -15,15 +15,15 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 import java.util.LinkedHashSet;
 
-import static nl.jqno.equalsverifier.internal.Util.classes;
-import static nl.jqno.equalsverifier.internal.Util.objects;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates objects using

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;

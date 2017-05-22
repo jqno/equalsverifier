@@ -15,9 +15,9 @@
  */
 package nl.jqno.equalsverifier.internal.checkers;
 
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;

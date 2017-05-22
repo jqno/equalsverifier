@@ -15,6 +15,9 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 

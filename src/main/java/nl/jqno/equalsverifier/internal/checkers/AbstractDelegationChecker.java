@@ -16,12 +16,12 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
 import nl.jqno.equalsverifier.internal.Formatter;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 
 import java.lang.reflect.Field;
 

@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal;
 
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

@@ -16,11 +16,11 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.ClassAccessor;
 import nl.jqno.equalsverifier.internal.Formatter;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

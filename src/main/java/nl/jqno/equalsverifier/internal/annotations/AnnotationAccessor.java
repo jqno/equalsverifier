@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier.internal.annotations;
 
-import nl.jqno.equalsverifier.internal.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 import org.objectweb.asm.*;
 
 import java.io.IOException;

@@ -15,11 +15,11 @@
  */
 package nl.jqno.equalsverifier.internal.checkers;
 
-import nl.jqno.equalsverifier.internal.ClassAccessor;
-import nl.jqno.equalsverifier.internal.FieldAccessor;
-import nl.jqno.equalsverifier.internal.FieldIterable;
-import nl.jqno.equalsverifier.internal.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 import java.lang.reflect.Field;
 import java.util.Set;

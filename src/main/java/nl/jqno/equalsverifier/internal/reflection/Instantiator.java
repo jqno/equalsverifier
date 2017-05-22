@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package nl.jqno.equalsverifier.internal;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -25,7 +25,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
-import static nl.jqno.equalsverifier.internal.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 
 /**
  * Instantiates objects of a given class.

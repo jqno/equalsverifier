@@ -16,8 +16,8 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
+import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
-import static nl.jqno.equalsverifier.internal.Util.*;
+import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
