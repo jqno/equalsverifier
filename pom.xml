@@ -99,7 +99,7 @@ limitations under the License.
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.6.12</version>
+            <version>1.7.0</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -385,7 +385,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.1.11</version>
+                    <version>1.2.0</version>
                 </plugin>
 
                 <plugin>
