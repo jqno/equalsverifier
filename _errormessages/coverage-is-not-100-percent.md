@@ -5,6 +5,34 @@ EqualsVerifier should get 100% code coverage on your `equals` and `hashCode` met
 
 If you have an example of a class where EqualsVerifier doesn't give you 100% coverage, and it's not in the list below, please [let me know](/equalsverifier/help).
 
+
+Using Lombok
+---
+Lombok always generates null checks in its `equals` methods, even if there is an `@Nonnull` annotation. For example:
+
+{% highlight java %}
+@EqualsAndHashCode
+public static final class Lombok {
+    @Nonnull
+    private final String s;
+
+    public Lombok(String s) {
+        this.s = s;
+    }
+}
+{% endhighlight %}
+
+This class will have less than 100% coverage, because null checks are generated for the `s` field. EqualsVerifier will not check these paths, due to the `@Nonnull` annotation.
+
+If you run into this problem, you can tell EqualsVerifier to ignore the annotation, like this:
+
+{% highlight java %}
+EqualsVerifier.forClass(Lombok.class)
+    .withIgnoredAnnotations(Nonnull.class)
+    .verify();
+{% endhighlight %}
+
+
 Using canEqual
 ---
 If you have a hierarchy of classes that each redefine `equals` and `hashCode` as described in [this article](http://www.artima.com/lejava/articles/equality.html), the leaf nodes in your class hierarchy tree won't get 100% percent coverage.

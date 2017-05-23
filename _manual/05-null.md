@@ -40,3 +40,13 @@ EqualsVerifier.forClass(Foo.class)
 
 This skips the null checks for all fields in the class.
 
+Finally, if you are using annotations, there might be a reason why you don't want EqualsVerifier to look at the annotation. The most common one is if you're using Lombok, which generates null checks in `equals` even if an `@Nonnull` annotation is present. In this case, you can disable the annotation like this:
+
+{% highlight java %}
+EqualsVerifier.forClass(Foo.class)
+    .withIgnoredAnnotations(Nonnull.class)
+    .verify();
+{% endhighlight %}
+
+It accepts a varargs argument, so you can specify as many annotations as you like. If the class you specify isn't an annotation. EqualsVerifier throws an exception.
+

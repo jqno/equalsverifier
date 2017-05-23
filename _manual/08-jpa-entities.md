@@ -98,3 +98,15 @@ public void testFoo() {
 
 If you want to have an abstract superclass implementing `equals`, but also include the subclass's fields in it, I recommend reading the [page about inheritance](/equalsverifier/manual/inheritance) and taking it from there.
 
+
+### Disabling JPA checking
+If, for some reason, you don't want EqualsVerifier to look at JPA's annotations, you can disable them like this:
+
+{% highlight java %}
+EqualsVerifier.forClass(Foo.class)
+        .withIgnoredAnnotations(Entity.class, Embeddable.class, MappedSuperclass.class, Transient.class)
+        .verify();
+{% endhighlight %}
+
+Of course, you only need to include the annotations that you actually use. If any of the classes you specify isn't an annotation. EqualsVerifier throws an exception.
+
