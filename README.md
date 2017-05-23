@@ -23,11 +23,19 @@ Project structure
 `src/`
 
 * `nl.jqno.equalsverifier`  
-  Main EqualsVerifier logic
-* `nl.jqno.equalsverifier.util`  
-  Reflection helpers
-* `nl.jqno.equalsverifier.util.exceptions`  
+  External API
+* `nl.jqno.equalsverifier.internal`  
+  Classes internal to the operation of EqualsVerifier
+* `nl.jqno.equalsverifier.internal.checkers`  
+  Checkers that perform EqualsVerifier's actual verifications
+* `nl.jqno.equalsverifier.internal.exceptions`  
   Internally used exceptions
+* `nl.jqno.equalsverifier.internal.prefabvalues`  
+  Cache and factories for instances of all types
+* `nl.jqno.equalsverifier.internal.reflection`
+  Helpers for reflection-based tasks
+* `nl.jqno.equalsverifier.internal.util`  
+  Various helpers
 
 `test/`
 
