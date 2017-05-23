@@ -15,7 +15,7 @@
  */
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.internal.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

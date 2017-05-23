@@ -15,8 +15,8 @@
  */
 package nl.jqno.equalsverifier.testhelpers.annotations;
 
-import nl.jqno.equalsverifier.internal.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.annotations.AnnotationProperties;
+import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationProperties;
 
 import java.util.Arrays;
 import java.util.List;
