@@ -117,7 +117,7 @@ public class NullFieldsTest extends IntegrationTestBase {
     public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
         expectException(IllegalArgumentException.class, "Class MixedNullFields does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(MixedNullFields.class)
-                .withIgnoredFields("thisFieldDoesNotExist");
+                .withNonnullFields("thisFieldDoesNotExist");
     }
 
     @Test
