@@ -13,7 +13,7 @@ Version 2.3.1
 -------------
 _July 3, 2017_
 
-* ...leave `equals` and `hashCode` methods non-final in JPA entities ([Issue 170](https://github.com/jqno/equalsverifier/issues/170))
+* ...leave `equals` and `hashCode` methods non-final in JPA entities. ([Issue 170](https://github.com/jqno/equalsverifier/issues/170))
 
 Version 2.3
 -----------
