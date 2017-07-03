@@ -1,5 +1,5 @@
 /*
- * Copyright 2011, 2013-2014 Jan Ouwens
+ * Copyright 2011, 2013-2014, 2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,21 +54,21 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
+    public void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
         EqualsVerifier.forClass(EntityByJpaAnnotation.class)
                 .verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
-        expectFailure("Mutability");
+    public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
+        expectFailure("Subclass");
         EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class)
                 .verify();
     }
 
     @Test
     public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
-        expectFailure("Mutability");
+        expectFailure("Subclass");
         EqualsVerifier.forClass(EntityByNonJpaAnnotation.class)
                 .verify();
     }
@@ -81,14 +81,14 @@ public class AnnotationsTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
-        expectFailure("Mutability");
+        expectFailure("Subclass");
         EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class)
                 .verify();
     }
 
     @Test
     public void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
-        expectFailure("Mutability");
+        expectFailure("Subclass");
         EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class)
                 .verify();
     }
@@ -101,14 +101,14 @@ public class AnnotationsTest extends IntegrationTestBase {
 
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
-        expectFailure("Mutability");
+        expectFailure("Subclass");
         EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class)
                 .verify();
     }
 
     @Test
     public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
-        expectFailure("Mutability");
+        expectFailure("Subclass");
         EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class)
                 .verify();
     }
@@ -180,7 +180,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof EntityByJpaAnnotation)) {
                 return false;
             }
@@ -188,7 +188,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static class SubclassEntityByJpaAnnotation extends EntityByJpaAnnotation {}
@@ -207,7 +207,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof EntityByNonJpaAnnotation)) {
                 return false;
             }
@@ -215,7 +215,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Embeddable
@@ -232,7 +232,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof EmbeddableByJpaAnnotation)) {
                 return false;
             }
@@ -240,7 +240,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static class SubclassEmbeddableByJpaAnnotation extends EmbeddableByJpaAnnotation {}
@@ -259,7 +259,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof EmbeddableByNonJpaAnnotation)) {
                 return false;
             }
@@ -267,7 +267,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.MappedSuperclass
@@ -284,7 +284,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof MappedSuperclassByJpaAnnotation)) {
                 return false;
             }
@@ -292,7 +292,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static class SubclassMappedSuperclassByJpaAnnotation extends MappedSuperclassByJpaAnnotation {}
@@ -311,7 +311,7 @@ public class AnnotationsTest extends IntegrationTestBase {
         }
 
         @Override
-        public final boolean equals(Object obj) {
+        public boolean equals(Object obj) {
             if (!(obj instanceof MappedSuperclassByNonJpaAnnotation)) {
                 return false;
             }
@@ -319,7 +319,7 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static class TransientByJpaAnnotation {

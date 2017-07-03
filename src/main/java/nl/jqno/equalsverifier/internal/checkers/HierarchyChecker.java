@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -60,9 +61,7 @@ public class HierarchyChecker<T> implements Checker {
         checkSubclass();
 
         checkRedefinedSubclass();
-        if (!config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
-            checkFinalEqualsMethod();
-        }
+        checkFinalEqualsMethod();
     }
 
     private void checkSuperclass() {
@@ -170,7 +169,11 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkFinalEqualsMethod() {
-        if (typeIsFinal || redefinedSubclass != null) {
+        boolean ignore =
+            config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) ||
+            classAccessor.hasAnnotation(SupportedAnnotations.ENTITY) ||
+            typeIsFinal || redefinedSubclass != null;
+        if (ignore) {
             return;
         }
 
