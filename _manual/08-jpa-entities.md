@@ -7,6 +7,8 @@ EqualsVerifier has some support for JPA entities.
 ### Entities
 JPA entities are mutable by design. Since adding `.suppress(Warning.NONFINAL_FIELDS)` to each test can get cumbersome, EqualsVerifier will do this implicitly for each class marked with an `@Entity`, `@Embeddable` or `@MappedSuperclass` annotation.
 
+JPA entities are also not allowed to be final, and even a final `equals` or `hashCode` method [is problematic](https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity). Therefore, EqualsVerifier will not enforce these for JPA entities, like it normally would. Note that this means that your class will be vulnerable to subclasses [breaking `equals`](/equalsverifier/manual/final).
+
 
 ### Transient fields
 Since fields marked with the `@Transient` annotation are not persisted, they should generally not participate in `equals` and `hashCode` either. Therefore, EqualsVerifier will implicitly call [`withIgnoredFields`](/equalsverifier/manual/ignoring-fields) for these fields.

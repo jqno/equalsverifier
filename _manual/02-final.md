@@ -33,3 +33,5 @@ If you do that, you should keep in mind that you can define a perfect `equals` m
 
 This is why EqualsVerifier makes such a big deal of this, and why suppressing `Warning.STRICT_INHERITANCE` is a last resort.
 
+JPA entities are an exception to this. You can read more about that [here](/equalsverifier/manual/jpa-entities).
+
