@@ -159,7 +159,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2</version>
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
@@ -386,7 +386,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.2.0</version>
+                    <version>1.2.2</version>
                 </plugin>
 
                 <plugin>
