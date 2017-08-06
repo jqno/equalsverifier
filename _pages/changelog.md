@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.3.2
+-------------
+August 6, 2017
+
+* ...use EqualsVerifier in your Java 9 projects. ([Issue 152](https://github.com/jqno/equalsverifier/issues/152))
+
 Version 2.3.1
 -------------
 _July 3, 2017_
