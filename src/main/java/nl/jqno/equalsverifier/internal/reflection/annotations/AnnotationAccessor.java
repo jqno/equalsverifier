@@ -147,7 +147,7 @@ public class AnnotationAccessor {
         private final boolean inheriting;
 
         public Visitor(boolean inheriting) {
-            super(Opcodes.ASM5);
+            super(Opcodes.ASM6);
             this.inheriting = inheriting;
         }
 
@@ -169,7 +169,7 @@ public class AnnotationAccessor {
         private final boolean inheriting;
 
         public MyFieldVisitor(Set<Annotation> fieldAnnotations, boolean inheriting) {
-            super(Opcodes.ASM5);
+            super(Opcodes.ASM6);
             this.fieldAnnotations = fieldAnnotations;
             this.inheriting = inheriting;
         }
@@ -193,7 +193,7 @@ public class AnnotationAccessor {
         private final AnnotationProperties properties;
 
         public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting) {
-            super(Opcodes.ASM5);
+            super(Opcodes.ASM6);
             this.annotationDescriptor = annotationDescriptor;
             this.annotations = annotations;
             this.inheriting = inheriting;
@@ -229,7 +229,7 @@ public class AnnotationAccessor {
         private final Set<Object> foundAnnotations;
 
         public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
-            super(Opcodes.ASM5);
+            super(Opcodes.ASM6);
             this.foundAnnotations = foundAnnotations;
         }
 

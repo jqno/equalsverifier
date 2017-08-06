@@ -99,12 +99,12 @@ limitations under the License.
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.7.1</version>
+            <version>1.7.2</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>5.2</version>
+            <version>6.0_BETA</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -159,7 +159,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.1</version>
+                <version>3.6.2</version>
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
@@ -331,7 +331,7 @@ limitations under the License.
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <minimizeJar>true</minimizeJar>
+                            <!-- <minimizeJar>true</minimizeJar> Maven Shade and ASM6 don't get along -->
                             <artifactSet>
                                 <includes>
                                     <artifact>org.ow2.asm:asm</artifact>
@@ -357,6 +357,7 @@ limitations under the License.
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
+                                        <exclude>module-info.class</exclude>
                                         <exclude>META-INF/INDEX.LIST</exclude>
                                         <exclude>META-INF/NOTICE</exclude>
                                     </excludes>
@@ -385,7 +386,7 @@ limitations under the License.
                 <plugin>
                     <groupId>org.pitest</groupId>
                     <artifactId>pitest-maven</artifactId>
-                    <version>1.2.0</version>
+                    <version>1.2.2</version>
                 </plugin>
 
                 <plugin>
