@@ -163,6 +163,31 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_repeating_withIgnoredFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
+        EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
+                .withIgnoredFields("colorNotUsed")
+                .withIgnoredFields("colorAlsoNotUsed")
+                .verify();
+    }
+
+    @Test
+    public void succeed_repeating_withOnlyTheseFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x")
+                .withOnlyTheseFields("y")
+                .verify();
+    }
+
+    @Test
+    public void fail_combining_withOnlyTheseFields_and_withIgnoredFields() {
+        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .withOnlyTheseFields("x")
+                .withIgnoredFields("colorNotUsed")
+                .verify();
+    }
+
+    @Test
     public void fail_whenTwoFieldsAreUnUsed_givenAllFieldsShouldBeUsedExceptOneOfThemButNotBoth() {
         expectFailure("Significant fields", "equals does not use", "colorAlsoNotUsed");
         EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
