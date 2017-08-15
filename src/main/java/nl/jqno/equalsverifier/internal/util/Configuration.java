@@ -33,7 +33,6 @@ public final class Configuration<T> {
     private final Set<String> actualFields;
     private final Set<String> excludedFields;
     private final Set<String> includedFields;
-//    private final Set<String> ignoredFields;
     private final Set<String> nonnullFields;
     private final Set<String> ignoredAnnotations;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
@@ -101,16 +100,38 @@ public final class Configuration<T> {
         return Collections.unmodifiableList(unequalExamples);
     }
 
-    public Configuration<T> withIgnoredFields(List<String> value) {
-        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, actualFields, new HashSet<>(value), includedFields, nonnullFields, ignoredAnnotations,
-                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
-    }
-
     public Set<String> getActualFields() {
         return Collections.unmodifiableSet(actualFields);
     }
 
+    public Set<String> getExcludedFields() {
+        return Collections.unmodifiableSet(excludedFields);
+    }
+
+    public Configuration<T> withExcludedFields(List<String> value) {
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, actualFields, new HashSet<>(value), includedFields, nonnullFields, ignoredAnnotations,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
+
+    public Set<String> getIncludedFields() {
+        return Collections.unmodifiableSet(includedFields);
+    }
+
+    public Configuration<T> withIncludedFields(List<String> value) {
+        return new Configuration<>(type, prefabValues, equalExamples, unequalExamples, actualFields, excludedFields, new HashSet<>(value), nonnullFields, ignoredAnnotations,
+                cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress);
+    }
+
     public Set<String> getIgnoredFields() {
+        Set<String> ignoredFields = new HashSet<>();
+        if (excludedFields.isEmpty() && !includedFields.isEmpty()) {
+            for (String name: actualFields) {
+                if (!includedFields.contains(name)) {
+                    ignoredFields.add(name);
+                }
+            }
+            return Collections.unmodifiableSet(ignoredFields);
+        }
         return Collections.unmodifiableSet(excludedFields);
     }
 

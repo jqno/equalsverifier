@@ -20,13 +20,11 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objectweb.asm.Type;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -175,11 +173,13 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
-        checkIgnoredFields();
-        List<String> ignoredFields = Arrays.asList(fields);
-        validateFieldNamesExist(ignoredFields);
+        checkNoExistingIncludedFields();
+        List<String> toBeExcludedFields = Arrays.asList(fields);
+        validateFieldNamesExist(toBeExcludedFields);
 
-        config = config.withIgnoredFields(ignoredFields);
+        List<String> allExcludedFields = new ArrayList<>(config.getExcludedFields());
+        allExcludedFields.addAll(toBeExcludedFields);
+        config = config.withExcludedFields(allExcludedFields);
         return this;
     }
 
@@ -194,20 +194,14 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
-        checkIgnoredFields();
-        List<String> ignoredFields = new ArrayList<>();
+        checkNoExistingExcludedFields();
         List<String> specifiedFields = Arrays.asList(fields);
-        Set<String> actualFieldNames = config.getActualFields();
 
         validateFieldNamesExist(specifiedFields);
 
-        for (String name: actualFieldNames) {
-            if (!specifiedFields.contains(name)) {
-                ignoredFields.add(name);
-            }
-        }
-
-        config = config.withIgnoredFields(ignoredFields);
+        List<String> allIncludedFields = new ArrayList<>(config.getIncludedFields());
+        allIncludedFields.addAll(specifiedFields);
+        config = config.withIncludedFields(allIncludedFields);
         return this;
     }
 
@@ -330,8 +324,14 @@ public final class EqualsVerifier<T> {
         }
     }
 
-    private void checkIgnoredFields() {
-        if (!config.getIgnoredFields().isEmpty()) {
+    private void checkNoExistingExcludedFields() {
+        if (!config.getExcludedFields().isEmpty()) {
+            throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        }
+    }
+
+    private void checkNoExistingIncludedFields() {
+        if (!config.getIncludedFields().isEmpty()) {
             throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         }
     }
