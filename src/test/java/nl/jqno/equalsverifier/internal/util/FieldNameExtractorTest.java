@@ -1,11 +1,26 @@
+/*
+ * Copyright 2017 Jan Ouwens
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package nl.jqno.equalsverifier.internal.util;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Set;
-
-import org.junit.Test;
 
 public class FieldNameExtractorTest {
     private static final String FIELD_NOT_FOUND = "field not found: ";
@@ -14,6 +29,7 @@ public class FieldNameExtractorTest {
     private static final String FIELD_OBJECT = "fieldObject";
     private static final String FIELD_LIST = "fieldList";
     private static final String FIELD_PRIMITIVE_INT = "fieldPrimitiveInt";
+
 
     @Test
     public void should_extractFields_succesfully() throws Exception {
@@ -41,26 +57,21 @@ public class FieldNameExtractorTest {
         fields.remove(FIELD_STRING);
     }
 
-}
+    class FieldNameExtractorTestHelper {
+        public final String fieldString;
+        protected int fieldPrimitiveInt;
+        final List<Integer> fieldList;
+        private final Object fieldObject;
 
+        public FieldNameExtractorTestHelper(String fieldString, List<Integer> fieldList, Object fieldObject) {
+            this.fieldString = fieldString;
+            this.fieldList = fieldList;
+            this.fieldObject = fieldObject;
+        }
 
-class FieldNameExtractorTestHelper {
-    public final String fieldString;
-    private final Object fieldObject;
-    final List<Integer> fieldList;
-    protected int fieldPrimitiveInt;
-
-    public FieldNameExtractorTestHelper(String fieldString, Object fieldObject, List<Integer> fieldList) {
-        this.fieldString = fieldString;
-        this.fieldObject = fieldObject;
-        this.fieldList = fieldList;
+        public void setFieldPrimitiveInt(int newInt) {
+            this.fieldPrimitiveInt = newInt;
+        }
     }
 
-    public int getFieldPrimitiveInt() {
-        return fieldPrimitiveInt;
-    }
-
-    public void setFieldPrimitiveInt(int fieldPrimitiveInt) {
-        this.fieldPrimitiveInt = fieldPrimitiveInt;
-    }
 }
