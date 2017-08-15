@@ -197,17 +197,17 @@ public final class EqualsVerifier<T> {
         checkIgnoredFields();
         List<String> ignoredFields = new ArrayList<>();
         Set<String> specifiedFields = new HashSet<>(Arrays.asList(fields));
-        Set<String> actualFieldNames = new HashSet<>();
-        for (Field f : FieldIterable.of(config.getType())) {
-            String name = f.getName();
-            actualFieldNames.add(name);
-            if (!specifiedFields.contains(name)) {
-                ignoredFields.add(name);
-            }
-        }
+        Set<String> actualFieldNames = config.getActualFields();
+
         for (String field : specifiedFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            }
+        }
+
+        for (String name: actualFieldNames) {
+            if (!specifiedFields.contains(name)) {
+                ignoredFields.add(name);
             }
         }
 
