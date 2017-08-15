@@ -17,7 +17,7 @@ public class FieldNameExtractorTest {
 
     @Test
     public void should_extractFields_succesfully() throws Exception {
-        Set<String> fields = FieldNameExtractor.extractFields(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
         assertTrue(FIELD_NOT_FOUND + FIELD_STRING, fields.contains(FIELD_STRING));
         assertTrue(FIELD_NOT_FOUND + FIELD_OBJECT, fields.contains(FIELD_OBJECT));
@@ -29,14 +29,14 @@ public class FieldNameExtractorTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void should_disallow_adding_extra_fields() throws Exception {
-        Set<String> fields = FieldNameExtractor.extractFields(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
         fields.add("illegally added field");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void should_disallow_removing_fields() throws Exception {
-        Set<String> fields = FieldNameExtractor.extractFields(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
         fields.remove(FIELD_STRING);
     }

@@ -65,7 +65,7 @@ public final class Configuration<T> {
     }
 
     public static <T> Configuration<T> of(Class<T> type) {
-        return new Configuration<>(type, new PrefabValues(), new ArrayList<T>(), new ArrayList<T>(), FieldNameExtractor.extractFields(type), new HashSet<String>(),
+        return new Configuration<>(type, new PrefabValues(), new ArrayList<T>(), new ArrayList<T>(), FieldNameExtractor.extractFieldNames(type), new HashSet<String>(),
                 new HashSet<String>(), new HashSet<String>(), new HashSet<String>(), CachedHashCodeInitializer.<T>passthrough(),
                 false, null, false, EnumSet.noneOf(Warning.class));
     }

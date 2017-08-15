@@ -9,8 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 
 class FieldNameExtractor {
 
-    static Set<String> extractFields(Class type) {
-
+    static <T> Set<String> extractFieldNames(Class<T> type) {
         Set<String> actualFieldNames = new HashSet<>();
         for (Field f : FieldIterable.of(type)) {
             String name = f.getName();
