@@ -182,7 +182,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     public void fail_combining_withOnlyTheseFields_and_withIgnoredFields() {
         expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(OneFieldUnused.class)
-                .withOnlyTheseFields("x")
+                .withOnlyTheseFields("x", "y")
                 .withIgnoredFields("colorNotUsed")
                 .verify();
     }
