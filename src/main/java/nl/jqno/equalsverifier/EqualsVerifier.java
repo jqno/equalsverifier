@@ -196,14 +196,10 @@ public final class EqualsVerifier<T> {
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
         checkIgnoredFields();
         List<String> ignoredFields = new ArrayList<>();
-        Set<String> specifiedFields = new HashSet<>(Arrays.asList(fields));
+        List<String> specifiedFields = Arrays.asList(fields);
         Set<String> actualFieldNames = config.getActualFields();
 
-        for (String field : specifiedFields) {
-            if (!actualFieldNames.contains(field)) {
-                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
-            }
-        }
+        validateFieldNamesExist(specifiedFields);
 
         for (String name: actualFieldNames) {
             if (!specifiedFields.contains(name)) {
@@ -341,10 +337,7 @@ public final class EqualsVerifier<T> {
     }
 
     private void validateFieldNamesExist(List<String> givenFields) {
-        Set<String> actualFieldNames = new HashSet<>();
-        for (Field field : FieldIterable.of(config.getType())) {
-            actualFieldNames.add(field.getName());
-        }
+        Set<String> actualFieldNames = config.getActualFields();
         for (String field : givenFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
