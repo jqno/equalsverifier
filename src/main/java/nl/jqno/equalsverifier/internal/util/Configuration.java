@@ -128,16 +128,7 @@ public final class Configuration<T> {
     }
 
     public Set<String> getIgnoredFields() {
-        Set<String> ignoredFields = new HashSet<>();
-        if (excludedFields.isEmpty() && !includedFields.isEmpty()) {
-            for (String name: actualFields) {
-                if (!includedFields.contains(name)) {
-                    ignoredFields.add(name);
-                }
-            }
-            return Collections.unmodifiableSet(ignoredFields);
-        }
-        return Collections.unmodifiableSet(excludedFields);
+        return Collections.unmodifiableSet(includedFields.isEmpty() ? excludedFields : invertIncludedFields());
     }
 
     public Configuration<T> withNonnullFields(List<String> value) {
@@ -212,5 +203,15 @@ public final class Configuration<T> {
 
     public ClassAccessor<T> createClassAccessor() {
         return ClassAccessor.of(type, prefabValues, ignoredAnnotations, warningsToSuppress.contains(Warning.ANNOTATION));
+    }
+
+    private Set<String> invertIncludedFields() {
+        Set<String> ignoredFields = new HashSet<>();
+        for (String name: actualFields) {
+            if (!includedFields.contains(name)) {
+                ignoredFields.add(name);
+            }
+        }
+        return ignoredFields;
     }
 }
