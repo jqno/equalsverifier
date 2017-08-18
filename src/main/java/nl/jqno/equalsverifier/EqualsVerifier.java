@@ -118,7 +118,7 @@ public final class EqualsVerifier<T> {
         EnumSet<Warning> ws = config.getWarningsToSuppress();
         Collections.addAll(ws, warnings);
         config = config.withWarningsToSuppress(ws);
-        checkNonnullFields();
+        assertNoNonnullFields();
         return this;
     }
 
@@ -173,7 +173,7 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
-        checkNoExistingIncludedFields();
+        assertNoExistingIncludedFields();
         List<String> toBeExcludedFields = Arrays.asList(fields);
         validateFieldNamesExist(toBeExcludedFields);
 
@@ -194,7 +194,7 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
-        checkNoExistingExcludedFields();
+        assertNoExistingExcludedFields();
         List<String> specifiedFields = Arrays.asList(fields);
 
         validateFieldNamesExist(specifiedFields);
@@ -221,7 +221,7 @@ public final class EqualsVerifier<T> {
         List<String> nonnullFields = Arrays.asList(fields);
         validateFieldNamesExist(nonnullFields);
         config = config.withNonnullFields(nonnullFields);
-        checkNonnullFields();
+        assertNoNonnullFields();
         return this;
     }
 
@@ -318,20 +318,22 @@ public final class EqualsVerifier<T> {
         return this;
     }
 
-    private void checkNonnullFields() {
+    private void assertNoNonnullFields() {
         if (!config.getNonnullFields().isEmpty() && config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
             throw new IllegalArgumentException("You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         }
     }
 
-    private void checkNoExistingExcludedFields() {
-        if (!config.getExcludedFields().isEmpty()) {
-            throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        }
+    private void assertNoExistingExcludedFields() {
+        assertNoExistingFields(config.getExcludedFields());
     }
 
-    private void checkNoExistingIncludedFields() {
-        if (!config.getIncludedFields().isEmpty()) {
+    private void assertNoExistingIncludedFields() {
+        assertNoExistingFields(config.getIncludedFields());
+    }
+
+    private void assertNoExistingFields(Set<String> fields) {
+        if (!fields.isEmpty()) {
             throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         }
     }
