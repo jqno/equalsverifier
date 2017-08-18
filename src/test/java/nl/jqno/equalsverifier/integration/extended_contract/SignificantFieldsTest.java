@@ -163,7 +163,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_repeating_withIgnoredFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
+    public void succeed_whenRepeatingWithIgnoredFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
         EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
                 .withIgnoredFields("colorNotUsed")
                 .withIgnoredFields("colorAlsoNotUsed")
@@ -171,7 +171,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_repeating_withOnlyTheseFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
+    public void succeed_whenRepeatingWithOnlyTheseFields_givenAllFieldsShouldBeUsedExceptThoseTwo() {
         EqualsVerifier.forClass(OneFieldUnused.class)
                 .withOnlyTheseFields("x")
                 .withOnlyTheseFields("y")
@@ -179,7 +179,7 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_combining_withOnlyTheseFields_and_withIgnoredFields() {
+    public void fail_whenCombiningWithOnlyTheseFieldsAndWithIgnoredFields() {
         expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(OneFieldUnused.class)
                 .withOnlyTheseFields("x", "y")
