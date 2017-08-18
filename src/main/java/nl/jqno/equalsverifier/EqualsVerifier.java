@@ -20,13 +20,11 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objectweb.asm.Type;
 
-import java.lang.reflect.Field;
 import java.util.*;
 
 /**
@@ -120,7 +118,7 @@ public final class EqualsVerifier<T> {
         EnumSet<Warning> ws = config.getWarningsToSuppress();
         Collections.addAll(ws, warnings);
         config = config.withWarningsToSuppress(ws);
-        checkNonnullFields();
+        assertNoNonnullFields();
         return this;
     }
 
@@ -175,11 +173,13 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withIgnoredFields(String... fields) {
-        checkIgnoredFields();
-        List<String> ignoredFields = Arrays.asList(fields);
-        validateFieldNamesExist(ignoredFields);
+        assertNoExistingIncludedFields();
+        List<String> toBeExcludedFields = Arrays.asList(fields);
+        validateFieldNamesExist(toBeExcludedFields);
 
-        config = config.withIgnoredFields(ignoredFields);
+        List<String> allExcludedFields = new ArrayList<>(config.getExcludedFields());
+        allExcludedFields.addAll(toBeExcludedFields);
+        config = config.withExcludedFields(allExcludedFields);
         return this;
     }
 
@@ -194,24 +194,14 @@ public final class EqualsVerifier<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifier<T> withOnlyTheseFields(String... fields) {
-        checkIgnoredFields();
-        List<String> ignoredFields = new ArrayList<>();
-        Set<String> specifiedFields = new HashSet<>(Arrays.asList(fields));
-        Set<String> actualFieldNames = new HashSet<>();
-        for (Field f : FieldIterable.of(config.getType())) {
-            String name = f.getName();
-            actualFieldNames.add(name);
-            if (!specifiedFields.contains(name)) {
-                ignoredFields.add(name);
-            }
-        }
-        for (String field : specifiedFields) {
-            if (!actualFieldNames.contains(field)) {
-                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
-            }
-        }
+        assertNoExistingExcludedFields();
+        List<String> specifiedFields = Arrays.asList(fields);
 
-        config = config.withIgnoredFields(ignoredFields);
+        validateFieldNamesExist(specifiedFields);
+
+        List<String> allIncludedFields = new ArrayList<>(config.getIncludedFields());
+        allIncludedFields.addAll(specifiedFields);
+        config = config.withIncludedFields(allIncludedFields);
         return this;
     }
 
@@ -231,7 +221,7 @@ public final class EqualsVerifier<T> {
         List<String> nonnullFields = Arrays.asList(fields);
         validateFieldNamesExist(nonnullFields);
         config = config.withNonnullFields(nonnullFields);
-        checkNonnullFields();
+        assertNoNonnullFields();
         return this;
     }
 
@@ -328,23 +318,28 @@ public final class EqualsVerifier<T> {
         return this;
     }
 
-    private void checkNonnullFields() {
+    private void assertNoNonnullFields() {
         if (!config.getNonnullFields().isEmpty() && config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
             throw new IllegalArgumentException("You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         }
     }
 
-    private void checkIgnoredFields() {
-        if (!config.getIgnoredFields().isEmpty()) {
+    private void assertNoExistingExcludedFields() {
+        assertNoExistingFields(config.getExcludedFields());
+    }
+
+    private void assertNoExistingIncludedFields() {
+        assertNoExistingFields(config.getIncludedFields());
+    }
+
+    private void assertNoExistingFields(Set<String> fields) {
+        if (!fields.isEmpty()) {
             throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         }
     }
 
     private void validateFieldNamesExist(List<String> givenFields) {
-        Set<String> actualFieldNames = new HashSet<>();
-        for (Field field : FieldIterable.of(config.getType())) {
-            actualFieldNames.add(field.getName());
-        }
+        Set<String> actualFieldNames = config.getActualFields();
         for (String field : givenFields) {
             if (!actualFieldNames.contains(field)) {
                 throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
