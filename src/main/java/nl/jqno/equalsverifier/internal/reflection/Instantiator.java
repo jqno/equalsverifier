@@ -36,7 +36,8 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
  *          anonymous subclass of this class.
  */
 public final class Instantiator<T> {
-    private static final List<String> FORBIDDEN_PACKAGES = Arrays.asList("java.", "javax.", "sun.", "com.sun.");
+    private static final List<String> FORBIDDEN_PACKAGES =
+            Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
 
     private final Class<T> type;
     private Objenesis objenesis;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2010,2012,2016 Jan Ouwens
+ * Copyright 2010,2012,2016-2017 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClass;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.Test;
+import org.w3c.dom.Element;
 
 import java.util.List;
 
@@ -78,6 +79,12 @@ public class InstantiatorTest {
     @SuppressWarnings("rawtypes")
     public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
         Instantiator instantiator = Instantiator.of(List.class);
+        instantiator.instantiateAnonymousSubclass();
+    }
+
+    @Test
+    public void instantiateOrgW3cDomClassWhichHasBootstrapClassLoader() {
+        Instantiator<Element> instantiator = Instantiator.of(Element.class);
         instantiator.instantiateAnonymousSubclass();
     }
 
