@@ -323,7 +323,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -331,7 +331,7 @@ limitations under the License.
                             <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <!-- <minimizeJar>true</minimizeJar> Maven Shade and ASM6 don't get along -->
+                            <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
                                     <artifact>org.ow2.asm:asm</artifact>
@@ -357,7 +357,6 @@ limitations under the License.
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <excludes>
-                                        <exclude>module-info.class</exclude>
                                         <exclude>META-INF/INDEX.LIST</exclude>
                                         <exclude>META-INF/NOTICE</exclude>
                                     </excludes>
