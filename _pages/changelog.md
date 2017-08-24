@@ -9,6 +9,15 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.3.3
+-------------
+August 24, 2017
+
+* ...chain calls to `withIgnoredFields` and `withOnlyTheseFields`. ([Issue 171](https://github.com/jqno/equalsverifier/issues/171); thanks Nathan!)
+* ...use fields from the Java library's `org.w3c.dom` package. ([Issue 174](https://github.com/jqno/equalsverifier/issues/174))
+* ...have a smaller EqualsVerifier jar file again due to better Maven support of Java 9. (Issue 152, [Comment 18](https://github.com/jqno/equalsverifier/issues/152#issuecomment-324149215))
+
+
 Version 2.3.2
 -------------
 August 6, 2017
@@ -208,7 +217,7 @@ Version 1.7.1
 _March 11, 2015_
 
 * ...use EqualsVerifier again, without suppressing 1.7's `REFERENCE_EQUALITY` warning, on classes containing:
-    * certain interfaces, and classes which don't redefine `equals`.  (Issue 104, [Comment 6](https://github.com/jqno/equalsverifier/issues/104#issuecomment-87377326))
+    * certain interfaces, and classes which don't redefine `equals`. (issue 104, [comment 6](https://github.com/jqno/equalsverifier/issues/104#issuecomment-87377326))
     * a static final lambda field. ([Issue 105](https://github.com/jqno/equalsverifier/issues/105))
 
 Version 1.7

@@ -11,7 +11,7 @@ Add this to your POM:
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>2.3.2</version>
+    <version>2.3.3</version>
     <scope>test</scope>
 </dependency>
 {% endhighlight %}
