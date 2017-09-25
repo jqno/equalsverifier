@@ -3,6 +3,7 @@ install: mvn dependency:resolve dependency:resolve-plugins
 script: mvn clean verify
 after_success: mvn jacoco:report coveralls:report
 jdk:
+  - oraclejdk9
   - oraclejdk8
   - oraclejdk7
   - openjdk7
