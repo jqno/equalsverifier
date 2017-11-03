@@ -99,12 +99,12 @@ limitations under the License.
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.7.2</version>
+            <version>1.7.8</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>6.0_BETA</version>
+            <version>6.0</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
@@ -159,7 +159,7 @@ limitations under the License.
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.6.2</version>
+                <version>3.7.0</version>
                 <configuration>
                     <showWarnings>true</showWarnings>
                     <compilerArgs>
