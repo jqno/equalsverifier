@@ -314,6 +314,7 @@ limitations under the License.
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
+                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
                             <Website>${project.url}</Website>
                         </manifestEntries>
                     </archive>
