@@ -5,6 +5,16 @@
 [![Open issues](https://img.shields.io/github/issues/jqno/equalsverifier.svg?style=plastic)](https://github.com/jqno/equalsverifier/issues)
 
 **EqualsVerifier** can be used in Java unit tests to verify whether the contract for the equals and hashCode methods in a class is met.
+The Maven coordinates are:
+
+```xml
+<dependency>
+    <groupId>nl.jqno.equalsverifier</groupId>
+    <artifactId>equalsverifier</artifactId>
+    <version>2.3.3</version>
+    <scope>test</scope>
+</dependency>
+```
 
 For documentation, please see the [project's website](http://www.jqno.nl/equalsverifier).
 
