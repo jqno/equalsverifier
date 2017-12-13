@@ -284,10 +284,30 @@ public final class JavaApiPrefabValues {
         String optional = "java.util.Optional";
         addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
 
+        ConditionalInstantiator localDateTime = new ConditionalInstantiator("java.time.LocalDateTime");
+        addValues(localDateTime.resolve(),
+                localDateTime.returnConstant("MIN"),
+                localDateTime.returnConstant("MAX"));
+        ConditionalInstantiator localDate = new ConditionalInstantiator("java.time.LocalDate");
+        addValues(localDate.resolve(),
+                localDate.returnConstant("MIN"),
+                localDate.returnConstant("MAX"));
+        ConditionalInstantiator localTime = new ConditionalInstantiator("java.time.LocalTime");
+        addValues(localTime.resolve(),
+                localTime.returnConstant("MIN"),
+                localTime.returnConstant("MAX"));
+        ConditionalInstantiator zonedDateTime = new ConditionalInstantiator("java.time.ZonedDateTime");
+        addValues(zonedDateTime.resolve(),
+                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2017-12-13T10:15:30+01:00")),
+                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2016-11-12T09:14:29-01:00")));
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
                 zoneId.callFactory("of", classes(String.class), objects("+1")),
                 zoneId.callFactory("of", classes(String.class), objects("-10")));
+        ConditionalInstantiator zoneOffset = new ConditionalInstantiator("java.time.ZoneOffset");
+        addValues(zoneOffset.resolve(),
+                zoneOffset.callFactory("ofHours", classes(int.class), objects(1)),
+                zoneOffset.callFactory("ofHours", classes(int.class), objects(-1)));
         ConditionalInstantiator dateTimeFormatter = new ConditionalInstantiator("java.time.format.DateTimeFormatter");
         addValues(dateTimeFormatter.resolve(),
                 dateTimeFormatter.returnConstant("ISO_TIME"),
