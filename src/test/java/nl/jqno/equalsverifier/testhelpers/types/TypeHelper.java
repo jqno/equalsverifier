@@ -17,12 +17,10 @@ package nl.jqno.equalsverifier.testhelpers.types;
 
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.DateFormat;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class TypeHelper {
     private static final Object OBJECT = new Object();

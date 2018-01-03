@@ -227,6 +227,10 @@ public final class JavaApiPrefabValues {
         addFactory(CopyOnWriteArraySet.class, new CollectionFactory<CopyOnWriteArraySet>() {
             @Override public CopyOnWriteArraySet createEmpty() { return new CopyOnWriteArraySet<>(); }
         });
+        addFactory(HashSet.class, new CollectionFactory<HashSet>() {
+            @Override
+            public HashSet createEmpty() { return new HashSet<>(); }
+        });
         addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
             @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
