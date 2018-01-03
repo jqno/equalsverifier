@@ -22,10 +22,9 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
-import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
-import nl.jqno.equalsverifier.testhelpers.types.Point3D;
-import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
+import nl.jqno.equalsverifier.testhelpers.types.*;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AnnotatedOuter.AnnotatedMiddle.AnnotatedInner;
@@ -304,14 +303,9 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void instantiateRecursiveApiTypes() {
-        ClassAccessor.of(RecursiveApiClassesContainer.class, prefabValues, NO_INGORED_ANNOTATIONS, false).getRedObject(TypeTag.NULL);
-    }
-
-    @Test
-    public void instantiateCollectionImplementations() {
-        ClassAccessor.of(AllRecursiveCollectionImplementationsContainer.class, prefabValues, NO_INGORED_ANNOTATIONS, false)
-                .getRedObject(TypeTag.NULL);
+    public void instantiateRecursiveTypeUsingPrefabValue() {
+        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
+        ClassAccessor.of(TwoStepNodeA.class, prefabValues, NO_INGORED_ANNOTATIONS, false).getRedObject(TypeTag.NULL);
     }
 
     @Test

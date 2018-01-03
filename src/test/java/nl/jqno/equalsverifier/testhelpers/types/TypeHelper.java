@@ -145,49 +145,6 @@ public class TypeHelper {
         }
     }
 
-    public static class RecursiveApiClassesContainer {
-        BigDecimal bigDecimal;
-        BigInteger bigInteger;
-        Calendar calendar;
-        Date date;
-        DateFormat dateFormat;
-        Exception exception;
-        Formatter formatter;
-        GregorianCalendar gregorianCalendar;
-        Locale locale;
-        Pattern pattern;
-        Scanner scanner;
-        TimeZone timeZone;
-        Throwable throwable;
-    }
-
-    public static class AllRecursiveCollectionImplementationsContainer {
-        CopyOnWriteArrayList<?> copyOnWriteArrayList;
-        LinkedList<?> linkedList;
-
-        ConcurrentHashMap<?, ?> concurrentHashMap;
-        EnumMap<?, ?> enumMap;
-        HashMap<?, ?> hashMap;
-        Hashtable<?, ?> hashtable;
-        LinkedHashMap<?, ?> linkedHashMap;
-        Properties properties;
-        TreeMap<?, ?> treeMap;
-        WeakHashMap<?, ?> weakHashMap;
-
-        CopyOnWriteArraySet<?> copyOnWriteArraySet;
-        EnumSet<?> enumSet;
-        HashSet<?> hashSet;
-        LinkedHashSet<?> linkedHashSet;
-        TreeSet<?> treeSet;
-
-        ArrayBlockingQueue<?> arrayBlockingQueue;
-        ConcurrentLinkedQueue<?> concurrentLinkedQueue;
-        DelayQueue<?> delayQueue;
-        LinkedBlockingQueue<?> linkedBlockingQueue;
-        PriorityBlockingQueue<?> priorityBlockingQueue;
-        SynchronousQueue<?> synchronousQueue;
-    }
-
     @SuppressWarnings("unused")
     public static class DifferentAccessModifiersFieldContainer {
         public static final int L = 0;
