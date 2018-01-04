@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jan Ouwens
+ * Copyright 2017-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 package nl.jqno.equalsverifier.coverage;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 import org.junit.Test;
-
-import javax.annotation.Nonnull;
 
 public class CoverageNonnullTest {
     @Test
