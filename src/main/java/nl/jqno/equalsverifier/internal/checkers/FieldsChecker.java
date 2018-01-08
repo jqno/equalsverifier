@@ -346,8 +346,6 @@ public class FieldsChecker<T> implements Checker {
         }
 
         private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            referenceAccessor.changeField(prefabValues, typeTag);
-            changedAccessor.changeField(prefabValues, typeTag);
             checkReflexivityFor(referenceAccessor, changedAccessor);
         }
 
