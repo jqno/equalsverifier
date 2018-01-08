@@ -304,7 +304,7 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
-        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
+        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
         ClassAccessor.of(TwoStepNodeA.class, prefabValues, NO_INGORED_ANNOTATIONS, false).getRedObject(TypeTag.NULL);
     }
 

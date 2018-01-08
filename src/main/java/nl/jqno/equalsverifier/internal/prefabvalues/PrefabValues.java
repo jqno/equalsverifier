@@ -61,9 +61,10 @@ public class PrefabValues {
      * @param type The class of the values.
      * @param red A value of type T.
      * @param black Another value of type T.
+     * @param redCopy A shallow copy of red.
      */
-    public <T> void addFactory(Class<T> type, T red, T black) {
-        factoryCache.put(type, new SimpleFactory<>(red, black, null));
+    public <T> void addFactory(Class<T> type, T red, T black, T redCopy) {
+        factoryCache.put(type, new SimpleFactory<>(red, black, redCopy));
     }
 
     /**

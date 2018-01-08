@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Jan Ouwens
+ * Copyright 2009-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,7 +135,7 @@ public final class EqualsVerifier<T> {
      *          or {@code black} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
-    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
+    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black, S redCopy) {
         if (otherType == null) {
             throw new NullPointerException("Type is null");
         }
@@ -145,8 +145,16 @@ public final class EqualsVerifier<T> {
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
         }
-        config.getPrefabValues().addFactory(otherType, red, black);
+        config.getPrefabValues().addFactory(otherType, red, black, redCopy);
         return this;
+    }
+
+    /**
+     * @deprecated Use {@link #withPrefabValues(Class, Object, Object, Object)}.
+     */
+    @Deprecated
+    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
+        return withPrefabValues(otherType, red, black, red);
     }
 
     /**

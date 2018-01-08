@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012, 2014-2016 Jan Ouwens
+ * Copyright 2010, 2012, 2014-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import static org.junit.Assert.*;
 public class FieldAccessorTest {
     private static final Point RED_NEW_POINT = new Point(10, 20);
     private static final Point BLACK_NEW_POINT = new Point(20, 10);
+    private static final Point REDCOPY_NEW_POINT = new Point(10, 20);
     private static final String FIELD_NAME = "field";
 
     private PrefabValues prefabValues;
@@ -423,7 +424,7 @@ public class FieldAccessorTest {
     @Test
     public void addPrefabValues() {
         PointContainer foo = new PointContainer(new Point(1, 2));
-        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
+        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT);
 
         doChangeField(foo, "point");
         assertEquals(RED_NEW_POINT, foo.getPoint());
@@ -438,7 +439,7 @@ public class FieldAccessorTest {
     @Test
     public void addPrefabArrayValues() {
         PointArrayContainer foo = new PointArrayContainer();
-        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT);
+        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT);
 
         doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);

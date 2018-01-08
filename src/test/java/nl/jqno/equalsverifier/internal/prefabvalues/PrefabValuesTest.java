@@ -43,7 +43,7 @@ public class PrefabValuesTest {
     @Before
     public void setUp() {
         pv.addFactory(String.class, new AppendingStringTestFactory());
-        pv.addFactory(int.class, 42, 1337);
+        pv.addFactory(int.class, 42, 1337, 42);
     }
 
     @Test
@@ -192,7 +192,7 @@ public class PrefabValuesTest {
 
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
-        pv.addFactory(int.class, -1, -2);
+        pv.addFactory(int.class, -1, -2, -1);
         assertEquals(-1, pv.giveRed(INT_TAG));
         assertEquals(-2, pv.giveBlack(INT_TAG));
     }
