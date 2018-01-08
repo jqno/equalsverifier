@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,7 @@ public class PrefabValues {
      * @param black Another value of type T.
      */
     public <T> void addFactory(Class<T> type, T red, T black) {
-        factoryCache.put(type, new SimpleFactory<>(red, black));
+        factoryCache.put(type, new SimpleFactory<>(red, black, null));
     }
 
     /**
@@ -172,7 +172,7 @@ public class PrefabValues {
     }
 
     private void addToCache(TypeTag tag, Tuple<?> tuple) {
-        cache.put(tag, tuple.getRed(), tuple.getBlack());
+        cache.put(tag, tuple.getRed(), tuple.getBlack(), tuple.getRedCopy());
     }
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {

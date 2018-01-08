@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,9 @@ public abstract class CollectionFactory<T extends Collection> extends AbstractRe
             black.add(blackElem);
         }
 
-        return new Tuple<>(red, black);
+        T redCopy = createEmpty();
+        redCopy.add(redElem);
+
+        return new Tuple<>(red, black, redCopy);
     }
 }

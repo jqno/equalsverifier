@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,9 +62,9 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             case 0:
                 throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
             case 1:
-                return new Tuple<>(enumConstants[0], enumConstants[0]);
+                return new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
             default:
-                return new Tuple<>(enumConstants[0], enumConstants[1]);
+                return new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
         }
     }
 
@@ -79,8 +79,10 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         Array.set(red, 0, prefabValues.giveRed(componentTag));
         T black = (T)Array.newInstance(componentType, 1);
         Array.set(black, 0, prefabValues.giveBlack(componentTag));
+        T redCopy = (T)Array.newInstance(componentType, 1);
+        Array.set(redCopy, 0, prefabValues.giveRed(componentTag));
 
-        return new Tuple<>(red, black);
+        return new Tuple<>(red, black, redCopy);
     }
 
     private void traverseFields(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
@@ -98,6 +100,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.<T>getType(), prefabValues, new HashSet<String>(), false);
         T red = accessor.getRedObject(tag);
         T black = accessor.getBlackObject(tag);
-        return new Tuple<>(red, black);
+        T redCopy = accessor.getRedObject(tag);
+        return new Tuple<>(red, black, redCopy);
     }
 }

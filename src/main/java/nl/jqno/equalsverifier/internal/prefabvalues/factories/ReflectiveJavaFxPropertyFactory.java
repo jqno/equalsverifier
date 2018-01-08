@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,8 @@ public final class ReflectiveJavaFxPropertyFactory<T> extends AbstractReflective
         TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
         Object red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
         Object black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+        Object redCopy = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
 
-        return Tuple.of(red, black);
+        return Tuple.of(red, black, redCopy);
     }
 }

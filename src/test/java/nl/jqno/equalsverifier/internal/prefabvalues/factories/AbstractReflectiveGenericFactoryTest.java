@@ -42,7 +42,7 @@ public class AbstractReflectiveGenericFactoryTest {
         factory = new AbstractReflectiveGenericFactory<String>() {
             @Override
             public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-                return Tuple.of("red", "black");
+                return Tuple.of("red", "black", new String("red"));
             }
         };
     }

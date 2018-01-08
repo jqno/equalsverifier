@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jan Ouwens
+ * Copyright 2015, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ import static org.junit.Assert.*;
 
 public class FactoryCacheTest {
     private static final Class<String> STRING_CLASS = String.class;
-    private static final PrefabValueFactory<String> STRING_FACTORY = new SimpleFactory<>("red", "black");
+    private static final PrefabValueFactory<String> STRING_FACTORY = new SimpleFactory<>("red", "black", new String("red"));
     private static final Class<Integer> INT_CLASS = int.class;
-    private static final PrefabValueFactory<Integer> INT_FACTORY = new SimpleFactory<>(42, 1337);
+    private static final PrefabValueFactory<Integer> INT_FACTORY = new SimpleFactory<>(42, 1337, 42);
 
     private FactoryCache cache = new FactoryCache();
 

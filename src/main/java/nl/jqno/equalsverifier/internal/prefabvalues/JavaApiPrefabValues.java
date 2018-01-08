@@ -271,7 +271,9 @@ public final class JavaApiPrefabValues {
                 red.add(pf.<Delayed>giveRed(delayed));
                 DelayQueue black = new DelayQueue<>();
                 black.add(pf.<Delayed>giveBlack(delayed));
-                return new Tuple<>(red, black);
+                DelayQueue redCopy = new DelayQueue<>();
+                redCopy.add(pf.<Delayed>giveRed(delayed));
+                return new Tuple<>(red, black, redCopy);
             }
         });
         addFactory(LinkedBlockingQueue.class, new CollectionFactory<LinkedBlockingQueue>() {

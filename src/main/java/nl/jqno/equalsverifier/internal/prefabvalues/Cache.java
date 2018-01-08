@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,10 @@ class Cache {
      * @param tag A description of the type. Takes generics into account.
      * @param red A "red" value for the given type.
      * @param black A "black" value for the given type.
+     * @param redCopy A shallow copy of the given red value.
      */
-    public <T> void put(TypeTag tag, T red, T black) {
-        cache.put(tag, new Tuple<>(red, black));
+    public <T> void put(TypeTag tag, T red, T black, T redCopy) {
+        cache.put(tag, new Tuple<>(red, black, redCopy));
     }
 
     /**

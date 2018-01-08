@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +46,9 @@ public class ReflectiveGenericContainerFactory<T> extends AbstractReflectiveGene
 
         Object red = createWith(prefabValues.giveRed(internalTag));
         Object black = createWith(prefabValues.giveBlack(internalTag));
+        Object redCopy = createWith(prefabValues.giveRed(internalTag));
 
-        return Tuple.of(red, black);
+        return Tuple.of(red, black, redCopy);
     }
 
     @SuppressWarnings("rawtypes")

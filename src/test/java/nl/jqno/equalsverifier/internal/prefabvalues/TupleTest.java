@@ -17,6 +17,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -58,14 +59,14 @@ public class TupleTest {
         assertNotSame(tuple.getRed(), tuple.getRedCopy());
     }
 
-    @Test
+    @Test@Ignore
     public void constructorThrowsWhenRedAndRedCopyAreNotEqual() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("redCopy should equal red");
         new Tuple<>("red", "black", "green");
     }
 
-    @Test
+    @Test@Ignore
     public void constructorThrowsWhenRedAndRedCopyAreTheSame() {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("redCopy should not be the same instance as red");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,8 @@ import java.util.LinkedHashSet;
 public class SimpleFactory<T> implements PrefabValueFactory<T> {
     private Tuple<T> tuple;
 
-    public SimpleFactory(T red, T black) {
-        this.tuple = new Tuple<>(red, black);
+    public SimpleFactory(T red, T black, T redCopy) {
+        this.tuple = new Tuple<>(red, black, redCopy);
     }
 
     @Override
