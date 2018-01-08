@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,35 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 /**
- * Container for two values of the same type: a "red" one and a "black" one.
+ * Container for three values of the same type: a "red" one, a "black" one, and a shallow copy of the "red" one.
  */
 public final class Tuple<T> {
     private final T red;
     private final T black;
+    private final T redCopy;
+
+    @Deprecated
+    public Tuple(T red, T black) {
+        this(red, black, null);
+    }
 
     /**
      * Constructor.
      *
      * @param red The red value.
      * @param black The black value.
+     * @param redCopy A shallow copy of the red value.
      */
-    public Tuple(T red, T black) {
+    public Tuple(T red, T black, T redCopy) {
+        if (!red.equals(redCopy)) {
+            throw new IllegalArgumentException("redCopy should equal red");
+        }
+        if (red == redCopy) {
+            throw new IllegalArgumentException("redCopy should not be the same instance as red");
+        }
         this.red = red;
         this.black = black;
+        this.redCopy = redCopy;
     }
 
     /**
@@ -42,7 +56,7 @@ public final class Tuple<T> {
      */
     @SuppressWarnings("unchecked")
     public static <U> Tuple<U> of(Object red, Object black) {
-        return new Tuple<>((U)red, (U)black);
+        return new Tuple<>((U)red, (U)black, null);
     }
 
     /**
@@ -60,6 +74,13 @@ public final class Tuple<T> {
     }
 
     /**
+     * Returns the shallow copy of the red value.
+     */
+    public T getRedCopy() {
+        return redCopy;
+    }
+
+    /**
      * {@inheritDoc}
      */
     @Override
@@ -68,7 +89,7 @@ public final class Tuple<T> {
             return false;
         }
         Tuple<?> other = (Tuple<?>)obj;
-        return red.equals(other.red) && black.equals(other.black);
+        return red.equals(other.red) && black.equals(other.black) && redCopy.equals(other.redCopy);
     }
 
     /**
@@ -79,6 +100,7 @@ public final class Tuple<T> {
         int result = 37;
         result = (59 * result) + red.hashCode();
         result = (59 * result) + black.hashCode();
+        result = (59 * result) + redCopy.hashCode();
         return result;
     }
 }
