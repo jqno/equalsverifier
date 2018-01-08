@@ -93,6 +93,7 @@ public final class JavaApiPrefabValues {
         addJodaTimeClasses();
     }
 
+    @SuppressFBWarnings(value = "DM_STRING_CTOR", justification = "We really do need a separate String instance with the same value")
     private void addPrimitiveClasses() {
         addValues(boolean.class, true, false, true);
         addValues(byte.class, (byte)1, (byte)2, (byte)1);

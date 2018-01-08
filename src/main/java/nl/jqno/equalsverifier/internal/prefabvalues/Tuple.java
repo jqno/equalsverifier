@@ -31,12 +31,6 @@ public final class Tuple<T> {
      * @param redCopy A shallow copy of the red value.
      */
     public Tuple(T red, T black, T redCopy) {
-//        if (!red.equals(redCopy)) {
-//            throw new IllegalArgumentException("redCopy should equal red");
-//        }
-//        if (red == redCopy) {
-//            throw new IllegalArgumentException("redCopy should not be the same instance as red");
-//        }
         this.red = red;
         this.black = black;
         this.redCopy = redCopy;
