@@ -1,5 +1,5 @@
 /*
- * Copyright 2012, 2014-2016 Jan Ouwens
+ * Copyright 2012, 2014-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,6 @@ public class OriginalStateTest extends IntegrationTestBase {
     @Test
     public void staticValueInSuperReturnsToOriginalState_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(SubContainer.class).verify();
-        assertEquals(STATIC, CorrectEquals.staticValue);
         assertEquals(STATIC, SuperContainer.staticValue);
         assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
     }

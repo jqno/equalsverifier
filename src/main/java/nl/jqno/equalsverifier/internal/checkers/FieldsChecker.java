@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Jan Ouwens
+ * Copyright 2009-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -370,14 +370,22 @@ public class FieldsChecker<T> implements Checker {
                 return;
             }
 
-            Object copy = ObjectAccessor.of(value).copy();
-            changedAccessor.set(copy);
+            Object saved = referenceAccessor.get();
+
+            TypeTag tag = TypeTag.of(referenceAccessor.getField(), typeTag);
+            referenceAccessor.set(prefabValues.giveRed(tag));
+            changedAccessor.set(prefabValues.giveRedCopy(tag));
+
+            Object left = referenceAccessor.getObject();
+            Object right = changedAccessor.getObject();
+
+            if (referenceAccessor.fieldIsStatic()) {
+                referenceAccessor.set(saved);
+            }
 
             Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
                     "\nIf this is intentional, consider suppressing Warning.%%",
-                    changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
-            Object left = referenceAccessor.getObject();
-            Object right = changedAccessor.getObject();
+                changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
             assertEquals(f, left, right);
         }
 

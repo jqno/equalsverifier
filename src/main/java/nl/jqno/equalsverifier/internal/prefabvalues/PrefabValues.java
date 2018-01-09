@@ -92,6 +92,19 @@ public class PrefabValues {
     }
 
     /**
+     * Returns a shallow copy of the "red" prefabricated value of the specified
+     * type.
+     *
+     * When possible, it's equal to but not the same as the "red" object.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     */
+    public <T> T giveRedCopy(TypeTag tag) {
+        return this.<T>giveTuple(tag).getRedCopy();
+    }
+
+    /**
      * Returns a tuple of two different prefabricated values of the specified
      * type.
      *
