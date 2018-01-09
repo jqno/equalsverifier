@@ -73,6 +73,8 @@ limitations under the License.
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <encoding>UTF-8</encoding>
+
+        <surefire.argLine></surefire.argLine>
         <jacoco.version>0.7.9</jacoco.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
         <findbugs.effort>Max</findbugs.effort>
@@ -156,6 +158,9 @@ limitations under the License.
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.20.1</version>
+                <configuration>
+                    <argLine>@{surefire.argLine}</argLine>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -201,6 +206,9 @@ limitations under the License.
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+                        <configuration>
+                            <propertyName>surefire.argLine</propertyName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -476,18 +484,9 @@ limitations under the License.
             <activation>
                 <jdk>9</jdk>
             </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.20.1</version>
-                        <configuration>
-                            <argLine>--illegal-access=deny</argLine>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
+            <properties>
+                <surefire.argLine>--illegal-access=deny</surefire.argLine>
+            </properties>
         </profile>
 
         <profile>
