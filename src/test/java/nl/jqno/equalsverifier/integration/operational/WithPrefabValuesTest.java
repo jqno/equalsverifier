@@ -24,14 +24,14 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3))
+                .withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3), new FinalPoint(1, 2))
                 .verify();
     }
 
     @Test
     public void succeed_whenTheClassIsAlreadyKnown() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(Object.class, new Object(), new Object());
+                .withPrefabValues(Object.class, new Object(), new Object(), new Object());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(null, "red", "black");
+                .withPrefabValues(null, "red", "black", new String("red"));
     }
 
     @Test
@@ -47,7 +47,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, null, "black");
+                .withPrefabValues(String.class, null, "black", "red");
     }
 
     @Test
@@ -55,7 +55,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, "red", null);
+                .withPrefabValues(String.class, "red", null, "red");
     }
 
     @Test
@@ -66,7 +66,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         String red = "red";
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, red, red);
+                .withPrefabValues(String.class, red, red, new String(red));
     }
 
     @Test
@@ -78,6 +78,6 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         String red2 = new String("red");
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, red1, red2);
+                .withPrefabValues(String.class, red1, red2, new String(red1));
     }
 }

@@ -154,11 +154,13 @@ public class ArrayTest extends IntegrationTestBase {
     public void succeed_whenArrayLengthIsInvariant() {
         int[] a = { 1, 2, 3 };
         int[] b = { 4, 5, 6 };
+        int[] aCopy = { 1, 2, 3 };
         int[][] x = { a, a, a };
         int[][] y = { b, b, b };
+        int[][] xCopy = { a, a, a };
         EqualsVerifier.forClass(Invariant.class)
-                .withPrefabValues(int[].class, a, b)
-                .withPrefabValues(int[][].class, x, y)
+                .withPrefabValues(int[].class, a, b, aCopy)
+                .withPrefabValues(int[][].class, x, y, xCopy)
                 .verify();
     }
 
