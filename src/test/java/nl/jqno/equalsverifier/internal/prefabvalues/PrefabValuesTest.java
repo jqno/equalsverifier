@@ -77,6 +77,19 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveRedCopyFromFactory() {
+        assertEquals("r", pv.giveRedCopy(STRING_TAG));
+        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+    }
+
+    @Test
+    public void giveRedCopyFromCache() {
+        pv.giveRedCopy(STRING_TAG);
+        assertEquals("r", pv.giveRedCopy(STRING_TAG));
+        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+    }
+
+    @Test
     public void giveRedFromFallbackFactory() {
         Point actual = pv.giveRed(POINT_TAG);
         assertEquals(new Point(42, 42), actual);
@@ -86,6 +99,13 @@ public class PrefabValuesTest {
     public void giveBlackFromFallbackFactory() {
         Point actual = pv.giveBlack(POINT_TAG);
         assertEquals(new Point(1337, 1337), actual);
+    }
+
+    @Test
+    public void giveRedCopyFromFallbackFactory() {
+        Point actual = pv.giveRedCopy(POINT_TAG);
+        assertEquals(new Point(42, 42), actual);
+        assertNotSame(pv.giveRed(POINT_TAG), actual);
     }
 
     @Test
