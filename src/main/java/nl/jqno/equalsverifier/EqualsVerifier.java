@@ -129,21 +129,26 @@ public final class EqualsVerifier<T> {
      * @param <S> The class of the prefabricated values.
      * @param otherType The class of the prefabricated values.
      * @param red An instance of {@code S}.
-     * @param black Another instance of {@code S}.
+     * @param black Another instance of {@code S}, not equal to {@code red}.
+     * @param redCopy A (shallow) copy of {@code red}; equal to but not the
+     *          same as {@code red}.
      * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException If either {@code otherType}, {@code red}
-     *          or {@code black} is null.
+     * @throws NullPointerException If either {@code otherType}, {@code red},
+     *          {@code black}, or {@code redCopy} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
     public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black, S redCopy) {
         if (otherType == null) {
             throw new NullPointerException("Type is null");
         }
-        if (red == null || black == null) {
-            throw new NullPointerException("One or both values are null.");
+        if (red == null || black == null || redCopy == null) {
+            throw new NullPointerException("One or more values are null.");
         }
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
+        }
+        if (!red.equals(redCopy)) {
+            throw new IllegalArgumentException("red and redCopy are not equal.");
         }
         config.getPrefabValues().addFactory(otherType, red, black, redCopy);
         return this;

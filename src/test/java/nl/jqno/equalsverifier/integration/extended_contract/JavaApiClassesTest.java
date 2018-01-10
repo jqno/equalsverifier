@@ -80,7 +80,7 @@ public class JavaApiClassesTest extends IntegrationTestBase {
                 .withPrefabValues(ThreadLocal.class,
                     ThreadLocalContainer.RED_INSTANCE,
                     ThreadLocalContainer.BLACK_INSTANCE,
-                    ThreadLocalContainer.REDCOPY_INSTANCE)
+                    ThreadLocalContainer.RED_INSTANCE)
                 .verify();
     }
 
@@ -290,7 +290,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     static final class ThreadLocalContainer {
         public static final ThreadLocal<Integer> RED_INSTANCE = createInstance(10);
         public static final ThreadLocal<Integer> BLACK_INSTANCE = createInstance(20);
-        public static final ThreadLocal<Integer> REDCOPY_INSTANCE = createInstance(10);
         private final ThreadLocal<Integer> instance = RED_INSTANCE;
 
         private static ThreadLocal<Integer> createInstance(final int initialValue) {
