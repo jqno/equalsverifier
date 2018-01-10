@@ -106,7 +106,10 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAFieldsEqualsMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class)
-                .withPrefabValues(AbstractEqualsDelegator.class, new AbstractEqualsDelegatorImpl(1), new AbstractEqualsDelegatorImpl(2), new AbstractEqualsDelegatorImpl(1))
+                .withPrefabValues(AbstractEqualsDelegator.class,
+                    new AbstractEqualsDelegatorImpl(1),
+                    new AbstractEqualsDelegatorImpl(2),
+                    new AbstractEqualsDelegatorImpl(1))
                 .verify();
     }
 
@@ -121,7 +124,10 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAFieldsHashCodeMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
-                .withPrefabValues(AbstractHashCodeDelegator.class, new AbstractHashCodeDelegatorImpl(1), new AbstractHashCodeDelegatorImpl(2), new AbstractHashCodeDelegatorImpl(1))
+                .withPrefabValues(AbstractHashCodeDelegator.class,
+                    new AbstractHashCodeDelegatorImpl(1),
+                    new AbstractHashCodeDelegatorImpl(2),
+                    new AbstractHashCodeDelegatorImpl(1))
                 .verify();
     }
 
