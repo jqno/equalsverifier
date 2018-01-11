@@ -17,17 +17,12 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
 public class TupleTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     private Tuple<String> tuple = new Tuple<>("red", "black", new String("red"));
 
     @Test

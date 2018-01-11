@@ -357,7 +357,7 @@ public class FieldsChecker<T> implements Checker {
             if (fieldType.equals(Object.class) || fieldType.isInterface()) {
                 return;
             }
-            if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
+            if (changedAccessor.fieldIsStatic()) {
                 return;
             }
             ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<String>(), true);
@@ -370,22 +370,15 @@ public class FieldsChecker<T> implements Checker {
                 return;
             }
 
-            Object saved = referenceAccessor.get();
-
             TypeTag tag = TypeTag.of(referenceAccessor.getField(), typeTag);
             referenceAccessor.set(prefabValues.giveRed(tag));
             changedAccessor.set(prefabValues.giveRedCopy(tag));
 
-            Object left = referenceAccessor.getObject();
-            Object right = changedAccessor.getObject();
-
-            if (referenceAccessor.fieldIsStatic()) {
-                referenceAccessor.set(saved);
-            }
-
             Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
                     "\nIf this is intentional, consider suppressing Warning.%%",
-                changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
+                    changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
+            Object left = referenceAccessor.getObject();
+            Object right = changedAccessor.getObject();
             assertEquals(f, left, right);
         }
 
