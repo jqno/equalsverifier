@@ -259,7 +259,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final String string;
         private final Integer integer;
         private final Class<?> type;
-        private final ArrayList<String> arrayList;
         private final BitSet bitset;
         private final Calendar calendar;
         private final Date date;
@@ -271,10 +270,10 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final InetAddress inetAddress;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public CommonClassesContainer(String string, Integer integer, Class<?> type, ArrayList<String> arrayList, BitSet bitset,
+        public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset,
                 Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
                 SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress) {
-            this.string = string; this.integer = integer; this.type = type; this.arrayList = arrayList; this.bitset = bitset;
+            this.string = string; this.integer = integer; this.type = type; this.bitset = bitset;
             this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
             this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress;
         }
