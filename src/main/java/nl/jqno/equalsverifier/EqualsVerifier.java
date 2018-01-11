@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -130,36 +131,30 @@ public final class EqualsVerifier<T> {
      * @param otherType The class of the prefabricated values.
      * @param red An instance of {@code S}.
      * @param black Another instance of {@code S}, not equal to {@code red}.
-     * @param redCopy A (shallow) copy of {@code red}; equal to but not the
-     *          same as {@code red}.
      * @return {@code this}, for easy method chaining.
      * @throws NullPointerException If either {@code otherType}, {@code red},
-     *          {@code black}, or {@code redCopy} is null.
+     *          or {@code black} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
-    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black, S redCopy) {
+    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
         if (otherType == null) {
             throw new NullPointerException("Type is null");
         }
-        if (red == null || black == null || redCopy == null) {
-            throw new NullPointerException("One or more values are null.");
+        if (red == null || black == null) {
+            throw new NullPointerException("One or both values are null.");
         }
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
         }
-        if (!red.equals(redCopy)) {
-            throw new IllegalArgumentException("red and redCopy are not equal.");
-        }
-        config.getPrefabValues().addFactory(otherType, red, black, redCopy);
-        return this;
-    }
 
-    /**
-     * @deprecated Use {@link #withPrefabValues(Class, Object, Object, Object)}.
-     */
-    @Deprecated
-    public <S> EqualsVerifier<T> withPrefabValues(Class<S> otherType, S red, S black) {
-        return withPrefabValues(otherType, red, black, red);
+        if (red.getClass().isArray()) {
+            config.getPrefabValues().addFactory(otherType, red, black, red);
+        }
+        else {
+            S redCopy = ObjectAccessor.of(red).copy();
+            config.getPrefabValues().addFactory(otherType, red, black, redCopy);
+        }
+        return this;
     }
 
     /**

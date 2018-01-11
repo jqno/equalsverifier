@@ -77,10 +77,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassContainsAThreadLocalField() {
         EqualsVerifier.forClass(ThreadLocalContainer.class)
-                .withPrefabValues(ThreadLocal.class,
-                    ThreadLocalContainer.RED_INSTANCE,
-                    ThreadLocalContainer.BLACK_INSTANCE,
-                    ThreadLocalContainer.RED_INSTANCE)
                 .verify();
     }
 

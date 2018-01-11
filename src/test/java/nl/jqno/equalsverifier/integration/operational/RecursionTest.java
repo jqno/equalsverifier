@@ -36,19 +36,15 @@ public class RecursionTest extends IntegrationTestBase {
 
     private Node red;
     private Node black;
-    private Node redCopy;
     private Tree redTree;
     private Tree blackTree;
-    private Tree redCopyTree;
 
     @Before
     public void createSomeNodes() {
         red = new Node(null);
         black = new Node(new Node(null));
-        redCopy = new Node(null);
         redTree = new Tree(Collections.<Tree>emptyList());
         blackTree = new Tree(Collections.singletonList(new Tree(Collections.<Tree>emptyList())));
-        redCopyTree = new Tree(Collections.<Tree>emptyList());
     }
 
     @Test
@@ -61,14 +57,14 @@ public class RecursionTest extends IntegrationTestBase {
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
         EqualsVerifier.forClass(Node.class)
-                .withPrefabValues(Node.class, red, black, redCopy)
+                .withPrefabValues(Node.class, red, black)
                 .verify();
     }
 
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNode.class)
-                .withPrefabValues(Node.class, red, black, redCopy)
+                .withPrefabValues(Node.class, red, black)
                 .verify();
     }
 
@@ -82,14 +78,14 @@ public class RecursionTest extends IntegrationTestBase {
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
         EqualsVerifier.forClass(NodeContainer.class)
-                .withPrefabValues(Node.class, red, black, redCopy)
+                .withPrefabValues(Node.class, red, black)
                 .verify();
     }
 
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNodeContainer.class)
-                .withPrefabValues(Node.class, red, black, redCopy)
+                .withPrefabValues(Node.class, red, black)
                 .verify();
     }
 
@@ -103,7 +99,7 @@ public class RecursionTest extends IntegrationTestBase {
     @Test
     public void succeed_whenDatastructureIsRecursiveInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(Tree.class)
-                .withPrefabValues(Tree.class, redTree, blackTree, redCopyTree)
+                .withPrefabValues(Tree.class, redTree, blackTree)
                 .verify();
     }
 
@@ -117,7 +113,7 @@ public class RecursionTest extends IntegrationTestBase {
     @Test
     public void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(TreeContainer.class)
-                .withPrefabValues(Tree.class, redTree, blackTree, redCopyTree)
+                .withPrefabValues(Tree.class, redTree, blackTree)
                 .verify();
     }
 

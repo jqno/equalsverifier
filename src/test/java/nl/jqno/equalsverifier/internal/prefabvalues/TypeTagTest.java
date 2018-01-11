@@ -39,7 +39,7 @@ public class TypeTagTest {
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier.forClass(TypeTag.class)
-                .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG, new TypeTag(Integer.class))
+                .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
     }

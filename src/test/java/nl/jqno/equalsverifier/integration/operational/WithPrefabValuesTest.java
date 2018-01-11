@@ -21,17 +21,14 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import org.junit.Test;
 
 public class WithPrefabValuesTest extends IntegrationTestBase {
+    private final FinalPoint red = new FinalPoint(1, 2);
+    private final FinalPoint black = new FinalPoint(2, 3);
+
     @Test
     public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(FinalPoint.class, new FinalPoint(1, 2), new FinalPoint(2, 3), new FinalPoint(1, 2))
+                .withPrefabValues(FinalPoint.class, red, black)
                 .verify();
-    }
-
-    @Test
-    public void succeed_whenTheClassIsAlreadyKnown() {
-        EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(String.class, "red", "black", new String("red"));
     }
 
     @Test
@@ -39,7 +36,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(null, "red", "black", new String("red"));
+                .withPrefabValues(null, red, black);
     }
 
     @Test
@@ -47,7 +44,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, null, "black", "red");
+                .withPrefabValues(FinalPoint.class, null, black);
     }
 
     @Test
@@ -55,15 +52,7 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, "red", null, "red");
-    }
-
-    @Test
-    public void throw_whenThirdPrefabValueIsNull() {
-        thrown.expect(NullPointerException.class);
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-            .withPrefabValues(String.class, "red", "black", null);
+                .withPrefabValues(FinalPoint.class, red, null);
     }
 
     @Test
@@ -71,10 +60,8 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Both values are equal.");
 
-        String red = "red";
-
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, red, red, new String(red));
+                .withPrefabValues(FinalPoint.class, red, red);
     }
 
     @Test
@@ -82,25 +69,10 @@ public class WithPrefabValuesTest extends IntegrationTestBase {
         thrown.expect(IllegalArgumentException.class);
         thrown.expectMessage("Both values are equal.");
 
-        String red1 = new String("red");
-        String red2 = new String("red");
+        FinalPoint red1 = new FinalPoint(4, 4);
+        FinalPoint red2 = new FinalPoint(4, 4);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, red1, red2, new String(red1));
-    }
-
-    @Test
-    public void throw_whenRedIsNotEqualToRedCopy() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("red and redCopy are not equal.");
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(String.class, "red", "black", "black");
-    }
-
-    @Test
-    public void succeed_whenCallingDeprecatedOverload() {
-        EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(String.class, "red", "black");
+                .withPrefabValues(FinalPoint.class, red1, red2);
     }
 }

@@ -139,6 +139,8 @@ public final class JavaApiPrefabValues {
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
 
+        addFactory(ThreadLocal.class, new ThreadLocalFactory());
+
         // Constructing InetAddress reflectively, because it might throw a awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
         addValues(inetAddress.resolve(),

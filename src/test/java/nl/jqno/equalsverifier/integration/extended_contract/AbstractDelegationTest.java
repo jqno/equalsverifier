@@ -70,7 +70,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
         EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class)
-                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2), new AbstractDelegatorImpl(1))
+                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
                 .verify();
     }
 
@@ -85,7 +85,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenHashCodeCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
         EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class)
-                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2), new AbstractDelegatorImpl(1))
+                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
                 .verify();
     }
 
@@ -106,10 +106,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAFieldsEqualsMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class)
-                .withPrefabValues(AbstractEqualsDelegator.class,
-                    new AbstractEqualsDelegatorImpl(1),
-                    new AbstractEqualsDelegatorImpl(2),
-                    new AbstractEqualsDelegatorImpl(1))
+                .withPrefabValues(AbstractEqualsDelegator.class, new AbstractEqualsDelegatorImpl(1), new AbstractEqualsDelegatorImpl(2))
                 .verify();
     }
 
@@ -124,10 +121,7 @@ public class AbstractDelegationTest extends IntegrationTestBase {
     @Test
     public void succeed_whenAFieldsHashCodeMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
-                .withPrefabValues(AbstractHashCodeDelegator.class,
-                    new AbstractHashCodeDelegatorImpl(1),
-                    new AbstractHashCodeDelegatorImpl(2),
-                    new AbstractHashCodeDelegatorImpl(1))
+                .withPrefabValues(AbstractHashCodeDelegator.class, new AbstractHashCodeDelegatorImpl(1), new AbstractHashCodeDelegatorImpl(2))
                 .verify();
     }
 

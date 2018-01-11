@@ -157,8 +157,8 @@ public class ArrayTest extends IntegrationTestBase {
         int[][] x = { a, a, a };
         int[][] y = { b, b, b };
         EqualsVerifier.forClass(Invariant.class)
-                .withPrefabValues(int[].class, a, b, a)
-                .withPrefabValues(int[][].class, x, y, x)
+                .withPrefabValues(int[].class, a, b)
+                .withPrefabValues(int[][].class, x, y)
                 .verify();
     }
 
