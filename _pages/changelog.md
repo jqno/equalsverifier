@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.1
+-------------
+January 12, 2018
+
+* ...run EqualsVerifier's test suite (and probably your own EqualsVerifier tests!) on Java 9 without any illegal-access warnings. ([Issue 172](https://github.com/jqno/equalsverifier/issues/172))
+
 Version 2.4
 -----------
 November 11, 2017
