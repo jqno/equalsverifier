@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class ReflectiveGuavaEnumBiMapFactoryTest {
 
     @Before
     public void setUp() {
-        prefabValues.addFactory(Enum.class, TwoElementEnum.ONE, TwoElementEnum.TWO);
+        prefabValues.addFactory(Enum.class, TwoElementEnum.ONE, TwoElementEnum.TWO, TwoElementEnum.ONE);
 
         expectedRed = EnumBiMap.create(TwoElementEnum.class, TwoElementEnum.class);
         expectedRed.put(TwoElementEnum.ONE, TwoElementEnum.TWO);

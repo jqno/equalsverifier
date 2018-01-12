@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Jan Ouwens
+ * Copyright 2009-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -346,8 +346,6 @@ public class FieldsChecker<T> implements Checker {
         }
 
         private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            referenceAccessor.changeField(prefabValues, typeTag);
-            changedAccessor.changeField(prefabValues, typeTag);
             checkReflexivityFor(referenceAccessor, changedAccessor);
         }
 
@@ -359,7 +357,7 @@ public class FieldsChecker<T> implements Checker {
             if (fieldType.equals(Object.class) || fieldType.isInterface()) {
                 return;
             }
-            if (changedAccessor.fieldIsStatic() && changedAccessor.fieldIsFinal()) {
+            if (changedAccessor.fieldIsStatic()) {
                 return;
             }
             ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<String>(), true);
@@ -372,8 +370,9 @@ public class FieldsChecker<T> implements Checker {
                 return;
             }
 
-            Object copy = ObjectAccessor.of(value).copy();
-            changedAccessor.set(copy);
+            TypeTag tag = TypeTag.of(referenceAccessor.getField(), typeTag);
+            referenceAccessor.set(prefabValues.giveRed(tag));
+            changedAccessor.set(prefabValues.giveRedCopy(tag));
 
             Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
                     "\nIf this is intentional, consider suppressing Warning.%%",

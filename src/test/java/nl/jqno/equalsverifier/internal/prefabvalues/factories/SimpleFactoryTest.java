@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,10 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 public class SimpleFactoryTest {
-    private SimpleFactory<?> factory = new SimpleFactory<>("red", "black");
+    private SimpleFactory<String> factory = new SimpleFactory<>("red", "black", new String("red"));
 
     @Test
     public void createRed() {
@@ -30,5 +31,12 @@ public class SimpleFactoryTest {
     @Test
     public void createBlack() {
         assertEquals("black", factory.createValues(null, null, null).getBlack());
+    }
+
+    @Test
+    public void redCopy() {
+        String redCopy = factory.createValues(null, null, null).getRedCopy();
+        assertEquals("red", redCopy);
+        assertNotSame("red", redCopy);
     }
 }

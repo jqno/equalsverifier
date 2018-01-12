@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013, 2015-2016 Jan Ouwens
+ * Copyright 2010-2013, 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveType() {
-        prefabValues.addFactory(Node.class, new Node(), new Node());
+        prefabValues.addFactory(Node.class, new Node(), new Node(), new Node());
         prefabValues.giveRed(NODE_TAG);
     }
 
@@ -100,7 +100,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveArrayType() {
-        prefabValues.addFactory(NodeArray.class, new NodeArray(), new NodeArray());
+        prefabValues.addFactory(NodeArray.class, new NodeArray(), new NodeArray(), new NodeArray());
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -112,7 +112,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void addTwoStepRecursiveType() {
-        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB());
+        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -124,7 +124,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void twoStepRecursiveArrayType() {
-        prefabValues.addFactory(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
+        prefabValues.addFactory(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 

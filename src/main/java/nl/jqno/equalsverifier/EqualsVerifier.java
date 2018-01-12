@@ -1,5 +1,5 @@
 /*
- * Copyright 2009-2017 Jan Ouwens
+ * Copyright 2009-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -129,9 +130,9 @@ public final class EqualsVerifier<T> {
      * @param <S> The class of the prefabricated values.
      * @param otherType The class of the prefabricated values.
      * @param red An instance of {@code S}.
-     * @param black Another instance of {@code S}.
+     * @param black Another instance of {@code S}, not equal to {@code red}.
      * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException If either {@code otherType}, {@code red}
+     * @throws NullPointerException If either {@code otherType}, {@code red},
      *          or {@code black} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
@@ -145,7 +146,14 @@ public final class EqualsVerifier<T> {
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
         }
-        config.getPrefabValues().addFactory(otherType, red, black);
+
+        if (red.getClass().isArray()) {
+            config.getPrefabValues().addFactory(otherType, red, black, red);
+        }
+        else {
+            S redCopy = ObjectAccessor.of(red).copy();
+            config.getPrefabValues().addFactory(otherType, red, black, redCopy);
+        }
         return this;
     }
 

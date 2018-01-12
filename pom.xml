@@ -1,5 +1,5 @@
 <!--
-Copyright 2014-2017 Jan Ouwens
+Copyright 2014-2018 Jan Ouwens
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -73,6 +73,7 @@ limitations under the License.
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <encoding>UTF-8</encoding>
+
         <jacoco.version>0.7.9</jacoco.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
         <findbugs.effort>Max</findbugs.effort>
@@ -152,6 +153,12 @@ limitations under the License.
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.20.1</version>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -466,13 +473,48 @@ limitations under the License.
 
     <profiles>
         <profile>
+            <id>java9</id>
+            <activation>
+                <jdk>[9,)</jdk>
+            </activation>
+            <properties>
+                <surefire.argLine>--illegal-access=deny</surefire.argLine>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <argLine>@{surefire.argLine}</argLine>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>default-prepare-agent</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                                <configuration>
+                                    <propertyName>surefire.argLine</propertyName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>addPitReport</id>
             <activation>
                 <file>
                     <exists>target/pit-reports</exists>
                 </file>
             </activation>
-
             <reporting>
                 <plugins>
                     <plugin>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,7 +43,7 @@ public class PrefabValuesTest {
     @Before
     public void setUp() {
         pv.addFactory(String.class, new AppendingStringTestFactory());
-        pv.addFactory(int.class, 42, 1337);
+        pv.addFactory(int.class, 42, 1337, 42);
     }
 
     @Test
@@ -77,6 +77,19 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveRedCopyFromFactory() {
+        assertEquals("r", pv.giveRedCopy(STRING_TAG));
+        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+    }
+
+    @Test
+    public void giveRedCopyFromCache() {
+        pv.giveRedCopy(STRING_TAG);
+        assertEquals("r", pv.giveRedCopy(STRING_TAG));
+        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+    }
+
+    @Test
     public void giveRedFromFallbackFactory() {
         Point actual = pv.giveRed(POINT_TAG);
         assertEquals(new Point(42, 42), actual);
@@ -89,9 +102,16 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveRedCopyFromFallbackFactory() {
+        Point actual = pv.giveRedCopy(POINT_TAG);
+        assertEquals(new Point(42, 42), actual);
+        assertNotSame(pv.giveRed(POINT_TAG), actual);
+    }
+
+    @Test
     public void giveTuple() {
         Tuple<Point> actual = pv.giveTuple(POINT_TAG);
-        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337)), actual);
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 
     @Test
@@ -192,7 +212,7 @@ public class PrefabValuesTest {
 
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
-        pv.addFactory(int.class, -1, -2);
+        pv.addFactory(int.class, -1, -2, -1);
         assertEquals(-1, pv.giveRed(INT_TAG));
         assertEquals(-2, pv.giveBlack(INT_TAG));
     }
@@ -206,7 +226,7 @@ public class PrefabValuesTest {
         @Override
         public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
             red += "r"; black += "b";
-            return new Tuple<>(red, black);
+            return new Tuple<>(red, black, new String(red));
         }
     }
 
@@ -223,7 +243,10 @@ public class PrefabValuesTest {
             List black = new ArrayList<>();
             black.add(prefabValues.giveBlack(subtag));
 
-            return new Tuple<>(red, black);
+            List redCopy = new ArrayList<>();
+            redCopy.add(prefabValues.giveRed(subtag));
+
+            return new Tuple<>(red, black, redCopy);
         }
     }
 

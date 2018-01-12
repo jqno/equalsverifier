@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2017 Jan Ouwens
+ * Copyright 2010-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -93,54 +93,60 @@ public final class JavaApiPrefabValues {
         addJodaTimeClasses();
     }
 
+    @SuppressFBWarnings(
+        value = {"DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR"},
+        justification = "We really do need a separate instances with the same value")
     private void addPrimitiveClasses() {
-        addValues(boolean.class, true, false);
-        addValues(byte.class, (byte)1, (byte)2);
-        addValues(char.class, 'a', 'b');
-        addValues(double.class, 0.5D, 1.0D);
-        addValues(float.class, 0.5F, 1.0F);
-        addValues(int.class, 1, 2);
-        addValues(long.class, 1L, 2L);
-        addValues(short.class, (short)1, (short)2);
+        addValues(boolean.class, true, false, true);
+        addValues(byte.class, (byte)1, (byte)2, (byte)1);
+        addValues(char.class, 'a', 'b', 'a');
+        addValues(double.class, 0.5D, 1.0D, 0.5D);
+        addValues(float.class, 0.5F, 1.0F, 0.5F);
+        addValues(int.class, 1, 2, 1);
+        addValues(long.class, 1L, 2L, 1L);
+        addValues(short.class, (short)1, (short)2, (short)1);
 
-        addValues(Boolean.class, true, false);
-        addValues(Byte.class, (byte)1, (byte)2);
-        addValues(Character.class, 'a', 'b');
-        addValues(Double.class, 0.5D, 1.0D);
-        addValues(Float.class, 0.5F, 1.0F);
-        addValues(Integer.class, 1, 2);
-        addValues(Long.class, 1L, 2L);
-        addValues(Short.class, (short)1, (short)2);
+        addValues(Boolean.class, true, false, new Boolean(true));
+        addValues(Byte.class, (byte)1, (byte)2, new Byte((byte)1));
+        addValues(Character.class, 'a', 'b', new Character('a'));
+        addValues(Double.class, 0.5D, 1.0D, new Double(0.5D));
+        addValues(Float.class, 0.5F, 1.0F, new Float(0.5F));
+        addValues(Integer.class, 1, 2, new Integer(1));
+        addValues(Long.class, 1L, 2L, new Long(1L));
+        addValues(Short.class, (short)1, (short)2, new Short((short)1));
 
-        addValues(Object.class, new Object(), new Object());
-        addValues(Class.class, Class.class, Object.class);
-        addValues(String.class, "one", "two");
-        addValues(Enum.class, Dummy.RED, Dummy.BLACK);
+        addValues(Object.class, new Object(), new Object(), new Object());
+        addValues(Class.class, Class.class, Object.class, Class.class);
+        addValues(String.class, "one", "two", new String("one"));
+        addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
     }
 
     @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")
     private void addClasses() {
-        addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE);
-        addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE);
-        addValues(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-        addValues(Date.class, new Date(0), new Date(1));
-        addValues(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance());
-        addValues(File.class, new File(""), new File("/"));
-        addValues(Formatter.class, new Formatter(), new Formatter());
-        addValues(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5));
-        addValues(Locale.class, new Locale("nl"), new Locale("hu"));
-        addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"));
-        addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"));
-        addValues(Scanner.class, new Scanner("one"), new Scanner("two"));
-        addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"));
-        addValues(Throwable.class, new Throwable(), new Throwable());
-        addValues(UUID.class, new UUID(0, -1), new UUID(1, 0));
+        addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
+        addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
+        addValues(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5), new GregorianCalendar(2010, 7, 4));
+        addValues(Date.class, new Date(0), new Date(1), new Date(0));
+        addValues(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance(), DateFormat.getTimeInstance());
+        addValues(File.class, new File(""), new File("/"), new File(""));
+        addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
+        addValues(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5), new GregorianCalendar(2010, 7, 4));
+        addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
+        addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
+        addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"), new SimpleDateFormat("yMd"));
+        addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
+        addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
+        addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
+        addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
+
+        addFactory(ThreadLocal.class, new ThreadLocalFactory());
 
         // Constructing InetAddress reflectively, because it might throw a awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
         addValues(inetAddress.resolve(),
                 inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")));
+                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -227,6 +233,10 @@ public final class JavaApiPrefabValues {
         addFactory(CopyOnWriteArraySet.class, new CollectionFactory<CopyOnWriteArraySet>() {
             @Override public CopyOnWriteArraySet createEmpty() { return new CopyOnWriteArraySet<>(); }
         });
+        addFactory(HashSet.class, new CollectionFactory<HashSet>() {
+            @Override
+            public HashSet createEmpty() { return new HashSet<>(); }
+        });
         addFactory(TreeSet.class, new CollectionFactory<TreeSet>() {
             @Override public TreeSet createEmpty() { return new TreeSet<>(OBJECT_COMPARATOR); }
         });
@@ -235,7 +245,8 @@ public final class JavaApiPrefabValues {
         BitSet redBitSet = new BitSet();
         BitSet blackBitSet = new BitSet();
         blackBitSet.set(0);
-        addValues(BitSet.class, redBitSet, blackBitSet);
+        BitSet redCopyBitSet = new BitSet();
+        addValues(BitSet.class, redBitSet, blackBitSet, redCopyBitSet);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -267,7 +278,9 @@ public final class JavaApiPrefabValues {
                 red.add(pf.<Delayed>giveRed(delayed));
                 DelayQueue black = new DelayQueue<>();
                 black.add(pf.<Delayed>giveBlack(delayed));
-                return new Tuple<>(red, black);
+                DelayQueue redCopy = new DelayQueue<>();
+                redCopy.add(pf.<Delayed>giveRed(delayed));
+                return new Tuple<>(red, black, redCopy);
             }
         });
         addFactory(LinkedBlockingQueue.class, new CollectionFactory<LinkedBlockingQueue>() {
@@ -276,7 +289,7 @@ public final class JavaApiPrefabValues {
         addFactory(PriorityBlockingQueue.class, new CollectionFactory<PriorityBlockingQueue>() {
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
-        addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>());
+        addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -284,20 +297,49 @@ public final class JavaApiPrefabValues {
         String optional = "java.util.Optional";
         addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
 
+        ConditionalInstantiator localDateTime = new ConditionalInstantiator("java.time.LocalDateTime");
+        addValues(localDateTime.resolve(),
+                localDateTime.returnConstant("MIN"),
+                localDateTime.returnConstant("MAX"),
+                localDateTime.returnConstant("MIN"));
+        ConditionalInstantiator localDate = new ConditionalInstantiator("java.time.LocalDate");
+        addValues(localDate.resolve(),
+                localDate.returnConstant("MIN"),
+                localDate.returnConstant("MAX"),
+                localDate.returnConstant("MIN"));
+        ConditionalInstantiator localTime = new ConditionalInstantiator("java.time.LocalTime");
+        addValues(localTime.resolve(),
+                localTime.returnConstant("MIN"),
+                localTime.returnConstant("MAX"),
+                localTime.returnConstant("MIN"));
+        ConditionalInstantiator zonedDateTime = new ConditionalInstantiator("java.time.ZonedDateTime");
+        addValues(zonedDateTime.resolve(),
+                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2017-12-13T10:15:30+01:00")),
+                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2016-11-12T09:14:29-01:00")),
+                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2017-12-13T10:15:30+01:00")));
         ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
         addValues(zoneId.resolve(),
                 zoneId.callFactory("of", classes(String.class), objects("+1")),
-                zoneId.callFactory("of", classes(String.class), objects("-10")));
+                zoneId.callFactory("of", classes(String.class), objects("-10")),
+                zoneId.callFactory("of", classes(String.class), objects("+1")));
+        ConditionalInstantiator zoneOffset = new ConditionalInstantiator("java.time.ZoneOffset");
+        addValues(zoneOffset.resolve(),
+                zoneOffset.callFactory("ofHours", classes(int.class), objects(1)),
+                zoneOffset.callFactory("ofHours", classes(int.class), objects(-1)),
+                zoneOffset.callFactory("ofHours", classes(int.class), objects(1)));
         ConditionalInstantiator dateTimeFormatter = new ConditionalInstantiator("java.time.format.DateTimeFormatter");
         addValues(dateTimeFormatter.resolve(),
                 dateTimeFormatter.returnConstant("ISO_TIME"),
-                dateTimeFormatter.returnConstant("ISO_DATE"));
+                dateTimeFormatter.returnConstant("ISO_DATE"),
+                dateTimeFormatter.returnConstant("ISO_TIME"));
         ConditionalInstantiator completableFuture = new ConditionalInstantiator("java.util.concurrent.CompletableFuture");
         addValues(completableFuture.resolve(),
+                completableFuture.instantiate(classes(), objects()),
                 completableFuture.instantiate(classes(), objects()),
                 completableFuture.instantiate(classes(), objects()));
         ConditionalInstantiator stampedLock = new ConditionalInstantiator("java.util.concurrent.locks.StampedLock");
         addValues(stampedLock.resolve(),
+                stampedLock.instantiate(classes(), objects()),
                 stampedLock.instantiate(classes(), objects()),
                 stampedLock.instantiate(classes(), objects()));
     }
@@ -322,7 +364,8 @@ public final class JavaApiPrefabValues {
         ConditionalInstantiator reference = new ConditionalInstantiator("javax.naming.Reference");
         addValues(reference.resolve(),
                 reference.instantiate(classes(String.class), objects("one")),
-                reference.instantiate(classes(String.class), objects("two")));
+                reference.instantiate(classes(String.class), objects("two")),
+                reference.instantiate(classes(String.class), objects("one")));
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
@@ -406,28 +449,33 @@ public final class JavaApiPrefabValues {
         ConditionalInstantiator chronology = new ConditionalInstantiator(JODA_PACKAGE + "Chronology");
         addValues(chronology.resolve(),
                 chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()),
-                chronology.callFactory(JODA_PACKAGE + "chrono.ISOChronology", "getInstanceUTC", classes(), objects()));
+                chronology.callFactory(JODA_PACKAGE + "chrono.ISOChronology", "getInstanceUTC", classes(), objects()),
+                chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()));
         ConditionalInstantiator dateTimeZone = new ConditionalInstantiator(JODA_PACKAGE + "DateTimeZone");
         addValues(dateTimeZone.resolve(),
                 dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)),
-                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(-10)));
+                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(-10)),
+                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)));
         ConditionalInstantiator periodType = new ConditionalInstantiator(JODA_PACKAGE + "PeriodType");
         addValues(periodType.resolve(),
                 periodType.callFactory("days", classes(), objects()),
-                periodType.callFactory("hours", classes(), objects()));
+                periodType.callFactory("hours", classes(), objects()),
+                periodType.callFactory("days", classes(), objects()));
         ConditionalInstantiator yearMonth = new ConditionalInstantiator(JODA_PACKAGE + "YearMonth");
         addValues(yearMonth.resolve(),
                 yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)),
-                yearMonth.instantiate(classes(int.class, int.class), objects(2014, 7)));
+                yearMonth.instantiate(classes(int.class, int.class), objects(2014, 7)),
+                yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)));
         ConditionalInstantiator monthDay = new ConditionalInstantiator(JODA_PACKAGE + "MonthDay");
         addValues(monthDay.resolve(),
                 monthDay.instantiate(classes(int.class, int.class), objects(6, 1)),
-                monthDay.instantiate(classes(int.class, int.class), objects(6, 26)));
+                monthDay.instantiate(classes(int.class, int.class), objects(6, 26)),
+                monthDay.instantiate(classes(int.class, int.class), objects(6, 1)));
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void addValues(Class<T> type, Object red, Object black) {
-        prefabValues.addFactory(type, (T)red, (T)black);
+    private <T> void addValues(Class<T> type, Object red, Object black, Object redCopy) {
+        prefabValues.addFactory(type, (T)red, (T)black, (T)redCopy);
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {

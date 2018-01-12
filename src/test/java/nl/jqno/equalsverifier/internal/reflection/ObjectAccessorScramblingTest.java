@@ -1,5 +1,5 @@
 /*
- * Copyright 2010, 2012, 2016 Jan Ouwens
+ * Copyright 2010, 2012, 2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +105,7 @@ public class ObjectAccessorScramblingTest {
 
     @Test
     public void scramblePrivateFinalPoint() {
-        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3));
+        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3), new Point(1, 2));
         FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
         Point before = foo.p;
 
@@ -116,7 +116,7 @@ public class ObjectAccessorScramblingTest {
 
     @Test
     public void scrambleNestedGenerics() {
-        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3));
+        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3), new Point(1, 2));
         GenericContainerContainer foo = new GenericContainerContainer();
 
         assertTrue(foo.strings.ts.isEmpty());

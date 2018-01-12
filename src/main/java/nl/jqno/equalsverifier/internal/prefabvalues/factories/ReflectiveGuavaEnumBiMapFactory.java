@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,8 +43,9 @@ public class ReflectiveGuavaEnumBiMapFactory<T> extends AbstractReflectiveGeneri
 
         Object red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         Object black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+        Object redCopy = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
 
-        return Tuple.of(red, black);
+        return Tuple.of(red, black, redCopy);
     }
 
     @SuppressWarnings("rawtypes")

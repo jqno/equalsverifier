@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public class FallbackFactoryTest {
     public void setUp() {
         factory = new FallbackFactory<>();
         prefabValues = new PrefabValues();
-        prefabValues.addFactory(int.class, 42, 1337);
+        prefabValues.addFactory(int.class, 42, 1337, 42);
         typeStack = new LinkedHashSet<>();
     }
 

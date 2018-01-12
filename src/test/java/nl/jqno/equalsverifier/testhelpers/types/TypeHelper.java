@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2013, 2015-2016 Jan Ouwens
+ * Copyright 2010-2013, 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@ package nl.jqno.equalsverifier.testhelpers.types;
 
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.DateFormat;
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 public class TypeHelper {
     private static final Object OBJECT = new Object();
@@ -143,49 +141,6 @@ public class TypeHelper {
             result &= Arrays.equals(strings, other.strings);
             return result;
         }
-    }
-
-    public static class RecursiveApiClassesContainer {
-        BigDecimal bigDecimal;
-        BigInteger bigInteger;
-        Calendar calendar;
-        Date date;
-        DateFormat dateFormat;
-        Exception exception;
-        Formatter formatter;
-        GregorianCalendar gregorianCalendar;
-        Locale locale;
-        Pattern pattern;
-        Scanner scanner;
-        TimeZone timeZone;
-        Throwable throwable;
-    }
-
-    public static class AllRecursiveCollectionImplementationsContainer {
-        CopyOnWriteArrayList<?> copyOnWriteArrayList;
-        LinkedList<?> linkedList;
-
-        ConcurrentHashMap<?, ?> concurrentHashMap;
-        EnumMap<?, ?> enumMap;
-        HashMap<?, ?> hashMap;
-        Hashtable<?, ?> hashtable;
-        LinkedHashMap<?, ?> linkedHashMap;
-        Properties properties;
-        TreeMap<?, ?> treeMap;
-        WeakHashMap<?, ?> weakHashMap;
-
-        CopyOnWriteArraySet<?> copyOnWriteArraySet;
-        EnumSet<?> enumSet;
-        HashSet<?> hashSet;
-        LinkedHashSet<?> linkedHashSet;
-        TreeSet<?> treeSet;
-
-        ArrayBlockingQueue<?> arrayBlockingQueue;
-        ConcurrentLinkedQueue<?> concurrentLinkedQueue;
-        DelayQueue<?> delayQueue;
-        LinkedBlockingQueue<?> linkedBlockingQueue;
-        PriorityBlockingQueue<?> priorityBlockingQueue;
-        SynchronousQueue<?> synchronousQueue;
     }
 
     @SuppressWarnings("unused")

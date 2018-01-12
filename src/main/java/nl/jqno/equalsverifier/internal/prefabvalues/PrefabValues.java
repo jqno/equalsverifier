@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,9 +61,10 @@ public class PrefabValues {
      * @param type The class of the values.
      * @param red A value of type T.
      * @param black Another value of type T.
+     * @param redCopy A shallow copy of red.
      */
-    public <T> void addFactory(Class<T> type, T red, T black) {
-        factoryCache.put(type, new SimpleFactory<>(red, black));
+    public <T> void addFactory(Class<T> type, T red, T black, T redCopy) {
+        factoryCache.put(type, new SimpleFactory<>(red, black, redCopy));
     }
 
     /**
@@ -88,6 +89,19 @@ public class PrefabValues {
      */
     public <T> T giveBlack(TypeTag tag) {
         return this.<T>giveTuple(tag).getBlack();
+    }
+
+    /**
+     * Returns a shallow copy of the "red" prefabricated value of the specified
+     * type.
+     *
+     * When possible, it's equal to but not the same as the "red" object.
+     *
+     * @param tag A description of the desired type, including generic
+     *            parameters.
+     */
+    public <T> T giveRedCopy(TypeTag tag) {
+        return this.<T>giveTuple(tag).getRedCopy();
     }
 
     /**
@@ -172,7 +186,7 @@ public class PrefabValues {
     }
 
     private void addToCache(TypeTag tag, Tuple<?> tuple) {
-        cache.put(tag, tuple.getRed(), tuple.getBlack());
+        cache.put(tag, tuple.getRed(), tuple.getBlack(), tuple.getRedCopy());
     }
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {

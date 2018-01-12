@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,9 @@ public class ReflectiveEnumMapFactory extends AbstractReflectiveGenericFactory<E
 
         EnumMap red = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
         EnumMap black = createWith(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+        EnumMap redCopy = createWith(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
 
-        return new Tuple<>(red, black);
+        return new Tuple<>(red, black, redCopy);
     }
 
     @SuppressWarnings("unchecked")

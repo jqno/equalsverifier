@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Jan Ouwens
+ * Copyright 2017-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 import org.junit.Test;
-
-import javax.annotation.Nonnull;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
@@ -55,7 +54,7 @@ public class AnnotationsIgnoreTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
         EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .withIgnoredAnnotations(javax.annotation.concurrent.Immutable.class)
+                .withIgnoredAnnotations(net.jcip.annotations.Immutable.class)
                 .verify();
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2016 Jan Ouwens
+ * Copyright 2015-2016, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,9 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
                 classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
         Object black = ci.callFactory(factoryType, factoryMethod,
                 classes(declaredParameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+        Object redCopy = ci.callFactory(factoryType, factoryMethod,
+            classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
 
-        return Tuple.of(red, black);
+        return Tuple.of(red, black, redCopy);
     }
 }

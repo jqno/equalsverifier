@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Jan Ouwens
+ * Copyright 2015, 2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,10 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 
 public class TupleTest {
-    private Tuple<String> tuple = new Tuple<>("red", "black");
+    private Tuple<String> tuple = new Tuple<>("red", "black", new String("red"));
 
     @Test
     public void equalsAndHashCode() {
@@ -39,5 +40,16 @@ public class TupleTest {
     @Test
     public void getBlack() {
         assertEquals("black", tuple.getBlack());
+    }
+
+    @Test
+    public void getRedCopy() {
+        assertEquals("red", tuple.getRedCopy());
+    }
+
+    @Test
+    public void redAndRedCopyInvariant() {
+        assertEquals(tuple.getRed(), tuple.getRedCopy());
+        assertNotSame(tuple.getRed(), tuple.getRedCopy());
     }
 }

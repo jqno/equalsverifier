@@ -1,5 +1,5 @@
 /*
- * Copyright 2015-2017 Jan Ouwens
+ * Copyright 2015-2018 Jan Ouwens
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,16 +39,21 @@ public abstract class MapFactory<T extends Map> extends AbstractReflectiveGeneri
         // Use red for key and black for value in the Red map to avoid having identical keys and values.
         // But don't do it in the Black map, or they may cancel each other out again.
 
-        T red = createEmpty();
         Object redKey = prefabValues.giveRed(keyTag);
-        red.put(redKey, prefabValues.giveBlack(valueTag));
+        Object blackKey = prefabValues.giveBlack(keyTag);
+        Object blackValue = prefabValues.giveBlack(valueTag);
+
+        T red = createEmpty();
+        red.put(redKey, blackValue);
 
         T black = createEmpty();
-        Object blackKey = prefabValues.giveBlack(keyTag);
         if (!redKey.equals(blackKey)) { // This happens with single-element enums
-            black.put(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+            black.put(prefabValues.giveBlack(keyTag), blackValue);
         }
 
-        return new Tuple<>(red, black);
+        T redCopy = createEmpty();
+        redCopy.put(redKey, blackValue);
+
+        return new Tuple<>(red, black, redCopy);
     }
 }
