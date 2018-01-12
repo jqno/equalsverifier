@@ -11,7 +11,7 @@ The Maven coordinates are:
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>2.4</version>
+    <version>2.4.1</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -32,50 +32,50 @@ Project structure
 
 `src/`
 
-* `nl.jqno.equalsverifier`  
+* `nl.jqno.equalsverifier`
   External API
-* `nl.jqno.equalsverifier.internal`  
+* `nl.jqno.equalsverifier.internal`
   Classes internal to the operation of EqualsVerifier
-* `nl.jqno.equalsverifier.internal.checkers`  
+* `nl.jqno.equalsverifier.internal.checkers`
   Checkers that perform EqualsVerifier's actual verifications
-* `nl.jqno.equalsverifier.internal.exceptions`  
+* `nl.jqno.equalsverifier.internal.exceptions`
   Internally used exceptions
-* `nl.jqno.equalsverifier.internal.prefabvalues`  
+* `nl.jqno.equalsverifier.internal.prefabvalues`
   Cache and factories for instances of all types
 * `nl.jqno.equalsverifier.internal.reflection`
   Helpers for reflection-based tasks
-* `nl.jqno.equalsverifier.internal.util`  
+* `nl.jqno.equalsverifier.internal.util`
   Various helpers
 
 `test/`
 
-* `javax.persistence`  
+* `javax.persistence`
   Annotations used by integration tests
-* `nl.jqno.equalsverifier`  
+* `nl.jqno.equalsverifier`
   Unit tests for specific subcomponents of EqualsVerifier
-* `nl.jqno.equalsverifier.coverage`  
+* `nl.jqno.equalsverifier.coverage`
   Code coverage tests, which fail if coverage is less than 100%
-* `nl.jqno.equalsverifier.integration.basic_contract`  
+* `nl.jqno.equalsverifier.integration.basic_contract`
   Integration tests that cover the contract as stated in `java.lang.Object`'s javadoc
-* `nl.jqno.equalsverifier.integration.extended_contract`  
+* `nl.jqno.equalsverifier.integration.extended_contract`
   Integration tests that cover specific corner cases in the Java language, and other essential points that are discussed in other sources, such as Effective Java, but not in the javadoc
-* `nl.jqno.equalsverifier.integration.extra_features`  
+* `nl.jqno.equalsverifier.integration.extra_features`
   Integration tests that cover non-standard situations that EqualsVerifier supports
-* `nl.jqno.equalsverifier.integration.inheritance`  
+* `nl.jqno.equalsverifier.integration.inheritance`
   Integration tests that cover inheritance in equality relations
-* `nl.jqno.equalsverifier.integration.operational`  
+* `nl.jqno.equalsverifier.integration.operational`
   Integration tests that cover issues that don't pertain to equals or hashCode themselves, but to EqualsVerifier's operation
-* `nl.jqno.equalsverifier.testhelpers`  
+* `nl.jqno.equalsverifier.testhelpers`
   Utility classes for use in tests
-* `nl.jqno.equalsverifier.testhelpers.annotations`  
+* `nl.jqno.equalsverifier.testhelpers.annotations`
   Annotations used by unit tests and integration tests
-* `nl.jqno.equalsverifier.testhelpers.annotations.casefolding`  
+* `nl.jqno.equalsverifier.testhelpers.annotations.casefolding`
   More annotations which would clash with other annotations because of casing
-* `nl.jqno.equalsverifier.testhelpers.types`  
+* `nl.jqno.equalsverifier.testhelpers.types`
    Various data classes for use in unit tests and integration tests
-* `nl.jqno.equalsverifier.util`  
+* `nl.jqno.equalsverifier.util`
   Unit tests for the reflection helpers
- 
+
 `lib/`
 
 * `equalsverifier-signedjar-test.jar`
@@ -84,7 +84,7 @@ Project structure
   Here's how to install a jar into it:<br>
   <pre>
   mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
-                           -Dfile=<path-to-file> -DgroupId=<myGroup> \ 
+                           -Dfile=<path-to-file> -DgroupId=<myGroup> \
                            -DartifactId=<myArtifactId> -Dversion=<myVersion> \
                            -Dpackaging=<myPackaging> -DcreateChecksum=true \
                            -DlocalRepositoryPath=lib
