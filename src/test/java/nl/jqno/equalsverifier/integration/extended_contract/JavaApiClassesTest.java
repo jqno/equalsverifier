@@ -268,14 +268,19 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final SimpleDateFormat simpleDateFormat;
         private final UUID uuid;
         private final InetAddress inetAddress;
+        private final java.awt.color.ColorSpace awtColorSpace;
+        private final java.awt.color.ICC_ColorSpace iccColorSpace;
+        private final java.awt.color.ICC_Profile iccProfile;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset,
                 Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress) {
+                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress,
+                java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace, java.awt.color.ICC_Profile iccProfile) {
             this.string = string; this.integer = integer; this.type = type; this.bitset = bitset;
             this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
             this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress;
+            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
@@ -284,7 +289,6 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 
     static final class ThreadLocalContainer {
         public static final ThreadLocal<Integer> RED_INSTANCE = createInstance(10);
-        public static final ThreadLocal<Integer> BLACK_INSTANCE = createInstance(20);
         private final ThreadLocal<Integer> instance = RED_INSTANCE;
 
         private static ThreadLocal<Integer> createInstance(final int initialValue) {

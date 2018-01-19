@@ -19,12 +19,18 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
+import java.awt.*;
+import java.awt.color.ColorSpace;
+import java.awt.color.ICC_ColorSpace;
+import java.awt.color.ICC_Profile;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
+import java.util.Queue;
 import java.util.concurrent.*;
 import java.util.regex.Pattern;
 
@@ -80,6 +86,7 @@ public final class JavaApiPrefabValues {
         addMaps();
         addSets();
         addQueues();
+        addAwtClasses();
         addJava8ApiClasses();
         addJavaFxClasses();
         addJavaxApiClasses();
@@ -290,6 +297,22 @@ public final class JavaApiPrefabValues {
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
+    }
+
+    private void addAwtClasses() {
+        addValues(Color.class, Color.RED, Color.BLACK, Color.RED);
+        addValues(ColorSpace.class,
+                ColorSpace.getInstance(ColorSpace.CS_sRGB),
+                ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB),
+                ColorSpace.getInstance(ColorSpace.CS_sRGB));
+        addValues(ICC_ColorSpace.class,
+                ColorSpace.getInstance(ColorSpace.CS_sRGB),
+                ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB),
+                ColorSpace.getInstance(ColorSpace.CS_sRGB));
+        addValues(ICC_Profile.class,
+                ICC_Profile.getInstance(ColorSpace.CS_sRGB),
+                ICC_Profile.getInstance(ColorSpace.CS_LINEAR_RGB),
+                ICC_Profile.getInstance(ColorSpace.CS_sRGB));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
