@@ -11,20 +11,20 @@ permalink: /changelog/
 
 Version 2.4.1
 -------------
-January 12, 2018
+_January 12, 2018_
 
 * ...run EqualsVerifier's test suite (and probably your own EqualsVerifier tests!) on Java 9 without any illegal-access warnings. ([Issue 172](https://github.com/jqno/equalsverifier/issues/172))
 
 Version 2.4
 -----------
-November 11, 2017
+_November 11, 2017_
 
 * ...refer to EqualsVerifier's official Java 9 module name: `nl.jqno.equalsverifier`.
 * ...use EqualsVerifier on the Java 10 Early Access build. ([Issue 177](https://github.com/jqno/equalsverifier/issues/177); thanks Vincent!)
 
 Version 2.3.3
 -------------
-August 24, 2017
+_August 24, 2017_
 
 * ...chain calls to `withIgnoredFields` and `withOnlyTheseFields`. ([Issue 171](https://github.com/jqno/equalsverifier/issues/171); thanks Nathan!)
 * ...use fields from the Java library's `org.w3c.dom` package. ([Issue 174](https://github.com/jqno/equalsverifier/issues/174))
@@ -32,7 +32,7 @@ August 24, 2017
 
 Version 2.3.2
 -------------
-August 6, 2017
+_August 6, 2017_
 
 * ...use EqualsVerifier in your Java 9 projects. ([Issue 152](https://github.com/jqno/equalsverifier/issues/152))
 
