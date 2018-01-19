@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.2
+-------------
+_January 20, 2018_
+
+* ...use AWT in fields without getting illegal reflective access warnings on Java 9 (or recursive datastructure warnings). ([Issue 183](https://github.com/jqno/equalsverifier/issues/183))
+
 Version 2.4.1
 -------------
 _January 12, 2018_
