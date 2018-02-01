@@ -3,10 +3,11 @@
   <groupId>nl.jqno.equalsverifier</groupId>
   <artifactId>equalsverifier-signedjar-test</artifactId>
   <versioning>
-    <release>0.1</release>
+    <release>0.2</release>
     <versions>
       <version>0.1</version>
+      <version>0.2</version>
     </versions>
-    <lastUpdated>20170518053257</lastUpdated>
+    <lastUpdated>20180201071543</lastUpdated>
   </versioning>
 </metadata>
