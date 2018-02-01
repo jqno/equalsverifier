@@ -84,9 +84,9 @@ Project structure
   Here's how to install a jar into it:<br>
   <pre>
   mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
-                           -Dfile=<path-to-file> -DgroupId=<myGroup> \
-                           -DartifactId=<myArtifactId> -Dversion=<myVersion> \
-                           -Dpackaging=<myPackaging> -DcreateChecksum=true \
+                           -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
+                           -DartifactId=&lt;myArtifactId> -Dversion=&lt;myVersion> \
+                           -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
                            -DlocalRepositoryPath=lib
   </pre>
   The signed jar itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
