@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.3
+-------------
+_February 3, 2018_
+
+* ...use Guava 24's Multisets. ([Issue 185](https://github.com/jqno/equalsverifier/issues/185); thanks Stephan!)
+
 Version 2.4.2
 -------------
 _January 20, 2018_
