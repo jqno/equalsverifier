@@ -15,6 +15,7 @@
  */
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -71,9 +72,12 @@ public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValue
         return genericTypes.get(n);
     }
 
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     protected void invoke(Class<?> type, Object receiver, String methodName, Class<?>[] classes, Object[] values) {
         try {
             Method method = type.getMethod(methodName, classes);
+            // Not necessary in the common case, but required for https://bugs.java.com/view_bug.do?bug_id=6924232.
+            method.setAccessible(true);
             method.invoke(receiver, values);
         }
         catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
