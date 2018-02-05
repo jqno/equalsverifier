@@ -98,9 +98,15 @@ limitations under the License.
             <version>6.0</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>annotations</artifactId>
-            <version>3.0.1u2</version>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>3.1.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.jcip</groupId>
+            <artifactId>jcip-annotations</artifactId>
+            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
 
@@ -209,9 +215,9 @@ limitations under the License.
                 </plugin>
 
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>findbugs-maven-plugin</artifactId>
-                    <version>3.0.5</version>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>3.1.1</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -252,8 +258,8 @@ limitations under the License.
             <properties>
                 <surefire.argLine>--illegal-access=deny</surefire.argLine>
                 <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
-                <findbugs.effort>Max</findbugs.effort>
-                <findbugs.threshold>Low</findbugs.threshold>
+                <spotbugs.effort>Max</spotbugs.effort>
+                <spotbugs.threshold>Low</spotbugs.threshold>
             </properties>
 
             <build>
@@ -455,16 +461,16 @@ limitations under the License.
                     </plugin>
 
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
                         <configuration>
-                            <effort>${findbugs.effort}</effort>
-                            <threshold>${findbugs.threshold}</threshold>
+                            <effort>${spotbugs.effort}</effort>
+                            <threshold>${spotbugs.threshold}</threshold>
                             <xmlOutput>true</xmlOutput>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>run-findbugs</id>
+                                <id>run-spotbugs</id>
                                 <phase>verify</phase>
                                 <goals>
                                     <goal>check</goal>
@@ -515,11 +521,11 @@ limitations under the License.
                     </plugin>
 
                     <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>findbugs-maven-plugin</artifactId>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
                         <configuration>
-                            <effort>${findbugs.effort}</effort>
-                            <threshold>${findbugs.threshold}</threshold>
+                            <effort>${spotbugs.effort}</effort>
+                            <threshold>${spotbugs.threshold}</threshold>
                         </configuration>
                     </plugin>
                 </plugins>
