@@ -203,7 +203,7 @@ limitations under the License.
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>6.19</version> <!-- Don't upgrade: version 7.0 and up require Java 8 -->
+                            <version>8.2</version>
                         </dependency>
                     </dependencies>
                 </plugin>
