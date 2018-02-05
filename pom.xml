@@ -71,6 +71,7 @@ limitations under the License.
 
     <properties>
         <encoding>UTF-8</encoding>
+        <jacoco.version>0.7.9</jacoco.version>
     </properties>
 
     <repositories>
@@ -250,7 +251,6 @@ limitations under the License.
 
             <properties>
                 <surefire.argLine>--illegal-access=deny</surefire.argLine>
-                <jacoco.version>0.7.9</jacoco.version>
                 <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
                 <findbugs.effort>Max</findbugs.effort>
                 <findbugs.threshold>Low</findbugs.threshold>
