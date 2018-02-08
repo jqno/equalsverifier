@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-@SuppressWarnings("deprecation")
 public final class NonnullJsr305WithNullableOnPackage {
     private final Object o;
     @edu.umd.cs.findbugs.annotations.Nullable

@@ -17,7 +17,6 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.jav
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-@SuppressWarnings("deprecation")
 public final class NonnullFindbugs1xWithNullableOnPackage {
     private final Object o;
     @edu.umd.cs.findbugs.annotations.Nullable
