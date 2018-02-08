@@ -36,7 +36,6 @@ import javax.annotation.Nullable;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-@SuppressWarnings("deprecation")
 public class AnnotationNonnullTest extends IntegrationTestBase {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {

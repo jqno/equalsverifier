@@ -272,7 +272,7 @@ limitations under the License.
                             <showWarnings>true</showWarnings>
                             <compilerArgs>
                                 <arg>-Werror</arg>
-                                <arg>-Xlint:rawtypes,unchecked,-options</arg>
+                                <arg>-Xlint:deprecation,rawtypes,unchecked,-options</arg>
                             </compilerArgs>
                         </configuration>
                     </plugin>
