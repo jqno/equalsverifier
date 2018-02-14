@@ -148,7 +148,7 @@ public final class JavaApiPrefabValues {
 
         addFactory(ThreadLocal.class, new ThreadLocalFactory());
 
-        // Constructing InetAddress reflectively, because it might throw a awkward exception otherwise.
+        // Constructing InetAddress reflectively, because it might throw an awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
         addValues(inetAddress.resolve(),
                 inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
