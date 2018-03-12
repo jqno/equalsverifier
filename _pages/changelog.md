@@ -9,6 +9,13 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.4
+-------------
+_March 12, 2018_
+
+* ...use EqualsVerifier on Java 10.
+* ...build and release EqualsVerifier from Java 9.
+
 Version 2.4.3
 -------------
 _February 3, 2018_
