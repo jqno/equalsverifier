@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.5
+-------------
+_March 20, 2018_
+
+* ...use EqualsVerifier on Java 10 GA. ([Issue 189](https://github.com/jqno/equalsverifier/issues/189); thanks Vincent!)
+
 Version 2.4.4
 -------------
 _March 12, 2018_
