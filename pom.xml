@@ -71,7 +71,7 @@ limitations under the License.
 
     <properties>
         <encoding>UTF-8</encoding>
-        <jacoco.version>0.8.0</jacoco.version>
+        <jacoco.version>0.8.1</jacoco.version>
     </properties>
 
     <repositories>
