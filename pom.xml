@@ -90,12 +90,12 @@ limitations under the License.
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.8.0</version>
+            <version>1.8.1</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
             <artifactId>asm</artifactId>
-            <version>6.1</version>
+            <version>6.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
