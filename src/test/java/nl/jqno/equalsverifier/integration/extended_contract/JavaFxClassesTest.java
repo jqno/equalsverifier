@@ -4,15 +4,15 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
 import org.junit.Test;
 
-public class Java8ApiClassesTest extends StringCompilerIntegrationTestBase {
+public class JavaFxClassesTest extends StringCompilerIntegrationTestBase {
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJava8IsAvailable() throws Exception {
         if (!isJavaFxAvailable()) {
             return;
         }
 
-        Class<?> java8Class = compile(JAVAFX_CLASS_NAME, JAVAFX_CLASS);
-        EqualsVerifier.forClass(java8Class)
+        Class<?> javafxClass = compile(JAVAFX_CLASS_NAME, JAVAFX_CLASS);
+        EqualsVerifier.forClass(javafxClass)
                 .verify();
     }
 
