@@ -1,13 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
 import org.junit.Test;
 
 import java.util.HashSet;
 
 import static org.junit.Assert.assertTrue;
 
-public class AnnotationAccessorTypeUseTest extends Java8IntegrationTestBase {
+public class AnnotationAccessorTypeUseTest extends StringCompilerIntegrationTestBase {
     private static final String JAVA_8_CLASS_NAME = "Java8Class";
     private static final String JAVA_8_CLASS =
             "\nimport org.eclipse.jdt.annotation.NonNull;" +

@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
 import org.junit.Test;
 
 /**
@@ -11,7 +11,7 @@ import org.junit.Test;
  * detect whether a Java 8 runtime is present and if so, compile and load
  * the class at run-time and then pass it to EqualsVerifier.
  */
-public class Java8ClassTest extends Java8IntegrationTestBase {
+public class Java8ClassTest extends StringCompilerIntegrationTestBase {
     private static final String JAVA_8_CLASS_NAME = "Java8Class";
     private static final String JAVA_8_CLASS =
             "\nimport java.util.List;" +

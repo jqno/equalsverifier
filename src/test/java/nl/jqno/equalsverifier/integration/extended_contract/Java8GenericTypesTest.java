@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
 import org.junit.Test;
 
-public class Java8GenericTypesTest extends Java8IntegrationTestBase {
+public class Java8GenericTypesTest extends StringCompilerIntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtObservableListFieldsGenericContent() {
         if (!isJavaFxAvailable()) {
