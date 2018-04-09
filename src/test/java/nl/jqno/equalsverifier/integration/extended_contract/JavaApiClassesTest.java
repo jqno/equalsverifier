@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
@@ -20,42 +19,36 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassContainsASuperCollection() {
         EqualsVerifier.forClass(SuperCollectionContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsAList() {
         EqualsVerifier.forClass(ListContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsASet() {
         EqualsVerifier.forClass(SetContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsAQueue() {
         EqualsVerifier.forClass(QueueContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsAMap() {
         EqualsVerifier.forClass(MapContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsACommonJavaApiType() {
         EqualsVerifier.forClass(CommonClassesContainer.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
                 .verify();
     }
 
