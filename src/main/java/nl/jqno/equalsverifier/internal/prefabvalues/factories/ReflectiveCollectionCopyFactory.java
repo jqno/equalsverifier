@@ -46,7 +46,7 @@ public final class ReflectiveCollectionCopyFactory<T> extends AbstractReflective
         Object black = ci.callFactory(factoryType, factoryMethod,
                 classes(declaredParameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
         Object redCopy = ci.callFactory(factoryType, factoryMethod,
-            classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+                classes(declaredParameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
 
         return Tuple.of(red, black, redCopy);
     }
