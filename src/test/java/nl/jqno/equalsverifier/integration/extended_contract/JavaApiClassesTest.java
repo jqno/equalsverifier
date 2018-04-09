@@ -314,33 +314,24 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    public final class Java8ApiClassesContainer {
-        private final Optional optional;
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class Java8ApiClassesContainer {
+        private final Optional<?> optional;
         private final ZonedDateTime zonedDateTime;
         private final ZoneId zoneId;
         private final DateTimeFormatter dateTimeFormatter;
         private final CompletableFuture completableFuture;
         private final StampedLock stampedLock;
 
-        public Java8ApiClassesContainer(Optional optional, ZonedDateTime zonedDateTime, ZoneId zoneId,
-                                        DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {
-            this.optional = optional;
-            this.zonedDateTime = zonedDateTime;
-            this.zoneId = zoneId;
-            this.dateTimeFormatter = dateTimeFormatter;
-            this.completableFuture = completableFuture;
+        public Java8ApiClassesContainer(Optional<?> optional, ZonedDateTime zonedDateTime, ZoneId zoneId,
+                DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {
+            this.optional = optional; this.zonedDateTime = zonedDateTime; this.zoneId = zoneId;
+            this.dateTimeFormatter = dateTimeFormatter; this.completableFuture = completableFuture;
             this.stampedLock = stampedLock;
         }
 
-        @Override
-        public boolean equals(Object obj) {
-            return defaultEquals(this, obj);
-        }
-
-        @Override
-        public int hashCode() {
-            return defaultHashCode(this);
-        }
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     static final class ThreadLocalContainer {
