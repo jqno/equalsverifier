@@ -11,8 +11,12 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.*;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -58,6 +62,12 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassContainsACommonJavaApiType() {
         EqualsVerifier.forClass(CommonClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsACommonJava8ApiType() {
+        EqualsVerifier.forClass(Java8ApiClassesContainer.class)
                 .verify();
     }
 
@@ -302,6 +312,35 @@ public class JavaApiClassesTest extends IntegrationTestBase {
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    public final class Java8ApiClassesContainer {
+        private final Optional optional;
+        private final ZonedDateTime zonedDateTime;
+        private final ZoneId zoneId;
+        private final DateTimeFormatter dateTimeFormatter;
+        private final CompletableFuture completableFuture;
+        private final StampedLock stampedLock;
+
+        public Java8ApiClassesContainer(Optional optional, ZonedDateTime zonedDateTime, ZoneId zoneId,
+                                        DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {
+            this.optional = optional;
+            this.zonedDateTime = zonedDateTime;
+            this.zoneId = zoneId;
+            this.dateTimeFormatter = dateTimeFormatter;
+            this.completableFuture = completableFuture;
+            this.stampedLock = stampedLock;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class ThreadLocalContainer {

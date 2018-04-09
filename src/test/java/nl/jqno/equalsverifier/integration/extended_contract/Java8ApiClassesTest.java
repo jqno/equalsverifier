@@ -1,23 +1,10 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.Java8IntegrationTestBase;
 import org.junit.Test;
 
 public class Java8ApiClassesTest extends Java8IntegrationTestBase {
-    @Test
-    public void successfullyInstantiatesAJava8Class_whenJava8IsAvailable() throws Exception {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> java8Class = compile(CLASS_NAME, CLASS);
-        EqualsVerifier.forClass(java8Class)
-                .suppress(Warning.REFERENCE_EQUALITY)
-                .verify();
-    }
-
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJava8IsAvailable() throws Exception {
         if (!isJavaFxAvailable()) {
@@ -28,48 +15,6 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
         EqualsVerifier.forClass(java8Class)
                 .verify();
     }
-
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String CLASS_NAME = "Java8ApiClassesContainer";
-    private static final String CLASS =
-            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;" +
-            "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;" +
-            "\n" +
-            "\nimport java.time.ZonedDateTime;" +
-            "\nimport java.time.ZoneId;" +
-            "\nimport java.time.format.DateTimeFormatter;" +
-            "\nimport java.util.Optional;" +
-            "\nimport java.util.concurrent.CompletableFuture;" +
-            "\nimport java.util.concurrent.locks.StampedLock;" +
-            "\n" +
-            "\npublic final class Java8ApiClassesContainer {" +
-            "\n    private final Optional optional;" +
-            "\n    private final ZonedDateTime zonedDateTime;" +
-            "\n    private final ZoneId zoneId;" +
-            "\n    private final DateTimeFormatter dateTimeFormatter;" +
-            "\n    private final CompletableFuture completableFuture;" +
-            "\n    private final StampedLock stampedLock;" +
-            "\n    " +
-            "\n    public Java8ApiClassesContainer(Optional optional, ZonedDateTime zonedDateTime, ZoneId zoneId," +
-            "\n            DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {" +
-            "\n        this.optional = optional;" +
-            "\n        this.zonedDateTime = zonedDateTime;" +
-            "\n        this.zoneId = zoneId;" +
-            "\n        this.dateTimeFormatter = dateTimeFormatter;" +
-            "\n        this.completableFuture = completableFuture;" +
-            "\n        this.stampedLock = stampedLock;" +
-            "\n    }" +
-            "\n    " +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        return defaultEquals(this, obj);" +
-            "\n    }" +
-            "\n    " +
-            "\n    @Override" +
-            "\n    public int hashCode() {" +
-            "\n        return defaultHashCode(this);" +
-            "\n    }" +
-            "\n}";
 
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_CLASS_NAME = "JavaFXApiClassesContainer";
