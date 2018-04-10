@@ -1,18 +1,3 @@
-/*
- * Copyright 2015-2016, 2018 Jan Ouwens
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
@@ -32,8 +17,6 @@ import java.util.Map;
  * Only creates values ones, and caches them once they've been created. Takes
  * generics into account; i.e., {@code List<Integer>} is different from
  * {@code List<String>}.
- *
- * @author Jan Ouwens
  */
 public class PrefabValues {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();

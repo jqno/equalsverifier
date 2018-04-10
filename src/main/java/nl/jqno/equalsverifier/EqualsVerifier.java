@@ -1,18 +1,3 @@
-/*
- * Copyright 2009-2018 Jan Ouwens
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.internal.checkers.*;
@@ -43,8 +28,6 @@ import java.util.*;
  * <p>
  * For more information, see the documentation at
  * http://www.jqno.nl/equalsverifier
- *
- * @author Jan Ouwens
  *
  * @param <T> The class under test.
  */
@@ -495,8 +478,6 @@ public final class EqualsVerifier<T> {
      * Its purpose is to make sure, at compile time, that a list of unequal
      * examples is given, as well as the list of equal examples that are
      * supplied to the aforementioned method.
-     *
-     * @author Jan Ouwens
      */
     public static final class RelaxedEqualsVerifierHelper<T> {
         private final Class<T> type;
