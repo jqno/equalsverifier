@@ -7,7 +7,6 @@ script: mvn clean verify
 
 matrix:
   include:
-    - jdk: openjdk7
     - jdk: oraclejdk8
     - jdk: oraclejdk9
       after_success: mvn jacoco:report
