@@ -63,32 +63,52 @@ public class AnnotationAccessorTest {
 
     @Test
     public void findRuntimeAnnotationInField() {
-        assertFieldHasAnnotation(RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION);
-        assertFieldHasAnnotation(BOTH_RETENTIONS, FIELD_RUNTIME_RETENTION);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION);
+        assertFieldHasAnnotation(AnnotatedFields.class, BOTH_RETENTIONS, FIELD_RUNTIME_RETENTION);
 
-        assertFieldDoesNotHaveAnnotation(CLASS_RETENTION, FIELD_RUNTIME_RETENTION);
-        assertFieldDoesNotHaveAnnotation(NO_RETENTION, FIELD_RUNTIME_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, CLASS_RETENTION, FIELD_RUNTIME_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, NO_RETENTION, FIELD_RUNTIME_RETENTION);
     }
 
     @Test
     public void findClassAnnotationInField() {
-        assertFieldHasAnnotation(CLASS_RETENTION, FIELD_CLASS_RETENTION);
-        assertFieldHasAnnotation(BOTH_RETENTIONS, FIELD_CLASS_RETENTION);
+        assertFieldHasAnnotation(AnnotatedFields.class, CLASS_RETENTION, FIELD_CLASS_RETENTION);
+        assertFieldHasAnnotation(AnnotatedFields.class, BOTH_RETENTIONS, FIELD_CLASS_RETENTION);
 
-        assertFieldDoesNotHaveAnnotation(RUNTIME_RETENTION, FIELD_CLASS_RETENTION);
-        assertFieldDoesNotHaveAnnotation(NO_RETENTION, FIELD_CLASS_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_CLASS_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, NO_RETENTION, FIELD_CLASS_RETENTION);
+    }
+
+    @Test
+    public void findTypeUseRuntimeAnnotationInField() {
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+        assertFieldHasAnnotation(AnnotatedTypes.class, BOTH_RETENTIONS, TYPEUSE_RUNTIME_RETENTION);
+
+        assertFieldDoesNotHaveAnnotation(AnnotatedTypes.class, CLASS_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedTypes.class, NO_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+    }
+
+    @Test
+    public void findTypeUseClassAnnotationInField() {
+        assertFieldHasAnnotation(AnnotatedTypes.class, CLASS_RETENTION, TYPEUSE_CLASS_RETENTION);
+        assertFieldHasAnnotation(AnnotatedTypes.class, BOTH_RETENTIONS, TYPEUSE_CLASS_RETENTION);
+
+        assertFieldDoesNotHaveAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_CLASS_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedTypes.class, NO_RETENTION, TYPEUSE_CLASS_RETENTION);
     }
 
     @Test
     public void findPartialAnnotationName() {
         assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
-        assertFieldHasAnnotation(RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
     }
 
     @Test
     public void findFullyQualifiedAnnotationName() {
         assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
-        assertFieldHasAnnotation(RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
     }
 
     @Test
@@ -109,6 +129,12 @@ public class AnnotationAccessorTest {
     public void fieldAnnotationInheritance() {
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", FIELD_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
+    }
+
+    @Test
+    public void typeUseAnnotationInheritance() {
+        assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
+        assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", TYPEUSE_DOESNT_INHERIT);
     }
 
     @Test
@@ -191,16 +217,8 @@ public class AnnotationAccessorTest {
         assertFalse(findTypeAnnotationFor(type, annotation));
     }
 
-    private void assertFieldHasAnnotation(String fieldName, Annotation annotation) {
-        assertFieldHasAnnotation(AnnotatedFields.class, fieldName, annotation);
-    }
-
     private void assertFieldHasAnnotation(Class<?> type, String fieldName, Annotation annotation) {
         assertTrue(findFieldAnnotationFor(type, fieldName, annotation));
-    }
-
-    private void assertFieldDoesNotHaveAnnotation(String fieldName, Annotation annotation) {
-        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, fieldName, annotation);
     }
 
     private void assertFieldDoesNotHaveAnnotation(Class<?> type, String fieldName, Annotation annotation) {

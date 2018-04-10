@@ -13,17 +13,22 @@ public enum TestSupportedAnnotations implements Annotation {
     TYPE_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeAnnotationClassRetention"),
     FIELD_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationRuntimeRetention"),
     FIELD_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/FieldAnnotationClassRetention"),
+    TYPEUSE_RUNTIME_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeUseAnnotationRuntimeRetention"),
+    TYPEUSE_CLASS_RETENTION(false, "Lnl/jqno/equalsverifier/testhelpers/annotations/TypeUseAnnotationClassRetention"),
 
     TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeAnnotationRuntimeRetention"),
     TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
-
     FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "FieldAnnotationRuntimeRetention"),
     FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
+    TYPEUSE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeUseAnnotationRuntimeRetention"),
+    TYPEUSE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeUseAnnotationRuntimeRetention.class.getCanonicalName()),
 
     TYPE_INHERITS(true, "TypeAnnotationInherits"),
     TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
     FIELD_INHERITS(true, "FieldAnnotationInherits"),
     FIELD_DOESNT_INHERIT(false, "FieldAnnotationDoesntInherit"),
+    TYPEUSE_INHERITS(true, "TypeUseAnnotationInherits"),
+    TYPEUSE_DOESNT_INHERIT(false, "TypeUseAnnotationDoesntInherit"),
 
     PACKAGE_ANNOTATION(false, "PackageAnnotation"),
     INAPPLICABLE(false, "Inapplicable") {
