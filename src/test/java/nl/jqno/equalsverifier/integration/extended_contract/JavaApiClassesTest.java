@@ -320,11 +320,11 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final ZonedDateTime zonedDateTime;
         private final ZoneId zoneId;
         private final DateTimeFormatter dateTimeFormatter;
-        private final CompletableFuture completableFuture;
+        private final CompletableFuture<?> completableFuture;
         private final StampedLock stampedLock;
 
         public Java8ApiClassesContainer(Optional<?> optional, ZonedDateTime zonedDateTime, ZoneId zoneId,
-                DateTimeFormatter dateTimeFormatter, CompletableFuture completableFuture, StampedLock stampedLock) {
+                DateTimeFormatter dateTimeFormatter, CompletableFuture<?> completableFuture, StampedLock stampedLock) {
             this.optional = optional; this.zonedDateTime = zonedDateTime; this.zoneId = zoneId;
             this.dateTimeFormatter = dateTimeFormatter; this.completableFuture = completableFuture;
             this.stampedLock = stampedLock;
