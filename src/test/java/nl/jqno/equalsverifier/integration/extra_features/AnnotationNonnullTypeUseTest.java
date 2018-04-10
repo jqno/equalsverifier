@@ -2,425 +2,255 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
+import nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import org.eclipse.jdt.annotation.DefaultLocation;
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.junit.Test;
 
-public class AnnotationNonnullTypeUseTest extends StringCompilerIntegrationTestBase {
+import java.util.Objects;
+
+public class AnnotationNonnullTypeUseTest extends IntegrationTestBase {
     @Test
     public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_MANUAL_NAME, NONNULL_MANUAL);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullManual.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_ON_CLASS_NAME, NONNULL_ECLIPSE_ON_CLASS);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseOnClass.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_ON_PACKAGE_NAME, NONNULL_ECLIPSE_ON_PACKAGE);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseOnPackage.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> outer = compile(NONNULL_ECLIPSE_OUTER_NAME, NONNULL_ECLIPSE_OUTER);
-        Class<?> fInner = findInnerClass(outer, "FInner");
-        EqualsVerifier.forClass(fInner)
+        EqualsVerifier.forClass(NonnullEclipseOuter.FInner.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> outer = compile(NONNULL_ECLIPSE_OUTER_NAME, NONNULL_ECLIPSE_OUTER);
-        Class<?> fMiddle = findInnerClass(outer, "FMiddle");
-        Class<?> fInnerInner = findInnerClass(fMiddle, "FInnerInner");
-        EqualsVerifier.forClass(fInnerInner)
+        EqualsVerifier.forClass(NonnullEclipseOuter.FMiddle.FInnerInner.class)
                 .verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(
-                NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME,
-                NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClassAndNullCheckInEquals.class)
                 .verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackageAndWarningIsSuppressed() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(
-                NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME,
-                NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithInapplicableLocationOnClass.class)
                 .verify();
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationWithApplicableLocationOnClass() {
-        if (!isJava8Available()) {
-            return;
-        }
-
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS);
-        EqualsVerifier.forClass(type)
+        EqualsVerifier.forClass(NonnullEclipseWithApplicableLocationOnClass.class)
                 .verify();
     }
 
-    private Class<?> findInnerClass(Class<?> outer, String name) {
-        for (Class<?> inner : outer.getDeclaredClasses()) {
-            if (inner.getName().endsWith(name)) {
-                return inner;
+    static final class NonnullManual {
+        private final @NonNull Object o;
+
+        public NonnullManual(Object o) { this.o = o; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof NonnullManual)) {
+                return false;
             }
+            NonnullManual other = (NonnullManual)obj;
+            return o.equals(other.o);
         }
-        throw new IllegalStateException("Inner class not found");
+
+        @Override public final int hashCode() { return Objects.hash(o); }
     }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_MANUAL_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullManual";
-    private static final String NONNULL_MANUAL =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.NonNull;" +
-            "\n" +
-            "\nclass NonnullManual {" +
-            "\n    private final @NonNull Object o;" +
-            "\n" +
-            "\n    public NonnullManual(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public final boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullManual)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullManual other = (NonnullManual)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+    @NonNullByDefault
+    static final class NonnullEclipseOnClass {
+        private final Object o;
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_ON_CLASS_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseOnClass";
-    private static final String NONNULL_ECLIPSE_ON_CLASS =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\n" +
-            "\n@NonNullByDefault" +
-            "\nfinal class NonnullEclipseOnClass {" +
-            "\n    private final Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseOnClass(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseOnClass)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseOnClass other = (NonnullEclipseOnClass)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+        public NonnullEclipseOnClass(Object o) { this.o = o; }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_ON_PACKAGE_NAME =
-            "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage";
-    private static final String NONNULL_ECLIPSE_ON_PACKAGE =
-            "\npackage nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\n" +
-            "\nfinal class NonnullEclipseOnPackage {" +
-            "\n    private final Object o;" +
-            "\n    " +
-            "\n    public NonnullEclipseOnPackage(Object o) { this.o = o; }" +
-            "\n    " +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseOnPackage)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseOnPackage other = (NonnullEclipseOnPackage)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n    " +
-            "\n    @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseOnClass)) {
+                return false;
+            }
+            NonnullEclipseOnClass other = (NonnullEclipseOnClass)obj;
+            return o.equals(other.o);
+        }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_OUTER_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseOuter";
-    private static final String NONNULL_ECLIPSE_OUTER =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\n" +
-            "\n@NonNullByDefault" +
-            "\nclass NonnullEclipseOuter {" +
-            "\n    static final class FInner {" +
-            "\n        private final Object o;" +
-            "\n" +
-            "\n        public FInner(Object o) { this.o = o; }" +
-            "\n" +
-            "\n        @Override" +
-            "\n        public boolean equals(Object obj) {" +
-            "\n            if (!(obj instanceof FInner)) {" +
-            "\n                return false;" +
-            "\n            }" +
-            "\n            FInner other = (FInner)obj;" +
-            "\n            return o.equals(other.o);" +
-            "\n        }" +
-            "\n" +
-            "\n        @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n    }" +
-            "\n" +
-            "\n    static class FMiddle {" +
-            "\n        static final class FInnerInner {" +
-            "\n            private final Object o;" +
-            "\n" +
-            "\n            public FInnerInner(Object o) { this.o = o; }" +
-            "\n" +
-            "\n            @Override" +
-            "\n            public boolean equals(Object obj) {" +
-            "\n                if (!(obj instanceof FInnerInner)) {" +
-            "\n                    return false;" +
-            "\n                }" +
-            "\n                FInnerInner other = (FInnerInner)obj;" +
-            "\n                return o.equals(other.o);" +
-            "\n            }" +
-            "\n" +
-            "\n            @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n        }" +
-            "\n    }" +
-            "\n}";
+        @Override public int hashCode() { return Objects.hash(o); }
+    }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithNullableOnClass";
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\nimport org.eclipse.jdt.annotation.Nullable;" +
-            "\n" +
-            "\n@NonNullByDefault" +
-            "\nclass NonnullEclipseWithNullableOnClass {" +
-            "\n    private final @Nullable Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseWithNullableOnClass(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public final boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseWithNullableOnClass)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseWithNullableOnClass other = (NonnullEclipseWithNullableOnClass)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+    @NonNullByDefault
+    static final class NonnullEclipseOuter {
+        static final class FInner {
+            private final Object o;
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\nimport org.eclipse.jdt.annotation.Nullable;" +
-            "\n" +
-            "\n@NonNullByDefault" +
-            "\nclass NonnullEclipseWithNullableOnClassAndNullCheckInEquals {" +
-            "\n    private final @Nullable Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseWithNullableOnClassAndNullCheckInEquals(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public final boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseWithNullableOnClassAndNullCheckInEquals)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseWithNullableOnClassAndNullCheckInEquals other = (NonnullEclipseWithNullableOnClassAndNullCheckInEquals)obj;" +
-            "\n        return o == null ? other.o == null : o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+            public FInner(Object o) { this.o = o; }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE_NAME =
-            "nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseWithNullableOnPackageAndNullCheckInEquals";
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_PACKAGE =
-            "\npackage nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.Nullable;" +
-            "\n" +
-            "\nclass NonnullEclipseWithNullableOnPackageAndNullCheckInEquals {" +
-            "\n    private final @Nullable Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseWithNullableOnPackageAndNullCheckInEquals(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public final boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other =" +
-            "\n                (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+            @Override
+            public boolean equals(Object obj) {
+                if (!(obj instanceof FInner)) {
+                    return false;
+                }
+                FInner other = (FInner)obj;
+                return o.equals(other.o);
+            }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithInapplicableLocationOnClass";
-    private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\n" +
-            "\n@NonNullByDefault({ DefaultLocation.PARAMETER, DefaultLocation.RETURN_TYPE })" +
-            "\nfinal class NonnullEclipseWithInapplicableLocationOnClass {" +
-            "\n    private final Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseWithInapplicableLocationOnClass(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseWithInapplicableLocationOnClass)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseWithInapplicableLocationOnClass other = (NonnullEclipseWithInapplicableLocationOnClass)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+            @Override public int hashCode() { return Objects.hash(o); }
+        }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
-    private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME =
-            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithApplicableLocationOnClass";
-    private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS =
-            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
-            "\n" +
-            "\nimport java.util.Objects;" +
-            "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
-            "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
-            "\n" +
-            "\n@NonNullByDefault({ DefaultLocation.FIELD, DefaultLocation.RETURN_TYPE })" +
-            "\nfinal class NonnullEclipseWithApplicableLocationOnClass {" +
-            "\n    private final Object o;" +
-            "\n" +
-            "\n    public NonnullEclipseWithApplicableLocationOnClass(Object o) { this.o = o; }" +
-            "\n" +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof NonnullEclipseWithApplicableLocationOnClass)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        NonnullEclipseWithApplicableLocationOnClass other = (NonnullEclipseWithApplicableLocationOnClass)obj;" +
-            "\n        return o.equals(other.o);" +
-            "\n    }" +
-            "\n" +
-            "\n    @Override public int hashCode() { return Objects.hash(o); }" +
-            "\n}";
+        static final class FMiddle {
+            static final class FInnerInner {
+                private final Object o;
+
+                public FInnerInner(Object o) { this.o = o; }
+
+                @Override
+                public boolean equals(Object obj) {
+                    if (!(obj instanceof FInnerInner)) {
+                        return false;
+                    }
+                    FInnerInner other = (FInnerInner)obj;
+                    return o.equals(other.o);
+                }
+
+                @Override public int hashCode() { return Objects.hash(o); }
+            }
+        }
+    }
+
+    @NonNullByDefault
+    static final class NonnullEclipseWithNullableOnClass {
+        private final @Nullable Object o;
+
+        public NonnullEclipseWithNullableOnClass(Object o) { this.o = o; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseWithNullableOnClass)) {
+                return false;
+            }
+            NonnullEclipseWithNullableOnClass other = (NonnullEclipseWithNullableOnClass)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public final int hashCode() { return Objects.hash(o); }
+    }
+
+    @NonNullByDefault
+    static final class NonnullEclipseWithNullableOnClassAndNullCheckInEquals {
+        private final @Nullable Object o;
+
+        public NonnullEclipseWithNullableOnClassAndNullCheckInEquals(Object o) { this.o = o; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseWithNullableOnClassAndNullCheckInEquals)) {
+                return false;
+            }
+            NonnullEclipseWithNullableOnClassAndNullCheckInEquals other = (NonnullEclipseWithNullableOnClassAndNullCheckInEquals)obj;
+            return o == null ? other.o == null : o.equals(other.o);
+        }
+
+        @Override public final int hashCode() { return Objects.hash(o); }
+    }
+
+    static final class NonnullEclipseWithNullableOnPackageAndNullCheckInEquals {
+        private final @Nullable Object o;
+
+        public NonnullEclipseWithNullableOnPackageAndNullCheckInEquals(Object o) { this.o = o; }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)) {
+                return false;
+            }
+            NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other =
+                    (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public final int hashCode() { return Objects.hash(o); }
+    }
+
+    @NonNullByDefault({ DefaultLocation.PARAMETER, DefaultLocation.RETURN_TYPE })
+    static final class NonnullEclipseWithInapplicableLocationOnClass {
+        private final Object o;
+
+        public NonnullEclipseWithInapplicableLocationOnClass(Object o) { this.o = o; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseWithInapplicableLocationOnClass)) {
+                return false;
+            }
+            NonnullEclipseWithInapplicableLocationOnClass other = (NonnullEclipseWithInapplicableLocationOnClass)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public int hashCode() { return Objects.hash(o); }
+    }
+
+    @NonNullByDefault({ DefaultLocation.FIELD, DefaultLocation.RETURN_TYPE })
+    static final class NonnullEclipseWithApplicableLocationOnClass {
+        private final Object o;
+
+        public NonnullEclipseWithApplicableLocationOnClass(Object o) { this.o = o; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NonnullEclipseWithApplicableLocationOnClass)) {
+                return false;
+            }
+            NonnullEclipseWithApplicableLocationOnClass other = (NonnullEclipseWithApplicableLocationOnClass)obj;
+            return o.equals(other.o);
+        }
+
+        @Override public int hashCode() { return Objects.hash(o); }
+    }
 }

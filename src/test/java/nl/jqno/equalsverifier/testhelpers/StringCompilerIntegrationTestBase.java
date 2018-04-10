@@ -32,10 +32,6 @@ public class StringCompilerIntegrationTestBase extends IntegrationTestBase {
         return compiler.compile(className, code);
     }
 
-    public boolean isJava8Available() {
-        return isTypeAvailable("java.util.Optional");
-    }
-
     public boolean isTypeAvailable(String fullyQualifiedTypeName) {
         return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
     }
