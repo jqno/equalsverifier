@@ -36,11 +36,7 @@ public class StringCompilerIntegrationTestBase extends IntegrationTestBase {
         return isTypeAvailable("java.util.Optional");
     }
 
-    public boolean isJavaFxAvailable() {
-        return isTypeAvailable("javafx.collections.ObservableList");
-    }
-
-    private boolean isTypeAvailable(String fullyQualifiedTypeName) {
+    public boolean isTypeAvailable(String fullyQualifiedTypeName) {
         return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
     }
 }
