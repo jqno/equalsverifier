@@ -1,8 +1,21 @@
 language: java
+
+before_install: wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 install: mvn dependency:resolve dependency:resolve-plugins
 script: mvn clean verify
-after_success: mvn jacoco:report coveralls:report
-jdk:
-  - oraclejdk9
-  - oraclejdk8
-  - openjdk7
+
+matrix:
+  include:
+    - jdk: openjdk7
+    - jdk: oraclejdk8
+    - jdk: oraclejdk9
+      after_success: mvn jacoco:report coveralls:report
+    - env: JDK='Oracle JDK 10'
+      install: . ./install-jdk.sh -F 10 -L BCL
+    - env: JDK='OpenJDK 10'
+      install: . ./install-jdk.sh -F 10 -L GPL
+    - env: JDK='Oracle JDK 11'
+      install: . ./install-jdk.sh -F 11 -L BCL
+  allow_failures:
+    - env: JDK='Oracle JDK 11'
+
