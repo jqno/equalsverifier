@@ -11,7 +11,7 @@ matrix:
     - jdk: openjdk7
     - jdk: oraclejdk8
     - jdk: oraclejdk9
-      after_success: mvn jacoco:report coveralls:report
+      after_success: mvn jacoco:report
     - env: JDK='Oracle JDK 10'
       install: . ./install-jdk.sh -F 10 -L BCL
     - env: JDK='OpenJDK 10'
