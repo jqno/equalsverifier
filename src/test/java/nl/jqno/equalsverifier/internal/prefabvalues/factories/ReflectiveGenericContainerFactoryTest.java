@@ -9,17 +9,16 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.LinkedHashSet;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("rawtypes")
 public class ReflectiveGenericContainerFactoryTest {
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
-    private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);
+    private static final TypeTag STRINGOPTIONAL_TYPETAG = new TypeTag(Optional.class, STRING_TYPETAG);
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
-    private static final TypeTag WILDCARDMAP_TYPETAG = new TypeTag(Map.class, OBJECT_TYPETAG, OBJECT_TYPETAG);
-    private static final TypeTag RAWMAP_TYPETAG = new TypeTag(Map.class);
+    private static final TypeTag WILDCARDOPTIONAL_TYPETAG = new TypeTag(Optional.class, OBJECT_TYPETAG);
+    private static final TypeTag RAWOPTIONAL_TYPETAG = new TypeTag(Optional.class);
 
     private static final ReflectiveGenericContainerFactory<Optional> OPTIONAL_FACTORY =
             new ReflectiveGenericContainerFactory<>("com.google.common.base.Optional", "of", Object.class);
@@ -42,21 +41,21 @@ public class ReflectiveGenericContainerFactoryTest {
 
     @Test
     public void createOptionalsOfString() {
-        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(STRINGSTRINGMAP_TYPETAG, prefabValues, typeStack);
+        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(STRINGOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(red), tuple.getRed());
         assertEquals(Optional.of(black), tuple.getBlack());
     }
 
     @Test
     public void createOptionalsOfWildcard() {
-        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(WILDCARDMAP_TYPETAG, prefabValues, typeStack);
+        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(WILDCARDOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(redObject), tuple.getRed());
         assertEquals(Optional.of(blackObject), tuple.getBlack());
     }
 
     @Test
     public void createRawOptionals() {
-        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(RAWMAP_TYPETAG, prefabValues, typeStack);
+        Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(RAWOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(redObject), tuple.getRed());
         assertEquals(Optional.of(blackObject), tuple.getBlack());
     }
