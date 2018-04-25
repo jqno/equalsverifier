@@ -2,7 +2,9 @@ language: java
 
 before_install: wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 install: mvn dependency:resolve dependency:resolve-plugins
-script: mvn clean verify
+script:
+  - java -version
+  - mvn clean verify
 
 matrix:
   include:
