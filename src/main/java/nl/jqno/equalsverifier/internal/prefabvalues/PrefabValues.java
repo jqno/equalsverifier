@@ -51,6 +51,18 @@ public class PrefabValues {
     }
 
     /**
+     * Associates the factory that can create instances of the given type,
+     * with the specified class, but only when it's actually encountered.
+     *
+     * @param <T> The type of value to which the factory is associated.
+     * @param typeName The class name of the values.
+     * @param factory The factory.
+     */
+    public <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
+        factoryCache.put(typeName, factory);
+    }
+
+    /**
      * Returns the "red" prefabricated value of the specified type.
      *
      * It's always a different value from the "black" one.

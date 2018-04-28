@@ -4,10 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
-import java.awt.*;
-import java.awt.color.ColorSpace;
-import java.awt.color.ICC_ColorSpace;
-import java.awt.color.ICC_Profile;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -283,19 +279,10 @@ public final class JavaApiPrefabValues {
     }
 
     private void addAwtClasses() {
-        addValues(Color.class, Color.RED, Color.BLACK, Color.RED);
-        addValues(ColorSpace.class,
-                ColorSpace.getInstance(ColorSpace.CS_sRGB),
-                ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB),
-                ColorSpace.getInstance(ColorSpace.CS_sRGB));
-        addValues(ICC_ColorSpace.class,
-                ColorSpace.getInstance(ColorSpace.CS_sRGB),
-                ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB),
-                ColorSpace.getInstance(ColorSpace.CS_sRGB));
-        addValues(ICC_Profile.class,
-                ICC_Profile.getInstance(ColorSpace.CS_sRGB),
-                ICC_Profile.getInstance(ColorSpace.CS_LINEAR_RGB),
-                ICC_Profile.getInstance(ColorSpace.CS_sRGB));
+        prefabValues.addLazyFactory("java.awt.Color", new ReflectiveLazyConstantFactory<>("java.awt.Color", "RED", "BLACK"));
+        prefabValues.addLazyFactory("java.awt.color.ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
+        prefabValues.addLazyFactory("java.awt.color.ICC_ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
+        prefabValues.addLazyFactory("java.awt.color.ICC_Profile", new ReflectiveLazyAwtFactory<>("java.awt.color.ICC_Profile"));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
