@@ -31,7 +31,7 @@ public class FactoryCacheTest {
 
     @Test
     public void putNullAndGetNothingBack() {
-        cache.put(null, STRING_FACTORY);
+        cache.put((Class<?>)null, STRING_FACTORY);
         assertNull(cache.get(null));
     }
 

@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveLazyConstantFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Rule;
@@ -12,6 +13,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.*;
 
 public class PrefabValuesTest {
@@ -202,6 +205,32 @@ public class PrefabValuesTest {
         assertEquals(-2, pv.giveBlack(INT_TAG));
     }
 
+    @Test
+    public void addLazyFactoryWorks() {
+        TypeTag tag = new TypeTag(Lazy.class);
+        pv.addLazyFactory(Lazy.class.getName(), new ReflectiveLazyConstantFactory<>(Lazy.class.getName(), "X", "Y"));
+        assertEquals(Lazy.X, pv.giveRed(tag));
+        assertEquals(Lazy.Y, pv.giveBlack(tag));
+        assertEquals(Lazy.X, pv.giveRedCopy(tag));
+    }
+
+    @Test
+    public void addLazyFactoryIsLazy() {
+        TypeTag tag = new TypeTag(ThrowingLazy.class);
+
+        // Doesn't throw:
+        pv.addLazyFactory(ThrowingLazy.class.getName(), new ReflectiveLazyConstantFactory<>(ThrowingLazy.class.getName(), "X", "Y"));
+
+        // Does throw:
+        try {
+            pv.giveRed(tag);
+            fail("Expected an exception");
+        }
+        catch (ExceptionInInitializerError e) {
+            // succeed
+        }
+    }
+
     private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
         private String red;
         private String black;
@@ -239,5 +268,33 @@ public class PrefabValuesTest {
         static int staticInt = 2;
         @SuppressWarnings("unused")
         int regularInt = 3;
+    }
+
+    @SuppressWarnings("unused")
+    public static class Lazy {
+        public static final Lazy X = new Lazy(1);
+        public static final Lazy Y = new Lazy(2);
+
+        private final int i;
+
+        public Lazy(int i) { this.i = i; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+
+        @Override
+        public String toString() {
+            return "Lazy: " + i;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    public static class ThrowingLazy {
+        {
+            if (true) { throw new IllegalStateException("initializing"); }
+        }
+
+        public static final ThrowingLazy X = new ThrowingLazy();
+        public static final ThrowingLazy Y = new ThrowingLazy();
     }
 }
