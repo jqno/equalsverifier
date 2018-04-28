@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.6
+-------------
+_April 28, 2018_
+
+* ...not see an AWT frame pop up while EqualsVerifier runs. ([Issue 192](https://github.com/jqno/equalsverifier/issues/192))
+
 Version 2.4.5
 -------------
 _March 20, 2018_
