@@ -7,7 +7,7 @@ import org.junit.Test;
 public class Java8GenericTypesTest extends Java8IntegrationTestBase {
     @Test
     public void succeed_whenEqualsLooksAtObservableListFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 
@@ -18,7 +18,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtObservableMapFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 
@@ -29,7 +29,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtObservableSetFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 
@@ -40,7 +40,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtListPropertyFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 
@@ -51,7 +51,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtMapPropertyFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 
@@ -62,7 +62,7 @@ public class Java8GenericTypesTest extends Java8IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtSetPropertyFieldsGenericContent() {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 

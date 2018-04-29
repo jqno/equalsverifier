@@ -20,7 +20,7 @@ public class Java8ApiClassesTest extends Java8IntegrationTestBase {
 
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJava8IsAvailable() throws Exception {
-        if (!isJava8Available()) {
+        if (!isJavaFxAvailable()) {
             return;
         }
 

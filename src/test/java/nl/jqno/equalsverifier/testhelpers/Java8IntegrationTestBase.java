@@ -34,7 +34,11 @@ public class Java8IntegrationTestBase extends IntegrationTestBase {
         return isTypeAvailable("java.util.Optional");
     }
 
-    private boolean isTypeAvailable(String fullyQualifiedTypeName) {
+    public boolean isJavaFxAvailable() {
+        return isTypeAvailable("javafx.collections.ObservableList");
+    }
+
+    public boolean isTypeAvailable(String fullyQualifiedTypeName) {
         return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
     }
 }
