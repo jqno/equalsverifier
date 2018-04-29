@@ -30,9 +30,7 @@ public final class JavaApiPrefabValues {
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
 
-    private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
-        @Override public int compare(Object o1, Object o2) { return Integer.compare(o1.hashCode(), o2.hashCode()); }
-    };
+    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     private PrefabValues prefabValues;
 
