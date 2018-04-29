@@ -107,7 +107,9 @@ public final class JavaApiPrefabValues {
         addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
     }
 
-    @SuppressFBWarnings(value = "DMI_HARDCODED_ABSOLUTE_FILENAME", justification = "Just need an instance, not for actual use.")
+    @SuppressFBWarnings(
+        value = {"DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD"},
+        justification = "We just need an instance of File and Thread; they're not for actual use.")
     private void addClasses() {
         addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
         addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
@@ -122,6 +124,7 @@ public final class JavaApiPrefabValues {
         addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"), new SimpleDateFormat("yMd"));
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
         addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
+        addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
 
