@@ -1,7 +1,7 @@
 [![Apache License 2.0](https://img.shields.io/:license-Apache%20License%202.0-blue.svg?style=plastic)](https://github.com/jqno/equalsverifier/blob/master/LICENSE.md)
 [![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
 [![Build Status](https://img.shields.io/travis/jqno/equalsverifier.svg?style=plastic)](https://travis-ci.org/jqno/equalsverifier)
-[![Open issues](https://img.shields.io/github/issues/jqno/equalsverifier.svg?style=plastic)](https://github.com/jqno/equalsverifier/issues)
+[![Issue resolution](http://isitmaintained.com/badge/resolution/jqno/equalsverifier.svg)](http://isitmaintained.com/project/jqno/equalsverifier "Average time to resolve an issue")
 
 **EqualsVerifier** can be used in Java unit tests to verify whether the contract for the equals and hashCode methods in a class is met.
 The Maven coordinates are:
