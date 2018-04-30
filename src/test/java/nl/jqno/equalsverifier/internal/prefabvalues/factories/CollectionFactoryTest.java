@@ -23,8 +23,8 @@ public class CollectionFactoryTest {
     private static final TypeTag ONEELEMENTENUM_TYPETAG = new TypeTag(OneElementEnum.class);
     private static final TypeTag ONEELEMENTENUMSET_TYPETAG = new TypeTag(Set.class, ONEELEMENTENUM_TYPETAG);
 
-    private static final CollectionFactory<List> LIST_FACTORY = new StubListPrefabValueFactory();
-    private static final CollectionFactory<Set> SET_FACTORY = new StubSetPrefabValueFactory();
+    private static final CollectionFactory<List> LIST_FACTORY = new CollectionFactory<>(ArrayList::new);
+    private static final CollectionFactory<Set> SET_FACTORY = new CollectionFactory<>(HashSet::new);
 
     private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
@@ -77,20 +77,6 @@ public class CollectionFactoryTest {
         Tuple<Set> tuple = SET_FACTORY.createValues(ONEELEMENTENUMSET_TYPETAG, prefabValues, typeStack);
         assertEquals(setOf(redEnum), tuple.getRed());
         assertEquals(setOf(), tuple.getBlack());
-    }
-
-    private static class StubListPrefabValueFactory extends CollectionFactory<List> {
-        @Override
-        public List createEmpty() {
-            return new ArrayList<>();
-        }
-    }
-
-    private static class StubSetPrefabValueFactory extends CollectionFactory<Set> {
-        @Override
-        public Set createEmpty() {
-            return new HashSet<>();
-        }
     }
 
     @SafeVarargs

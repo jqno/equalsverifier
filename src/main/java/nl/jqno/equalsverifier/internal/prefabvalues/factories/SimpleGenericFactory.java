@@ -7,11 +7,11 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.LinkedHashSet;
 import java.util.function.Function;
 
-public class SimpleGenericFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public class SimpleGenericFactory<A, T> extends AbstractReflectiveGenericFactory<T> {
 
-    private final Function<?, T> factory;
+    private final Function<A, T> factory;
 
-    public SimpleGenericFactory(Function<?, T> factory) {
+    public SimpleGenericFactory(Function<A, T> factory) {
         this.factory = factory;
     }
 

@@ -20,7 +20,7 @@ public class SimpleGenericFactoryTest {
     private static final TypeTag WILDCARDOPTIONAL_TYPETAG = new TypeTag(Optional.class, OBJECT_TYPETAG);
     private static final TypeTag RAWOPTIONAL_TYPETAG = new TypeTag(Optional.class);
 
-    private static final SimpleGenericFactory<Optional> OPTIONAL_FACTORY =
+    private static final SimpleGenericFactory<?, Optional> OPTIONAL_FACTORY =
         new SimpleGenericFactory<>(Optional::of);
 
     private final PrefabValues prefabValues = new PrefabValues();
