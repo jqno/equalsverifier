@@ -284,14 +284,21 @@ public class TypeHelper {
         public int noRetention;
     }
 
+    public static class AnnotatedTypes {
+        public @TypeUseAnnotationRuntimeRetention int runtimeRetention;
+        public @TypeUseAnnotationClassRetention int classRetention;
+        public @TypeUseAnnotationRuntimeRetention @TypeUseAnnotationClassRetention int bothRetentions;
+        public int noRetention;
+    }
+
     @TypeAnnotationInherits
     @TypeAnnotationDoesntInherit
     public static class SuperclassWithAnnotations {
         @FieldAnnotationInherits
-        public int inherits;
+        public @TypeUseAnnotationInherits int inherits;
 
         @FieldAnnotationDoesntInherit
-        public int doesntInherit;
+        public @TypeUseAnnotationDoesntInherit int doesntInherit;
     }
 
     public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}

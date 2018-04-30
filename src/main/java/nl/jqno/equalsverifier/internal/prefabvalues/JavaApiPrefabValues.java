@@ -10,8 +10,11 @@ import java.math.BigInteger;
 import java.nio.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.*;
@@ -30,9 +33,7 @@ public final class JavaApiPrefabValues {
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
 
-    private static final Comparator<Object> OBJECT_COMPARATOR = new Comparator<Object>() {
-        @Override public int compare(Object o1, Object o2) { return Integer.compare(o1.hashCode(), o2.hashCode()); }
-    };
+    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     private PrefabValues prefabValues;
 
@@ -322,54 +323,27 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
+        addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
+        addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
+        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalDate.MIN);
+        addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
+        addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
+        addValues(DateTimeFormatter.class, DateTimeFormatter.ISO_TIME, DateTimeFormatter.ISO_DATE, DateTimeFormatter.ISO_TIME);
+        addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
+
+        addValues(ZonedDateTime.class,
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
+            ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
+
         String optional = "java.util.Optional";
         addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
 
-        ConditionalInstantiator localDateTime = new ConditionalInstantiator("java.time.LocalDateTime");
-        addValues(localDateTime.resolve(),
-                localDateTime.returnConstant("MIN"),
-                localDateTime.returnConstant("MAX"),
-                localDateTime.returnConstant("MIN"));
-        ConditionalInstantiator localDate = new ConditionalInstantiator("java.time.LocalDate");
-        addValues(localDate.resolve(),
-                localDate.returnConstant("MIN"),
-                localDate.returnConstant("MAX"),
-                localDate.returnConstant("MIN"));
-        ConditionalInstantiator localTime = new ConditionalInstantiator("java.time.LocalTime");
-        addValues(localTime.resolve(),
-                localTime.returnConstant("MIN"),
-                localTime.returnConstant("MAX"),
-                localTime.returnConstant("MIN"));
-        ConditionalInstantiator zonedDateTime = new ConditionalInstantiator("java.time.ZonedDateTime");
-        addValues(zonedDateTime.resolve(),
-                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2017-12-13T10:15:30+01:00")),
-                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2016-11-12T09:14:29-01:00")),
-                zonedDateTime.callFactory("parse", classes(CharSequence.class), objects("2017-12-13T10:15:30+01:00")));
-        ConditionalInstantiator zoneId = new ConditionalInstantiator("java.time.ZoneId");
-        addValues(zoneId.resolve(),
-                zoneId.callFactory("of", classes(String.class), objects("+1")),
-                zoneId.callFactory("of", classes(String.class), objects("-10")),
-                zoneId.callFactory("of", classes(String.class), objects("+1")));
-        ConditionalInstantiator zoneOffset = new ConditionalInstantiator("java.time.ZoneOffset");
-        addValues(zoneOffset.resolve(),
-                zoneOffset.callFactory("ofHours", classes(int.class), objects(1)),
-                zoneOffset.callFactory("ofHours", classes(int.class), objects(-1)),
-                zoneOffset.callFactory("ofHours", classes(int.class), objects(1)));
-        ConditionalInstantiator dateTimeFormatter = new ConditionalInstantiator("java.time.format.DateTimeFormatter");
-        addValues(dateTimeFormatter.resolve(),
-                dateTimeFormatter.returnConstant("ISO_TIME"),
-                dateTimeFormatter.returnConstant("ISO_DATE"),
-                dateTimeFormatter.returnConstant("ISO_TIME"));
         ConditionalInstantiator completableFuture = new ConditionalInstantiator("java.util.concurrent.CompletableFuture");
         addValues(completableFuture.resolve(),
                 completableFuture.instantiate(classes(), objects()),
                 completableFuture.instantiate(classes(), objects()),
                 completableFuture.instantiate(classes(), objects()));
-        ConditionalInstantiator stampedLock = new ConditionalInstantiator("java.util.concurrent.locks.StampedLock");
-        addValues(stampedLock.resolve(),
-                stampedLock.instantiate(classes(), objects()),
-                stampedLock.instantiate(classes(), objects()),
-                stampedLock.instantiate(classes(), objects()));
     }
 
     private void addJavaFxClasses() {

@@ -201,8 +201,8 @@ public class PrefabValuesTest {
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
         pv.addFactory(int.class, -1, -2, -1);
-        assertEquals(-1, pv.giveRed(INT_TAG));
-        assertEquals(-2, pv.giveBlack(INT_TAG));
+        assertEquals(-1, (int)pv.giveRed(INT_TAG));
+        assertEquals(-2, (int)pv.giveBlack(INT_TAG));
     }
 
     @Test

@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.Test;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -10,6 +11,12 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
+    @Test
+    public void succeed_whenClassHasASyntheticClassAsAField() {
+        EqualsVerifier.forClass(LambdaContainer.class)
+                .verify();
+    }
+
     @Test
     public void succeed_whenClassHasASyntheticFieldBecauseItsInsideAUnitTestClass() {
         EqualsVerifier.forClass(Outer.class)
@@ -32,6 +39,30 @@ public class SyntheticFieldsTest {
     public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
         EqualsVerifier.forClass(CoberturaContainer.class)
                 .verify();
+    }
+
+    static final class LambdaContainer {
+        private static final Comparator<LambdaContainer> COMPARATOR =
+            (c1, c2) -> 0;   // A lambda is a synthetic class
+
+        private final String s;
+
+        public LambdaContainer(String s) {
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof LambdaContainer)) {
+                return false;
+            }
+            return Objects.equals(s, ((LambdaContainer)obj).s);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(s);
+        }
     }
 
     /* non-static */ final class Outer {

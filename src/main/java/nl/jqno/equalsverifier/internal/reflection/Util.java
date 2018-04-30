@@ -36,13 +36,45 @@ public final class Util {
     }
 
     /**
+     * Helper method to create an empty array of Objects.
+     *
+     * @return An empty array.
+     */
+    public static Object[] objects() {
+        return new Object[] {};
+    }
+
+    /**
      * Helper method to create an array of Objects.
      *
-     * @param objects The objects to construct an array out of.
+     * @param first The object to construct an array out of.
+     * @return An array with the given object.
+     */
+    public static Object[] objects(Object first) {
+        return new Object[] { first };
+    }
+
+    /**
+     * Helper method to create an array of Objects.
+     *
+     * @param first The first object to construct an array out of.
+     * @param second The second object in the array.
      * @return An array with the given objects.
      */
-    public static Object[] objects(Object... objects) {
-        return objects;
+    public static Object[] objects(Object first, Object second) {
+        return new Object[] { first, second };
+    }
+
+    /**
+     * Helper method to create an array of Objects.
+     *
+     * @param first The first object to construct an array out of.
+     * @param second The second object in the array.
+     * @param third The third object in the array.
+     * @return An array with the given objects.
+     */
+    public static Object[] objects(Object first, Object second, Object third) {
+        return new Object[] { first, second, third };
     }
 
     /**
