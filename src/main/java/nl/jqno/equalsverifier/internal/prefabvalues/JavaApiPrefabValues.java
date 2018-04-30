@@ -315,10 +315,10 @@ public final class JavaApiPrefabValues {
     }
 
     private void addAwtClasses() {
-        prefabValues.addLazyFactory("java.awt.Color", new ReflectiveLazyConstantFactory<>("java.awt.Color", "RED", "BLACK"));
-        prefabValues.addLazyFactory("java.awt.color.ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
-        prefabValues.addLazyFactory("java.awt.color.ICC_ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
-        prefabValues.addLazyFactory("java.awt.color.ICC_Profile", new ReflectiveLazyAwtFactory<>("java.awt.color.ICC_Profile"));
+        addLazyFactory("java.awt.Color", new ReflectiveLazyConstantFactory<>("java.awt.Color", "RED", "BLACK"));
+        addLazyFactory("java.awt.color.ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
+        addLazyFactory("java.awt.color.ICC_ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
+        addLazyFactory("java.awt.color.ICC_Profile", new ReflectiveLazyAwtFactory<>("java.awt.color.ICC_Profile"));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -475,6 +475,10 @@ public final class JavaApiPrefabValues {
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
         prefabValues.addFactory(type, factory);
+    }
+
+    private <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
+        prefabValues.addLazyFactory(typeName, factory);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
