@@ -17,6 +17,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.arity1;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.collection;
 import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 /**
@@ -132,7 +134,7 @@ public final class JavaApiPrefabValues {
         addValues(java.sql.Time.class, new java.sql.Time(1337), new java.sql.Time(42), new java.sql.Time(1337));
         addValues(java.sql.Timestamp.class, new java.sql.Timestamp(1337), new java.sql.Timestamp(42), new java.sql.Timestamp(1337));
 
-        addFactory(ThreadLocal.class, new SimpleGenericFactory<>(a -> ThreadLocal.withInitial(() -> a)));
+        addFactory(ThreadLocal.class, arity1(a -> ThreadLocal.withInitial(() -> a), null));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
@@ -154,18 +156,22 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
-        addFactory(Iterable.class, new CollectionFactory(ArrayList::new));
-        addFactory(Collection.class, new CollectionFactory<>(ArrayList::new));
+        addFactory(Iterable.class, arity1(a -> {
+            Collection coll = new ArrayList<>();
+            coll.add(a);
+            return coll;
+        }, ArrayList::new));
+        addFactory(Collection.class, collection(ArrayList::new));
     }
 
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addLists() {
-        addFactory(List.class, new CollectionFactory<>(ArrayList::new));
-        addFactory(CopyOnWriteArrayList.class, new CollectionFactory<>(CopyOnWriteArrayList::new));
-        addFactory(LinkedList.class, new CollectionFactory<>(LinkedList::new));
-        addFactory(ArrayList.class, new CollectionFactory<>(ArrayList::new));
-        addFactory(Vector.class, new CollectionFactory<>(Vector::new));
-        addFactory(Stack.class, new CollectionFactory<>(Stack::new));
+        addFactory(List.class, collection(ArrayList::new));
+        addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
+        addFactory(LinkedList.class, collection(LinkedList::new));
+        addFactory(ArrayList.class, collection(ArrayList::new));
+        addFactory(Vector.class, collection(Vector::new));
+        addFactory(Stack.class, collection(Stack::new));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -186,31 +192,27 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addSets() {
-        addFactory(Set.class, new CollectionFactory<>(HashSet::new));
-        addFactory(SortedSet.class, new CollectionFactory<>(() -> new TreeSet<>(OBJECT_COMPARATOR)));
-        addFactory(NavigableSet.class, new CollectionFactory<>(() -> new TreeSet<>(OBJECT_COMPARATOR)));
-        addFactory(CopyOnWriteArraySet.class, new CollectionFactory<>(CopyOnWriteArraySet::new));
-        addFactory(HashSet.class, new CollectionFactory<>(HashSet::new));
-        addFactory(TreeSet.class, new CollectionFactory<>(() -> new TreeSet<>(OBJECT_COMPARATOR)));
+        addFactory(Set.class, collection(HashSet::new));
+        addFactory(SortedSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
+        addFactory(NavigableSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
+        addFactory(CopyOnWriteArraySet.class, collection(CopyOnWriteArraySet::new));
+        addFactory(HashSet.class, collection(HashSet::new));
+        addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
         addFactory(EnumSet.class, new ReflectiveEnumSetFactory());
         addValues(BitSet.class, BitSet.valueOf(new byte[]{0}), BitSet.valueOf(new byte[]{1}), BitSet.valueOf(new byte[]{0}));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addQueues() {
-        addFactory(Queue.class, new CollectionFactory<>(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(BlockingQueue.class, new CollectionFactory<>(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(Deque.class, new CollectionFactory<>(() -> new ArrayDeque<>(1)));
-        addFactory(BlockingDeque.class, new CollectionFactory<>(() -> new LinkedBlockingDeque<>(1)));
-        addFactory(ArrayBlockingQueue.class, new CollectionFactory<>(() -> new ArrayBlockingQueue<>(1)));
-        addFactory(ConcurrentLinkedQueue.class, new CollectionFactory<>(ConcurrentLinkedQueue::new));
-        addFactory(DelayQueue.class, new SimpleGenericFactory<Delayed, DelayQueue>(a -> {
-            DelayQueue dq = new DelayQueue<>();
-            dq.add(a);
-            return dq;
-        }));
-        addFactory(LinkedBlockingQueue.class, new CollectionFactory<>(() -> new LinkedBlockingQueue(1)));
-        addFactory(PriorityBlockingQueue.class, new CollectionFactory<>(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
+        addFactory(Queue.class, collection(() -> new ArrayBlockingQueue<>(1)));
+        addFactory(BlockingQueue.class, collection(() -> new ArrayBlockingQueue<>(1)));
+        addFactory(Deque.class, collection(() -> new ArrayDeque<>(1)));
+        addFactory(BlockingDeque.class, collection(() -> new LinkedBlockingDeque<>(1)));
+        addFactory(ArrayBlockingQueue.class, collection(() -> new ArrayBlockingQueue<>(1)));
+        addFactory(ConcurrentLinkedQueue.class, collection(ConcurrentLinkedQueue::new));
+        addFactory(DelayQueue.class, collection(DelayQueue::new));
+        addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
+        addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
@@ -242,8 +244,8 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
-        addFactory(Optional.class, new SimpleGenericFactory<>(Optional::of));
-        addFactory(CompletableFuture.class, new SimpleGenericFactory<>(ignored -> new CompletableFuture<>()));
+        addFactory(Optional.class, arity1(Optional::of, Optional::empty));
+        addFactory(CompletableFuture.class, arity1(ignored -> new CompletableFuture<>(), CompletableFuture::new));
 
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);

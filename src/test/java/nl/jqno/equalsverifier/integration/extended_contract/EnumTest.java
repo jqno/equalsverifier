@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -51,6 +52,12 @@ public class EnumTest {
     @Test
     public void succeed_whenClassHasMapWithSingletonKey() {
         EqualsVerifier.forClass(SingletonKeyMapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassHasSingletonOptional() {
+        EqualsVerifier.forClass(SingletonOptionalContainer.class)
                 .verify();
     }
 
@@ -148,6 +155,15 @@ public class EnumTest {
         private final Map<Singleton, Object> singletonKeyMap;
 
         public SingletonKeyMapContainer(Map<Singleton, Object> singletonKeyMap) { this.singletonKeyMap = singletonKeyMap; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class SingletonOptionalContainer {
+        private final Optional<Singleton> singletonOptional;
+
+        public SingletonOptionalContainer(Optional<Singleton> singletonOptional) { this.singletonOptional = singletonOptional; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
