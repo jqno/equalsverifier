@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Contains a cache of factories, for {@link PrefabValues}.
  */
-class FactoryCache {
+public class FactoryCache {
     /**
      * We store Strings instead of Classes, so that the cache can be lazy
      * and initializers won't be called until the class is actually needed.

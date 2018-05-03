@@ -121,7 +121,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- conditional test dependencies -->
+        <!-- provided prefabvalue dependencies -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
@@ -131,8 +131,8 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>20.0</version> <!-- Don't upgrade: version 21.0 and up require Java 8 -->
-            <scope>test</scope>
+            <version>25.0-jre</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jdt</groupId>

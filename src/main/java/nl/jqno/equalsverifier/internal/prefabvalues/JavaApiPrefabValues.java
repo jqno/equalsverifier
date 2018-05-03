@@ -285,12 +285,12 @@ public final class JavaApiPrefabValues {
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
-        addNewGuavaCollection("Multiset", "HashMultiset");
-        addNewGuavaCollection("SortedMultiset", "TreeMultiset", Comparator.class, OBJECT_COMPARATOR);
-        addNewGuavaCollection("HashMultiset", "HashMultiset");
-        addNewGuavaCollection("TreeMultiset", "TreeMultiset", Comparator.class, OBJECT_COMPARATOR);
-        addNewGuavaCollection("LinkedHashMultiset", "LinkedHashMultiset");
-        addNewGuavaCollection("ConcurrentHashMultiset", "ConcurrentHashMultiset");
+        addLazyFactory(GUAVA_PACKAGE + "Multiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "SortedMultiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "HashMultiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "TreeMultiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "ConcurrentHashMultiset", new ExternalFactory<>("GuavaFactory"));
         addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
         addCopiedGuavaCollection("ImmutableSortedMultiset", classForName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
