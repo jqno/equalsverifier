@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -26,5 +27,9 @@ public final class Factories {
             coll.add(a);
             return coll;
         }, emptyFactory);
+    }
+
+    public static <K, V, T extends Map<K, V>> PrefabValueFactory<T> map(Supplier<T> emptyFactory) {
+        return new MapFactory<>(emptyFactory);
     }
 }

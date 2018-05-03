@@ -17,8 +17,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.arity1;
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.collection;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
 import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 /**
@@ -34,6 +33,7 @@ public final class JavaApiPrefabValues {
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
+    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
@@ -176,17 +176,17 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addMaps() {
-        addFactory(Map.class, new MapFactory<>(HashMap::new));
-        addFactory(SortedMap.class, new MapFactory<>(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(NavigableMap.class, new MapFactory<>(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(ConcurrentNavigableMap.class, new MapFactory<>(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR)));
-        addFactory(ConcurrentHashMap.class, new MapFactory<>(ConcurrentHashMap::new));
-        addFactory(HashMap.class, new MapFactory<>(HashMap::new));
-        addFactory(Hashtable.class, new MapFactory<>(Hashtable::new));
-        addFactory(LinkedHashMap.class, new MapFactory<>(LinkedHashMap::new));
-        addFactory(Properties.class, new MapFactory<>(Properties::new));
-        addFactory(TreeMap.class, new MapFactory<>(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(WeakHashMap.class, new MapFactory<>(WeakHashMap::new));
+        addFactory(Map.class, map(HashMap::new));
+        addFactory(SortedMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
+        addFactory(NavigableMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
+        addFactory(ConcurrentNavigableMap.class, map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR)));
+        addFactory(ConcurrentHashMap.class, map(ConcurrentHashMap::new));
+        addFactory(HashMap.class, map(HashMap::new));
+        addFactory(Hashtable.class, map(Hashtable::new));
+        addFactory(LinkedHashMap.class, map(LinkedHashMap::new));
+        addFactory(Properties.class, map(Properties::new));
+        addFactory(TreeMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
+        addFactory(WeakHashMap.class, map(WeakHashMap::new));
         addFactory(EnumMap.class, new ReflectiveEnumMapFactory());
     }
 
@@ -285,27 +285,27 @@ public final class JavaApiPrefabValues {
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
-        addLazyFactory(GUAVA_PACKAGE + "Multiset", new ExternalFactory<>("GuavaFactory"));
-        addLazyFactory(GUAVA_PACKAGE + "SortedMultiset", new ExternalFactory<>("GuavaFactory"));
-        addLazyFactory(GUAVA_PACKAGE + "HashMultiset", new ExternalFactory<>("GuavaFactory"));
-        addLazyFactory(GUAVA_PACKAGE + "TreeMultiset", new ExternalFactory<>("GuavaFactory"));
-        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultiset", new ExternalFactory<>("GuavaFactory"));
-        addLazyFactory(GUAVA_PACKAGE + "ConcurrentHashMultiset", new ExternalFactory<>("GuavaFactory"));
+        addLazyFactory(GUAVA_PACKAGE + "Multiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "SortedMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "HashMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "TreeMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ConcurrentHashMultiset", GUAVA_FACTORY);
         addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
         addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
         addCopiedGuavaCollection("ImmutableSortedMultiset", classForName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
     }
 
     private void addGoogleGuavaMultimapCollectionsClasses() {
-        addNewGuavaMap("Multimap", "ArrayListMultimap");
-        addNewGuavaMap("ListMultimap", "ArrayListMultimap");
-        addNewGuavaMap("SetMultimap", "HashMultimap");
-        addNewGuavaMap("SortedSetMultimap", "TreeMultimap", OBJECT_COMPARATOR);
-        addNewGuavaMap("ArrayListMultimap", "ArrayListMultimap");
-        addNewGuavaMap("HashMultimap", "HashMultimap");
-        addNewGuavaMap("LinkedListMultimap", "LinkedListMultimap");
-        addNewGuavaMap("LinkedHashMultimap", "LinkedHashMultimap");
-        addNewGuavaMap("TreeMultimap", "TreeMultimap", OBJECT_COMPARATOR);
+        addLazyFactory(GUAVA_PACKAGE + "Multimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ListMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "SetMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "SortedSetMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ArrayListMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "HashMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "LinkedListMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "TreeMultimap", GUAVA_FACTORY);
         addCopiedGuavaCollection("ImmutableListMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
         addCopiedGuavaCollection("ImmutableSetMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
 
@@ -315,8 +315,8 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addGoogleGuavaBiMapCollectionsClasses() {
-        addNewGuavaMap("BiMap", "HashBiMap");
-        addNewGuavaMap("HashBiMap", "HashBiMap");
+        addLazyFactory(GUAVA_PACKAGE + "BiMap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);
         addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
         addCopiedGuavaCollection("ImmutableBiMap", Map.class);
         addFactory(classForName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
@@ -428,21 +428,6 @@ public final class JavaApiPrefabValues {
         Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
         ReflectiveCollectionFactory<T> factory =
                 ReflectiveCollectionFactory.callFactoryMethodWithParameter(GUAVA_PACKAGE + actualType, "create", parameterType, parameterValue);
-        addFactory(type, factory);
-    }
-
-    private <T> void addNewGuavaMap(String declaredType, String actualType) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveMapFactory<T> factory = ReflectiveMapFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        addFactory(type, factory);
-    }
-
-    private <T> void addNewGuavaMap(String declaredType, String actualType, Comparator<Object> comparator) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveMapFactory<T> factory =
-                ReflectiveMapFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
         addFactory(type, factory);
     }
 
