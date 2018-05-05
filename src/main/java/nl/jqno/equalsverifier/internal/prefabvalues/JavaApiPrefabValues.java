@@ -331,8 +331,8 @@ public final class JavaApiPrefabValues {
     }
 
     private void addGoogleGuavaRegularCollectionsClasses() {
-        addNewGuavaCollection("EvictingQueue", "EvictingQueue", int.class, 10);
-        addNewGuavaCollection("MinMaxPriorityQueue", "MinMaxPriorityQueue");
+        addLazyFactory(GUAVA_PACKAGE + "EvictingQueue", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "MinMaxPriorityQueue", GUAVA_FACTORY);
 
         ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
         ConditionalInstantiator rangeSet = new ConditionalInstantiator(GUAVA_PACKAGE + "RangeSet");
@@ -413,22 +413,6 @@ public final class JavaApiPrefabValues {
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
         addFactory(classForName(JAVAFX_PROPERTY_PACKAGE + declaredType),
                 new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
-    }
-
-    private <T> void addNewGuavaCollection(String declaredType, String actualType) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveCollectionFactory<T> factory =
-                ReflectiveCollectionFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        addFactory(type, factory);
-    }
-
-    private <T, U> void addNewGuavaCollection(String declaredType, String actualType, Class<U> parameterType, U parameterValue) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveCollectionFactory<T> factory =
-                ReflectiveCollectionFactory.callFactoryMethodWithParameter(GUAVA_PACKAGE + actualType, "create", parameterType, parameterValue);
-        addFactory(type, factory);
     }
 
     private <T> void addNewGuavaTable(String declaredType, String actualType, Comparator<Object> comparator) {

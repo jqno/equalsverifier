@@ -27,6 +27,7 @@ public final class GuavaFactory {
         putMultisets(cache);
         putMultimaps(cache);
         putBiMaps(cache);
+        putRegularCollections(cache);
 
         return cache;
     }
@@ -55,6 +56,11 @@ public final class GuavaFactory {
     private static void putBiMaps(FactoryCache cache) {
         cache.put(BiMap.class, map(HashBiMap::create));
         cache.put(HashBiMap.class, map(HashBiMap::create));
+    }
+
+    private static void putRegularCollections(FactoryCache cache) {
+        cache.put(EvictingQueue.class, collection(() -> EvictingQueue.create(10)));
+        cache.put(MinMaxPriorityQueue.class, collection(() -> MinMaxPriorityQueue.orderedBy(OBJECT_COMPARATOR).create()));
     }
 
     private static <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
