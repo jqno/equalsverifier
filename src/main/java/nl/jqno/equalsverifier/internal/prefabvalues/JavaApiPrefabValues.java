@@ -320,9 +320,9 @@ public final class JavaApiPrefabValues {
     }
 
     private void addGoogleGuavaTableCollectionClasses() {
-        addNewGuavaTable("Table", "HashBasedTable");
-        addNewGuavaTable("HashBasedTable", "HashBasedTable");
-        addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
+        addLazyFactory(GUAVA_PACKAGE + "Table", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "HashBasedTable", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "TreeBasedTable", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "ArrayTable", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "ImmutableTable", GUAVA_FACTORY);
     }
@@ -406,21 +406,5 @@ public final class JavaApiPrefabValues {
     private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
         addFactory(classForName(JAVAFX_PROPERTY_PACKAGE + declaredType),
                 new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
-    }
-
-    private <T> void addNewGuavaTable(String declaredType, String actualType, Comparator<Object> comparator) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveGuavaTableFactory<T> factory =
-                ReflectiveGuavaTableFactory.callFactoryMethodWithComparator(GUAVA_PACKAGE + actualType, "create", comparator);
-        addFactory(type, factory);
-    }
-
-    private <T> void addNewGuavaTable(String declaredType, String actualType) {
-        @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)classForName(GUAVA_PACKAGE + declaredType);
-        ReflectiveGuavaTableFactory<T> factory =
-                ReflectiveGuavaTableFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
-        addFactory(type, factory);
     }
 }

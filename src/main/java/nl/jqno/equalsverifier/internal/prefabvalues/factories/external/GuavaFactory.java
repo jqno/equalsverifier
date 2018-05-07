@@ -71,6 +71,9 @@ public final class GuavaFactory {
 
     @SuppressWarnings("unchecked")
     private static void putTables(FactoryCache cache) {
+        cache.put(Table.class, table(HashBasedTable::create));
+        cache.put(HashBasedTable.class, table(HashBasedTable::create));
+        cache.put(TreeBasedTable.class, table(() -> TreeBasedTable.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
         cache.put(ArrayTable.class, copy(Table.class, ArrayTable::create));
         cache.put(ImmutableTable.class, copy(Table.class, ImmutableTable::copyOf));
     }
@@ -98,6 +101,10 @@ public final class GuavaFactory {
         return new MultimapFactory<>(factory);
     }
 
+    private static <C, R, V, T extends Table<C, R, V>> TableFactory<C, R, V, T> table(Supplier<T> factory) {
+        return new TableFactory<>(factory);
+    }
+
     private static final class MultimapFactory<K, V, T extends Multimap<K, V>> extends AbstractReflectiveGenericFactory<T> {
         private final Supplier<T> factory;
 
@@ -120,6 +127,31 @@ public final class GuavaFactory {
 
             return Tuple.of(red, black, redCopy);
 
+        }
+    }
+
+    private static final class TableFactory<C, R, V, T extends Table<C, R, V>> extends AbstractReflectiveGenericFactory<T> {
+        private final Supplier<T> factory;
+
+        private TableFactory(Supplier<T> factory) {
+            this.factory = factory;
+        }
+
+        @Override
+        public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
+            TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
+            TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, prefabValues, clone);
+
+            T red = factory.get();
+            T black = factory.get();
+            T redCopy = factory.get();
+            red.put(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
+            black.put(prefabValues.giveBlack(columnTag), prefabValues.giveBlack(rowTag), prefabValues.giveBlack(valueTag));
+            redCopy.put(prefabValues.giveRed(columnTag), prefabValues.giveRed(rowTag), prefabValues.giveBlack(valueTag));
+
+            return Tuple.of(red, black, redCopy);
         }
     }
 }
