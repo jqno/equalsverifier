@@ -291,9 +291,9 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "TreeMultiset", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultiset", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "ConcurrentHashMultiset", GUAVA_FACTORY);
-        addCopiedGuavaCollection("EnumMultiset", Iterable.class, EnumSet.class, "create");
-        addCopiedGuavaCollection("ImmutableMultiset", Iterable.class);
-        addCopiedGuavaCollection("ImmutableSortedMultiset", classForName(GUAVA_PACKAGE + "SortedMultiset"), "copyOfSorted");
+        addLazyFactory(GUAVA_PACKAGE + "EnumMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableMultiset", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedMultiset", GUAVA_FACTORY);
     }
 
     private void addGoogleGuavaMultimapCollectionsClasses() {
@@ -306,19 +306,16 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "LinkedListMultimap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "LinkedHashMultimap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "TreeMultimap", GUAVA_FACTORY);
-        addCopiedGuavaCollection("ImmutableListMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
-        addCopiedGuavaCollection("ImmutableSetMultimap", classForName(GUAVA_PACKAGE + "Multimap"));
-
-        ConditionalInstantiator ci = new ConditionalInstantiator(GUAVA_PACKAGE + "Multimap");
-        addCopiedGuavaCollection("ImmutableMultimap", "ImmutableListMultimap", ci.resolve(), ci.resolve(), "copyOf");
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableListMultimap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableSetMultimap", GUAVA_FACTORY);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addLazyFactory(GUAVA_PACKAGE + "BiMap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);
-        addCopiedGuavaCollection("EnumHashBiMap", Map.class, EnumMap.class, "create");
-        addCopiedGuavaCollection("ImmutableBiMap", Map.class);
+        addLazyFactory(GUAVA_PACKAGE + "EnumHashBiMap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableBiMap", GUAVA_FACTORY);
         addFactory(classForName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
     }
 
@@ -326,29 +323,25 @@ public final class JavaApiPrefabValues {
         addNewGuavaTable("Table", "HashBasedTable");
         addNewGuavaTable("HashBasedTable", "HashBasedTable");
         addNewGuavaTable("TreeBasedTable", "TreeBasedTable", OBJECT_COMPARATOR);
-        addCopiedGuavaCollection("ArrayTable", classForName(GUAVA_PACKAGE + "Table"), "create");
-        addCopiedGuavaCollection("ImmutableTable", classForName(GUAVA_PACKAGE + "Table"));
+        addLazyFactory(GUAVA_PACKAGE + "ArrayTable", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableTable", GUAVA_FACTORY);
     }
 
     private void addGoogleGuavaRegularCollectionsClasses() {
         addLazyFactory(GUAVA_PACKAGE + "EvictingQueue", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "MinMaxPriorityQueue", GUAVA_FACTORY);
-
-        ConditionalInstantiator range = new ConditionalInstantiator(GUAVA_PACKAGE + "Range");
-        ConditionalInstantiator rangeSet = new ConditionalInstantiator(GUAVA_PACKAGE + "RangeSet");
-        ConditionalInstantiator immutableRangeSet = new ConditionalInstantiator(GUAVA_PACKAGE + "ImmutableRangeSet");
-        addCopiedGuavaCollection("ImmutableRangeSet", range.resolve(), "of");
-        addCopiedGuavaCollection("TreeRangeSet", rangeSet.resolve(), immutableRangeSet.resolve(), "create");
-        addCopiedGuavaCollection("RangeSet", "TreeRangeSet", rangeSet.resolve(), immutableRangeSet.resolve(), "create");
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableRangeSet", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "TreeRangeSet", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "RangeSet", GUAVA_FACTORY);
     }
 
     private void addGoogleGuavaImmutableClasses() {
-        addCopiedGuavaCollection("ImmutableCollection", "ImmutableList", Collection.class, Collection.class, "copyOf");
-        addCopiedGuavaCollection("ImmutableList", Collection.class);
-        addCopiedGuavaCollection("ImmutableMap", Map.class);
-        addCopiedGuavaCollection("ImmutableSet", Collection.class);
-        addCopiedGuavaCollection("ImmutableSortedMap", Map.class);
-        addCopiedGuavaCollection("ImmutableSortedSet", Collection.class);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableCollection", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableList", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableMap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableSet", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedMap", GUAVA_FACTORY);
+        addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedSet", GUAVA_FACTORY);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -429,26 +422,5 @@ public final class JavaApiPrefabValues {
         ReflectiveGuavaTableFactory<T> factory =
                 ReflectiveGuavaTableFactory.callFactoryMethod(GUAVA_PACKAGE + actualType, "create");
         addFactory(type, factory);
-    }
-
-    private void addCopiedGuavaCollection(String name, Class<?> copyFrom) {
-        addCopiedGuavaCollection(name, copyFrom, "copyOf");
-    }
-
-    private void addCopiedGuavaCollection(String name, Class<?> copyFrom, String copyMethodName) {
-        addCopiedGuavaCollection(name, copyFrom, copyFrom, copyMethodName);
-    }
-
-    private void addCopiedGuavaCollection(String name, Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
-        addCopiedGuavaCollection(name, name, declaredCopyFrom, actualCopyFrom, copyMethodName);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void addCopiedGuavaCollection(String declaredName, String actualName,
-            Class<?> declaredCopyFrom, Class<?> actualCopyFrom, String copyMethodName) {
-
-        String className = GUAVA_PACKAGE + actualName;
-        addFactory(classForName(GUAVA_PACKAGE + declaredName),
-                new ReflectiveCollectionCopyFactory(className, declaredCopyFrom, actualCopyFrom, className, copyMethodName));
     }
 }

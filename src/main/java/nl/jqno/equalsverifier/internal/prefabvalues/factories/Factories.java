@@ -29,6 +29,10 @@ public final class Factories {
         }, emptyFactory);
     }
 
+    public static <T, S> PrefabValueFactory<T> copy(Class<S> source, Function<S, T> copy) {
+        return new CopyFactory<>(source, copy);
+    }
+
     public static <K, V, T extends Map<K, V>> PrefabValueFactory<T> map(Supplier<T> emptyFactory) {
         return new MapFactory<>(emptyFactory);
     }

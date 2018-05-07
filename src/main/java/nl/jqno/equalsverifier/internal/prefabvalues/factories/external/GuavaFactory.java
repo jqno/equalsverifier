@@ -7,12 +7,10 @@ import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
 
-import java.util.Comparator;
-import java.util.LinkedHashSet;
+import java.util.*;
 import java.util.function.Supplier;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.collection;
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.map;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
 
 public final class GuavaFactory {
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
@@ -27,11 +25,14 @@ public final class GuavaFactory {
         putMultisets(cache);
         putMultimaps(cache);
         putBiMaps(cache);
+        putTables(cache);
         putRegularCollections(cache);
+        putImmutableClasses(cache);
 
         return cache;
     }
 
+    @SuppressWarnings("unchecked")
     private static void putMultisets(FactoryCache cache) {
         cache.put(Multiset.class, collection(HashMultiset::create));
         cache.put(SortedMultiset.class, collection(() -> TreeMultiset.create(OBJECT_COMPARATOR)));
@@ -39,8 +40,12 @@ public final class GuavaFactory {
         cache.put(TreeMultiset.class, collection(() -> TreeMultiset.create(OBJECT_COMPARATOR)));
         cache.put(LinkedHashMultiset.class, collection(LinkedHashMultiset::create));
         cache.put(ConcurrentHashMultiset.class, collection(ConcurrentHashMultiset::create));
+        cache.put(EnumMultiset.class, copy(EnumSet.class, a -> EnumMultiset.create(a)));
+        cache.put(ImmutableMultiset.class, copy(Set.class, ImmutableMultiset::copyOf));
+        cache.put(ImmutableSortedMultiset.class, copy(SortedMultiset.class, ImmutableSortedMultiset::copyOfSorted));
     }
 
+    @SuppressWarnings("unchecked")
     private static void putMultimaps(FactoryCache cache) {
         cache.put(Multimap.class, multimap(ArrayListMultimap::create));
         cache.put(ListMultimap.class, multimap(ArrayListMultimap::create));
@@ -51,16 +56,42 @@ public final class GuavaFactory {
         cache.put(LinkedListMultimap.class, multimap(LinkedListMultimap::create));
         cache.put(LinkedHashMultimap.class, multimap(LinkedHashMultimap::create));
         cache.put(TreeMultimap.class, multimap(() -> TreeMultimap.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
+        cache.put(ImmutableListMultimap.class, copy(Multimap.class, ImmutableListMultimap::copyOf));
+        cache.put(ImmutableSetMultimap.class, copy(Multimap.class, ImmutableSetMultimap::copyOf));
+        cache.put(ImmutableMultimap.class, copy(Multimap.class, ImmutableListMultimap::copyOf));
     }
 
+    @SuppressWarnings("unchecked")
     private static void putBiMaps(FactoryCache cache) {
         cache.put(BiMap.class, map(HashBiMap::create));
         cache.put(HashBiMap.class, map(HashBiMap::create));
+        cache.put(EnumHashBiMap.class, copy(EnumMap.class, EnumHashBiMap::create));
+        cache.put(ImmutableBiMap.class, copy(Map.class, ImmutableBiMap::copyOf));
     }
 
+    @SuppressWarnings("unchecked")
+    private static void putTables(FactoryCache cache) {
+        cache.put(ArrayTable.class, copy(Table.class, ArrayTable::create));
+        cache.put(ImmutableTable.class, copy(Table.class, ImmutableTable::copyOf));
+    }
+
+    @SuppressWarnings("unchecked")
     private static void putRegularCollections(FactoryCache cache) {
         cache.put(EvictingQueue.class, collection(() -> EvictingQueue.create(10)));
         cache.put(MinMaxPriorityQueue.class, collection(() -> MinMaxPriorityQueue.orderedBy(OBJECT_COMPARATOR).create()));
+        cache.put(ImmutableRangeSet.class, copy(Range.class, ImmutableRangeSet::of));
+        cache.put(TreeRangeSet.class, copy(ImmutableRangeSet.class, TreeRangeSet::create));
+        cache.put(RangeSet.class, copy(ImmutableRangeSet.class, TreeRangeSet::create));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void putImmutableClasses(FactoryCache cache) {
+        cache.put(ImmutableCollection.class, copy(Collection.class, ImmutableList::copyOf));
+        cache.put(ImmutableList.class, copy(Collection.class, ImmutableList::copyOf));
+        cache.put(ImmutableMap.class, copy(Map.class, ImmutableMap::copyOf));
+        cache.put(ImmutableSet.class, copy(Collection.class, ImmutableSet::copyOf));
+        cache.put(ImmutableSortedMap.class, copy(Map.class, ImmutableSortedMap::copyOf));
+        cache.put(ImmutableSortedSet.class, copy(Set.class, ImmutableSortedSet::copyOf));
     }
 
     private static <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
