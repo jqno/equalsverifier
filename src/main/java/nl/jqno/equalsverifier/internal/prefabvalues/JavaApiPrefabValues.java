@@ -346,12 +346,8 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addNewGoogleGuavaClasses() {
-        String rangeFqcn = GUAVA_PACKAGE + "Range";
-        ConditionalInstantiator range = new ConditionalInstantiator(rangeFqcn, false);
-        addFactory(range.resolve(), new ReflectiveGenericContainerFactory(rangeFqcn, "atLeast", Comparable.class));
-
-        String optional = "com.google.common.base.Optional";
-        addFactory(classForName(optional), new ReflectiveGenericContainerFactory(optional, "of", Object.class));
+        addLazyFactory(GUAVA_PACKAGE + "Range", GUAVA_FACTORY);
+        addLazyFactory("com.google.common.base.Optional", GUAVA_FACTORY);
     }
 
     private void addJodaTimeClasses() {

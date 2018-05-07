@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -28,6 +29,7 @@ public final class GuavaFactory {
         putTables(cache);
         putRegularCollections(cache);
         putImmutableClasses(cache);
+        putNewTypes(cache);
 
         return cache;
     }
@@ -95,6 +97,12 @@ public final class GuavaFactory {
         cache.put(ImmutableSet.class, copy(Collection.class, ImmutableSet::copyOf));
         cache.put(ImmutableSortedMap.class, copy(Map.class, ImmutableSortedMap::copyOf));
         cache.put(ImmutableSortedSet.class, copy(Set.class, ImmutableSortedSet::copyOf));
+    }
+
+    @SuppressWarnings("unchecked")
+    private static void putNewTypes(FactoryCache cache) {
+        cache.put(Range.class, Factories.<Comparable<?>, Range<?>>arity1(Range::atLeast, Range::all));
+        cache.put(com.google.common.base.Optional.class, arity1(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
     }
 
     private static <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
