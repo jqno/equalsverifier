@@ -33,6 +33,7 @@ public final class JavaApiPrefabValues {
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
+    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactory");
     private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactory");
     private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
     private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactory");
@@ -238,10 +239,10 @@ public final class JavaApiPrefabValues {
     }
 
     private void addAwtClasses() {
-        addLazyFactory("java.awt.Color", new ReflectiveLazyConstantFactory<>("java.awt.Color", "RED", "BLACK"));
-        addLazyFactory("java.awt.color.ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
-        addLazyFactory("java.awt.color.ICC_ColorSpace", new ReflectiveLazyAwtFactory<>("java.awt.color.ColorSpace"));
-        addLazyFactory("java.awt.color.ICC_Profile", new ReflectiveLazyAwtFactory<>("java.awt.color.ICC_Profile"));
+        addLazyFactory("java.awt.Color", AWT_FACTORY);
+        addLazyFactory("java.awt.color.ColorSpace", AWT_FACTORY);
+        addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
+        addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
