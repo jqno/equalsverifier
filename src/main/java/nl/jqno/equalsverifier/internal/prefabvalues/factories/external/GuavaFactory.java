@@ -69,6 +69,7 @@ public final class GuavaFactory {
         cache.put(HashBiMap.class, map(HashBiMap::create));
         cache.put(EnumHashBiMap.class, copy(EnumMap.class, EnumHashBiMap::create));
         cache.put(ImmutableBiMap.class, copy(Map.class, ImmutableBiMap::copyOf));
+        cache.put(EnumBiMap.class, new EnumBiMapFactory<>());
     }
 
     @SuppressWarnings("unchecked")
@@ -135,6 +136,23 @@ public final class GuavaFactory {
 
             return Tuple.of(red, black, redCopy);
 
+        }
+    }
+
+    private static final class EnumBiMapFactory<K extends Enum<K>, V extends Enum<V>, T extends EnumBiMap<K, V>>
+            extends AbstractReflectiveGenericFactory<T> {
+
+        @Override
+        public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
+            TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone, Enum.class);
+
+            Map<K, V> red = ImmutableMap.of(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+            Map<K, V> black = ImmutableMap.of(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
+            Map<K, V> redCopy = ImmutableMap.of(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+
+            return Tuple.of(EnumBiMap.create(red), EnumBiMap.create(black), EnumBiMap.create(redCopy));
         }
     }
 

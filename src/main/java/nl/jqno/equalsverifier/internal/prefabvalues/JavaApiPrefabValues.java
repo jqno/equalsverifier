@@ -316,7 +316,7 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "EnumHashBiMap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "ImmutableBiMap", GUAVA_FACTORY);
-        addFactory(classForName(GUAVA_PACKAGE + "EnumBiMap"), new ReflectiveGuavaEnumBiMapFactory());
+        addLazyFactory(GUAVA_PACKAGE + "EnumBiMap", GUAVA_FACTORY);
     }
 
     private void addGoogleGuavaTableCollectionClasses() {
