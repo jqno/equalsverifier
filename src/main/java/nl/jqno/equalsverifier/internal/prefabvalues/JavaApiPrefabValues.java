@@ -33,6 +33,7 @@ public final class JavaApiPrefabValues {
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
+    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactory");
     private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
     private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactory");
 
@@ -278,11 +279,7 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaxApiClasses() {
-        ConditionalInstantiator reference = new ConditionalInstantiator("javax.naming.Reference");
-        addValues(reference.resolve(),
-                reference.instantiate(classes(String.class), objects("one")),
-                reference.instantiate(classes(String.class), objects("two")),
-                reference.instantiate(classes(String.class), objects("one")));
+        addLazyFactory("javax.naming.Reference", JAVAX_FACTORY);
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {
