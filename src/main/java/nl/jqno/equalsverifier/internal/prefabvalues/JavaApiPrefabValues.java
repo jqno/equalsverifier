@@ -34,6 +34,7 @@ public final class JavaApiPrefabValues {
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
     private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
+    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactory");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
@@ -351,31 +352,11 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJodaTimeClasses() {
-        ConditionalInstantiator chronology = new ConditionalInstantiator(JODA_PACKAGE + "Chronology");
-        addValues(chronology.resolve(),
-                chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()),
-                chronology.callFactory(JODA_PACKAGE + "chrono.ISOChronology", "getInstanceUTC", classes(), objects()),
-                chronology.callFactory(JODA_PACKAGE + "chrono.GregorianChronology", "getInstanceUTC", classes(), objects()));
-        ConditionalInstantiator dateTimeZone = new ConditionalInstantiator(JODA_PACKAGE + "DateTimeZone");
-        addValues(dateTimeZone.resolve(),
-                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)),
-                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(-10)),
-                dateTimeZone.callFactory("forOffsetHours", classes(int.class), objects(+1)));
-        ConditionalInstantiator periodType = new ConditionalInstantiator(JODA_PACKAGE + "PeriodType");
-        addValues(periodType.resolve(),
-                periodType.callFactory("days", classes(), objects()),
-                periodType.callFactory("hours", classes(), objects()),
-                periodType.callFactory("days", classes(), objects()));
-        ConditionalInstantiator yearMonth = new ConditionalInstantiator(JODA_PACKAGE + "YearMonth");
-        addValues(yearMonth.resolve(),
-                yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)),
-                yearMonth.instantiate(classes(int.class, int.class), objects(2014, 7)),
-                yearMonth.instantiate(classes(int.class, int.class), objects(2009, 6)));
-        ConditionalInstantiator monthDay = new ConditionalInstantiator(JODA_PACKAGE + "MonthDay");
-        addValues(monthDay.resolve(),
-                monthDay.instantiate(classes(int.class, int.class), objects(6, 1)),
-                monthDay.instantiate(classes(int.class, int.class), objects(6, 26)),
-                monthDay.instantiate(classes(int.class, int.class), objects(6, 1)));
+        addLazyFactory(JODA_PACKAGE + "Chronology", JODA_FACTORY);
+        addLazyFactory(JODA_PACKAGE + "DateTimeZone", JODA_FACTORY);
+        addLazyFactory(JODA_PACKAGE + "PeriodType", JODA_FACTORY);
+        addLazyFactory(JODA_PACKAGE + "YearMonth", JODA_FACTORY);
+        addLazyFactory(JODA_PACKAGE + "MonthDay", JODA_FACTORY);
     }
 
     @SuppressWarnings("unchecked")

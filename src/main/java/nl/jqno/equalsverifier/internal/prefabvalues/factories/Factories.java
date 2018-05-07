@@ -11,6 +11,10 @@ public final class Factories {
         // Do not instantiate
     }
 
+    public static <T> PrefabValueFactory<T> values(T red, T black, T redCopy) {
+        return new SimpleFactory<>(red, black, redCopy);
+    }
+
     @SuppressWarnings("unchecked")
     public static <A, T> PrefabValueFactory<T> arity1(Function<A, T> factory, Supplier<T> emptyFactory) {
         return new SimpleGenericFactory<>(list -> factory.apply((A)list.get(0)), emptyFactory);
