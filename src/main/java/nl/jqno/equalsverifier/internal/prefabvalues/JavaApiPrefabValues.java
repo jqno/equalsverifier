@@ -201,7 +201,7 @@ public final class JavaApiPrefabValues {
         addFactory(CopyOnWriteArraySet.class, collection(CopyOnWriteArraySet::new));
         addFactory(HashSet.class, collection(HashSet::new));
         addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
-        addFactory(EnumSet.class, new ReflectiveEnumSetFactory());
+        addFactory(EnumSet.class, new EnumSetFactory<>(EnumSet::copyOf));
         addValues(BitSet.class, BitSet.valueOf(new byte[]{0}), BitSet.valueOf(new byte[]{1}), BitSet.valueOf(new byte[]{0}));
     }
 

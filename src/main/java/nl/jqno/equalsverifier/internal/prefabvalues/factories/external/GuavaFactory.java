@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories;
 
 import java.util.*;
@@ -43,7 +44,7 @@ public final class GuavaFactory {
         cache.put(TreeMultiset.class, collection(() -> TreeMultiset.create(OBJECT_COMPARATOR)));
         cache.put(LinkedHashMultiset.class, collection(LinkedHashMultiset::create));
         cache.put(ConcurrentHashMultiset.class, collection(ConcurrentHashMultiset::create));
-        cache.put(EnumMultiset.class, copy(EnumSet.class, a -> EnumMultiset.create(a)));
+        cache.put(EnumMultiset.class, new EnumSetFactory<>(EnumMultiset::create));
         cache.put(ImmutableMultiset.class, copy(Set.class, ImmutableMultiset::copyOf));
         cache.put(ImmutableSortedMultiset.class, copy(SortedMultiset.class, ImmutableSortedMultiset::copyOfSorted));
     }
