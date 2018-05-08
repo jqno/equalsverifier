@@ -190,7 +190,7 @@ public final class JavaApiPrefabValues {
         addFactory(Properties.class, map(Properties::new));
         addFactory(TreeMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
         addFactory(WeakHashMap.class, map(WeakHashMap::new));
-        addFactory(EnumMap.class, new ReflectiveEnumMapFactory());
+        addFactory(EnumMap.class, new EnumMapFactory<>(EnumMap::new));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
