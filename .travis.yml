@@ -2,9 +2,8 @@ language: java
 
 before_install: wget https://github.com/sormuras/bach/raw/master/install-jdk.sh
 install: mvn dependency:resolve dependency:resolve-plugins
-script:
-  - java -version
-  - mvn clean verify
+before_script: java -version
+script: mvn clean verify
 
 matrix:
   include:
@@ -16,8 +15,13 @@ matrix:
       install: . ./install-jdk.sh -F 10 -L BCL
     - env: JDK='OpenJDK 10'
       install: . ./install-jdk.sh -F 10 -L GPL
-    - env: JDK='Oracle JDK 11'
+    - env: JDK='Oracle JDK 11 (simplified)'
       install: . ./install-jdk.sh -F 11 -L BCL
+      script: mvn clean verify -P simplified,!fullbuild
+    - env: JDK='Oracle JDK 11 (full build)'
+      install: . ./install-jdk.sh -F 11 -L BCL
+
   allow_failures:
-    - env: JDK='Oracle JDK 11'
+    - env: JDK='Oracle JDK 11 (simplified)'
+    - env: JDK='Oracle JDK 11 (full build)'
 

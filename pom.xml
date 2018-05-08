@@ -218,9 +218,9 @@
     <profiles>
         <profile>
             <!-- Do only minimal tests on older JVMs -->
-            <id>backward-compatibility-for-travisci</id>
+            <id>simplified</id>
             <activation>
-                <jdk>[1.7,1.8]</jdk>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <build>
                 <plugins>
@@ -242,7 +242,7 @@
         </profile>
 
         <profile>
-            <id>java9</id>
+            <id>fullbuild</id>
             <activation>
                 <jdk>[9,)</jdk>
             </activation>
