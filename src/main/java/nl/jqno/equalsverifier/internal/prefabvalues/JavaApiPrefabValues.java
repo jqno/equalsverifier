@@ -34,6 +34,7 @@ public final class JavaApiPrefabValues {
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
     private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactory");
+    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>("JavaFxFactory");
     private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactory");
     private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
     private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactory");
@@ -264,19 +265,19 @@ public final class JavaApiPrefabValues {
     }
 
     private void addJavaFxClasses() {
-        addJavaFxCollection("ObservableList", List.class, "observableList");
-        addJavaFxCollection("ObservableMap", Map.class, "observableMap");
-        addJavaFxCollection("ObservableSet", Set.class, "observableSet");
-        addJavaFxProperty("BooleanProperty", "SimpleBooleanProperty", boolean.class);
-        addJavaFxProperty("DoubleProperty", "SimpleDoubleProperty", double.class);
-        addJavaFxProperty("FloatProperty", "SimpleFloatProperty", float.class);
-        addJavaFxProperty("IntegerProperty", "SimpleIntegerProperty", int.class);
-        addJavaFxProperty("ListProperty", "SimpleListProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList"));
-        addJavaFxProperty("LongProperty", "SimpleLongProperty", long.class);
-        addJavaFxProperty("MapProperty", "SimpleMapProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap"));
-        addJavaFxProperty("ObjectProperty", "SimpleObjectProperty", Object.class);
-        addJavaFxProperty("SetProperty", "SimpleSetProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
-        addJavaFxProperty("StringProperty", "SimpleStringProperty", String.class);
+        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "BooleanProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "DoubleProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "FloatProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "IntegerProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "ListProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "LongProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "MapProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "ObjectProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "SetProperty", JAVAFX_FACTORY);
+        addLazyFactory(JAVAFX_PROPERTY_PACKAGE + "StringProperty", JAVAFX_FACTORY);
     }
 
     private void addJavaxApiClasses() {
@@ -368,18 +369,5 @@ public final class JavaApiPrefabValues {
 
     private <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
         prefabValues.addLazyFactory(typeName, factory);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void addJavaFxCollection(String name, Class<?> copyFrom, String factoryMethod) {
-        String className = JAVAFX_COLLECTIONS_PACKAGE + name;
-        addFactory(classForName(className),
-                new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void addJavaFxProperty(String declaredType, String actualType, Class<?> propertyType) {
-        addFactory(classForName(JAVAFX_PROPERTY_PACKAGE + declaredType),
-                new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
     }
 }
