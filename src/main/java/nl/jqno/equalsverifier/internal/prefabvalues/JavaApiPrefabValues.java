@@ -1,7 +1,10 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.ExternalFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 import java.io.File;
@@ -18,7 +21,8 @@ import java.util.concurrent.locks.StampedLock;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
-import static nl.jqno.equalsverifier.internal.reflection.Util.*;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
@@ -253,7 +257,7 @@ public final class JavaApiPrefabValues {
 
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
-        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalDate.MIN);
+        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalTime.MIN);
         addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
         addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
         addValues(DateTimeFormatter.class, DateTimeFormatter.ISO_TIME, DateTimeFormatter.ISO_DATE, DateTimeFormatter.ISO_TIME);
@@ -359,8 +363,8 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void addValues(Class<T> type, Object red, Object black, Object redCopy) {
-        prefabValues.addFactory(type, (T)red, (T)black, (T)redCopy);
+    private <T> void addValues(Class<T> type, T red, T black, T redCopy) {
+        prefabValues.addFactory(type, red, black, redCopy);
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
