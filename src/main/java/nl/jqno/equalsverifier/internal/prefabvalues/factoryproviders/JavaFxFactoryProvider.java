@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.prefabvalues.factories.external;
+package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
