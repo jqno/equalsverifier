@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class SimpleGenericFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
     private final Function<List<Object>, T> factory;
     private final Supplier<T> emptyFactory;

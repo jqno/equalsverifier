@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.LinkedHashSet;
 import java.util.function.Function;
 
-public class CopyFactory<T, S> extends AbstractReflectiveGenericFactory<T> {
+public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
     private final Class<S> source;
     private Function<S, T> copy;
 

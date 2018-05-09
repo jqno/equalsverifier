@@ -4,7 +4,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
@@ -56,7 +56,7 @@ public final class JavaFxFactory {
         return new PropertyFactory<>(JAVAFX_PROPERTY_PACKAGE + typeName, parameterRawType);
     }
 
-    static final class PropertyFactory<T> extends AbstractReflectiveGenericFactory<T> {
+    static final class PropertyFactory<T> extends AbstractGenericFactory<T> {
         private final String fullyQualifiedTypeName;
         private final Class<?> parameterRawType;
 

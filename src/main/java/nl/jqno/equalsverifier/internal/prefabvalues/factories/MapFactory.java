@@ -13,7 +13,7 @@ import java.util.function.Supplier;
  * implementations of {@link Map}, taking generics into account.
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class MapFactory<T extends Map> extends AbstractReflectiveGenericFactory<T> {
+public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
     private final Supplier<T> createEmpty;
 
     public MapFactory(Supplier<T> createEmpty) {

@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @SuppressWarnings({"unchecked", "rawtypes"})
-public final class EnumMapFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
     private final Function<Map, T> factory;
 
     public EnumMapFactory(Function<Map, T> factory) {

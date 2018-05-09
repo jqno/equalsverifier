@@ -14,7 +14,7 @@ import java.util.function.Function;
  * using reflection, while taking generics into account.
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
-public class EnumSetFactory<T> extends AbstractReflectiveGenericFactory<T> {
+public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
     private final Function<Collection, T> factory;
 
     public EnumSetFactory(Function<Collection, T> factory) {

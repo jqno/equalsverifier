@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories;
@@ -116,7 +116,7 @@ public final class GuavaFactory {
         return new TableFactory<>(factory);
     }
 
-    private static final class MultimapFactory<K, V, T extends Multimap<K, V>> extends AbstractReflectiveGenericFactory<T> {
+    private static final class MultimapFactory<K, V, T extends Multimap<K, V>> extends AbstractGenericFactory<T> {
         private final Supplier<T> factory;
 
         private MultimapFactory(Supplier<T> factory) {
@@ -141,7 +141,7 @@ public final class GuavaFactory {
         }
     }
 
-    private static final class TableFactory<C, R, V, T extends Table<C, R, V>> extends AbstractReflectiveGenericFactory<T> {
+    private static final class TableFactory<C, R, V, T extends Table<C, R, V>> extends AbstractGenericFactory<T> {
         private final Supplier<T> factory;
 
         private TableFactory(Supplier<T> factory) {
