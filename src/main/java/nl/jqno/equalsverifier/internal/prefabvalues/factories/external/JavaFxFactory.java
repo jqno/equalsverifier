@@ -1,14 +1,20 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories.external;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveCollectionCopyFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveJavaFxPropertyFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractReflectiveGenericFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.copy;
+import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 public final class JavaFxFactory {
     private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
@@ -26,33 +32,57 @@ public final class JavaFxFactory {
     public static FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
-        addJavaFxCollection(cache, "ObservableList", List.class, "observableList");
-        addJavaFxCollection(cache, "ObservableMap", Map.class, "observableMap");
-        addJavaFxCollection(cache, "ObservableSet", Set.class, "observableSet");
-        addJavaFxProperty(cache, "BooleanProperty", "SimpleBooleanProperty", boolean.class);
-        addJavaFxProperty(cache, "DoubleProperty", "SimpleDoubleProperty", double.class);
-        addJavaFxProperty(cache, "FloatProperty", "SimpleFloatProperty", float.class);
-        addJavaFxProperty(cache, "IntegerProperty", "SimpleIntegerProperty", int.class);
-        addJavaFxProperty(cache, "ListProperty", "SimpleListProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList"));
-        addJavaFxProperty(cache, "LongProperty", "SimpleLongProperty", long.class);
-        addJavaFxProperty(cache, "MapProperty", "SimpleMapProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap"));
-        addJavaFxProperty(cache, "ObjectProperty", "SimpleObjectProperty", Object.class);
-        addJavaFxProperty(cache, "SetProperty", "SimpleSetProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet"));
-        addJavaFxProperty(cache, "StringProperty", "SimpleStringProperty", String.class);
+        cache.put(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList", fxCollection(List.class, "observableList"));
+        cache.put(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap", fxCollection(Map.class, "observableMap"));
+        cache.put(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet", fxCollection(Set.class, "observableSet"));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "BooleanProperty", fxProperty("SimpleBooleanProperty", boolean.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "DoubleProperty", fxProperty("SimpleDoubleProperty", double.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "FloatProperty", fxProperty("SimpleFloatProperty", float.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "IntegerProperty", fxProperty("SimpleIntegerProperty", int.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "ListProperty",
+            fxProperty("SimpleListProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList")));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "LongProperty", fxProperty("SimpleLongProperty", long.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "MapProperty",
+            fxProperty("SimpleMapProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableMap")));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "ObjectProperty", fxProperty("SimpleObjectProperty", Object.class));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "SetProperty",
+            fxProperty("SimpleSetProperty", classForName(JAVAFX_COLLECTIONS_PACKAGE + "ObservableSet")));
+        cache.put(JAVAFX_PROPERTY_PACKAGE + "StringProperty", fxProperty("SimpleStringProperty", String.class));
 
         return cache;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void addJavaFxCollection(FactoryCache cache, String name, Class<?> copyFrom, String factoryMethod) {
-        String className = JAVAFX_COLLECTIONS_PACKAGE + name;
-        cache.put(classForName(className),
-            new ReflectiveCollectionCopyFactory(className, copyFrom, JAVAFX_COLLECTIONS_PACKAGE + "FXCollections", factoryMethod));
+    private static <T> PrefabValueFactory<T> fxProperty(String typeName, Class<?> parameterRawType) {
+        return new PropertyFactory<>(JAVAFX_PROPERTY_PACKAGE + typeName, parameterRawType);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void addJavaFxProperty(FactoryCache cache, String declaredType, String actualType, Class<?> propertyType) {
-        cache.put(classForName(JAVAFX_PROPERTY_PACKAGE + declaredType),
-            new ReflectiveJavaFxPropertyFactory(JAVAFX_PROPERTY_PACKAGE + actualType, propertyType));
+    static final class PropertyFactory<T> extends AbstractReflectiveGenericFactory<T> {
+        private final String fullyQualifiedTypeName;
+        private final Class<?> parameterRawType;
+
+        PropertyFactory(String fullyQualifiedTypeName, Class<?> parameterRawType) {
+            this.fullyQualifiedTypeName = fullyQualifiedTypeName;
+            this.parameterRawType = parameterRawType;
+        }
+
+        @Override
+        public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            ConditionalInstantiator ci = new ConditionalInstantiator(fullyQualifiedTypeName);
+            TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
+
+            Object red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+            Object black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+            Object redCopy = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+
+            return Tuple.of(red, black, redCopy);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <T, S> PrefabValueFactory<T> fxCollection(Class<S> source, String copyMethodName) {
+        return copy(source, a -> {
+            ConditionalInstantiator ci = new ConditionalInstantiator(JAVAFX_COLLECTIONS_PACKAGE + "FXCollections");
+            return (T)ci.callFactory(copyMethodName, classes(source), objects(a));
+        });
     }
 }
