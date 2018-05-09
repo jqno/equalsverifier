@@ -4,6 +4,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.external.FactoryProvider;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 import java.util.LinkedHashSet;
@@ -25,7 +26,8 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         if (factoryCache == null) {
             ConditionalInstantiator ci = new ConditionalInstantiator(factoryName);
-            factoryCache = (FactoryCache)ci.callFactory("getFactoryCache", classes(), objects());
+            FactoryProvider provider = (FactoryProvider)ci.instantiate(classes(), objects());
+            factoryCache = provider.getFactoryCache();
         }
 
         PrefabValueFactory<T> factory = factoryCache.get(tag.getType());

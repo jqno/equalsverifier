@@ -7,13 +7,9 @@ import org.joda.time.chrono.ISOChronology;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
-public final class JodaFactory {
+public final class JodaFactoryProvider implements FactoryProvider {
 
-    private JodaFactory() {
-        // Don't instantiate
-    }
-
-    public static FactoryCache getFactoryCache() {
+    public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
         cache.put(

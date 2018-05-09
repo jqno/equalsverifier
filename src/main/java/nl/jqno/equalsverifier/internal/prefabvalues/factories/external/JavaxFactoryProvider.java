@@ -6,13 +6,9 @@ import javax.naming.Reference;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
-public final class JavaxFactory {
+public final class JavaxFactoryProvider implements FactoryProvider {
 
-    private JavaxFactory() {
-        // Don't instantiate
-    }
-
-    public static FactoryCache getFactoryCache() {
+    public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
         cache.put(Reference.class, values(new Reference("one"), new Reference("two"), new Reference("one")));

@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.external.JavaFxFactory.PropertyFactory;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.external.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("rawtypes")
-public class JavaFxFactoryTest {
+public class JavaFxFactoryProviderTest {
     private PrefabValues prefabValues;
 
     @Before
@@ -28,7 +28,7 @@ public class JavaFxFactoryTest {
 
     @Test
     public void maintainCoverageOnJdksThatDontHaveJavafx() {
-        assertNotNull(JavaFxFactory.getFactoryCache());
+        assertNotNull(new JavaFxFactoryProvider().getFactoryCache());
     }
 
     @Test

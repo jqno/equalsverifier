@@ -9,16 +9,12 @@ import java.awt.color.ICC_Profile;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
-public final class AwtFactory {
+public final class AwtFactoryProvider implements FactoryProvider {
 
     private static final int CS_RED = ColorSpace.CS_sRGB;
     private static final int CS_BLACK = ColorSpace.CS_LINEAR_RGB;
 
-    private AwtFactory() {
-        // Do not instantiate
-    }
-
-    public static FactoryCache getFactoryCache() {
+    public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
         cache.put(

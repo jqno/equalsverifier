@@ -37,11 +37,11 @@ public final class JavaApiPrefabValues {
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
-    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactory");
-    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>("JavaFxFactory");
-    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactory");
-    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactory");
-    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactory");
+    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactoryProvider");
+    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>("JavaFxFactoryProvider");
+    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
+    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactoryProvider");
+    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactoryProvider");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 

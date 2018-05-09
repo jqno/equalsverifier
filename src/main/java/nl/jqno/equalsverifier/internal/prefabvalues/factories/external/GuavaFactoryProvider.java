@@ -15,14 +15,10 @@ import java.util.function.Supplier;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
 
-public final class GuavaFactory {
+public final class GuavaFactoryProvider implements FactoryProvider {
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
-    private GuavaFactory() {
-        // Don't instantiate
-    }
-
-    public static FactoryCache getFactoryCache() {
+    public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
         putMultisets(cache);
@@ -37,7 +33,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putMultisets(FactoryCache cache) {
+    private void putMultisets(FactoryCache cache) {
         cache.put(Multiset.class, collection(HashMultiset::create));
         cache.put(SortedMultiset.class, collection(() -> TreeMultiset.create(OBJECT_COMPARATOR)));
         cache.put(HashMultiset.class, collection(HashMultiset::create));
@@ -50,7 +46,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putMultimaps(FactoryCache cache) {
+    private void putMultimaps(FactoryCache cache) {
         cache.put(Multimap.class, multimap(ArrayListMultimap::create));
         cache.put(ListMultimap.class, multimap(ArrayListMultimap::create));
         cache.put(SetMultimap.class, multimap(HashMultimap::create));
@@ -66,7 +62,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putBiMaps(FactoryCache cache) {
+    private void putBiMaps(FactoryCache cache) {
         cache.put(BiMap.class, map(HashBiMap::create));
         cache.put(HashBiMap.class, map(HashBiMap::create));
         cache.put(EnumHashBiMap.class, copy(EnumMap.class, EnumHashBiMap::create));
@@ -75,7 +71,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putTables(FactoryCache cache) {
+    private void putTables(FactoryCache cache) {
         cache.put(Table.class, table(HashBasedTable::create));
         cache.put(HashBasedTable.class, table(HashBasedTable::create));
         cache.put(TreeBasedTable.class, table(() -> TreeBasedTable.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
@@ -84,7 +80,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putRegularCollections(FactoryCache cache) {
+    private void putRegularCollections(FactoryCache cache) {
         cache.put(EvictingQueue.class, collection(() -> EvictingQueue.create(10)));
         cache.put(MinMaxPriorityQueue.class, collection(() -> MinMaxPriorityQueue.orderedBy(OBJECT_COMPARATOR).create()));
         cache.put(ImmutableRangeSet.class, copy(Range.class, ImmutableRangeSet::of));
@@ -93,7 +89,7 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putImmutableClasses(FactoryCache cache) {
+    private void putImmutableClasses(FactoryCache cache) {
         cache.put(ImmutableCollection.class, copy(Collection.class, ImmutableList::copyOf));
         cache.put(ImmutableList.class, copy(Collection.class, ImmutableList::copyOf));
         cache.put(ImmutableMap.class, copy(Map.class, ImmutableMap::copyOf));
@@ -103,16 +99,16 @@ public final class GuavaFactory {
     }
 
     @SuppressWarnings("unchecked")
-    private static void putNewTypes(FactoryCache cache) {
+    private void putNewTypes(FactoryCache cache) {
         cache.put(Range.class, Factories.<Comparable<?>, Range<?>>arity1(Range::atLeast, Range::all));
         cache.put(com.google.common.base.Optional.class, arity1(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
     }
 
-    private static <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
+    private <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
         return new MultimapFactory<>(factory);
     }
 
-    private static <C, R, V, T extends Table<C, R, V>> TableFactory<C, R, V, T> table(Supplier<T> factory) {
+    private <C, R, V, T extends Table<C, R, V>> TableFactory<C, R, V, T> table(Supplier<T> factory) {
         return new TableFactory<>(factory);
     }
 

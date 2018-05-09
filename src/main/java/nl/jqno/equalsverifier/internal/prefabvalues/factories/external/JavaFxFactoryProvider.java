@@ -16,20 +16,16 @@ import java.util.Set;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.copy;
 import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
-public final class JavaFxFactory {
+public final class JavaFxFactoryProvider implements FactoryProvider {
     private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
-
-    private JavaFxFactory() {
-        // Don't instantiate
-    }
 
     /*
      * As long as there's no easy dependency for JavaFX to rely on in Maven,
      * we can't refer to the actual types, and have to go around it with String
      * representations of the type names.
      */
-    public static FactoryCache getFactoryCache() {
+    public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 
         cache.put(JAVAFX_COLLECTIONS_PACKAGE + "ObservableList", fxCollection(List.class, "observableList"));
@@ -52,7 +48,7 @@ public final class JavaFxFactory {
         return cache;
     }
 
-    private static <T> PrefabValueFactory<T> fxProperty(String typeName, Class<?> parameterRawType) {
+    private <T> PrefabValueFactory<T> fxProperty(String typeName, Class<?> parameterRawType) {
         return new PropertyFactory<>(JAVAFX_PROPERTY_PACKAGE + typeName, parameterRawType);
     }
 
