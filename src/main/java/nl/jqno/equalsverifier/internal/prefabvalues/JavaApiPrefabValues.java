@@ -142,7 +142,7 @@ public final class JavaApiPrefabValues {
         addValues(java.sql.Time.class, new java.sql.Time(1337), new java.sql.Time(42), new java.sql.Time(1337));
         addValues(java.sql.Timestamp.class, new java.sql.Timestamp(1337), new java.sql.Timestamp(42), new java.sql.Timestamp(1337));
 
-        addFactory(ThreadLocal.class, arity1(a -> ThreadLocal.withInitial(() -> a), null));
+        addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
@@ -164,7 +164,7 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addCollection() {
-        addFactory(Iterable.class, arity1(a -> {
+        addFactory(Iterable.class, simple(a -> {
             Collection coll = new ArrayList<>();
             coll.add(a);
             return coll;
@@ -252,8 +252,8 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void addJava8ApiClasses() {
-        addFactory(Optional.class, arity1(Optional::of, Optional::empty));
-        addFactory(CompletableFuture.class, arity1(ignored -> new CompletableFuture<>(), CompletableFuture::new));
+        addFactory(Optional.class, simple(Optional::of, Optional::empty));
+        addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
 
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);

@@ -100,8 +100,8 @@ public final class GuavaFactoryProvider implements FactoryProvider {
 
     @SuppressWarnings("unchecked")
     private void putNewTypes(FactoryCache cache) {
-        cache.put(Range.class, Factories.<Comparable<?>, Range<?>>arity1(Range::atLeast, Range::all));
-        cache.put(com.google.common.base.Optional.class, arity1(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
+        cache.put(Range.class, Factories.<Comparable<?>, Range<?>>simple(Range::atLeast, Range::all));
+        cache.put(com.google.common.base.Optional.class, simple(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
     }
 
     private <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {

@@ -24,9 +24,9 @@ public class SimpleGenericFactoryTest {
     private static final TypeTag PAIR_TYPETAG = new TypeTag(Pair.class, STRING_TYPETAG, INTEGER_TYPETAG);
 
     private static final PrefabValueFactory<Optional> OPTIONAL_FACTORY =
-        Factories.arity1(Optional::of, Optional::empty);
+        Factories.simple(Optional::of, Optional::empty);
     private static final PrefabValueFactory<Pair> PAIR_FACTORY =
-        Factories.arity2(Pair::of, null);
+        Factories.simple(Pair::of, null);
 
     private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();

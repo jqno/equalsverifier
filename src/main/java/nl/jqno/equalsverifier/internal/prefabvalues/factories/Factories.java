@@ -1,8 +1,10 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import nl.jqno.equalsverifier.Func.Func1;
+import nl.jqno.equalsverifier.Func.Func2;
+
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -15,18 +17,16 @@ public final class Factories {
         return new SimpleFactory<>(red, black, redCopy);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <A, T> PrefabValueFactory<T> arity1(Function<A, T> factory, Supplier<T> emptyFactory) {
-        return new SimpleGenericFactory<>(list -> factory.apply((A)list.get(0)), emptyFactory);
+    public static <A, T> PrefabValueFactory<T> simple(Func1<A, T> factory, Supplier<T> emptyFactory) {
+        return new SimpleGenericFactory<>(factory, emptyFactory);
     }
 
-    @SuppressWarnings("unchecked")
-    public static <A, B, T> PrefabValueFactory<T> arity2(BiFunction<A, B, T> factory, Supplier<T> emptyFactory) {
-        return new SimpleGenericFactory<>(list -> factory.apply((A)list.get(0), (B)list.get(1)), emptyFactory);
+    public static <A, B, T> PrefabValueFactory<T> simple(Func2<A, B, T> factory, Supplier<T> emptyFactory) {
+        return new SimpleGenericFactory<>(factory, emptyFactory);
     }
 
     public static <A, T extends Collection<A>> PrefabValueFactory<T> collection(Supplier<T> emptyFactory) {
-        return Factories.<A, T>arity1(a -> {
+        return Factories.<A, T>simple(a -> {
             T coll = emptyFactory.get();
             coll.add(a);
             return coll;

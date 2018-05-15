@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -7,15 +8,14 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
-    private final Function<List<Object>, T> factory;
+    private final Func<T> factory;
     private final Supplier<T> emptyFactory;
 
-    public SimpleGenericFactory(Function<List<Object>, T> factory, Supplier<T> emptyFactory) {
+    public SimpleGenericFactory(Func<T> factory, Supplier<T> emptyFactory) {
         this.factory = factory;
         this.emptyFactory = emptyFactory;
     }
