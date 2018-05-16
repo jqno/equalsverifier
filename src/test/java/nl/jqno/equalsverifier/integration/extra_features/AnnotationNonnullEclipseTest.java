@@ -12,10 +12,10 @@ import org.junit.Test;
 
 import java.util.Objects;
 
-public class AnnotationNonnullTypeUseTest extends IntegrationTestBase {
+public class AnnotationNonnullEclipseTest extends IntegrationTestBase {
     @Test
-    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() {
-        EqualsVerifier.forClass(NonnullManual.class)
+    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseAnnotationOnFieldType() {
+        EqualsVerifier.forClass(NonnullTypeUse.class)
                 .verify();
     }
 
@@ -90,17 +90,17 @@ public class AnnotationNonnullTypeUseTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static final class NonnullManual {
+    static final class NonnullTypeUse {
         private final @NonNull Object o;
 
-        public NonnullManual(Object o) { this.o = o; }
+        public NonnullTypeUse(Object o) { this.o = o; }
 
         @Override
         public final boolean equals(Object obj) {
-            if (!(obj instanceof NonnullManual)) {
+            if (!(obj instanceof NonnullTypeUse)) {
                 return false;
             }
-            NonnullManual other = (NonnullManual)obj;
+            NonnullTypeUse other = (NonnullTypeUse)obj;
             return o.equals(other.o);
         }
 
