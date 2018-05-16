@@ -14,17 +14,17 @@ import java.util.LinkedHashSet;
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
-public class AbstractReflectiveGenericFactoryTest {
+public class AbstractGenericFactoryTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
     private String receiver;
-    private AbstractReflectiveGenericFactory<String> factory;
+    private AbstractGenericFactory<String> factory;
 
     @Before
     public void setUp() {
         receiver = "";
-        factory = new AbstractReflectiveGenericFactory<String>() {
+        factory = new AbstractGenericFactory<String>() {
             @Override
             public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
                 return Tuple.of("red", "black", new String("red"));

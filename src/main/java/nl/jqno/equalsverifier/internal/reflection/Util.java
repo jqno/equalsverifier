@@ -15,9 +15,10 @@ public final class Util {
      * @param className The fully qualified name of the class to resolve.
      * @return The corresponding class if it exists, null otherwise.
      */
-    public static Class<?> classForName(String className) {
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> classForName(String className) {
         try {
-            return Class.forName(className);
+            return (Class<T>)Class.forName(className);
         }
         catch (ClassNotFoundException | VerifyError e) {
             // Catching VerifyError fixes issue #147. I don't know how to unit test it.

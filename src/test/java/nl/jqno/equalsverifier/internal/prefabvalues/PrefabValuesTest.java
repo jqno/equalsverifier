@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveLazyConstantFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.*;
@@ -207,23 +207,25 @@ public class PrefabValuesTest {
 
     @Test
     public void addLazyFactoryWorks() {
-        TypeTag tag = new TypeTag(Lazy.class);
-        pv.addLazyFactory(Lazy.class.getName(), new ReflectiveLazyConstantFactory<>(Lazy.class.getName(), "X", "Y"));
-        assertEquals(Lazy.X, pv.giveRed(tag));
-        assertEquals(Lazy.Y, pv.giveBlack(tag));
-        assertEquals(Lazy.X, pv.giveRedCopy(tag));
+        TypeTag lazyTag = new TypeTag(Lazy.class);
+        pv.addLazyFactory(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
+        assertEquals(Lazy.X, pv.giveRed(lazyTag));
+        assertEquals(Lazy.Y, pv.giveBlack(lazyTag));
+        assertEquals(Lazy.X, pv.giveRedCopy(lazyTag));
     }
 
     @Test
     public void addLazyFactoryIsLazy() {
-        TypeTag tag = new TypeTag(ThrowingLazy.class);
+        TypeTag throwingLazyTag = new TypeTag(ThrowingLazy.class);
 
         // Doesn't throw:
-        pv.addLazyFactory(ThrowingLazy.class.getName(), new ReflectiveLazyConstantFactory<>(ThrowingLazy.class.getName(), "X", "Y"));
+        pv.addLazyFactory(
+            ThrowingLazy.class.getName(),
+            (tag, prefabValues, typeStack) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
 
         // Does throw:
         try {
-            pv.giveRed(tag);
+            pv.giveRed(throwingLazyTag);
             fail("Expected an exception");
         }
         catch (ExceptionInInitializerError e) {

@@ -47,7 +47,7 @@ public class ConditionalInstantiator {
      *
      * @return The corresponding class object if the type exists; null otherwise.
      */
-    public Class<?> resolve() {
+    public <T> Class<T> resolve() {
         return classForName(fullyQualifiedClassName);
     }
 

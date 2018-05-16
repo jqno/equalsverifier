@@ -15,7 +15,7 @@ import java.util.List;
  * Abstract implementation of {@link PrefabValueFactory} that provides helper
  * functions for dealing with generics.
  */
-public abstract class AbstractReflectiveGenericFactory<T> implements PrefabValueFactory<T> {
+public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T> {
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
 
     protected LinkedHashSet<TypeTag> cloneWith(LinkedHashSet<TypeTag> typeStack, TypeTag tag) {

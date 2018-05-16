@@ -78,4 +78,12 @@ public final class Tuple<T> {
         result = (59 * result) + redCopy.hashCode();
         return result;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String toString() {
+        return "Tuple [" + red + ", " + black + ", " + redCopy + "]";
+    }
 }
