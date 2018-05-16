@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier;
 
 import nl.jqno.equalsverifier.Func.Func1;
+import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
@@ -157,6 +158,31 @@ public final class EqualsVerifier<T> {
      *          {@code factory} is null.
      */
     public <S> EqualsVerifier<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
+        if (otherType == null) {
+            throw new NullPointerException("Type is null");
+        }
+        if (factory == null) {
+            throw new NullPointerException("Factory is null");
+        }
+
+        config.getPrefabValues().addFactory(otherType, simple(factory, null));
+        return this;
+    }
+
+    /**
+     * Adds a factory to generate prefabricated values for instance fields of
+     * classes with 2 generic type parameters that EqualsVerifier cannot
+     * instantiate by itself.
+     *
+     * @param <S> The class of the prefabricated values.
+     * @param otherType The class of the prefabricated values.
+     * @param factory A factory to generate an instance of {@code S}, given a
+     *          value of each of its generic type parameters.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException if either {@code otherType} or
+     *          {@code factory} is null.
+     */
+    public <S> EqualsVerifier<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         if (otherType == null) {
             throw new NullPointerException("Type is null");
         }
