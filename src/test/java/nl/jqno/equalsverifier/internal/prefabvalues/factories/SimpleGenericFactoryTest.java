@@ -4,7 +4,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import org.apache.commons.lang3.tuple.Pair;
+import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ public class SimpleGenericFactoryTest {
     private static final PrefabValueFactory<Optional> OPTIONAL_FACTORY =
         Factories.simple(Optional::of, Optional::empty);
     private static final PrefabValueFactory<Pair> PAIR_FACTORY =
-        Factories.simple(Pair::of, null);
+        Factories.simple(Pair::new, null);
 
     private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
@@ -72,7 +72,7 @@ public class SimpleGenericFactoryTest {
     @Test
     public void createSomethingWithMoreThanOneTypeParameter() {
         Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, prefabValues, typeStack);
-        assertEquals(Pair.of(redString, redInt), tuple.getRed());
-        assertEquals(Pair.of(blackString, blackInt), tuple.getBlack());
+        assertEquals(new Pair<>(redString, redInt), tuple.getRed());
+        assertEquals(new Pair<>(blackString, blackInt), tuple.getBlack());
     }
 }
