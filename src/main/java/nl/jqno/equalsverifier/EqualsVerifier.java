@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -158,15 +159,11 @@ public final class EqualsVerifier<T> {
      *          {@code factory} is null.
      */
     public <S> EqualsVerifier<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
-        if (otherType == null) {
-            throw new NullPointerException("Type is null");
-        }
         if (factory == null) {
             throw new NullPointerException("Factory is null");
         }
+        return withGenericPrefabValueFactory(otherType, simple(factory, null), 1);
 
-        config.getPrefabValues().addFactory(otherType, simple(factory, null));
-        return this;
     }
 
     /**
@@ -183,15 +180,10 @@ public final class EqualsVerifier<T> {
      *          {@code factory} is null.
      */
     public <S> EqualsVerifier<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
-        if (otherType == null) {
-            throw new NullPointerException("Type is null");
-        }
         if (factory == null) {
             throw new NullPointerException("Factory is null");
         }
-
-        config.getPrefabValues().addFactory(otherType, simple(factory, null));
-        return this;
+        return withGenericPrefabValueFactory(otherType, simple(factory, null), 2);
     }
 
     /**
@@ -360,6 +352,20 @@ public final class EqualsVerifier<T> {
         CachedHashCodeInitializer<T> cachedHashCodeInitializer =
                 new CachedHashCodeInitializer<>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
         config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
+        return this;
+    }
+
+    private <S> EqualsVerifier<T> withGenericPrefabValueFactory(Class<S> otherType, PrefabValueFactory<S> factory, int arity) {
+        if (otherType == null) {
+            throw new NullPointerException("Type is null");
+        }
+        int n = otherType.getTypeParameters().length;
+        if (n != arity) {
+            throw new IllegalArgumentException("Number of generic type parameters doesn't match:\n  " +
+                    otherType.getName() + " has " + n + "\n  Factory has " + arity);
+        }
+
+        config.getPrefabValues().addFactory(otherType, factory);
         return this;
     }
 

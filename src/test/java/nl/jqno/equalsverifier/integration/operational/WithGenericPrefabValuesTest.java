@@ -11,7 +11,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "unchecked"})
 public class WithGenericPrefabValuesTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -52,12 +52,19 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void throw_whenFactoryIsNull_given1GenericParameter() {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
                 .withGenericPrefabValues(SingleGenericContainer.class, (Func1)null);
+    }
+
+    @Test
+    public void throw_whenFactoryHas2Parameters_given1GenericParameter() {
+        thrown.expect(IllegalArgumentException.class);
+
+        EqualsVerifier.forClass(SingleGenericContainerContainer.class)
+            .withGenericPrefabValues(SingleGenericContainer.class, (Func2)(a, b) -> new SingleGenericContainer<>(a));
     }
 
     @Test
@@ -85,12 +92,19 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    @SuppressWarnings("unchecked")
     public void throw_whenFactoryIsNull_given2GenericParameters() {
         thrown.expect(NullPointerException.class);
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
                 .withGenericPrefabValues(DoubleGenericContainer.class, (Func2)null);
+    }
+
+    @Test
+    public void throw_whenFactoryHas1Parameter_given2GenericParameters() {
+        thrown.expect(IllegalArgumentException.class);
+
+        EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
+            .withGenericPrefabValues(DoubleGenericContainer.class, (Func1)(a -> new DoubleGenericContainer<>(a, a)));
     }
 
     private static final class SingleGenericContainerContainer {
