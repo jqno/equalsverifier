@@ -66,9 +66,9 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
             ConditionalInstantiator ci = new ConditionalInstantiator(fullyQualifiedTypeName);
             TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
 
-            Object red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
-            Object black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
-            Object redCopy = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+            T red = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
+            T black = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveBlack(singleParameterTag)));
+            T redCopy = ci.instantiate(classes(parameterRawType), objects(prefabValues.giveRed(singleParameterTag)));
 
             return Tuple.of(red, black, redCopy);
         }
@@ -78,7 +78,7 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
     private static <T, S> PrefabValueFactory<T> fxCollection(Class<S> source, String copyMethodName) {
         return copy(source, a -> {
             ConditionalInstantiator ci = new ConditionalInstantiator(JAVAFX_COLLECTIONS_PACKAGE + "FXCollections");
-            return (T)ci.callFactory(copyMethodName, classes(source), objects(a));
+            return ci.callFactory(copyMethodName, classes(source), objects(a));
         });
     }
 }

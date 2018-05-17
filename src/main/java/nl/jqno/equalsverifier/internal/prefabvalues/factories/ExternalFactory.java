@@ -26,7 +26,7 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
     public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         if (factoryCache == null) {
             ConditionalInstantiator ci = new ConditionalInstantiator(factoryName);
-            FactoryProvider provider = (FactoryProvider)ci.instantiate(classes(), objects());
+            FactoryProvider provider = ci.instantiate(classes(), objects());
             factoryCache = provider.getFactoryCache();
         }
 
