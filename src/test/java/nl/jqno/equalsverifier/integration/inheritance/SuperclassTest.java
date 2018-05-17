@@ -73,17 +73,9 @@ public class SuperclassTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectly() {
+    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassUsesCommonsLangEqualsBuilder() {
         EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
                 .withRedefinedSuperclass()
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectlyAndAllFieldsShouldBeUsed() {
-        EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
-                .withRedefinedSuperclass()
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -221,7 +213,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    public abstract static class AbstractEqualsDefiner {
+    public abstract static class AbstractEqualsDefinerWithEqualsBuilder {
         @Override
         public final boolean equals(Object obj) {
             return EqualsBuilder.reflectionEquals(this, obj);
@@ -234,7 +226,7 @@ public class SuperclassTest extends IntegrationTestBase {
     }
 
     @SuppressWarnings("unused")
-    public static class ConcreteEqualsInheriter extends AbstractEqualsDefiner {
+    public static class ConcreteEqualsInheriter extends AbstractEqualsDefinerWithEqualsBuilder {
         private final int a;
         private final int b;
 
