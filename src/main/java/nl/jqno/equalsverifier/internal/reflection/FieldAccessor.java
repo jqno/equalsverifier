@@ -117,7 +117,7 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void set(Object value) {
-        modify(new FieldSetter(value), true);
+        modify(() -> field.set(object, value), true);
     }
 
     /**
@@ -127,7 +127,7 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void defaultField() {
-        modify(new FieldDefaulter(), false);
+        modify(this::setFieldToDefault, false);
     }
 
     /**
@@ -137,7 +137,38 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void defaultStaticField() {
-        modify(new FieldDefaulter(), true);
+        modify(this::setFieldToDefault, true);
+    }
+
+    private void setFieldToDefault() throws IllegalAccessException {
+        Class<?> type = field.getType();
+        if (type == boolean.class){
+            field.setBoolean(object, false);
+        }
+        else if (type == byte.class) {
+            field.setByte(object, (byte)0);
+        }
+        else if (type == char.class) {
+            field.setChar(object, '\u0000');
+        }
+        else if (type == double.class) {
+            field.setDouble(object, 0.0);
+        }
+        else if (type == float.class) {
+            field.setFloat(object, 0.0f);
+        }
+        else if (type == int.class){
+            field.setInt(object, 0);
+        }
+        else if (type == long.class) {
+            field.setLong(object, 0);
+        }
+        else if (type == short.class) {
+            field.setShort(object, (short)0);
+        }
+        else {
+            field.set(object, null);
+        }
     }
 
     /**
@@ -149,7 +180,7 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void copyTo(Object to) {
-        modify(new FieldCopier(to), false);
+        modify(() -> field.set(to, field.get(object)), false);
     }
 
     /**
@@ -163,7 +194,10 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        modify(new FieldChanger(prefabValues, enclosingType), false);
+        modify(() -> {
+            Object newValue = prefabValues.giveOther(TypeTag.of(field, enclosingType), field.get(object));
+            field.set(object, newValue);
+        }, false);
     }
 
     private void modify(FieldModifier modifier, boolean includeStatic) {
@@ -183,6 +217,11 @@ public class FieldAccessor {
         }
     }
 
+    @FunctionalInterface
+    private interface FieldModifier {
+        void modify() throws IllegalAccessException;
+    }
+
     /**
      * Determines whether the field can be modified using reflection.
      *
@@ -197,85 +236,5 @@ public class FieldAccessor {
             return false;
         }
         return true;
-    }
-
-    private interface FieldModifier {
-        void modify() throws IllegalAccessException;
-    }
-
-    private class FieldSetter implements FieldModifier {
-        private final Object newValue;
-
-        public FieldSetter(Object newValue) {
-            this.newValue = newValue;
-        }
-
-        @Override
-        public void modify() throws IllegalAccessException {
-            field.set(object, newValue);
-        }
-    }
-
-    private class FieldDefaulter implements FieldModifier {
-        @Override
-        public void modify() throws IllegalAccessException {
-            Class<?> type = field.getType();
-            if (type == boolean.class){
-                field.setBoolean(object, false);
-            }
-            else if (type == byte.class) {
-                field.setByte(object, (byte)0);
-            }
-            else if (type == char.class) {
-                field.setChar(object, '\u0000');
-            }
-            else if (type == double.class) {
-                field.setDouble(object, 0.0);
-            }
-            else if (type == float.class) {
-                field.setFloat(object, 0.0f);
-            }
-            else if (type == int.class){
-                field.setInt(object, 0);
-            }
-            else if (type == long.class) {
-                field.setLong(object, 0);
-            }
-            else if (type == short.class) {
-                field.setShort(object, (short)0);
-            }
-            else {
-                field.set(object, null);
-            }
-        }
-    }
-
-    private class FieldCopier implements FieldModifier {
-        private final Object to;
-
-        public FieldCopier(Object to) {
-            this.to = to;
-        }
-
-        @Override
-        public void modify() throws IllegalAccessException {
-            field.set(to, field.get(object));
-        }
-    }
-
-    private class FieldChanger implements FieldModifier {
-        private final PrefabValues prefabValues;
-        private final TypeTag enclosingType;
-
-        public FieldChanger(PrefabValues prefabValues, TypeTag enclosingType) {
-            this.prefabValues = prefabValues;
-            this.enclosingType = enclosingType;
-        }
-
-        @Override
-        public void modify() throws IllegalAccessException {
-            Object newValue = prefabValues.giveOther(TypeTag.of(field, enclosingType), field.get(object));
-            field.set(object, newValue);
-        }
     }
 }
