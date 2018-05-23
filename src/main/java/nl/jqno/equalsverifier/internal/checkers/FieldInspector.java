@@ -1,8 +1,8 @@
-package nl.jqno.equalsverifier.internal.util;
+package nl.jqno.equalsverifier.internal.checkers;
 
+import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
@@ -36,7 +36,4 @@ public class FieldInspector<T> {
         }
     }
 
-    public interface FieldCheck {
-        void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor);
-    }
 }

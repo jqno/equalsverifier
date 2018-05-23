@@ -1,445 +1,78 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.FieldInspector;
-import nl.jqno.equalsverifier.internal.util.Formatter;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.Set;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import java.util.function.Predicate;
 
 public class FieldsChecker<T> implements Checker {
-    private final TypeTag typeTag;
-    private final ClassAccessor<T> classAccessor;
-    private final PrefabValues prefabValues;
-    private final EnumSet<Warning> warningsToSuppress;
-    private final Set<String> ignoredFields;
-    private final Set<String> nonnullFields;
-    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final Configuration<T> config;
+    private final ArrayFieldCheck<T> arrayFieldCheck;
+    private final FloatAndDoubleFieldCheck floatAndDoubleFieldCheck;
+    private final MutableStateFieldCheck mutableStateFieldCheck;
+    private final ReflexivityFieldCheck<T> reflexivityFieldCheck;
+    private final SignificantFieldCheck<T> significantFieldCheck;
+    private final SignificantFieldCheck<T> skippingSignificantFieldCheck;
+    private final SymmetryFieldCheck symmetryFieldCheck;
+    private final TransientFieldsCheck<T> transientFieldsCheck;
+    private final TransitivityFieldCheck transitivityFieldCheck;
 
     public FieldsChecker(Configuration<T> config) {
-        this.typeTag = config.getTypeTag();
-        this.classAccessor = config.createClassAccessor();
-        this.prefabValues = config.getPrefabValues();
-        this.warningsToSuppress = config.getWarningsToSuppress();
-        this.ignoredFields = config.getIgnoredFields();
-        this.nonnullFields = config.getNonnullFields();
-        this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+        this.config = config;
+
+        PrefabValues prefabValues = config.getPrefabValues();
+        TypeTag typeTag = config.getTypeTag();
+        Predicate<FieldAccessor> isCachedHashCodeField =
+            a -> a.getFieldName().equals(config.getCachedHashCodeInitializer().getCachedHashCodeFieldName());
+
+        this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
+        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck();
+        this.mutableStateFieldCheck = new MutableStateFieldCheck(prefabValues, typeTag, isCachedHashCodeField);
+        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
+        this.significantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
+        this.skippingSignificantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
+        this.symmetryFieldCheck = new SymmetryFieldCheck(prefabValues, typeTag);
+        this.transientFieldsCheck = new TransientFieldsCheck<>(config);
+        this.transitivityFieldCheck = new TransitivityFieldCheck(prefabValues, typeTag);
     }
 
     @Override
     public void check() {
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, typeTag);
+        ClassAccessor<T> classAccessor = config.createClassAccessor();
+        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
 
         if (!classAccessor.isEqualsInheritedFromObject()) {
-            inspector.check(new ArrayFieldCheck());
-            inspector.check(new FloatAndDoubleFieldCheck());
-            inspector.check(new ReflexivityFieldCheck());
+            inspector.check(arrayFieldCheck);
+            inspector.check(floatAndDoubleFieldCheck);
+            inspector.check(reflexivityFieldCheck);
         }
 
-        if (!ignoreMutability()) {
-            inspector.check(new MutableStateFieldCheck());
+        if (!ignoreMutability(classAccessor)) {
+            inspector.check(mutableStateFieldCheck);
         }
 
-        if (!warningsToSuppress.contains(Warning.TRANSIENT_FIELDS)) {
-            inspector.check(new TransientFieldsCheck());
+        if (!config.getWarningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
+            inspector.check(transientFieldsCheck);
         }
 
-        inspector.check(new SignificantFieldCheck(false));
-        inspector.check(new SymmetryFieldCheck());
-        inspector.check(new TransitivityFieldCheck());
+        inspector.check(significantFieldCheck);
+        inspector.check(symmetryFieldCheck);
+        inspector.check(transitivityFieldCheck);
 
-        if (!warningsToSuppress.contains(Warning.NULL_FIELDS)) {
-            inspector.checkWithNull(nonnullFields, new SignificantFieldCheck(true));
+        if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
+            inspector.checkWithNull(config.getNonnullFields(), skippingSignificantFieldCheck);
         }
     }
 
-    private boolean ignoreMutability() {
-        return warningsToSuppress.contains(Warning.NONFINAL_FIELDS) ||
+    private boolean ignoreMutability(ClassAccessor<T> classAccessor) {
+        return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS) ||
                 classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
                 classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
-    }
-
-    private boolean isCachedHashCodeField(FieldAccessor accessor) {
-        return accessor.getFieldName().equals(cachedHashCodeInitializer.getCachedHashCodeFieldName());
-    }
-
-    private class SymmetryFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            checkSymmetry(referenceAccessor, changedAccessor);
-
-            changedAccessor.changeField(prefabValues, typeTag);
-            checkSymmetry(referenceAccessor, changedAccessor);
-
-            referenceAccessor.changeField(prefabValues, typeTag);
-            checkSymmetry(referenceAccessor, changedAccessor);
-        }
-
-        private void checkSymmetry(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Object left = referenceAccessor.getObject();
-            Object right = changedAccessor.getObject();
-            assertTrue(Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", left, right),
-                    left.equals(right) == right.equals(left));
-        }
-    }
-
-    private class TransitivityFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Object a1 = referenceAccessor.getObject();
-            Object b1 = buildB1(changedAccessor);
-            Object b2 = buildB2(a1, referenceAccessor.getField());
-
-            boolean x = a1.equals(b1);
-            boolean y = b1.equals(b2);
-            boolean z = a1.equals(b2);
-
-            if (countFalses(x, y, z) == 1) {
-                fail(Formatter.of(
-                        "Transitivity: two of these three instances are equal to each other," +
-                        " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
-                        a1, b1, b2));
-            }
-        }
-
-        private Object buildB1(FieldAccessor accessor) {
-            accessor.changeField(prefabValues, typeTag);
-            return accessor.getObject();
-        }
-
-        private Object buildB2(Object a1, Field referenceField) {
-            Object result = ObjectAccessor.of(a1).copy();
-            ObjectAccessor<?> objectAccessor = ObjectAccessor.of(result);
-            objectAccessor.fieldAccessorFor(referenceField).changeField(prefabValues, typeTag);
-            for (Field field : FieldIterable.of(result.getClass())) {
-                if (!field.equals(referenceField)) {
-                    objectAccessor.fieldAccessorFor(field).changeField(prefabValues, typeTag);
-                }
-            }
-            return result;
-        }
-
-        private int countFalses(boolean... bools) {
-            int result = 0;
-            for (boolean b : bools) {
-                if (!b) {
-                    result++;
-                }
-            }
-            return result;
-        }
-    }
-
-    private class SignificantFieldCheck implements FieldInspector.FieldCheck {
-        private final boolean skipCertainTestsThatDontMatterWhenValuesAreNull;
-
-        public SignificantFieldCheck(boolean skipTestBecause0AndNullBothHaveA0HashCode) {
-            this.skipCertainTestsThatDontMatterWhenValuesAreNull = skipTestBecause0AndNullBothHaveA0HashCode;
-        }
-
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            if (isCachedHashCodeField(referenceAccessor)) {
-                return;
-            }
-
-            Object reference = referenceAccessor.getObject();
-            Object changed = changedAccessor.getObject();
-            String fieldName = referenceAccessor.getFieldName();
-
-            if (referenceAccessor.get() == null && NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, referenceAccessor.getField())) {
-                return;
-            }
-
-            boolean equalToItself = reference.equals(changed);
-
-            changedAccessor.changeField(prefabValues, typeTag);
-
-            boolean equalsChanged = !reference.equals(changed);
-            boolean hashCodeChanged =
-                    cachedHashCodeInitializer.getInitializedHashCode(reference) != cachedHashCodeInitializer.getInitializedHashCode(changed);
-
-            assertEqualsAndHashCodeRelyOnSameFields(equalsChanged, hashCodeChanged, reference, changed, fieldName);
-            assertFieldShouldBeIgnored(equalToItself, equalsChanged, referenceAccessor, fieldName);
-
-            referenceAccessor.changeField(prefabValues, typeTag);
-        }
-
-        private void assertEqualsAndHashCodeRelyOnSameFields(boolean equalsChanged, boolean hashCodeChanged,
-                    Object reference, Object changed, String fieldName) {
-
-            if (equalsChanged != hashCodeChanged) {
-                boolean skipEqualsHasMoreThanHashCodeTest =
-                        warningsToSuppress.contains(Warning.STRICT_HASHCODE) || skipCertainTestsThatDontMatterWhenValuesAreNull;
-                if (!skipEqualsHasMoreThanHashCodeTest) {
-                    Formatter formatter = Formatter.of(
-                            "Significant fields: equals relies on %%, but hashCode does not." +
-                            "\n  %% has hashCode %%\n  %% has hashCode %%",
-                            fieldName, reference, reference.hashCode(), changed, changed.hashCode());
-                    assertFalse(formatter, equalsChanged);
-                }
-                Formatter formatter = Formatter.of(
-                        "Significant fields: hashCode relies on %%, but equals does not." +
-                        "\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
-                        fieldName, reference, changed);
-                assertFalse(formatter, hashCodeChanged);
-            }
-        }
-
-        private void assertFieldShouldBeIgnored(boolean equalToItself, boolean equalsChanged,
-                    FieldAccessor referenceAccessor, String fieldName) {
-
-            if (shouldAllFieldsBeUsed(referenceAccessor) && isFieldEligible(referenceAccessor)) {
-                assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
-
-                boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
-                assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
-                        fieldShouldBeIgnored || equalsChanged);
-                assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
-                        !fieldShouldBeIgnored || !equalsChanged || skipCertainTestsThatDontMatterWhenValuesAreNull);
-            }
-        }
-
-        private boolean shouldAllFieldsBeUsed(FieldAccessor referenceAccessor) {
-            return !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
-                    !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY) &&
-                    !(warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) && !referenceAccessor.fieldIsFinal());
-        }
-
-        private boolean isFieldEligible(FieldAccessor referenceAccessor) {
-            return !referenceAccessor.fieldIsStatic() &&
-                    !referenceAccessor.fieldIsTransient() &&
-                    !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
-                    !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
-        }
-    }
-
-    private class ArrayFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Class<?> arrayType = referenceAccessor.getFieldType();
-            if (!arrayType.isArray()) {
-                return;
-            }
-            if (!referenceAccessor.canBeModifiedReflectively()) {
-                return;
-            }
-
-            String fieldName = referenceAccessor.getFieldName();
-            Object reference = referenceAccessor.getObject();
-            Object changed = changedAccessor.getObject();
-            replaceInnermostArrayValue(changedAccessor);
-
-            if (arrayType.getComponentType().isArray()) {
-                assertDeep(fieldName, reference, changed);
-            }
-            else {
-                assertArray(fieldName, reference, changed);
-            }
-        }
-
-        private void replaceInnermostArrayValue(FieldAccessor accessor) {
-            Object newArray = arrayCopy(accessor.get());
-            accessor.set(newArray);
-        }
-
-        private Object arrayCopy(Object array) {
-            if (array == null) {
-                return null;
-            }
-            Class<?> componentType = array.getClass().getComponentType();
-            int length = Array.getLength(array);
-            Object result = Array.newInstance(componentType, length);
-            for (int i = 0; i < length; i++) {
-                if (componentType.isArray()) {
-                    Array.set(result, i, arrayCopy(Array.get(array, i)));
-                }
-                else {
-                    Array.set(result, i, Array.get(array, i));
-                }
-            }
-            return result;
-        }
-
-        private void assertDeep(String fieldName, Object reference, Object changed) {
-            Formatter eqEqFormatter = Formatter.of(
-                    "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.",
-                    fieldName);
-            assertEquals(eqEqFormatter, reference, changed);
-
-            Formatter regularFormatter = Formatter.of(
-                    "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.",
-                    fieldName);
-            assertEquals(regularFormatter,
-                    cachedHashCodeInitializer.getInitializedHashCode(reference), cachedHashCodeInitializer.getInitializedHashCode(changed));
-        }
-
-        private void assertArray(String fieldName, Object reference, Object changed) {
-            assertEquals(Formatter.of("Array: == or regular equals() used instead of Arrays.equals() for field %%.", fieldName),
-                    reference, changed);
-            assertEquals(Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
-                    cachedHashCodeInitializer.getInitializedHashCode(reference), cachedHashCodeInitializer.getInitializedHashCode(changed));
-        }
-    }
-
-    private class FloatAndDoubleFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Class<?> type = referenceAccessor.getFieldType();
-            if (isFloat(type)) {
-                referenceAccessor.set(Float.NaN);
-                changedAccessor.set(Float.NaN);
-                assertEquals(Formatter.of("Float: equals doesn't use Float.compare for field %%.", referenceAccessor.getFieldName()),
-                        referenceAccessor.getObject(), changedAccessor.getObject());
-            }
-            if (isDouble(type)) {
-                referenceAccessor.set(Double.NaN);
-                changedAccessor.set(Double.NaN);
-                assertEquals(Formatter.of("Double: equals doesn't use Double.compare for field %%.", referenceAccessor.getFieldName()),
-                        referenceAccessor.getObject(), changedAccessor.getObject());
-            }
-        }
-
-        private boolean isFloat(Class<?> type) {
-            return type == float.class || type == Float.class;
-        }
-
-        private boolean isDouble(Class<?> type) {
-            return type == double.class || type == Double.class;
-        }
-    }
-
-    private class ReflexivityFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
-                return;
-            }
-
-            checkReferenceReflexivity(referenceAccessor, changedAccessor);
-            checkValueReflexivity(referenceAccessor, changedAccessor);
-            checkNullReflexivity(referenceAccessor, changedAccessor);
-        }
-
-        private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            checkReflexivityFor(referenceAccessor, changedAccessor);
-        }
-
-        private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Class<?> fieldType = changedAccessor.getFieldType();
-            if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
-                return;
-            }
-            if (fieldType.equals(Object.class) || fieldType.isInterface()) {
-                return;
-            }
-            if (changedAccessor.fieldIsStatic()) {
-                return;
-            }
-            ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<String>(), true);
-            if (!fieldTypeAccessor.declaresEquals()) {
-                return;
-            }
-            Object value = changedAccessor.get();
-            if (value.getClass().isSynthetic()) {
-                // Sometimes not the fieldType, but its content, is synthetic.
-                return;
-            }
-
-            TypeTag tag = TypeTag.of(referenceAccessor.getField(), typeTag);
-            referenceAccessor.set(prefabValues.giveRed(tag));
-            changedAccessor.set(prefabValues.giveRedCopy(tag));
-
-            Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
-                    "\nIf this is intentional, consider suppressing Warning.%%",
-                    changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
-            Object left = referenceAccessor.getObject();
-            Object right = changedAccessor.getObject();
-            assertEquals(f, left, right);
-        }
-
-        private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Field field = referenceAccessor.getField();
-            boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
-            boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, field);
-            boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS) || nonnullFields.contains(field.getName());
-            if (fieldIsPrimitive || !ignoreNull) {
-                referenceAccessor.defaultField();
-                changedAccessor.defaultField();
-                checkReflexivityFor(referenceAccessor, changedAccessor);
-            }
-        }
-
-        private void checkReflexivityFor(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Object left = referenceAccessor.getObject();
-            Object right = changedAccessor.getObject();
-
-            if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-                assertFalse(Formatter.of("Unnecessary suppression: %%. Two identical copies are equal.", Warning.IDENTICAL_COPY.toString()),
-                        left.equals(right));
-            }
-            else {
-                Formatter f = Formatter.of("Reflexivity: object does not equal an identical copy of itself:\n  %%" +
-                        "\nIf this is intentional, consider suppressing Warning.%%", left, Warning.IDENTICAL_COPY.toString());
-                assertEquals(f, left, right);
-            }
-        }
-    }
-
-    private class MutableStateFieldCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            if (isCachedHashCodeField(referenceAccessor)) {
-                return;
-            }
-
-            Object reference = referenceAccessor.getObject();
-            Object changed = changedAccessor.getObject();
-
-            changedAccessor.changeField(prefabValues, typeTag);
-
-            boolean equalsChanged = !reference.equals(changed);
-
-            if (equalsChanged && !referenceAccessor.fieldIsFinal()) {
-                fail(Formatter.of("Mutability: equals depends on mutable field %%.", referenceAccessor.getFieldName()));
-            }
-
-            referenceAccessor.changeField(prefabValues, typeTag);
-        }
-    }
-
-    private class TransientFieldsCheck implements FieldInspector.FieldCheck {
-        @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-            Object reference = referenceAccessor.getObject();
-            Object changed = changedAccessor.getObject();
-
-            changedAccessor.changeField(prefabValues, typeTag);
-
-            boolean equalsChanged = !reference.equals(changed);
-            boolean fieldIsTransient = referenceAccessor.fieldIsTransient() ||
-                    classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
-
-            if (equalsChanged && fieldIsTransient) {
-                fail(Formatter.of("Transient field %% should not be included in equals/hashCode contract.", referenceAccessor.getFieldName()));
-            }
-
-            referenceAccessor.changeField(prefabValues, typeTag);
-        }
     }
 }
