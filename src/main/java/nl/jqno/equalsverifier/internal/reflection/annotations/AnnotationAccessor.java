@@ -21,7 +21,6 @@ public class AnnotationAccessor {
     private final boolean ignoreFailure;
     private final AnnotationCache cache = new AnnotationCache();
 
-    private boolean processed = false;
     private boolean shortCircuit = false;
 
     /**
@@ -79,12 +78,11 @@ public class AnnotationAccessor {
     }
 
     private void process() {
-        if (processed) {
+        if (cache.hasResolved(type)) {
             return;
         }
 
         visit();
-        processed = true;
     }
 
     private void visit() {
