@@ -197,16 +197,20 @@ public class AnnotationAccessor {
             }
             for (Annotation annotation : supportedAnnotations) {
                 if (!inheriting || annotation.inherits()) {
-                    for (String descriptor : annotation.descriptors()) {
-                        String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
-                        if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, ignoredAnnotations)) {
-                            if (fieldName.isPresent()) {
-                                cache.addFieldAnnotation(type, fieldName.get(), annotation);
-                            }
-                            else {
-                                cache.addClassAnnotation(type, annotation);
-                            }
-                        }
+                    matchAnnotation(annotation);
+                }
+            }
+        }
+
+        private void matchAnnotation(Annotation annotation) {
+            for (String descriptor : annotation.descriptors()) {
+                String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
+                if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, ignoredAnnotations)) {
+                    if (fieldName.isPresent()) {
+                        cache.addFieldAnnotation(type, fieldName.get(), annotation);
+                    }
+                    else {
+                        cache.addClassAnnotation(type, annotation);
                     }
                 }
             }
