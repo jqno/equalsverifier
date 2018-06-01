@@ -1,11 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -19,7 +21,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -189,13 +190,24 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
-    public void dynamicClassThrowsException() {
-        Class<?> type = Instantiator.of(Point.class).instantiateAnonymousSubclass().getClass();
-
-        thrown.expect(ReflectionException.class);
-        thrown.expectMessage(containsString("Cannot read class file"));
-
+    public void dynamicClassDoesntGetProcessed_butDoesntThrowEither() {
+        Class<?> type = Instantiator.of(AnnotatedWithRuntime.class).instantiateAnonymousSubclass().getClass();
         build(type);
+
+        assertTypeDoesNotHaveAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
+    }
+
+    @Test
+    public void generatedClassWithGeneratedFieldDoesNotThrow() {
+        class Super {}
+        Class<?> sub = new ByteBuddy()
+            .with(TypeValidation.DISABLED)
+            .subclass(Super.class)
+            .defineField("dynamicField", int.class, Visibility.PRIVATE)
+            .make()
+            .load(Super.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+            .getLoaded();
+        build(sub);
     }
 
     private void build(Class<?>... types) {

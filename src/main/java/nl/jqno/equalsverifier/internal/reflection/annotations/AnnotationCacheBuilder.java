@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 import org.objectweb.asm.*;
@@ -48,8 +47,7 @@ public class AnnotationCacheBuilder {
             cr.accept(v, 0);
         }
         catch (IOException e) {
-            throw new ReflectionException("Cannot read class file for " + type.getSimpleName() +
-                    ".\nSuppress Warning.ANNOTATION to skip annotation processing phase.");
+            // Just ignore this class if it can't be processed.
         }
     }
 
