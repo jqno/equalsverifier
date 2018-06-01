@@ -3,10 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -302,28 +299,30 @@ public class ClassAccessor<T> {
      * @param enclosingType Describes the type that contains this object as a
      *                      field, to determine any generic parameters it may
      *                      contain.
+     * @param annotationCache To check for any NonNull annotations.
      * @return An instance of T where all the fields are initialized to their
      *          default values.
      */
-    public T getDefaultValuesObject(TypeTag enclosingType) {
-        return getDefaultValuesAccessor(enclosingType, new HashSet<String>()).get();
+    public T getDefaultValuesObject(TypeTag enclosingType, AnnotationCache annotationCache) {
+        return getDefaultValuesAccessor(enclosingType, new HashSet<>(), annotationCache).get();
     }
 
     /**
      * Returns an {@link ObjectAccessor} for
-     * {@link #getDefaultValuesObject(TypeTag)}.
+     * {@link #getDefaultValuesObject(TypeTag, AnnotationCache)}.
      *
      * @param enclosingType Describes the type that contains this object as a
      *                      field, to determine any generic parameters it may
      *                      contain.
      * @param nonnullFields Fields which are not allowed to be set to null.
+     * @param annotationCache To check for any NonNull annotations.
      * @return An {@link ObjectAccessor} for
-     *          {@link #getDefaultValuesObject(TypeTag)}.
+     *          {@link #getDefaultValuesObject(TypeTag, AnnotationCache)}.
      */
-    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields) {
+    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields, AnnotationCache annotationCache) {
         ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
-            if (NonnullAnnotationVerifier.fieldIsNonnull(this, field) || nonnullFields.contains(field.getName())) {
+            if (NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache) || nonnullFields.contains(field.getName())) {
                 FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues, enclosingType);
             }

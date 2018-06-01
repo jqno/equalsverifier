@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -13,11 +12,9 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "We only want to see if it throws an exception.")
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
-    private final ClassAccessor<T> classAccessor;
     private Configuration<T> config;
 
-    public NullPointerExceptionFieldCheck(ClassAccessor<T> classAccessor, Configuration<T> config) {
-        this.classAccessor = classAccessor;
+    public NullPointerExceptionFieldCheck(Configuration<T> config) {
         this.config = config;
     }
 
@@ -30,7 +27,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
         if (field.getType().isPrimitive()) {
             return;
         }
-        if (NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, field)) {
+        if (NonnullAnnotationVerifier.fieldIsNonnull(field, config.getAnnotationCache())) {
             return;
         }
 

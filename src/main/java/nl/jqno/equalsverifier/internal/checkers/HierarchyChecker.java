@@ -71,7 +71,7 @@ public class HierarchyChecker<T> implements Checker {
         }
         else {
             safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
-            safelyCheckSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag, config.getNonnullFields()));
+            safelyCheckSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag, config.getNonnullFields(), config.getAnnotationCache()));
         }
     }
 

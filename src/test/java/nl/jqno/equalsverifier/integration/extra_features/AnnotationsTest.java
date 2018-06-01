@@ -99,14 +99,6 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenReadingAnnotationsFromDynamicClass() {
-        FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
-        expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
-        EqualsVerifier.forClass(dynamic.getClass())
-                .verify();
-    }
-
-    @Test
     public void succeed_whenClassIsDynamic_givenAnnotationWarningIsSuppressed() {
         FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
         EqualsVerifier.forClass(dynamic.getClass())

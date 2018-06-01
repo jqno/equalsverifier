@@ -4,6 +4,9 @@ import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.ConditionalCompiler;
 import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
@@ -38,6 +41,7 @@ public class ClassAccessorTest {
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
     private ClassAccessor<DefaultValues> defaultValuesClassAccessor;
+    private AnnotationCache defaultValuesAnnotationCache;
 
     @Before
     public void setup() {
@@ -46,6 +50,9 @@ public class ClassAccessorTest {
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues, NO_INGORED_ANNOTATIONS, false);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues, NO_INGORED_ANNOTATIONS, false);
         defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues, NO_INGORED_ANNOTATIONS, false);
+
+        defaultValuesAnnotationCache = new AnnotationCache();
+        new AnnotationCacheBuilder(SupportedAnnotations.values(), new HashSet<>()).build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
     @Test
@@ -252,7 +259,8 @@ public class ClassAccessorTest {
 
     @Test
     public void getDefaultValuesAccessor_withNoNonnullValues() {
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, new HashSet<String>());
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache);
         DefaultValues foo = objectAccessor.get();
         assertEquals(null, foo.s);
         // The rest is tested in getDefaultValuesObject
@@ -262,7 +270,8 @@ public class ClassAccessorTest {
     public void getDefaultValuesAccessor_withOneNonnullValue() {
         Set<String> nonnullFields = new HashSet<>();
         nonnullFields.add("s");
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, nonnullFields);
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, nonnullFields, defaultValuesAnnotationCache);
         DefaultValues foo = objectAccessor.get();
         assertFalse(foo.s == null);
         // The rest is tested in getDefaultValuesObject
@@ -271,7 +280,7 @@ public class ClassAccessorTest {
     @Test
     public void getDefaultValuesObject() {
         ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues, NO_INGORED_ANNOTATIONS, false);
-        DefaultValues foo = accessor.getDefaultValuesObject(TypeTag.NULL);
+        DefaultValues foo = accessor.getDefaultValuesObject(TypeTag.NULL, defaultValuesAnnotationCache);
         assertEquals(0, foo.i);
         assertEquals(null, foo.s);
         assertFalse(foo.t == null);

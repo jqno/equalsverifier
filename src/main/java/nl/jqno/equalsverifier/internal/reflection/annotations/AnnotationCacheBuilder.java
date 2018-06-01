@@ -29,7 +29,7 @@ public class AnnotationCacheBuilder {
 
     private void visitFields(Class<?> type, AnnotationCache cache) {
         for (Field f : FieldIterable.of(type)) {
-            build(f.getClass(), cache);
+            build(f.getDeclaringClass(), cache);
         }
     }
 

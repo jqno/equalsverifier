@@ -67,7 +67,7 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(transitivityFieldCheck);
 
         if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
-            inspector.checkWithNull(config.getNonnullFields(), skippingSignificantFieldCheck);
+            inspector.checkWithNull(config.getNonnullFields(), config.getAnnotationCache(), skippingSignificantFieldCheck);
         }
     }
 
