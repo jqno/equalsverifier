@@ -156,7 +156,7 @@ public class HierarchyChecker<T> implements Checker {
     private void checkFinalEqualsMethod() {
         boolean ignore =
             config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) ||
-            classAccessor.hasAnnotation(SupportedAnnotations.ENTITY) ||
+            config.getAnnotationCache().hasClassAnnotation(type, SupportedAnnotations.ENTITY) ||
             typeIsFinal || redefinedSubclass != null;
         if (ignore) {
             return;

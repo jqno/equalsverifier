@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
@@ -53,7 +54,7 @@ public class FieldsChecker<T> implements Checker {
             inspector.check(reflexivityFieldCheck);
         }
 
-        if (!ignoreMutability(classAccessor)) {
+        if (!ignoreMutability(config.getType())) {
             inspector.check(mutableStateFieldCheck);
         }
 
@@ -70,9 +71,10 @@ public class FieldsChecker<T> implements Checker {
         }
     }
 
-    private boolean ignoreMutability(ClassAccessor<T> classAccessor) {
+    private boolean ignoreMutability(Class<?> type) {
+        AnnotationCache cache = config.getAnnotationCache();
         return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS) ||
-                classAccessor.hasAnnotation(SupportedAnnotations.IMMUTABLE) ||
-                classAccessor.hasAnnotation(SupportedAnnotations.ENTITY);
+                cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE) ||
+                cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY);
     }
 }
