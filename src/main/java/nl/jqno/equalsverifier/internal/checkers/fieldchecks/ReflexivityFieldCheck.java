@@ -12,7 +12,6 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.lang.reflect.Field;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
@@ -59,7 +58,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck {
         if (changedAccessor.fieldIsStatic()) {
             return;
         }
-        ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues, new HashSet<>(), true);
+        ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
         if (!fieldTypeAccessor.declaresEquals()) {
             return;
         }

@@ -202,7 +202,7 @@ public final class Configuration<T> {
     }
 
     public ClassAccessor<T> createClassAccessor() {
-        return ClassAccessor.of(type, prefabValues, ignoredAnnotations, warningsToSuppress.contains(Warning.ANNOTATION));
+        return ClassAccessor.of(type, prefabValues);
     }
 
     private Set<String> invertIncludedFields() {

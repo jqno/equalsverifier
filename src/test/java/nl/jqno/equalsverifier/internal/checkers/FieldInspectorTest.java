@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 public class FieldInspectorTest {
     private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitiveFactories();
-    private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, new HashSet<>(), false);
+    private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues);
 
     @Test
     public void objectsAreReset_whenEachIterationBegins() {

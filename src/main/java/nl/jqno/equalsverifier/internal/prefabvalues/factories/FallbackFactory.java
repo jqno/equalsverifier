@@ -9,7 +9,6 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 /**
@@ -81,7 +80,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     }
 
     private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
-        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues, new HashSet<>(), false);
+        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
         T red = accessor.getRedObject(tag);
         T black = accessor.getBlackObject(tag);
         T redCopy = accessor.getRedObject(tag);
