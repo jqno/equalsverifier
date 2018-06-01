@@ -23,16 +23,50 @@ public class AnnotationCacheBuilder {
             return;
         }
 
-        visit(type, cache);
+        visitClass(type, cache);
+        visitFields(type, cache);
+    }
+
+    private void visitFields(Class<?> type, AnnotationCache cache) {
         for (Field f : FieldIterable.of(type)) {
             build(f.getClass(), cache);
         }
     }
 
-    private void visit(Class<?> type, AnnotationCache cache) {
+    private void visitClass(Class<?> type, AnnotationCache cache) {
         visitType(type, type, cache, false);
+        visitSuperclasses(type, cache);
+        visitOuterClasses(type, cache);
+        visitPackage(type, cache);
+    }
+
+    private void visitSuperclasses(Class<?> type, AnnotationCache cache) {
         for (Class<?> c : SuperclassIterable.of(type)) {
             visitType(c, type, cache, true);
+        }
+    }
+
+    private void visitOuterClasses(Class<?> type, AnnotationCache cache) {
+        Class<?> outer = type.getDeclaringClass();
+        while (outer != null) {
+            visitType(outer, type, cache, false);
+            outer = outer.getDeclaringClass();
+        }
+    }
+
+    private void visitPackage(Class<?> type, AnnotationCache cache) {
+        try {
+            Package pkg = type.getPackage();
+            if (pkg == null) {
+                return;
+            }
+
+            String className = pkg.getName() + ".package-info";
+            Class<?> packageType = Class.forName(className);
+            visitType(packageType, type, cache, false);
+        }
+        catch (ClassNotFoundException e) {
+            // No package object; do nothing.
         }
     }
 

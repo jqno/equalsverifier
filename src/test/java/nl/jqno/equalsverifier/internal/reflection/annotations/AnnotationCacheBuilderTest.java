@@ -4,6 +4,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
+import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
@@ -144,6 +145,30 @@ public class AnnotationCacheBuilderTest {
 
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", TYPEUSE_DOESNT_INHERIT);
+    }
+
+    @Test
+    public void typeAnnotationInOuterClass() {
+        build(AnnotatedOuter.AnnotatedMiddle.class);
+
+        assertTypeHasAnnotation(AnnotatedOuter.AnnotatedMiddle.class, TYPE_CLASS_RETENTION);
+        assertTypeDoesNotHaveAnnotation(AnnotatedOuter.AnnotatedMiddle.class, INAPPLICABLE);
+    }
+
+    @Test
+    public void typeAnnotationNestedInOuterClass() {
+        build(AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class);
+
+        assertTypeHasAnnotation(AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class, TYPE_CLASS_RETENTION);
+        assertTypeDoesNotHaveAnnotation(AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class, INAPPLICABLE);
+    }
+
+    @Test
+    public void typeAnnotationInPackage() {
+        build(AnnotatedPackage.class);
+
+        assertTypeHasAnnotation(AnnotatedPackage.class, PACKAGE_ANNOTATION);
+        assertTypeDoesNotHaveAnnotation(AnnotatedPackage.class, INAPPLICABLE);
     }
 
     @Test
