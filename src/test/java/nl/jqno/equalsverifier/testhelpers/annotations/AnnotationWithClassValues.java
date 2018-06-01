@@ -6,5 +6,4 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface AnnotationWithClassValues {
     Class<? extends Annotation>[] annotations();
-    String[] strings();
 }
