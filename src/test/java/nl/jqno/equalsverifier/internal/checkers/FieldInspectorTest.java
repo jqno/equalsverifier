@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
@@ -17,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 
 public class FieldInspectorTest {
     private final PrefabValues prefabValues = PrefabValuesFactory.withPrimitiveFactories();
-    private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues, new HashSet<String>(), false);
+    private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues);
 
     @Test
     public void objectsAreReset_whenEachIterationBegins() {
@@ -30,8 +31,9 @@ public class FieldInspectorTest {
     public void objectsAreReset_whenEachIterationBegins_givenNullObjects() {
         FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
         Set<String> nullFields = new HashSet<>();
+        AnnotationCache annotationCache = new AnnotationCache();
 
-        inspector.checkWithNull(nullFields, new ResetObjectForEachIterationCheck());
+        inspector.checkWithNull(nullFields, annotationCache, new ResetObjectForEachIterationCheck());
     }
 
     private final class ResetObjectForEachIterationCheck implements FieldCheck {

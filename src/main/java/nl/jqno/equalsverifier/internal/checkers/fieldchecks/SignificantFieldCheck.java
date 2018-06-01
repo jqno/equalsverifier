@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -19,23 +19,25 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 public class SignificantFieldCheck<T> implements FieldCheck {
+    private final Class<?> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
-    private final ClassAccessor<T> classAccessor;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> ignoredFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final AnnotationCache annotationCache;
     private final Predicate<FieldAccessor> isCachedHashCodeField;
     private final boolean skipCertainTestsThatDontMatterWhenValuesAreNull;
 
     public SignificantFieldCheck(
             Configuration<T> config, Predicate<FieldAccessor> isCachedHashCodeField, boolean skipTestBecause0AndNullBothHaveA0HashCode) {
+        this.type = config.getType();
         this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
-        this.classAccessor = config.createClassAccessor();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
+        this.annotationCache = config.getAnnotationCache();
         this.isCachedHashCodeField = isCachedHashCodeField;
         this.skipCertainTestsThatDontMatterWhenValuesAreNull = skipTestBecause0AndNullBothHaveA0HashCode;
     }
@@ -50,7 +52,7 @@ public class SignificantFieldCheck<T> implements FieldCheck {
         Object changed = changedAccessor.getObject();
         String fieldName = referenceAccessor.getFieldName();
 
-        if (referenceAccessor.get() == null && NonnullAnnotationVerifier.fieldIsNonnull(classAccessor, referenceAccessor.getField())) {
+        if (referenceAccessor.get() == null && NonnullAnnotationVerifier.fieldIsNonnull(referenceAccessor.getField(), annotationCache)) {
             return;
         }
 
@@ -113,6 +115,6 @@ public class SignificantFieldCheck<T> implements FieldCheck {
         return !referenceAccessor.fieldIsStatic() &&
                 !referenceAccessor.fieldIsTransient() &&
                 !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
-                !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
+                !annotationCache.hasFieldAnnotation(type, referenceAccessor.getField().getName(), SupportedAnnotations.TRANSIENT);
     }
 }

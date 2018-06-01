@@ -37,9 +37,10 @@ public interface Annotation {
      * Validates the annotation based on its properties.
      *
      * @param properties An object that contains information about the annotation.
+     * @param annotationCache A cache containing all annotations for known types.
      * @param ignoredAnnotations A collection of type descriptors for annotations
      *          to ignore.
      * @return True if the annotation is valid and can be used as intended.
      */
-    public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations);
+    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations);
 }

@@ -9,6 +9,9 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -442,9 +445,17 @@ public final class EqualsVerifier<T> {
             return;
         }
 
+        buildAnnotationCache();
         verifyWithoutExamples();
         ensureUnequalExamples();
         verifyWithExamples();
+    }
+
+    private void buildAnnotationCache() {
+        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(SupportedAnnotations.values(), config.getIgnoredAnnotations());
+        AnnotationCache cache = new AnnotationCache();
+        acb.build(config.getType(), cache);
+        config = config.withAnnotationCache(cache);
     }
 
     private void verifyWithoutExamples() {

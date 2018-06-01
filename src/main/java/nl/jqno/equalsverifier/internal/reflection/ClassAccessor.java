@@ -3,16 +3,11 @@ package nl.jqno.equalsverifier.internal.reflection;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -23,25 +18,15 @@ import java.util.Set;
  * @param <T> A class.
  */
 public class ClassAccessor<T> {
-    private static final Map<Map.Entry<String, Annotation>, Boolean> PACKAGE_ANNOTATION_CACHE = Util.newLruCache(512);
     private final Class<T> type;
     private final PrefabValues prefabValues;
-    private final Annotation[] supportedAnnotations;
-    private final Set<String> ignoredAnnotations;
-    private final boolean ignoreAnnotationFailure;
-    private final AnnotationAccessor annotationAccessor;
 
     /**
-     * Private constructor. Call {@link #of(Class, PrefabValues, Set, boolean)} instead.
+     * Private constructor. Call {@link #of(Class, PrefabValues)} instead.
      */
-    ClassAccessor(Class<T> type, PrefabValues prefabValues, Annotation[] supportedAnnotations,
-            Set<String> ignoredAnnotations, boolean ignoreAnnotationFailure) {
+    ClassAccessor(Class<T> type, PrefabValues prefabValues) {
         this.type = type;
         this.prefabValues = prefabValues;
-        this.supportedAnnotations = supportedAnnotations;
-        this.ignoredAnnotations = ignoredAnnotations;
-        this.ignoreAnnotationFailure = ignoreAnnotationFailure;
-        this.annotationAccessor = new AnnotationAccessor(supportedAnnotations, type, ignoredAnnotations, ignoreAnnotationFailure);
     }
 
     /**
@@ -52,14 +37,10 @@ public class ClassAccessor<T> {
      *          the same as T.
      * @param prefabValues Prefabricated values with which to fill instantiated
      *          objects.
-     * @param ignoredAnnotations A collection of type descriptors for
-     *          annotations to ignore.
-     * @param ignoreAnnotationFailure Ignore when processing annotations fails.
      * @return A {@link ClassAccessor} for T.
      */
-    public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues,
-            Set<String> ignoredAnnotations, boolean ignoreAnnotationFailure) {
-        return new ClassAccessor<>(type, prefabValues, SupportedAnnotations.values(), ignoredAnnotations, ignoreAnnotationFailure);
+    public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues) {
+        return new ClassAccessor<>(type, prefabValues);
     }
 
     /**
@@ -67,78 +48,6 @@ public class ClassAccessor<T> {
      */
     public Class<T> getType() {
         return type;
-    }
-
-    /**
-     * Determines whether T has a particular annotation.
-     *
-     * @param annotation The annotation we want to find.
-     * @return True if T has the specified annotation.
-     */
-    public boolean hasAnnotation(Annotation annotation) {
-        return annotationAccessor.typeHas(annotation);
-    }
-
-    /**
-     * Determines whether any of T's outer classes, if they exist, have a particular annotation.
-     *
-     * @param annotation The annotation we want to find.
-     * @return True if T has an outer class with the specified annotation.
-     */
-    public boolean outerClassHasAnnotation(Annotation annotation) {
-        Class<?> outer = type.getDeclaringClass();
-        while (outer != null) {
-            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, outer, ignoredAnnotations, ignoreAnnotationFailure);
-            if (accessor.typeHas(annotation)) {
-                return true;
-            }
-            outer = outer.getDeclaringClass();
-        }
-        return false;
-    }
-
-    /**
-     * Determines whether the package in which T resides has a particular annotation.
-     *
-     * @param annotation The annotation we want to find.
-     * @return True if the package in which T resides has the specified annotation.
-     */
-    public boolean packageHasAnnotation(Annotation annotation) {
-        try {
-            Package pkg = type.getPackage();
-            if (pkg == null) {
-                return false;
-            }
-
-            String packageName = pkg.getName();
-            Map.Entry<String, Annotation> entry = new SimpleImmutableEntry<>(packageName, annotation);
-            Boolean hasAnnotation = PACKAGE_ANNOTATION_CACHE.get(entry);
-            if (hasAnnotation != null) {
-                return hasAnnotation;
-            }
-
-            String className = packageName + ".package-info";
-            Class<?> packageType = Class.forName(className);
-            AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoredAnnotations, ignoreAnnotationFailure);
-            hasAnnotation = accessor.typeHas(annotation);
-            PACKAGE_ANNOTATION_CACHE.put(entry, hasAnnotation);
-            return hasAnnotation;
-        }
-        catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Determines whether a particular field in T has a particular annotation.
-     *
-     * @param field The field for which we want to know if it has the specified
-     *          annotation.
-     * @param annotation The annotation we want to find.
-     * @return True if the specified field in T has the specified annotation.
-     */
-    public boolean fieldHasAnnotation(Field field, Annotation annotation) {
-        return annotationAccessor.fieldHas(field.getName(), annotation);
     }
 
     /**
@@ -236,7 +145,7 @@ public class ClassAccessor<T> {
      * @return An accessor for T's superclass.
      */
     public ClassAccessor<? super T> getSuperAccessor() {
-        return ClassAccessor.of(type.getSuperclass(), prefabValues, ignoredAnnotations, ignoreAnnotationFailure);
+        return ClassAccessor.of(type.getSuperclass(), prefabValues);
     }
 
     /**
@@ -295,35 +204,23 @@ public class ClassAccessor<T> {
     }
 
     /**
-     * Returns an instance of T where all the fields are initialized to their
-     * default values. I.e., 0 for ints, and null for objects (except when the
-     * field is marked with a NonNull annotation).
-     *
-     * @param enclosingType Describes the type that contains this object as a
-     *                      field, to determine any generic parameters it may
-     *                      contain.
-     * @return An instance of T where all the fields are initialized to their
-     *          default values.
-     */
-    public T getDefaultValuesObject(TypeTag enclosingType) {
-        return getDefaultValuesAccessor(enclosingType, new HashSet<String>()).get();
-    }
-
-    /**
-     * Returns an {@link ObjectAccessor} for
-     * {@link #getDefaultValuesObject(TypeTag)}.
+     * Returns an {@link ObjectAccessor} for an instance of T where all the
+     * fields are initialized to their default values. I.e., 0 for ints, and
+     * null for objects (except when the field is marked with a NonNull
+     * annotation).
      *
      * @param enclosingType Describes the type that contains this object as a
      *                      field, to determine any generic parameters it may
      *                      contain.
      * @param nonnullFields Fields which are not allowed to be set to null.
-     * @return An {@link ObjectAccessor} for
-     *          {@link #getDefaultValuesObject(TypeTag)}.
+     * @param annotationCache To check for any NonNull annotations.
+     * @return An {@link ObjectAccessor} for an instance of T where all the
+     *          fields are initialized to their default values.
      */
-    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields) {
+    public ObjectAccessor<T> getDefaultValuesAccessor(TypeTag enclosingType, Set<String> nonnullFields, AnnotationCache annotationCache) {
         ObjectAccessor<T> result = buildObjectAccessor();
         for (Field field : FieldIterable.of(type)) {
-            if (NonnullAnnotationVerifier.fieldIsNonnull(this, field) || nonnullFields.contains(field.getName())) {
+            if (NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache) || nonnullFields.contains(field.getName())) {
                 FieldAccessor accessor = result.fieldAccessorFor(field);
                 accessor.changeField(prefabValues, enclosingType);
             }
