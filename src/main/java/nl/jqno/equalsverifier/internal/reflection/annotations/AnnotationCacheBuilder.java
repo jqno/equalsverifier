@@ -174,6 +174,7 @@ public class AnnotationCacheBuilder {
             if (ignoredAnnotations.contains(annotationDescriptor)) {
                 return;
             }
+
             for (Annotation annotation : supportedAnnotations) {
                 if (!inheriting || annotation.inherits()) {
                     matchAnnotation(annotation);
@@ -184,7 +185,7 @@ public class AnnotationCacheBuilder {
         private void matchAnnotation(Annotation annotation) {
             for (String descriptor : annotation.descriptors()) {
                 String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
-                if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, ignoredAnnotations)) {
+                if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, cache, ignoredAnnotations)) {
                     if (fieldName.isPresent()) {
                         cache.addFieldAnnotation(type, fieldName.get(), annotation);
                     }

@@ -271,7 +271,7 @@ public class AnnotationCacheBuilderTest {
         }
 
         @Override
-        public boolean validate(AnnotationProperties descriptor, Set<String> ignoredAnnotations) {
+        public boolean validate(AnnotationProperties descriptor, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             this.properties = descriptor;
             return true;
         }

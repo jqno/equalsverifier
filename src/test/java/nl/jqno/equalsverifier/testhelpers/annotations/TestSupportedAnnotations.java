@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.annotations;
 
 import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationProperties;
 
 import java.util.Arrays;
@@ -33,7 +34,7 @@ public enum TestSupportedAnnotations implements Annotation {
     PACKAGE_ANNOTATION(false, "PackageAnnotation"),
     INAPPLICABLE(false, "Inapplicable") {
         @Override
-        public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations) {
+        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             return false;
         }
     };
@@ -57,7 +58,7 @@ public enum TestSupportedAnnotations implements Annotation {
     }
 
     @Override
-    public boolean validate(AnnotationProperties properties, Set<String> ignoredAnnotations) {
+    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
         return true;
     }
 }
