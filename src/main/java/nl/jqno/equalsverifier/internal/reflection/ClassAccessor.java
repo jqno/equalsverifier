@@ -10,7 +10,9 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -21,6 +23,7 @@ import java.util.Set;
  * @param <T> A class.
  */
 public class ClassAccessor<T> {
+    private static final Map<Map.Entry<String, Annotation>, Boolean> PACKAGE_ANNOTATION_CACHE = Util.newLruCache(512);
     private final Class<T> type;
     private final PrefabValues prefabValues;
     private final Annotation[] supportedAnnotations;
@@ -107,10 +110,19 @@ public class ClassAccessor<T> {
                 return false;
             }
 
-            String className = pkg.getName() + ".package-info";
+            String packageName = pkg.getName();
+            Map.Entry<String, Annotation> entry = new SimpleImmutableEntry<>(packageName, annotation);
+            Boolean hasAnnotation = PACKAGE_ANNOTATION_CACHE.get(entry);
+            if (hasAnnotation != null) {
+                return hasAnnotation;
+            }
+
+            String className = packageName + ".package-info";
             Class<?> packageType = Class.forName(className);
             AnnotationAccessor accessor = new AnnotationAccessor(supportedAnnotations, packageType, ignoredAnnotations, ignoreAnnotationFailure);
-            return accessor.typeHas(annotation);
+            hasAnnotation = accessor.typeHas(annotation);
+            PACKAGE_ANNOTATION_CACHE.put(entry, hasAnnotation);
+            return hasAnnotation;
         }
         catch (ClassNotFoundException e) {
             return false;
