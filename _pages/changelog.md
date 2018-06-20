@@ -9,6 +9,14 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.7
+-------------
+_June 20, 2018_
+
+* ...run EqualsVerifier faster, because part of the processing of annotations is cached. ([Issue 195](https://github.com/jqno/equalsverifier/issues/195); thanks Андрей!)
+* ...not get illegal reflective access error messages when using Thread on Java 10. ([Issue 193](https://github.com/jqno/equalsverifier/issues/193))
+* ...use `@Transient` again to implicitly ignore fields, as discussed in the [manual](/equalsverifier/manual/jpa-entities). ([Issue 196](https://github.com/jqno/equalsverifier/issues/196))
+
 Version 2.4.6
 -------------
 _April 28, 2018_
