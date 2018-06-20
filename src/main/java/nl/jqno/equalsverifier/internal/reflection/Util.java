@@ -46,7 +46,7 @@ public final class Util {
     }
 
     /**
-     * Helper method to create simple LRU cache implementation
+     * Helper method to create simple LRU cache implementation.
      *
      * @param maxSize maximum size of map
      * @return simple thread-safe map with maximum-size eviction by LRU algorithm
@@ -54,7 +54,7 @@ public final class Util {
     public static <K, V> Map<K, V> newLruCache(final int maxSize) {
         LinkedHashMap<K, V> map = new LinkedHashMap<K, V>(16, 0.75f, true) {
             @Override
-            protected boolean removeEldestEntry(Map.Entry eldest) {
+            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
                 return size() > maxSize;
             }
         };
