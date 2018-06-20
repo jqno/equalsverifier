@@ -49,7 +49,7 @@ public enum SupportedAnnotations implements Annotation {
      * {@link NullPointerException}s being thrown if any of the fields in that
      * class or package are null.
      *
-     * Note that @DefaultAnnotation is deprectated. Nevertheless, EqualsVerifier
+     * Note that @DefaultAnnotation is deprecated. Nevertheless, EqualsVerifier
      * still supports it.
      */
     FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false,
