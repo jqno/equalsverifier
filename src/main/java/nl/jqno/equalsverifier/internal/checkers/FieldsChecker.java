@@ -209,6 +209,7 @@ public class FieldsChecker<T> implements Checker {
 
             boolean fieldIsEligible = !referenceAccessor.fieldIsStatic() &&
                     !referenceAccessor.fieldIsTransient() &&
+                    !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT) &&
                     !referenceAccessor.fieldIsSingleValueEnum();
 
             if (allFieldsShouldBeUsed && fieldIsEligible) {

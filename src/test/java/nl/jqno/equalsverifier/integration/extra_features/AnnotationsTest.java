@@ -99,26 +99,6 @@ public class AnnotationsTest extends IntegrationTestBase {
     }
 
     @Test
-    public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotation() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(TransientByJpaAnnotation.class)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenFieldsAreUsedInEquals_givenTheyHaveJpaTransientAnnotationInSuperclass() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(SubclassTransientByJpaAnnotation.class)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenFieldsAreUsedInEquals_givenTransientAnnotationResidesInWrongPackage() {
-        EqualsVerifier.forClass(TransientByNonJpaAnnotation.class)
-                .verify();
-    }
-
-    @Test
     public void fail_whenReadingAnnotationsFromDynamicClass() {
         FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
         expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
@@ -304,42 +284,6 @@ public class AnnotationsTest extends IntegrationTestBase {
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-    }
-
-    static class TransientByJpaAnnotation {
-        private final int i;
-
-        @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient
-        private final int j;
-
-        public TransientByJpaAnnotation(int i, int j) { this.i = i; this.j = j; }
-
-        @Override
-        public final boolean equals(Object obj) {
-            if (!(obj instanceof TransientByJpaAnnotation)) {
-                return false;
-            }
-            TransientByJpaAnnotation other = (TransientByJpaAnnotation)obj;
-            return i == other.i && j == other.j;
-        }
-
-        @Override public final int hashCode() { return defaultHashCode(this); }
-    }
-
-    static final class SubclassTransientByJpaAnnotation extends TransientByJpaAnnotation {
-        public SubclassTransientByJpaAnnotation(int i, int j) { super(i, j); }
-    }
-
-    static final class TransientByNonJpaAnnotation {
-        private final int i;
-
-        @nl.jqno.equalsverifier.testhelpers.annotations.Transient
-        private final int j;
-
-        public TransientByNonJpaAnnotation(int i, int j) { this.i = i; this.j = j; }
-
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 }
