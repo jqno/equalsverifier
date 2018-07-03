@@ -81,7 +81,7 @@ public final class Instantiator<T> {
         boolean isSystemClass = isSystemClass(superclass.getName());
 
         String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
-        String name = namePrefix + "." + superclass.getSimpleName() + "$$DynamicSubclass$" + UUID.randomUUID().toString().substring(0, 8);
+        String name = namePrefix + "." + superclass.getSimpleName() + "$$DynamicSubclass$" + superclass.hashCode();
 
         Class<S> existsAlready = (Class<S>)classForName(name);
         if (existsAlready != null) {

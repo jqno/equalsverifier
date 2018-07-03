@@ -7,12 +7,12 @@ import org.junit.Test;
 
 public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     @Test
-    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
+    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() {
         if (!isJava8Available()) {
             return;
         }
 
-        Class<?> type = compile(NONNULL_MANUAL_NAME, NONNULL_MANUAL);
+        Class<?> type = compile(fqcnFor(NONNULL_MANUAL_NAME), NONNULL_MANUAL);
         EqualsVerifier.forClass(type)
                 .verify();
     }
@@ -23,7 +23,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_ON_CLASS_NAME, NONNULL_ECLIPSE_ON_CLASS);
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_ON_CLASS_NAME), NONNULL_ECLIPSE_ON_CLASS);
         EqualsVerifier.forClass(type)
                 .verify();
     }
@@ -70,7 +70,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME), NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
         EqualsVerifier.forClass(type)
                 .verify();
@@ -82,7 +82,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME), NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS);
         EqualsVerifier.forClass(type)
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
@@ -94,7 +94,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME,
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME),
                 NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
         EqualsVerifier.forClass(type)
                 .verify();
@@ -130,7 +130,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME), NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
         EqualsVerifier.forClass(type)
                 .verify();
@@ -142,7 +142,7 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS);
+        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME), NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS);
         EqualsVerifier.forClass(type)
                 .verify();
     }
@@ -159,6 +159,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_MANUAL_NAME = "NonnullManual";
     private static final String NONNULL_MANUAL =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNull;" +
             "\n" +
@@ -182,6 +184,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_ON_CLASS_NAME = "NonnullEclipseOnClass";
     private static final String NONNULL_ECLIPSE_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\n" +
@@ -276,6 +280,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME = "NonnullEclipseWithNullableOnClass";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\nimport org.eclipse.jdt.annotation.Nullable;" +
@@ -302,6 +308,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME =
             "NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\nimport org.eclipse.jdt.annotation.Nullable;" +
@@ -354,6 +362,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithInapplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
@@ -379,6 +389,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithApplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
