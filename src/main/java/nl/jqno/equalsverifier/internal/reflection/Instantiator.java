@@ -6,11 +6,14 @@ import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 /**
  * Instantiates objects of a given class.
@@ -83,13 +86,26 @@ public final class Instantiator<T> {
         }
 
         Class<?> context = isSystemClass ? Instantiator.class : superclass;
+        ClassLoadingStrategy<? super ClassLoader> cs = getClassLoadingStrategy(context);
         return (Class<S>)new ByteBuddy()
                 .with(TypeValidation.DISABLED)
                 .subclass(superclass)
                 .name(name)
                 .make()
-                .load(context.getClassLoader(), ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain()))
+                .load(context.getClassLoader(), cs)
                 .getLoaded();
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(Class<S> context) {
+        if (System.getProperty("java.version").startsWith("1")) {
+            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
+        }
+        else {
+            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
+            Object lookup = ci.callFactory("java.lang.invoke.MethodHandles", "privateLookupIn", classes(Class.class, MethodHandles.Lookup.class), objects(context, MethodHandles.lookup()));
+            return ClassLoadingStrategy.UsingLookup.of(lookup);
+        }
     }
 
     private static boolean isSystemClass(String className) {
