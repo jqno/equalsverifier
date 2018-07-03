@@ -32,10 +32,6 @@ public class Java8IntegrationTestBase extends IntegrationTestBase {
         return compiler.compile(className, code);
     }
 
-    public String fqcnFor(String className) {
-        return GENERATED_PACKAGE_NAME + "." + className;
-    }
-
     public boolean isJava8Available() {
         return isTypeAvailable("java.util.Optional");
     }
