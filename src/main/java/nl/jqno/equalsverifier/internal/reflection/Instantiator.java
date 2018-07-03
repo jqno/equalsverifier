@@ -103,7 +103,7 @@ public final class Instantiator<T> {
     }
 
     @SuppressWarnings("unchecked")
-    private static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(Class<S> context) {
+    public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(Class<S> context) {
         if (System.getProperty("java.version").startsWith("1.")) {
             return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
         }
