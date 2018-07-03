@@ -94,7 +94,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME),
+        Class<?> type = compile(
+                fqcnFor(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME),
                 NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
         EqualsVerifier.forClass(type)
                 .verify();
@@ -130,7 +131,9 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(fqcnFor(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME), NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
+        Class<?> type = compile(
+                fqcnFor(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME),
+                NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
         EqualsVerifier.forClass(type)
                 .verify();

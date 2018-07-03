@@ -10,11 +10,8 @@ import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
-import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
-import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
+import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 /**
  * Instantiates objects of a given class.
@@ -112,7 +109,11 @@ public final class Instantiator<T> {
         }
         else {
             ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
-            Object lookup = ci.callFactory("java.lang.invoke.MethodHandles", "privateLookupIn", classes(Class.class, MethodHandles.Lookup.class), objects(context, MethodHandles.lookup()));
+            Object lookup = ci.callFactory(
+                    "java.lang.invoke.MethodHandles",
+                    "privateLookupIn",
+                    classes(Class.class, MethodHandles.Lookup.class),
+                    objects(context, MethodHandles.lookup()));
             return ClassLoadingStrategy.UsingLookup.of(lookup);
         }
     }
