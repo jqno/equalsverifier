@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -65,6 +66,7 @@ public final class JavaApiPrefabValues {
         addMaps();
         addSets();
         addQueues();
+        addNioBuffers();
         addAwtClasses();
         addJava8ApiClasses();
         addJavaFxClasses();
@@ -279,6 +281,25 @@ public final class JavaApiPrefabValues {
             @Override public PriorityBlockingQueue createEmpty() { return new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR); }
         });
         addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
+    }
+
+    private void addNioBuffers() {
+        addValues(Buffer.class,
+                ByteBuffer.wrap(new byte[] { 0 }), ByteBuffer.wrap(new byte[] { 1 }), ByteBuffer.wrap(new byte[] { 0 }));
+        addValues(ByteBuffer.class,
+                ByteBuffer.wrap(new byte[] { 0 }), ByteBuffer.wrap(new byte[] { 1 }), ByteBuffer.wrap(new byte[] { 0 }));
+        addValues(CharBuffer.class,
+                CharBuffer.wrap("a"), CharBuffer.wrap("b"), CharBuffer.wrap("a"));
+        addValues(DoubleBuffer.class,
+                DoubleBuffer.wrap(new double[] { 0.0 }), DoubleBuffer.wrap(new double[] { 1.0 }), DoubleBuffer.wrap(new double[] { 0.0 }));
+        addValues(FloatBuffer.class,
+                FloatBuffer.wrap(new float[] { 0.0f }), FloatBuffer.wrap(new float[] { 1.0f }), FloatBuffer.wrap(new float[] { 0.0f }));
+        addValues(IntBuffer.class,
+                IntBuffer.wrap(new int[] { 0 }), IntBuffer.wrap(new int[] { 1 }), IntBuffer.wrap(new int[] { 0 }));
+        addValues(LongBuffer.class,
+                LongBuffer.wrap(new long[] { 0 }), LongBuffer.wrap(new long[] { 1 }), LongBuffer.wrap(new long[] { 0 }));
+        addValues(ShortBuffer.class,
+                ShortBuffer.wrap(new short[] { 0 }), ShortBuffer.wrap(new short[] { 1 }), ShortBuffer.wrap(new short[] { 0 }));
     }
 
     private void addAwtClasses() {

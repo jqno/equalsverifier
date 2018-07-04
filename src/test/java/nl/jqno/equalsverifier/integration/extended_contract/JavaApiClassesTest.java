@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.nio.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.*;
@@ -43,6 +44,12 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     @Test
     public void succeed_whenClassContainsAMap() {
         EqualsVerifier.forClass(MapContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsANioBuffer() {
+        EqualsVerifier.forClass(NioBufferContainer.class)
                 .verify();
     }
 
@@ -230,6 +237,28 @@ public class JavaApiClassesTest extends IntegrationTestBase {
             callKeySet(properties, treeMap, weakHashMap);
             callKeySet(enumMap);
         }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class NioBufferContainer {
+        private final Buffer buffer;
+        private final ByteBuffer byteBuffer;
+        private final CharBuffer charBuffer;
+        private final DoubleBuffer doubleBuffer;
+        private final FloatBuffer floatBuffer;
+        private final IntBuffer intBuffer;
+        private final LongBuffer longBuffer;
+        private final ShortBuffer shortBuffer;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public NioBufferContainer(Buffer buffer, ByteBuffer byteBuffer, CharBuffer charBuffer, DoubleBuffer doubleBuffer,
+                FloatBuffer floatBuffer, IntBuffer intBuffer, LongBuffer longBuffer, ShortBuffer shortBuffer) {
+            this.buffer = buffer; this.byteBuffer = byteBuffer; this.charBuffer = charBuffer; this.doubleBuffer = doubleBuffer;
+            this.floatBuffer = floatBuffer; this.intBuffer = intBuffer; this.longBuffer = longBuffer; this.shortBuffer = shortBuffer;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
