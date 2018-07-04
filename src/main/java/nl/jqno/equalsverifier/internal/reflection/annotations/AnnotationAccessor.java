@@ -109,7 +109,7 @@ public class AnnotationAccessor {
             ClassReader cr = new ClassReader(is);
             cr.accept(v, 0);
         }
-        catch (IOException e) {
+        catch (IOException | UnsupportedOperationException e) {
             if (ignoreFailure) {
                 shortCircuit = true;
             }
