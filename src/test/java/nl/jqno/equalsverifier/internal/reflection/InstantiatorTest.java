@@ -61,6 +61,13 @@ public class InstantiatorTest {
     }
 
     @Test
+    public void instantiateAnNonToplevelClass() {
+        class Something {}
+        Instantiator<Something> instantiator = Instantiator.of(Something.class);
+        instantiator.instantiateAnonymousSubclass();
+    }
+
+    @Test
     @SuppressWarnings("rawtypes")
     public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
         Instantiator instantiator = Instantiator.of(List.class);

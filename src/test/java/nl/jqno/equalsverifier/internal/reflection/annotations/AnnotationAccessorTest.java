@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
@@ -171,7 +170,7 @@ public class AnnotationAccessorTest {
                 .subclass(Super.class)
                 .defineField("dynamicField", int.class, Visibility.PRIVATE)
                 .make()
-                .load(Super.class.getClassLoader(), ClassLoadingStrategy.Default.INJECTION)
+                .load(Super.class.getClassLoader(), Instantiator.getClassLoadingStrategy(Super.class))
                 .getLoaded();
         AnnotationAccessor accessor = new AnnotationAccessor(TestSupportedAnnotations.values(), sub, NO_INGORED_ANNOTATIONS, true);
         assertFalse(accessor.fieldHas("dynamicField", FIELD_RUNTIME_RETENTION));

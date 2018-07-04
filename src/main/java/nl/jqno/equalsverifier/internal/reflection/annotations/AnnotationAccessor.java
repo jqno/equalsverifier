@@ -13,6 +13,8 @@ import java.util.*;
  * and its fields.
  */
 public class AnnotationAccessor {
+    private static final int OPCODES = Opcodes.ASM6;
+
     private final Annotation[] supportedAnnotations;
     private final Class<?> type;
     private final Set<String> ignoredAnnotations;
@@ -130,7 +132,7 @@ public class AnnotationAccessor {
         private final boolean inheriting;
 
         public Visitor(boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.inheriting = inheriting;
         }
 
@@ -152,7 +154,7 @@ public class AnnotationAccessor {
         private final boolean inheriting;
 
         public MyFieldVisitor(Set<Annotation> fieldAnnotations, boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.fieldAnnotations = fieldAnnotations;
             this.inheriting = inheriting;
         }
@@ -176,7 +178,7 @@ public class AnnotationAccessor {
         private final AnnotationProperties properties;
 
         public MyAnnotationVisitor(String annotationDescriptor, Set<Annotation> annotations, boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.annotationDescriptor = annotationDescriptor;
             this.annotations = annotations;
             this.inheriting = inheriting;
@@ -212,7 +214,7 @@ public class AnnotationAccessor {
         private final Set<Object> foundAnnotations;
 
         public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.foundAnnotations = foundAnnotations;
         }
 

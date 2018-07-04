@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class Java8IntegrationTestBase extends IntegrationTestBase {
+    public static final String GENERATED_PACKAGE_NAME = "nl.jqno.equalsverifier.generated";
+
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 

@@ -53,7 +53,7 @@ public class FormatterTest {
     public void oneAbstractParameter() {
         Instantiator<Abstract> i = Instantiator.of(Abstract.class);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [FormatterTest$Abstract x=0]-throws AbstractMethodError"));
+        assertThat(f.format(), containsString("Abstract: [Abstract x=0]-throws AbstractMethodError"));
     }
 
     @Test
@@ -67,7 +67,7 @@ public class FormatterTest {
     public void oneDelegatedAbstractParameter() {
         Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [FormatterTest$AbstractDelegation y=0]-throws AbstractMethodError"));
+        assertThat(f.format(), containsString("Abstract: [AbstractDelegation y=0]-throws AbstractMethodError"));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class FormatterTest {
         Formatter f = Formatter.of("AC: %%", ac);
         String actual = f.format();
         // Split up the message, because on some JDKs, AbstractMethodError is sometimes empty while on others, it isn't.
-        assertThat(actual, containsString("AC: [AbstractContainer ad=[FormatterTest$AbstractDelegation y=0]-throws AbstractMethodError"));
+        assertThat(actual, containsString("AC: [AbstractContainer ad=[AbstractDelegation y=0]-throws AbstractMethodError"));
         assertThat(actual, containsString("]-throws AbstractMethodError"));
     }
 

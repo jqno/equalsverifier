@@ -6,11 +6,12 @@ import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.*;
 
 /**
  * Instantiates objects of a given class.
@@ -21,6 +22,7 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 public final class Instantiator<T> {
     private static final List<String> FORBIDDEN_PACKAGES =
             Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
+    private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
     private Objenesis objenesis;
@@ -74,8 +76,9 @@ public final class Instantiator<T> {
     @SuppressWarnings("unchecked")
     private static synchronized <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
         boolean isSystemClass = isSystemClass(superclass.getName());
-        String namePrefix = isSystemClass ? "$" : "";
-        String name = namePrefix + superclass.getName() + "$$DynamicSubclass";
+
+        String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
+        String name = namePrefix + "." + superclass.getSimpleName() + "$$DynamicSubclass$" + superclass.hashCode();
 
         Class<S> existsAlready = (Class<S>)classForName(name);
         if (existsAlready != null) {
@@ -83,13 +86,36 @@ public final class Instantiator<T> {
         }
 
         Class<?> context = isSystemClass ? Instantiator.class : superclass;
+        ClassLoadingStrategy<? super ClassLoader> cs = getClassLoadingStrategy(context);
         return (Class<S>)new ByteBuddy()
                 .with(TypeValidation.DISABLED)
                 .subclass(superclass)
                 .name(name)
                 .make()
-                .load(context.getClassLoader(), ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain()))
+                .load(context.getClassLoader(), cs)
                 .getLoaded();
+    }
+
+    private static String getPackageName(Class<?> type) {
+        String cn = type.getName();
+        int dot = cn.lastIndexOf('.');
+        return (dot != -1) ? cn.substring(0, dot).intern() : "";
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(Class<S> context) {
+        if (System.getProperty("java.version").startsWith("1.")) {
+            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
+        }
+        else {
+            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
+            Object lookup = ci.callFactory(
+                    "java.lang.invoke.MethodHandles",
+                    "privateLookupIn",
+                    classes(Class.class, MethodHandles.Lookup.class),
+                    objects(context, MethodHandles.lookup()));
+            return ClassLoadingStrategy.UsingLookup.of(lookup);
+        }
     }
 
     private static boolean isSystemClass(String className) {

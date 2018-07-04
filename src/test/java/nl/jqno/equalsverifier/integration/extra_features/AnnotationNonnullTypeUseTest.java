@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
     @Test
-    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() throws Exception {
+    public void successfullyInstantiatesAJava8ClassWithStreams_whenJava8IsAvailable() {
         if (!isJava8Available()) {
             return;
         }
@@ -94,7 +94,8 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME,
+        Class<?> type = compile(
+                NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME,
                 NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS);
         EqualsVerifier.forClass(type)
                 .verify();
@@ -130,7 +131,9 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             return;
         }
 
-        Class<?> type = compile(NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME, NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
+        Class<?> type = compile(
+                NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME,
+                NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS);
         expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
         EqualsVerifier.forClass(type)
                 .verify();
@@ -156,9 +159,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
         throw new IllegalStateException("Inner class not found");
     }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_MANUAL_NAME = "NonnullManual";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_MANUAL_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullManual";
     private static final String NONNULL_MANUAL =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNull;" +
             "\n" +
@@ -179,9 +185,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_ECLIPSE_ON_CLASS_NAME = "NonnullEclipseOnClass";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_ECLIPSE_ON_CLASS_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseOnClass";
     private static final String NONNULL_ECLIPSE_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\n" +
@@ -228,9 +237,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_ECLIPSE_OUTER_NAME = "NonnullEclipseOuter";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_ECLIPSE_OUTER_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseOuter";
     private static final String NONNULL_ECLIPSE_OUTER =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\n" +
@@ -273,9 +285,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    }" +
             "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME = "NonnullEclipseWithNullableOnClass";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithNullableOnClass";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\nimport org.eclipse.jdt.annotation.Nullable;" +
@@ -300,8 +315,10 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
 
     // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS_NAME =
-            "NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithNullableOnClassAndNullCheckInEquals";
     private static final String NONNULL_ECLIPSE_WITH_NULLABLE_ON_CLASS_AND_NULLCHECK_IN_EQUALS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
             "\nimport org.eclipse.jdt.annotation.Nullable;" +
@@ -351,9 +368,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public final int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithInapplicableLocationOnClass";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithInapplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_INAPPLICABLE_LOCATION_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
@@ -376,9 +396,12 @@ public class AnnotationNonnullTypeUseTest extends Java8IntegrationTestBase {
             "\n    @Override public int hashCode() { return Objects.hash(o); }" +
             "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
-    private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME = "NonnullEclipseWithApplicableLocationOnClass";
+    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS_NAME =
+            GENERATED_PACKAGE_NAME + ".NonnullEclipseWithApplicableLocationOnClass";
     private static final String NONNULL_ECLIPSE_WITH_APPLICABLE_LOCATION_ON_CLASS =
+            "\npackage " + GENERATED_PACKAGE_NAME + ";" +
+            "\n" +
             "\nimport java.util.Objects;" +
             "\nimport org.eclipse.jdt.annotation.DefaultLocation;" +
             "\nimport org.eclipse.jdt.annotation.NonNullByDefault;" +
