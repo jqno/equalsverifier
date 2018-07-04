@@ -9,6 +9,13 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.4.8
+-------------
+_July 4, 2018_
+
+* ...have better support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
+* ...prefab values for Java NIO Buffers. ([Issue 198](https://github.com/jqno/equalsverifier/issues/198))
+
 Version 2.4.7
 -------------
 _June 20, 2018_
