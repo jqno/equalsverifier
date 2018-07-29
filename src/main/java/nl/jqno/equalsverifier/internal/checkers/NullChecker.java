@@ -91,13 +91,23 @@ public class NullChecker<T> implements Checker {
             catch (NullPointerException e) {
                 npeThrown(testedMethodName, field, e);
             }
+            catch (AbstractMethodError e) {
+                abstractMethodErrorThrown(testedMethodName, field, e);
+            }
             catch (Exception e) {
                 exceptionThrown(testedMethodName, field, e);
             }
         }
 
-        private void npeThrown(String method, Field field, Exception e) {
+        private void npeThrown(String method, Field field, NullPointerException e) {
             fail(Formatter.of("Non-nullity: %% throws NullPointerException on field %%.", method, field.getName()), e);
+        }
+
+        private void abstractMethodErrorThrown(String method, Field field, AbstractMethodError e) {
+            fail(Formatter.of(
+                    "Abstract delegation: %% throws AbstractMethodError when field %% is null.\n" +
+                    "Suppress Warning.NULL_FIELDS to disable this check.",
+                    method, field.getName()), e);
         }
 
         private void exceptionThrown(String method, Field field, Exception e) {
