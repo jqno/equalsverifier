@@ -36,6 +36,23 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
                 .verify();
     }
 
+    @Test
+    public void fail_whenAbstractImplementationThrowsNpe() {
+        expectFailure("Abstract delegation: equals throws AbstractMethodError when field object is null");
+        EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .withIgnoredFields("objectFactory")
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenAbstractImplementationThrowsNpe_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
+                .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
+                .withIgnoredFields("objectFactory")
+                .verify();
+    }
+
     abstract static class AbstractFinalMethodsPoint {
         private final int x;
         private final int y;
@@ -112,5 +129,44 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
         }
 
         @Override public final int hashCode() { return defaultHashCode(this); }
+    }
+
+    interface Supplier<T> {
+        T get();
+    }
+
+    abstract static class AbstractLazyObjectContainer {
+        private Object object;
+
+        private Object getObject() {
+            if (object == null) {
+                object = createObject();
+            }
+            return object;
+        }
+
+        protected abstract Object createObject();
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (!(obj instanceof AbstractLazyObjectContainer)) {
+                return false;
+            }
+            AbstractLazyObjectContainer other = (AbstractLazyObjectContainer)obj;
+            return getObject().equals(other.getObject());
+        }
+
+        @Override public int hashCode() { return getObject().hashCode(); }
+    }
+
+    static final class NullThrowingLazyObjectContainer extends AbstractLazyObjectContainer {
+        private final Supplier<Object> objectFactory;
+
+        protected NullThrowingLazyObjectContainer(Supplier<Object> flourFactory) { this.objectFactory = flourFactory; }
+
+        @Override
+        protected Object createObject() {
+            return objectFactory.get();
+        }
     }
 }

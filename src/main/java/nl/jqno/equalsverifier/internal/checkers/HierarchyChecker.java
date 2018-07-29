@@ -85,8 +85,8 @@ public class HierarchyChecker<T> implements Checker {
         try {
             checkSuperProperties(reference, equalSuper, shallowCopy);
         }
-        catch (AbstractMethodError ignored) {
-            // In this case, we'll assume all super properties hold.
+        catch (AbstractMethodError | NullPointerException ignored) {
+            // In these cases, we'll assume all super properties hold.
             // The problems we test for, can never occur anyway if you can't instantiate a super instance.
         }
     }
