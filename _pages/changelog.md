@@ -9,6 +9,15 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.5
+-----------
+_July 30, 2018_
+
+* ...suppress `Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED` when only the final fields are relevant to your `equals` method. ([Issue 200](https://github.com/jqno/equalsverifier/issues/200))
+* ...use empty enums in your class.  ([Issue 199](https://github.com/jqno/equalsverifier/issues/199))
+* ...use both abstract methods and lazy initializers without risking an unexplained `NullPointerException`. ([Issue 201](https://github.com/jqno/equalsverifier/issues/201))
+
+
 Version 2.4.8
 -------------
 _July 4, 2018_

@@ -40,6 +40,16 @@ Java has the `transient` keyword to exclude fields from serialization, and [JPA]
 If these fields do participate in `equals`, EqualsVerifier fails the test. This behavior can be avoided by suppressing `Warning.TRANSIENT_FIELDS`.
 
 
+### Non-final fields
+If the state of your class is defined by final fields, and you also have one or more non-final fields in your class (for instance because you need to cache something), you can tell EqualsVerifier to ignore the non-final fields:
+
+{% highlight java %}
+EqualsVerifier.forClass(Foo.class)
+    .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
+    .verify();
+{% endhighlight %}
+
+
 ### Disable it all
 If you don't care whether all fields are used in `equals` or not, you can also disable the checks altogether:
 
