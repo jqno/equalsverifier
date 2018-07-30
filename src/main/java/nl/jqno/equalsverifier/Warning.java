@@ -16,6 +16,15 @@ public enum Warning {
     ALL_FIELDS_SHOULD_BE_USED,
 
     /**
+     * Signals that non-final fields are not relevant in the {@code equals}
+     * contract. {@code EqualsVerifier} will not fail if one or more non-final
+     * fields do not affect the outcome of {@code equals}.
+     * <p>
+     * Only applies to non-transient fields.
+     */
+    ALL_NONFINAL_FIELDS_SHOULD_BE_USED,
+
+    /**
      * Disables annotation processing for the class under test.
      * <p>
      * Suppress this warning if {@link EqualsVerifier} cannot read the bytecode

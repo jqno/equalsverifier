@@ -78,6 +78,28 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void fail_whenANonfinalFieldIsUnused() {
+        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+        EqualsVerifier.forClass(OneNonfinalFieldUnused.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenANonfinalFieldIsUnused_givenAllNonfinalFieldsWarningIsSuppressed() {
+        EqualsVerifier.forClass(OneNonfinalFieldUnused.class)
+                .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenAFieldIsUnused_givenOnlyAllNonfinalFieldsWarningIsSuppressed() {
+        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
+        EqualsVerifier.forClass(OneFieldUnused.class)
+                .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenATransientFieldIsUnused_givenAllFieldsShouldBeUsed() {
         EqualsVerifier.forClass(OneTransientFieldUnusedColorPoint.class)
                 .verify();
@@ -367,6 +389,29 @@ public class SignificantFieldsTest extends IntegrationTestBase {
                 return false;
             }
             OneFieldUnused other = (OneFieldUnused)obj;
+            return x == other.x && y == other.y;
+        }
+
+        @Override
+        public int hashCode() {
+            return x + (31 * y);
+        }
+    }
+
+    static final class OneNonfinalFieldUnused {
+        private final int x;
+        private final int y;
+        @SuppressWarnings("unused")
+        private Color colorNotUsed;
+
+        public OneNonfinalFieldUnused(int x, int y, Color color) { this.x = x; this.y = y; this.colorNotUsed = color; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof OneNonfinalFieldUnused)) {
+                return false;
+            }
+            OneNonfinalFieldUnused other = (OneNonfinalFieldUnused)obj;
             return x == other.x && y == other.y;
         }
 
