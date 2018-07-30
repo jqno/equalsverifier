@@ -85,9 +85,9 @@ public class FieldAccessor {
     /**
      * Returns whether the field is an enum with a single value.
      */
-    public boolean fieldIsSingleValueEnum() {
+    public boolean fieldIsEmptyOrSingleValueEnum() {
         Class<?> type = field.getType();
-        return type.isEnum() && type.getEnumConstants().length == 1;
+        return type.isEnum() && type.getEnumConstants().length <= 1;
     }
 
     /**

@@ -18,6 +18,12 @@ public class EnumTest {
     }
 
     @Test
+    public void succeed_whenClassHasAnEmptyEnumButIgnoresIt() {
+        EqualsVerifier.forClass(EmptyEnumContainer.class)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassHasASingletonEnumButIgnoresIt() {
         EqualsVerifier.forClass(SingletonContainer.class)
                 .verify();
@@ -53,6 +59,31 @@ public class EnumTest {
     }
 
     enum Singleton { INSTANCE }
+
+    enum Empty {}
+
+    static final class EmptyEnumContainer {
+        private final int i;
+
+        @SuppressWarnings("unused")
+        private final Empty empty;
+
+        public EmptyEnumContainer(int i, Empty empty) { this.i = i; this.empty = empty; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof EmptyEnumContainer)) {
+                return false;
+            }
+            EmptyEnumContainer other = (EmptyEnumContainer)obj;
+            return i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
+        }
+    }
 
     static final class SingletonContainer {
         private final int i;

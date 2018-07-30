@@ -244,6 +244,7 @@ public class TypeHelper {
 
     @SuppressWarnings("unused")
     public static final class EnumContainer {
+        private EmptyEnum emptyEnum;
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;
     }

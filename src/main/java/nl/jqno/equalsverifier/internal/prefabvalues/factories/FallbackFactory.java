@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -45,7 +44,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
         switch (enumConstants.length) {
             case 0:
-                throw new ReflectionException("Enum " + type.getSimpleName() + " has no elements");
+                return new Tuple<>(null, null, null);
             case 1:
                 return new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
             default:

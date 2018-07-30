@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
@@ -21,6 +20,7 @@ public class PrefabValuesCreatorTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
     private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
+    private static final TypeTag EMPTY_ENUM_TAG = new TypeTag(EmptyEnum.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
     private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
@@ -66,9 +66,8 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void createEmptyEnum() {
-        thrown.expect(ReflectionException.class);
-        thrown.expectMessage("Enum EmptyEnum has no elements");
-        prefabValues.giveRed(new TypeTag(EmptyEnum.class));
+        assertNull(prefabValues.giveRed(EMPTY_ENUM_TAG));
+        assertNull(prefabValues.giveBlack(EMPTY_ENUM_TAG));
     }
 
     @Test

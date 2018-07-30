@@ -210,7 +210,7 @@ public class FieldsChecker<T> implements Checker {
             boolean fieldIsEligible = !referenceAccessor.fieldIsStatic() &&
                     !referenceAccessor.fieldIsTransient() &&
                     !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT) &&
-                    !referenceAccessor.fieldIsSingleValueEnum();
+                    !referenceAccessor.fieldIsEmptyOrSingleValueEnum();
 
             if (allFieldsShouldBeUsed && fieldIsEligible) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);

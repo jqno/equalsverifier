@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -42,9 +41,8 @@ public class FallbackFactoryTest {
     }
 
     @Test
-    public void dontGiveEmptyEnum() {
-        thrown.expect(ReflectionException.class);
-        new FallbackFactory<>().createValues(new TypeTag(EmptyEnum.class), prefabValues, typeStack);
+    public void giveNullInsteadOfEmptyEnum() {
+        assertCorrectTuple(EmptyEnum.class, null, null);
     }
 
     @Test

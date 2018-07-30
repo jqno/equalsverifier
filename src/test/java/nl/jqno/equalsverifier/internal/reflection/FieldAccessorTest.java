@@ -117,21 +117,28 @@ public class FieldAccessorTest {
     public void isNotEnum() {
         PrimitiveContainer foo = new PrimitiveContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
-        assertFalse(fieldAccessor.fieldIsSingleValueEnum());
+        assertFalse(fieldAccessor.fieldIsEmptyOrSingleValueEnum());
     }
 
     @Test
     public void isEnumButNotSingleValue() {
         EnumContainer foo = new EnumContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, "twoElementEnum");
-        assertFalse(fieldAccessor.fieldIsSingleValueEnum());
+        assertFalse(fieldAccessor.fieldIsEmptyOrSingleValueEnum());
     }
 
     @Test
     public void isSingleValueEnum() {
         EnumContainer foo = new EnumContainer();
         FieldAccessor fieldAccessor = getAccessorFor(foo, "oneElementEnum");
-        assertTrue(fieldAccessor.fieldIsSingleValueEnum());
+        assertTrue(fieldAccessor.fieldIsEmptyOrSingleValueEnum());
+    }
+
+    @Test
+    public void isEmptyEnum() {
+        EnumContainer foo = new EnumContainer();
+        FieldAccessor fieldAccessor = getAccessorFor(foo, "emptyEnum");
+        assertTrue(fieldAccessor.fieldIsEmptyOrSingleValueEnum());
     }
 
     @Test

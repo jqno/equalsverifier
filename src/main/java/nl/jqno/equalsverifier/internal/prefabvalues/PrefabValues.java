@@ -127,6 +127,9 @@ public class PrefabValues {
         }
 
         Tuple<T> tuple = giveTuple(tag);
+        if (tuple.getRed() == null) {
+            return null;
+        }
         if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
             return tuple.getBlack();
         }
