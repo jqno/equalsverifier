@@ -204,15 +204,7 @@ public class FieldsChecker<T> implements Checker {
         private void assertFieldShouldBeIgnored(boolean equalToItself, boolean equalsChanged,
                     FieldAccessor referenceAccessor, String fieldName) {
 
-            boolean allFieldsShouldBeUsed = !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
-                    !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
-
-            boolean fieldIsEligible = !referenceAccessor.fieldIsStatic() &&
-                    !referenceAccessor.fieldIsTransient() &&
-                    !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT) &&
-                    !referenceAccessor.fieldIsEmptyOrSingleValueEnum();
-
-            if (allFieldsShouldBeUsed && fieldIsEligible) {
+            if (shouldAllFieldsBeUsed(referenceAccessor) && isFieldEligible(referenceAccessor)) {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
 
                 boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
@@ -221,6 +213,19 @@ public class FieldsChecker<T> implements Checker {
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
                         !fieldShouldBeIgnored || !equalsChanged);
             }
+        }
+
+        private boolean shouldAllFieldsBeUsed(FieldAccessor referenceAccessor) {
+            return !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
+                    !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY) &&
+                    !(warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) && !referenceAccessor.fieldIsFinal());
+        }
+
+        private boolean isFieldEligible(FieldAccessor referenceAccessor) {
+            return !referenceAccessor.fieldIsStatic() &&
+                !referenceAccessor.fieldIsTransient() &&
+                !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
+                !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
         }
     }
 
