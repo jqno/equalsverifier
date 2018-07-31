@@ -11,12 +11,12 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.*;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.StampedLock;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -318,17 +318,24 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class Java8ApiClassesContainer {
         private final Optional<?> optional;
-        private final ZonedDateTime zonedDateTime;
+        private final LocalDate localDate;
+        private final LocalTime localTime;
+        private final LocalDateTime localDateTime;
         private final ZoneId zoneId;
+        private final ZoneOffset zoneOffset;
+        private final ZonedDateTime zonedDateTime;
         private final DateTimeFormatter dateTimeFormatter;
         private final CompletableFuture<?> completableFuture;
         private final StampedLock stampedLock;
+        private final Supplier<?> supplier;
 
-        public Java8ApiClassesContainer(Optional<?> optional, ZonedDateTime zonedDateTime, ZoneId zoneId,
-                DateTimeFormatter dateTimeFormatter, CompletableFuture<?> completableFuture, StampedLock stampedLock) {
-            this.optional = optional; this.zonedDateTime = zonedDateTime; this.zoneId = zoneId;
-            this.dateTimeFormatter = dateTimeFormatter; this.completableFuture = completableFuture;
-            this.stampedLock = stampedLock;
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public Java8ApiClassesContainer(Optional<?> optional, LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime,
+                ZoneId zoneId, ZoneOffset zoneOffset, ZonedDateTime zonedDateTime, DateTimeFormatter dateTimeFormatter,
+                CompletableFuture<?> completableFuture, StampedLock stampedLock, Supplier<?> supplier) {
+            this.optional = optional; this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime;
+            this.zoneId = zoneId; this.zoneOffset = zoneOffset; this.zonedDateTime = zonedDateTime; this.dateTimeFormatter = dateTimeFormatter;
+            this.completableFuture = completableFuture; this.stampedLock = stampedLock; this.supplier = supplier;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

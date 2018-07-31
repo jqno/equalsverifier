@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.StampedLock;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
@@ -77,7 +78,6 @@ public final class JavaApiPrefabValues {
         addQueues();
         addNioBuffers();
         addAwtClasses();
-        addJava8ApiClasses();
         addJavaFxClasses();
         addJavaxApiClasses();
         addGoogleGuavaMultisetCollectionsClasses();
@@ -118,6 +118,7 @@ public final class JavaApiPrefabValues {
         addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
     }
 
+    // CHECKSTYLE: ignore ExecutableStatementCount for 58 lines.
     @SuppressFBWarnings(
         value = {"DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD"},
         justification = "We just need an instance of File and Thread; they're not for actual use.")
@@ -127,22 +128,37 @@ public final class JavaApiPrefabValues {
         addValues(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5), new GregorianCalendar(2010, 7, 4));
         addValues(Date.class, new Date(0), new Date(1), new Date(0));
         addValues(DateFormat.class, DateFormat.getTimeInstance(), DateFormat.getDateInstance(), DateFormat.getTimeInstance());
+        addValues(DateTimeFormatter.class, DateTimeFormatter.ISO_TIME, DateTimeFormatter.ISO_DATE, DateTimeFormatter.ISO_TIME);
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
         addValues(GregorianCalendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5), new GregorianCalendar(2010, 7, 4));
+        addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
+        addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
+        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalTime.MIN);
         addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(SimpleDateFormat.class, new SimpleDateFormat("yMd"), new SimpleDateFormat("dMy"), new SimpleDateFormat("yMd"));
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
+        addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
         addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
+        addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
+        addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
+        addValues(ZonedDateTime.class,
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
+            ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
+
+        addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
+        addFactory(Optional.class, simple(Optional::of, Optional::empty));
+        addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
+        addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
+
         addValues(java.sql.Date.class, new java.sql.Date(1337), new java.sql.Date(42), new java.sql.Date(1337));
         addValues(java.sql.Time.class, new java.sql.Time(1337), new java.sql.Time(42), new java.sql.Time(1337));
         addValues(java.sql.Timestamp.class, new java.sql.Timestamp(1337), new java.sql.Timestamp(42), new java.sql.Timestamp(1337));
-
-        addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception otherwise.
         ConditionalInstantiator inetAddress = new ConditionalInstantiator("java.net.InetAddress");
@@ -248,24 +264,6 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
-    }
-
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void addJava8ApiClasses() {
-        addFactory(Optional.class, simple(Optional::of, Optional::empty));
-        addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
-
-        addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
-        addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
-        addValues(LocalTime.class, LocalTime.MIN, LocalTime.MAX, LocalTime.MIN);
-        addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
-        addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
-        addValues(DateTimeFormatter.class, DateTimeFormatter.ISO_TIME, DateTimeFormatter.ISO_DATE, DateTimeFormatter.ISO_TIME);
-        addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
-        addValues(ZonedDateTime.class,
-            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
-            ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
-            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
     }
 
     private void addJavaFxClasses() {
