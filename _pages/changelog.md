@@ -9,12 +9,19 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.5.1
+-------------
+_August 5, 2018_
+
+* ...successfully use `withIgnoredFields` on stateless fields. ([Issue 203](https://github.com/jqno/equalsverifier/issues/203))
+
+
 Version 2.5
 -----------
 _July 30, 2018_
 
 * ...suppress `Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED` when only the final fields are relevant to your `equals` method. ([Issue 200](https://github.com/jqno/equalsverifier/issues/200))
-* ...use empty enums in your class.  ([Issue 199](https://github.com/jqno/equalsverifier/issues/199))
+* ...use empty enums in your class. ([Issue 199](https://github.com/jqno/equalsverifier/issues/199))
 * ...use both abstract methods and lazy initializers without risking an unexplained `NullPointerException`. ([Issue 201](https://github.com/jqno/equalsverifier/issues/201))
 
 
