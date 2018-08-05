@@ -307,6 +307,13 @@ public class SignificantFieldsTest extends IntegrationTestBase {
     }
 
     @Test
+    public void succeed_whenUsedFieldIsStateless_givenStatelessFieldIsIgnored() {
+        EqualsVerifier.forClass(UsedStatelessContainer.class)
+                .withIgnoredFields("statelessField")
+                .verify();
+    }
+
+    @Test
     public void succeed_whenClassIsStateless_givenAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(Stateless.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)

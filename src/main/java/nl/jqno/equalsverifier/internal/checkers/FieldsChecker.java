@@ -146,10 +146,10 @@ public class FieldsChecker<T> implements Checker {
     }
 
     private class SignificantFieldCheck implements FieldInspector.FieldCheck {
-        private final boolean skipTestBecause0AndNullBothHaveA0HashCode;
+        private final boolean skipCertainTestsThatDontMatterWhenValuesAreNull;
 
         public SignificantFieldCheck(boolean skipTestBecause0AndNullBothHaveA0HashCode) {
-            this.skipTestBecause0AndNullBothHaveA0HashCode = skipTestBecause0AndNullBothHaveA0HashCode;
+            this.skipCertainTestsThatDontMatterWhenValuesAreNull = skipTestBecause0AndNullBothHaveA0HashCode;
         }
 
         @Override
@@ -185,7 +185,7 @@ public class FieldsChecker<T> implements Checker {
 
             if (equalsChanged != hashCodeChanged) {
                 boolean skipEqualsHasMoreThanHashCodeTest =
-                        warningsToSuppress.contains(Warning.STRICT_HASHCODE) || skipTestBecause0AndNullBothHaveA0HashCode;
+                        warningsToSuppress.contains(Warning.STRICT_HASHCODE) || skipCertainTestsThatDontMatterWhenValuesAreNull;
                 if (!skipEqualsHasMoreThanHashCodeTest) {
                     Formatter formatter = Formatter.of(
                             "Significant fields: equals relies on %%, but hashCode does not." +
@@ -211,7 +211,7 @@ public class FieldsChecker<T> implements Checker {
                 assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
                         fieldShouldBeIgnored || equalsChanged);
                 assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
-                        !fieldShouldBeIgnored || !equalsChanged);
+                        !fieldShouldBeIgnored || !equalsChanged || skipCertainTestsThatDontMatterWhenValuesAreNull);
             }
         }
 
@@ -223,9 +223,9 @@ public class FieldsChecker<T> implements Checker {
 
         private boolean isFieldEligible(FieldAccessor referenceAccessor) {
             return !referenceAccessor.fieldIsStatic() &&
-                !referenceAccessor.fieldIsTransient() &&
-                !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
-                !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
+                    !referenceAccessor.fieldIsTransient() &&
+                    !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
+                    !classAccessor.fieldHasAnnotation(referenceAccessor.getField(), SupportedAnnotations.TRANSIENT);
         }
     }
 
