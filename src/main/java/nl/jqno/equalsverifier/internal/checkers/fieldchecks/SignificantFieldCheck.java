@@ -30,7 +30,7 @@ public class SignificantFieldCheck<T> implements FieldCheck {
     private final boolean skipCertainTestsThatDontMatterWhenValuesAreNull;
 
     public SignificantFieldCheck(
-            Configuration<T> config, Predicate<FieldAccessor> isCachedHashCodeField, boolean skipTestBecause0AndNullBothHaveA0HashCode) {
+            Configuration<T> config, Predicate<FieldAccessor> isCachedHashCodeField, boolean skipCertainTestsThatDontMatterWhenValuesAreNull) {
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
@@ -39,7 +39,7 @@ public class SignificantFieldCheck<T> implements FieldCheck {
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
         this.annotationCache = config.getAnnotationCache();
         this.isCachedHashCodeField = isCachedHashCodeField;
-        this.skipCertainTestsThatDontMatterWhenValuesAreNull = skipTestBecause0AndNullBothHaveA0HashCode;
+        this.skipCertainTestsThatDontMatterWhenValuesAreNull = skipCertainTestsThatDontMatterWhenValuesAreNull;
     }
 
     @Override
