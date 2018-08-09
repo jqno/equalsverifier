@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.EqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -50,12 +51,12 @@ public class OriginalStateTest extends IntegrationTestBase {
 
     @Test
     public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
-        EqualsVerifier<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
+        EqualsVerifierApi<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
         PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories();
 
         // Mock EqualsVerifier's StaticFieldValueStash
         ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);
-        FieldAccessor configFieldAccessor = objectAccessor.fieldAccessorFor(EqualsVerifier.class.getDeclaredField("config"));
+        FieldAccessor configFieldAccessor = objectAccessor.fieldAccessorFor(EqualsVerifierApi.class.getDeclaredField("config"));
         ObjectAccessor<?> configAccessor = ObjectAccessor.of(configFieldAccessor.get());
         FieldAccessor prefabValuesAccessor = configAccessor.fieldAccessorFor(Configuration.class.getDeclaredField("prefabValues"));
         prefabValuesAccessor.set(mockPrefabValues);
