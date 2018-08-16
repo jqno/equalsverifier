@@ -134,7 +134,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> usingGetClass() {
-        config = config.withUsingGetClass();
+        config = config.withUsingGetClass(true);
         return this;
     }
 

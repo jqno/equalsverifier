@@ -181,10 +181,10 @@ public final class Configuration<T> {
         return redefinedSubclass;
     }
 
-    public Configuration<T> withUsingGetClass() {
+    public Configuration<T> withUsingGetClass(boolean value) {
         return new Configuration<>(type, prefabValues, annotationCache, equalExamples, unequalExamples, actualFields, excludedFields,
                 includedFields, nonnullFields, ignoredAnnotations, cachedHashCodeInitializer, hasRedefinedSuperclass,
-                redefinedSubclass, true, warningsToSuppress);
+                redefinedSubclass, value, warningsToSuppress);
     }
 
     public boolean isUsingGetClass() {

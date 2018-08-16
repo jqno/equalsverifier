@@ -29,6 +29,10 @@ public final class EqualsVerifier {
      */
     private EqualsVerifier() {}
 
+    public static ConfiguredEqualsVerifierApi configure() {
+        return new ConfiguredEqualsVerifierApi();
+    }
+
     /**
      * Factory method. For general use.
      *
