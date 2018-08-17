@@ -70,7 +70,8 @@ public final class JavaApiPrefabValues {
 
     private void addJavaClasses() {
         addPrimitiveClasses();
-        addClasses();
+        addCommonClasses();
+        addUncommonClasses();
         addCollection();
         addLists();
         addMaps();
@@ -118,11 +119,10 @@ public final class JavaApiPrefabValues {
         addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
     }
 
-    // CHECKSTYLE: ignore ExecutableStatementCount for 58 lines.
     @SuppressFBWarnings(
         value = {"DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD"},
         justification = "We just need an instance of File and Thread; they're not for actual use.")
-    private void addClasses() {
+    private void addCommonClasses() {
         addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
         addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
         addValues(Calendar.class, new GregorianCalendar(2010, 7, 4), new GregorianCalendar(2010, 7, 5), new GregorianCalendar(2010, 7, 4));
@@ -154,6 +154,9 @@ public final class JavaApiPrefabValues {
         addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
+    }
+
+    private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
 
         addValues(java.sql.Date.class, new java.sql.Date(1337), new java.sql.Date(42), new java.sql.Date(1337));
@@ -165,17 +168,17 @@ public final class JavaApiPrefabValues {
         ConditionalInstantiator inet4Address = new ConditionalInstantiator("java.net.Inet4Address");
         ConditionalInstantiator inet6Address = new ConditionalInstantiator("java.net.Inet6Address");
         addValues(inetAddress.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(inet4Address.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(inet6Address.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::1")));
+            inetAddress.callFactory("getByName", classes(String.class), objects("::1")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("::")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("::1")));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
