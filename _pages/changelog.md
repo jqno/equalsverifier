@@ -9,6 +9,12 @@ permalink: /changelog/
 
 <a name="2.x"></a>
 
+Version 2.5.2
+-------------
+_August 17, 2018_
+
+* ...avoid adding prefab values for `Inet4Address`, `Inet6Address`, `java.sql.Date`, `java.sql.Time` and `java.sql.Timestamp`.
+
 Version 2.5.1
 -------------
 _August 5, 2018_
@@ -30,7 +36,7 @@ Version 2.4.8
 _July 4, 2018_
 
 * ...have better support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
-* ...prefab values for Java NIO Buffers. ([Issue 198](https://github.com/jqno/equalsverifier/issues/198))
+* ...avoid adding prefab values for Java NIO Buffers. ([Issue 198](https://github.com/jqno/equalsverifier/issues/198))
 
 Version 2.4.7
 -------------
