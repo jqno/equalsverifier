@@ -6,6 +6,8 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
 
 import java.io.File;
+import java.net.Inet4Address;
+import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.*;
 import java.text.SimpleDateFormat;
@@ -146,8 +148,8 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final EnumSet<TypeHelper.Enum> enumSet;
 
         public SetContainer(Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
-                            CopyOnWriteArraySet<String> copyOnWriteArraySet, HashSet<String> hashSet, TreeSet<String> treeSet,
-                            EnumSet<TypeHelper.Enum> enumSet) {
+                CopyOnWriteArraySet<String> copyOnWriteArraySet, HashSet<String> hashSet, TreeSet<String> treeSet,
+                EnumSet<TypeHelper.Enum> enumSet) {
             this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
             this.copyOnWriteArraySet = copyOnWriteArraySet; this.hashSet = hashSet; this.treeSet = treeSet;
             this.enumSet = enumSet;
@@ -275,19 +277,26 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final SimpleDateFormat simpleDateFormat;
         private final UUID uuid;
         private final InetAddress inetAddress;
+        private final Inet4Address inet4Address;
+        private final Inet6Address inet6Address;
         private final Thread thread;
+        private final java.sql.Date sqlDate;
+        private final java.sql.Time sqlTime;
+        private final java.sql.Timestamp sqlTimestamp;
         private final java.awt.color.ColorSpace awtColorSpace;
         private final java.awt.color.ICC_ColorSpace iccColorSpace;
         private final java.awt.color.ICC_Profile iccProfile;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset,
-                Calendar calendar, Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress, Thread thread,
+        public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset, Calendar calendar,
+                Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
+                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
+                Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp,
                 java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace, java.awt.color.ICC_Profile iccProfile) {
-            this.string = string; this.integer = integer; this.type = type; this.bitset = bitset;
-            this.calendar = calendar; this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-            this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress; this.thread = thread;
+            this.string = string; this.integer = integer; this.type = type; this.bitset = bitset; this.calendar = calendar;
+            this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
+            this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress; this.inet4Address = inet4Address;
+            this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate; this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
             this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile;
         }
 
