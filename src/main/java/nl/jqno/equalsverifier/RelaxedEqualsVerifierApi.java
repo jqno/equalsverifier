@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.internal.util.Configuration;
-
 import java.util.List;
 
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLeastOne;
@@ -63,10 +61,7 @@ public class RelaxedEqualsVerifierApi<T> {
             }
         }
 
-        Configuration<T> config = Configuration.of(type)
-            .withEqualExamples(equalExamples)
-            .withUnequalExamples(unequalExamples);
-        return new EqualsVerifierApi<>(config)
+        return new EqualsVerifierApi<>(type, equalExamples, unequalExamples)
             .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }
 }

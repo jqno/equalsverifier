@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.internal.util.Configuration;
-
 import java.util.Collections;
 import java.util.EnumSet;
 
@@ -20,9 +18,6 @@ public final class ConfiguredEqualsVerifierApi {
     }
 
     public <T> EqualsVerifierApi<T> forClass(Class<T> type) {
-        Configuration<T> config = Configuration.of(type)
-                .withWarningsToSuppress(EnumSet.copyOf(warningsToSuppress))
-                .withUsingGetClass(usingGetClass);
-        return new EqualsVerifierApi<>(config);
+        return new EqualsVerifierApi<>(type, EnumSet.copyOf(warningsToSuppress), usingGetClass);
     }
 }

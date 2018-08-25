@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 
 import java.util.List;
@@ -40,8 +39,7 @@ public final class EqualsVerifier {
      *          tested.
      */
     public static <T> EqualsVerifierApi<T> forClass(Class<T> type) {
-        Configuration<T> config = Configuration.of(type);
-        return new EqualsVerifierApi<>(config);
+        return new EqualsVerifierApi<>(type);
     }
 
     /**

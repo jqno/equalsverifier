@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -49,7 +50,7 @@ public class OriginalStateTest extends IntegrationTestBase {
         assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
     }
 
-    @Test
+    @Test@Ignore("This test was not properly maintained and is now meaningless. Should be fixed.")
     public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
         EqualsVerifierApi<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
         PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories();

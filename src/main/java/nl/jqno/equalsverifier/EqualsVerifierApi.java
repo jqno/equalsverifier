@@ -4,16 +4,12 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.FieldNameExtractor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objectweb.asm.Type;
 
@@ -27,14 +23,46 @@ import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.s
  * @param <T> The class under test.
  */
 public class EqualsVerifierApi<T> {
-    private Configuration<T> config;
+    private final Class<T> type;
+    private final Set<String> actualFields;
+
+    private EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
+    private boolean usingGetClass = false;
+    private boolean hasRedefinedSuperclass = false;
+    private Class<? extends T> redefinedSubclass = null;
+    private PrefabValues prefabValues = new PrefabValues();
+    private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
+    private Set<String> allExcludedFields = new HashSet<>();
+    private Set<String> allIncludedFields = new HashSet<>();
+    private Set<String> nonnullFields = new HashSet<>();
+    private Set<String> ignoredAnnotationDescriptors = new HashSet<>();
+    private List<T> equalExamples = new ArrayList<>();
+    private List<T> unequalExamples = new ArrayList<>();
 
     /**
      * Constructor, only to be called by {@link EqualsVerifier#forClass(Class)}.
      */
-    /* package protected */ EqualsVerifierApi(Configuration<T> config) {
-        this.config = config;
-        JavaApiPrefabValues.addTo(config.getPrefabValues());
+    /* package protected */ EqualsVerifierApi(Class<T> type) {
+        this.type = type;
+        actualFields = FieldNameExtractor.extractFieldNames(type);
+    }
+
+    /**
+     * Constructor, only to be called by {@link ConfiguredEqualsVerifierApi#forClass(Class)}.
+     */
+    /* package protected */ EqualsVerifierApi(Class<T> type, EnumSet<Warning> warningsToSuppress, boolean usingGetClass) {
+        this(type);
+        this.warningsToSuppress = warningsToSuppress;
+        this.usingGetClass = usingGetClass;
+    }
+
+    /**
+     * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object, Object[])}.
+     */
+    /* package protected */ EqualsVerifierApi(Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+        this(type);
+        this.equalExamples = equalExamples;
+        this.unequalExamples = unequalExamples;
     }
 
     /**
@@ -46,9 +74,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> suppress(Warning... warnings) {
-        EnumSet<Warning> ws = config.getWarningsToSuppress();
-        Collections.addAll(ws, warnings);
-        config = config.withWarningsToSuppress(ws);
+        Collections.addAll(warningsToSuppress, warnings);
         assertNoNonnullFields();
         return this;
     }
@@ -78,11 +104,11 @@ public class EqualsVerifierApi<T> {
         }
 
         if (red.getClass().isArray()) {
-            config.getPrefabValues().addFactory(otherType, red, black, red);
+            prefabValues.addFactory(otherType, red, black, red);
         }
         else {
             S redCopy = ObjectAccessor.of(red).copy();
-            config.getPrefabValues().addFactory(otherType, red, black, redCopy);
+            prefabValues.addFactory(otherType, red, black, redCopy);
         }
         return this;
     }
@@ -134,7 +160,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> usingGetClass() {
-        config = config.withUsingGetClass(true);
+        this.usingGetClass = true;
         return this;
     }
 
@@ -155,9 +181,7 @@ public class EqualsVerifierApi<T> {
         List<String> toBeExcludedFields = Arrays.asList(fields);
         validateFieldNamesExist(toBeExcludedFields);
 
-        List<String> allExcludedFields = new ArrayList<>(config.getExcludedFields());
         allExcludedFields.addAll(toBeExcludedFields);
-        config = config.withExcludedFields(allExcludedFields);
         return this;
     }
 
@@ -177,9 +201,7 @@ public class EqualsVerifierApi<T> {
 
         validateFieldNamesExist(specifiedFields);
 
-        List<String> allIncludedFields = new ArrayList<>(config.getIncludedFields());
         allIncludedFields.addAll(specifiedFields);
-        config = config.withIncludedFields(allIncludedFields);
         return this;
     }
 
@@ -196,9 +218,9 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withNonnullFields(String... fields) {
-        List<String> nonnullFields = Arrays.asList(fields);
-        validateFieldNamesExist(nonnullFields);
-        config = config.withNonnullFields(nonnullFields);
+        List<String> fieldsAsList = Arrays.asList(fields);
+        validateFieldNamesExist(fieldsAsList);
+        nonnullFields.addAll(fieldsAsList);
         assertNoNonnullFields();
         return this;
     }
@@ -216,11 +238,9 @@ public class EqualsVerifierApi<T> {
      */
     public EqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
         validateAnnotationsAreValid(annotations);
-        List<String> ignoredAnnotationDescriptors = new ArrayList<>();
         for (Class<?> ignoredAnnotation : annotations) {
             ignoredAnnotationDescriptors.add(Type.getDescriptor(ignoredAnnotation));
         }
-        config = config.withIgnoredAnnotations(ignoredAnnotationDescriptors);
         return this;
     }
 
@@ -235,7 +255,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withRedefinedSuperclass() {
-        config = config.withRedefinedSuperclass();
+        this.hasRedefinedSuperclass = true;
         return this;
     }
 
@@ -248,14 +268,14 @@ public class EqualsVerifierApi<T> {
      * {@link EqualsVerifier} should be used as well to verify its
      * adherence to the contracts.
      *
-     * @param redefinedSubclass A subclass of T for which no instance can be
-     *          equal to any instance of T.
+     * @param subclass A subclass of T for which no instance can be equal to
+     *          any instance of T.
      * @return {@code this}, for easy method chaining.
      *
      * @see Warning#STRICT_INHERITANCE
      */
-    public EqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> redefinedSubclass) {
-        config = config.withRedefinedSubclass(redefinedSubclass);
+    public EqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
+        this.redefinedSubclass = subclass;
         return this;
     }
 
@@ -290,9 +310,8 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
-        CachedHashCodeInitializer<T> cachedHashCodeInitializer =
-            new CachedHashCodeInitializer<>(config.getType(), cachedHashCodeField, calculateHashCodeMethod, example);
-        config = config.withCachedHashCodeInitializer(cachedHashCodeInitializer);
+        cachedHashCodeInitializer =
+            new CachedHashCodeInitializer<>(type, cachedHashCodeField, calculateHashCodeMethod, example);
         return this;
     }
 
@@ -306,22 +325,22 @@ public class EqualsVerifierApi<T> {
                 otherType.getName() + " has " + n + "\n  Factory has " + arity);
         }
 
-        config.getPrefabValues().addFactory(otherType, factory);
+        prefabValues.addFactory(otherType, factory);
         return this;
     }
 
     private void assertNoNonnullFields() {
-        if (!config.getNonnullFields().isEmpty() && config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
+        if (!nonnullFields.isEmpty() && warningsToSuppress.contains(Warning.NULL_FIELDS)) {
             throw new IllegalArgumentException("You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         }
     }
 
     private void assertNoExistingExcludedFields() {
-        assertNoExistingFields(config.getExcludedFields());
+        assertNoExistingFields(allExcludedFields);
     }
 
     private void assertNoExistingIncludedFields() {
-        assertNoExistingFields(config.getIncludedFields());
+        assertNoExistingFields(allIncludedFields);
     }
 
     private void assertNoExistingFields(Set<String> fields) {
@@ -331,10 +350,9 @@ public class EqualsVerifierApi<T> {
     }
 
     private void validateFieldNamesExist(List<String> givenFields) {
-        Set<String> actualFieldNames = config.getActualFields();
         for (String field : givenFields) {
-            if (!actualFieldNames.contains(field)) {
-                throw new IllegalArgumentException("Class " + config.getType().getSimpleName() + " does not contain field " + field + ".");
+            if (!actualFields.contains(field)) {
+                throw new IllegalArgumentException("Class " + type.getSimpleName() + " does not contain field " + field + ".");
             }
         }
     }
@@ -379,24 +397,23 @@ public class EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
-        if (config.getType().isEnum()) {
+        if (type.isEnum()) {
             return;
         }
 
-        buildAnnotationCache();
-        verifyWithoutExamples();
-        ensureUnequalExamples();
-        verifyWithExamples();
+        Configuration<T> config = buildConfig();
+
+        verifyWithoutExamples(config);
+        verifyWithExamples(config);
     }
 
-    private void buildAnnotationCache() {
-        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(SupportedAnnotations.values(), config.getIgnoredAnnotations());
-        AnnotationCache cache = new AnnotationCache();
-        acb.build(config.getType(), cache);
-        config = config.withAnnotationCache(cache);
+    private Configuration<T> buildConfig() {
+        return new Configuration<>(type, allExcludedFields, allIncludedFields, nonnullFields, cachedHashCodeInitializer,
+                hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, prefabValues,
+                ignoredAnnotationDescriptors, actualFields, equalExamples, unequalExamples);
     }
 
-    private void verifyWithoutExamples() {
+    private void verifyWithoutExamples(Configuration<T> config) {
         Checker[] checkers = {
             new SignatureChecker<>(config),
             new AbstractDelegationChecker<>(config),
@@ -409,21 +426,7 @@ public class EqualsVerifierApi<T> {
         }
     }
 
-    private void ensureUnequalExamples() {
-        if (config.getUnequalExamples().size() > 0) {
-            return;
-        }
-
-        TypeTag tag = config.getTypeTag();
-        ClassAccessor<T> classAccessor = config.createClassAccessor();
-
-        List<T> unequalExamples = new ArrayList<>();
-        unequalExamples.add(classAccessor.getRedObject(tag));
-        unequalExamples.add(classAccessor.getBlackObject(tag));
-        config = config.withUnequalExamples(unequalExamples);
-    }
-
-    private void verifyWithExamples() {
+    private void verifyWithExamples(Configuration<T> config) {
         Checker[] checkers = {
             new ExamplesChecker<>(config),
             new HierarchyChecker<>(config),
