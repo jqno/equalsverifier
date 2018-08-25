@@ -124,7 +124,7 @@ public final class EqualsVerifier<T> {
             throw new NullPointerException("Type is null");
         }
         if (red == null || black == null) {
-            throw new NullPointerException("One or both values are null.");
+            throw new NullPointerException(String.format( "Red: %s or Black: %s is null", red, black ));
         }
         if (red.equals(black)) {
             throw new IllegalArgumentException("Both values are equal.");
