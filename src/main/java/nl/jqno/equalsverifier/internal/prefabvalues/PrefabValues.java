@@ -22,8 +22,15 @@ public class PrefabValues {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
 
     private final Cache cache = new Cache();
-    private final FactoryCache factoryCache = new FactoryCache();
+    private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
+
+    /**
+     * Constructor.
+     */
+    public PrefabValues(FactoryCache factoryCache) {
+        this.factoryCache = factoryCache;
+    }
 
     /**
      * Associates the factory that can create instances of the given type,

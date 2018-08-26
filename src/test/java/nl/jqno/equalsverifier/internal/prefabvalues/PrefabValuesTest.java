@@ -26,12 +26,14 @@ public class PrefabValuesTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private PrefabValues pv = new PrefabValues();
+    private FactoryCache factoryCache = new FactoryCache();
+    private PrefabValues pv;
 
     @Before
     public void setUp() {
-        pv.addFactory(String.class, new AppendingStringTestFactory());
-        pv.addFactory(int.class, 42, 1337, 42);
+        factoryCache.put(String.class, new AppendingStringTestFactory());
+        factoryCache.put(int.class, values(42, 1337, 42));
+        pv = new PrefabValues(factoryCache);
     }
 
     @Test

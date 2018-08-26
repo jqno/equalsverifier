@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -37,8 +38,9 @@ public class ClassAccessorTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues();
-        JavaApiPrefabValues.addTo(prefabValues);
+        FactoryCache factoryCache = new FactoryCache();
+        JavaApiPrefabValues.addTo(factoryCache);
+        prefabValues = new PrefabValues(factoryCache);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);
         defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues);

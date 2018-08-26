@@ -1,9 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -22,8 +19,9 @@ public class JavaFxFactoryProviderTest {
 
     @Before
     public void setUp() {
-        prefabValues = new PrefabValues();
-        JavaApiPrefabValues.addTo(prefabValues);
+        FactoryCache factoryCache = new FactoryCache();
+        JavaApiPrefabValues.addTo(factoryCache);
+        prefabValues = new PrefabValues(factoryCache);
     }
 
     @Test

@@ -4,7 +4,7 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -16,6 +16,7 @@ import org.objectweb.asm.Type;
 import java.util.*;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.simple;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -30,7 +31,7 @@ public class EqualsVerifierApi<T> {
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
-    private PrefabValues prefabValues = new PrefabValues();
+    private FactoryCache factoryCache = new FactoryCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
     private Set<String> allExcludedFields = new HashSet<>();
     private Set<String> allIncludedFields = new HashSet<>();
@@ -104,11 +105,11 @@ public class EqualsVerifierApi<T> {
         }
 
         if (red.getClass().isArray()) {
-            prefabValues.addFactory(otherType, red, black, red);
+            factoryCache.put(otherType, values(red, black, red));
         }
         else {
             S redCopy = ObjectAccessor.of(red).copy();
-            prefabValues.addFactory(otherType, red, black, redCopy);
+            factoryCache.put(otherType, values(red, black, redCopy));
         }
         return this;
     }
@@ -325,7 +326,7 @@ public class EqualsVerifierApi<T> {
                 otherType.getName() + " has " + n + "\n  Factory has " + arity);
         }
 
-        prefabValues.addFactory(otherType, factory);
+        factoryCache.put(otherType, factory);
         return this;
     }
 
@@ -409,7 +410,7 @@ public class EqualsVerifierApi<T> {
 
     private Configuration<T> buildConfig() {
         return new Configuration<>(type, allExcludedFields, allIncludedFields, nonnullFields, cachedHashCodeInitializer,
-                hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, prefabValues,
+                hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, factoryCache,
                 ignoredAnnotationDescriptors, actualFields, equalExamples, unequalExamples);
     }
 

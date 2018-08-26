@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -35,7 +36,7 @@ public class Configuration<T> {
     public Configuration(Class<T> type, Set<String> excludedFields, Set<String> includedFields,
                 Set<String> nonnullFields, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
-                PrefabValues prefabValues, Set<String> ignoredAnnotationDescriptors, Set<String> actualFields,
+                FactoryCache factoryCache, Set<String> ignoredAnnotationDescriptors, Set<String> actualFields,
                 List<T> equalExamples, List<T> unequalExamples) {
         this.type = type;
         this.excludedFields = excludedFields;
@@ -48,8 +49,8 @@ public class Configuration<T> {
         this.warningsToSuppress = warningsToSuppress;
 
         this.typeTag = new TypeTag(type);
-        this.prefabValues = prefabValues;
-        JavaApiPrefabValues.addTo(prefabValues);
+        JavaApiPrefabValues.addTo(factoryCache);
+        this.prefabValues = new PrefabValues(factoryCache);
         this.classAccessor = ClassAccessor.of(type, prefabValues);
         this.annotationCache = buildAnnotationCache(ignoredAnnotationDescriptors);
         this.ignoredFields = includedFields.isEmpty() ? excludedFields : invertIncludedFields(actualFields);

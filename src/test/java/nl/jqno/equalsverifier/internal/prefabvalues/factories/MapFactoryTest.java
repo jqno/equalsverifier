@@ -1,9 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.prefabvalues.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,8 +23,9 @@ public class MapFactoryTest {
 
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
-    private final PrefabValues prefabValues = new PrefabValues();
+    private final FactoryCache factoryCache = new FactoryCache();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private PrefabValues prefabValues;
     private String red;
     private String black;
     private Object redObject;
@@ -36,7 +34,8 @@ public class MapFactoryTest {
 
     @Before
     public void setUp() {
-        JavaApiPrefabValues.addTo(prefabValues);
+        JavaApiPrefabValues.addTo(factoryCache);
+        prefabValues = new PrefabValues(factoryCache);
         red = prefabValues.giveRed(STRING_TYPETAG);
         black = prefabValues.giveBlack(STRING_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);
