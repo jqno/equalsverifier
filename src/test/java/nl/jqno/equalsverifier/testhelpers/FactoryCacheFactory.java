@@ -1,14 +1,13 @@
 package nl.jqno.equalsverifier.testhelpers;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
-public final class PrefabValuesFactory {
-    private PrefabValuesFactory() {}
+public final class FactoryCacheFactory {
+    private FactoryCacheFactory() {}
 
-    public static PrefabValues withPrimitiveFactories() {
+    public static FactoryCache withPrimitiveFactories() {
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(boolean.class, values(true, false, true));
         factoryCache.put(byte.class, values((byte)1, (byte)2, (byte)1));
@@ -18,6 +17,6 @@ public final class PrefabValuesFactory {
         factoryCache.put(int.class, values(1, 2, 1));
         factoryCache.put(long.class, values(1L, 2L, 1L));
         factoryCache.put(short.class, values((short)1, (short)2, (short)1));
-        return new PrefabValues(factoryCache);
+        return factoryCache;
     }
 }

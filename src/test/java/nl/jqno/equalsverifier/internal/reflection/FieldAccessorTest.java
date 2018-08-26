@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import java.lang.reflect.Field;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.Assert.*;
 
 public class FieldAccessorTest {
@@ -27,6 +28,7 @@ public class FieldAccessorTest {
     public void setup() {
         FactoryCache factoryCache = new FactoryCache();
         JavaApiPrefabValues.addTo(factoryCache);
+        factoryCache.put(Point.class, values(RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT));
         prefabValues = new PrefabValues(factoryCache);
     }
 
@@ -418,7 +420,6 @@ public class FieldAccessorTest {
     @Test
     public void addPrefabValues() {
         PointContainer foo = new PointContainer(new Point(1, 2));
-        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT);
 
         doChangeField(foo, "point");
         assertEquals(RED_NEW_POINT, foo.getPoint());
@@ -433,7 +434,6 @@ public class FieldAccessorTest {
     @Test
     public void addPrefabArrayValues() {
         PointArrayContainer foo = new PointArrayContainer();
-        prefabValues.addFactory(Point.class, RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT);
 
         doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);

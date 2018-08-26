@@ -4,7 +4,6 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,43 +29,6 @@ public class PrefabValues {
      */
     public PrefabValues(FactoryCache factoryCache) {
         this.factoryCache = factoryCache;
-    }
-
-    /**
-     * Associates the factory that can create instances of the given type,
-     * with the specified class.
-     *
-     * @param <T> The type of value to which the factory is associated.
-     * @param type The class of the values.
-     * @param factory The factory.
-     */
-    public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
-        factoryCache.put(type, factory);
-    }
-
-    /**
-     * Associates the specified values with the specified class.
-     *
-     * @param <T> The type of value to put into this {@link PrefabValues}.
-     * @param type The class of the values.
-     * @param red A value of type T.
-     * @param black Another value of type T.
-     * @param redCopy A shallow copy of red.
-     */
-    public <T> void addFactory(Class<T> type, T red, T black, T redCopy) {
-        factoryCache.put(type, new SimpleFactory<>(red, black, redCopy));
-    }
-
-    /**
-     * Associates the factory that can create instances of the given type,
-     * with the specified class, but only when it's actually encountered.
-     *
-     * @param <T> The type of value to which the factory is associated.
-     * @param typeName The class name of the values.
-     * @param factory The factory.
-     */
-    public <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
-        factoryCache.put(typeName, factory);
     }
 
     /**

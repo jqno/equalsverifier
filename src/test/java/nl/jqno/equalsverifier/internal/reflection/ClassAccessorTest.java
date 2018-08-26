@@ -23,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.Assert.*;
 
 public class ClassAccessorTest {
@@ -30,6 +31,7 @@ public class ClassAccessorTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
+    private FactoryCache factoryCache = new FactoryCache();
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
@@ -38,7 +40,6 @@ public class ClassAccessorTest {
 
     @Before
     public void setup() {
-        FactoryCache factoryCache = new FactoryCache();
         JavaApiPrefabValues.addTo(factoryCache);
         prefabValues = new PrefabValues(factoryCache);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
@@ -227,7 +228,8 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
-        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
+        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        prefabValues = new PrefabValues(factoryCache);
         ClassAccessor.of(TwoStepNodeA.class, prefabValues).getRedObject(TypeTag.NULL);
     }
 

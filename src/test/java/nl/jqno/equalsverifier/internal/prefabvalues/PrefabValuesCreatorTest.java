@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
+import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
@@ -12,6 +12,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
@@ -29,11 +30,13 @@ public class PrefabValuesCreatorTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
+    private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
     @Before
     public void setup() {
-        prefabValues = PrefabValuesFactory.withPrimitiveFactories();
+        factoryCache = FactoryCacheFactory.withPrimitiveFactories();
+        prefabValues = new PrefabValues(factoryCache);
     }
 
     @Test
@@ -72,7 +75,8 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveType() {
-        prefabValues.addFactory(Node.class, new Node(), new Node(), new Node());
+        factoryCache.put(Node.class, values(new Node(), new Node(), new Node()));
+        prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(NODE_TAG);
     }
 
@@ -84,7 +88,8 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void oneStepRecursiveArrayType() {
-        prefabValues.addFactory(NodeArray.class, new NodeArray(), new NodeArray(), new NodeArray());
+        factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
+        prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -96,7 +101,8 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void addTwoStepRecursiveType() {
-        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
+        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -108,7 +114,8 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void twoStepRecursiveArrayType() {
-        prefabValues.addFactory(TwoStepNodeArrayB.class, new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB());
+        factoryCache.put(TwoStepNodeArrayB.class, values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
+        prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 

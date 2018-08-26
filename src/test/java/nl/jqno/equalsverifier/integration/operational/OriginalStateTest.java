@@ -6,8 +6,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
-import nl.jqno.equalsverifier.testhelpers.PrefabValuesFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -53,7 +53,7 @@ public class OriginalStateTest extends IntegrationTestBase {
     @Test@Ignore("This test was not properly maintained and is now meaningless. Should be fixed.")
     public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
         EqualsVerifierApi<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-        PrefabValues mockPrefabValues = PrefabValuesFactory.withPrimitiveFactories();
+        PrefabValues mockPrefabValues = new PrefabValues(FactoryCacheFactory.withPrimitiveFactories());
 
         // Mock EqualsVerifier's StaticFieldValueStash
         ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);
