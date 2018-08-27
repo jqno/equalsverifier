@@ -21,8 +21,7 @@ public class ObjectAccessorScramblingTest {
 
     @Before
     public void setup() {
-        FactoryCache factoryCache = new FactoryCache();
-        JavaApiPrefabValues.addTo(factoryCache);
+        FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         prefabValues = new PrefabValues(factoryCache);
     }

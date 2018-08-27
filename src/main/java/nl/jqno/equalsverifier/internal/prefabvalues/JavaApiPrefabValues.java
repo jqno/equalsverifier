@@ -51,21 +51,20 @@ public final class JavaApiPrefabValues {
     private enum Dummy { RED, BLACK }
 
     /**
-     * Private constructor. Use {@link #addTo(FactoryCache)}.
+     * Private constructor. Use {@link #build()}.
      */
     private JavaApiPrefabValues(FactoryCache factoryCache) {
         this.factoryCache = factoryCache;
     }
 
     /**
-     * Adds instances of Java API classes that cannot be instantiated
-     * dynamically to {@code prefabValues}.
-     *
-     * @param factoryCache The instance of FactoryCache that should
-     *          contain the Java API instances.
+     * Creates a FactoryCache pre-populated with instances of Java API classes
+     * that cannot be instantiated dynamically.
      */
-    public static void addTo(FactoryCache factoryCache) {
-        new JavaApiPrefabValues(factoryCache).addJavaClasses();
+    public static FactoryCache build() {
+        FactoryCache result = new FactoryCache();
+        new JavaApiPrefabValues(result).addJavaClasses();
+        return result;
     }
 
     private void addJavaClasses() {

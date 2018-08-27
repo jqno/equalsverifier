@@ -31,7 +31,7 @@ public class ClassAccessorTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
-    private FactoryCache factoryCache = new FactoryCache();
+    private FactoryCache factoryCache;
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
@@ -40,7 +40,7 @@ public class ClassAccessorTest {
 
     @Before
     public void setup() {
-        JavaApiPrefabValues.addTo(factoryCache);
+        factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);

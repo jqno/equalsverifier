@@ -1,6 +1,9 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,9 +39,7 @@ public class SimpleGenericFactoryTest {
 
     @Before
     public void setUp() {
-        FactoryCache factoryCache = new FactoryCache();
-        JavaApiPrefabValues.addTo(factoryCache);
-        prefabValues = new PrefabValues(factoryCache);
+        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         redString = prefabValues.giveRed(STRING_TYPETAG);
         blackString = prefabValues.giveBlack(STRING_TYPETAG);
         redInt = prefabValues.giveRed(INTEGER_TYPETAG);

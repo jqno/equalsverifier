@@ -49,8 +49,8 @@ public class Configuration<T> {
         this.warningsToSuppress = warningsToSuppress;
 
         this.typeTag = new TypeTag(type);
-        JavaApiPrefabValues.addTo(factoryCache);
-        this.prefabValues = new PrefabValues(factoryCache);
+        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
+        this.prefabValues = new PrefabValues(cache);
         this.classAccessor = ClassAccessor.of(type, prefabValues);
         this.annotationCache = buildAnnotationCache(ignoredAnnotationDescriptors);
         this.ignoredFields = includedFields.isEmpty() ? excludedFields : invertIncludedFields(actualFields);

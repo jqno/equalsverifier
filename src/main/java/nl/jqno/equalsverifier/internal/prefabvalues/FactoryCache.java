@@ -83,6 +83,6 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
      */
     @Override
     public Iterator<Map.Entry<String, PrefabValueFactory<?>>> iterator() {
-        return null;
+        return cache.entrySet().iterator();
     }
 }

@@ -26,8 +26,7 @@ public class FieldAccessorTest {
 
     @Before
     public void setup() {
-        FactoryCache factoryCache = new FactoryCache();
-        JavaApiPrefabValues.addTo(factoryCache);
+        FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT));
         prefabValues = new PrefabValues(factoryCache);
     }
