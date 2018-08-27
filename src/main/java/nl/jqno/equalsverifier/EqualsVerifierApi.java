@@ -409,7 +409,7 @@ public class EqualsVerifierApi<T> {
     }
 
     private Configuration<T> buildConfig() {
-        return new Configuration<>(type, allExcludedFields, allIncludedFields, nonnullFields, cachedHashCodeInitializer,
+        return Configuration.build(type, allExcludedFields, allIncludedFields, nonnullFields, cachedHashCodeInitializer,
                 hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, factoryCache,
                 ignoredAnnotationDescriptors, actualFields, equalExamples, unequalExamples);
     }
