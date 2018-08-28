@@ -28,6 +28,16 @@ public final class EqualsVerifier {
      */
     private EqualsVerifier() {}
 
+    /**
+     * Creates a configuration object that can be reused with EqualsVerifier
+     * for multiple classes. It has a fluent API.
+     *
+     * Save the configuration in a variable of type {@link EqualsVerifierApi}
+     * and call {@link #forClass(Class)} on it for each class whose
+     * {@code equals} and {@code hashCode} must be verified.
+     *
+     * @return A reusable configuration object with a fluent API.
+     */
     public static ConfiguredEqualsVerifierApi configure() {
         return new ConfiguredEqualsVerifierApi();
     }
@@ -37,6 +47,7 @@ public final class EqualsVerifier {
      *
      * @param type The class for which the {@code equals} method should be
      *          tested.
+     * @return A fluent API for EqualsVerifier.
      */
     public static <T> EqualsVerifierApi<T> forClass(Class<T> type) {
         return new EqualsVerifierApi<>(type);
@@ -67,6 +78,7 @@ public final class EqualsVerifier {
      * @param more More instances of T, all of which are equal, but not
      *          identical, to one another and to {@code first} and
      *          {@code second}.
+     * @return A fluent API for a more relaxed EqualsVerifier.
      */
     @SafeVarargs
     public static <T> RelaxedEqualsVerifierApi<T> forRelaxedEqualExamples(T first, T second, T... more) {
