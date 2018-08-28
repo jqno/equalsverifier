@@ -5,18 +5,11 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.FieldNameExtractor;
+import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objectweb.asm.Type;
 
 import java.util.*;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.simple;
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -94,23 +87,7 @@ public class EqualsVerifierApi<T> {
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
     public <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S black) {
-        if (otherType == null) {
-            throw new NullPointerException("Type is null");
-        }
-        if (red == null || black == null) {
-            throw new NullPointerException("One or both values are null.");
-        }
-        if (red.equals(black)) {
-            throw new IllegalArgumentException("Both values are equal.");
-        }
-
-        if (red.getClass().isArray()) {
-            factoryCache.put(otherType, values(red, black, red));
-        }
-        else {
-            S redCopy = ObjectAccessor.of(red).copy();
-            factoryCache.put(otherType, values(red, black, redCopy));
-        }
+        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, black);
         return this;
     }
 
@@ -128,10 +105,8 @@ public class EqualsVerifierApi<T> {
      *          {@code factory} is null.
      */
     public <S> EqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
-        if (factory == null) {
-            throw new NullPointerException("Factory is null");
-        }
-        return withGenericPrefabValueFactory(otherType, simple(factory, null), 1);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        return this;
     }
 
     /**
@@ -148,10 +123,8 @@ public class EqualsVerifierApi<T> {
      *          {@code factory} is null.
      */
     public <S> EqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
-        if (factory == null) {
-            throw new NullPointerException("Factory is null");
-        }
-        return withGenericPrefabValueFactory(otherType, simple(factory, null), 2);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
+        return this;
     }
 
     /**
@@ -313,20 +286,6 @@ public class EqualsVerifierApi<T> {
     public EqualsVerifierApi<T> withCachedHashCode(String cachedHashCodeField, String calculateHashCodeMethod, T example) {
         cachedHashCodeInitializer =
             new CachedHashCodeInitializer<>(type, cachedHashCodeField, calculateHashCodeMethod, example);
-        return this;
-    }
-
-    private <S> EqualsVerifierApi<T> withGenericPrefabValueFactory(Class<S> otherType, PrefabValueFactory<S> factory, int arity) {
-        if (otherType == null) {
-            throw new NullPointerException("Type is null");
-        }
-        int n = otherType.getTypeParameters().length;
-        if (n != arity) {
-            throw new IllegalArgumentException("Number of generic type parameters doesn't match:\n  " +
-                otherType.getName() + " has " + n + "\n  Factory has " + arity);
-        }
-
-        factoryCache.put(otherType, factory);
         return this;
     }
 
