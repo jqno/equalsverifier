@@ -2,12 +2,19 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveType;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.Test;
 
-public class ConfiguredEqualsVerifierTest {
+public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
 
     @Test
     public void succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
@@ -22,6 +29,51 @@ public class ConfiguredEqualsVerifierTest {
         EqualsVerifier.configure()
                 .suppress(Warning.STRICT_INHERITANCE)
                 .forClass(PointContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void sanity_fail_whenTypeIsRecursive() {
+        expectFailure("Recursive datastructure");
+        EqualsVerifier.forClass(RecursiveType.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenTypeIsRecursive_givenPrefabValuesArePreconfigured() {
+        EqualsVerifier.configure()
+                .withPrefabValues(RecursiveType.class, new RecursiveType(null), new RecursiveType(new RecursiveType(null)))
+                .forClass(RecursiveTypeContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void sanity_fail_whenSingleGenericTypeIsRecursive() {
+        expectFailure("Recursive datastructure");
+        EqualsVerifier.forClass(SingleGenericContainerContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenSingleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+        EqualsVerifier.configure()
+                .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
+                .forClass(SingleGenericContainerContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
+        expectFailure("Recursive datastructure");
+        EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenDoubleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+        EqualsVerifier.configure()
+                .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
+                .forClass(DoubleGenericContainerContainer.class)
                 .verify();
     }
 

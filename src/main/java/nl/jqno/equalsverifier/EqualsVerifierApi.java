@@ -44,9 +44,10 @@ public class EqualsVerifierApi<T> {
     /**
      * Constructor, only to be called by {@link ConfiguredEqualsVerifierApi#forClass(Class)}.
      */
-    /* package protected */ EqualsVerifierApi(Class<T> type, EnumSet<Warning> warningsToSuppress, boolean usingGetClass) {
+    /* package protected */ EqualsVerifierApi(Class<T> type, EnumSet<Warning> warningsToSuppress, FactoryCache factoryCache, boolean usingGetClass) {
         this(type);
         this.warningsToSuppress = warningsToSuppress;
+        this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
     }
 
