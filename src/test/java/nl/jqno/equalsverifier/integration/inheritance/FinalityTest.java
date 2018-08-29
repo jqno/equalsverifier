@@ -2,13 +2,13 @@ package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class FinalityTest extends IntegrationTestBase {
+public class FinalityTest extends ExpectedExceptionTestBase {
     private static final String BOTH_FINAL_OR_NONFINAL = "Finality: equals and hashCode must both be final or both be non-final";
     private static final String SUBCLASS = "Subclass";
     private static final String SUPPLY_AN_INSTANCE =

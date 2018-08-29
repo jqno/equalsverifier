@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class AnnotationsIgnoreTest extends IntegrationTestBase {
+public class AnnotationsIgnoreTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
         expectFailure("Mutability");

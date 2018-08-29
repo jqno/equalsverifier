@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
@@ -12,7 +12,7 @@ import org.junit.Test;
 
 import java.util.Objects;
 
-public class AnnotationNonnullEclipseTest extends IntegrationTestBase {
+public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseAnnotationOnFieldType() {
         EqualsVerifier.forClass(NonnullTypeUse.class)

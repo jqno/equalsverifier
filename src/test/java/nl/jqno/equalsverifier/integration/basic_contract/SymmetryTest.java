@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class SymmetryTest extends IntegrationTestBase {
+public class SymmetryTest extends ExpectedExceptionTestBase {
     private static final String SYMMETRY = "Symmetry";
     private static final String NOT_SYMMETRIC = "objects are not symmetric";
     private static final String AND = "and";

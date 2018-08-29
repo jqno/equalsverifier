@@ -2,12 +2,12 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class SignatureTest extends IntegrationTestBase {
+public class SignatureTest extends ExpectedExceptionTestBase {
     private static final String OVERLOADED = "Overloaded";
     private static final String SIGNATURE_SHOULD_BE = "Signature should be";
     private static final String SIGNATURE = "public boolean equals(Object obj)";

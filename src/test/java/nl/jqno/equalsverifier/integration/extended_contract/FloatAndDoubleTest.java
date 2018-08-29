@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class FloatAndDoubleTest extends IntegrationTestBase {
+public class FloatAndDoubleTest extends ExpectedExceptionTestBase {
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
     private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
 

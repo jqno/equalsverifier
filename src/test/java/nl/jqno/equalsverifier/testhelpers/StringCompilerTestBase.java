@@ -9,8 +9,7 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 
-public class StringCompilerIntegrationTestBase extends IntegrationTestBase {
-    public static final String GENERATED_PACKAGE_NAME = "nl.jqno.equalsverifier.generated";
+public abstract class StringCompilerTestBase extends ExpectedExceptionTestBase {
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();

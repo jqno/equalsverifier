@@ -6,8 +6,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.assertEquals;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class OriginalStateTest extends IntegrationTestBase {
+public class OriginalStateTest extends ExpectedExceptionTestBase {
     private static final String INSTANCE_1 = "instance 1";
     private static final String INSTANCE_2 = "instance 2";
     private static final String STATIC = "static";

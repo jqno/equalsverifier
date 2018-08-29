@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.StringCompilerIntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Test;
 
-public class JavaFxClassesTest extends StringCompilerIntegrationTestBase {
+public class JavaFxClassesTest extends StringCompilerTestBase {
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
         if (!isJavaFxAvailable()) {

@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import com.google.common.collect.ImmutableList;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class RecursionTest extends IntegrationTestBase {
+public class RecursionTest extends ExpectedExceptionTestBase {
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
     private static final String PREFAB = "Add prefab values for one of the following types";
 

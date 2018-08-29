@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.Test;
 
-public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
+public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {

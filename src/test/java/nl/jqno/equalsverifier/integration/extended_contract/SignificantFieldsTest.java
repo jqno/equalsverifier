@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class SignificantFieldsTest extends IntegrationTestBase {
+public class SignificantFieldsTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsUsesAFieldAndHashCodeDoesnt() {
         expectFailure("Significant fields", "equals relies on", "yNotUsed", "but hashCode does not");

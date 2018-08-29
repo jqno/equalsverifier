@@ -2,11 +2,11 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
-public class DontOverrideEqualsTest extends IntegrationTestBase {
+public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsIsInheritedDirectlyFromObject() {
         expectFailure("Equals is inherited directly from Object");

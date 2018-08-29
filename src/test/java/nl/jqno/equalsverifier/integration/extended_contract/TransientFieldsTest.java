@@ -2,13 +2,13 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient;
 import org.junit.Test;
 
 import java.util.Objects;
 
-public class TransientFieldsTest extends IntegrationTestBase {
+public class TransientFieldsTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenFieldsWithTransientModifierAreNotUsedInEquals() {
         EqualsVerifier.forClass(NotUsingFieldsWithTransientModifier.class)

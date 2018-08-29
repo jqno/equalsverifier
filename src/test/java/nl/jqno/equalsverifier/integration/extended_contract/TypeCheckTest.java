@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
-public class TypeCheckTest extends IntegrationTestBase {
+public class TypeCheckTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsReturnsTrueForACompletelyUnrelatedType() {
         expectFailure("Type-check: equals returns true for an unrelated type.");

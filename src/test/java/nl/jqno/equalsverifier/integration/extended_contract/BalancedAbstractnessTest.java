@@ -2,14 +2,14 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class BalancedAbstractnessTest extends IntegrationTestBase {
+public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String BOTH_ARE_ABSTRACT = "equals and hashCode methods are both abstract";
     private static final String EQUALS_IS_ABSTRACT = "equals method is abstract";

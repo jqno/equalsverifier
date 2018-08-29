@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import com.google.common.collect.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class GenericTypesTest extends IntegrationTestBase {
+public class GenericTypesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(Java8GenericTypeContainer.class)

@@ -5,7 +5,7 @@ import org.hamcrest.Description;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-public class IntegrationTestBase {
+public abstract class ExpectedExceptionTestBase {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 

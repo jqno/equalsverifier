@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class SuperclassTest extends IntegrationTestBase {
+public class SuperclassTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(ColorBlindColorPoint.class)
