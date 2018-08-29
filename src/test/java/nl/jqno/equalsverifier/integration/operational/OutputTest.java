@@ -28,7 +28,7 @@ public class OutputTest extends IntegrationTestBase {
 
     @Test
     public void messageIsValidAndExceptionHasNoCause_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
-        expectMessageIsValid();
+        expectMessageIsValidFor(Point.class);
         expectExceptionHasNoCause();
 
         EqualsVerifier.forClass(Point.class).verify();
@@ -36,7 +36,7 @@ public class OutputTest extends IntegrationTestBase {
 
     @Test
     public void messageIsValidAndExceptionHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
-        expectMessageIsValid();
+        expectMessageIsValidFor(AssertionExceptionWithCauseThrower.class);
         expectMessageContains(MESSAGE);
         expectMessageDoesNotContain(NullPointerException.class.getSimpleName());
         expectCause(NullPointerException.class);
@@ -46,7 +46,7 @@ public class OutputTest extends IntegrationTestBase {
 
     @Test
     public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
-        expectMessageIsValid();
+        expectMessageIsValidFor(UnsupportedOperationExceptionWithMessageThrower.class);
         expectMessageContains(UnsupportedOperationException.class.getSimpleName(), MESSAGE);
         expectMessageDoesNotContain("null");
         expectCause(UnsupportedOperationException.class, MESSAGE);
@@ -56,7 +56,7 @@ public class OutputTest extends IntegrationTestBase {
 
     @Test
     public void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
-        expectMessageIsValid();
+        expectMessageIsValidFor(IllegalStateExceptionThrower.class);
         expectMessageContains(IllegalStateException.class.getSimpleName());
         expectMessageDoesNotContain("null");
         expectCause(IllegalStateException.class);
@@ -66,13 +66,14 @@ public class OutputTest extends IntegrationTestBase {
 
     @Test
     public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
-        expectMessageIsValid();
+        expectMessageIsValidFor(Node.class);
         expectExceptionHasNoCause();
 
         EqualsVerifier.forClass(Node.class).verify();
     }
 
-    private void expectMessageIsValid() {
+    private void expectMessageIsValidFor(Class<?> type) {
+        expectMessageContains(type.getSimpleName());
         expectMessageContains(SEE_ALSO, WIKIPAGE_URL);
         expectMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
     }

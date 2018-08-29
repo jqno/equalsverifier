@@ -348,7 +348,8 @@ public class EqualsVerifierApi<T> {
     private void handleError(Throwable messageContainer, Throwable trueCause) {
         boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
         Formatter message = Formatter.of(
-            "%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+            "EqualsVerifier found a problem in class %%.\n%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+            type.getSimpleName(),
             showCauseExceptionInMessage ? trueCause.getClass().getSimpleName() + ": " : "",
             messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
 
