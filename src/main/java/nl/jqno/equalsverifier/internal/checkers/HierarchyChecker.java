@@ -34,7 +34,7 @@ public class HierarchyChecker<T> implements Checker {
 
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
-        this.classAccessor = config.createClassAccessor();
+        this.classAccessor = config.getClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();

@@ -1,5 +1,8 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 public class RecursiveTypeHelper {
     public static final class Node {
         Node node;
@@ -46,4 +49,26 @@ public class RecursiveTypeHelper {
     }
 
     public static final class RecursiveThisIsTheOtherField {}
+
+    public static final class RecursiveType {
+        private final RecursiveType recurse;
+
+        public RecursiveType(RecursiveType recurse) {
+            this.recurse = recurse;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    public static final class RecursiveTypeContainer {
+        private final RecursiveType recurse;
+
+        public RecursiveTypeContainer(RecursiveType recurse) {
+            this.recurse = recurse;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
 }

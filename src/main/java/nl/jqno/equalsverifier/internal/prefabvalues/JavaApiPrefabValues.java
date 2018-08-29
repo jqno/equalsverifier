@@ -46,26 +46,25 @@ public final class JavaApiPrefabValues {
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
-    private PrefabValues prefabValues;
+    private FactoryCache factoryCache;
 
     private enum Dummy { RED, BLACK }
 
     /**
-     * Private constructor. Use {@link #addTo(PrefabValues)}.
+     * Private constructor. Use {@link #build()}.
      */
-    private JavaApiPrefabValues(PrefabValues prefabValues) {
-        this.prefabValues = prefabValues;
+    private JavaApiPrefabValues(FactoryCache factoryCache) {
+        this.factoryCache = factoryCache;
     }
 
     /**
-     * Adds instances of Java API classes that cannot be instantiated
-     * dynamically to {@code prefabValues}.
-     *
-     * @param prefabValues The instance of prefabValues that should
-     *          contain the Java API instances.
+     * Creates a FactoryCache pre-populated with instances of Java API classes
+     * that cannot be instantiated dynamically.
      */
-    public static void addTo(PrefabValues prefabValues) {
-        new JavaApiPrefabValues(prefabValues).addJavaClasses();
+    public static FactoryCache build() {
+        FactoryCache result = new FactoryCache();
+        new JavaApiPrefabValues(result).addJavaClasses();
+        return result;
     }
 
     private void addJavaClasses() {
@@ -365,14 +364,14 @@ public final class JavaApiPrefabValues {
 
     @SuppressWarnings("unchecked")
     private <T> void addValues(Class<T> type, T red, T black, T redCopy) {
-        prefabValues.addFactory(type, red, black, redCopy);
+        factoryCache.put(type, values(red, black, redCopy));
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
-        prefabValues.addFactory(type, factory);
+        factoryCache.put(type, factory);
     }
 
     private <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
-        prefabValues.addLazyFactory(typeName, factory);
+        factoryCache.put(typeName, factory);
     }
 }

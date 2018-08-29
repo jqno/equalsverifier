@@ -45,7 +45,7 @@ public class FieldsChecker<T> implements Checker {
 
     @Override
     public void check() {
-        ClassAccessor<T> classAccessor = config.createClassAccessor();
+        ClassAccessor<T> classAccessor = config.getClassAccessor();
         FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
 
         if (!classAccessor.isEqualsInheritedFromObject()) {

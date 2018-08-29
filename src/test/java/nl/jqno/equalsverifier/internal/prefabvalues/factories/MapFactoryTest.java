@@ -26,8 +26,8 @@ public class MapFactoryTest {
 
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
-    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private PrefabValues prefabValues;
     private String red;
     private String black;
     private Object redObject;
@@ -36,7 +36,7 @@ public class MapFactoryTest {
 
     @Before
     public void setUp() {
-        JavaApiPrefabValues.addTo(prefabValues);
+        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         red = prefabValues.giveRed(STRING_TYPETAG);
         black = prefabValues.giveBlack(STRING_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);

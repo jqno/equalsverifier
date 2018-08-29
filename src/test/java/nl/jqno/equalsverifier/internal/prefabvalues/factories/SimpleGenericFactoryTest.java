@@ -28,8 +28,8 @@ public class SimpleGenericFactoryTest {
     private static final PrefabValueFactory<Pair> PAIR_FACTORY =
         Factories.simple(Pair::new, null);
 
-    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private PrefabValues prefabValues;
     private String redString;
     private String blackString;
     private Integer redInt;
@@ -39,7 +39,7 @@ public class SimpleGenericFactoryTest {
 
     @Before
     public void setUp() {
-        JavaApiPrefabValues.addTo(prefabValues);
+        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         redString = prefabValues.giveRed(STRING_TYPETAG);
         blackString = prefabValues.giveBlack(STRING_TYPETAG);
         redInt = prefabValues.giveRed(INTEGER_TYPETAG);

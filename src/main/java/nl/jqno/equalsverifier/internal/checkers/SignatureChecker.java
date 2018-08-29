@@ -19,7 +19,7 @@ public class SignatureChecker<T> implements Checker {
 
     public SignatureChecker(Configuration<T> config) {
         this.type = config.getType();
-        this.classAccessor = config.createClassAccessor();
+        this.classAccessor = config.getClassAccessor();
         this.warningsToSuppress = config.getWarningsToSuppress();
     }
 

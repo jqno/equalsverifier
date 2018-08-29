@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -22,6 +23,7 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.Assert.*;
 
 public class ClassAccessorTest {
@@ -29,6 +31,7 @@ public class ClassAccessorTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder();
 
+    private FactoryCache factoryCache;
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
@@ -37,8 +40,8 @@ public class ClassAccessorTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues();
-        JavaApiPrefabValues.addTo(prefabValues);
+        factoryCache = JavaApiPrefabValues.build();
+        prefabValues = new PrefabValues(factoryCache);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
         abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);
         defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues);
@@ -225,7 +228,8 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
-        prefabValues.addFactory(TwoStepNodeB.class, new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB());
+        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        prefabValues = new PrefabValues(factoryCache);
         ClassAccessor.of(TwoStepNodeA.class, prefabValues).getRedObject(TypeTag.NULL);
     }
 

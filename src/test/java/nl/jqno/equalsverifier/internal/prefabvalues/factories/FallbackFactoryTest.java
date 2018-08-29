@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -17,6 +18,7 @@ import org.junit.rules.ExpectedException;
 
 import java.util.LinkedHashSet;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.hamcrest.CoreMatchers.allOf;
@@ -35,8 +37,9 @@ public class FallbackFactoryTest {
     @Before
     public void setUp() {
         factory = new FallbackFactory<>();
-        prefabValues = new PrefabValues();
-        prefabValues.addFactory(int.class, 42, 1337, 42);
+        FactoryCache factoryCache = new FactoryCache();
+        factoryCache.put(int.class, values(42, 1337, 42));
+        prefabValues = new PrefabValues(factoryCache);
         typeStack = new LinkedHashSet<>();
     }
 

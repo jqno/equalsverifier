@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier;
 /**
  * Enum of warnings that can be suppressed in {@link EqualsVerifier}.
  *
- * @see EqualsVerifier#suppress(Warning...)
+ * @see EqualsVerifierApi#suppress(Warning...)
  */
 public enum Warning {
     /**

@@ -22,8 +22,7 @@ public class JavaFxFactoryProviderTest {
 
     @Before
     public void setUp() {
-        prefabValues = new PrefabValues();
-        JavaApiPrefabValues.addTo(prefabValues);
+        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
     }
 
     @Test
