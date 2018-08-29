@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import nl.jqno.equalsverifier.ConfiguredEqualsVerifierApi;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -74,6 +75,49 @@ public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
         EqualsVerifier.configure()
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
                 .forClass(DoubleGenericContainerContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenConfigurationIsShared() {
+        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure()
+                .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
+                .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new);
+
+        ev.forClass(SingleGenericContainerContainer.class)
+                .verify();
+        ev.forClass(DoubleGenericContainerContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void individuallySuppressedWarningsAreNotAddedGlobally() {
+        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure()
+                .suppress(Warning.STRICT_INHERITANCE);
+
+        // should succeed
+        ev.forClass(MutablePoint.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
+
+        // NONFINAL_FIELDS is not added to configuration, so should fail
+        expectFailure("Mutability");
+        ev.forClass(MutablePoint.class)
+                .verify();
+    }
+
+    @Test
+    public void individuallyAddedPrefabValuesAreNotAddedGlobally() {
+        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure();
+
+        // should succeed
+        ev.forClass(SingleGenericContainerContainer.class)
+                .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
+                .verify();
+
+        // PrefabValues are not added to configuration, so should fail
+        expectFailure("Recursive datastructure");
+        ev.forClass(SingleGenericContainerContainer.class)
                 .verify();
     }
 
