@@ -42,7 +42,7 @@ public class EqualsVerifierApi<T> {
     }
 
     /**
-     * Constructor, only to be called by {@link ConfiguredEqualsVerifierApi#forClass(Class)}.
+     * Constructor, only to be called by {@link ConfiguredEqualsVerifier#forClass(Class)}.
      */
     /* package protected */ EqualsVerifierApi(Class<T> type, EnumSet<Warning> warningsToSuppress, FactoryCache factoryCache, boolean usingGetClass) {
         this(type);

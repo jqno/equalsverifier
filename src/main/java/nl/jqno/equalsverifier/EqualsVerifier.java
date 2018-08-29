@@ -38,8 +38,8 @@ public final class EqualsVerifier {
      *
      * @return A reusable configuration object with a fluent API.
      */
-    public static ConfiguredEqualsVerifierApi configure() {
-        return new ConfiguredEqualsVerifierApi();
+    public static ConfiguredEqualsVerifier configure() {
+        return new ConfiguredEqualsVerifier();
     }
 
     /**

@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import nl.jqno.equalsverifier.ConfiguredEqualsVerifierApi;
+import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
@@ -80,7 +80,7 @@ public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
 
     @Test
     public void succeed_whenConfigurationIsShared() {
-        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure()
+        ConfiguredEqualsVerifier ev = EqualsVerifier.configure()
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new);
 
@@ -92,7 +92,7 @@ public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
 
     @Test
     public void individuallySuppressedWarningsAreNotAddedGlobally() {
-        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure()
+        ConfiguredEqualsVerifier ev = EqualsVerifier.configure()
                 .suppress(Warning.STRICT_INHERITANCE);
 
         // should succeed
@@ -108,7 +108,7 @@ public class ConfiguredEqualsVerifierTest extends IntegrationTestBase {
 
     @Test
     public void individuallyAddedPrefabValuesAreNotAddedGlobally() {
-        ConfiguredEqualsVerifierApi ev = EqualsVerifier.configure();
+        ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
 
         // should succeed
         ev.forClass(SingleGenericContainerContainer.class)

@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import java.util.Collections;
 import java.util.EnumSet;
 
-public final class ConfiguredEqualsVerifierApi {
+public final class ConfiguredEqualsVerifier {
     private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
     private final FactoryCache factoryCache = new FactoryCache();
     private boolean usingGetClass = false;
@@ -21,7 +21,7 @@ public final class ConfiguredEqualsVerifierApi {
      *          {@code EqualsVerifier}.
      * @return {@code this}, for easy method chaining.
      */
-    public ConfiguredEqualsVerifierApi suppress(Warning... warnings) {
+    public ConfiguredEqualsVerifier suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
         return this;
     }
@@ -39,7 +39,7 @@ public final class ConfiguredEqualsVerifierApi {
      *          or {@code black} is null.
      * @throws IllegalArgumentException If {@code red} equals {@code black}.
      */
-    public <S> ConfiguredEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S black) {
+    public <S> ConfiguredEqualsVerifier withPrefabValues(Class<S> otherType, S red, S black) {
         PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, black);
         return this;
     }
@@ -57,7 +57,7 @@ public final class ConfiguredEqualsVerifierApi {
      * @throws NullPointerException if either {@code otherType} or
      *          {@code factory} is null.
      */
-    public <S> ConfiguredEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
+    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -75,7 +75,7 @@ public final class ConfiguredEqualsVerifierApi {
      * @throws NullPointerException if either {@code otherType} or
      *          {@code factory} is null.
      */
-    public <S> ConfiguredEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
+    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -86,7 +86,7 @@ public final class ConfiguredEqualsVerifierApi {
      *
      * @return {@code this}, for easy method chaining.
      */
-    public ConfiguredEqualsVerifierApi usingGetClass() {
+    public ConfiguredEqualsVerifier usingGetClass() {
         usingGetClass = true;
         return this;
     }
