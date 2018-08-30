@@ -338,24 +338,20 @@ public class EqualsVerifierApi<T> {
             performVerification();
         }
         catch (MessagingException e) {
-            handleError(e, e.getCause());
+            handleError(e, e.getDescription());
         }
         catch (Throwable e) {
-            handleError(e, e);
+            handleError(e, e.getMessage());
         }
     }
 
-    private void handleError(Throwable messageContainer, Throwable trueCause) {
-        boolean showCauseExceptionInMessage = trueCause != null && trueCause.equals(messageContainer);
+    private void handleError(Throwable throwable, String description) {
         Formatter message = Formatter.of(
-            "EqualsVerifier found a problem in class %%.\n%%%%\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+            "EqualsVerifier found a problem in class %%.\n-> %%\n\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
             type.getSimpleName(),
-            showCauseExceptionInMessage ? trueCause.getClass().getSimpleName() + ": " : "",
-            messageContainer.getMessage() == null ? "" : messageContainer.getMessage());
+            description);
 
-        AssertionError error = new AssertionError(message.format());
-        error.initCause(trueCause);
-        throw error;
+        throw new AssertionError(message.format(), throwable);
     }
 
     private void performVerification() {

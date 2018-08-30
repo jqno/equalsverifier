@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -12,24 +13,17 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import java.util.LinkedHashSet;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.hamcrest.CoreMatchers.allOf;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class FallbackFactoryTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
+public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     private FallbackFactory<?> factory;
     private PrefabValues prefabValues;
     private LinkedHashSet<TypeTag> typeStack;
@@ -75,20 +69,20 @@ public class FallbackFactoryTest {
 
     @Test
     public void dontGiveRecursiveClass() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         factory.createValues(new TypeTag(Node.class), prefabValues, typeStack);
     }
 
     @Test
     public void dontGiveTwoStepRecursiveClass() {
-        thrown.expect(RecursionException.class);
-        thrown.expectMessage(allOf(containsString("TwoStepNodeA"), containsString("TwoStepNodeB")));
+        expectException(RecursionException.class);
+        expectDescription("TwoStepNodeA", "TwoStepNodeB");
         factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack);
     }
 
     @Test
     public void dontGiveRecursiveArray() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack);
     }
 

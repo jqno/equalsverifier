@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
@@ -8,16 +9,12 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
-public class PrefabValuesCreatorTest {
+public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
     private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
@@ -26,9 +23,6 @@ public class PrefabValuesCreatorTest {
     private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
     private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
@@ -82,7 +76,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveType() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         prefabValues.giveRed(NODE_TAG);
     }
 
@@ -95,7 +89,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveArrayType() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -108,7 +102,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddTwoStepRecursiveType() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -121,7 +115,7 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddTwoStepRecursiveArrayType() {
-        thrown.expect(RecursionException.class);
+        expectException(RecursionException.class);
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
@@ -132,15 +126,17 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void recursiveWithAnotherFieldFirst() {
-        thrown.expectMessage(containsString(RecursiveWithAnotherFieldFirst.class.getSimpleName()));
-        thrown.expectMessage(not(containsString(RecursiveThisIsTheOtherField.class.getSimpleName())));
+        expectException(RecursionException.class);
+        expectDescription(RecursiveWithAnotherFieldFirst.class.getSimpleName());
+        expectNotInDescription(RecursiveThisIsTheOtherField.class.getSimpleName());
         prefabValues.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class));
     }
 
     @Test
     public void exceptionMessage() {
-        thrown.expectMessage(TwoStepNodeA.class.getSimpleName());
-        thrown.expectMessage(TwoStepNodeB.class.getSimpleName());
+        expectException(RecursionException.class);
+        expectDescription(TwoStepNodeA.class.getSimpleName());
+        expectDescription(TwoStepNodeB.class.getSimpleName());
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 

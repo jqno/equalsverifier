@@ -2,9 +2,6 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -18,27 +15,20 @@ public class OutputTest extends ExpectedExceptionTestBase {
     private static final String WIKIPAGE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
     private static final String MESSAGE = "a message for an exception";
 
-    private static final String[] BLACKLISTED_EXCEPTIONS = {
-            AssertionError.class.getSimpleName(),
-            MessagingException.class.getSimpleName(),
-            RecursionException.class.getSimpleName(),
-            AssertionException.class.getSimpleName(),
-            ReflectionException.class.getSimpleName()
-    };
-
     @Test
-    public void messageIsValidAndExceptionHasNoCause_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+    public void messageIsValid_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         expectMessageIsValidFor(Point.class);
-        expectExceptionHasNoCause();
+        expectCause(AssertionException.class);
 
         EqualsVerifier.forClass(Point.class).verify();
     }
 
     @Test
-    public void messageIsValidAndExceptionHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
+    public void messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
         expectMessageIsValidFor(AssertionExceptionWithCauseThrower.class);
         expectMessageContains(MESSAGE);
         expectMessageDoesNotContain(NullPointerException.class.getSimpleName());
+        expectCause(AssertionException.class);
         expectCause(NullPointerException.class);
 
         EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify();
@@ -67,7 +57,7 @@ public class OutputTest extends ExpectedExceptionTestBase {
     @Test
     public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
         expectMessageIsValidFor(Node.class);
-        expectExceptionHasNoCause();
+        expectCauseIsnt(StackOverflowError.class);
 
         EqualsVerifier.forClass(Node.class).verify();
     }
@@ -75,7 +65,6 @@ public class OutputTest extends ExpectedExceptionTestBase {
     private void expectMessageIsValidFor(Class<?> type) {
         expectMessageContains(type.getSimpleName());
         expectMessageContains(SEE_ALSO, WIKIPAGE_URL);
-        expectMessageDoesNotContain(BLACKLISTED_EXCEPTIONS);
     }
 
     private void expectMessageContains(String... contains) {
@@ -94,8 +83,8 @@ public class OutputTest extends ExpectedExceptionTestBase {
         expectFailureWithCause(cause, message);
     }
 
-    private void expectExceptionHasNoCause() {
-        expectFailureWithCause(null);
+    private void expectCauseIsnt(Class<? extends Throwable> notCause) {
+        expectFailureWithoutCause(notCause);
     }
 
     private static class AssertionExceptionWithCauseThrower {

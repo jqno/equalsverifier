@@ -9,19 +9,26 @@ package nl.jqno.equalsverifier.internal.exceptions;
  */
 @SuppressWarnings("serial")
 public abstract class MessagingException extends RuntimeException {
+    private final String description;
+
     public MessagingException() {
-        super();
+        this(null, null);
     }
 
-    public MessagingException(String message) {
-        super(message);
+    public MessagingException(String description) {
+        this(description, null);
     }
 
     public MessagingException(Throwable cause) {
-        super(cause);
+        this(null, cause);
     }
 
-    public MessagingException(String message, Throwable cause) {
-        super(message, cause);
+    public MessagingException(String description, Throwable cause) {
+        super(null, cause);
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

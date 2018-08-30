@@ -1,17 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import org.junit.Rule;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 
-public class AssertTest {
+public class AssertTest extends ExpectedExceptionTestBase {
     private static final Formatter FAIL = Formatter.of("fail");
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void coverTheConstructor() {
@@ -27,8 +23,8 @@ public class AssertTest {
 
     @Test
     public void assertEqualsObjectFailure() {
-        thrown.expect(AssertionException.class);
-        thrown.expectMessage("fail");
+        expectException(AssertionException.class);
+        expectDescription("fail");
         Assert.assertEquals(FAIL, "one", "two");
     }
 
@@ -39,8 +35,8 @@ public class AssertTest {
 
     @Test
     public void assertFalseFailure() {
-        thrown.expect(AssertionException.class);
-        thrown.expectMessage("fail");
+        expectException(AssertionException.class);
+        expectDescription("fail");
         Assert.assertFalse(FAIL, true);
     }
 
@@ -51,15 +47,15 @@ public class AssertTest {
 
     @Test
     public void assertTrueFailure() {
-        thrown.expect(AssertionException.class);
-        thrown.expectMessage("fail");
+        expectException(AssertionException.class);
+        expectDescription("fail");
         Assert.assertTrue(FAIL, false);
     }
 
     @Test
     public void failFailure() {
-        thrown.expect(AssertionException.class);
-        thrown.expectMessage("fail");
+        expectException(AssertionException.class);
+        expectDescription("fail");
         Assert.fail(FAIL);
     }
 }
