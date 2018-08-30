@@ -18,7 +18,15 @@ public class OutputTest extends ExpectedExceptionTestBase {
     @Test
     public void messageIsValid_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         expectMessageIsValidFor(Point.class);
-        expectCause(AssertionException.class);
+        expectFailureWithCause(AssertionException.class);
+
+        EqualsVerifier.forClass(Point.class).verify();
+    }
+
+    @Test
+    public void errorDescriptionAppearsOnlyAtTopOfStacktrace_notInOneOfItsCauses() {
+        expectMessageContains("Subclass");
+        expectCauseMessageDoesNotContain("Subclass");
 
         EqualsVerifier.forClass(Point.class).verify();
     }
@@ -28,8 +36,8 @@ public class OutputTest extends ExpectedExceptionTestBase {
         expectMessageIsValidFor(AssertionExceptionWithCauseThrower.class);
         expectMessageContains(MESSAGE);
         expectMessageDoesNotContain(NullPointerException.class.getSimpleName());
-        expectCause(AssertionException.class);
-        expectCause(NullPointerException.class);
+        expectFailureWithCause(AssertionException.class);
+        expectFailureWithCause(NullPointerException.class);
 
         EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify();
     }
@@ -39,7 +47,7 @@ public class OutputTest extends ExpectedExceptionTestBase {
         expectMessageIsValidFor(UnsupportedOperationExceptionWithMessageThrower.class);
         expectMessageContains(UnsupportedOperationException.class.getSimpleName(), MESSAGE);
         expectMessageDoesNotContain("null");
-        expectCause(UnsupportedOperationException.class, MESSAGE);
+        expectFailureWithCause(UnsupportedOperationException.class, MESSAGE);
 
         EqualsVerifier.forClass(UnsupportedOperationExceptionWithMessageThrower.class).verify();
     }
@@ -49,7 +57,7 @@ public class OutputTest extends ExpectedExceptionTestBase {
         expectMessageIsValidFor(IllegalStateExceptionThrower.class);
         expectMessageContains(IllegalStateException.class.getSimpleName());
         expectMessageDoesNotContain("null");
-        expectCause(IllegalStateException.class);
+        expectFailureWithCause(IllegalStateException.class);
 
         EqualsVerifier.forClass(IllegalStateExceptionThrower.class).verify();
     }
@@ -57,7 +65,7 @@ public class OutputTest extends ExpectedExceptionTestBase {
     @Test
     public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
         expectMessageIsValidFor(Node.class);
-        expectCauseIsnt(StackOverflowError.class);
+        expectFailureWithoutCause(StackOverflowError.class);
 
         EqualsVerifier.forClass(Node.class).verify();
     }
@@ -77,14 +85,6 @@ public class OutputTest extends ExpectedExceptionTestBase {
         for (String s : doesNotContain) {
             thrown.expect(not(s));
         }
-    }
-
-    private void expectCause(Class<? extends Throwable> cause, String... message) {
-        expectFailureWithCause(cause, message);
-    }
-
-    private void expectCauseIsnt(Class<? extends Throwable> notCause) {
-        expectFailureWithoutCause(notCause);
     }
 
     private static class AssertionExceptionWithCauseThrower {

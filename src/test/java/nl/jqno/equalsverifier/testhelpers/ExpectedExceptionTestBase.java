@@ -42,6 +42,10 @@ public abstract class ExpectedExceptionTestBase {
         }
     }
 
+    public void expectCauseMessageDoesNotContain(String doesNotContain) {
+        thrown.expect(not(new CauseDescriptionMatcher(doesNotContain)));
+    }
+
     private static final class CauseMatcher extends BaseMatcher<Object> {
         private final Class<? extends Throwable> cause;
 
@@ -92,6 +96,31 @@ public abstract class ExpectedExceptionTestBase {
         @Override
         public void describeTo(Description dsc) {
             dsc.appendText("description [" + description + "]");
+        }
+    }
+
+    public static final class CauseDescriptionMatcher extends BaseMatcher<Object> {
+        private final String description;
+
+        public CauseDescriptionMatcher(String description) {
+            this.description = description;
+        }
+
+        @Override
+        public boolean matches(Object item) {
+            Throwable cause = ((Throwable)item).getCause();
+            while (cause != null) {
+                if (cause.getMessage() != null && cause.getMessage().contains(description)) {
+                    return true;
+                }
+                cause = cause.getCause();
+            }
+            return false;
+        }
+
+        @Override
+        public void describeTo(Description dsc) {
+            dsc.appendText("cause contains [" + description + "]");
         }
     }
 }
