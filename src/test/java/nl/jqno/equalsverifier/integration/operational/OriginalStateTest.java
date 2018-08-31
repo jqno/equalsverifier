@@ -1,14 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.EqualsVerifierApi;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -16,6 +9,8 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends ExpectedExceptionTestBase {
@@ -50,21 +45,22 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
         assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
     }
 
-    @Test@Ignore("This test was not properly maintained and is now meaningless. Should be fixed.")
-    public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() throws NoSuchFieldException {
-        EqualsVerifierApi<MutableIntContainer> ev = EqualsVerifier.forClass(MutableIntContainer.class);
-        PrefabValues mockPrefabValues = new PrefabValues(FactoryCacheFactory.withPrimitiveFactories());
+    @Test
+    public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() {
+        try {
+            EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify();
+            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer.");
+        }
+        catch (AssertionError e) {
+            // Make sure EV fails on a check that actually mutates fields.
+            assertTrue(e.getMessage().contains("Mutability"));
+        }
+        catch (Throwable ignored) {
+            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
+        }
 
-        // Mock EqualsVerifier's StaticFieldValueStash
-        ObjectAccessor<?> objectAccessor = ObjectAccessor.of(ev);
-        FieldAccessor configFieldAccessor = objectAccessor.fieldAccessorFor(EqualsVerifierApi.class.getDeclaredField("config"));
-        ObjectAccessor<?> configAccessor = ObjectAccessor.of(configFieldAccessor.get());
-        FieldAccessor prefabValuesAccessor = configAccessor.fieldAccessorFor(Configuration.class.getDeclaredField("prefabValues"));
-        prefabValuesAccessor.set(mockPrefabValues);
-
-        // Make sure the exception actually occurs, on a check that actually mutates the fields.
-        expectFailure("Mutability");
-        ev.verify();
+        assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
+        assertEquals(STATIC, CorrectEquals.staticValue);
     }
 
     static final class CorrectEquals {
@@ -122,10 +118,10 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
         }
     }
 
-    static final class MutableIntContainer {
-        private int field;
+    static final class FailingEqualsContainerContainer {
+        private CorrectEqualsContainer foo;
 
-        public MutableIntContainer(int value) { field = value; }
+        public FailingEqualsContainerContainer(CorrectEqualsContainer foo) { this.foo = foo; }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
         @Override public int hashCode() { return defaultHashCode(this); }
