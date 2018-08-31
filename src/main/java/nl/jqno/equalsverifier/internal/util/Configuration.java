@@ -14,8 +14,6 @@ import java.util.*;
 
 public class Configuration<T> {
     private final Class<T> type;
-    private final Set<String> excludedFields;
-    private final Set<String> includedFields;
     private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
@@ -34,16 +32,14 @@ public class Configuration<T> {
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
     public Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
-                Set<String> excludedFields, Set<String> includedFields, Set<String> ignoredFields, Set<String> nonnullFields,
-                AnnotationCache annotationCache, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
+                Set<String> ignoredFields, Set<String> nonnullFields, AnnotationCache annotationCache,
+                CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
                 List<T> equalExamples, List<T> unequalExamples) {
         this.type = type;
         this.typeTag = typeTag;
         this.classAccessor = classAccessor;
         this.prefabValues = prefabValues;
-        this.excludedFields = excludedFields;
-        this.includedFields = includedFields;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
         this.annotationCache = annotationCache;
@@ -71,9 +67,8 @@ public class Configuration<T> {
         Set<String> ignoredFields = includedFields.isEmpty() ? excludedFields : invertIncludedFields(actualFields, includedFields);
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
-        return new Configuration<>(type, typeTag, classAccessor, prefabValues, excludedFields, includedFields, ignoredFields,
-            nonnullFields, annotationCache, cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass,
-            warningsToSuppress, equalExamples, unequals);
+        return new Configuration<>(type, typeTag, classAccessor, prefabValues, ignoredFields, nonnullFields, annotationCache,
+            cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, equalExamples, unequals);
     }
 
     private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationDescriptors) {
@@ -106,14 +101,6 @@ public class Configuration<T> {
 
     public Class<T> getType() {
         return type;
-    }
-
-    public Set<String> getExcludedFields() {
-        return Collections.unmodifiableSet(excludedFields);
-    }
-
-    public Set<String> getIncludedFields() {
-        return Collections.unmodifiableSet(includedFields);
     }
 
     public Set<String> getNonnullFields() {
