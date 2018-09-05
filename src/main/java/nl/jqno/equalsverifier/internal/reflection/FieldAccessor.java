@@ -18,7 +18,7 @@ public class FieldAccessor {
     /**
      * Constructor.
      *
-     * @param object The object we want to access.
+     * @param object The object that contains the field we want to access.
      * @param field A field of object.
      */
     public FieldAccessor(Object object, Field field) {
@@ -27,63 +27,63 @@ public class FieldAccessor {
     }
 
     /**
-     * Getter.
+     * @return The object that contains the field.
      */
     public Object getObject() {
         return object;
     }
 
     /**
-     * Getter.
+     * @return The field itself.
      */
     public Field getField() {
         return field;
     }
 
     /**
-     * Getter for the field's type.
+     * @return The field's type.
      */
     public Class<?> getFieldType() {
         return field.getType();
     }
 
     /**
-     * Getter for the field's name.
+     * @return The field's name.
      */
     public String getFieldName() {
         return field.getName();
     }
 
     /**
-     * Returns whether the field is of a primitive type.
+     * @return Whether the field is of a primitive type.
      */
     public boolean fieldIsPrimitive() {
         return getFieldType().isPrimitive();
     }
 
     /**
-     * Returns whether the field is marked with the final modifier.
+     * @return Whether the field is marked with the final modifier.
      */
     public boolean fieldIsFinal() {
         return Modifier.isFinal(field.getModifiers());
     }
 
     /**
-     * Returns whether the field is marked with the static modifier.
+     * @return Whether the field is marked with the static modifier.
      */
     public boolean fieldIsStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
 
     /**
-     * Returns whether the field is marked with the transient modifier.
+     * @return Whether the field is marked with the transient modifier.
      */
     public boolean fieldIsTransient() {
         return Modifier.isTransient(field.getModifiers());
     }
 
     /**
-     * Returns whether the field is an enum with a single value.
+     * @return Whether the field is an enum with a single value.
      */
     public boolean fieldIsEmptyOrSingleValueEnum() {
         Class<?> type = field.getType();
@@ -191,6 +191,8 @@ public class FieldAccessor {
      *
      * @param prefabValues If the field is of a type contained within
      *          prefabValues, the new value will be taken from it.
+     * @param enclosingType A tag for the type that contains the field. Needed
+     *          to determine a generic type, if it has one..
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {

@@ -47,6 +47,7 @@ public final class EqualsVerifier {
      *
      * @param type The class for which the {@code equals} method should be
      *          tested.
+     * @param <T> The type.
      * @return A fluent API for EqualsVerifier.
      */
     public static <T> EqualsVerifierApi<T> forClass(Class<T> type) {
@@ -78,6 +79,7 @@ public final class EqualsVerifier {
      * @param more More instances of T, all of which are equal, but not
      *          identical, to one another and to {@code first} and
      *          {@code second}.
+     * @param <T> the type.
      * @return A fluent API for a more relaxed EqualsVerifier.
      */
     @SafeVarargs

@@ -1,9 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 public final class Util {
     private Util() {
         // Do not instantiate
@@ -13,6 +9,7 @@ public final class Util {
      * Helper method to resolve a Class of a given name.
      *
      * @param className The fully qualified name of the class to resolve.
+     * @param <T> The type of the class to resolve.
      * @return The corresponding class if it exists, null otherwise.
      */
     @SuppressWarnings("unchecked")
@@ -76,21 +73,5 @@ public final class Util {
      */
     public static Object[] objects(Object first, Object second, Object third) {
         return new Object[] { first, second, third };
-    }
-
-    /**
-     * Helper method to create simple LRU cache implementation.
-     *
-     * @param maxSize maximum size of map
-     * @return simple thread-safe map with maximum-size eviction by LRU algorithm
-     */
-    public static <K, V> Map<K, V> newLruCache(final int maxSize) {
-        LinkedHashMap<K, V> map = new LinkedHashMap<K, V>(16, 0.75f, true) {
-            @Override
-            protected boolean removeEldestEntry(Map.Entry<K, V> eldest) {
-                return size() > maxSize;
-            }
-        };
-        return Collections.synchronizedMap(map);
     }
 }

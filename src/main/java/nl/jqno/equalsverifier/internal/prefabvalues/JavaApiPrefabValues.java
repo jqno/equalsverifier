@@ -60,6 +60,8 @@ public final class JavaApiPrefabValues {
     /**
      * Creates a FactoryCache pre-populated with instances of Java API classes
      * that cannot be instantiated dynamically.
+     *
+     * @return A pre-populated {@link FactoryCache}.
      */
     public static FactoryCache build() {
         FactoryCache result = new FactoryCache();

@@ -28,6 +28,7 @@ public final class Tuple<T> {
      * @param black The black value.
      * @param redCopy A shallow copy of the red value.
      * @param <U> The assumed type of the values.
+     * @return A typed tuple with the three given values.
      */
     @SuppressWarnings("unchecked")
     public static <U> Tuple<U> of(Object red, Object black, Object redCopy) {
@@ -35,21 +36,21 @@ public final class Tuple<T> {
     }
 
     /**
-     * Returns the red value.
+     * @return The red value.
      */
     public T getRed() {
         return red;
     }
 
     /**
-     * Returns the black value.
+     * @return The black value.
      */
     public T getBlack() {
         return black;
     }
 
     /**
-     * Returns the shallow copy of the red value.
+     * @return The shallow copy of the red value.
      */
     public T getRedCopy() {
         return redCopy;

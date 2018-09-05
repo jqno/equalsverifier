@@ -25,7 +25,7 @@ public class AnnotationProperties {
     }
 
     /**
-     * Getter.
+     * @return the annotation's descriptor string.
      */
     public String getDescriptor() {
         return descriptor;
