@@ -158,7 +158,7 @@ public enum Warning {
      * Some may find that too strict for their liking; suppressing this warning
      * disables that test.
      *
-     * @see EqualsVerifier#withRedefinedSubclass(Class)
+     * @see EqualsVerifierApi#withRedefinedSubclass(Class)
      */
     STRICT_INHERITANCE,
 

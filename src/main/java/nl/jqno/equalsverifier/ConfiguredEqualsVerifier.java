@@ -94,6 +94,7 @@ public final class ConfiguredEqualsVerifier {
     /**
      * Factory method. For general use.
      *
+     * @param <T> The type.
      * @param type The class for which the {@code equals} method should be
      *          tested.
      * @return A fluent API for EqualsVerifier.

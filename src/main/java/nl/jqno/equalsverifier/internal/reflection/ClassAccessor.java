@@ -44,15 +44,16 @@ public class ClassAccessor<T> {
     }
 
     /**
-     * Getter.
+     * @return The class on which {@link ClassAccessor} operates.
      */
     public Class<T> getType() {
         return type;
     }
 
     /**
-     * Determines whether T declares a field.  This does not include inherited fields.
+     * Determines whether T declares a field. This does not include inherited fields.
      *
+     * @param field The field that we want to detect.
      * @return True if T declares the field.
      */
     public boolean declaresField(Field field) {
