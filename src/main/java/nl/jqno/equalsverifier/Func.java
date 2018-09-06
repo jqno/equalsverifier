@@ -19,7 +19,7 @@ public interface Func<T> {
      * Functional interface for generating prefab values of a generic type
      * {@code T} that has exactly 1 generic parameter {@code A}.
      *
-     * A value of {@link A} will be supplied in the {@link Func1#supply(A)}
+     * A value of {@link A} will be supplied in the {@link Func1#supply(Object)}
      * method.
      *
      * @param <A> The type of {@code T}'s generic parameter.
@@ -40,7 +40,7 @@ public interface Func<T> {
      * {@code T} that has exactly 2 generic parameters, {@code A} and {@code B}.
      *
      * Values of {@link A} and {@code B} will be supplied in the
-     * {@link Func2#supply(A, B)} method.
+     * {@link Func2#supply(Object, Object)} method.
      *
      * @param <A> The type of {@code T}'s first generic parameter.
      * @param <B> The type of {@code T}'s second generic parameter.
