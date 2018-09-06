@@ -5,7 +5,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -51,10 +50,6 @@ public class SignificantFieldCheck<T> implements FieldCheck {
         Object reference = referenceAccessor.getObject();
         Object changed = changedAccessor.getObject();
         String fieldName = referenceAccessor.getFieldName();
-
-        if (referenceAccessor.get() == null && NonnullAnnotationVerifier.fieldIsNonnull(referenceAccessor.getField(), annotationCache)) {
-            return;
-        }
 
         boolean equalToItself = reference.equals(changed);
 

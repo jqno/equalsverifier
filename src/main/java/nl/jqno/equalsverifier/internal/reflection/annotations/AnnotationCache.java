@@ -14,10 +14,6 @@ public class AnnotationCache {
         return hasResolved(type) && cache.get(type).hasClassAnnotation(annotation);
     }
 
-    public boolean hasField(Class<?> type, String fieldName) {
-        return hasResolved(type) && cache.get(type).hasField(fieldName);
-    }
-
     public boolean hasFieldAnnotation(Class<?> type, String fieldName, Annotation annotation) {
         return hasResolved(type) && cache.get(type).hasFieldAnnotation(fieldName, annotation);
     }

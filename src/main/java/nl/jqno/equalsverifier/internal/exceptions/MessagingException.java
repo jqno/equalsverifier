@@ -19,10 +19,6 @@ public abstract class MessagingException extends RuntimeException {
         this(description, null);
     }
 
-    public MessagingException(Throwable cause) {
-        this(null, cause);
-    }
-
     public MessagingException(String description, Throwable cause) {
         super(null, cause);
         this.description = description;

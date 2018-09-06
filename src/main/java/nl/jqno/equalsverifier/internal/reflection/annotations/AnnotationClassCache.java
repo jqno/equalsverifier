@@ -15,10 +15,6 @@ class AnnotationClassCache {
         return classAnnotations.contains(annotation);
     }
 
-    public boolean hasField(String fieldName) {
-        return fieldAnnotations.containsKey(fieldName);
-    }
-
     public boolean hasFieldAnnotation(String fieldName, Annotation annotation) {
         return fieldAnnotations.containsKey(fieldName) && fieldAnnotations.get(fieldName).contains(annotation);
     }
