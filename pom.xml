@@ -56,7 +56,7 @@
 
     <properties>
         <encoding>UTF-8</encoding>
-        <jacoco.version>0.8.1</jacoco.version>
+        <jacoco.version>0.8.2</jacoco.version>
     </properties>
 
     <repositories>
