@@ -245,7 +245,7 @@
         <profile>
             <id>simplified</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
             </activation>
             <build>
                 <plugins>
