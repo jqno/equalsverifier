@@ -17,12 +17,9 @@ matrix:
       script: mvn clean verify -Dspotbugs.skip=true
     - jdk: openjdk11
       script: mvn clean verify -Dspotbugs.skip=true
-    - jdk: oraclejdk-ea
-      script: mvn clean verify -Dspotbugs.skip=true
     - jdk: openjdk-ea
       script: mvn clean verify -Dspotbugs.skip=true
 
   allow_failures:
-    - jdk: oraclejdk-ea
     - jdk: openjdk-ea
 
