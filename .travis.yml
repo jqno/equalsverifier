@@ -23,8 +23,6 @@ matrix:
       script: mvn clean verify -Dspotbugs.skip=true
 
   allow_failures:
-    - jdk: oraclejdk11
-    - jdk: openjdk11
     - jdk: oraclejdk-ea
     - jdk: openjdk-ea
 
