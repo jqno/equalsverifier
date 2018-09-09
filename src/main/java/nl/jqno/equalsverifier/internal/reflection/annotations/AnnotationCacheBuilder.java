@@ -10,6 +10,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class AnnotationCacheBuilder {
+    @SuppressWarnings("deprecation")
+    private static final int OPCODES = Opcodes.ASM7_EXPERIMENTAL;
+
     private final List<Annotation> supportedAnnotations;
     private final Set<String> ignoredAnnotations;
 
@@ -99,7 +102,7 @@ public class AnnotationCacheBuilder {
         private final boolean inheriting;
 
         public Visitor(Class<?> type, AnnotationCache cache, boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.type = type;
             this.cache = cache;
             this.inheriting = inheriting;
@@ -124,7 +127,7 @@ public class AnnotationCacheBuilder {
         private final boolean inheriting;
 
         public MyFieldVisitor(Class<?> type, AnnotationCache cache, String fieldName, boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.type = type;
             this.cache = cache;
             this.fieldName = fieldName;
@@ -153,7 +156,7 @@ public class AnnotationCacheBuilder {
 
         public MyAnnotationVisitor(Class<?> type, String annotationDescriptor, AnnotationCache cache,
                 Optional<String> fieldName, boolean inheriting) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.type = type;
             this.annotationDescriptor = annotationDescriptor;
             this.cache = cache;
@@ -201,7 +204,7 @@ public class AnnotationCacheBuilder {
         private final Set<Object> foundAnnotations;
 
         public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
-            super(Opcodes.ASM6);
+            super(OPCODES);
             this.foundAnnotations = foundAnnotations;
         }
 

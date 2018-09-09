@@ -56,7 +56,7 @@
 
     <properties>
         <encoding>UTF-8</encoding>
-        <jacoco.version>0.8.1</jacoco.version>
+        <jacoco.version>0.8.2</jacoco.version>
     </properties>
 
     <repositories>
@@ -75,7 +75,7 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.8.16</version>
+            <version>1.8.21</version>
         </dependency>
         <dependency>
             <groupId>org.ow2.asm</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.7</version>
+            <version>3.8</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -157,7 +157,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>25.0-jre</version>
+            <version>26.0-jre</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -167,7 +167,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0-M1</version>
+                <version>3.0.0-M2</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -177,7 +177,7 @@
                         <configuration>
                             <rules>
                                 <requireMavenVersion>
-                                    <version>3.0.4</version>
+                                    <version>3.3.9</version>
                                 </requireMavenVersion>
                             </rules>
                         </configuration>
@@ -191,13 +191,13 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.7.0</version>
+                    <version>3.8.0</version>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.21.0</version>
+                    <version>2.22.0</version>
                 </plugin>
 
                 <plugin>
@@ -220,7 +220,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.2</version>
+                            <version>8.12</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -245,7 +245,7 @@
         <profile>
             <id>simplified</id>
             <activation>
-                <activeByDefault>true</activeByDefault>
+                <jdk>1.8</jdk>
             </activation>
             <build>
                 <plugins>
@@ -264,6 +264,17 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>compatibility</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+
+            <properties>
+                <spotbugs.skip>true</spotbugs.skip>
+            </properties>
         </profile>
 
         <profile>
@@ -305,7 +316,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.0.2</version>
+                        <version>3.1.0</version>
                         <configuration>
                             <archive>
                                 <manifest>
@@ -322,7 +333,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.1.0</version>
+                        <version>3.1.1</version>
                         <executions>
                             <execution>
                                 <phase>package</phase>
