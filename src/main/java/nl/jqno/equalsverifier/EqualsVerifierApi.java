@@ -328,7 +328,8 @@ public class EqualsVerifierApi<T> {
 
     /**
      * Performs the verification of the contracts for {@code equals} and
-     * {@code hashCode}.
+     * {@code hashCode} and throws an {@link AssertionError} if there is a
+     * problem.
      *
      * @throws AssertionError If the contract is not met, or if
      *          {@link EqualsVerifier}'s preconditions do not hold.
@@ -338,20 +339,40 @@ public class EqualsVerifierApi<T> {
             performVerification();
         }
         catch (MessagingException e) {
-            handleError(e, e.getDescription());
+            throw new AssertionError(buildErrorMessage(e.getDescription()), e);
         }
         catch (Throwable e) {
-            handleError(e, e.getMessage());
+            throw new AssertionError(buildErrorMessage(e.getMessage()), e);
         }
     }
 
-    private void handleError(Throwable throwable, String description) {
-        Formatter message = Formatter.of(
-            "EqualsVerifier found a problem in class %%.\n-> %%\n\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-            type.getSimpleName(),
-            description);
+    /**
+     * Performs the verification of the contracts for {@code equals} and
+     * {@code hashCode} and returns an {@link EqualsVerifierReport} with the
+     * results of the verification.
+     *
+     * @return An {@link EqualsVerifierReport} that indicates whether the
+     *          contract is met and whether {@link EqualsVerifier}'s
+     *          preconditions hold.
+     */
+    public EqualsVerifierReport report() {
+        try {
+            performVerification();
+            return EqualsVerifierReport.SUCCESS;
+        }
+        catch (MessagingException e) {
+            return new EqualsVerifierReport(false, buildErrorMessage(e.getDescription()), e);
+        }
+        catch (Throwable e) {
+            return new EqualsVerifierReport(false, buildErrorMessage(e.getMessage()), e);
+        }
+    }
 
-        throw new AssertionError(message.format(), throwable);
+    private String buildErrorMessage(String description) {
+        return Formatter.of(
+                "EqualsVerifier found a problem in class %%.\n-> %%\n\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+                type.getSimpleName(),
+                description).format();
     }
 
     private void performVerification() {
