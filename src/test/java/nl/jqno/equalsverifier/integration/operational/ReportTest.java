@@ -28,7 +28,5 @@ public class ReportTest {
         assertThat(report.getMessage(), startsWith("EqualsVerifier found a problem in class Point"));
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
-
-        report.getCause().printStackTrace();
     }
 }

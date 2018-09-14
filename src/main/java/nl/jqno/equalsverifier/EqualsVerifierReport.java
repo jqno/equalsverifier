@@ -30,8 +30,8 @@ public class EqualsVerifierReport {
 
     /**
      * @return whether the class tested by {@link EqualsVerifierApi#report()}
-     * conforms to the {@link Object#equals(Object)} and
-     * {@link Object#hashCode()} contracts.
+     *          conforms to the {@link Object#equals(Object)} and
+     *          {@link Object#hashCode()} contracts.
      */
     public boolean isSuccessful() {
         return successful;
@@ -39,9 +39,9 @@ public class EqualsVerifierReport {
 
     /**
      * @return a detailed error message if the class tested by
-     * {@link EqualsVerifierApi#report()} does not conform to the
-     * {@link Object#equals(Object)} {@link Object#hashCode()} contracts; or
-     * an empty string if it does.
+     *          {@link EqualsVerifierApi#report()} does not conform to the
+     *          {@link Object#equals(Object)} and {@link Object#hashCode()}
+     *          contracts; or an empty string if it does.
      */
     public String getMessage() {
         return message;
@@ -49,9 +49,9 @@ public class EqualsVerifierReport {
 
     /**
      * @return an exception indicating the source of the failure if the class
-     * tested by {@link EqualsVerifierApi#report()} does not conform to the
-     * {@link Object#equals(Object)} {@link Object#hashCode()} contracts; or
-     * null if it does.
+     *          tested by {@link EqualsVerifierApi#report()} does not conform to
+     *          the {@link Object#equals(Object)} and {@link Object#hashCode()}
+     *          contracts; or null if it does.
      */
     public Throwable getCause() {
         return cause;
