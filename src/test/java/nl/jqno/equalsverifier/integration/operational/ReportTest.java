@@ -17,7 +17,7 @@ public class ReportTest {
 
         assertTrue(report.isSuccessful());
         assertEquals("", report.getMessage());
-        assertNull(report.getException());
+        assertNull(report.getCause());
     }
 
     @Test
@@ -26,9 +26,9 @@ public class ReportTest {
 
         assertFalse(report.isSuccessful());
         assertThat(report.getMessage(), startsWith("EqualsVerifier found a problem in class Point"));
-        assertEquals(AssertionException.class, report.getException().getClass());
-        assertNull(report.getException().getMessage());
+        assertEquals(AssertionException.class, report.getCause().getClass());
+        assertNull(report.getCause().getMessage());
 
-        report.getException().printStackTrace();
+        report.getCause().printStackTrace();
     }
 }

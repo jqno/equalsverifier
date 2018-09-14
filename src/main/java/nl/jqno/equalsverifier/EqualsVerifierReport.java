@@ -6,12 +6,12 @@ public class EqualsVerifierReport {
 
     private final boolean successful;
     private final String message;
-    private final Throwable exception;
+    private final Throwable cause;
 
-    /* package protected */ EqualsVerifierReport(boolean successful, String message, Throwable exception) {
+    /* package protected */ EqualsVerifierReport(boolean successful, String message, Throwable cause) {
         this.successful = successful;
         this.message = message;
-        this.exception = exception;
+        this.cause = cause;
     }
 
     public boolean isSuccessful() {
@@ -22,7 +22,7 @@ public class EqualsVerifierReport {
         return message;
     }
 
-    public Throwable getException() {
-        return exception;
+    public Throwable getCause() {
+        return cause;
     }
 }
