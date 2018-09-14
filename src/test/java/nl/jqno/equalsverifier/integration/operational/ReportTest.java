@@ -29,4 +29,30 @@ public class ReportTest {
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
     }
+
+    @Test
+    public void reportReturnsTheSameInformationAsVerify() {
+        EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
+        try {
+            EqualsVerifier.forClass(Point.class).verify();
+            fail("Should have failed");
+        }
+        catch (AssertionError e) {
+            assertEquals(e.getMessage(), report.getMessage());
+            assertEquals(e.getCause().getClass(), report.getCause().getClass());
+
+            StackTraceElement[] verified = e.getCause().getStackTrace();
+            StackTraceElement[] reported = report.getCause().getStackTrace();
+            assertEquals(verified.length, reported.length);
+
+            for (int i = 0; i < verified.length; i++) {
+                if (!verified[i].getMethodName().equals("verify")) {
+                    // When the `verify` method is reached, the stacktraces start to diverge.
+                    break;
+                }
+
+                assertEquals(verified[i], reported[i]);
+            }
+        }
+    }
 }
