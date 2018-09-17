@@ -11,12 +11,15 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.*;
+import java.rmi.dgc.VMID;
+import java.rmi.server.UID;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -79,7 +82,8 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         addNioBuffers();
-        addAwtClasses();
+        addAtomicClasses();
+        addAncientJavaApiClasses();
         addJavaFxClasses();
         addJavaxApiClasses();
         addGoogleGuavaMultisetCollectionsClasses();
@@ -263,11 +267,36 @@ public final class JavaApiPrefabValues {
                 ShortBuffer.wrap(new short[] { 0 }), ShortBuffer.wrap(new short[] { 1 }), ShortBuffer.wrap(new short[] { 0 }));
     }
 
-    private void addAwtClasses() {
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private void addAtomicClasses() {
+        addValues(AtomicBoolean.class, new AtomicBoolean(true), new AtomicBoolean(false), new AtomicBoolean(true));
+        addValues(AtomicInteger.class, new AtomicInteger(1), new AtomicInteger(2), new AtomicInteger(1));
+        addValues(AtomicIntegerArray.class, new AtomicIntegerArray(new int[] { 1 }), new AtomicIntegerArray(new int[] { 2 }), new AtomicIntegerArray(new int[] { 1 }));
+        addValues(AtomicLong.class, new AtomicLong(1L), new AtomicLong(2L), new AtomicLong(1L));
+        addValues(AtomicLongArray.class, new AtomicLongArray(new long[] { 1L }), new AtomicLongArray(new long[] { 2L }), new AtomicLongArray(new long[] { 1 }));
+        addFactory(AtomicMarkableReference.class, simple(r -> new AtomicMarkableReference(r, true), null));
+        addFactory(AtomicReference.class, simple(AtomicReference::new, null));
+        addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
+        addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
+            TypeTag y = tag.getGenericTypes().get(0);
+            Object[] red = new Object[] { pv.giveRed(y) };
+            Object[] black = new Object[] { pv.giveBlack(y) };
+            Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
+            return Tuple.of(new AtomicReferenceArray(red), new AtomicReferenceArray(black), new AtomicReferenceArray(redCopy));
+        });
+    }
+
+    private void addAncientJavaApiClasses() {
         addLazyFactory("java.awt.Color", AWT_FACTORY);
         addLazyFactory("java.awt.color.ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
+
+        VMID redVmid = new VMID();
+        addValues(VMID.class, redVmid, new VMID(), redVmid);
+        UID redUid = new UID();
+        addValues(UID.class, redUid, new UID(), redUid);
+
     }
 
     private void addJavaFxClasses() {

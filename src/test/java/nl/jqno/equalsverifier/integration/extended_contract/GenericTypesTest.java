@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Supplier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
@@ -15,7 +16,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 public class GenericTypesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
-        EqualsVerifier.forClass(Java8GenericTypeContainer.class)
+        EqualsVerifier.forClass(JavaGenericTypeContainer.class)
                 .verify();
     }
 
@@ -109,29 +110,32 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    static final class Java8GenericTypeContainer {
+    static final class JavaGenericTypeContainer {
         private final Optional<Point> optional;
         private final Supplier<Point> supplier;
+        private final AtomicReferenceArray<Point> atomicReferenceArray;
 
-        public Java8GenericTypeContainer(Optional<Point> optional, Supplier<Point> supplier) {
-            this.optional = optional; this.supplier = supplier;
+        public JavaGenericTypeContainer(Optional<Point> optional, Supplier<Point> supplier, AtomicReferenceArray<Point> atomicReferenceArray) {
+            this.optional = optional; this.supplier = supplier; this.atomicReferenceArray = atomicReferenceArray;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof Java8GenericTypeContainer)) {
+            if (!(obj instanceof JavaGenericTypeContainer)) {
                 return false;
             }
-            Java8GenericTypeContainer other = (Java8GenericTypeContainer)obj;
+            JavaGenericTypeContainer other = (JavaGenericTypeContainer)obj;
             Point thisOptionalPoint = optional != null ? optional.orElse(null) : null;
             Point thatOptionalPoint = other.optional != null ? other.optional.orElse(null) : null;
             Point thisSupplierPoint = supplier != null ? supplier.get() : null;
             Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
-            return Objects.equals(thisOptionalPoint, thatOptionalPoint) && Objects.equals(thisSupplierPoint, thatSupplierPoint);
+            Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
+            Point thatAraPoint = other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
+            return Objects.equals(thisOptionalPoint, thatOptionalPoint) && Objects.equals(thisSupplierPoint, thatSupplierPoint) && Objects.equals(thisAraPoint, thatAraPoint);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "Java8GenericTypeContainer: " + optional + ", " + supplier.get(); }
+        @Override public String toString() { return "JavaGenericTypeContainer: " + optional + ", " + supplier.get(); }
     }
 
     static final class ListContainer {

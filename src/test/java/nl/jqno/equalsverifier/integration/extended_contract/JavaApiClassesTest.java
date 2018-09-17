@@ -15,6 +15,7 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -72,8 +73,14 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void succeed_whenClassContainsAnAwtClass() {
-        EqualsVerifier.forClass(AwtClassesContainer.class)
+    public void succeed_whenClassContainsAnAtomicValue() {
+        EqualsVerifier.forClass(AtomicClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsAnAncientJavaApiClass() {
+        EqualsVerifier.forClass(AncientJavaApiClassesContainer.class)
                 .verify();
     }
 
@@ -343,14 +350,42 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-    static final class AwtClassesContainer {
+    static final class AtomicClassesContainer {
+        private final AtomicBoolean atomicBoolean;
+        private final AtomicInteger atomicInteger;
+        private final AtomicIntegerArray atomicIntegerArray;
+        private final AtomicLong atomicLong;
+        private final AtomicLongArray atomicLongArray;
+        private final AtomicMarkableReference<?> atomicMarkableReference;
+        private final AtomicReference<?> atomicReference;
+        private final AtomicReferenceArray<?> atomicReferenceArray;
+        private final AtomicStampedReference<?> atomicStampedReference;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public AtomicClassesContainer(AtomicBoolean atomicBoolean, AtomicInteger atomicInteger, AtomicIntegerArray atomicIntegerArray,
+                AtomicLong atomicLong, AtomicLongArray atomicLongArray, AtomicMarkableReference<?> atomicMarkableReference,
+                AtomicReference<?> atomicReference, AtomicReferenceArray<?> atomicReferenceArray, AtomicStampedReference<?> atomicStampedReference) {
+            this.atomicBoolean = atomicBoolean; this.atomicInteger = atomicInteger; this.atomicIntegerArray = atomicIntegerArray;
+            this.atomicLong = atomicLong; this.atomicLongArray = atomicLongArray; this.atomicMarkableReference = atomicMarkableReference;
+            this.atomicReference = atomicReference; this.atomicReferenceArray = atomicReferenceArray; this.atomicStampedReference = atomicStampedReference;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class AncientJavaApiClassesContainer {
         private final java.awt.color.ColorSpace awtColorSpace;
         private final java.awt.color.ICC_ColorSpace iccColorSpace;
         private final java.awt.color.ICC_Profile iccProfile;
+        private final java.rmi.dgc.VMID vmid;
+        private final java.rmi.server.UID uid;
 
-        public AwtClassesContainer(java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace,
-                java.awt.color.ICC_Profile iccProfile) {
-            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile;
+        public AncientJavaApiClassesContainer(java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace,
+                                              java.awt.color.ICC_Profile iccProfile, java.rmi.dgc.VMID vmid, java.rmi.server.UID uid) {
+            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile; this.vmid = vmid; this.uid = uid;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
