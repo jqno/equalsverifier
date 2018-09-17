@@ -119,6 +119,7 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             this.optional = optional; this.supplier = supplier; this.atomicReferenceArray = atomicReferenceArray;
         }
 
+        // CHECKSTYLE: ignore NPathComplexity for 2 lines.
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof JavaGenericTypeContainer)) {
@@ -131,7 +132,9 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
             Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
             Point thatAraPoint = other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
-            return Objects.equals(thisOptionalPoint, thatOptionalPoint) && Objects.equals(thisSupplierPoint, thatSupplierPoint) && Objects.equals(thisAraPoint, thatAraPoint);
+            return Objects.equals(thisOptionalPoint, thatOptionalPoint) &&
+                Objects.equals(thisSupplierPoint, thatSupplierPoint) &&
+                Objects.equals(thisAraPoint, thatAraPoint);
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }

@@ -271,9 +271,15 @@ public final class JavaApiPrefabValues {
     private void addAtomicClasses() {
         addValues(AtomicBoolean.class, new AtomicBoolean(true), new AtomicBoolean(false), new AtomicBoolean(true));
         addValues(AtomicInteger.class, new AtomicInteger(1), new AtomicInteger(2), new AtomicInteger(1));
-        addValues(AtomicIntegerArray.class, new AtomicIntegerArray(new int[] { 1 }), new AtomicIntegerArray(new int[] { 2 }), new AtomicIntegerArray(new int[] { 1 }));
+        addValues(AtomicIntegerArray.class,
+            new AtomicIntegerArray(new int[] { 1 }),
+            new AtomicIntegerArray(new int[] { 2 }),
+            new AtomicIntegerArray(new int[] { 1 }));
         addValues(AtomicLong.class, new AtomicLong(1L), new AtomicLong(2L), new AtomicLong(1L));
-        addValues(AtomicLongArray.class, new AtomicLongArray(new long[] { 1L }), new AtomicLongArray(new long[] { 2L }), new AtomicLongArray(new long[] { 1 }));
+        addValues(AtomicLongArray.class,
+            new AtomicLongArray(new long[] { 1L }),
+            new AtomicLongArray(new long[] { 2L }),
+            new AtomicLongArray(new long[] { 1L }));
         addFactory(AtomicMarkableReference.class, simple(r -> new AtomicMarkableReference(r, true), null));
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
         addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));

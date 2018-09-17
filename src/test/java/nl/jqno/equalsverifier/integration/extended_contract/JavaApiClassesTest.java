@@ -367,7 +367,8 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 AtomicReference<?> atomicReference, AtomicReferenceArray<?> atomicReferenceArray, AtomicStampedReference<?> atomicStampedReference) {
             this.atomicBoolean = atomicBoolean; this.atomicInteger = atomicInteger; this.atomicIntegerArray = atomicIntegerArray;
             this.atomicLong = atomicLong; this.atomicLongArray = atomicLongArray; this.atomicMarkableReference = atomicMarkableReference;
-            this.atomicReference = atomicReference; this.atomicReferenceArray = atomicReferenceArray; this.atomicStampedReference = atomicStampedReference;
+            this.atomicReference = atomicReference; this.atomicReferenceArray = atomicReferenceArray;
+            this.atomicStampedReference = atomicStampedReference;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
