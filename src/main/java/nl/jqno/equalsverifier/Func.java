@@ -26,6 +26,7 @@ public interface Func<T> {
      * @param <T> The type of prefab value.
      */
     @SuppressWarnings("unchecked")
+    @FunctionalInterface
     interface Func1<A, T> extends Func<T> {
         @Override
         default T apply(List<?> values) {
@@ -47,6 +48,7 @@ public interface Func<T> {
      * @param <T> The type of prefab value.
      */
     @SuppressWarnings("unchecked")
+    @FunctionalInterface
     interface Func2<A, B, T> extends Func<T> {
         @Override
         default T apply(List<?> values) {
