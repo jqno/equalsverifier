@@ -60,6 +60,9 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
         catch (AbstractMethodError e) {
             abstractMethodErrorThrown(testedMethodName, field, e);
         }
+        catch (ClassCastException e) {
+            classCastExceptionThrown(field, e);
+        }
         catch (Exception e) {
             exceptionThrown(testedMethodName, field, e);
         }
@@ -70,10 +73,20 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
     }
 
     private void abstractMethodErrorThrown(String method, Field field, AbstractMethodError e) {
-        fail(Formatter.of(
-            "Abstract delegation: %% throws AbstractMethodError when field %% is null.\n" +
-                "Suppress Warning.NULL_FIELDS to disable this check.",
-            method, field.getName()), e);
+        fail(
+            Formatter.of(
+                "Abstract delegation: %% throws AbstractMethodError when field %% is null.\n" +
+                    "Suppress Warning.NULL_FIELDS to disable this check.",
+                method, field.getName()),
+            e);
+    }
+
+    private void classCastExceptionThrown(Field field, ClassCastException e) {
+        fail(
+            Formatter.of(
+                "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for %%.",
+                field.getType().getSimpleName()),
+            e);
     }
 
     private void exceptionThrown(String method, Field field, Exception e) {

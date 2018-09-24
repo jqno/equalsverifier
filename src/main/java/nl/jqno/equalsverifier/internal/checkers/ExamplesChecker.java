@@ -73,8 +73,15 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     private void checkReflexivity(T reference) {
-        assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
+        try {
+            assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
                 reference, reference);
+        }
+        catch (ClassCastException e) {
+            fail(Formatter.of(
+                "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for the type that triggered the exception."),
+                e);
+        }
     }
 
     @SuppressFBWarnings(value = "EC_NULL_ARG", justification = "Check what happens when null is passed into equals.")
