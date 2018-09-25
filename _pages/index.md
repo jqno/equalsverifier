@@ -26,7 +26,9 @@ If you're interested, there's more to read:
 
 * The [FAQ](/equalsverifier/faq).
 * The [changelog](/equalsverifier/changelog).
-* The [migration guide](/equalsverifier/migration1to2), if you're migrating from version 1.x to 2.x.
+* The migration guides:
+    * [2.x to 3.x](/equalsverifier/migration2to3)
+    * [1.x to 2.x](/equalsverifier/migration1to2)
 * The [inspiration](/equalsverifier/inspiration) for EqualsVerifier.
 
 

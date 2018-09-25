@@ -21,7 +21,7 @@ _???_
     * the name of a failing class is mentioned more clearly in the error message ([Issue 202](https://github.com/jqno/equalsverifier/issues/202)),
     * the error message no longer edits out EqualsVerifier-internal calls from the stacktrace,
     * the layout of the text in the error messages has been improved.
-* ...supply prefab values for specific generic types using `withGenericPrefabValues`: see [here](/equalsverifier/errormessages/recursive-datastructure/).
+* ...supply prefab values for specific generic types using `withGenericPrefabValues`: see [here](/equalsverifier/errormessages/recursive-datastructure#generics).
 * ...avoid adding prefab values for `java.util.function.Supplier`, `java.util.concurrent.atomic.Atomic*` classes and some RMI-specific classes. ([Issue 207](https://github.com/jqno/equalsverifier/issues/207))
 * ...no longer suppress `Warning.ANNOTATION`, since it's not needed anymore.
 * ...ask EqualsVerifier for a report, instead of making it fail a test, using `#report()`.

@@ -27,6 +27,8 @@ If you are using `withIgnoredFields`, you still have to add prefab values. Equal
 
 Note that static fields are ignored only if they are also final.
 
+<a name="generics"></a>
+
 Generics
 --------
 In rare cases involving generics, `withPrefabValues` might not work.

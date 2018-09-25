@@ -2,7 +2,7 @@
 title: Migration guide 1 to 2
 permalink: /migration1to2/
 ---
-When migrating from EqualsVerifier 1 to 2, there are a few things you should be aware of. (See also the [changelog](/equalsverifier/changelog)).
+When migrating from EqualsVerifier 1 to 2, there are a few things you should be aware of. (See also the [changelog](/equalsverifier/changelog#2.x)).
 
 * EqualsVerifier 2 no longer supports Java 6. Don't upgrade if you're still using Java 6.
 * `EqualsVerifier.forExamples` has been removed, because over time, EqualsVerifier has been ignoring the given examples more and more anyway, favouring `forClass` style checks instead. There were also occasional problems when the given examples were of inconsistent  types. Therefore, in almost all cases, you can use `EqualsVerifier.forClass` instead. In the rare cases when that doesn't work, you can also use `EqualsVerifier.forRelaxedEqualExamples`.
