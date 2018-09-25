@@ -4,8 +4,32 @@ permalink: /changelog/
 ---
 * What's new in [version 1.x](#1.x)?
 * What's new in [version 2.x](#2.x)?
+* What's new in [version 3.x](#3.x)?
 
 **Well, you can now ...**
+
+<a name="3.x"></a>
+
+Version 3.0
+-----------
+_???_
+
+* ...no longer use EqualsVerifier with Java 7.
+* ...but have full support for Java 11.
+* ...re-use the EqualsVerifier configuration: see [the manual](/equalsverifier/manual/reusing-configurations).
+* ...read EqualsVerifier's error messages more easily, because
+    * the name of a failing class is mentioned more clearly in the error message ([Issue 202](https://github.com/jqno/equalsverifier/issues/202)),
+    * the error message no longer edits out EqualsVerifier-internal calls from the stacktrace,
+    * the layout of the text in the error messages has been improved.
+* ...supply prefab values for specific generic types using `withGenericPrefabValues`: see [here](/equalsverifier/errormessages/recursive-datastructure/).
+* ...avoid adding prefab values for `java.util.function.Supplier`, `java.util.concurrent.atomic.Atomic*` classes and some RMI-specific classes. ([Issue 207](https://github.com/jqno/equalsverifier/issues/207))
+* ...no longer suppress `Warning.ANNOTATION`, since it's not needed anymore.
+* ...ask EqualsVerifier for a report, instead of making it fail a test, using `#report()`.
+* ...run EqualsVerifier a little faster. ([Issue 190](https://github.com/jqno/equalsverifier/issues/190); see also [this tweet](https://twitter.com/jqno/status/1002562042862231552))
+* ...read and understand the EqualsVerifier source code more easily, because
+    * the codebase has been updated to use Java 8 language features,
+    * the JavaDoc has been updated,
+    * the annoying license and copyright headers have been removed. (Don't worry: EqualsVerifier is still licensed under the Apache 2.0 license!)
 
 <a name="2.x"></a>
 
@@ -42,7 +66,7 @@ Version 2.4.7
 -------------
 _June 20, 2018_
 
-* ...run EqualsVerifier faster, because part of the processing of annotations is cached. ([Issue 195](https://github.com/jqno/equalsverifier/issues/195); thanks Андрей!)
+* ...run EqualsVerifier faster, because part of the processing of annotations is cached. ([Issue 190](https://github.com/jqno/equalsverifier/issues/190) and [Issue 195](https://github.com/jqno/equalsverifier/issues/195); thanks Андрей!)
 * ...not get illegal reflective access error messages when using Thread on Java 10. ([Issue 193](https://github.com/jqno/equalsverifier/issues/193))
 * ...use `@Transient` again to implicitly ignore fields, as discussed in the [manual](/equalsverifier/manual/jpa-entities). ([Issue 196](https://github.com/jqno/equalsverifier/issues/196))
 
