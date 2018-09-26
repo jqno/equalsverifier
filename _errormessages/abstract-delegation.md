@@ -12,7 +12,3 @@ If one of the fields has an abstract type, the error can be avoided by calling `
 
 Note that, from version 1.1.4, EqualsVerifier includes the name of the abstract method that caused the error in its error message.
 
-A note about Joda-Time
-----------------------
-This problem tends to show up often when using the Joda-Time types `LocalDate` and `LocalTime`. In these cases, the class `org.joda.time.Chronology` is mentioned in the error message. It's best to solve this by adding instances of `LocalDate` or `LocalTime` to the prefab values, not instances of `Chronology`.
-
