@@ -12,7 +12,7 @@ permalink: /changelog/
 
 Version 3.0
 -----------
-_???_
+_September 26, 2018_
 
 * ...no longer use EqualsVerifier with Java 7.
 * ...but have full support for Java 11.
