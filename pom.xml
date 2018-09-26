@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>3.1.6</version>
+            <version>3.1.7</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -233,7 +233,7 @@
                         <dependency>
                             <groupId>com.github.spotbugs</groupId>
                             <artifactId>spotbugs</artifactId>
-                            <version>3.1.6</version>
+                            <version>3.1.7</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -264,17 +264,6 @@
                     </plugin>
                 </plugins>
             </build>
-        </profile>
-
-        <profile>
-            <id>compatibility</id>
-            <activation>
-                <jdk>[11,)</jdk>
-            </activation>
-
-            <properties>
-                <spotbugs.skip>true</spotbugs.skip>
-            </properties>
         </profile>
 
         <profile>
