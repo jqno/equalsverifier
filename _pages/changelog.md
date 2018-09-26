@@ -15,7 +15,7 @@ Version 3.0
 _September 26, 2018_
 
 * ...no longer use EqualsVerifier with Java 7.
-* ...but have full support for Java 11.
+* ...but have full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
 * ...re-use the EqualsVerifier configuration: see [the manual](/equalsverifier/manual/reusing-configurations).
 * ...read EqualsVerifier's error messages more easily, because
     * the name of a failing class is mentioned more clearly in the error message ([Issue 202](https://github.com/jqno/equalsverifier/issues/202)),
