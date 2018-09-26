@@ -2,12 +2,12 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
 
-public class CachedHashCodeTest extends IntegrationTestBase {
+public class CachedHashCodeTest extends ExpectedExceptionTestBase {
     private static final String SOME_NAME = "some name";
     private static final String CACHED_HASHCODE = "Cached hashCode:";
     private static final String MALFORMED_CALCULATEHASHCODEMETHOD = "Could not find calculateHashCodeMethod: must be 'private int";

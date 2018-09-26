@@ -24,10 +24,10 @@ public class MapFactoryTest {
     private static final TypeTag ONEELEMENTENUM_TYPETAG = new TypeTag(OneElementEnum.class);
     private static final TypeTag ONEELEMENTENUMKEYMAP_TYPETAG = new TypeTag(Map.class, ONEELEMENTENUM_TYPETAG, OBJECT_TYPETAG);
 
-    private static final MapFactory<Map> MAP_FACTORY = new StubMapPrefabValueFactory();
+    private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
-    private final PrefabValues prefabValues = new PrefabValues();
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private PrefabValues prefabValues;
     private String red;
     private String black;
     private Object redObject;
@@ -36,7 +36,7 @@ public class MapFactoryTest {
 
     @Before
     public void setUp() {
-        JavaApiPrefabValues.addTo(prefabValues);
+        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         red = prefabValues.giveRed(STRING_TYPETAG);
         black = prefabValues.giveBlack(STRING_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);
@@ -70,13 +70,6 @@ public class MapFactoryTest {
         Tuple<Map> tuple = MAP_FACTORY.createValues(ONEELEMENTENUMKEYMAP_TYPETAG, prefabValues, typeStack);
         assertEquals(mapOf(redEnum, blackObject), tuple.getRed());
         assertEquals(new HashMap<>(), tuple.getBlack());
-    }
-
-    private static class StubMapPrefabValueFactory extends MapFactory<Map> {
-        @Override
-        public Map createEmpty() {
-            return new HashMap<>();
-        }
     }
 
     private <K, V> Map<K, V> mapOf(K key, V value) {

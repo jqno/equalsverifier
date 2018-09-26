@@ -69,6 +69,8 @@ public final class Assert {
      * Throws an AssertionException.
      *
      * @param message Message to be included in the {@link AssertionException}.
+     * @param cause Throwable to be included as cause in the
+     *          {@link AssertionException}. Can be null.
      * @throws AssertionException Always.
      */
     public static void fail(Formatter message, Throwable cause) {

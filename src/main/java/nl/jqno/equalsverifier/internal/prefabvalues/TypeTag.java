@@ -134,7 +134,8 @@ public final class TypeTag {
     }
 
     /**
-     * Getter for the TypeTag's raw type.
+     * @param <T> The returned {@link Class} will have this generic type.
+     * @return The TypeTag's raw type.
      */
     @SuppressWarnings("unchecked")
     public <T> Class<T> getType() {
@@ -142,7 +143,7 @@ public final class TypeTag {
     }
 
     /**
-     * Getter for the TypeTag's generic types.
+     * @return The TypeTag's generic types.
      */
     public List<TypeTag> getGenericTypes() {
         return Collections.unmodifiableList(genericTypes);

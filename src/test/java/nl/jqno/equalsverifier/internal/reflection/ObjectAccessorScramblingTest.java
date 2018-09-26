@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.Assert.*;
 
 public class ObjectAccessorScramblingTest {
@@ -19,8 +21,9 @@ public class ObjectAccessorScramblingTest {
 
     @Before
     public void setup() {
-        prefabValues = new PrefabValues();
-        JavaApiPrefabValues.addTo(prefabValues);
+        FactoryCache factoryCache = JavaApiPrefabValues.build();
+        factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
+        prefabValues = new PrefabValues(factoryCache);
     }
 
     @Test
@@ -90,7 +93,6 @@ public class ObjectAccessorScramblingTest {
 
     @Test
     public void scramblePrivateFinalPoint() {
-        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3), new Point(1, 2));
         FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
         Point before = foo.p;
 
@@ -101,7 +103,6 @@ public class ObjectAccessorScramblingTest {
 
     @Test
     public void scrambleNestedGenerics() {
-        prefabValues.addFactory(Point.class, new Point(1, 2), new Point(2, 3), new Point(1, 2));
         GenericContainerContainer foo = new GenericContainerContainer();
 
         assertTrue(foo.strings.ts.isEmpty());

@@ -7,11 +7,11 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-final class FieldNameExtractor {
+public final class FieldNameExtractor {
 
     private FieldNameExtractor() {}
 
-    static <T> Set<String> extractFieldNames(Class<T> type) {
+    public static <T> Set<String> extractFieldNames(Class<T> type) {
         Set<String> actualFieldNames = new HashSet<>();
         for (Field f : FieldIterable.of(type)) {
             String name = f.getName();

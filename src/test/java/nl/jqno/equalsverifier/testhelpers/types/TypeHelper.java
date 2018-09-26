@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 public class TypeHelper {
     private static final Object OBJECT = new Object();
 
@@ -253,6 +256,71 @@ public class TypeHelper {
         public Point[] points = { new Point(1, 2) };
     }
 
+    @SuppressWarnings("unused")
+    public static final class SingleGenericContainerContainer {
+        private final SingleGenericContainer<String> string;
+        private final SingleGenericContainer<Integer> integer;
+
+        public SingleGenericContainerContainer(SingleGenericContainer<String> string, SingleGenericContainer<Integer> integer) {
+            this.string = string;
+            this.integer = integer;
+        }
+
+        @Override public boolean equals(Object obj) {
+            if (string != null) {
+                String s = string.t;
+            }
+            return defaultEquals(this, obj);
+        }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class SingleGenericContainer<T> {
+        private final SingleGenericContainer<Void> justToMakeItRecursiveAndForcePrefabValues = null;
+
+        private final T t;
+
+        public SingleGenericContainer(T t) { this.t = t; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class DoubleGenericContainerContainer {
+        private final DoubleGenericContainer<String, Boolean> stringBoolean;
+        private final DoubleGenericContainer<Integer, Byte> integerByte;
+
+        public DoubleGenericContainerContainer(
+            DoubleGenericContainer<String, Boolean> stringBoolean,
+            DoubleGenericContainer<Integer, Byte> integerByte) {
+            this.stringBoolean = stringBoolean;
+            this.integerByte = integerByte;
+        }
+
+        @Override public boolean equals(Object obj) {
+            if (stringBoolean != null) {
+                String s = stringBoolean.t;
+            }
+            return defaultEquals(this, obj);
+        }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused")
+    public static final class DoubleGenericContainer<T, U> {
+        private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues = null;
+
+        private final T t;
+        private final U u;
+
+        public DoubleGenericContainer(T t, U u) { this.t = t; this.u = u; }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
     @TypeAnnotationRuntimeRetention
     public static class AnnotatedWithRuntime {}
 
@@ -284,14 +352,21 @@ public class TypeHelper {
         public int noRetention;
     }
 
+    public static class AnnotatedTypes {
+        public @TypeUseAnnotationRuntimeRetention int runtimeRetention;
+        public @TypeUseAnnotationClassRetention int classRetention;
+        public @TypeUseAnnotationRuntimeRetention @TypeUseAnnotationClassRetention int bothRetentions;
+        public int noRetention;
+    }
+
     @TypeAnnotationInherits
     @TypeAnnotationDoesntInherit
     public static class SuperclassWithAnnotations {
         @FieldAnnotationInherits
-        public int inherits;
+        public @TypeUseAnnotationInherits int inherits;
 
         @FieldAnnotationDoesntInherit
-        public int doesntInherit;
+        public @TypeUseAnnotationDoesntInherit int doesntInherit;
     }
 
     public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}

@@ -6,8 +6,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
@@ -43,9 +45,9 @@ public class ConditionalInstantiatorTest {
     @Test
     public void objectIsInstantiatedCorrectly_whenValidConstructorParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar");
-        Object expected = new GregorianCalendar(1999, 11, 31);
+        Calendar expected = new GregorianCalendar(1999, 11, 31);
 
-        Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
+        Calendar actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
         assertThat(actual, is(expected));
     }
 
@@ -75,9 +77,9 @@ public class ConditionalInstantiatorTest {
     @Test
     public void objectIsInstantiatedCorrectly_whenValidFactoryMethodAndParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
-        Object expected = Integer.valueOf(42);
+        int expected = Integer.valueOf(42);
 
-        Object actual = ci.callFactory("valueOf", classes(int.class), objects(42));
+        int actual = ci.callFactory("valueOf", classes(int.class), objects(42));
         assertThat(actual, is(expected));
     }
 
@@ -123,9 +125,9 @@ public class ConditionalInstantiatorTest {
     @Test
     public void objectIsInstantiatedCorrectly_whenValidExternalFactoryMethodAndParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
-        Object expected = Collections.emptyList();
+        List<?> expected = Collections.emptyList();
 
-        Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
+        List<?> actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
         assertThat(actual, is(expected));
     }
 
@@ -194,9 +196,9 @@ public class ConditionalInstantiatorTest {
     @Test
     public void objectIsReturned_whenValidConstantIsProvided() {
         ci = new ConditionalInstantiator("java.math.BigDecimal");
-        Object expected = BigDecimal.TEN;
+        BigDecimal expected = BigDecimal.TEN;
 
-        Object actual = ci.returnConstant("TEN");
+        BigDecimal actual = ci.returnConstant("TEN");
         assertThat(actual, is(expected));
     }
 

@@ -2,11 +2,12 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
+import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import org.junit.Test;
 
-public class WarningsMixTest extends IntegrationTestBase {
+public class WarningsMixTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
         expectFailure("Mutability:");
@@ -90,27 +91,6 @@ public class WarningsMixTest extends IntegrationTestBase {
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
                 .verify();
-    }
-
-    static class MutablePoint {
-        private int x;
-        private int y;
-
-        public MutablePoint(int x, int y) { this.x = x; this.y = y; }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof MutablePoint)) {
-                return false;
-            }
-            MutablePoint other = (MutablePoint)obj;
-            return x == other.x && y == other.y;
-        }
-
-        @Override
-        public int hashCode() {
-            return x + (31 * y);
-        }
     }
 
     static class NeverNullColorContainer {

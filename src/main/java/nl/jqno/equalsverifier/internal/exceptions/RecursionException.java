@@ -30,7 +30,7 @@ public class RecursionException extends MessagingException {
      * {@inheritDoc}
      */
     @Override
-    public String getMessage() {
+    public String getDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("Recursive datastructure.\nAdd prefab values for one of the following types: ");
         Iterator<TypeTag> i = typeStack.iterator();

@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
  *
  * @param <T> The type to instantiate.
  */
+@FunctionalInterface
 public interface PrefabValueFactory<T> {
     /**
      * Creates a tuple of two prefab values.

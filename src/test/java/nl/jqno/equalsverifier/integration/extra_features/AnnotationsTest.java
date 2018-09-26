@@ -1,11 +1,8 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
-import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
 import org.junit.Test;
@@ -16,7 +13,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class AnnotationsTest extends IntegrationTestBase {
+public class AnnotationsTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
         EqualsVerifier.forClass(ImmutableByAnnotation.class)
@@ -95,29 +92,6 @@ public class AnnotationsTest extends IntegrationTestBase {
     public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
         expectFailure("Subclass");
         EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenReadingAnnotationsFromDynamicClass() {
-        FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
-        expectFailure("Cannot read class file for", "Suppress Warning.ANNOTATION to skip annotation processing phase");
-        EqualsVerifier.forClass(dynamic.getClass())
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassIsDynamic_givenAnnotationWarningIsSuppressed() {
-        FinalMethodsPoint dynamic = Instantiator.of(FinalMethodsPoint.class).instantiateAnonymousSubclass();
-        EqualsVerifier.forClass(dynamic.getClass())
-                .suppress(Warning.ANNOTATION)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassIsNotDynamic_givenAnnotationWarningIsSuppressed() {
-        EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .suppress(Warning.ANNOTATION)
                 .verify();
     }
 

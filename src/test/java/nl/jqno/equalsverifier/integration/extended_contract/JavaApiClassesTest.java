@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
 
@@ -11,14 +11,19 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.nio.*;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.StampedLock;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class JavaApiClassesTest extends IntegrationTestBase {
+public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsASuperCollection() {
         EqualsVerifier.forClass(SuperCollectionContainer.class)
@@ -56,8 +61,26 @@ public class JavaApiClassesTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenClassContainsACommonJavaApiType() {
+    public void succeed_whenClassContainsACommonJavaApiClass() {
         EqualsVerifier.forClass(CommonClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsACommonJava8ApiClass() {
+        EqualsVerifier.forClass(Java8ApiClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsAnAtomicValue() {
+        EqualsVerifier.forClass(AtomicClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsAnAncientJavaApiClass() {
+        EqualsVerifier.forClass(AncientJavaApiClassesContainer.class)
                 .verify();
     }
 
@@ -283,21 +306,87 @@ public class JavaApiClassesTest extends IntegrationTestBase {
         private final java.sql.Date sqlDate;
         private final java.sql.Time sqlTime;
         private final java.sql.Timestamp sqlTimestamp;
-        private final java.awt.color.ColorSpace awtColorSpace;
-        private final java.awt.color.ICC_ColorSpace iccColorSpace;
-        private final java.awt.color.ICC_Profile iccProfile;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset, Calendar calendar,
                 Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
                 SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
-                Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp,
-                java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace, java.awt.color.ICC_Profile iccProfile) {
+                Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp) {
             this.string = string; this.integer = integer; this.type = type; this.bitset = bitset; this.calendar = calendar;
             this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
             this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress; this.inet4Address = inet4Address;
             this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate; this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
-            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class Java8ApiClassesContainer {
+        private final Optional<?> optional;
+        private final LocalDate localDate;
+        private final LocalTime localTime;
+        private final LocalDateTime localDateTime;
+        private final ZoneId zoneId;
+        private final ZoneOffset zoneOffset;
+        private final ZonedDateTime zonedDateTime;
+        private final DateTimeFormatter dateTimeFormatter;
+        private final CompletableFuture<?> completableFuture;
+        private final StampedLock stampedLock;
+        private final Supplier<?> supplier;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public Java8ApiClassesContainer(Optional<?> optional, LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime,
+                ZoneId zoneId, ZoneOffset zoneOffset, ZonedDateTime zonedDateTime, DateTimeFormatter dateTimeFormatter,
+                CompletableFuture<?> completableFuture, StampedLock stampedLock, Supplier<?> supplier) {
+            this.optional = optional; this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime;
+            this.zoneId = zoneId; this.zoneOffset = zoneOffset; this.zonedDateTime = zonedDateTime; this.dateTimeFormatter = dateTimeFormatter;
+            this.completableFuture = completableFuture; this.stampedLock = stampedLock; this.supplier = supplier;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class AtomicClassesContainer {
+        private final AtomicBoolean atomicBoolean;
+        private final AtomicInteger atomicInteger;
+        private final AtomicIntegerArray atomicIntegerArray;
+        private final AtomicLong atomicLong;
+        private final AtomicLongArray atomicLongArray;
+        private final AtomicMarkableReference<?> atomicMarkableReference;
+        private final AtomicReference<?> atomicReference;
+        private final AtomicReferenceArray<?> atomicReferenceArray;
+        private final AtomicStampedReference<?> atomicStampedReference;
+
+        // CHECKSTYLE: ignore ParameterNumber for 1 line.
+        public AtomicClassesContainer(AtomicBoolean atomicBoolean, AtomicInteger atomicInteger, AtomicIntegerArray atomicIntegerArray,
+                AtomicLong atomicLong, AtomicLongArray atomicLongArray, AtomicMarkableReference<?> atomicMarkableReference,
+                AtomicReference<?> atomicReference, AtomicReferenceArray<?> atomicReferenceArray, AtomicStampedReference<?> atomicStampedReference) {
+            this.atomicBoolean = atomicBoolean; this.atomicInteger = atomicInteger; this.atomicIntegerArray = atomicIntegerArray;
+            this.atomicLong = atomicLong; this.atomicLongArray = atomicLongArray; this.atomicMarkableReference = atomicMarkableReference;
+            this.atomicReference = atomicReference; this.atomicReferenceArray = atomicReferenceArray;
+            this.atomicStampedReference = atomicStampedReference;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class AncientJavaApiClassesContainer {
+        private final java.awt.color.ColorSpace awtColorSpace;
+        private final java.awt.color.ICC_ColorSpace iccColorSpace;
+        private final java.awt.color.ICC_Profile iccProfile;
+        private final java.rmi.dgc.VMID vmid;
+        private final java.rmi.server.UID uid;
+
+        public AncientJavaApiClassesContainer(java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace,
+                                              java.awt.color.ICC_Profile iccProfile, java.rmi.dgc.VMID vmid, java.rmi.server.UID uid) {
+            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile; this.vmid = vmid; this.uid = uid;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

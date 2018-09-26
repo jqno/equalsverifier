@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
-public class NonNullityTest extends IntegrationTestBase {
+public class NonNullityTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
         expectFailure("Non-nullity: NullPointerException thrown");

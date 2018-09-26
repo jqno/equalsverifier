@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom.N
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable.NonnullJsr305InapplicableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305JavaxOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 import org.junit.Test;
 
@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class AnnotationNonnullTest extends IntegrationTestBase {
+public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {
         EqualsVerifier.forClass(NonnullManual.class)

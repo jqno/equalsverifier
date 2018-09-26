@@ -1,18 +1,19 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
+import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class GetClassTest extends IntegrationTestBase {
+public class GetClassTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
-        EqualsVerifier.forClass(GetClassPointHappyPath.class)
+        EqualsVerifier.forClass(GetClassPoint.class)
                 .usingGetClass()
                 .verify();
     }
@@ -50,24 +51,6 @@ public class GetClassTest extends IntegrationTestBase {
                 .verify();
     }
 
-    static class GetClassPointHappyPath {
-        private final int x;
-        private final int y;
-
-        public GetClassPointHappyPath(int x, int y) { this.x = x; this.y = y; }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == null || obj.getClass() != getClass()) {
-                return false;
-            }
-            GetClassPointHappyPath p = (GetClassPointHappyPath)obj;
-            return p.x == x && p.y == y;
-        }
-
-        @Override public int hashCode() { return defaultHashCode(this); }
-    }
-
     static class GetClassPointNull {
         private final int x;
         private final int y;
@@ -86,7 +69,7 @@ public class GetClassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    static class GetClassColorPoint extends GetClassPointHappyPath {
+    static class GetClassColorPoint extends GetClassPoint {
         private final Color color;
 
         public GetClassColorPoint(int x, int y, Color color) { super(x, y); this.color = color; }

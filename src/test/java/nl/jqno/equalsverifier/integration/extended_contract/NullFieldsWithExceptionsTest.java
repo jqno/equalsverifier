@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -9,7 +9,7 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class NullFieldsWithExceptionsTest extends IntegrationTestBase {
+public class NullFieldsWithExceptionsTest extends ExpectedExceptionTestBase {
     private static final String EQUALS = "equals";
     private static final String HASH_CODE = "hashCode";
     private static final String THROWS = "throws";

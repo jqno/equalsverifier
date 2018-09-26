@@ -45,15 +45,18 @@ public class ConditionalInstantiator {
     /**
      * Attempts to resolve the type.
      *
+     * @param <T> The resolved type.
      * @return The corresponding class object if the type exists; null otherwise.
      */
-    public Class<?> resolve() {
+    public <T> Class<T> resolve() {
         return classForName(fullyQualifiedClassName);
     }
 
     /**
      * Attempts to instantiate the type.
      *
+     * @param <T>
+     *          The type to instantiate.
      * @param paramTypes
      *          The types of the constructor parameters of the constructor
      *          that we want to call.
@@ -64,13 +67,13 @@ public class ConditionalInstantiator {
      * @throws ReflectionException If instantiation fails.
      */
     @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
-    public Object instantiate(Class<?>[] paramTypes, Object[] paramValues) {
+    public <T> T instantiate(Class<?>[] paramTypes, Object[] paramValues) {
         try {
-            Class<?> type = resolve();
+            Class<T> type = resolve();
             if (type == null) {
                 return null;
             }
-            Constructor<?> c = type.getConstructor(paramTypes);
+            Constructor<T> c = type.getConstructor(paramTypes);
             c.setAccessible(true);
             return c.newInstance(paramValues);
         }
@@ -82,6 +85,8 @@ public class ConditionalInstantiator {
     /**
      * Attempts to call a static factory method on the type.
      *
+     * @param <T>
+     *          The return type of the factory method.
      * @param factoryMethod
      *          The name of the factory method.
      * @param paramTypes
@@ -94,13 +99,15 @@ public class ConditionalInstantiator {
      * @throws ReflectionException
      *          If the call to the factory method fails.
      */
-    public Object callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+    public <T> T callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
         return callFactory(fullyQualifiedClassName, factoryMethod, paramTypes, paramValues);
     }
 
     /**
      * Attempts to call a static factory method on a type.
      *
+     * @param <T>
+     *          The return type of the factory method.
      * @param factoryTypeName
      *          The type that contains the factory method.
      * @param factoryMethod
@@ -116,16 +123,17 @@ public class ConditionalInstantiator {
      *          If the call to the factory method fails.
      */
     @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
-    public Object callFactory(String factoryTypeName, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
+    @SuppressWarnings("unchecked")
+    public <T> T callFactory(String factoryTypeName, String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
         try {
-            Class<?> type = resolve();
+            Class<T> type = resolve();
             if (type == null) {
                 return null;
             }
             Class<?> factoryType = Class.forName(factoryTypeName);
             Method factory = factoryType.getMethod(factoryMethod, paramTypes);
             factory.setAccessible(true);
-            return factory.invoke(null, paramValues);
+            return (T)factory.invoke(null, paramValues);
         }
         catch (Exception e) {
             return handleException(e);
@@ -135,6 +143,8 @@ public class ConditionalInstantiator {
     /**
      * Attempts to resolve a static constant on the type.
      *
+     * @param <T>
+     *          The type of the constant.
      * @param constantName
      *          The name of the constant.
      * @return The value of the constant, or null if the type does not exist.
@@ -142,22 +152,23 @@ public class ConditionalInstantiator {
      *          If resolving the constant fails.
      */
     @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
-    public Object returnConstant(String constantName) {
+    @SuppressWarnings("unchecked")
+    public <T> T returnConstant(String constantName) {
         try {
-            Class<?> type = resolve();
+            Class<T> type = resolve();
             if (type == null) {
                 return null;
             }
             Field field = type.getField(constantName);
             field.setAccessible(true);
-            return field.get(null);
+            return (T)field.get(null);
         }
         catch (Exception e) {
             return handleException(e);
         }
     }
 
-    private Object handleException(Exception e) {
+    private <T> T handleException(Exception e) {
         if (throwExceptions) {
             throw new ReflectionException(e);
         }

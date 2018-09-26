@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
-public class HashCodeTest extends IntegrationTestBase {
+public class HashCodeTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenHashCodesAreInconsistent() {
         expectFailure("hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());

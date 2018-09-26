@@ -89,6 +89,7 @@ public final class ObjectAccessor<T> {
      * recursively.
      *
      * @param subclass A subclass of the wrapped object's class.
+     * @param <S> The subclass.
      * @return A shallow copy.
      */
     public <S extends T> S copyIntoSubclass(Class<S> subclass) {

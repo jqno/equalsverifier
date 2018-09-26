@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelaxedEqualsPreconditionTest extends IntegrationTestBase {
+public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     private static final String PRECONDITION = "Precondition";
     private static final String DIFFERENT_CLASSES = "are of different classes";
     private static final String TWO_IDENTICAL_OBJECTS_APPEAR = "two identical objects appear";

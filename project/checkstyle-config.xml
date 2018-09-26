@@ -7,6 +7,11 @@
     <property name="charset" value="UTF-8"/>
     <property name="severity" value="error"/>
 
+    <module name="SuppressionFilter">
+        <property name="file" value="project/suppressions.xml"/>
+        <property name="optional" value="false"/>
+    </module>
+
     <module name="FileLength"/>
     <module name="FileTabCharacter"/>
     <module name="NewlineAtEndOfFile">
@@ -66,7 +71,7 @@
         <module name="ImportOrder">
             <property name="groups" value="*,javax,java"/>
             <property name="ordered" value="true"/>
-            <property name="separated" value="false"/>
+            <property name="separated" value="true"/>
             <property name="option" value="bottom"/>
             <property name="sortStaticImportsAlphabetically" value="true"/>
         </module>
@@ -74,8 +79,12 @@
         <module name="InnerAssignment"/>
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>
-        <module name="JavadocTagContinuationIndentation"/>
+        <module name="JavadocMethod">
+            <property name="allowMissingJavadoc" value="true"/>
+            <property name="scope" value="public"/>
+        </module>
         <module name="JavadocStyle"/>
+        <module name="JavadocTagContinuationIndentation"/>
         <module name="JavaNCSS"/>
         <module name="LineLength">
             <property name="max" value="150"/>

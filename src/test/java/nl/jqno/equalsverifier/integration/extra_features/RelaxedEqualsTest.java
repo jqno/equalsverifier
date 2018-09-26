@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RelaxedEqualsTest extends IntegrationTestBase {
+public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
     private Multiple a;
     private Multiple b;
     private Multiple x;

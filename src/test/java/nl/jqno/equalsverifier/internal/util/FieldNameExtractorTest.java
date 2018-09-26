@@ -2,10 +2,10 @@ package nl.jqno.equalsverifier.internal.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertTrue;
-
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertTrue;
 
 public class FieldNameExtractorTest {
     private static final String FIELD_NOT_FOUND = "field not found: ";

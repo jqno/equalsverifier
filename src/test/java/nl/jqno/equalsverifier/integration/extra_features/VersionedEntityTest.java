@@ -2,14 +2,14 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import java.util.Objects;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class VersionedEntityTest extends IntegrationTestBase {
+public class VersionedEntityTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
         expectFailure("object does not equal an identical copy of itself", Warning.IDENTICAL_COPY.toString());

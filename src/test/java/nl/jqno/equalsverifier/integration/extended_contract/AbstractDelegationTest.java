@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -10,7 +10,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class AbstractDelegationTest extends IntegrationTestBase {
+public class AbstractDelegationTest extends ExpectedExceptionTestBase {
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
     private static final String HASHCODE_DELEGATES = "hashCode method delegates to an abstract method";

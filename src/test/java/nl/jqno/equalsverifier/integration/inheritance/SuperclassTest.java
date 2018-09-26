@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class SuperclassTest extends IntegrationTestBase {
+public class SuperclassTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(ColorBlindColorPoint.class)
@@ -73,17 +73,9 @@ public class SuperclassTest extends IntegrationTestBase {
     }
 
     @Test
-    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectly() {
+    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassUsesCommonsLangEqualsBuilder() {
         EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
                 .withRedefinedSuperclass()
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassImplementsThemCorrectlyAndAllFieldsShouldBeUsed() {
-        EqualsVerifier.forClass(ConcreteEqualsInheriter.class)
-                .withRedefinedSuperclass()
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -221,7 +213,7 @@ public class SuperclassTest extends IntegrationTestBase {
         @Override public int hashCode() { return defaultHashCode(this); }
     }
 
-    public abstract static class AbstractEqualsDefiner {
+    public abstract static class AbstractEqualsDefinerWithEqualsBuilder {
         @Override
         public final boolean equals(Object obj) {
             return EqualsBuilder.reflectionEquals(this, obj);
@@ -234,7 +226,7 @@ public class SuperclassTest extends IntegrationTestBase {
     }
 
     @SuppressWarnings("unused")
-    public static class ConcreteEqualsInheriter extends AbstractEqualsDefiner {
+    public static class ConcreteEqualsInheriter extends AbstractEqualsDefinerWithEqualsBuilder {
         private final int a;
         private final int b;
 

@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.*;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in
  *    Scala.
  */
-public class SubclassTest extends IntegrationTestBase {
+public class SubclassTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassIsFinal() {
         EqualsVerifier.forClass(FinalPoint.class)

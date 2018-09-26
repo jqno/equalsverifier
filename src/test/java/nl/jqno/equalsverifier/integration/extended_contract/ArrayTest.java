@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.hamcrest.CoreMatchers.containsString;
 
-public class ArrayTest extends IntegrationTestBase {
+public class ArrayTest extends ExpectedExceptionTestBase {
     private static final String REGULAR_EQUALS = "Array: == or regular equals() used instead of Arrays.equals() for field";
     private static final String REGULAR_HASHCODE = "Array: regular hashCode() used instead of Arrays.hashCode() for field";
     private static final String MULTIDIMENSIONAL_EQUALS =

@@ -34,7 +34,7 @@ public class HierarchyChecker<T> implements Checker {
 
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
-        this.classAccessor = config.createClassAccessor();
+        this.classAccessor = config.getClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
@@ -71,7 +71,7 @@ public class HierarchyChecker<T> implements Checker {
         }
         else {
             safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
-            safelyCheckSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag, config.getNonnullFields()));
+            safelyCheckSuperProperties(classAccessor.getDefaultValuesAccessor(typeTag, config.getNonnullFields(), config.getAnnotationCache()));
         }
     }
 
@@ -156,7 +156,7 @@ public class HierarchyChecker<T> implements Checker {
     private void checkFinalEqualsMethod() {
         boolean ignore =
             config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE) ||
-            classAccessor.hasAnnotation(SupportedAnnotations.ENTITY) ||
+            config.getAnnotationCache().hasClassAnnotation(type, SupportedAnnotations.ENTITY) ||
             typeIsFinal || redefinedSubclass != null;
         if (ignore) {
             return;

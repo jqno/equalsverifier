@@ -2,19 +2,24 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import com.google.common.collect.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.function.Supplier;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class GenericTypesTest extends IntegrationTestBase {
+public class GenericTypesTest extends ExpectedExceptionTestBase {
+    @Test
+    public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
+        EqualsVerifier.forClass(JavaGenericTypeContainer.class)
+                .verify();
+    }
+
     @Test
     public void succeed_whenEqualsLooksAtListFieldsGenericContent() {
         EqualsVerifier.forClass(ListContainer.class)
@@ -103,6 +108,37 @@ public class GenericTypesTest extends IntegrationTestBase {
     public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class)
                 .verify();
+    }
+
+    static final class JavaGenericTypeContainer {
+        private final Optional<Point> optional;
+        private final Supplier<Point> supplier;
+        private final AtomicReferenceArray<Point> atomicReferenceArray;
+
+        public JavaGenericTypeContainer(Optional<Point> optional, Supplier<Point> supplier, AtomicReferenceArray<Point> atomicReferenceArray) {
+            this.optional = optional; this.supplier = supplier; this.atomicReferenceArray = atomicReferenceArray;
+        }
+
+        // CHECKSTYLE: ignore NPathComplexity for 2 lines.
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JavaGenericTypeContainer)) {
+                return false;
+            }
+            JavaGenericTypeContainer other = (JavaGenericTypeContainer)obj;
+            Point thisOptionalPoint = optional != null ? optional.orElse(null) : null;
+            Point thatOptionalPoint = other.optional != null ? other.optional.orElse(null) : null;
+            Point thisSupplierPoint = supplier != null ? supplier.get() : null;
+            Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
+            Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
+            Point thatAraPoint = other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
+            return Objects.equals(thisOptionalPoint, thatOptionalPoint) &&
+                Objects.equals(thisSupplierPoint, thatSupplierPoint) &&
+                Objects.equals(thisAraPoint, thatAraPoint);
+        }
+
+        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override public String toString() { return "JavaGenericTypeContainer: " + optional + ", " + supplier.get(); }
     }
 
     static final class ListContainer {
@@ -197,9 +233,9 @@ public class GenericTypesTest extends IntegrationTestBase {
     }
 
     static final class ListOfTContainer<T> {
-        private final List<T> list;
+        private final ArrayList<T> list;
 
-        public ListOfTContainer(List<T> list) { this.list = list; }
+        public ListOfTContainer(ArrayList<T> list) { this.list = list; }
 
         @Override
         public boolean equals(Object obj) {

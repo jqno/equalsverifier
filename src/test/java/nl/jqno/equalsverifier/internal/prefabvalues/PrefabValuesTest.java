@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.ReflectiveLazyConstantFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Rule;
@@ -13,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.*;
@@ -26,12 +26,14 @@ public class PrefabValuesTest {
     @Rule
     public ExpectedException thrown = ExpectedException.none();
 
-    private PrefabValues pv = new PrefabValues();
+    private FactoryCache factoryCache = new FactoryCache();
+    private PrefabValues pv;
 
     @Before
     public void setUp() {
-        pv.addFactory(String.class, new AppendingStringTestFactory());
-        pv.addFactory(int.class, 42, 1337, 42);
+        factoryCache.put(String.class, new AppendingStringTestFactory());
+        factoryCache.put(int.class, values(42, 1337, 42));
+        pv = new PrefabValues(factoryCache);
     }
 
     @Test
@@ -184,7 +186,8 @@ public class PrefabValuesTest {
 
     @Test
     public void stringListIsSeparateFromIntegerList() {
-        pv.addFactory(List.class, new ListTestFactory());
+        factoryCache.put(List.class, new ListTestFactory());
+        pv = new PrefabValues(factoryCache);
 
         List<String> strings = pv.giveRed(new TypeTag(List.class, STRING_TAG));
         List<Integer> ints = pv.giveRed(new TypeTag(List.class, INT_TAG));
@@ -195,35 +198,40 @@ public class PrefabValuesTest {
 
     @Test
     public void addingNullDoesntBreakAnything() {
-        pv.addFactory(null, new ListTestFactory());
+        factoryCache.put((Class<?>)null, new ListTestFactory());
     }
 
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
-        pv.addFactory(int.class, -1, -2, -1);
-        assertEquals(-1, pv.giveRed(INT_TAG));
-        assertEquals(-2, pv.giveBlack(INT_TAG));
+        factoryCache.put(int.class, values(-1, -2, -1));
+        pv = new PrefabValues(factoryCache);
+        assertEquals(-1, (int)pv.giveRed(INT_TAG));
+        assertEquals(-2, (int)pv.giveBlack(INT_TAG));
     }
 
     @Test
     public void addLazyFactoryWorks() {
-        TypeTag tag = new TypeTag(Lazy.class);
-        pv.addLazyFactory(Lazy.class.getName(), new ReflectiveLazyConstantFactory<>(Lazy.class.getName(), "X", "Y"));
-        assertEquals(Lazy.X, pv.giveRed(tag));
-        assertEquals(Lazy.Y, pv.giveBlack(tag));
-        assertEquals(Lazy.X, pv.giveRedCopy(tag));
+        TypeTag lazyTag = new TypeTag(Lazy.class);
+        factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
+        pv = new PrefabValues(factoryCache);
+        assertEquals(Lazy.X, pv.giveRed(lazyTag));
+        assertEquals(Lazy.Y, pv.giveBlack(lazyTag));
+        assertEquals(Lazy.X, pv.giveRedCopy(lazyTag));
     }
 
     @Test
     public void addLazyFactoryIsLazy() {
-        TypeTag tag = new TypeTag(ThrowingLazy.class);
+        TypeTag throwingLazyTag = new TypeTag(ThrowingLazy.class);
 
         // Doesn't throw:
-        pv.addLazyFactory(ThrowingLazy.class.getName(), new ReflectiveLazyConstantFactory<>(ThrowingLazy.class.getName(), "X", "Y"));
+        factoryCache.put(
+            ThrowingLazy.class.getName(),
+            (tag, prefabValues, typeStack) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
+        pv = new PrefabValues(factoryCache);
 
         // Does throw:
         try {
-            pv.giveRed(tag);
+            pv.giveRed(throwingLazyTag);
             fail("Expected an exception");
         }
         catch (ExceptionInInitializerError e) {

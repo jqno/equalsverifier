@@ -7,7 +7,6 @@ script: mvn clean verify
 
 matrix:
   include:
-    - jdk: openjdk7
     - jdk: oraclejdk8
     - jdk: oraclejdk9
       after_success: mvn jacoco:report
@@ -16,14 +15,8 @@ matrix:
     - jdk: openjdk10
     - jdk: oraclejdk11
     - jdk: openjdk11
-    - jdk: oraclejdk-ea
-      script: mvn clean verify -P simplified,!fullbuild
     - jdk: openjdk-ea
-      script: mvn clean verify -P simplified,!fullbuild
 
   allow_failures:
-    - jdk: oraclejdk11
-    - jdk: openjdk11
-    - jdk: oraclejdk-ea
     - jdk: openjdk-ea
 

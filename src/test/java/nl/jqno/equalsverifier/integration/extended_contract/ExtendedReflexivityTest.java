@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
 
 import java.util.Objects;
@@ -10,7 +10,7 @@ import java.util.Objects;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class ExtendedReflexivityTest extends IntegrationTestBase {
+public class ExtendedReflexivityTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsUsesEqualsMethodForObjects() {
         EqualsVerifier.forClass(UsesEqualsMethod.class)

@@ -4,7 +4,6 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,44 +21,16 @@ public class PrefabValues {
     private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
 
     private final Cache cache = new Cache();
-    private final FactoryCache factoryCache = new FactoryCache();
+    private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
 
     /**
-     * Associates the factory that can create instances of the given type,
-     * with the specified class.
+     * Constructor.
      *
-     * @param <T> The type of value to which the factory is associated.
-     * @param type The class of the values.
-     * @param factory The factory.
+     * @param factoryCache The factories that can be used to create values.
      */
-    public <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {
-        factoryCache.put(type, factory);
-    }
-
-    /**
-     * Associates the specified values with the specified class.
-     *
-     * @param <T> The type of value to put into this {@link PrefabValues}.
-     * @param type The class of the values.
-     * @param red A value of type T.
-     * @param black Another value of type T.
-     * @param redCopy A shallow copy of red.
-     */
-    public <T> void addFactory(Class<T> type, T red, T black, T redCopy) {
-        factoryCache.put(type, new SimpleFactory<>(red, black, redCopy));
-    }
-
-    /**
-     * Associates the factory that can create instances of the given type,
-     * with the specified class, but only when it's actually encountered.
-     *
-     * @param <T> The type of value to which the factory is associated.
-     * @param typeName The class name of the values.
-     * @param factory The factory.
-     */
-    public <T> void addLazyFactory(String typeName, PrefabValueFactory<T> factory) {
-        factoryCache.put(typeName, factory);
+    public PrefabValues(FactoryCache factoryCache) {
+        this.factoryCache = factoryCache;
     }
 
     /**
@@ -67,8 +38,10 @@ public class PrefabValues {
      *
      * It's always a different value from the "black" one.
      *
+     * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic
      *            parameters.
+     * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
         return this.<T>giveTuple(tag).getRed();
@@ -79,8 +52,10 @@ public class PrefabValues {
      *
      * It's always a different value from the "red" one.
      *
+     * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic
      *            parameters.
+     * @return The "black" prefabricated value.
      */
     public <T> T giveBlack(TypeTag tag) {
         return this.<T>giveTuple(tag).getBlack();
@@ -92,8 +67,10 @@ public class PrefabValues {
      *
      * When possible, it's equal to but not the same as the "red" object.
      *
+     * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic
      *            parameters.
+     * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
         return this.<T>giveTuple(tag).getRedCopy();
@@ -103,8 +80,10 @@ public class PrefabValues {
      * Returns a tuple of two different prefabricated values of the specified
      * type.
      *
+     * @param <T> The returned tuple will have this generic type.
      * @param tag A description of the desired type, including generic
      *            parameters.
+     * @return A tuple of two different values of the given type.
      */
     public <T> Tuple<T> giveTuple(TypeTag tag) {
         realizeCacheFor(tag, emptyStack());
@@ -115,10 +94,12 @@ public class PrefabValues {
      * Returns a prefabricated value of the specified type, that is different
      * from the specified value.
      *
+     * @param <T> The type of the value.
      * @param tag A description of the desired type, including generic
      *            parameters.
      * @param value A value that is different from the value that will be
      *              returned.
+     * @return A value that is different from {@code value}.
      */
     public <T> T giveOther(TypeTag tag, T value) {
         Class<T> type = tag.getType();
@@ -156,6 +137,7 @@ public class PrefabValues {
      * Makes sure that values for the specified type are present in the cache,
      * but doesn't return them.
      *
+     * @param <T> The desired type.
      * @param tag A description of the desired type, including generic
      *            parameters.
      * @param typeStack Keeps track of recursion in the type.

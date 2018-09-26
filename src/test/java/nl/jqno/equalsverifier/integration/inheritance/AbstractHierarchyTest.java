@@ -2,13 +2,13 @@ package nl.jqno.equalsverifier.integration.inheritance;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.IntegrationTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.Test;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
-public class AbstractHierarchyTest extends IntegrationTestBase {
+public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
         EqualsVerifier.forClass(AbstractFinalMethodsPoint.class)
@@ -131,10 +131,6 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
         @Override public final int hashCode() { return defaultHashCode(this); }
     }
 
-    interface Supplier<T> {
-        T get();
-    }
-
     abstract static class AbstractLazyObjectContainer {
         private Object object;
 
@@ -159,10 +155,14 @@ public class AbstractHierarchyTest extends IntegrationTestBase {
         @Override public int hashCode() { return getObject().hashCode(); }
     }
 
-    static final class NullThrowingLazyObjectContainer extends AbstractLazyObjectContainer {
-        private final Supplier<Object> objectFactory;
+    interface SupplierThatDoesntHaveAPrefab<T> {
+        T get();
+    }
 
-        protected NullThrowingLazyObjectContainer(Supplier<Object> flourFactory) { this.objectFactory = flourFactory; }
+    static final class NullThrowingLazyObjectContainer extends AbstractLazyObjectContainer {
+        private final SupplierThatDoesntHaveAPrefab<Object> objectFactory;
+
+        protected NullThrowingLazyObjectContainer(SupplierThatDoesntHaveAPrefab<Object> flourFactory) { this.objectFactory = flourFactory; }
 
         @Override
         protected Object createObject() {
