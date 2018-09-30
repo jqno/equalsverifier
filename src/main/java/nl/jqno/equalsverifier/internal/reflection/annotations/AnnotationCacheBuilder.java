@@ -10,8 +10,8 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class AnnotationCacheBuilder {
-    @SuppressWarnings("deprecation")
-    private static final int OPCODES = Opcodes.ASM7_EXPERIMENTAL;
+
+    private static final int OPCODES = Opcodes.ASM7;
 
     private final List<Annotation> supportedAnnotations;
     private final Set<String> ignoredAnnotations;
