@@ -7,6 +7,7 @@ import org.joda.time.*;
 import org.junit.Test;
 
 import javax.naming.Reference;
+
 import java.math.BigDecimal;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;

@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.testhelpers;
 
 import javax.tools.*;
 import javax.tools.JavaCompiler.CompilationTask;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;

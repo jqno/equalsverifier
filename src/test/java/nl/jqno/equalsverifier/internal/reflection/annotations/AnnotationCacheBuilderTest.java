@@ -17,6 +17,7 @@ import org.junit.rules.ExpectedException;
 import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation;
 
 import javax.annotation.meta.TypeQualifier;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
