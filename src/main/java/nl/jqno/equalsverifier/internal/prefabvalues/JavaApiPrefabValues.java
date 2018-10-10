@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.nio.*;
 import java.rmi.dgc.VMID;
 import java.rmi.server.UID;
@@ -148,6 +149,7 @@ public final class JavaApiPrefabValues {
         addValues(TimeZone.class, TimeZone.getTimeZone("GMT+1"), TimeZone.getTimeZone("GMT+2"), TimeZone.getTimeZone("GMT+1"));
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
+        addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
         addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
         addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));

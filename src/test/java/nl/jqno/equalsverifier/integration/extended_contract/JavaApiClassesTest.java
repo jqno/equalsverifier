@@ -9,6 +9,7 @@ import java.io.File;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.net.URI;
 import java.nio.*;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -298,6 +299,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final GregorianCalendar gregorianCalendar;
         private final Pattern pattern;
         private final SimpleDateFormat simpleDateFormat;
+        private final URI uri;
         private final UUID uuid;
         private final InetAddress inetAddress;
         private final Inet4Address inet4Address;
@@ -310,11 +312,11 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset, Calendar calendar,
                 Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-                SimpleDateFormat simpleDateFormat, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
+                SimpleDateFormat simpleDateFormat, URI uri, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
                 Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp) {
             this.string = string; this.integer = integer; this.type = type; this.bitset = bitset; this.calendar = calendar;
             this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-            this.simpleDateFormat = simpleDateFormat; this.uuid = uuid; this.inetAddress = inetAddress; this.inet4Address = inet4Address;
+            this.simpleDateFormat = simpleDateFormat; this.uri = uri; this.uuid = uuid; this.inetAddress = inetAddress; this.inet4Address = inet4Address;
             this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate; this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
         }
 
