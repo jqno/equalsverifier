@@ -316,8 +316,9 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp) {
             this.string = string; this.integer = integer; this.type = type; this.bitset = bitset; this.calendar = calendar;
             this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-            this.simpleDateFormat = simpleDateFormat; this.uri = uri; this.uuid = uuid; this.inetAddress = inetAddress; this.inet4Address = inet4Address;
-            this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate; this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
+            this.simpleDateFormat = simpleDateFormat; this.uri = uri; this.uuid = uuid; this.inetAddress = inetAddress;
+            this.inet4Address = inet4Address; this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate;
+            this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
