@@ -57,6 +57,7 @@
     <properties>
         <encoding>UTF-8</encoding>
         <jacoco.version>0.8.2</jacoco.version>
+        <checkstyle.version>8.14</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
     </properties>
 
     <repositories>
@@ -220,7 +221,7 @@
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
                             <artifactId>checkstyle</artifactId>
-                            <version>8.12</version>
+                            <version>${checkstyle.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
