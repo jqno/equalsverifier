@@ -56,9 +56,17 @@
 
     <properties>
         <encoding>UTF-8</encoding>
+        <java.release>8</java.release>
         <jacoco.version>0.8.2</jacoco.version>
+
         <checkstyle.version>8.14</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
+        <checkstyle.maven.version>3.0.0</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
+
+        <spotbugs.version>3.1.7</spotbugs.version>
+        <spotbugs.maven.version>3.1.6</spotbugs.maven.version>
+        <spotbugs.effort>Max</spotbugs.effort>
+        <spotbugs.threshold>Low</spotbugs.threshold>
     </properties>
 
     <repositories>
@@ -87,7 +95,7 @@
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>3.1.7</version>
+            <version>${spotbugs.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -189,8 +197,167 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.0</version>
+                <configuration>
+                    <source>${java.release}</source>
+                    <target>${java.release}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.0</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
+                            <Website>${project.url}</Website>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <minimizeJar>true</minimizeJar>
+                            <artifactSet>
+                                <includes>
+                                    <artifact>org.ow2.asm:asm</artifact>
+                                    <artifact>net.bytebuddy:byte-buddy</artifact>
+                                    <artifact>org.objenesis:objenesis</artifact>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.objectweb.asm</pattern>
+                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.asm</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.bytebuddy</pattern>
+                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.bytebuddy</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.objenesis</pattern>
+                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.objenesis</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/INDEX.LIST</exclude>
+                                        <exclude>META-INF/NOTICE</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.8</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>org.jacoco.ant</artifactId>
+                        <version>${jacoco.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>run-jacoco</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
+                                <report>
+                                    <executiondata>
+                                        <file file="${project.build.directory}/jacoco.exec" />
+                                    </executiondata>
+                                    <structure name="EqualsVerifier: external coverage">
+                                        <classfiles>
+                                            <fileset dir="${project.build.testOutputDirectory}/nl/jqno/equalsverifier/coverage" />
+                                        </classfiles>
+                                        <sourcefiles encoding="UTF-8">
+                                            <fileset dir="${project.build.testSourceDirectory}" />
+                                        </sourcefiles>
+                                    </structure>
+                                    <check failonviolation="true" violationsproperty="violation">
+                                        <rule element="BUNDLE">
+                                            <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+                                        </rule>
+                                    </check>
+                                    <html destdir="${project.build.directory}/jacoco-external" />
+                                </report>
+                                <report>
+                                    <executiondata>
+                                        <file file="${project.build.directory}/jacoco.exec" />
+                                    </executiondata>
+                                    <structure name="EqualsVerifier: internal coverage">
+                                        <classfiles>
+                                            <fileset dir="${project.build.outputDirectory}" />
+                                        </classfiles>
+                                        <sourcefiles encoding="UTF-8">
+                                            <fileset dir="${project.build.sourceDirectory}" />
+                                        </sourcefiles>
+                                    </structure>
+                                    <check failonviolation="true" violationsproperty="violation">
+                                        <rule element="BUNDLE">
+                                            <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.96" />
+                                        </rule>
+                                    </check>
+                                    <html destdir="${project.build.directory}/jacoco-internal" />
+                                </report>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${checkstyle.maven.version}</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -218,55 +385,63 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.maven.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>${spotbugs.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <effort>${spotbugs.effort}</effort>
+                    <threshold>${spotbugs.threshold}</threshold>
+                    <xmlOutput>true</xmlOutput>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>run-spotbugs</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.4.2</version>
+                <configuration>
+                    <threads>3</threads>
+                    <targetClasses>
+                        <param>nl.jqno.equalsverifier.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>nl.jqno.equalsverifier.*</param>
+                    </targetTests>
+                </configuration>
+            </plugin>
         </plugins>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.8.0</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.22.0</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.jacoco</groupId>
-                    <artifactId>jacoco-maven-plugin</artifactId>
-                    <version>${jacoco.version}</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>org.pitest</groupId>
-                    <artifactId>pitest-maven</artifactId>
-                    <version>1.4.2</version>
-                </plugin>
-
-                <plugin>
-                    <groupId>com.github.spotbugs</groupId>
-                    <artifactId>spotbugs-maven-plugin</artifactId>
-                    <version>3.1.6</version>
-                    <dependencies>
-                        <dependency>
-                            <groupId>com.github.spotbugs</groupId>
-                            <artifactId>spotbugs</artifactId>
-                            <version>3.1.7</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-            </plugins>
-        </pluginManagement>
     </build>
 
     <reporting>
         <plugins>
             <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyle.maven.version}</version>
                 <configuration>
                     <configLocation>${checkstyle.config}</configLocation>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
@@ -281,44 +456,28 @@
                     </reportSet>
                 </reportSets>
             </plugin>
+
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.maven.version}</version>
+                <configuration>
+                    <effort>${spotbugs.effort}</effort>
+                    <threshold>${spotbugs.threshold}</threshold>
+                </configuration>
+            </plugin>
         </plugins>
     </reporting>
 
     <profiles>
         <profile>
-            <id>simplified</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <source>8</source>
-                            <target>8</target>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>fullbuild</id>
+            <id>adds-module-checks-and-linting-for-java9-and-up</id>
             <activation>
                 <jdk>[9,)</jdk>
             </activation>
 
             <properties>
                 <surefire.argLine>--illegal-access=deny</surefire.argLine>
-                <spotbugs.effort>Max</spotbugs.effort>
-                <spotbugs.threshold>Low</spotbugs.threshold>
             </properties>
 
             <build>
@@ -327,7 +486,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
                         <configuration>
-                            <release>8</release>
+                            <release>${java.release}</release>
                             <showWarnings>true</showWarnings>
                             <compilerArgs>
                                 <arg>-Werror</arg>
@@ -345,70 +504,6 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.1.0</version>
-                        <configuration>
-                            <archive>
-                                <manifest>
-                                    <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                                </manifest>
-                                <manifestEntries>
-                                    <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
-                                    <Website>${project.url}</Website>
-                                </manifestEntries>
-                            </archive>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-shade-plugin</artifactId>
-                        <version>3.1.1</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>shade</goal>
-                                </goals>
-                                <configuration>
-                                    <minimizeJar>true</minimizeJar>
-                                    <artifactSet>
-                                        <includes>
-                                            <artifact>org.ow2.asm:asm</artifact>
-                                            <artifact>net.bytebuddy:byte-buddy</artifact>
-                                            <artifact>org.objenesis:objenesis</artifact>
-                                        </includes>
-                                    </artifactSet>
-                                    <relocations>
-                                        <relocation>
-                                            <pattern>org.objectweb.asm</pattern>
-                                            <shadedPattern>nl.jqno.equalsverifier.internal.lib.asm</shadedPattern>
-                                        </relocation>
-                                        <relocation>
-                                            <pattern>net.bytebuddy</pattern>
-                                            <shadedPattern>nl.jqno.equalsverifier.internal.lib.bytebuddy</shadedPattern>
-                                        </relocation>
-                                        <relocation>
-                                            <pattern>org.objenesis</pattern>
-                                            <shadedPattern>nl.jqno.equalsverifier.internal.lib.objenesis</shadedPattern>
-                                        </relocation>
-                                    </relocations>
-                                    <filters>
-                                        <filter>
-                                            <artifact>*:*</artifact>
-                                            <excludes>
-                                                <exclude>META-INF/INDEX.LIST</exclude>
-                                                <exclude>META-INF/NOTICE</exclude>
-                                            </excludes>
-                                        </filter>
-                                    </filters>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
                         <executions>
@@ -423,148 +518,8 @@
                             </execution>
                         </executions>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>1.8</version>
-                        <executions>
-                            <execution>
-                                <id>run-jacoco</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target>
-                                        <taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
-                                        <report>
-                                            <executiondata>
-                                                <file file="${project.build.directory}/jacoco.exec" />
-                                            </executiondata>
-                                            <structure name="EqualsVerifier: external coverage">
-                                                <classfiles>
-                                                    <fileset dir="${project.build.testOutputDirectory}/nl/jqno/equalsverifier/coverage" />
-                                                </classfiles>
-                                                <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.build.testSourceDirectory}" />
-                                                </sourcefiles>
-                                            </structure>
-                                            <check failonviolation="true" violationsproperty="violation">
-                                                <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
-                                                </rule>
-                                            </check>
-                                            <html destdir="${project.build.directory}/jacoco-external" />
-                                        </report>
-                                        <report>
-                                            <executiondata>
-                                                <file file="${project.build.directory}/jacoco.exec" />
-                                            </executiondata>
-                                            <structure name="EqualsVerifier: internal coverage">
-                                                <classfiles>
-                                                    <fileset dir="${project.build.outputDirectory}" />
-                                                </classfiles>
-                                                <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.build.sourceDirectory}" />
-                                                </sourcefiles>
-                                            </structure>
-                                            <check failonviolation="true" violationsproperty="violation">
-                                                <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.96" />
-                                                </rule>
-                                            </check>
-                                            <html destdir="${project.build.directory}/jacoco-internal" />
-                                        </report>
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.jacoco</groupId>
-                                <artifactId>org.jacoco.ant</artifactId>
-                                <version>${jacoco.version}</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <configuration>
-                            <effort>${spotbugs.effort}</effort>
-                            <threshold>${spotbugs.threshold}</threshold>
-                            <xmlOutput>true</xmlOutput>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>run-spotbugs</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-maven</artifactId>
-                        <configuration>
-                            <threads>3</threads>
-                            <targetClasses>
-                                <param>nl.jqno.equalsverifier.*</param>
-                            </targetClasses>
-                            <targetTests>
-                                <param>nl.jqno.equalsverifier.*</param>
-                            </targetTests>
-                        </configuration>
-                    </plugin>
                 </plugins>
             </build>
-
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <configuration>
-                            <effort>${spotbugs.effort}</effort>
-                            <threshold>${spotbugs.threshold}</threshold>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </reporting>
-        </profile>
-
-        <profile>
-            <id>addPitReport</id>
-            <activation>
-                <file>
-                    <exists>target/pit-reports</exists>
-                </file>
-            </activation>
-            <reporting>
-                <plugins>
-                    <plugin>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-maven</artifactId>
-                        <reportSets>
-                            <reportSet>
-                                <reports>
-                                    <report>report</report>
-                                </reports>
-                            </reportSet>
-                        </reportSets>
-                    </plugin>
-                </plugins>
-            </reporting>
         </profile>
     </profiles>
 </project>
