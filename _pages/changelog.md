@@ -10,6 +10,13 @@ permalink: /changelog/
 
 <a name="3.x"></a>
 
+Version 3.1
+-----------
+_October 29, 2018_
+
+* ...not get illegal reflective access warnings for `java.net.URI` on Java 9+. ([Issue 214](https://github.com/jqno/equalsverifier/issues/214))
+* ...know that the internal ASM dependency is no longer experimental.
+
 Version 3.0
 -----------
 _September 26, 2018_
