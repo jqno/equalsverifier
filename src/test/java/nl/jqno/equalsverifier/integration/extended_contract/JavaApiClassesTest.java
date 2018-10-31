@@ -338,14 +338,26 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final CompletableFuture<?> completableFuture;
         private final StampedLock stampedLock;
         private final Supplier<?> supplier;
+        private final Duration duration;
+        private final Instant instant;
+        private final MonthDay monthDay;
+        private final OffsetDateTime offsetDateTime;
+        private final OffsetTime offsetTime;
+        private final Period period;
+        private final Year year;
+        private final YearMonth yearMonth;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public Java8ApiClassesContainer(Optional<?> optional, LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime,
                 ZoneId zoneId, ZoneOffset zoneOffset, ZonedDateTime zonedDateTime, DateTimeFormatter dateTimeFormatter,
-                CompletableFuture<?> completableFuture, StampedLock stampedLock, Supplier<?> supplier) {
+                CompletableFuture<?> completableFuture, StampedLock stampedLock, Supplier<?> supplier,
+                Duration duration, Instant instant, MonthDay monthDay, OffsetDateTime offsetDateTime,
+                OffsetTime offsetTime, Period period, Year year, YearMonth yearMonth) {
             this.optional = optional; this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime;
             this.zoneId = zoneId; this.zoneOffset = zoneOffset; this.zonedDateTime = zonedDateTime; this.dateTimeFormatter = dateTimeFormatter;
             this.completableFuture = completableFuture; this.stampedLock = stampedLock; this.supplier = supplier;
+            this.duration = duration; this.instant = instant; this.monthDay = monthDay; this.offsetDateTime = offsetDateTime;
+            this.offsetTime = offsetTime; this.period = period; this.year = year; this.yearMonth = yearMonth;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
