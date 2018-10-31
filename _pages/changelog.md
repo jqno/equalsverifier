@@ -10,8 +10,14 @@ permalink: /changelog/
 
 <a name="3.x"></a>
 
-Version 3.1
------------
+Version 3.0.2
+-------------
+_October 31, 2018_
+
+* ...not get illegal acces warnings for various `java.time` classes on Java 9+. ([Issue 217](https://github.com/jqno/equalsverifier/issues/217))
+
+Version 3.0.1
+-------------
 _October 29, 2018_
 
 * ...not get illegal reflective access warnings for `java.net.URI` on Java 9+. ([Issue 214](https://github.com/jqno/equalsverifier/issues/214))
