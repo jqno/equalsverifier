@@ -3,7 +3,10 @@ title: Getting Started
 permalink: /manual/getting-started/
 ---
 ## Get EqualsVerifier
-EqualsVerifier 2.x requires Java 7 or higher. EqualsVerifier 1.x requires Java 6 or higher.
+Requirements:
+* EqualsVerifier 3.x → Java 8 or higher
+* EqualsVerifier 2.x → Java 7 or higher
+* EqualsVerifier 1.x → Java 6 or higher
 
 Add this to your POM:
 
