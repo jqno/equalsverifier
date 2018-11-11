@@ -26,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated internal ASM dependency to version 7.0, so Java 11 support is no longer experimental.
 
-## [3.0.0] - 2018-09-26
+## [3.0] - 2018-09-26
 ### Added
 - Full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
 - Re-usable EqualsVerifier configurations: see [the manual](/equalsverifier/manual/reusing-configurations).
@@ -52,4 +52,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 <a name="1.x"/>
+
+
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
+[3.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.1...equalsverifier-3.0.2
+[3.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0...equalsverifier-3.0.1
+[3.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.5.2...equalsverifier-3.0
 
