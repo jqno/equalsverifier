@@ -175,6 +175,59 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Uninitialized static arrays cause NullPointerException. ([Issue 165](https://github.com/jqno/equalsverifier/issues/165))
 
 
+## [2.1.8] - 2016-12-13
+### Fixed
+- Classes that implement an abstract class that calls an abstract method in its `equals` or `hashCode` method, throw AbstractMethodError when EqualsVerifier is called with `#usingGetClass()`. ([Issue 161](https://github.com/jqno/equalsverifier/issues/161))
+
+
+## [2.1.7] - 2016-11-18
+### Fixed
+- Single value enums cause Significant fields error. ([Issue 157](https://github.com/jqno/equalsverifier/issues/157); thanks Stephan!)
+
+
+## [2.1.6] - 2016-10-01
+### Fixed
+- Annotations which are available at compile-time but not at run-time sometimes throw NullPointerException. ([Issue 153](https://github.com/jqno/equalsverifier/issues/153) and [Issue 154](https://github.com/jqno/equalsverifier/issues/154))
+
+
+## [2.1.5] - 2016-08-06
+### Fixed
+- `java.util.Vector` and `java.util.Stack` fields throw ArrayIndexOutOfBoundsException. ([Issue 151](https://github.com/jqno/equalsverifier/issues/151))
+
+
+## [2.1.4] - 2016-07-25
+### Fixed
+- Full generics support for Guava's `Range`. ([Issue 150](https://github.com/jqno/equalsverifier/issues/150); thanks Stephan!)
+
+
+## [2.1.3] - 2016-07-17
+### Fixed
+- Older versions of Google Guava cause ReflectionException. ([Issue 149](https://github.com/jqno/equalsverifier/issues/149))
+
+
+## [2.1.2] - 2016-06-20
+### Fixed
+- Race condition when EqualsVerifier is run concurrently. ([Issue 148](https://github.com/jqno/equalsverifier/issues/148); thanks Borys!)
+
+
+## [2.1.1] - 2016-06-14
+### Changed
+- Updated ByteBuddy dependency. ([Issue 145](https://github.com/jqno/equalsverifier/issues/145); thanks Vincent!)
+
+### Fixed
+- In certain situations, for example when running unit tests with coverage in IntelliJ, VerifyErrors are thrown. ([Issue 147](https://github.com/jqno/equalsverifier/issues/147))
+
+
+## [2.1] - 2016-05-22
+### Added
+- `Warning.STRICT_HASHCODE` to let EqualsVerifier allow `hashCode` methods that don't use all the fields that are also used in `equals`, or even constant `hashCode`s. ([Issue 142](https://github.com/jqno/equalsverifier/issues/142))
+
+### Fixed
+- Unexpected behaviour when a class's `equals` or `hashCode` asserts on the length of its array field. ([Issue 143](https://github.com/jqno/equalsverifier/issues/143))
+- Objenesis's meta-data carries into EqualsVerifier's jar file's `META-INF` folder. ([Issue 144](https://github.com/jqno/equalsverifier/issues/144))
+- EqualsVerifier throws ReflectionException when it's unable to read annotations on fields in certain situations. (Issue 14, [Comment 21](https://github.com/jqno/equalsverifier/issues/114#issuecomment-206463710))
+
+
 <a name="1.x"/>
 
 
@@ -206,4 +259,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.2.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.2.1...equalsverifier-2.2.2
 [2.2.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.2...equalsverifier-2.2.1
 [2.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.8...equalsverifier-2.2
+
+[2.1.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.7...equalsverifier-2.1.8
+[2.1.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.6...equalsverifier-2.1.7
+[2.1.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.5...equalsverifier-2.1.6
+[2.1.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.4...equalsverifier-2.1.5
+[2.1.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.3...equalsverifier-2.1.4
+[2.1.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.2...equalsverifier-2.1.3
+[2.1.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.1...equalsverifier-2.1.2
+[2.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1...equalsverifier-2.1.1
+[2.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0.2...equalsverifier-2.1
 
