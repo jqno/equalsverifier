@@ -153,17 +153,41 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - The `MANIFEST.MF` file is back in the EqualsVerifier jar. ([Issue 169](https://github.com/jqno/equalsverifier/issues/169))
 
 
+## [2.2.2] - 2017-04-03
+### Fixed
+- `java.inet.InetAddress` fields cause "Cannot inject classes into the bootstrap class loader" error. ([Issue 168](https://github.com/jqno/equalsverifier/issues/168))
+- Fields of other types also cause class loader errors. ([Also issue 168](https://github.com/jqno/equalsverifier/issues/168))
+
+
+## [2.2.1] - 2017-01-29
+### Fixed
+- Fields of `Map` type where a single value enum is used as key. ([Issue 166](https://github.com/jqno/equalsverifier/issues/166))
+
+
+## [2.2] - 2017-01-14
+### Added
+- `#withNonnullFields()` to be more specific about which fields may be null. ([Issue 134](https://github.com/jqno/equalsverifier/issues/134))
+
+### Changed
+- Error messages are more helpful.
+
+### Fixed
+- Uninitialized static arrays cause NullPointerException. ([Issue 165](https://github.com/jqno/equalsverifier/issues/165))
+
 
 <a name="1.x"/>
 
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
+
 [3.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.1...equalsverifier-3.0.2
 [3.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0...equalsverifier-3.0.1
 [3.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.5.2...equalsverifier-3.0
+
 [2.5.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.5.1...equalsverifier-2.5.2
 [2.5.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.5...equalsverifier-2.5.1
 [2.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4.8...equalsverifier-2.5
+
 [2.4.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4.7...equalsverifier-2.4.8
 [2.4.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4.6...equalsverifier-2.4.7
 [2.4.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4.5...equalsverifier-2.4.6
@@ -173,8 +197,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4.1...equalsverifier-2.4.2
 [2.4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.4...equalsverifier-2.4.1
 [2.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.3.3...equalsverifier-2.4
+
 [2.3.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.3.2...equalsverifier-2.3.3
 [2.3.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.3.1...equalsverifier-2.3.2
 [2.3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.3...equalsverifier-2.3.1
 [2.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.2.2...equalsverifier-2.3
+
+[2.2.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.2.1...equalsverifier-2.2.2
+[2.2.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.2...equalsverifier-2.2.1
+[2.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.8...equalsverifier-2.2
 
