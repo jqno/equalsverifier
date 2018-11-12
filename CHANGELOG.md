@@ -16,15 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [3.0.2] - 2018-10-31
-### Added
-- Prefab values for various `java.time` classes, to avoid illegal reflective access warnings on Java 9+. ([Issue 217](https://github.com/jqno/equalsverifier/issues/217))
+### Fixed
+- Illegal reflective access warnings for various `java.time` classes on Java 9+, by adding prefab values. ([Issue 217](https://github.com/jqno/equalsverifier/issues/217))
 
 
 ## [3.0.1] - 2018-10-29
-### Added
-- Prefab value for `java.net.URI`, to avoid illegal reflective access warnings on Java 9+. ([Issue 214](https://github.com/jqno/equalsverifier/issues/214))
-
-### Changed
+### Fixed
+- Illegal reflective access warnings for `java.net.URI` on Java 9+, by adding a prefab value. ([Issue 214](https://github.com/jqno/equalsverifier/issues/214))
 - Updated internal ASM dependency to version 7.0, so Java 11 support is no longer experimental.
 
 
@@ -34,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Re-usable EqualsVerifier configurations: see [the manual](/equalsverifier/manual/reusing-configurations).
 - `#report()` method to ask EqualsVerifier for a report, instead of making it fail a test.
 - `#withGenericPrefabValues()` method added to supply values for specific generic types: see [here](/equalsverifier/errormessages/recursive-datastructure#generics).
-- Prefab values for `java.util.function.Supplier`, `java.util.concurrent.atomic.Atomic*` and some RMI-specific classes. ([Issue 207](https://github.com/jqno/equalsverifier/issues/207))
 
 ### Changed
 - Error messages are more readable, because:
@@ -50,17 +47,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Warning.ANNOTATION`, because it's no longer needed.
 - The annoying license and copyright headers in each file. (Don't worry: EqualsVerifier is still licensed under the Apache 2.0 license!)
 
+### Fixed
+- Illegal reflective access warnings for `java.util.function.Supplier`, `java.util.concurrent.atomic.Atomic*` and some RMI-specific classes on Java 9+, by adding prefab values. ([Issue 207](https://github.com/jqno/equalsverifier/issues/207))
+
 
 <a name="2.x"/>
 
 ## [2.5.2] - 2018-08-17
-### Added
-- Prefab values for `Inet4Address`, `Inet6Address`, `java.sql.Date`, `java.sql.Time` and `java.sql.Timestamp`.
+### Fixed
+- Illegal reflective access warnings for `Inet4Address`, `Inet6Address`, `java.sql.Date`, `java.sql.Time` and `java.sql.Timestamp` on Java 9+, by adding prefab values.
 
 
 ## [2.5.1] - 2018-08-05
 ### Fixed
-- `#withIgnoredFields` on stateless fields. ([Issue 203](https://github.com/jqno/equalsverifier/issues/203))
+- AssertionError when class under test has stateless fields: you can now use `#withIgnoredFields()`. ([Issue 203](https://github.com/jqno/equalsverifier/issues/203))
 
 
 ## [2.5] - 2018-07-30
@@ -73,19 +73,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [2.4.8] - 2018-07-04
-### Added
-- Better support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
-- Prefab values for Java NIO buffers. ([Issue 198](https://github.com/jqno/equalsverifier/issues/198))
+### Fixed
+- Significant field error on Java NIO buffers. ([Issue 198](https://github.com/jqno/equalsverifier/issues/198))
+- Java 11 compatibility. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
 
 
 ## [2.4.7] - 2018-06-20
-### Added
-- Prefab values for `java.lang.Thread`, to avoid illegal reflective access warnings on Java 9+. ([Issue 193](https://github.com/jqno/equalsverifier/issues/193))
-
 ### Changed
 - Performance improvements because part of the processing of annotations is now cached. ([Issue 190](https://github.com/jqno/equalsverifier/issues/190); thanks Андрей!)
 
 ### Fixed
+- Illegal reflective access warnings for `java.lang.Thread` on Java 9+, by adding prefab values. ([Issue 193](https://github.com/jqno/equalsverifier/issues/193))
 - using `@Transient` to implicitly ignore fields, as discussed in the [manual](/equalsverifier/manual/jpa-entities). ([Issue 196](https://github.com/jqno/equalsverifier/issues/196))
 
 
@@ -95,12 +93,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [2.4.5] - 2018-03-20
-### Added
-- Support for Java 10 GA. ([Issue 189](https://github.com/jqno/equalsverifier/issues/189); thanks Vincent!)
+### Changed
+- Updated internal Byte Buddy dependency to support Java 10 GA. ([Issue 189](https://github.com/jqno/equalsverifier/issues/189); thanks Vincent!)
 
 
 ## [2.4.4] - 2018-03-12
-### Added
+### Changed
 - Initial support for Java 10.
 - Support for building and releasing EqualsVerifier from Java 9.
 
@@ -111,8 +109,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [2.4.2] - 2018-01-20
-### Added
-- Prefab values for AWT classes to avoid illegal reflective access warnings on Java 9+ (and recursive datastructure warnings). ([Issue 183](https://github.com/jqno/equalsverifier/issues/183))
+### Fixed
+- Illegal reflective access warnings on Java 9+ and recursive datastructure errors for AWT classes, by adding prefab values. ([Issue 183](https://github.com/jqno/equalsverifier/issues/183))
 
 
 ## [2.4.1] - 2018-01-12
