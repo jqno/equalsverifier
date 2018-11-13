@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [3.0] - 2018-09-26
+If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/equalsverifier/migration2to3).
+
 ### Added
 - Full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
 - Re-usable EqualsVerifier configurations: see [the manual](/equalsverifier/manual/reusing-configurations).
@@ -228,6 +230,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - EqualsVerifier throws ReflectionException when it's unable to read annotations on fields in certain situations. (Issue 14, [Comment 21](https://github.com/jqno/equalsverifier/issues/114#issuecomment-206463710))
 
 
+## [2.0.2] - 2016-04-03
+### Fixed
+- Classes that implement an abstract class that calls an abstract method in its `equals` or `hashCode` method, throws AbstractMethodError. ([Issue 138](https://github.com/jqno/equalsverifier/issues/138))
+- `javax.naming.Reference` throws IllegalStateException on certain JVMs. ([Issue 114](https://github.com/jqno/equalsverifier/issues/114))
+
+
+## [2.0.1] - 2016-03-13
+### Changed
+- `com.google.code.findbugs.annotations` dependency now has `provided` scope. ([Issue 136](https://github.com/jqno/equalsverifier/issues/136); thanks Stephan!)
+
+### Fixed
+- Classes that have a static final reference to a recursive data structure, without adding a prefab value.
+- Classes that have a generic parameter that extends `Comparable` throw IllegalArgumentException. ([Issue 136](https://github.com/jqno/equalsverifier/issues/136))
+
+
+## [2.0] - 2016-03-06
+If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/equalsverifier/migration1to2).
+
+### Added
+- `#withIgnoredFields()` to disregard specific fields, while expecting all remaining fields to be used in `equals`.
+- `#withOnlyTheseFields()` to expect that the given fields are used, and that the remaining fields are not used. ([Issue 128](https://github.com/jqno/equalsverifier/issues/128))
+- `Warning.ALL_FIELDS_SHOULD_BE_USED` to suppress Significant field errors.
+- EqualsVerifier fails when `equals` isn't overridden (i.e., inherited directly from `Object`). ([Issue 66](https://github.com/jqno/equalsverifier/issues/66))
+  - `Warning.INHERITED_DIRECTLY_FROM_OBJECT` to revert back to the old behaviour.
+
+### Changed
+- 'All fields should be used' is now the default behaviour. ([Issue 65](https://github.com/jqno/equalsverifier/issues/65))
+- `#forRelaxedEqualExamples()` implicitly suppresses `Warning.ALL_FIELDS_SHOULD_BE_USED`.
+- Suppressing `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` implicitly suppresses `Warning.ALL_FIELDS_SHOULD_BE_USED`.
+- EqualsVerifier puts more useful information on the stack trace if it fails.
+- Replaced internal dependency to CGLib with Byte Buddy, for better support of Java 8. ([Issue 115](https://github.com/jqno/equalsverifier/issues/115))
+- Improved EqualsVerifier's code quality by adding Checkstyle and FindBugs, and doing mutation tests with PIT.
+
+### Removed
+- Support for Java 6.
+- `EqualsVerifier#forExamples()`. Use `#forClass()` or `#forRelaxedEqualExamples()` instead.
+- `EqualsVerifier#debug()`. (It didn't do anything anymore, anyway.)
+
+### Fixed
+- Referring to the generic contents of containers such as `List` and `Optional` in the implementation of `equals` and `hashCode` can throw ClassCastException. ([Issue 84](https://github.com/jqno/equalsverifier/issues/84))
+
 <a name="1.x"/>
 
 
@@ -269,4 +312,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 [2.1.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1.1...equalsverifier-2.1.2
 [2.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.1...equalsverifier-2.1.1
 [2.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0.2...equalsverifier-2.1
+
+[2.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0.1...equalsverifier-2.0.2
+[2.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0...equalsverifier-2.0.1
+[2.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.8...equalsverifier-2.0
 
