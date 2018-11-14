@@ -271,7 +271,83 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 ### Fixed
 - Referring to the generic contents of containers such as `List` and `Optional` in the implementation of `equals` and `hashCode` can throw ClassCastException. ([Issue 84](https://github.com/jqno/equalsverifier/issues/84))
 
+
 <a name="1.x"/>
+
+## [1.7.8] - 2016-12-26
+### Fixed
+- EqualsVerifier throws RuntimeException when used together with Java 8's `-parameters` compiler option.
+
+
+## [1.7.7] - 2016-01-18
+### Fixed
+- EqualsVerifier throws NullPointerException when used together with Cobertura. ([Issue 132](https://github.com/jqno/equalsverifier/issues/132))
+
+
+## [1.7.6] - 2015-12-21
+### Changed
+- EqualsVerifier gives 100% mutation coverage with [PIT](http://pitest.org) on your `equals` and `hashCode` methods. ([Issue 131](https://github.com/jqno/equalsverifier/issues/131))
+
+### Fixed
+- Implementing an interface that defines `equals` causes Reflexivity error. ([Issue 130](https://github.com/jqno/equalsverifier/issues/130))
+
+
+## [1.7.5] - 2015-08-29
+### Changed
+- EqualsVerifier gives Symmetry errors if the symmetry violation only occurs in the subclass of a versioned entity. (Issue 123, [Comment 10](https://github.com/jqno/equalsverifier/issues/123#issuecomment-134201349))
+- EqualsVerifier gives a warning when the id check on a versioned entity is implemented incorrectly. (Issue 123, [Comment 17](https://github.com/jqno/equalsverifier/issues/123#issuecomment-133151013))
+- Suppressing `Warning.NONFINAL_FIELDS` on classes marked `@Embeddable` and `@MappedSuperclass` is no longer needed. ([Issue 124](https://github.com/jqno/equalsverifier/issues/124) and Issue 123, [Comment 15](https://github.com/jqno/equalsverifier/issues/123#issuecomment-134168785))
+
+### Fixed
+- EqualsVerifier throws NullPointerException on singleton enum fields. ([Issue 125](https://github.com/jqno/equalsverifier/issues/125))
+
+
+## [1.7.4] - 2015-08-17
+### Fixed
+- JavaFX fields (on Java 8) cause RecursionException: added prefab values. ([Issue 120](https://github.com/jqno/equalsverifier/issues/120))
+- `javax.naming.Reference` fields cause ClassCastException: added prefab value. ([Issue 118](https://github.com/jqno/equalsverifier/issues/118))
+- SBT throws ClassNotFoundException when running EqualsVerifier. ([Issue 119](https://github.com/jqno/equalsverifier/issues/119))
+- Reporting on subclasses of versioned entities. ([Issue 123](https://github.com/jqno/equalsverifier/issues/123))
+
+
+## [1.7.3] - 2015-07-18
+### Changed
+- `cachedHashCode` field can now have protected or default visibility for `#withCachedHashCode()`. ([Issue 110](https://github.com/jqno/equalsverifier/issues/110))
+- Several behind-the-scenes improvements :).
+
+### Fixed
+- Static final fields with value `null` throw NullPointerException. ([Issue 116](https://github.com/jqno/equalsverifier/issues/116))
+
+
+## [1.7.2] - 2015-03-28
+### Added
+- Support for Eclipse's JDT null annotations, including the Java 8 style type annotations.
+
+### Changed
+- All internal dependencies have been updated. ([Issue 107](https://github.com/jqno/equalsverifier/issues/107))
+
+### Fixed
+- Static fields with an empty array throw ArrayIndexOutOfBoundsException. ([Issue 106](https://github.com/jqno/equalsverifier/issues/106))
+- Several potential bugs, using [PIT](http://pitest.org).
+
+
+## [1.7.1] - 2015-03-11
+### Fixed
+- EqualsVerifier throws Reflexivity errors (which then need to be suppressed with version 1.7's `Warning.REFERENCE_EQUALITY`) on
+  - certain interfaces, and classes which don't redefine `equals`. (issue 104, [comment 6](https://github.com/jqno/equalsverifier/issues/104#issuecomment-87377326))
+  - static final lambda fields. ([Issue 105](https://github.com/jqno/equalsverifier/issues/105))
+
+
+## [1.7] - 2015-03-04
+### Added
+- `#withCachedHashCode()` to verify classes that cache their `hashCode`. ([Issue 60](https://github.com/jqno/equalsverifier/issues/60); thanks Niall!)
+- `Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE` to avoid giving an example value for `#withCachedHashCode()`. ([Issue 60](https://github.com/jqno/equalsverifier/issues/60))
+- An error message when you accidentally use `==` instead of `equals` on an object field inside the `equals` method. ([Issue 104](https://github.com/jqno/equalsverifier/issues/104))
+- `Warning.REFERENCE_EQUALITY` to suppress the above error. ([Issue 104](https://github.com/jqno/equalsverifier/issues/104))
+
+### Fixed
+- Several Java Collections interface classes, including `SortedSet` and `TreeSet`, throw AbstractMethodError: added prefab values. ([Issue 103](https://github.com/jqno/equalsverifier/issues/103))
+
 
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
@@ -316,4 +392,14 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 [2.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0.1...equalsverifier-2.0.2
 [2.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.0...equalsverifier-2.0.1
 [2.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.8...equalsverifier-2.0
+
+[1.7.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.7...equalsverifier-1.7.8
+[1.7.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.6...equalsverifier-1.7.7
+[1.7.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.5...equalsverifier-1.7.6
+[1.7.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.4...equalsverifier-1.7.5
+[1.7.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.3...equalsverifier-1.7.4
+[1.7.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.2...equalsverifier-1.7.3
+[1.7.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.1...equalsverifier-1.7.2
+[1.7.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7...equalsverifier-1.7.1
+[1.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.6...equalsverifier-1.7
 
