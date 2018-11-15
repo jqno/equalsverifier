@@ -440,6 +440,42 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 - Some false negatives when running EqualsVerifier's test suite. ([Issue 77](https://github.com/jqno/equalsverifier/issues/77))
 
 
+## [1.1.4] - 2013-01-14
+### Changed
+- Fork EqualsVerifier on GitHub! The code has been moved to GitHub. The project frontpage will remain on Google Code.
+- Error messages on Abstract Delegation are more informative: EqualsVerifier now also mentions the name of the abstract method that was called.
+
+### Fixed
+- Issue when the class under test has a superclass that has no declarations for `equals` and `hashCode`. ([Issue 63](https://github.com/jqno/equalsverifier/issues/63))
+- No error when using `#allFieldsShouldBeUsed()` and the class under test has fields, but no declarations for `equals` and `hashCode` (and hence doesn't use these fields). ([Issue 67](https://github.com/jqno/equalsverifier/issues/67))
+
+
+## [1.1.3] - 2012-04-21
+### Fixed
+- `#allFieldsShouldBeUsed()` includes static fields. EqualsVerifier will now no longer complain if these static fields aren't used in your `equals` and `hashCode` methods. ([Issue 57](https://github.com/jqno/equalsverifier/issues/57))
+- EqualsVerifier passes when an `equals` method works incorrectly if a field in the class under test is null. ([Issue 59](https://github.com/jqno/equalsverifier/issues/59))
+
+
+## [1.1.2] - 2012-03-01
+### Fixed
+- EqualsVerifier _recursively_ changes the value of non-final static fields, causing other tests to fail. (Issue 55, [Comment 8](http://github.com/jqno/equalsverifier/issues/55#issuecomment-87376895))
+
+
+## [1.1.1] - 2012-02-21
+### Added
+- `Warning.IDENTICAL_COPY`, to suppress when you want to use reference equality in an overridden `equals` method. ([Issue 56](https://github.com/jqno/equalsverifier/issues/56))
+
+
+## [1.1] - 2012-02-11
+### Added
+- `#allFieldsShouldBeUsed()` to get a warning if you forgot to include a field in `equals` or `hashCode` method. ([Issue 53](https://github.com/jqno/equalsverifier/issues/53))
+
+### Fixed
+- EqualsVerifier passes when you include a reference-equality check (`this == obj`), followed by an incorrect instanceof check in your `equals` method. EqualsVerifier will now notice if you do an instanceof check for a class other than the one that you are testing. (Issue 55, [Comment 2](http://github.com/jqno/equalsverifier/issues/55#issuecomment-87376889))
+- EqualsVerifier changes the values of non-final static fields, causing other tests to fail. ([Issue 52](https://github.com/jqno/equalsverifier/issues/52) and [Issue 55](https://github.com/jqno/equalsverifier/issues/55))
+- `File`, `List`, `Set`, `Map` and `Collection` fields give unjustified warnings: added prefab values. ([Issue 49](https://github.com/jqno/equalsverifier/issues/49) and [Issue 51](https://github.com/jqno/equalsverifier/issues/51))
+
+
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
 
@@ -506,4 +542,10 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [1.3]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3
 
 [1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_4...version_1_2
+
+[1.1.4]: https://github.com/jqno/equalsverifier/compare/version_1_1_3...version_1_1_4
+[1.1.3]: https://github.com/jqno/equalsverifier/compare/version_1_1_2...version_1_1_3
+[1.1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_1...version_1_1_2
+[1.1.1]: https://github.com/jqno/equalsverifier/compare/version_1_1...version_1_1_1
+[1.1]: https://github.com/jqno/equalsverifier/compare/version_1_0_2...version_1_1
 
