@@ -511,6 +511,20 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 - `BigDecimal` and `BigInteger` fields cause Recursion error: added prefab values. ([Issue 34](https://github.com/jqno/equalsverifier/issues/34))
 
 
+## [0.7] - 2010-11-15
+### Added
+- `#usingGetClass()` to test `equals` methods that use a call to `getClass()` instead of an `instanceof` check to determine the type of the object passed in.
+
+### Changed
+- EqualsVerifier warns when you use a transient field in your `equals` or `hashCode` method. Don't worry, you can suppress this warning too.
+- Error messages contain a link to the [Error messages](/equalsverifier/errormessages) page to get more help.
+- The back end is almost completely re-written.
+
+### Fixed
+- Certain Java API classes, like `Date`, `GregorianCalendar` and `Pattern`, cause Recursion error: added prefab values.
+- Many Javadoc improvements (including the one in [Issue 32](https://github.com/jqno/equalsverifier/issues/32)).
+
+
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
 
@@ -587,4 +601,6 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [1.0.2]: https://github.com/jqno/equalsverifier/compare/version_1_0_1...version_1_0_2
 [1.0.1]: https://github.com/jqno/equalsverifier/compare/version_1_0...version_1_0_1
 [1.0]: https://github.com/jqno/equalsverifier/compare/version_0_7...version_1_0
+
+[0.7]: https://github.com/jqno/equalsverifier/compare/version_0_6_5...version_0_7
 
