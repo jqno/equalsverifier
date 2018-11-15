@@ -349,6 +349,97 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 - Several Java Collections interface classes, including `SortedSet` and `TreeSet`, throw AbstractMethodError: added prefab values. ([Issue 103](https://github.com/jqno/equalsverifier/issues/103))
 
 
+## [1.6] - 2015-01-17
+### Added
+- Support for default `@Nonnull` annotations. ([Issue 50](https://github.com/jqno/equalsverifier/issues/50))
+  - Using FindBugs's `@DefaultAnnotation` or `@DefaultAnnotationForFields`,
+  - Using a JSR 305 annotation (see [this StackOverflow question](http://stackoverflow.com/q/11776302/127863)),
+  - Placing them either on the class or on the package,
+  - With the ability to override the default annotation by placing `@Nullable` or `@CheckForNull` on a field.
+- Check for `hashCode` consistency when object is stateless. ([Issue 97](https://github.com/jqno/equalsverifier/issues/97))
+- Support for classes where equality is fully defined in a superclass, for example using Apache Commons's [`EqualsBuilder.reflectionEquals`](http://commons.apache.org/proper/commons-lang/javadocs/api-3.3.2/org/apache/commons/lang3/builder/EqualsBuilder.html#reflectionEquals%28java.lang.Object,%20java.lang.Object,%20boolean%29). ([Issue 102](https://github.com/jqno/equalsverifier/issues/102))
+
+### Fixed
+- Stateless classes cause Precondition error. ([Issue 46](https://github.com/jqno/equalsverifier/issues/46))
+- Classes with stateless fields cause Precondition error. ([Issue 100](https://github.com/jqno/equalsverifier/issues/100) and [Issue 101](https://github.com/jqno/equalsverifier/issues/101)) 
+
+
+## [1.5.1] - 2014-12-05
+### Changed
+- EqualsVerifier now build with Maven instead of ANT+Ivy.
+
+### Fixed
+- Dependency issues when incompatible versions of ASM and/or CGLib are on the classpath: EqualsVerifier is now shipped as an "uber jar" which contains all its dependencies inside. ([Issue 96](https://github.com/jqno/equalsverifier/issues/96))
+- EqualsVerifier throws ReflectionException with older versions of Google Guava on the classpath. ([Issue 98](https://github.com/jqno/equalsverifier/issues/98))
+
+
+## [1.5] - 2014-08-20
+### Added
+- Support for Java 8! Classes containing Java 8 language features are now supported, and prefab values for new Java 8 API classes have been added. ([Issue 92](https://github.com/jqno/equalsverifier/issues/92))
+
+### Changed
+- Improved error messages when `equals` or `hashCode` are themselves abstract.
+- Heavily refactored EqualsVerifier's unit tests to make them easier to find and understand.
+
+### Fixed
+- Classes from [Joda-Time](http://www.joda.org/joda-time/) and [Google Guava](https://code.google.com/p/guava-libraries/) throw AbstractMethodError: added prefab values. ([Issue 83](https://github.com/jqno/equalsverifier/issues/83))
+- Multi-dimensional arrays cause incorrect error messages. ([Issue 90](https://github.com/jqno/equalsverifier/issues/90) and [Issue 94](https://github.com/jqno/equalsverifier/issues/94))
+- `Arrays#equals` on `Object[]` fields doesn't work; only `Arrays#deepEquals()` does. ([Issue 94](https://github.com/jqno/equalsverifier/issues/94))
+- Using `#allFieldsShouldBeUsed()` requires overriding `equals`. ([Issue 95](https://github.com/jqno/equalsverifier/issues/95); thanks Dean!)
+
+
+## [1.4.1] - 2014-03-18
+### Changed
+- Improved EqualsVerifier's unit tests for reflexivity and symmetry, to catch small mistakes such as the one in [Issue 88](https://github.com/jqno/equalsverifier/issues/88).
+
+### Fixed
+- Verifying an enum causes Identical Copy and Symmetry errors. ([Issue 87](https://github.com/jqno/equalsverifier/issues/87))
+
+## [1.4] - 2013-12-27
+### Added
+- `#allFieldsShouldBeUsedExcept()` to specifically ignore certain fields. ([Issue 82](https://github.com/jqno/equalsverifier/issues/82))
+
+### Changed
+- EqualsVerifier now covers 100% of your `equals` and `hashCode` methods. ([FAQ](/equalsverifier/faq#coverage))
+- Error messages around abstract delegation are clearer. This clarifies especially classes that contain Joda-Time `LocalDate` fields.
+
+### Fixed
+- Classes that have an array field but don't declare an `equals` method cause an error.
+- `java.util.BitSet` fields cause ArrayIndexOutOfBoundsException: added prefab value. ([Issue 86](https://github.com/jqno/equalsverifier/issues/86))
+
+
+## [1.3.1] - 2013-06-09
+### Added
+- `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` which can be suppressed when testing "versioned entity" classes where a zero id field indicates that the object is new. ([Issue 80](https://github.com/jqno/equalsverifier/issues/80))
+
+### Changed
+- Explanations for EqualsVerifier's error messages can now be read on the [new EqualsVerifier website](http://jqno.nl/equalsverifier/errormessages) at [jqno.nl](http://jqno.nl/equalsverifier), which matches EqualsVerifier's fully qualified name: `nl.jqno.equalsverifier.EqualsVerifier`.
+- Transitivity errors are more accurate. ([Issue 78](https://github.com/jqno/equalsverifier/issues/78))
+
+### Fixed
+- Exceptions thrown in `#toString()` break EqualsVerifier. ([Issue 79](https://github.com/jqno/equalsverifier/issues/79))
+- `java.util.UUID` fields cause Recursion error: added prefab value. ([Issue 81](https://github.com/jqno/equalsverifier/issues/81))
+
+### Deprecated
+- `#debug()`, because relevant exceptions are now included as a cause in the stack trace.
+
+
+## [1.3] - 2013-06-09
+
+Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/06/11/what-happened-to-equalsverifier-1-3/). Use 1.3.1 instead.
+
+
+## [1.2] - 2013-03-26
+### Changed
+- EqualsVerifier no longer fails on single value enums (and hence, singletons), even if they don't count for `equals` and `hashCode`. ([Issue 74](https://github.com/jqno/equalsverifier/issues/74))
+- EqualsVerifier can now be built using Ant 1.9. ([Issue 76](https://github.com/jqno/equalsverifier/issues/76))
+### Fixed
+- Non-transitive `equals` methods (using `||`) pass. ([Issue 75](https://github.com/jqno/equalsverifier/issues/75); blog post about [the problem](http://www.jqno.nl/post/2013/02/17/reaction-to-cedric-beusts-equals-challenge/) and [the solution](http://www.jqno.nl/post/2013/03/26/on-transitivity))
+- Errors when the `toString` method of the class under test throws exceptions.
+- Classes containing null fields throw NullPointerExample in `#forRelaxedEqualExamples`. ([Issue 73](https://github.com/jqno/equalsverifier/issues/73))
+- Some false negatives when running EqualsVerifier's test suite. ([Issue 77](https://github.com/jqno/equalsverifier/issues/77))
+
+
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
 
@@ -402,4 +493,17 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 [1.7.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7.1...equalsverifier-1.7.2
 [1.7.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.7...equalsverifier-1.7.1
 [1.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.6...equalsverifier-1.7
+
+[1.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-1.5.1...equalsverifier-1.6
+
+[1.5.1]: https://github.com/jqno/equalsverifier/compare/version_1_5...equalsverifier-1.5.1
+[1.5]: https://github.com/jqno/equalsverifier/compare/version_1_4_1...version_1_5
+
+[1.4.1]: https://github.com/jqno/equalsverifier/compare/version_1_4...version_1_4_1
+[1.4]: https://github.com/jqno/equalsverifier/compare/version_1_3_1...version_1_4
+
+[1.3.1]: https://github.com/jqno/equalsverifier/compare/version_1_3...version_1_3_1
+[1.3]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3
+
+[1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_4...version_1_2
 
