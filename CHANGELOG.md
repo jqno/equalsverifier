@@ -476,6 +476,41 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 - `File`, `List`, `Set`, `Map` and `Collection` fields give unjustified warnings: added prefab values. ([Issue 49](https://github.com/jqno/equalsverifier/issues/49) and [Issue 51](https://github.com/jqno/equalsverifier/issues/51))
 
 
+## [1.0.2] - 2011-08-14
+### Changed
+- EqualsVerifier is now in Maven Central! ([Issue 36](https://github.com/jqno/equalsverifier/issues/36))
+
+### Fixed
+- EqualsVerifier passes when you forget to include an `instanceof` check or a `getClass()` check in your `equals` method. ([Issue 47](https://github.com/jqno/equalsverifier/issues/47))
+- EqualsVerifier throws AbstractMethodError on a class whose superclass has abstract declarations for `equals` and `hashCode`. ([Issue 48](https://github.com/jqno/equalsverifier/issues/48))
+
+
+## [1.0.1] - 2011-04-17
+### Added
+- `Warning.ANNOTATION` to disable annotation processing. This is useful for dynamically generated classes. ([Issue 41](https://github.com/jqno/equalsverifier/issues/41))
+
+### Fixed
+- Issue when EqualsVerifier tests a class that is a subclass of one of the classes from `rt.jar`, which are loaded by the system classloader. ([Issue 43](https://github.com/jqno/equalsverifier/issues/43))
+- EqualsVerifier fails on classes with `float` or `double` fields but no `equals` method. ([Issue 44](https://github.com/jqno/equalsverifier/issues/44))
+- `Throwable` and `Exception` fields cause Recursion error: added prefab values. ([Issue 45](https://github.com/jqno/equalsverifier/issues/45))
+
+
+## [1.0] - 2011-02-23
+### Added
+- Support for annotations. Use any of the following annotations on your classes and fields: EqualsVerifier will know what to do!
+    * `@Immutable`: EqualsVerifier will not complain about non-final fields if your class is `@Immutable`. (It doesn't matter in which package the annotation is defined; `javax.annotations.concurrent.Immutable`, `net.jcip.annotations.Immutable` or your own implementation will all work fine.)
+    * `@Nonnull`, `@NonNull` and `@NotNull`: EqualsVerifier will not check for potential `NullPointerException`s for any field marked with any of these annotations. (Again: the source package doesn't matter.) This is similar to calling `#suppress(Warning.NULL_FIELDS)`, but on a per-field basis, instead of all-or-nothing. ([Issue 28](https://github.com/jqno/equalsverifier/issues/28))
+    * `@Entity`: EqualsVerifier will not complain about non-final fields if your class is a JPA Entity. Note that this only works for `javax.persistence.Entity`, not for `Entity` annotations from other packages. ([Issue 37](https://github.com/jqno/equalsverifier/issues/37))
+    * `@Transient`: Fields marked with this annotation (again, only from `javax.persistence.Transient`), will be treated the same as fields marked with Java's `transient` modifier; i.e., EqualsVerifier will complain if they are used in the `equals` contract.
+
+### Changed
+- EqualsVerifier now shows the name of the field that throws a potential NullPointerException. ([Issue 39](https://github.com/jqno/equalsverifier/issues/39))
+
+### Fixed
+- EqualsVerifier detects recursive data structures where there are none. ([Issue 34](https://github.com/jqno/equalsverifier/issues/34))
+- `BigDecimal` and `BigInteger` fields cause Recursion error: added prefab values. ([Issue 34](https://github.com/jqno/equalsverifier/issues/34))
+
+
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
 
@@ -548,4 +583,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [1.1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_1...version_1_1_2
 [1.1.1]: https://github.com/jqno/equalsverifier/compare/version_1_1...version_1_1_1
 [1.1]: https://github.com/jqno/equalsverifier/compare/version_1_0_2...version_1_1
+
+[1.0.2]: https://github.com/jqno/equalsverifier/compare/version_1_0_1...version_1_0_2
+[1.0.1]: https://github.com/jqno/equalsverifier/compare/version_1_0...version_1_0_1
+[1.0]: https://github.com/jqno/equalsverifier/compare/version_0_7...version_1_0
 
