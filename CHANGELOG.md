@@ -498,10 +498,10 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 ## [1.0] - 2011-02-23
 ### Added
 - Support for annotations. Use any of the following annotations on your classes and fields: EqualsVerifier will know what to do!
-    * `@Immutable`: EqualsVerifier will not complain about non-final fields if your class is `@Immutable`. (It doesn't matter in which package the annotation is defined; `javax.annotations.concurrent.Immutable`, `net.jcip.annotations.Immutable` or your own implementation will all work fine.)
-    * `@Nonnull`, `@NonNull` and `@NotNull`: EqualsVerifier will not check for potential `NullPointerException`s for any field marked with any of these annotations. (Again: the source package doesn't matter.) This is similar to calling `#suppress(Warning.NULL_FIELDS)`, but on a per-field basis, instead of all-or-nothing. ([Issue 28](https://github.com/jqno/equalsverifier/issues/28))
-    * `@Entity`: EqualsVerifier will not complain about non-final fields if your class is a JPA Entity. Note that this only works for `javax.persistence.Entity`, not for `Entity` annotations from other packages. ([Issue 37](https://github.com/jqno/equalsverifier/issues/37))
-    * `@Transient`: Fields marked with this annotation (again, only from `javax.persistence.Transient`), will be treated the same as fields marked with Java's `transient` modifier; i.e., EqualsVerifier will complain if they are used in the `equals` contract.
+  - `@Immutable`: EqualsVerifier will not complain about non-final fields if your class is `@Immutable`. (It doesn't matter in which package the annotation is defined; `javax.annotations.concurrent.Immutable`, `net.jcip.annotations.Immutable` or your own implementation will all work fine.)
+  - `@Nonnull`, `@NonNull` and `@NotNull`: EqualsVerifier will not check for potential `NullPointerException`s for any field marked with any of these annotations. (Again: the source package doesn't matter.) This is similar to calling `#suppress(Warning.NULL_FIELDS)`, but on a per-field basis, instead of all-or-nothing. ([Issue 28](https://github.com/jqno/equalsverifier/issues/28))
+  - `@Entity`: EqualsVerifier will not complain about non-final fields if your class is a JPA Entity. Note that this only works for `javax.persistence.Entity`, not for `Entity` annotations from other packages. ([Issue 37](https://github.com/jqno/equalsverifier/issues/37))
+  - `@Transient`: Fields marked with this annotation (again, only from `javax.persistence.Transient`), will be treated the same as fields marked with Java's `transient` modifier; i.e., EqualsVerifier will complain if they are used in the `equals` contract.
 
 ### Changed
 - EqualsVerifier now shows the name of the field that throws a potential NullPointerException. ([Issue 39](https://github.com/jqno/equalsverifier/issues/39))
@@ -524,6 +524,52 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 - Certain Java API classes, like `Date`, `GregorianCalendar` and `Pattern`, cause Recursion error: added prefab values.
 - Many Javadoc improvements (including the one in [Issue 32](https://github.com/jqno/equalsverifier/issues/32)).
 
+
+## [0.6.5] - 2010-08-05
+### Changed
+- EqualsVerifier now contains an internal list of prefab values for a wide variety of Java API types, to avoid getting 'Recursive datastructure' errors all the time. ([Issue 30](https://github.com/jqno/equalsverifier/issues/30))
+- Error messages when `equals`, `hashCode` or `toString` throws something other than a NullPointerException when one of the fields is `null`, are now more helpful. ([Issue 31](https://github.com/jqno/equalsverifier/issues/31))
+
+
+## [0.6.4] - 2010-06-13
+### Fixed
+- Error message that a certain field is used in `equals` but not in `hashCode` or the other way around, when really `Arrays.hashCode()` or `Arrays.deepHashCode()` should have been used. ([Issue 27](https://github.com/jqno/equalsverifier/issues/27))
+- Many non-nullity errors on `toString`.
+
+
+## [0.6.3] - 2010-05-18
+### Fixed
+- EqualsVerifier gives hashCode error on classes that don't override `equals` or `hashCode`. ([Issue 23](https://github.com/jqno/equalsverifier/issues/23))
+- IllegalAccessException when EqualsVerifier is used together with the [EclEmma](http://www.eclemma.org/) code coverage tool. ([Issue 22](https://github.com/jqno/equalsverifier/issues/22))
+- Classes that contain (indirect) references to non-static inner classes cause recursive data structure errors. ([Issue 21](https://github.com/jqno/equalsverifier/issues/21))
+
+
+## [0.6.2] - 2010-02-11
+### Fixed
+- Regression with `#withPrefabValues()` for recursive data structure fields in superclasses. ([Issue 20](https://github.com/jqno/equalsverifier/issues/20))
+
+
+## [0.6.1] - 2010-02-06
+### Changed
+- Renamed `#verbose()` to `#debug()` to access `#verify()` more quickly using autocompletion in IDEs.
+
+### Fixed
+- Regression with `#withPrefabValues()` for fields which delegate to abstract methods. ([Issue 14](https://github.com/jqno/equalsverifier/issues/14))
+
+
+## [0.6] - 2010-01-30
+### Changed
+- The API is more consistend. `#with(Feature)` is now `#suppress(Warning)`, which feels more Java-y. Former features that were not warnings, are now proper methods on `EqualsVerifier`: `#verbose()` and `#withRedefinedSuperclass()`.
+- Error messages have been improved:
+  - many messages now span multiple lines for improved readability;
+  - hashCodes are printed (where relevant);
+  - unexpected exceptions are no longer eaten by EqualsVerifier, so they can be read without calling `#verbose()`;
+  - calls to abstract methods from within `equals` and `hashCode`, which cannot be resolved, are now detected and properly reported. ([Issue 14](https://github.com/jqno/equalsverifier/issues/14))
+
+### Fixed
+- EqualsVerifier fails on classes that contain fields whose `equals` methods might throw NullPointerExceptions. ([Issue 19](https://github.com/jqno/equalsverifier/issues/19))
+- EqualsVerifier detects recursive data structures where there are none. ([Issue 18](https://github.com/jqno/equalsverifier/issues/18))
+- `Class` fields throw IllegalAccessError: added prefab value. ([Issue 17](https://github.com/jqno/equalsverifier/issues/17))
 
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
@@ -603,4 +649,11 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [1.0]: https://github.com/jqno/equalsverifier/compare/version_0_7...version_1_0
 
 [0.7]: https://github.com/jqno/equalsverifier/compare/version_0_6_5...version_0_7
+
+[0.6.5]: https://github.com/jqno/equalsverifier/compare/version_0_6_4...version_0_6_5
+[0.6.4]: https://github.com/jqno/equalsverifier/compare/version_0_6_3...version_0_6_4
+[0.6.3]: https://github.com/jqno/equalsverifier/compare/version_0_6_2...version_0_6_3
+[0.6.2]: https://github.com/jqno/equalsverifier/compare/version_0_6_1...version_0_6_2
+[0.6.1]: https://github.com/jqno/equalsverifier/compare/version_0_6...version_0_6_1
+[0.6]: https://github.com/jqno/equalsverifier/compare/version_0_5...version_0_6
 
