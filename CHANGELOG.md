@@ -28,13 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [3.0] - 2018-09-26
-If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/equalsverifier/migration2to3).
+If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](http://jqno.nl/equalsverifier/migration2to3).
 
 ### Added
 - Full support for Java 11. ([Issue 197](https://github.com/jqno/equalsverifier/issues/197))
-- Re-usable EqualsVerifier configurations: see [the manual](/equalsverifier/manual/reusing-configurations).
+- Re-usable EqualsVerifier configurations: see [the manual](http://jqno.nl/equalsverifier/manual/reusing-configurations).
 - `#report()` method to ask EqualsVerifier for a report, instead of making it fail a test.
-- `#withGenericPrefabValues()` method added to supply values for specific generic types: see [here](/equalsverifier/errormessages/recursive-datastructure#generics).
+- `#withGenericPrefabValues()` method added to supply values for specific generic types: see [here](http://jqno.nl/equalsverifier/errormessages/recursive-datastructure#generics).
 
 ### Changed
 - Error messages are more readable, because:
@@ -87,7 +87,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/e
 
 ### Fixed
 - `java.lang.Thread` fields cause illegal reflective access warning on Java 9+: added prefab values. ([Issue 193](https://github.com/jqno/equalsverifier/issues/193))
-- `@Transient` fields are not ignored, as discussed in the [manual](/equalsverifier/manual/jpa-entities). ([Issue 196](https://github.com/jqno/equalsverifier/issues/196))
+- `@Transient` fields are not ignored, as discussed in the [manual](http://jqno.nl/equalsverifier/manual/jpa-entities). ([Issue 196](https://github.com/jqno/equalsverifier/issues/196))
 
 
 ## [2.4.6] - 2018-04-28
@@ -227,7 +227,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/e
 ### Fixed
 - Unexpected behaviour when a class's `equals` or `hashCode` asserts on the length of its array field. ([Issue 143](https://github.com/jqno/equalsverifier/issues/143))
 - Objenesis's meta-data carries into EqualsVerifier's jar file's `META-INF` folder. ([Issue 144](https://github.com/jqno/equalsverifier/issues/144))
-- EqualsVerifier throws ReflectionException when it's unable to read annotations on fields in certain situations. (Issue 14, [Comment 21](https://github.com/jqno/equalsverifier/issues/114#issuecomment-206463710))
+- EqualsVerifier throws ReflectionException when it's unable to read annotations on fields in certain situations. (Issue 114, [Comment 21](https://github.com/jqno/equalsverifier/issues/114#issuecomment-206463710))
 
 
 ## [2.0.2] - 2016-04-03
@@ -238,7 +238,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/e
 
 ## [2.0.1] - 2016-03-13
 ### Changed
-- `com.google.code.findbugs.annotations` dependency now has `provided` scope. ([Issue 136](https://github.com/jqno/equalsverifier/issues/136); thanks Stephan!)
+- `com.google.code.findbugs.annotations` dependency now has `provided` scope. ([Issue 135](https://github.com/jqno/equalsverifier/issues/135); thanks Stephan!)
 
 ### Fixed
 - Classes that have a static final reference to a recursive data structure, without adding a prefab value.
@@ -246,7 +246,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](/e
 
 
 ## [2.0] - 2016-03-06
-If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/equalsverifier/migration1to2).
+If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](http://jqno.nl/equalsverifier/migration1to2).
 
 ### Added
 - `#withIgnoredFields()` to disregard specific fields, while expecting all remaining fields to be used in `equals`.
@@ -400,7 +400,7 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 - `#allFieldsShouldBeUsedExcept()` to specifically ignore certain fields. ([Issue 82](https://github.com/jqno/equalsverifier/issues/82))
 
 ### Changed
-- EqualsVerifier now covers 100% of your `equals` and `hashCode` methods. ([FAQ](/equalsverifier/faq#coverage))
+- EqualsVerifier now covers 100% of your `equals` and `hashCode` methods. ([FAQ](http://jqno.nl/equalsverifier/faq#coverage))
 - Error messages around abstract delegation are clearer. This clarifies especially classes that contain Joda-Time `LocalDate` fields.
 
 ### Fixed
@@ -424,7 +424,7 @@ If you're upgrading from EqualsVerifier 1.x, please see the [migration guide](/e
 - `#debug()`, because relevant exceptions are now included as a cause in the stack trace.
 
 
-## [1.3] - 2013-06-09
+## 1.3 - 2013-06-09
 
 Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/06/11/what-happened-to-equalsverifier-1-3/). Use 1.3.1 instead.
 
@@ -517,7 +517,7 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 ### Changed
 - EqualsVerifier warns when you use a transient field in your `equals` or `hashCode` method. Don't worry, you can suppress this warning too.
-- Error messages contain a link to the [Error messages](/equalsverifier/errormessages) page to get more help.
+- Error messages contain a link to the [Error messages](http://jqno.nl/equalsverifier/errormessages) page to get more help.
 - The back end is almost completely re-written.
 
 ### Fixed
@@ -666,12 +666,11 @@ You can now use EqualsVerifier!
 [1.4.1]: https://github.com/jqno/equalsverifier/compare/version_1_4...version_1_4_1
 [1.4]: https://github.com/jqno/equalsverifier/compare/version_1_3_1...version_1_4
 
-[1.3.1]: https://github.com/jqno/equalsverifier/compare/version_1_3_broken...version_1_3_1
-[1.3]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3_broken
+[1.3.1]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3_1
 
 [1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_4...version_1_2
 
-[1.1.4]: https://github.com/jqno/equalsverifier/compare/version_1_1_3...version_1_1_4
+[1.1.4]: https://github.com/jqno/equalsverifier/compare/e18f544...version_1_1_4
 [1.1.3]: https://github.com/jqno/equalsverifier/compare/version_1_1_2...version_1_1_3
 [1.1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_1...version_1_1_2
 [1.1.1]: https://github.com/jqno/equalsverifier/compare/version_1_1...version_1_1_1
@@ -690,8 +689,8 @@ You can now use EqualsVerifier!
 [0.6.1]: https://github.com/jqno/equalsverifier/compare/version_0_6...version_0_6_1
 [0.6]: https://github.com/jqno/equalsverifier/compare/version_0_5...version_0_6
 
-[0.5]: https://github.com/jqno/equalsverifier/compare/version_0_4...version_0_5
-[0.4]: https://github.com/jqno/equalsverifier/compare/version_0_3...version_0_4
+[0.5]: https://github.com/jqno/equalsverifier/commits/version_0_5
+[0.4]: https://github.com/jqno/equalsverifier/compare/8b2b6f8...a30ff4b 
 [0.3]: https://github.com/jqno/equalsverifier/compare/version_0_2...version_0_3
 [0.2]: https://github.com/jqno/equalsverifier/compare/version_0_1...version_0_2
 [0.1]: https://github.com/jqno/equalsverifier/commits/version_0_1
