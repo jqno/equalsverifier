@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
+## [3.0.3] - 2018-11-16
+### Fixed
+- An incorrect `module-info` was shaded into the jar file. ([Issue 222](https://github.com/jqno/equalsverifier/issues/222))
+
+
 ## [3.0.2] - 2018-10-31
 ### Fixed
 - `java.time` fields cause illegal reflective access warning on Java 9+: added prefab values. [Issue 217](https://github.com/jqno/equalsverifier/issues/217))
@@ -605,8 +610,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.3...HEAD
 
+[3.0.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...equalsverifier-3.0.3
 [3.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.1...equalsverifier-3.0.2
 [3.0.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0...equalsverifier-3.0.1
 [3.0]: https://github.com/jqno/equalsverifier/compare/equalsverifier-2.5.2...equalsverifier-3.0
