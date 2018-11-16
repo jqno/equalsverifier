@@ -572,6 +572,39 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 - `Class` fields throw IllegalAccessError: added prefab value. ([Issue 17](https://github.com/jqno/equalsverifier/issues/17))
 
 
+## [0.5] - 2009-09-01
+### Changed
+- EqualsVerifier is now compiled with debug information, so you can step through the source in Eclipse after adding the EqualsVerifier jar to your project. ([Issue 11](https://github.com/jqno/equalsverifier/issues/11))
+
+### Fixed
+- Fields of interface of abstract class types (such as Lists and other Collection types) throw InstantiationError. ([Issue 12](https://github.com/jqno/equalsverifier/issues/12))
+
+
+## [0.4] - 2009-08-29
+### Added
+- `#withRelaxedEqualExamples()` to verify equality rules that are more relaxed than simple field-by-field comparisons. ([Issue 9](https://github.com/jqno/equalsverifier/issues/9))
+
+
+## [0.3] - 2009-08-01
+### Changed
+- EqualsVerifier now recursively instantiates objects so `#withPrefabValues()` is now only needed for actual recursive data structures. ([Issue 7](https://github.com/jqno/equalsverifier/issues/7))
+
+
+## [0.2] - 2009-07-03
+### Changed
+- EqualsVerifier now checks if `Arrays.deepEquals()` was used for multidimensional and `Object` arrays. ([Issue 3](https://github.com/jqno/equalsverifier/issues/3))
+- Optional features are now accessed through a clean enum instead of through lots of different method calls. ([Issue 4](https://github.com/jqno/equalsverifier/issues/4))
+- EqualsVerifier can now be used in unit test frameworks other than JUnit 4. ([Issue 5](https://github.com/jqno/equalsverifier/issues/5))
+- Stack traces are now printed to `System.err`. ([Issue 6](https://github.com/jqno/equalsverifier/issues/6))
+
+### Fixed
+- Can't use the _fields are never null_ feature on classes instantiated with `#forClass()`. ([Issue 1](https://github.com/jqno/equalsverifier/issues/1))
+
+
+## [0.1] - 2009-06-01
+You can now use EqualsVerifier!
+
+
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...HEAD
 
 [3.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.1...equalsverifier-3.0.2
@@ -656,4 +689,10 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [0.6.2]: https://github.com/jqno/equalsverifier/compare/version_0_6_1...version_0_6_2
 [0.6.1]: https://github.com/jqno/equalsverifier/compare/version_0_6...version_0_6_1
 [0.6]: https://github.com/jqno/equalsverifier/compare/version_0_5...version_0_6
+
+[0.5]: https://github.com/jqno/equalsverifier/compare/version_0_4...version_0_5
+[0.4]: https://github.com/jqno/equalsverifier/compare/version_0_3...version_0_4
+[0.3]: https://github.com/jqno/equalsverifier/compare/version_0_2...version_0_3
+[0.2]: https://github.com/jqno/equalsverifier/compare/version_0_1...version_0_2
+[0.1]: https://github.com/jqno/equalsverifier/commits/version_0_1
 
