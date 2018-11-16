@@ -633,8 +633,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 [1.4.1]: https://github.com/jqno/equalsverifier/compare/version_1_4...version_1_4_1
 [1.4]: https://github.com/jqno/equalsverifier/compare/version_1_3_1...version_1_4
 
-[1.3.1]: https://github.com/jqno/equalsverifier/compare/version_1_3...version_1_3_1
-[1.3]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3
+[1.3.1]: https://github.com/jqno/equalsverifier/compare/version_1_3_broken...version_1_3_1
+[1.3]: https://github.com/jqno/equalsverifier/compare/version_1_2...version_1_3_broken
 
 [1.2]: https://github.com/jqno/equalsverifier/compare/version_1_1_4...version_1_2
 
