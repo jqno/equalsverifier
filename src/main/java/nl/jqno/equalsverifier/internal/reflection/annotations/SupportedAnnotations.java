@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 import org.objectweb.asm.Type;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
@@ -119,15 +119,16 @@ public enum SupportedAnnotations implements Annotation {
     NULLABLE(false, "Nullable", "CheckForNull");
 
     private final boolean inherits;
-    private final List<String> descriptors;
+    private final Set<String> descriptors;
 
     private SupportedAnnotations(boolean inherits, String... descriptors) {
         this.inherits = inherits;
-        this.descriptors = Arrays.asList(descriptors);
+        this.descriptors = new HashSet<>();
+        this.descriptors.addAll(Arrays.asList(descriptors));
     }
 
     @Override
-    public Iterable<String> descriptors() {
+    public Set<String> descriptors() {
         return descriptors;
     }
 

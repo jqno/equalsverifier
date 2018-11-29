@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationProperties;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 public enum TestSupportedAnnotations implements Annotation {
@@ -39,15 +39,16 @@ public enum TestSupportedAnnotations implements Annotation {
     };
 
     private final boolean inherits;
-    private final List<String> descriptors;
+    private final Set<String> descriptors;
 
     private TestSupportedAnnotations(boolean inherits, String... descriptors) {
         this.inherits = inherits;
-        this.descriptors = Arrays.asList(descriptors);
+        this.descriptors = new HashSet<>();
+        this.descriptors.addAll(Arrays.asList(descriptors));
     }
 
     @Override
-    public Iterable<String> descriptors() {
+    public Set<String> descriptors() {
         return descriptors;
     }
 

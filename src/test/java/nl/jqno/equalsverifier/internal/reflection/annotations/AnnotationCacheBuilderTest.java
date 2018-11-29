@@ -17,7 +17,6 @@ import org.junit.rules.ExpectedException;
 import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -261,8 +260,10 @@ public class AnnotationCacheBuilderTest {
         private AnnotationProperties properties;
 
         @Override
-        public Iterable<String> descriptors() {
-            return Collections.singletonList(AnnotationWithClassValues.class.getSimpleName());
+        public Set<String> descriptors() {
+            Set<String> result = new HashSet<>();
+            result.add(AnnotationWithClassValues.class.getSimpleName());
+            return result;
         }
 
         @Override

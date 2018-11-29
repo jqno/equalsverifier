@@ -20,9 +20,9 @@ public interface Annotation {
      * instance, @Nonnull, @NonNull and @NotNull have the same semantics; their
      * descriptors can be grouped together in one {@link Annotation} instance.
      *
-     * @return An Iterable of annotation descriptor strings.
+     * @return A Set of annotation descriptor strings.
      */
-    public Iterable<String> descriptors();
+    public Set<String> descriptors();
 
     /**
      * Whether the annotation applies to the class in which is appears only, or
