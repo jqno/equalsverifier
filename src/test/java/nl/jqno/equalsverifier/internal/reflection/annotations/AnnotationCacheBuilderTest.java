@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
@@ -14,7 +15,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
 import java.util.HashSet;
@@ -202,7 +202,7 @@ public class AnnotationCacheBuilderTest {
     private Set<String> mapGetDescriptor(AnnotationWithClassValuesDescriptor annotation) {
         Set<String> result = new HashSet<>();
         for (Object o : annotation.properties.getArrayValues("annotations")) {
-            Type type = (Type)o;
+            TypeDescription type = (TypeDescription)o;
             result.add(type.getDescriptor());
         }
         return result;
