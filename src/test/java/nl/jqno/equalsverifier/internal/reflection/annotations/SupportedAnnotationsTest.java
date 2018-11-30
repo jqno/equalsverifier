@@ -14,21 +14,21 @@ public class SupportedAnnotationsTest {
 
     @Test
     public void jsr305DefaultReturnsTrue_whenAnnotationHasNonnullAnnotation() {
-        AnnotationProperties props = new AnnotationProperties("Lnl/jqno/equalsverifier/testhelpers/annotations/DefaultNonnullJavax;");
+        AnnotationProperties props = new AnnotationProperties("nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax");
         boolean actual = SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL.validate(props, EMPTY_ANNOTATION_CACHE, NO_IGNORED_ANNOTATIONS);
         assertTrue(actual);
     }
 
     @Test
     public void jsr305DefaultReturnsFalse_whenAnnotationDoesntHaveNonnullAnnotation() {
-        AnnotationProperties props = new AnnotationProperties("Ljavax/annotation/Nonnull;");
+        AnnotationProperties props = new AnnotationProperties("javax.annotation.Nonnull");
         boolean actual = SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL.validate(props, EMPTY_ANNOTATION_CACHE, NO_IGNORED_ANNOTATIONS);
         assertFalse(actual);
     }
 
     @Test
     public void jsr305DefaultReturnsFalse_whenTypeDoesNotExist() {
-        AnnotationProperties props = new AnnotationProperties("Lnl/jqno/equalsverifier/TypeDoesNotExist;");
+        AnnotationProperties props = new AnnotationProperties("nl.jqno.equalsverifier.TypeDoesNotExist");
         boolean actual = SupportedAnnotations.JSR305_DEFAULT_ANNOTATION_NONNULL.validate(props, EMPTY_ANNOTATION_CACHE, NO_IGNORED_ANNOTATIONS);
         assertFalse(actual);
     }

@@ -4,7 +4,10 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 import java.util.GregorianCalendar;
+import java.util.HashSet;
+import java.util.Set;
 
+import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.Assert.*;
 
@@ -38,5 +41,15 @@ public class UtilTest {
         Object[] expected = new Object[] { "x", new Point(1, 2) };
         Object[] actual = Util.objects("x", new Point(1, 2));
         assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void setOfReturnsItsArguments() {
+        Set<String> expected = new HashSet<>();
+        expected.add("one");
+        expected.add("two");
+
+        Set<String> actual = setOf("one", "two");
+        assertEquals(expected, actual);
     }
 }

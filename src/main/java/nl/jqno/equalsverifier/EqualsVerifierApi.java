@@ -7,7 +7,6 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-import org.objectweb.asm.Type;
 
 import java.util.*;
 
@@ -214,7 +213,7 @@ public class EqualsVerifierApi<T> {
     public EqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
         validateAnnotationsAreValid(annotations);
         for (Class<?> ignoredAnnotation : annotations) {
-            ignoredAnnotationDescriptors.add(Type.getDescriptor(ignoredAnnotation));
+            ignoredAnnotationDescriptors.add(ignoredAnnotation.getCanonicalName());
         }
         return this;
     }

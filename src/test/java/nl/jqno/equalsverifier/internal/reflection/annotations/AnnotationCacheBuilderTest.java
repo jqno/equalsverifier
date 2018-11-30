@@ -2,12 +2,13 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
@@ -127,6 +128,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertTypeHasAnnotation(SubclassWithAnnotations.class, TYPE_INHERITS);
+        assertTypeHasAnnotation(SuperclassWithAnnotations.class, TYPE_INHERITS);
         assertTypeDoesNotHaveAnnotation(SubclassWithAnnotations.class, TYPE_DOESNT_INHERIT);
     }
 
@@ -135,6 +137,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", FIELD_INHERITS);
+        assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", FIELD_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
     }
 
@@ -143,6 +146,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
+        assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", TYPEUSE_DOESNT_INHERIT);
     }
 
@@ -171,6 +175,16 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void searchIgnoredField() {
+        cacheBuilder = new AnnotationCacheBuilder(
+            TestSupportedAnnotations.values(),
+            Util.setOf(FieldAnnotationRuntimeRetention.class.getCanonicalName()));
+        build(AnnotatedFields.class);
+
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, "runtimeRetention", FIELD_RUNTIME_RETENTION);
+    }
+
+    @Test
     public void searchNonExistingField() {
         build(AnnotatedFields.class);
 
@@ -194,18 +208,9 @@ public class AnnotationCacheBuilderTest {
 
         assertTypeHasAnnotation(AnnotationWithClassValuesContainer.class, annotation);
 
-        Set<String> annotations = mapGetDescriptor(annotation);
-        assertTrue(annotations.contains("Ljavax/annotation/Nonnull;"));
-        assertTrue(annotations.contains("Lnl/jqno/equalsverifier/testhelpers/annotations/NotNull;"));
-    }
-
-    private Set<String> mapGetDescriptor(AnnotationWithClassValuesDescriptor annotation) {
-        Set<String> result = new HashSet<>();
-        for (Object o : annotation.properties.getArrayValues("annotations")) {
-            TypeDescription type = (TypeDescription)o;
-            result.add(type.getDescriptor());
-        }
-        return result;
+        Set<String> annotations = new HashSet<>(annotation.properties.getArrayValues("annotations"));
+        assertTrue(annotations.contains("javax.annotation.Nonnull"));
+        assertTrue(annotations.contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull"));
     }
 
     @Test

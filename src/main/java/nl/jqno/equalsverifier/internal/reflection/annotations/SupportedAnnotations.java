@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import org.objectweb.asm.Type;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -56,12 +54,10 @@ public enum SupportedAnnotations implements Annotation {
             "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<Object> values = properties.getArrayValues("value");
-            for (Object value : values) {
+            Set<String> values = properties.getArrayValues("value");
+            for (String value : values) {
                 for (String descriptor : NONNULL.descriptors()) {
-                    Type type = (Type)value;
-                    String typeDescriptor = type.getDescriptor();
-                    if (typeDescriptor.contains(descriptor) && !ignoredAnnotations.contains(typeDescriptor)) {
+                    if (value.contains(descriptor) && !ignoredAnnotations.contains(value)) {
                         return true;
                     }
                 }
@@ -74,8 +70,7 @@ public enum SupportedAnnotations implements Annotation {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             try {
-                Type t = Type.getType(properties.getDescriptor());
-                Class<?> annotationType = classForName(t.getClassName());
+                Class<?> annotationType = classForName(properties.getDescriptor());
                 if (annotationType == null) {
                     return false;
                 }
@@ -103,7 +98,7 @@ public enum SupportedAnnotations implements Annotation {
     ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<Object> values = properties.getArrayValues("value");
+            Set<String> values = properties.getArrayValues("value");
             if (values == null) {
                 return true;
             }

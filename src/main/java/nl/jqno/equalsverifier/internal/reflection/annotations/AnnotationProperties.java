@@ -13,7 +13,7 @@ import java.util.Set;
  */
 public class AnnotationProperties {
     private final String descriptor;
-    private Map<String, Set<Object>> arrayValues = new HashMap<>();
+    private Map<String, Set<String>> arrayValues = new HashMap<>();
 
     /**
      * Constructor.
@@ -37,7 +37,7 @@ public class AnnotationProperties {
      * @param name The name of the array value property.
      * @param values The content of the array value property.
      */
-    public void putArrayValues(String name, Set<Object> values) {
+    public void putArrayValues(String name, Set<String> values) {
         arrayValues.put(name, values);
     }
 
@@ -47,7 +47,7 @@ public class AnnotationProperties {
      * @param name The name of the array value property.
      * @return The content of the array value property.
      */
-    public Set<Object> getArrayValues(String name) {
+    public Set<String> getArrayValues(String name) {
         return arrayValues.get(name);
     }
 }
