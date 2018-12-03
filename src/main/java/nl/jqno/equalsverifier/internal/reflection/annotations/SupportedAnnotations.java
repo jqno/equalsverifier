@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import org.objectweb.asm.Type;
-
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
@@ -56,12 +54,10 @@ public enum SupportedAnnotations implements Annotation {
             "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<Object> values = properties.getArrayValues("value");
-            for (Object value : values) {
-                for (String descriptor : NONNULL.descriptors()) {
-                    Type type = (Type)value;
-                    String typeDescriptor = type.getDescriptor();
-                    if (typeDescriptor.contains(descriptor) && !ignoredAnnotations.contains(typeDescriptor)) {
+            Set<String> values = properties.getArrayValues("value");
+            for (String value : values) {
+                for (String className : NONNULL.partialClassNames()) {
+                    if (value.contains(className) && !ignoredAnnotations.contains(value)) {
                         return true;
                     }
                 }
@@ -74,8 +70,7 @@ public enum SupportedAnnotations implements Annotation {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             try {
-                Type t = Type.getType(properties.getDescriptor());
-                Class<?> annotationType = classForName(t.getClassName());
+                Class<?> annotationType = classForName(properties.getClassName());
                 if (annotationType == null) {
                     return false;
                 }
@@ -103,7 +98,7 @@ public enum SupportedAnnotations implements Annotation {
     ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<Object> values = properties.getArrayValues("value");
+            Set<String> values = properties.getArrayValues("value");
             if (values == null) {
                 return true;
             }
@@ -119,16 +114,17 @@ public enum SupportedAnnotations implements Annotation {
     NULLABLE(false, "Nullable", "CheckForNull");
 
     private final boolean inherits;
-    private final List<String> descriptors;
+    private final Set<String> partialClassNames;
 
-    private SupportedAnnotations(boolean inherits, String... descriptors) {
+    private SupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
-        this.descriptors = Arrays.asList(descriptors);
+        this.partialClassNames = new HashSet<>();
+        this.partialClassNames.addAll(Arrays.asList(partialClassNames));
     }
 
     @Override
-    public Iterable<String> descriptors() {
-        return descriptors;
+    public Set<String> partialClassNames() {
+        return partialClassNames;
     }
 
     @Override

@@ -6,7 +6,9 @@ import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.packageannotation.AnnotatedPackage;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
+import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
@@ -14,10 +16,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.objectweb.asm.Type;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,18 +109,18 @@ public class AnnotationCacheBuilderTest {
     public void findPartialAnnotationName() {
         build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
 
-        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
+        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
     }
 
     @Test
     public void findFullyQualifiedAnnotationName() {
         build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
 
-        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
+        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
     }
 
     @Test
@@ -128,6 +128,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertTypeHasAnnotation(SubclassWithAnnotations.class, TYPE_INHERITS);
+        assertTypeHasAnnotation(SuperclassWithAnnotations.class, TYPE_INHERITS);
         assertTypeDoesNotHaveAnnotation(SubclassWithAnnotations.class, TYPE_DOESNT_INHERIT);
     }
 
@@ -136,6 +137,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", FIELD_INHERITS);
+        assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", FIELD_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
     }
 
@@ -144,6 +146,7 @@ public class AnnotationCacheBuilderTest {
         build(SubclassWithAnnotations.class);
 
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
+        assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
         assertFieldDoesNotHaveAnnotation(SubclassWithAnnotations.class, "doesntInherit", TYPEUSE_DOESNT_INHERIT);
     }
 
@@ -172,6 +175,16 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void searchIgnoredField() {
+        cacheBuilder = new AnnotationCacheBuilder(
+            TestSupportedAnnotations.values(),
+            Util.setOf(FieldAnnotationRuntimeRetention.class.getCanonicalName()));
+        build(AnnotatedFields.class);
+
+        assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, "runtimeRetention", FIELD_RUNTIME_RETENTION);
+    }
+
+    @Test
     public void searchNonExistingField() {
         build(AnnotatedFields.class);
 
@@ -188,25 +201,16 @@ public class AnnotationCacheBuilderTest {
 
     @Test
     public void annotationsArrayParametersAreFoundOnClass() {
-        AnnotationWithClassValuesDescriptor annotation = new AnnotationWithClassValuesDescriptor();
+        AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
         Annotation[] supportedAnnotations = { annotation };
         AnnotationCacheBuilder acb = new AnnotationCacheBuilder(supportedAnnotations, NO_INGORED_ANNOTATIONS);
         acb.build(AnnotationWithClassValuesContainer.class, cache);
 
         assertTypeHasAnnotation(AnnotationWithClassValuesContainer.class, annotation);
 
-        Set<String> annotations = mapGetDescriptor(annotation);
-        assertTrue(annotations.contains("Ljavax/annotation/Nonnull;"));
-        assertTrue(annotations.contains("Lnl/jqno/equalsverifier/testhelpers/annotations/NotNull;"));
-    }
-
-    private Set<String> mapGetDescriptor(AnnotationWithClassValuesDescriptor annotation) {
-        Set<String> result = new HashSet<>();
-        for (Object o : annotation.properties.getArrayValues("annotations")) {
-            Type type = (Type)o;
-            result.add(type.getDescriptor());
-        }
-        return result;
+        Set<String> annotations = new HashSet<>(annotation.properties.getArrayValues("annotations"));
+        assertTrue(annotations.contains("javax.annotation.Nonnull"));
+        assertTrue(annotations.contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull"));
     }
 
     @Test
@@ -257,12 +261,14 @@ public class AnnotationCacheBuilderTest {
         assertFalse(cache.hasFieldAnnotation(type, fieldName, annotation));
     }
 
-    private static class AnnotationWithClassValuesDescriptor implements Annotation {
+    private static class AnnotationWithClassValuesAnnotation implements Annotation {
         private AnnotationProperties properties;
 
         @Override
-        public Iterable<String> descriptors() {
-            return Collections.singletonList(AnnotationWithClassValues.class.getSimpleName());
+        public Set<String> partialClassNames() {
+            Set<String> result = new HashSet<>();
+            result.add(AnnotationWithClassValues.class.getSimpleName());
+            return result;
         }
 
         @Override
@@ -271,8 +277,8 @@ public class AnnotationCacheBuilderTest {
         }
 
         @Override
-        public boolean validate(AnnotationProperties descriptor, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            this.properties = descriptor;
+        public boolean validate(AnnotationProperties props, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            this.properties = props;
             return true;
         }
     }

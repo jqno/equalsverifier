@@ -1,17 +1,19 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.pool.TypePool;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
-import org.objectweb.asm.*;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 
 public class AnnotationCacheBuilder {
-
-    private static final int OPCODES = Opcodes.ASM7;
 
     private final List<Annotation> supportedAnnotations;
     private final Set<String> ignoredAnnotations;
@@ -26,196 +28,120 @@ public class AnnotationCacheBuilder {
             return;
         }
 
-        visitClass(type, cache);
-        visitFields(type, cache);
-    }
-
-    private void visitFields(Class<?> type, AnnotationCache cache) {
-        for (Field f : FieldIterable.of(type)) {
-            build(f.getDeclaringClass(), cache);
-        }
-    }
-
-    private void visitClass(Class<?> type, AnnotationCache cache) {
-        visitType(type, type, cache, false);
-        visitSuperclasses(type, cache);
-        visitOuterClasses(type, cache);
-        visitPackage(type, cache);
-    }
-
-    private void visitSuperclasses(Class<?> type, AnnotationCache cache) {
-        for (Class<?> c : SuperclassIterable.of(type)) {
-            visitType(c, type, cache, true);
-        }
-    }
-
-    private void visitOuterClasses(Class<?> type, AnnotationCache cache) {
-        Class<?> outer = type.getDeclaringClass();
-        while (outer != null) {
-            visitType(outer, type, cache, false);
-            outer = outer.getDeclaringClass();
-        }
-    }
-
-    private void visitPackage(Class<?> type, AnnotationCache cache) {
         try {
-            Package pkg = type.getPackage();
-            if (pkg == null) {
-                return;
-            }
+            TypePool pool = TypePool.Default.of(type.getClassLoader());
+            TypeDescription typeDescription = pool.describe(type.getName()).resolve();
 
-            String className = pkg.getName() + ".package-info";
-            Class<?> packageType = Class.forName(className);
-            visitType(packageType, type, cache, false);
+            visitType(setOf(type), cache, typeDescription, false);
+            visitSuperclasses(type, cache, pool);
+            visitOuterClasses(type, cache, pool);
+            visitPackage(type, cache, pool);
         }
-        catch (ClassNotFoundException e) {
-            // No package object; do nothing.
-        }
-    }
-
-    private void visitType(Class<?> type, Class<?> cacheInto, AnnotationCache cache, boolean inheriting) {
-        ClassLoader classLoader = getClassLoaderFor(type);
-        Type asmType = Type.getType(type);
-        String url = asmType.getInternalName() + ".class";
-
-        try (InputStream is = classLoader.getResourceAsStream(url)) {
-            Visitor v = new Visitor(cacheInto, cache, inheriting);
-            ClassReader cr = new ClassReader(is);
-            cr.accept(v, 0);
-        }
-        catch (IOException e) {
+        catch (IllegalStateException ignored) {
             // Just ignore this class if it can't be processed.
         }
     }
 
-    private ClassLoader getClassLoaderFor(Class<?> c) {
-        ClassLoader result = c.getClassLoader();
-        if (result == null) {
-            result = ClassLoader.getSystemClassLoader();
-        }
-        return result;
+    private void visitType(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
+        visitClass(types, cache, typeDescription, inheriting);
+        visitFields(types, cache, typeDescription, inheriting);
     }
 
-    private class Visitor extends ClassVisitor {
-        private final Class<?> type;
-        private final AnnotationCache cache;
-        private final boolean inheriting;
+    private void visitSuperclasses(Class<?> type, AnnotationCache cache, TypePool pool) {
+        SuperclassIterable.of(type).forEach(c -> {
+            TypeDescription typeDescription = pool.describe(c.getName()).resolve();
+            visitType(setOf(type, c), cache, typeDescription, true);
+        });
+    }
 
-        public Visitor(Class<?> type, AnnotationCache cache, boolean inheriting) {
-            super(OPCODES);
-            this.type = type;
-            this.cache = cache;
-            this.inheriting = inheriting;
-        }
+    private void visitOuterClasses(Class<?> type, AnnotationCache cache, TypePool pool) {
+        Class<?> outer = type.getDeclaringClass();
+        while (outer != null) {
+            TypeDescription typeDescription = pool.describe(outer.getName()).resolve();
+            visitType(setOf(type, outer), cache, typeDescription, false);
 
-        @Override
-        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-            return new MyAnnotationVisitor(type, descriptor, cache, Optional.empty(), inheriting);
-        }
-
-        @Override
-        public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-            cache.addField(type, name);
-            return new MyFieldVisitor(type, cache, name, inheriting);
+            outer = outer.getDeclaringClass();
         }
     }
 
-    private class MyFieldVisitor extends FieldVisitor {
-        private final Class<?> type;
-        private final AnnotationCache cache;
-        private final String fieldName;
-        private final boolean inheriting;
-
-        public MyFieldVisitor(Class<?> type, AnnotationCache cache, String fieldName, boolean inheriting) {
-            super(OPCODES);
-            this.type = type;
-            this.cache = cache;
-            this.fieldName = fieldName;
-            this.inheriting = inheriting;
+    private void visitPackage(Class<?> type, AnnotationCache cache, TypePool pool) {
+        Package pkg = type.getPackage();
+        if (pkg == null) {
+            return;
         }
 
-        @Override
-        public AnnotationVisitor visitTypeAnnotation(int typeRef, TypePath typePath, String descriptor, boolean visible) {
-            return new MyAnnotationVisitor(type, descriptor, cache, Optional.of(fieldName), inheriting);
-        }
+        String className = pkg.getName() + ".package-info";
 
-        @Override
-        public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
-            return new MyAnnotationVisitor(type, descriptor, cache, Optional.of(fieldName), inheriting);
+        try {
+            TypeDescription typeDescription = pool.describe(className).resolve();
+            visitType(setOf(type), cache, typeDescription, false);
+        }
+        catch (IllegalStateException e) {
+            // No package object; do nothing.
         }
     }
 
-    private class MyAnnotationVisitor extends AnnotationVisitor {
-        private final Class<?> type;
-        private final String annotationDescriptor;
-        private final AnnotationCache cache;
-        private final Optional<String> fieldName;
-        private final boolean inheriting;
+    private void visitClass(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
+        Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addClassAnnotation(t, a));
+        typeDescription.getDeclaredAnnotations()
+            .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+    }
 
-        private final AnnotationProperties properties;
+    private void visitFields(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
+        typeDescription.getDeclaredFields().forEach(f -> {
+            Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addFieldAnnotation(t, f.getName(), a));
 
-        public MyAnnotationVisitor(Class<?> type, String annotationDescriptor, AnnotationCache cache,
-                Optional<String> fieldName, boolean inheriting) {
-            super(OPCODES);
-            this.type = type;
-            this.annotationDescriptor = annotationDescriptor;
-            this.cache = cache;
-            this.fieldName = fieldName;
-            this.inheriting = inheriting;
-            properties = new AnnotationProperties(annotationDescriptor);
+            // Regular field annotations
+            f.getDeclaredAnnotations()
+                .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+
+            // Type-use annotations
+            f.getType().getDeclaredAnnotations()
+                .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+        });
+    }
+
+    private void cacheSupportedAnnotations(
+            AnnotationDescription annotation, AnnotationCache cache, Consumer<Annotation> addToCache, boolean inheriting) {
+
+        if (ignoredAnnotations.contains(annotation.getAnnotationType().getCanonicalName())) {
+            return;
         }
 
-        @Override
-        public AnnotationVisitor visitArray(String name) {
-            Set<Object> foundAnnotations = new HashSet<>();
-            properties.putArrayValues(name, foundAnnotations);
-            return new AnnotationArrayValueVisitor(foundAnnotations);
-        }
+        AnnotationProperties props = buildAnnotationProperties(annotation);
+        supportedAnnotations
+            .stream()
+            .filter(sa -> matches(annotation, sa))
+            .filter(sa -> !inheriting || sa.inherits())
+            .filter(sa -> sa.validate(props, cache, ignoredAnnotations))
+            .forEach(addToCache);
+    }
 
-        @Override
-        public void visitEnd() {
-            if (ignoredAnnotations.contains(annotationDescriptor)) {
-                return;
-            }
-
-            for (Annotation annotation : supportedAnnotations) {
-                if (!inheriting || annotation.inherits()) {
-                    matchAnnotation(annotation);
-                }
-            }
-        }
-
-        private void matchAnnotation(Annotation annotation) {
-            for (String descriptor : annotation.descriptors()) {
-                String asBytecodeIdentifier = descriptor.replaceAll("\\.", "/") + ";";
-                if (annotationDescriptor.endsWith(asBytecodeIdentifier) && annotation.validate(properties, cache, ignoredAnnotations)) {
-                    if (fieldName.isPresent()) {
-                        cache.addFieldAnnotation(type, fieldName.get(), annotation);
+    private AnnotationProperties buildAnnotationProperties(AnnotationDescription annotation) {
+        AnnotationProperties props = new AnnotationProperties(annotation.getAnnotationType().getCanonicalName());
+        annotation.getAnnotationType().getDeclaredMethods().forEach(m -> {
+            Object val = annotation.getValue(m).resolve();
+            if (val.getClass().isArray()) {
+                Object[] array = (Object[])val;
+                Set<String> values = new HashSet<>();
+                for (Object obj : array) {
+                    if (obj instanceof TypeDescription) {
+                        values.add(((TypeDescription)obj).getName());
                     }
                     else {
-                        cache.addClassAnnotation(type, annotation);
+                        values.add(obj.toString());
                     }
                 }
+                props.putArrayValues(m.getName(), values);
             }
-        }
+        });
+        return props;
     }
 
-    private static class AnnotationArrayValueVisitor extends AnnotationVisitor {
-        private final Set<Object> foundAnnotations;
-
-        public AnnotationArrayValueVisitor(Set<Object> foundAnnotations) {
-            super(OPCODES);
-            this.foundAnnotations = foundAnnotations;
-        }
-
-        @Override
-        public void visit(String name, Object value) {
-            foundAnnotations.add(value);
-        }
-
-        @Override
-        public void visitEnum(String name, String desc, String value) {
-            foundAnnotations.add(value);
-        }
+    private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
+        String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
+        return supportedAnnotation.partialClassNames()
+            .stream()
+            .anyMatch(canonicalName::endsWith);
     }
 }

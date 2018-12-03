@@ -12,23 +12,23 @@ import java.util.Set;
  * that are actually used by EqualsVerifier.
  */
 public class AnnotationProperties {
-    private final String descriptor;
-    private Map<String, Set<Object>> arrayValues = new HashMap<>();
+    private final String className;
+    private Map<String, Set<String>> arrayValues = new HashMap<>();
 
     /**
      * Constructor.
      *
-     * @param descriptor The annotation's descriptor string.
+     * @param className The annotation's className string.
      */
-    public AnnotationProperties(String descriptor) {
-        this.descriptor = descriptor;
+    public AnnotationProperties(String className) {
+        this.className = className;
     }
 
     /**
-     * @return the annotation's descriptor string.
+     * @return the annotation's className string.
      */
-    public String getDescriptor() {
-        return descriptor;
+    public String getClassName() {
+        return className;
     }
 
     /**
@@ -37,7 +37,7 @@ public class AnnotationProperties {
      * @param name The name of the array value property.
      * @param values The content of the array value property.
      */
-    public void putArrayValues(String name, Set<Object> values) {
+    public void putArrayValues(String name, Set<String> values) {
         arrayValues.put(name, values);
     }
 
@@ -47,7 +47,7 @@ public class AnnotationProperties {
      * @param name The name of the array value property.
      * @return The content of the array value property.
      */
-    public Set<Object> getArrayValues(String name) {
+    public Set<String> getArrayValues(String name) {
         return arrayValues.get(name);
     }
 }

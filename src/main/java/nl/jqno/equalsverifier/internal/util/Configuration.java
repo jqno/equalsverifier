@@ -56,14 +56,14 @@ public class Configuration<T> {
     public static <T> Configuration<T> build(Class<T> type, Set<String> excludedFields, Set<String> includedFields,
                 Set<String> nonnullFields, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
-                FactoryCache factoryCache, Set<String> ignoredAnnotationDescriptors, Set<String> actualFields,
+                FactoryCache factoryCache, Set<String> ignoredAnnotationClassNames, Set<String> actualFields,
                 List<T> equalExamples, List<T> unequalExamples) {
 
         TypeTag typeTag = new TypeTag(type);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         PrefabValues prefabValues = new PrefabValues(cache);
         ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
-        AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationDescriptors);
+        AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
         Set<String> ignoredFields = includedFields.isEmpty() ? excludedFields : invertIncludedFields(actualFields, includedFields);
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
@@ -71,8 +71,8 @@ public class Configuration<T> {
             cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, equalExamples, unequals);
     }
 
-    private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationDescriptors) {
-        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(SupportedAnnotations.values(), ignoredAnnotationDescriptors);
+    private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationClassNames) {
+        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(SupportedAnnotations.values(), ignoredAnnotationClassNames);
         AnnotationCache cache = new AnnotationCache();
         acb.build(type, cache);
         return cache;
