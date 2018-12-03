@@ -28,6 +28,10 @@ public interface Annotation {
      * Whether the annotation applies to the class in which is appears only, or
      * whether it applies to that class and all its subclasses.
      *
+     * Note: this encompasses more than {@see java.lang.annotation.Inherited}
+     * does: this flag also applies, for example, to annotations on fields that
+     * are declared in a superclass.
+     *
      * @return True if the annotation is inherited by subclasses of the class
      *          in which the annotation appears.
      */
