@@ -88,11 +88,6 @@
             <version>1.9.4</version>
         </dependency>
         <dependency>
-            <groupId>org.ow2.asm</groupId>
-            <artifactId>asm</artifactId>
-            <version>7.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
             <version>${spotbugs.version}</version>
@@ -248,16 +243,11 @@
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
                                 <includes>
-                                    <artifact>org.ow2.asm:asm</artifact>
                                     <artifact>net.bytebuddy:byte-buddy</artifact>
                                     <artifact>org.objenesis:objenesis</artifact>
                                 </includes>
                             </artifactSet>
                             <relocations>
-                                <relocation>
-                                    <pattern>org.objectweb.asm</pattern>
-                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.asm</shadedPattern>
-                                </relocation>
                                 <relocation>
                                     <pattern>net.bytebuddy</pattern>
                                     <shadedPattern>nl.jqno.equalsverifier.internal.lib.bytebuddy</shadedPattern>
@@ -268,12 +258,6 @@
                                 </relocation>
                             </relocations>
                             <filters>
-                                <filter>
-                                    <artifact>org.objectweb.asm:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                    </excludes>
-                                </filter>
                                 <filter>
                                     <artifact>net.bytebuddy:*</artifact>
                                     <excludes>
