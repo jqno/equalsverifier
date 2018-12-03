@@ -16,12 +16,12 @@ public enum TestSupportedAnnotations implements Annotation {
     TYPEUSE_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationRuntimeRetention"),
     TYPEUSE_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationClassRetention"),
 
-    TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeAnnotationRuntimeRetention"),
-    TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
-    FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "FieldAnnotationRuntimeRetention"),
-    FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
-    TYPEUSE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR(false, "TypeUseAnnotationRuntimeRetention"),
-    TYPEUSE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR(false, TypeUseAnnotationRuntimeRetention.class.getCanonicalName()),
+    TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeAnnotationRuntimeRetention"),
+    TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
+    FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "FieldAnnotationRuntimeRetention"),
+    FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
+    TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeUseAnnotationRuntimeRetention"),
+    TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, TypeUseAnnotationRuntimeRetention.class.getCanonicalName()),
 
     TYPE_INHERITS(true, "TypeAnnotationInherits"),
     TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
@@ -39,17 +39,17 @@ public enum TestSupportedAnnotations implements Annotation {
     };
 
     private final boolean inherits;
-    private final Set<String> descriptors;
+    private final Set<String> partialClassNames;
 
-    private TestSupportedAnnotations(boolean inherits, String... descriptors) {
+    private TestSupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
-        this.descriptors = new HashSet<>();
-        this.descriptors.addAll(Arrays.asList(descriptors));
+        this.partialClassNames = new HashSet<>();
+        this.partialClassNames.addAll(Arrays.asList(partialClassNames));
     }
 
     @Override
-    public Set<String> descriptors() {
-        return descriptors;
+    public Set<String> partialClassNames() {
+        return partialClassNames;
     }
 
     @Override

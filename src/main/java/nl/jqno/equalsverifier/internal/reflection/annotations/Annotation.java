@@ -12,17 +12,18 @@ import java.util.Set;
  */
 public interface Annotation {
     /**
-     * One or more strings that contain the annotation's class name. A
-     * descriptor can be the annotation's fully qualified canonical name, or a
+     * One or more strings that contain the annotation's (partial) class name.
+     * This can be the annotation's fully qualified canonical name, or a
      * substring thereof.
      *
-     * An annotation can be described by more than one descriptor. For
+     * An annotation can be described by more than one partial class name. For
      * instance, @Nonnull, @NonNull and @NotNull have the same semantics; their
-     * descriptors can be grouped together in one {@link Annotation} instance.
+     * partialClassNames can be grouped together in one {@link Annotation}
+     * instance.
      *
-     * @return A Set of annotation descriptor strings.
+     * @return A Set of potentially partial annotation class names.
      */
-    public Set<String> descriptors();
+    public Set<String> partialClassNames();
 
     /**
      * Whether the annotation applies to the class in which is appears only, or
@@ -42,7 +43,7 @@ public interface Annotation {
      *
      * @param properties An object that contains information about the annotation.
      * @param annotationCache A cache containing all annotations for known types.
-     * @param ignoredAnnotations A collection of type descriptors for annotations
+     * @param ignoredAnnotations A collection of type partialClassNames for annotations
      *          to ignore.
      * @return True if the annotation is valid and can be used as intended.
      */

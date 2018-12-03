@@ -109,18 +109,18 @@ public class AnnotationCacheBuilderTest {
     public void findPartialAnnotationName() {
         build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
 
-        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_DESCRIPTOR);
+        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
     }
 
     @Test
     public void findFullyQualifiedAnnotationName() {
         build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
 
-        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
-        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_DESCRIPTOR);
+        assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
     }
 
     @Test
@@ -201,7 +201,7 @@ public class AnnotationCacheBuilderTest {
 
     @Test
     public void annotationsArrayParametersAreFoundOnClass() {
-        AnnotationWithClassValuesDescriptor annotation = new AnnotationWithClassValuesDescriptor();
+        AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
         Annotation[] supportedAnnotations = { annotation };
         AnnotationCacheBuilder acb = new AnnotationCacheBuilder(supportedAnnotations, NO_INGORED_ANNOTATIONS);
         acb.build(AnnotationWithClassValuesContainer.class, cache);
@@ -261,11 +261,11 @@ public class AnnotationCacheBuilderTest {
         assertFalse(cache.hasFieldAnnotation(type, fieldName, annotation));
     }
 
-    private static class AnnotationWithClassValuesDescriptor implements Annotation {
+    private static class AnnotationWithClassValuesAnnotation implements Annotation {
         private AnnotationProperties properties;
 
         @Override
-        public Set<String> descriptors() {
+        public Set<String> partialClassNames() {
             Set<String> result = new HashSet<>();
             result.add(AnnotationWithClassValues.class.getSimpleName());
             return result;
@@ -277,8 +277,8 @@ public class AnnotationCacheBuilderTest {
         }
 
         @Override
-        public boolean validate(AnnotationProperties descriptor, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            this.properties = descriptor;
+        public boolean validate(AnnotationProperties props, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            this.properties = props;
             return true;
         }
     }

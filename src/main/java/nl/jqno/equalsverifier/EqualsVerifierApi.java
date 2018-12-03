@@ -28,7 +28,7 @@ public class EqualsVerifierApi<T> {
     private Set<String> allExcludedFields = new HashSet<>();
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();
-    private Set<String> ignoredAnnotationDescriptors = new HashSet<>();
+    private Set<String> ignoredAnnotationClassNames = new HashSet<>();
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
 
@@ -213,7 +213,7 @@ public class EqualsVerifierApi<T> {
     public EqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
         validateAnnotationsAreValid(annotations);
         for (Class<?> ignoredAnnotation : annotations) {
-            ignoredAnnotationDescriptors.add(ignoredAnnotation.getCanonicalName());
+            ignoredAnnotationClassNames.add(ignoredAnnotation.getCanonicalName());
         }
         return this;
     }
@@ -388,7 +388,7 @@ public class EqualsVerifierApi<T> {
     private Configuration<T> buildConfig() {
         return Configuration.build(type, allExcludedFields, allIncludedFields, nonnullFields, cachedHashCodeInitializer,
                 hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, factoryCache,
-                ignoredAnnotationDescriptors, actualFields, equalExamples, unequalExamples);
+            ignoredAnnotationClassNames, actualFields, equalExamples, unequalExamples);
     }
 
     private void verifyWithoutExamples(Configuration<T> config) {

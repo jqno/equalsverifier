@@ -56,8 +56,8 @@ public enum SupportedAnnotations implements Annotation {
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             Set<String> values = properties.getArrayValues("value");
             for (String value : values) {
-                for (String descriptor : NONNULL.descriptors()) {
-                    if (value.contains(descriptor) && !ignoredAnnotations.contains(value)) {
+                for (String className : NONNULL.partialClassNames()) {
+                    if (value.contains(className) && !ignoredAnnotations.contains(value)) {
                         return true;
                     }
                 }
@@ -70,7 +70,7 @@ public enum SupportedAnnotations implements Annotation {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             try {
-                Class<?> annotationType = classForName(properties.getDescriptor());
+                Class<?> annotationType = classForName(properties.getClassName());
                 if (annotationType == null) {
                     return false;
                 }
@@ -114,17 +114,17 @@ public enum SupportedAnnotations implements Annotation {
     NULLABLE(false, "Nullable", "CheckForNull");
 
     private final boolean inherits;
-    private final Set<String> descriptors;
+    private final Set<String> partialClassNames;
 
-    private SupportedAnnotations(boolean inherits, String... descriptors) {
+    private SupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
-        this.descriptors = new HashSet<>();
-        this.descriptors.addAll(Arrays.asList(descriptors));
+        this.partialClassNames = new HashSet<>();
+        this.partialClassNames.addAll(Arrays.asList(partialClassNames));
     }
 
     @Override
-    public Set<String> descriptors() {
-        return descriptors;
+    public Set<String> partialClassNames() {
+        return partialClassNames;
     }
 
     @Override

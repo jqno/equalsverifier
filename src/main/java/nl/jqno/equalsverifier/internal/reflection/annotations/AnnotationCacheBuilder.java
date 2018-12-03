@@ -140,7 +140,7 @@ public class AnnotationCacheBuilder {
 
     private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
         String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
-        return supportedAnnotation.descriptors()
+        return supportedAnnotation.partialClassNames()
             .stream()
             .anyMatch(canonicalName::endsWith);
     }
