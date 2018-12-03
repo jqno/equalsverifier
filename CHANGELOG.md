@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Changed
+- Removed direct dependency on ASM by re-writing the annotation processor to Byte-Buddy. ([Issue 208](https://github.com/jqno/equalsverifier/issues/208))
 
 
 <a name="3.x"/>
