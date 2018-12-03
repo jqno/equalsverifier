@@ -86,6 +86,7 @@ public final class Util {
      * @param <T> The type of objects to add to the set.
      * @return A set with the given objets.
      */
+    @SafeVarargs
     public static <T> Set<T> setOf(T... ts) {
         return new HashSet<>(Arrays.asList(ts));
     }
