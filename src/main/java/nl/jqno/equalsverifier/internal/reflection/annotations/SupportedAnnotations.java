@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
+import nl.jqno.equalsverifier.Warning;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,6 +42,23 @@ public enum SupportedAnnotations implements Annotation {
      * transient modifier. EqualsVerifier will treat these the same.
      */
     TRANSIENT(true, "javax.persistence.Transient"),
+
+    /**
+     * Fields in JPA Entities that are marked @Id are usually part of the
+     * entity's surrogate key. EqualsVerifier will therefore assume that it
+     * must not be used in the equals/hashCode contract, unless
+     * {@link Warning#SURROGATE_KEY} is suppressed.
+     */
+    ID(false, "javax.persistence.Id"),
+
+    /**
+     * Fields in JPA Entities that are marked @NaturalId are part of the
+     * entity's natural/business identity. If a @NaturalId annotation is
+     * present in an entity, all fields marked with this annotation must be
+     * part of the equals/hashCode contract, and all fields NOT marked with it
+     * must NOT be part of the contract.
+     */
+    NATURALID(false, "org.hibernate.NaturalId"),
 
     /**
      * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
