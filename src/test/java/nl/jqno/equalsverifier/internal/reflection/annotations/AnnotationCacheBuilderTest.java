@@ -191,11 +191,19 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
-    public void inapplicableAnnotationsAreNotFound() {
+    public void annotationsAreValidated() {
         build(InapplicableAnnotations.class);
 
         assertTypeDoesNotHaveAnnotation(InapplicableAnnotations.class, INAPPLICABLE);
         assertFieldDoesNotHaveAnnotation(InapplicableAnnotations.class, "inapplicable", INAPPLICABLE);
+    }
+
+    @Test
+    public void annotationsArePostProcessed() {
+        build(PostProcessedFieldAnnotation.class);
+
+        assertTypeHasAnnotation(PostProcessedFieldAnnotation.class, POST_PROCESS);
+        assertFieldHasAnnotation(PostProcessedFieldAnnotation.class, "postProcessed", POST_PROCESS);
     }
 
     @Test

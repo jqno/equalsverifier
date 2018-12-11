@@ -36,6 +36,12 @@ public enum TestSupportedAnnotations implements Annotation {
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             return false;
         }
+    },
+    POST_PROCESS(false, "PostProcess") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, POST_PROCESS));
+        }
     };
 
     private final boolean inherits;
@@ -55,10 +61,5 @@ public enum TestSupportedAnnotations implements Annotation {
     @Override
     public boolean inherits() {
         return inherits;
-    }
-
-    @Override
-    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-        return true;
     }
 }

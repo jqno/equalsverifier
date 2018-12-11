@@ -143,7 +143,12 @@ public enum SupportedAnnotations implements Annotation {
      * must not be used in the equals/hashCode contract, unless
      * {@link Warning#SURROGATE_KEY} is suppressed.
      */
-    ID(false, "javax.persistence.Id"),
+    ID(false, "javax.persistence.Id") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, ID));
+        }
+    },
 
     /**
      * Fields in JPA Entities that are marked @NaturalId are part of the
@@ -152,7 +157,12 @@ public enum SupportedAnnotations implements Annotation {
      * part of the equals/hashCode contract, and all fields NOT marked with it
      * must NOT be part of the contract.
      */
-    NATURALID(false, "org.hibernate.NaturalId");
+    NATURALID(false, "org.hibernate.NaturalId") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, NATURALID));
+        }
+    };
 
     private final boolean inherits;
     private final Set<String> partialClassNames;
@@ -171,10 +181,5 @@ public enum SupportedAnnotations implements Annotation {
     @Override
     public boolean inherits() {
         return inherits;
-    }
-
-    @Override
-    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-        return true;
     }
 }

@@ -377,6 +377,11 @@ public class TypeHelper {
         public int inapplicable;
     }
 
+    public static class PostProcessedFieldAnnotation {
+        @PostProcess
+        public int postProcessed;
+    }
+
     public abstract static class AbstractEqualsAndHashCode {
         @Override
         public abstract boolean equals(Object obj);
