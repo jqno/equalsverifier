@@ -30,6 +30,100 @@ public enum SupportedAnnotations implements Annotation {
     NONNULL(true, "Nonnull", "NonNull", "NotNull"),
 
     /**
+     * If a class is marked @Nonnull, @Nullable can be used to revert that
+     * for specific fields.
+     */
+    NULLABLE(false, "Nullable", "CheckForNull"),
+
+    /**
+     * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
+     * EqualsVerifier will not complain about potential
+     * {@link NullPointerException}s being thrown if any of the fields in that
+     * class or package are null.
+     *
+     * Note that @DefaultAnnotation is deprecated. Nevertheless, EqualsVerifier
+     * still supports it.
+     */
+    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false,
+            "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
+        @Override
+        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            Set<String> values = properties.getArrayValues("value");
+            for (String value : values) {
+                for (String className : NONNULL.partialClassNames()) {
+                    if (value.contains(className) && !ignoredAnnotations.contains(value)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+    },
+
+    /**
+     * Represents any annotation that is marked with @Nonnull
+     * and @TypeQualifierDefault. If a class or package is marked with such an
+     * annotation, EqualsVerifier will not complain about potential
+     * {@link NullPointerException}s being thrown if any of the fields in that
+     * class or package are null.
+     */
+    JSR305_DEFAULT_ANNOTATION_NONNULL(false, "") {
+        @Override
+        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            try {
+                Class<?> annotationType = classForName(properties.getClassName());
+                if (annotationType == null) {
+                    return false;
+                }
+                AnnotationCacheBuilder builder =
+                    new AnnotationCacheBuilder(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, ignoredAnnotations);
+                builder.build(annotationType, annotationCache);
+
+                boolean hasNonnullAnnotation = annotationCache.hasClassAnnotation(annotationType, NONNULL);
+                boolean hasValidTypeQualifierDefault = annotationCache.hasClassAnnotation(annotationType, JSR305_TYPE_QUALIFIER_DEFAULT);
+                return hasNonnullAnnotation && hasValidTypeQualifierDefault;
+            }
+            catch (UnsupportedClassVersionError ignored) {
+                return false;
+            }
+        }
+    },
+
+    /**
+     * If an annotation type is marked with JSR305's @TypeQualifierDefault
+     * annotation, it becomes a 'default' annotation for whatever other
+     * annotation it is marked with; for example @Nonnull.
+     */
+    JSR305_TYPE_QUALIFIER_DEFAULT(false, "javax.annotation.meta.TypeQualifierDefault") {
+        @Override
+        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            return properties.getArrayValues("value").contains("FIELD");
+        }
+    },
+
+    /**
+     * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
+     * EqualsVerifier will not complain about potential
+     * {@link NullPointerException}s being thrown if any of the fields in that
+     * class or package are null.
+     */
+    ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
+        @Override
+        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+            Set<String> values = properties.getArrayValues("value");
+            if (values == null) {
+                return true;
+            }
+            for (Object value : values) {
+                if ("FIELD".equals(value)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    },
+
+    /**
      * JPA Entities cannot be final, nor can their fields be.
      * EqualsVerifier will not complain about non-final fields
      * on @Entity, @Embeddable and @MappedSuperclass classes.
@@ -58,79 +152,7 @@ public enum SupportedAnnotations implements Annotation {
      * part of the equals/hashCode contract, and all fields NOT marked with it
      * must NOT be part of the contract.
      */
-    NATURALID(false, "org.hibernate.NaturalId"),
-
-    /**
-     * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
-     * EqualsVerifier will not complain about potential
-     * {@link NullPointerException}s being thrown if any of the fields in that
-     * class or package are null.
-     *
-     * Note that @DefaultAnnotation is deprecated. Nevertheless, EqualsVerifier
-     * still supports it.
-     */
-    FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(false,
-            "edu.umd.cs.findbugs.annotations.DefaultAnnotation", "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
-        @Override
-        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<String> values = properties.getArrayValues("value");
-            for (String value : values) {
-                for (String className : NONNULL.partialClassNames()) {
-                    if (value.contains(className) && !ignoredAnnotations.contains(value)) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-    },
-
-    JSR305_DEFAULT_ANNOTATION_NONNULL(false, "") {
-        @Override
-        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            try {
-                Class<?> annotationType = classForName(properties.getClassName());
-                if (annotationType == null) {
-                    return false;
-                }
-                AnnotationCacheBuilder builder =
-                    new AnnotationCacheBuilder(new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT }, ignoredAnnotations);
-                builder.build(annotationType, annotationCache);
-
-                boolean hasNonnullAnnotation = annotationCache.hasClassAnnotation(annotationType, NONNULL);
-                boolean hasValidTypeQualifierDefault = annotationCache.hasClassAnnotation(annotationType, JSR305_TYPE_QUALIFIER_DEFAULT);
-                return hasNonnullAnnotation && hasValidTypeQualifierDefault;
-            }
-            catch (UnsupportedClassVersionError ignored) {
-                return false;
-            }
-        }
-    },
-
-    JSR305_TYPE_QUALIFIER_DEFAULT(false, "javax.annotation.meta.TypeQualifierDefault") {
-        @Override
-        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            return properties.getArrayValues("value").contains("FIELD");
-        }
-    },
-
-    ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
-        @Override
-        public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-            Set<String> values = properties.getArrayValues("value");
-            if (values == null) {
-                return true;
-            }
-            for (Object value : values) {
-                if ("FIELD".equals(value)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    },
-
-    NULLABLE(false, "Nullable", "CheckForNull");
+    NATURALID(false, "org.hibernate.NaturalId");
 
     private final boolean inherits;
     private final Set<String> partialClassNames;
