@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 
 import java.util.*;
 
-public class Configuration<T> {
+public final class Configuration<T> {
     private final Class<T> type;
     private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
@@ -31,7 +31,7 @@ public class Configuration<T> {
     private final List<T> unequalExamples;
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
-    public Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
+    private Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
                 Set<String> ignoredFields, Set<String> nonnullFields, AnnotationCache annotationCache,
                 CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
