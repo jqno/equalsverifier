@@ -157,7 +157,7 @@ public enum SupportedAnnotations implements Annotation {
      * part of the equals/hashCode contract, and all fields NOT marked with it
      * must NOT be part of the contract.
      */
-    NATURALID(false, "org.hibernate.NaturalId") {
+    NATURALID(false, "org.hibernate.annotations.NaturalId") {
         @Override
         public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
             types.forEach(t -> annotationCache.addClassAnnotation(t, NATURALID));

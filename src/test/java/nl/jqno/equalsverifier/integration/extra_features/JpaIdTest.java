@@ -15,7 +15,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class JpaIdTest extends ExpectedExceptionTestBase {
 
-    @Test@Ignore
+    @Test
     public void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
                 .verify();
@@ -28,7 +28,7 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
@@ -43,7 +43,7 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
                 .verify();
