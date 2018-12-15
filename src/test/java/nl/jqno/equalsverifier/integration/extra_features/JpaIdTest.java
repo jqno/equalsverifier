@@ -5,7 +5,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -49,9 +48,9 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    @Test@Ignore
+    @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
-        expectFailure("<<placeholder>>");
+        expectFailure("Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
                 .verify();

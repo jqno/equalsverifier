@@ -380,6 +380,7 @@ public class EqualsVerifierApi<T> {
         }
 
         Configuration<T> config = buildConfig();
+        config.validate();
 
         verifyWithoutExamples(config);
         verifyWithExamples(config);

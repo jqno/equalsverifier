@@ -118,6 +118,12 @@ public final class Configuration<T> {
         return result;
     }
 
+    public void validate() {
+        if (warningsToSuppress.contains(Warning.SURROGATE_KEY) && annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID)) {
+            throw new IllegalStateException("Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
+        }
+    }
+
     public Class<T> getType() {
         return type;
     }
