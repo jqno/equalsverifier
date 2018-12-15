@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
 import org.junit.Test;
@@ -70,10 +71,28 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdAndNothingIsAnnotatedWithJpaId() {
+        EqualsVerifier.forClass(NaturalIdWithoutJpaIdBusinessKeyPerson.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         expectFailure("Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenIdIsPartOfAProperJpaEntity() {
+        EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class)
                 .verify();
     }
 
@@ -232,6 +251,84 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 return false;
             }
             NaturalIdBusinessKeyPerson other = (NaturalIdBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity);
+        }
+    }
+
+    static final class NaturalIdWithoutJpaIdBusinessKeyPerson {
+        private final UUID id;
+        @NaturalId
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public NaturalIdWithoutJpaIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NaturalIdWithoutJpaIdBusinessKeyPerson)) {
+                return false;
+            }
+            NaturalIdWithoutJpaIdBusinessKeyPerson other = (NaturalIdWithoutJpaIdBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity);
+        }
+    }
+
+    @Entity
+    static final class JpaIdBusinessKeyPersonEntity {
+        @Id
+        private UUID id;
+        private String socialSecurity;
+        private String name;
+        private LocalDate birthdate;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdBusinessKeyPersonEntity)) {
+                return false;
+            }
+            JpaIdBusinessKeyPersonEntity other = (JpaIdBusinessKeyPersonEntity)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(birthdate, other.birthdate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity, name, birthdate);
+        }
+    }
+
+    @Entity
+    static final class NaturalIdBusinessKeyPersonEntity {
+        @Id
+        private UUID id;
+        @NaturalId
+        private String socialSecurity;
+        private String name;
+        private LocalDate birthdate;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NaturalIdBusinessKeyPersonEntity)) {
+                return false;
+            }
+            NaturalIdBusinessKeyPersonEntity other = (NaturalIdBusinessKeyPersonEntity)obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 
