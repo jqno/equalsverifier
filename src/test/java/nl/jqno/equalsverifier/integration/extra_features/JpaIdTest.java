@@ -77,6 +77,20 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
+    @Test
+    public void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
+        expectFailure("Significant fields");
+        EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
+        expectFailure("Significant fields");
+        EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class)
+                .verify();
+    }
+
     static final class JpaIdBusinessKeyPerson {
         @Id
         private final UUID id;
@@ -218,6 +232,67 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 return false;
             }
             NaturalIdBusinessKeyPerson other = (NaturalIdBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity);
+        }
+    }
+
+    static final class NonJpaIdBusinessKeyPerson {
+        @nl.jqno.equalsverifier.testhelpers.annotations.Id
+        private final UUID id;
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public NonJpaIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NonJpaIdBusinessKeyPerson)) {
+                return false;
+            }
+            NonJpaIdBusinessKeyPerson other = (NonJpaIdBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(birthdate, other.birthdate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity, name, birthdate);
+        }
+    }
+
+    static final class NonHibernateNaturalIdBusinessKeyPerson {
+        @Id
+        private final UUID id;
+        @nl.jqno.equalsverifier.testhelpers.annotations.NaturalId
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public NonHibernateNaturalIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
+                return false;
+            }
+            NonHibernateNaturalIdBusinessKeyPerson other = (NonHibernateNaturalIdBusinessKeyPerson)obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 
