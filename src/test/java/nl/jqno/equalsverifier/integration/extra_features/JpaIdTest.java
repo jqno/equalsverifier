@@ -77,10 +77,52 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenIdFieldIsTheOnlyFieldUsed() {
+        expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id.", "Suppress Warning.SURROGATE_KEY if");
+        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                .withOnlyTheseFields("id")
+                .verify();
+    }
+
+    @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         expectFailure("Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
+        expectFailure("Precondition: you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
+        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                .withOnlyTheseFields("socialSecurity")
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
+        expectFailure("Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
+        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                .withIgnoredFields("socialSecurity")
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
+        expectFailure("Precondition: you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                .withOnlyTheseFields("socialSecurity")
+                .verify();
+    }
+
+    @Test
+    public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
+        expectFailure("Precondition: you can't use withIgnoredFields when fields are marked with @NaturalId.");
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                .withIgnoredFields("socialSecurity")
                 .verify();
     }
 

@@ -6,15 +6,19 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public final class Configuration<T> {
     private final Class<T> type;
+    private final Set<String> excludedFields;
+    private final Set<String> includedFields;
     private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
@@ -33,14 +37,16 @@ public final class Configuration<T> {
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
-                Set<String> ignoredFields, Set<String> nonnullFields, AnnotationCache annotationCache,
-                CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
+                Set<String> excludedFields, Set<String> includedFields, Set<String> ignoredFields, Set<String> nonnullFields,
+                AnnotationCache annotationCache, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
                 List<T> equalExamples, List<T> unequalExamples) {
         this.type = type;
         this.typeTag = typeTag;
         this.classAccessor = classAccessor;
         this.prefabValues = prefabValues;
+        this.excludedFields = excludedFields;
+        this.includedFields = includedFields;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
         this.annotationCache = annotationCache;
@@ -68,8 +74,9 @@ public final class Configuration<T> {
         Set<String> ignoredFields = determineIgnoredFields(type, annotationCache, warningsToSuppress, excludedFields, includedFields, actualFields);
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
-        return new Configuration<>(type, typeTag, classAccessor, prefabValues, ignoredFields, nonnullFields, annotationCache,
-            cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass, warningsToSuppress, equalExamples, unequals);
+        return new Configuration<>(type, typeTag, classAccessor, prefabValues, excludedFields, includedFields, ignoredFields,
+            nonnullFields, annotationCache, cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass,
+            warningsToSuppress, equalExamples, unequals);
     }
 
     private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationClassNames) {
@@ -118,10 +125,40 @@ public final class Configuration<T> {
         return result;
     }
 
+    // CHECKSTYLE: ignore CyclomaticComplexity for 28 lines.
+    // CHECKSTYLE: ignore NPathComplexity for 28 lines.
     public void validate() {
-        if (warningsToSuppress.contains(Warning.SURROGATE_KEY) && annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID)) {
-            throw new IllegalStateException("Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
+        boolean hasSurrogateKey = warningsToSuppress.contains(Warning.SURROGATE_KEY);
+        boolean hasNaturalId = annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID);
+        boolean usesWithOnlyTheseFields = !includedFields.isEmpty();
+        boolean usesWithIgnoredFields = !excludedFields.isEmpty();
+
+        if (hasSurrogateKey && hasNaturalId) {
+            fail("you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
         }
+        if (hasSurrogateKey && usesWithOnlyTheseFields) {
+            fail("you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
+        }
+        if (hasSurrogateKey && usesWithIgnoredFields) {
+            fail("you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
+        }
+        if (hasNaturalId && usesWithOnlyTheseFields) {
+            fail("you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
+        }
+        if (hasNaturalId && usesWithIgnoredFields) {
+            fail("you can't use withIgnoredFields when fields are marked with @NaturalId.");
+        }
+        for (Field f : FieldIterable.of(type)) {
+            String fieldName = f.getName();
+            if (includedFields.contains(fieldName) && annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.ID)) {
+                fail("you can't use withOnlyTheseFields on a field marked @Id.\n" +
+                    "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.");
+            }
+        }
+    }
+
+    private void fail(String message) {
+        throw new IllegalStateException("Precondition: " + message);
     }
 
     public Class<T> getType() {
