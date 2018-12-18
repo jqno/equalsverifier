@@ -133,40 +133,36 @@ public final class Configuration<T> {
         return result;
     }
 
-    // CHECKSTYLE: ignore CyclomaticComplexity for 28 lines.
-    // CHECKSTYLE: ignore NPathComplexity for 28 lines.
+    // CHECKSTYLE: ignore VariableDeclarationUsageDistance for 6 lines.
     public void validate() {
-        boolean hasSurrogateKey = warningsToSuppress.contains(Warning.SURROGATE_KEY);
         boolean hasNaturalId = annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID);
+        boolean hasSurrogateKey = warningsToSuppress.contains(Warning.SURROGATE_KEY);
+        boolean hasVersionedEntity = warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
         boolean usesWithOnlyTheseFields = !includedFields.isEmpty();
         boolean usesWithIgnoredFields = !excludedFields.isEmpty();
 
-        if (hasSurrogateKey && hasNaturalId) {
-            fail("you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
-        }
-        if (hasSurrogateKey && usesWithOnlyTheseFields) {
-            fail("you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
-        }
-        if (hasSurrogateKey && usesWithIgnoredFields) {
-            fail("you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
-        }
-        if (hasNaturalId && usesWithOnlyTheseFields) {
-            fail("you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
-        }
-        if (hasNaturalId && usesWithIgnoredFields) {
-            fail("you can't use withIgnoredFields when fields are marked with @NaturalId.");
-        }
+        validate(hasSurrogateKey && hasNaturalId, "you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
+        validate(hasSurrogateKey && usesWithOnlyTheseFields, "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
+        validate(hasSurrogateKey && usesWithIgnoredFields, "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
+        validate(hasNaturalId && usesWithOnlyTheseFields, "you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
+        validate(hasNaturalId && usesWithIgnoredFields, "you can't use withIgnoredFields when fields are marked with @NaturalId.");
+        validate(hasVersionedEntity && hasNaturalId,
+            "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
+        validate(hasVersionedEntity && hasSurrogateKey,
+            "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
+
         for (Field f : FieldIterable.of(type)) {
-            String fieldName = f.getName();
-            if (includedFields.contains(fieldName) && annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.ID)) {
-                fail("you can't use withOnlyTheseFields on a field marked @Id.\n" +
-                    "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.");
-            }
+            boolean fieldIsIncludedAndHasId = includedFields.contains(f.getName()) &&
+                annotationCache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID);
+            validate(fieldIsIncludedAndHasId, "you can't use withOnlyTheseFields on a field marked @Id.\n" +
+                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.");
         }
     }
 
-    private void fail(String message) {
-        throw new IllegalStateException("Precondition: " + message);
+    private void validate(boolean condition, String errorMessage) {
+        if (condition) {
+            throw new IllegalStateException("Precondition: " + errorMessage);
+        }
     }
 
     public Class<T> getType() {

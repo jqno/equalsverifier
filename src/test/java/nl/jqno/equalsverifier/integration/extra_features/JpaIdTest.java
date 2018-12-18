@@ -141,6 +141,22 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
+        expectFailure("Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenWarningVersionedEntityIsSuppressed_givenWarningSurrogateKeyIsAlsoSuppressed() {
+        expectFailure("Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
+        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
     public void succeed_whenIdIsPartOfAProperJpaEntity() {
         EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class)
                 .verify();
