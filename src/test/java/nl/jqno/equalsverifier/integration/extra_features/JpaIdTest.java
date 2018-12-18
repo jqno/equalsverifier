@@ -77,6 +77,20 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
+        EqualsVerifier.forClass(JpaIdBusinessKeyPersonDoesntUseName.class)
+                .withIgnoredFields("name")
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
+        EqualsVerifier.forClass(JpaIdBusinessKeyPersonDoesntUseName.class)
+                .withOnlyTheseFields("socialSecurity", "birthdate")
+                .verify();
+    }
+
+    @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
         expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id.", "Suppress Warning.SURROGATE_KEY if");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
@@ -328,6 +342,36 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
         @Override
         public int hashCode() {
             return Objects.hash(socialSecurity);
+        }
+    }
+
+    static final class JpaIdBusinessKeyPersonDoesntUseName {
+        @Id
+        private final UUID id;
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public JpaIdBusinessKeyPersonDoesntUseName(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdBusinessKeyPersonDoesntUseName)) {
+                return false;
+            }
+            JpaIdBusinessKeyPersonDoesntUseName other = (JpaIdBusinessKeyPersonDoesntUseName)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(birthdate, other.birthdate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity, birthdate);
         }
     }
 

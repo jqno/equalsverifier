@@ -101,11 +101,19 @@ public final class Configuration<T> {
                     .collect(Collectors.toSet());
             }
             else {
-                return actualFields.stream()
+                Set<String> ignored = actualFields.stream()
                     .filter(f -> annotationCache.hasFieldAnnotation(type, f, SupportedAnnotations.ID))
                     .collect(Collectors.toSet());
+                ignored.addAll(determineAnnotationlessIgnoredFields(excludedFields, includedFields, actualFields));
+                return ignored;
             }
         }
+        return determineAnnotationlessIgnoredFields(excludedFields, includedFields, actualFields);
+    }
+
+    private static Set<String> determineAnnotationlessIgnoredFields(Set<String> excludedFields,
+            Set<String> includedFields, Set<String> actualFields) {
+
         if (!includedFields.isEmpty()) {
             return actualFields.stream()
                 .filter(f -> !includedFields.contains(f))
