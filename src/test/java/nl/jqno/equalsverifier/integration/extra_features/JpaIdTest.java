@@ -91,6 +91,25 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void succeed_whenIdIsPartOfAProperJpaEntity() {
+        EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
+        EqualsVerifier.forClass(JpaIdVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                .verify();
+    }
+
+    @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
         expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id.", "Suppress Warning.SURROGATE_KEY if");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
@@ -153,18 +172,6 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
         expectFailure("Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenIdIsPartOfAProperJpaEntity() {
-        EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class)
-                .verify();
-    }
-
-    @Test
-    public void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class)
                 .verify();
     }
 
@@ -498,6 +505,30 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
         @Override
         public int hashCode() {
             return Objects.hash(socialSecurity);
+        }
+    }
+
+    public static final class JpaIdVersionedEntity {
+        @Id
+        private final long id;
+        private final String s;
+
+        public JpaIdVersionedEntity(long id, String s) { this.id = id; this.s = s; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdVersionedEntity)) {
+                return false;
+            }
+            JpaIdVersionedEntity other = (JpaIdVersionedEntity)obj;
+            if (id == 0L && other.id == 0L) {
+                return Objects.equals(s, other.s);
+            }
+            return id == other.id;
+        }
+
+        @Override public int hashCode() {
+            return Float.floatToIntBits(id);
         }
     }
 }
