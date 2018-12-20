@@ -99,6 +99,16 @@ public class AnnotationCacheBuilder {
             f.getType().getDeclaredAnnotations()
                 .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
         });
+        typeDescription.getDeclaredMethods()
+            .filter(m -> m.getName().startsWith("get"))
+            .forEach(m -> {
+                String methodName = m.getName();
+                String correspondingFieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
+                Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addFieldAnnotation(t, correspondingFieldName, a));
+
+                m.getDeclaredAnnotations()
+                    .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
+            });
     }
 
     private void cacheSupportedAnnotations(

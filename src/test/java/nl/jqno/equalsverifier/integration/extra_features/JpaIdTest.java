@@ -110,6 +110,12 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void succeed_whenMethodsAreAnnotatedInsteadOfFields() {
+        EqualsVerifier.forClass(MethodAnnotatedBusinessKeyPerson.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
         expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id.", "Suppress Warning.SURROGATE_KEY if");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
@@ -529,6 +535,39 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
         @Override public int hashCode() {
             return Float.floatToIntBits(id);
+        }
+    }
+
+    static final class MethodAnnotatedBusinessKeyPerson {
+        private final UUID id;
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public MethodAnnotatedBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Id public UUID getId() { return id; }
+        @NaturalId public String getSocialSecurity() { return socialSecurity; }
+        public String getName() { return name; }
+        public LocalDate getBirthdate() { return birthdate; }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof MethodAnnotatedBusinessKeyPerson)) {
+                return false;
+            }
+            MethodAnnotatedBusinessKeyPerson other = (MethodAnnotatedBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity);
         }
     }
 }
