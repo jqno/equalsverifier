@@ -18,7 +18,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenTypeIsNull() {
-        thrown.expect(NullPointerException.class);
+        expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
                 .withPrefabValues(null, red, black);
@@ -26,7 +26,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenFirstPrefabValueIsNull() {
-        thrown.expect(NullPointerException.class);
+        expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
                 .withPrefabValues(FinalPoint.class, null, black);
@@ -34,7 +34,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenSecondPrefabValueIsNull() {
-        thrown.expect(NullPointerException.class);
+        expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
                 .withPrefabValues(FinalPoint.class, red, null);
@@ -42,8 +42,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenThePrefabValuesAreTheSame() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Both values are equal.");
+        expectException(IllegalStateException.class, "Precondition", "both values are equal");
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
                 .withPrefabValues(FinalPoint.class, red, red);
@@ -51,8 +50,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenThePrefabValuesAreEqual() {
-        thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("Both values are equal.");
+        expectException(IllegalStateException.class, "Precondition", "both values are equal");
 
         FinalPoint red1 = new FinalPoint(4, 4);
         FinalPoint red2 = new FinalPoint(4, 4);

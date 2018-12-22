@@ -70,7 +70,7 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenFactoryHas2Parameters_given1GenericParameter() {
-        expectException(IllegalArgumentException.class);
+        expectException(IllegalStateException.class, "Precondition", "number of generic type parameters doesn't match");
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
                 .withGenericPrefabValues(SingleGenericContainer.class, (Func2)(a, b) -> new SingleGenericContainer<>(a));
@@ -122,7 +122,7 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenFactoryHas1Parameter_given2GenericParameters() {
-        expectException(IllegalArgumentException.class);
+        expectException(IllegalStateException.class, "Precondition", "number of generic type parameters doesn't match");
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
                 .withGenericPrefabValues(DoubleGenericContainer.class, (Func1)(a -> new DoubleGenericContainer<>(a, a)));

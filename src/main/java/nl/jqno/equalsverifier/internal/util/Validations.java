@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -41,6 +42,21 @@ public final class Validations {
         unequalExamples.forEach(u ->
             validate(equalExamples.contains(u), "an equal example also appears as unequal example.")
         );
+    }
+
+    public static <T> void validateRedAndBlackPrefabValues(Class<T> type, T red, T black) {
+        validateNotNull(type, "type is null.");
+        validateNotNull(red, "red value is null.");
+        validateNotNull(black, "black value is null.");
+        validate(red.equals(black), "both values are equal.");
+    }
+
+    public static <T> void validateGenericPrefabValues(Class<T> type, PrefabValueFactory<T> factory, int arity) {
+        validateNotNull(type, "type is null.");
+
+        int n = type.getTypeParameters().length;
+        validate(n != arity, "number of generic type parameters doesn't match:\n  " +
+            type.getName() + " has " + n + "\n  Factory has " + arity);
     }
 
     public static void validateWarningsAndFields(Set<Warning> warnings, Set<String> includedFields, Set<String> excludedFields) {
@@ -89,6 +105,12 @@ public final class Validations {
                 "you can't use withOnlyTheseFields on a field marked @Id.\n" +
                 "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.")
         );
+    }
+
+    public static void validateNotNull(Object object, String errormessage) {
+        if (object == null) {
+            throw new NullPointerException("Precondition: " + errormessage);
+        }
     }
 
     private static void validate(boolean condition, String errorMessage) {
