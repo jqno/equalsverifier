@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Removed direct dependency on ASM by re-writing the annotation processor to Byte-Buddy. ([Issue 208](https://github.com/jqno/equalsverifier/issues/208))
+- Various precondition checks now give slightly different error messages if they fail.
 
 ### Fixed
 - EqualsVerifier's test suite now runs on Java 12 EA. ([Issue 209](https://github.com/jqno/equalsverifier/issues/209))
