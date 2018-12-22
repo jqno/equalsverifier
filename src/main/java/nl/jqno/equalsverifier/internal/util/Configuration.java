@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 
 public final class Configuration<T> {
     private final Class<T> type;
-    private final Set<String> excludedFields;
-    private final Set<String> includedFields;
     private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
@@ -35,16 +33,14 @@ public final class Configuration<T> {
 
     // CHECKSTYLE: ignore ParameterNumber for 1 line.
     private Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
-                Set<String> excludedFields, Set<String> includedFields, Set<String> ignoredFields, Set<String> nonnullFields,
-                AnnotationCache annotationCache, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
+                Set<String> ignoredFields, Set<String> nonnullFields, AnnotationCache annotationCache,
+                CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
                 Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
                 List<T> equalExamples, List<T> unequalExamples) {
         this.type = type;
         this.typeTag = typeTag;
         this.classAccessor = classAccessor;
         this.prefabValues = prefabValues;
-        this.excludedFields = excludedFields;
-        this.includedFields = includedFields;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
         this.annotationCache = annotationCache;
@@ -72,8 +68,8 @@ public final class Configuration<T> {
         Set<String> ignoredFields = determineIgnoredFields(type, annotationCache, warningsToSuppress, excludedFields, includedFields, actualFields);
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
-        return new Configuration<>(type, typeTag, classAccessor, prefabValues, excludedFields, includedFields, ignoredFields,
-            nonnullFields, annotationCache, cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass,
+        return new Configuration<>(type, typeTag, classAccessor, prefabValues, ignoredFields, nonnullFields,
+            annotationCache, cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass,
             warningsToSuppress, equalExamples, unequals);
     }
 
@@ -129,12 +125,6 @@ public final class Configuration<T> {
         result.add(classAccessor.getRedObject(typeTag));
         result.add(classAccessor.getBlackObject(typeTag));
         return result;
-    }
-
-    public void validate() {
-        Validations.validateWarnings(warningsToSuppress);
-        Validations.validateWarningsAndFields(warningsToSuppress, includedFields, excludedFields);
-        Validations.validateAnnotations(type, annotationCache, warningsToSuppress, includedFields, excludedFields);
     }
 
     public Class<T> getType() {

@@ -133,20 +133,38 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
-        expectFailure("Precondition: you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
+        expectException(IllegalStateException.class,
+                "Precondition", "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
         EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
                 .withOnlyTheseFields("socialSecurity")
+                .suppress(Warning.SURROGATE_KEY);
+    }
+
+    @Test
+    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
+        expectException(IllegalStateException.class,
+                "Precondition", "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
+        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
-                .verify();
+                .withOnlyTheseFields("socialSecurity");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
-        expectFailure("Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
+        expectException(IllegalStateException.class,
+                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
         EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
                 .withIgnoredFields("socialSecurity")
+                .suppress(Warning.SURROGATE_KEY);
+    }
+
+    @Test
+    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
+        expectException(IllegalStateException.class,
+                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
+        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
-                .verify();
+                .withIgnoredFields("socialSecurity");
     }
 
     @Test
@@ -175,10 +193,10 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenWarningVersionedEntityIsSuppressed_givenWarningSurrogateKeyIsAlsoSuppressed() {
-        expectFailure("Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
+        expectException(IllegalStateException.class,
+                "Precondition", "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                .verify();
+                .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
     }
 
     @Test

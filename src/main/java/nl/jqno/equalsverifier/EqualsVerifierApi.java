@@ -69,6 +69,8 @@ public class EqualsVerifierApi<T> {
      */
     public EqualsVerifierApi<T> suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
+        Validations.validateWarnings(warningsToSuppress);
+        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         assertNoNonnullFields();
         return this;
     }
@@ -153,9 +155,11 @@ public class EqualsVerifierApi<T> {
     public EqualsVerifierApi<T> withIgnoredFields(String... fields) {
         assertNoExistingIncludedFields();
         List<String> toBeExcludedFields = Arrays.asList(fields);
-        validateFieldNamesExist(toBeExcludedFields);
 
+        validateFieldNamesExist(toBeExcludedFields);
         allExcludedFields.addAll(toBeExcludedFields);
+
+        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         return this;
     }
 
@@ -174,8 +178,9 @@ public class EqualsVerifierApi<T> {
         List<String> specifiedFields = Arrays.asList(fields);
 
         validateFieldNamesExist(specifiedFields);
-
         allIncludedFields.addAll(specifiedFields);
+
+        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         return this;
     }
 
@@ -380,7 +385,7 @@ public class EqualsVerifierApi<T> {
         }
 
         Configuration<T> config = buildConfig();
-        config.validate();
+        Validations.validateAnnotations(type, config.getAnnotationCache(), warningsToSuppress, allIncludedFields, allExcludedFields);
 
         verifyWithoutExamples(config);
         verifyWithExamples(config);
