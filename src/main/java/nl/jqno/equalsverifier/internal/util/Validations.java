@@ -6,14 +6,31 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Set;
 
 public final class Validations {
     private Validations() {}
 
+    public static void validateFieldNamesExist(Class<?> type, List<String> givenFields, Set<String> actualFields) {
+        for (String field : givenFields) {
+            validate(!actualFields.contains(field), "class " + type.getSimpleName() + " does not contain field " + field + ".");
+        }
+    }
+
     public static void validateWarnings(Set<Warning> warnings) {
         validate(warnings.contains(Warning.SURROGATE_KEY) && warnings.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY),
             "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
+    }
+
+    public static void validateFields(Set<String> includedFields, Set<String> excludedFields) {
+        validate(!includedFields.isEmpty() && !excludedFields.isEmpty(),
+            "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+    }
+
+    public static void validateNonnullFields(Set<String> nonnullFields, Set<Warning> warnings) {
+        validate(!nonnullFields.isEmpty() && warnings.contains(Warning.NULL_FIELDS),
+            "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
     }
 
     public static void validateWarningsAndFields(Set<Warning> warnings, Set<String> includedFields, Set<String> excludedFields) {
@@ -25,7 +42,13 @@ public final class Validations {
         validate(hasSurrogateKey && usesWithIgnoredFields, "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
-    public static void validateAnnotations(
+    public static void validateGivenAnnotations(Class<?>... givenAnnotations) {
+        for (Class<?> annotation : givenAnnotations) {
+            validate(!annotation.isAnnotation(), "class " + annotation.getCanonicalName() + " is not an annotation.");
+        }
+    }
+
+    public static void validateProcessedAnnotations(
             Class<?> type, AnnotationCache cache, Set<Warning> warnings, Set<String> includedFields, Set<String> excludedFields) {
 
         validateClassAnnotations(type, cache, warnings, includedFields, excludedFields);

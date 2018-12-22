@@ -187,7 +187,7 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenCombiningWithOnlyTheseFieldsAndWithIgnoredFields() {
-        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        expectException(IllegalStateException.class, "Precondition", "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(OneFieldUnused.class)
                 .withOnlyTheseFields("x", "y")
                 .withIgnoredFields("colorNotUsed")
@@ -220,7 +220,7 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsExcepted() {
-        expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
+        expectException(IllegalStateException.class, "Precondition", "class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("thisFieldDoesNotExist");
     }
@@ -250,14 +250,14 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
-        expectException(IllegalArgumentException.class, "Class FinalPoint does not contain field thisFieldDoesNotExist.");
+        expectException(IllegalStateException.class, "Precondition", "class FinalPoint does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withOnlyTheseFields("thisFieldDoesNotExist");
     }
 
     @Test
     public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
-        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        expectException(IllegalStateException.class, "Precondition", "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withOnlyTheseFields("x")
                 .withIgnoredFields("x");
@@ -265,7 +265,7 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
-        expectException(IllegalArgumentException.class, "You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
+        expectException(IllegalStateException.class, "Precondition", "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
         EqualsVerifier.forClass(FinalPoint.class)
                 .withIgnoredFields("x")
                 .withOnlyTheseFields("x");
