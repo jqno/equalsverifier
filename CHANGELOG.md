@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Added
+- Support for JPA's `@Id` and Hibernate's `@NaturalId` annotations. See [the manual](http://jqno.nl/equalsverifier/manual/jpa-entities) for more details. ([Issue 225](https://github.com/jqno/equalsverifier/issues/225))
+
 ### Changed
 - Removed direct dependency on ASM by re-writing the annotation processor to Byte-Buddy. ([Issue 208](https://github.com/jqno/equalsverifier/issues/208))
 
