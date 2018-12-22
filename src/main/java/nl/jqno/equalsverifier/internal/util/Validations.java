@@ -9,6 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
+import static nl.jqno.equalsverifier.internal.util.ListBuilders.listContainsDuplicates;
+
 public final class Validations {
     private Validations() {}
 
@@ -31,6 +33,14 @@ public final class Validations {
     public static void validateNonnullFields(Set<String> nonnullFields, Set<Warning> warnings) {
         validate(!nonnullFields.isEmpty() && warnings.contains(Warning.NULL_FIELDS),
             "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+    }
+
+    public static <T> void validateUnequalExamples(List<T> unequalExamples, List<T> equalExamples) {
+        validate(listContainsDuplicates(unequalExamples), "two objects are equal to each other.");
+
+        unequalExamples.forEach(u ->
+            validate(equalExamples.contains(u), "an equal example also appears as unequal example.")
+        );
     }
 
     public static void validateWarningsAndFields(Set<Warning> warnings, Set<String> includedFields, Set<String> excludedFields) {

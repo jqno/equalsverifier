@@ -34,7 +34,7 @@ public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
-        expectException(IllegalArgumentException.class, "An equal example also appears as unequal example.");
+        expectException(IllegalStateException.class, "Precondition", "an equal example also appears as unequal example.");
         EqualsVerifier.forRelaxedEqualExamples(a, b)
                 .andUnequalExamples(a);
     }
