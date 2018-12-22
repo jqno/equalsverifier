@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -13,9 +13,9 @@ public final class Validations {
     private Validations() {}
 
     public static void validateFieldNamesExist(Class<?> type, List<String> givenFields, Set<String> actualFields) {
-        for (String field : givenFields) {
-            validate(!actualFields.contains(field), "class " + type.getSimpleName() + " does not contain field " + field + ".");
-        }
+        givenFields.forEach(f ->
+            validate(!actualFields.contains(f), "class " + type.getSimpleName() + " does not contain field " + f + ".")
+        );
     }
 
     public static void validateWarnings(Set<Warning> warnings) {
@@ -43,9 +43,9 @@ public final class Validations {
     }
 
     public static void validateGivenAnnotations(Class<?>... givenAnnotations) {
-        for (Class<?> annotation : givenAnnotations) {
-            validate(!annotation.isAnnotation(), "class " + annotation.getCanonicalName() + " is not an annotation.");
-        }
+        Arrays.stream(givenAnnotations).forEach(a ->
+            validate(!a.isAnnotation(), "class " + a.getCanonicalName() + " is not an annotation.")
+        );
     }
 
     public static void validateProcessedAnnotations(
@@ -74,11 +74,11 @@ public final class Validations {
     }
 
     private static void validateFieldAnnotations(Class<?> type, AnnotationCache cache, Set<String> includedFields) {
-        for (Field f : FieldIterable.of(type)) {
+        FieldIterable.of(type).forEach(f ->
             validate(includedFields.contains(f.getName()) && cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID),
                 "you can't use withOnlyTheseFields on a field marked @Id.\n" +
-                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.");
-        }
+                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.")
+        );
     }
 
     private static void validate(boolean condition, String errorMessage) {

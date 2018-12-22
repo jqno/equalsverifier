@@ -153,13 +153,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withIgnoredFields(String... fields) {
-        List<String> toBeExcludedFields = Arrays.asList(fields);
-        allExcludedFields.addAll(toBeExcludedFields);
-
-        Validations.validateFields(allIncludedFields, allExcludedFields);
-        Validations.validateFieldNamesExist(type, toBeExcludedFields, actualFields);
-        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
-        return this;
+        return withFieldsAddedAndValidated(allExcludedFields, Arrays.asList(fields));
     }
 
     /**
@@ -173,8 +167,11 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
-        List<String> specifiedFields = Arrays.asList(fields);
-        allIncludedFields.addAll(specifiedFields);
+        return withFieldsAddedAndValidated(allIncludedFields, Arrays.asList(fields));
+    }
+
+    private EqualsVerifierApi<T> withFieldsAddedAndValidated(Set<String> collection, List<String> specifiedFields) {
+        collection.addAll(specifiedFields);
 
         Validations.validateFields(allIncludedFields, allExcludedFields);
         Validations.validateFieldNamesExist(type, specifiedFields, actualFields);
