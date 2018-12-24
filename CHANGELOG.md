@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Various precondition checks now give slightly different error messages if they fail.
 
 ### Fixed
-- `#withPrefabValues()` no longer throws InaccessibleObjectException when the prefab value is from a module that is not open for reflection and the `--illegal-access=deny` flag is activated. (It will still issue illegal reflective access warnings when `--illegal-access=warn`, though. This is the default setting.) ([Issue 215](https://github.com/jqno/equalsverifier/issues/215))
+- `#withPrefabValues()` no longer throws InaccessibleObjectException when the prefab value is from a module that is not open for reflection and the `--illegal-access=deny` flag is activated. (It will still issue illegal reflective access warnings when `--illegal-access=warn`, though. This is the default setting.) ([Issue 206](https://github.com/jqno/equalsverifier/issues/206) and [Issue 215](https://github.com/jqno/equalsverifier/issues/215))
 - EqualsVerifier's test suite now runs on Java 12 EA. ([Issue 209](https://github.com/jqno/equalsverifier/issues/209))
 
 
