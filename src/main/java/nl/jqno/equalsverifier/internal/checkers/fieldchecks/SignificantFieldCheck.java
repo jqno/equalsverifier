@@ -90,13 +90,13 @@ public class SignificantFieldCheck<T> implements FieldCheck {
                 FieldAccessor referenceAccessor, String fieldName) {
 
         if (shouldAllFieldsBeUsed(referenceAccessor) && isFieldEligible(referenceAccessor)) {
-            assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
-
             boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
-            assertTrue(Formatter.of("Significant fields: equals does not use %%, or it is stateless.", fieldName),
-                    fieldShouldBeIgnored || equalsChanged);
-            assertTrue(Formatter.of("Significant fields: equals should not use %%, but it does.", fieldName),
-                    !fieldShouldBeIgnored || !equalsChanged || skipCertainTestsThatDontMatterWhenValuesAreNull);
+            boolean thisFieldIsMarkedAsId = annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.ID);
+            boolean anotherFieldIsMarkedAsId = !thisFieldIsMarkedAsId && annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID);
+
+            assertTrue(Formatter.of("Significant fields: equals does not use %%.", fieldName), equalToItself);
+            assertFieldShouldHaveBeenUsed(fieldName, equalsChanged, fieldShouldBeIgnored, thisFieldIsMarkedAsId, anotherFieldIsMarkedAsId);
+            assertFieldShouldNotBeUsed(fieldName, equalsChanged, fieldShouldBeIgnored, thisFieldIsMarkedAsId, anotherFieldIsMarkedAsId);
         }
     }
 
@@ -111,5 +111,43 @@ public class SignificantFieldCheck<T> implements FieldCheck {
                 !referenceAccessor.fieldIsTransient() &&
                 !referenceAccessor.fieldIsEmptyOrSingleValueEnum() &&
                 !annotationCache.hasFieldAnnotation(type, referenceAccessor.getField().getName(), SupportedAnnotations.TRANSIENT);
+    }
+
+    private void assertFieldShouldHaveBeenUsed(String fieldName, boolean equalsChanged, boolean fieldShouldBeIgnored,
+            boolean thisFieldIsMarkedAsId, boolean anotherFieldIsMarkedAsId) {
+
+        final String message;
+        if (thisFieldIsMarkedAsId) {
+            message = "Significant fields: %% is marked @Id and Warning.SURROGATE_KEY is suppressed, but equals does not use it.";
+        }
+        else if (anotherFieldIsMarkedAsId) {
+            message = "Significant fields: equals does not use %%, or it is stateless.\n" +
+                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id field(s).";
+        }
+        else {
+            message = "Significant fields: equals does not use %%, or it is stateless.";
+        }
+
+        assertTrue(Formatter.of(message, fieldName), fieldShouldBeIgnored || equalsChanged);
+    }
+
+    private void assertFieldShouldNotBeUsed(String fieldName, boolean equalsChanged, boolean fieldShouldBeIgnored,
+            boolean thisFieldIsMarkedAsId, boolean anotherFieldIsMarkedAsId) {
+
+        final String message;
+        if (thisFieldIsMarkedAsId) {
+            message = "Significant fields: %% is marked @Id so equals should not use it, but it does.\n" +
+                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id field(s).";
+        }
+        else if (anotherFieldIsMarkedAsId) {
+            message = "Significant fields: equals should not use %% because Warning.SURROGATE_KEY is suppressed" +
+                " and it is not marked as @Id, but it does.";
+        }
+        else {
+            message = "Significant fields: equals should not use %%, but it does.";
+        }
+
+        assertTrue(Formatter.of(message, fieldName),
+            !fieldShouldBeIgnored || !equalsChanged || skipCertainTestsThatDontMatterWhenValuesAreNull);
     }
 }

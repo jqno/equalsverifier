@@ -15,6 +15,8 @@ public enum TestSupportedAnnotations implements Annotation {
     FIELD_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention"),
     TYPEUSE_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationRuntimeRetention"),
     TYPEUSE_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationClassRetention"),
+    METHOD_RUNTIME_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationRuntimeRetention"),
+    METHOD_CLASS_RETENTION(false, "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationClassRetention"),
 
     TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeAnnotationRuntimeRetention"),
     TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
@@ -22,6 +24,8 @@ public enum TestSupportedAnnotations implements Annotation {
     FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
     TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeUseAnnotationRuntimeRetention"),
     TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, TypeUseAnnotationRuntimeRetention.class.getCanonicalName()),
+    METHOD_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "MethodAnnotationRuntimeRetention"),
+    METHOD_RUNTIME_RETENTION_CANONICAL_CLASSNAME(false, MethodAnnotationRuntimeRetention.class.getCanonicalName()),
 
     TYPE_INHERITS(true, "TypeAnnotationInherits"),
     TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
@@ -35,6 +39,12 @@ public enum TestSupportedAnnotations implements Annotation {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
             return false;
+        }
+    },
+    POST_PROCESS(false, "PostProcess") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, POST_PROCESS));
         }
     };
 
@@ -55,10 +65,5 @@ public enum TestSupportedAnnotations implements Annotation {
     @Override
     public boolean inherits() {
         return inherits;
-    }
-
-    @Override
-    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-        return true;
     }
 }

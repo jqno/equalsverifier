@@ -163,6 +163,17 @@ public enum Warning {
     STRICT_INHERITANCE,
 
     /**
+     * Disables the check that fields marked with the @Id annotation in JPA
+     * entities may not be used in the {@code equals} contract.
+     * <p>
+     * When this warning is suppressed, the fields marked with @Id will become
+     * the entity's surrogate key. Only these fields can now be part of the
+     * {@code equals} contract; all other fields may no longer be used in
+     * {@code equals}.
+     */
+    SURROGATE_KEY,
+
+    /**
      * Disables the check that transient fields not be part of the
      * {@code equals} contract.
      * <p>

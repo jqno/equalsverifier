@@ -47,5 +47,15 @@ public interface Annotation {
      *          to ignore.
      * @return True if the annotation is valid and can be used as intended.
      */
-    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations);
+    public default boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
+        return true;
+    }
+
+    /**
+     * Performs post processing after the annotation was added to the cache.
+     *
+     * @param types The types that the annotation applies to.
+     * @param annotationCache A cache containing all annotations for known types.
+     */
+    public default void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {}
 }

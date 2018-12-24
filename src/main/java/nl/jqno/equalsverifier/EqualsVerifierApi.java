@@ -69,7 +69,9 @@ public class EqualsVerifierApi<T> {
      */
     public EqualsVerifierApi<T> suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
-        assertNoNonnullFields();
+        Validations.validateWarnings(warningsToSuppress);
+        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
+        Validations.validateNonnullFields(nonnullFields, warningsToSuppress);
         return this;
     }
 
@@ -151,12 +153,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withIgnoredFields(String... fields) {
-        assertNoExistingIncludedFields();
-        List<String> toBeExcludedFields = Arrays.asList(fields);
-        validateFieldNamesExist(toBeExcludedFields);
-
-        allExcludedFields.addAll(toBeExcludedFields);
-        return this;
+        return withFieldsAddedAndValidated(allExcludedFields, Arrays.asList(fields));
     }
 
     /**
@@ -170,12 +167,15 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
-        assertNoExistingExcludedFields();
-        List<String> specifiedFields = Arrays.asList(fields);
+        return withFieldsAddedAndValidated(allIncludedFields, Arrays.asList(fields));
+    }
 
-        validateFieldNamesExist(specifiedFields);
+    private EqualsVerifierApi<T> withFieldsAddedAndValidated(Set<String> collection, List<String> specifiedFields) {
+        collection.addAll(specifiedFields);
 
-        allIncludedFields.addAll(specifiedFields);
+        Validations.validateFields(allIncludedFields, allExcludedFields);
+        Validations.validateFieldNamesExist(type, specifiedFields, actualFields);
+        Validations.validateWarningsAndFields(warningsToSuppress, allIncludedFields, allExcludedFields);
         return this;
     }
 
@@ -193,9 +193,9 @@ public class EqualsVerifierApi<T> {
      */
     public EqualsVerifierApi<T> withNonnullFields(String... fields) {
         List<String> fieldsAsList = Arrays.asList(fields);
-        validateFieldNamesExist(fieldsAsList);
         nonnullFields.addAll(fieldsAsList);
-        assertNoNonnullFields();
+        Validations.validateFieldNamesExist(type, fieldsAsList, actualFields);
+        Validations.validateNonnullFields(nonnullFields, warningsToSuppress);
         return this;
     }
 
@@ -211,7 +211,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public EqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
-        validateAnnotationsAreValid(annotations);
+        Validations.validateGivenAnnotations(annotations);
         for (Class<?> ignoredAnnotation : annotations) {
             ignoredAnnotationClassNames.add(ignoredAnnotation.getCanonicalName());
         }
@@ -289,42 +289,6 @@ public class EqualsVerifierApi<T> {
         return this;
     }
 
-    private void assertNoNonnullFields() {
-        if (!nonnullFields.isEmpty() && warningsToSuppress.contains(Warning.NULL_FIELDS)) {
-            throw new IllegalArgumentException("You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
-        }
-    }
-
-    private void assertNoExistingExcludedFields() {
-        assertNoExistingFields(allExcludedFields);
-    }
-
-    private void assertNoExistingIncludedFields() {
-        assertNoExistingFields(allIncludedFields);
-    }
-
-    private void assertNoExistingFields(Set<String> fields) {
-        if (!fields.isEmpty()) {
-            throw new IllegalArgumentException("You can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        }
-    }
-
-    private void validateFieldNamesExist(List<String> givenFields) {
-        for (String field : givenFields) {
-            if (!actualFields.contains(field)) {
-                throw new IllegalArgumentException("Class " + type.getSimpleName() + " does not contain field " + field + ".");
-            }
-        }
-    }
-
-    private void validateAnnotationsAreValid(Class<?>... givenAnnotations) {
-        for (Class<?> annotation : givenAnnotations) {
-            if (!annotation.isAnnotation()) {
-                throw new IllegalArgumentException("Class " + annotation.getCanonicalName() + " is not an annotation.");
-            }
-        }
-    }
-
     /**
      * Performs the verification of the contracts for {@code equals} and
      * {@code hashCode} and throws an {@link AssertionError} if there is a
@@ -380,6 +344,7 @@ public class EqualsVerifierApi<T> {
         }
 
         Configuration<T> config = buildConfig();
+        Validations.validateProcessedAnnotations(type, config.getAnnotationCache(), warningsToSuppress, allIncludedFields, allExcludedFields);
 
         verifyWithoutExamples(config);
         verifyWithExamples(config);

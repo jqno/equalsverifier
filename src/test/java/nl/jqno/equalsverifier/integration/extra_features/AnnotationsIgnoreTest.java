@@ -45,7 +45,7 @@ public class AnnotationsIgnoreTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
-        expectException(IllegalArgumentException.class, "Class", "java.lang.String", "is not an annotation");
+        expectException(IllegalStateException.class, "class", "java.lang.String", "is not an annotation");
         EqualsVerifier.forClass(ImmutableByAnnotation.class)
                 .withIgnoredAnnotations(String.class);
     }

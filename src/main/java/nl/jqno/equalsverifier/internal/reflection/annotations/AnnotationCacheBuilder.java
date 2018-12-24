@@ -84,7 +84,7 @@ public class AnnotationCacheBuilder {
     private void visitClass(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
         Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addClassAnnotation(t, a));
         typeDescription.getDeclaredAnnotations()
-            .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+            .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
     }
 
     private void visitFields(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
@@ -93,20 +93,32 @@ public class AnnotationCacheBuilder {
 
             // Regular field annotations
             f.getDeclaredAnnotations()
-                .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
 
             // Type-use annotations
             f.getType().getDeclaredAnnotations()
-                .forEach(a -> cacheSupportedAnnotations(a, cache, addToCache, inheriting));
+                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
         });
+        typeDescription.getDeclaredMethods()
+            .filter(m -> m.getName().startsWith("get"))
+            .forEach(m -> {
+                String methodName = m.getName();
+                String correspondingFieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
+                Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addFieldAnnotation(t, correspondingFieldName, a));
+
+                m.getDeclaredAnnotations()
+                    .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
+            });
     }
 
     private void cacheSupportedAnnotations(
-            AnnotationDescription annotation, AnnotationCache cache, Consumer<Annotation> addToCache, boolean inheriting) {
+            AnnotationDescription annotation, Set<Class<?>> types, AnnotationCache cache, Consumer<Annotation> addToCache, boolean inheriting) {
 
         if (ignoredAnnotations.contains(annotation.getAnnotationType().getCanonicalName())) {
             return;
         }
+
+        Consumer<Annotation> postProcess = a -> a.postProcess(types, cache);
 
         AnnotationProperties props = buildAnnotationProperties(annotation);
         supportedAnnotations
@@ -114,7 +126,7 @@ public class AnnotationCacheBuilder {
             .filter(sa -> matches(annotation, sa))
             .filter(sa -> !inheriting || sa.inherits())
             .filter(sa -> sa.validate(props, cache, ignoredAnnotations))
-            .forEach(addToCache);
+            .forEach(addToCache.andThen(postProcess));
     }
 
     private AnnotationProperties buildAnnotationProperties(AnnotationDescription annotation) {

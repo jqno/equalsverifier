@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
+import nl.jqno.equalsverifier.Warning;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,18 +30,10 @@ public enum SupportedAnnotations implements Annotation {
     NONNULL(true, "Nonnull", "NonNull", "NotNull"),
 
     /**
-     * JPA Entities cannot be final, nor can their fields be.
-     * EqualsVerifier will not complain about non-final fields
-     * on @Entity, @Embeddable and @MappedSuperclass classes.
+     * If a class is marked @Nonnull, @Nullable can be used to revert that
+     * for specific fields.
      */
-    ENTITY(false, "javax.persistence.Entity", "javax.persistence.Embeddable", "javax.persistence.MappedSuperclass"),
-
-    /**
-     * Fields in JPA Entities that are marked @Transient should not be included
-     * in the equals/hashCode contract, like fields that have the Java
-     * transient modifier. EqualsVerifier will treat these the same.
-     */
-    TRANSIENT(true, "javax.persistence.Transient"),
+    NULLABLE(false, "Nullable", "CheckForNull"),
 
     /**
      * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
@@ -66,6 +60,13 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
+    /**
+     * Represents any annotation that is marked with @Nonnull
+     * and @TypeQualifierDefault. If a class or package is marked with such an
+     * annotation, EqualsVerifier will not complain about potential
+     * {@link NullPointerException}s being thrown if any of the fields in that
+     * class or package are null.
+     */
     JSR305_DEFAULT_ANNOTATION_NONNULL(false, "") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
@@ -88,6 +89,11 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
+    /**
+     * If an annotation type is marked with JSR305's @TypeQualifierDefault
+     * annotation, it becomes a 'default' annotation for whatever other
+     * annotation it is marked with; for example @Nonnull.
+     */
     JSR305_TYPE_QUALIFIER_DEFAULT(false, "javax.annotation.meta.TypeQualifierDefault") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
@@ -95,6 +101,12 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
+    /**
+     * If a class or package is marked with @DefaultAnnotation(Nonnull.class),
+     * EqualsVerifier will not complain about potential
+     * {@link NullPointerException}s being thrown if any of the fields in that
+     * class or package are null.
+     */
     ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
         @Override
         public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
@@ -111,7 +123,46 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
-    NULLABLE(false, "Nullable", "CheckForNull");
+    /**
+     * JPA Entities cannot be final, nor can their fields be.
+     * EqualsVerifier will not complain about non-final fields
+     * on @Entity, @Embeddable and @MappedSuperclass classes.
+     */
+    ENTITY(false, "javax.persistence.Entity", "javax.persistence.Embeddable", "javax.persistence.MappedSuperclass"),
+
+    /**
+     * Fields in JPA Entities that are marked @Transient should not be included
+     * in the equals/hashCode contract, like fields that have the Java
+     * transient modifier. EqualsVerifier will treat these the same.
+     */
+    TRANSIENT(true, "javax.persistence.Transient"),
+
+    /**
+     * Fields in JPA Entities that are marked @Id are usually part of the
+     * entity's surrogate key. EqualsVerifier will therefore assume that it
+     * must not be used in the equals/hashCode contract, unless
+     * {@link Warning#SURROGATE_KEY} is suppressed.
+     */
+    ID(false, "javax.persistence.Id") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, ID));
+        }
+    },
+
+    /**
+     * Fields in JPA Entities that are marked @NaturalId are part of the
+     * entity's natural/business identity. If a @NaturalId annotation is
+     * present in an entity, all fields marked with this annotation must be
+     * part of the equals/hashCode contract, and all fields NOT marked with it
+     * must NOT be part of the contract.
+     */
+    NATURALID(false, "org.hibernate.annotations.NaturalId") {
+        @Override
+        public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
+            types.forEach(t -> annotationCache.addClassAnnotation(t, NATURALID));
+        }
+    };
 
     private final boolean inherits;
     private final Set<String> partialClassNames;
@@ -130,10 +181,5 @@ public enum SupportedAnnotations implements Annotation {
     @Override
     public boolean inherits() {
         return inherits;
-    }
-
-    @Override
-    public boolean validate(AnnotationProperties properties, AnnotationCache annotationCache, Set<String> ignoredAnnotations) {
-        return true;
     }
 }

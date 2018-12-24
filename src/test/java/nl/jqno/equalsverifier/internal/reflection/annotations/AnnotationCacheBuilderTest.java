@@ -105,21 +105,43 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void findRuntimeAnnotationInMethod() {
+        build(AnnotatedMethods.class);
+
+        assertFieldHasAnnotation(AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_RUNTIME_RETENTION);
+        assertFieldHasAnnotation(AnnotatedMethods.class, BOTH_RETENTIONS, METHOD_RUNTIME_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedMethods.class, CLASS_RETENTION, METHOD_RUNTIME_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedMethods.class, NO_RETENTION, METHOD_RUNTIME_RETENTION);
+    }
+
+    @Test
+    public void findClassAnnotationInMethod() {
+        build(AnnotatedMethods.class);
+
+        assertFieldHasAnnotation(AnnotatedMethods.class, CLASS_RETENTION, METHOD_CLASS_RETENTION);
+        assertFieldHasAnnotation(AnnotatedMethods.class, BOTH_RETENTIONS, METHOD_CLASS_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_CLASS_RETENTION);
+        assertFieldDoesNotHaveAnnotation(AnnotatedMethods.class, NO_RETENTION, METHOD_CLASS_RETENTION);
+    }
+
+    @Test
     public void findPartialAnnotationName() {
-        build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
+        build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class, AnnotatedMethods.class);
 
         assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
         assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
         assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
     }
 
     @Test
     public void findFullyQualifiedAnnotationName() {
-        build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class);
+        build(AnnotatedWithRuntime.class, AnnotatedFields.class, AnnotatedTypes.class, AnnotatedMethods.class);
 
         assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
         assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
         assertFieldHasAnnotation(AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+        assertFieldHasAnnotation(AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
     }
 
     @Test
@@ -191,11 +213,19 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
-    public void inapplicableAnnotationsAreNotFound() {
+    public void annotationsAreValidated() {
         build(InapplicableAnnotations.class);
 
         assertTypeDoesNotHaveAnnotation(InapplicableAnnotations.class, INAPPLICABLE);
         assertFieldDoesNotHaveAnnotation(InapplicableAnnotations.class, "inapplicable", INAPPLICABLE);
+    }
+
+    @Test
+    public void annotationsArePostProcessed() {
+        build(PostProcessedFieldAnnotation.class);
+
+        assertTypeHasAnnotation(PostProcessedFieldAnnotation.class, POST_PROCESS);
+        assertFieldHasAnnotation(PostProcessedFieldAnnotation.class, "postProcessed", POST_PROCESS);
     }
 
     @Test

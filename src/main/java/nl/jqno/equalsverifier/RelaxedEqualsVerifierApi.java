@@ -1,9 +1,10 @@
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.internal.util.Validations;
+
 import java.util.List;
 
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLeastOne;
-import static nl.jqno.equalsverifier.internal.util.ListBuilders.listContainsDuplicates;
 
 /**
  * API class for
@@ -52,15 +53,7 @@ public class RelaxedEqualsVerifierApi<T> {
     @SafeVarargs
     public final EqualsVerifierApi<T> andUnequalExamples(T first, T... more) {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
-        if (listContainsDuplicates(unequalExamples)) {
-            throw new IllegalArgumentException("Two objects are equal to each other.");
-        }
-        for (T example : unequalExamples) {
-            if (equalExamples.contains(example)) {
-                throw new IllegalArgumentException("An equal example also appears as unequal example.");
-            }
-        }
-
+        Validations.validateUnequalExamples(unequalExamples, equalExamples);
         return new EqualsVerifierApi<>(type, equalExamples, unequalExamples)
             .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }

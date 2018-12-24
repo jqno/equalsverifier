@@ -359,6 +359,25 @@ public class TypeHelper {
         public int noRetention;
     }
 
+    public static class AnnotatedMethods {
+        private int runtimeRetention;
+        private int classRetention;
+        private int bothRetentions;
+        private int noRetention;
+
+        @MethodAnnotationRuntimeRetention
+        public int getRuntimeRetention() { return runtimeRetention; }
+
+        @MethodAnnotationClassRetention
+        public int getClassRetention() { return classRetention; }
+
+        @MethodAnnotationRuntimeRetention
+        @MethodAnnotationClassRetention
+        public int getBothRetentions() { return bothRetentions; }
+
+        public int getNoRetention() { return noRetention; }
+    }
+
     @TypeAnnotationInherits
     @TypeAnnotationDoesntInherit
     public static class SuperclassWithAnnotations {
@@ -375,6 +394,11 @@ public class TypeHelper {
     public static class InapplicableAnnotations {
         @Inapplicable
         public int inapplicable;
+    }
+
+    public static class PostProcessedFieldAnnotation {
+        @PostProcess
+        public int postProcessed;
     }
 
     public abstract static class AbstractEqualsAndHashCode {

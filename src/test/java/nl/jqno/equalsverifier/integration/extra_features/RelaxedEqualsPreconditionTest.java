@@ -11,9 +11,9 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     private static final String DIFFERENT_CLASSES = "are of different classes";
     private static final String TWO_IDENTICAL_OBJECTS_APPEAR = "two identical objects appear";
     private static final String NOT_ALL_EQUAL_OBJECT_ARE_EQUAL = "not all equal objects are equal";
-    private static final String EQUAL_IS_UNEQUAL = "An equal example also appears as unequal example.";
+    private static final String EQUAL_IS_UNEQUAL = "an equal example also appears as unequal example.";
     private static final String OBJECT_APPEARS_TWICE = "the same object appears twice";
-    private static final String TWO_OBJECTS_ARE_EQUAL = "Two objects are equal to each other";
+    private static final String TWO_OBJECTS_ARE_EQUAL = "two objects are equal to each other";
 
     private Multiple red;
     private Multiple black;
@@ -111,21 +111,21 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAnEqualExampleIsAlsoGivenAsAnUnequalExample() {
-        expectException(IllegalArgumentException.class, EQUAL_IS_UNEQUAL);
+        expectException(IllegalStateException.class, PRECONDITION, EQUAL_IS_UNEQUAL);
         EqualsVerifier.forRelaxedEqualExamples(red, green)
                 .andUnequalExample(green);
     }
 
     @Test
     public void fail_whenTheSameUnequalExampleIsGivenTwice() {
-        expectException(IllegalArgumentException.class, TWO_OBJECTS_ARE_EQUAL);
+        expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
         EqualsVerifier.forRelaxedEqualExamples(red, black)
                 .andUnequalExamples(green, green);
     }
 
     @Test
     public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
-        expectException(IllegalArgumentException.class, TWO_OBJECTS_ARE_EQUAL);
+        expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
         Multiple xx = new Multiple(2, 2);
         EqualsVerifier.forRelaxedEqualExamples(red, black)
                 .andUnequalExamples(green, xx);

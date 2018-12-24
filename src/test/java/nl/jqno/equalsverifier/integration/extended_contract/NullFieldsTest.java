@@ -100,14 +100,16 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
-        expectException(IllegalArgumentException.class, "Class MixedNullFields does not contain field thisFieldDoesNotExist.");
+        expectException(IllegalStateException.class,
+                "Precondition", "class MixedNullFields does not contain field thisFieldDoesNotExist.");
         EqualsVerifier.forClass(MixedNullFields.class)
                 .withNonnullFields("thisFieldDoesNotExist");
     }
 
     @Test
     public void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
-        expectException(IllegalArgumentException.class, "You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        expectException(IllegalStateException.class,
+                "Precondition", "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         EqualsVerifier.forClass(MixedNullFields.class)
                 .withNonnullFields("o")
                 .suppress(Warning.NULL_FIELDS);
@@ -115,7 +117,8 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
-        expectException(IllegalArgumentException.class, "You can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        expectException(IllegalStateException.class,
+                "Precondition", "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         EqualsVerifier.forClass(MixedNullFields.class)
                 .suppress(Warning.NULL_FIELDS)
                 .withNonnullFields("o");
