@@ -34,6 +34,14 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
+        expectFailure("Significant fields", "equals does not use id");
+        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                .withIgnoredAnnotations(Id.class)
+                .verify();
+    }
+
+    @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
         expectFailure("Significant fields", "id is marked @Id", "equals should not use it", "Suppress Warning.SURROGATE_KEY if");
         EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
@@ -73,6 +81,14 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdAndNothingIsAnnotatedWithJpaId() {
         EqualsVerifier.forClass(NaturalIdWithoutJpaIdBusinessKeyPerson.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
+        expectFailure("Significant fields", "equals does not use name");
+        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                .withIgnoredAnnotations(NaturalId.class)
                 .verify();
     }
 
