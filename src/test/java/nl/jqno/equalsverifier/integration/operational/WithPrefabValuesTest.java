@@ -5,6 +5,8 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     private final FinalPoint red = new FinalPoint(1, 2);
     private final FinalPoint black = new FinalPoint(2, 3);
@@ -57,5 +59,12 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
                 .withPrefabValues(FinalPoint.class, red1, red2);
+    }
+
+    @Test
+    public void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
+        EqualsVerifier.forClass(FinalPoint.class)
+                .withPrefabValues(LocalDate.class, LocalDate.of(2018, 12, 24), LocalDate.of(2018, 12, 25))
+                .verify();
     }
 }
