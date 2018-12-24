@@ -11,6 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+
+<a name="3.x"/>
+
+## [3.1]
 ### Added
 - Support for JPA's `@Id` and Hibernate's `@NaturalId` annotations. See [the manual](http://jqno.nl/equalsverifier/manual/jpa-entities) for more details. ([Issue 225](https://github.com/jqno/equalsverifier/issues/225))
 
@@ -22,8 +27,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `#withPrefabValues()` no longer throws InaccessibleObjectException when the prefab value is from a module that is not open for reflection and the `--illegal-access=deny` flag is activated. (It will still issue illegal reflective access warnings when `--illegal-access=warn`, though. This is the default setting.) ([Issue 206](https://github.com/jqno/equalsverifier/issues/206) and [Issue 215](https://github.com/jqno/equalsverifier/issues/215))
 - EqualsVerifier's test suite now runs on Java 12 EA. ([Issue 209](https://github.com/jqno/equalsverifier/issues/209))
 
-
-<a name="3.x"/>
 
 ## [3.0.3] - 2018-11-16
 ### Fixed
@@ -621,6 +624,8 @@ You can now use EqualsVerifier!
 
 
 [Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.3...HEAD
+
+[3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.3...equalsverifier-3.1
 
 [3.0.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...equalsverifier-3.0.3
 [3.0.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.1...equalsverifier-3.0.2
