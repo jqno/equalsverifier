@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
-## [3.1]
+## [3.1] - 2018-12-24
 ### Added
 - Support for JPA's `@Id` and Hibernate's `@NaturalId` annotations. See [the manual](http://jqno.nl/equalsverifier/manual/jpa-entities) for more details. ([Issue 225](https://github.com/jqno/equalsverifier/issues/225))
 
