@@ -100,7 +100,7 @@ public class AnnotationCacheBuilder {
                 .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
         });
         typeDescription.getDeclaredMethods()
-            .filter(m -> m.getName().startsWith("get"))
+            .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3)
             .forEach(m -> {
                 String methodName = m.getName();
                 String correspondingFieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);

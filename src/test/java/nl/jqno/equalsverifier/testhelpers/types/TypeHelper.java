@@ -409,6 +409,10 @@ public class TypeHelper {
         public abstract int hashCode();
     }
 
+    public static final class ClassContainsMethodNamedGet {
+        public int get() { return 1; }
+    }
+
     @SuppressWarnings("serial")
     public static final class LoadedBySystemClassLoader extends Exception {}
 }

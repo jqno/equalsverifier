@@ -243,6 +243,11 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void classWithMethodNamedGetDoesNotThrow() {
+        build(ClassContainsMethodNamedGet.class);
+    }
+
+    @Test
     public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
         build(LoadedBySystemClassLoader.class);
     }
