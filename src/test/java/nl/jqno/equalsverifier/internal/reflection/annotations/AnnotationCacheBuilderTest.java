@@ -248,6 +248,11 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void classWithDifficultAnnotationDoesNotThrow() {
+        build(DifficultAnnotationHolder.class);
+    }
+
+    @Test
     public void loadedBySystemClassLoaderDoesNotThrowNullPointerException() {
         build(LoadedBySystemClassLoader.class);
     }

@@ -413,6 +413,15 @@ public class TypeHelper {
         public int get() { return 1; }
     }
 
+    @DifficultAnnotation
+    public static final class DifficultAnnotationHolder {
+        @DifficultAnnotation
+        private int i;
+
+        @DifficultAnnotation
+        public int getI() { return i; }
+    }
+
     @SuppressWarnings("serial")
     public static final class LoadedBySystemClassLoader extends Exception {}
 }

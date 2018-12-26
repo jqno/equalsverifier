@@ -133,7 +133,7 @@ public class AnnotationCacheBuilder {
         AnnotationProperties props = new AnnotationProperties(annotation.getAnnotationType().getCanonicalName());
         annotation.getAnnotationType().getDeclaredMethods().forEach(m -> {
             Object val = annotation.getValue(m).resolve();
-            if (val.getClass().isArray()) {
+            if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
                 Object[] array = (Object[])val;
                 Set<String> values = new HashSet<>();
                 for (Object obj : array) {
