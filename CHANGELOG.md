@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
+## [3.1.1] - 2018-12-26
+### Fixed
+- Classes with a method named `get()` cause StringIndexOutOfBoundsException. ([Issue 226](https://github.com/jqno/equalsverifier/issues/226))
+
 ## [3.1] - 2018-12-24
 ### Added
 - Support for JPA's `@Id` and Hibernate's `@NaturalId` annotations. See [the manual](http://jqno.nl/equalsverifier/manual/jpa-entities) for more details. ([Issue 225](https://github.com/jqno/equalsverifier/issues/225))
@@ -623,8 +627,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.3...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.1...HEAD
 
+[3.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1...equalsverifier-3.1.1
 [3.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.3...equalsverifier-3.1
 
 [3.0.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.0.2...equalsverifier-3.0.3
