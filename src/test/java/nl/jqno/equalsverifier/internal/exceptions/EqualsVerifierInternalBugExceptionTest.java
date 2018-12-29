@@ -5,12 +5,12 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-public class EqualsVerifierBugExceptionTest {
-    private EqualsVerifierBugException actual;
+public class EqualsVerifierInternalBugExceptionTest {
+    private EqualsVerifierInternalBugException actual;
 
     @Test
     public void exceptionHasNoSpecificMessage() {
-        actual = new EqualsVerifierBugException();
+        actual = new EqualsVerifierInternalBugException();
 
         assertNoMessage();
         assertNoCause();
@@ -19,7 +19,7 @@ public class EqualsVerifierBugExceptionTest {
     @Test
     public void exceptionHasSpecificMessage() {
         String message = "my message";
-        actual = new EqualsVerifierBugException(message);
+        actual = new EqualsVerifierInternalBugException(message);
 
         assertMessage(message);
         assertNoCause();
@@ -28,7 +28,7 @@ public class EqualsVerifierBugExceptionTest {
     @Test
     public void exceptionHasACause() {
         Throwable cause = new IllegalStateException("cause of the bug");
-        actual = new EqualsVerifierBugException(cause);
+        actual = new EqualsVerifierInternalBugException(cause);
 
         assertNoMessage();
         assertCause(cause);
@@ -38,7 +38,7 @@ public class EqualsVerifierBugExceptionTest {
     public void exceptionHasMessageAndCause() {
         String message = "some message";
         Throwable cause = new IllegalArgumentException("some cause");
-        actual = new EqualsVerifierBugException(message, cause);
+        actual = new EqualsVerifierInternalBugException(message, cause);
 
         assertMessage(message);
         assertCause(cause);

@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierBugException;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -69,7 +69,7 @@ public final class TypeTag {
         if (type instanceof TypeVariable) {
             return processTypeVariable((TypeVariable<?>)type, enclosingType, shortCircuitRecursiveTypeBound);
         }
-        throw new EqualsVerifierBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
+        throw new EqualsVerifierInternalBugException("Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
 
     private static TypeTag processClass(Class<?> type, List<TypeTag> nestedTags) {
