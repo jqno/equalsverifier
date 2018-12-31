@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
+## [3.1.4] - 2018-12-31
+### Added
+- Support for JPA's `@EmbeddedId` annotation: it is now handled in the same way as `@Id`. ([Issue 228](https://github.com/jqno/equalsverifier/issues/228))
+
 ## [3.1.3] - 2018-12-29
 ### Fixed
 - McAfee falsely flags `EqualsVerifierBugException` as a `Exploit-ByteVerify` virus. ([Issue 229](https://github.com/jqno/equalsverifier/issues/229); thanks Matt!)
@@ -635,8 +639,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.3...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.4...HEAD
 
+[3.1.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.3...equalsverifier-3.1.4
 [3.1.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.2...equalsverifier-3.1.3
 [3.1.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.1...equalsverifier-3.1.2
 [3.1.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1...equalsverifier-3.1.1
