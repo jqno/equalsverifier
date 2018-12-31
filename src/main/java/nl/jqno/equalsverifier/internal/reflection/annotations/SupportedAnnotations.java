@@ -143,7 +143,7 @@ public enum SupportedAnnotations implements Annotation {
      * must not be used in the equals/hashCode contract, unless
      * {@link Warning#SURROGATE_KEY} is suppressed.
      */
-    ID(false, "javax.persistence.Id") {
+    ID(false, "javax.persistence.Id", "javax.persistence.EmbeddedId") {
         @Override
         public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
             types.forEach(t -> annotationCache.addClassAnnotation(t, ID));

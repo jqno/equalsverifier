@@ -118,7 +118,7 @@ public class SignificantFieldCheck<T> implements FieldCheck {
 
         final String message;
         if (thisFieldIsMarkedAsId) {
-            message = "Significant fields: %% is marked @Id and Warning.SURROGATE_KEY is suppressed, but equals does not use it.";
+            message = "Significant fields: %% is marked @Id or @EmbeddedId and Warning.SURROGATE_KEY is suppressed, but equals does not use it.";
         }
         else if (anotherFieldIsMarkedAsId) {
             message = "Significant fields: equals does not use %%, or it is stateless.\n" +
@@ -136,7 +136,7 @@ public class SignificantFieldCheck<T> implements FieldCheck {
 
         final String message;
         if (thisFieldIsMarkedAsId) {
-            message = "Significant fields: %% is marked @Id so equals should not use it, but it does.\n" +
+            message = "Significant fields: %% is marked @Id or @EmbeddedId so equals should not use it, but it does.\n" +
                 "Suppress Warning.SURROGATE_KEY if you want to use only the @Id field(s).";
         }
         else if (anotherFieldIsMarkedAsId) {

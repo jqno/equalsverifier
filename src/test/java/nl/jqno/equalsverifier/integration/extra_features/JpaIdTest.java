@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.EmbeddedId;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
@@ -68,6 +69,30 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
         expectFailure("Significant fields", "equals should not use socialSecurity",
                 "Warning.SURROGATE_KEY is suppressed and it is not marked as @Id", "but it does");
         EqualsVerifier.forClass(JpaIdBusinessKeyPersonReorderedFields.class)
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenEmbeddedIdIsUsedCorrectly() {
+        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                .verify();
+        EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class)
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
+        expectFailure("Significant fields", "id is marked @Id or @EmbeddedId", "equals should not use it", "Suppress Warning.SURROGATE_KEY if");
+        EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
+        expectFailure("Significant fields", "id is marked @Id or @EmbeddedId", "Warning.SURROGATE_KEY", "equals does not use");
+        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
                 .suppress(Warning.SURROGATE_KEY)
                 .verify();
     }
@@ -340,6 +365,66 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
                 return false;
             }
             JpaIdSurrogateKeyPersonReorderedFields other = (JpaIdSurrogateKeyPersonReorderedFields)obj;
+            return Objects.equals(id, other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+    }
+
+    static final class JpaEmbeddedIdBusinessKeyPerson {
+        @EmbeddedId
+        private final UUID id;
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public JpaEmbeddedIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JpaEmbeddedIdBusinessKeyPerson)) {
+                return false;
+            }
+            JpaEmbeddedIdBusinessKeyPerson other = (JpaEmbeddedIdBusinessKeyPerson)obj;
+            return Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(birthdate, other.birthdate);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(socialSecurity, name, birthdate);
+        }
+    }
+
+    static final class JpaEmbeddedIdSurrogateKeyPerson {
+        @EmbeddedId
+        private final UUID id;
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public JpaEmbeddedIdSurrogateKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof JpaEmbeddedIdSurrogateKeyPerson)) {
+                return false;
+            }
+            JpaEmbeddedIdSurrogateKeyPerson other = (JpaEmbeddedIdSurrogateKeyPerson)obj;
             return Objects.equals(id, other.id);
         }
 
