@@ -339,7 +339,7 @@ public class EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
-        if (type.isEnum()) {
+        if (type.isEnum() || type.isInterface()) {
             return;
         }
 

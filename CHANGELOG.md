@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Verifying interfaces directly causes NullPointerException. ([Issue 232](https://github.com/jqno/equalsverifier/issues/232))
 - Improved error messages regarding JPA's `@EmbeddedId` annotation. ([Issue 231](https://github.com/jqno/equalsverifier/issues/231))
 
 
