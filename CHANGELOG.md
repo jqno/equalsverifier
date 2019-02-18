@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Fixed
+- Improved error messages regarding JPA's `@EmbeddedId` annotation. ([Issue 231](https://github.com/jqno/equalsverifier/issues/231))
 
 
 <a name="3.x"/>

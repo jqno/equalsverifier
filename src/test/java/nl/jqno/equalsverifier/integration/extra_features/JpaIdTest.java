@@ -98,6 +98,14 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
+        expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.", "Suppress Warning.SURROGATE_KEY if");
+        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+            .withOnlyTheseFields("id")
+            .verify();
+    }
+
+    @Test
     public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
                 .verify();
@@ -158,7 +166,7 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
-        expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id.", "Suppress Warning.SURROGATE_KEY if");
+        expectFailure("Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.", "Suppress Warning.SURROGATE_KEY if");
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
                 .withOnlyTheseFields("id")
                 .verify();

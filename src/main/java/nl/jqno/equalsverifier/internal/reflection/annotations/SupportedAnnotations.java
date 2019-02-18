@@ -138,9 +138,9 @@ public enum SupportedAnnotations implements Annotation {
     TRANSIENT(true, "javax.persistence.Transient"),
 
     /**
-     * Fields in JPA Entities that are marked @Id are usually part of the
-     * entity's surrogate key. EqualsVerifier will therefore assume that it
-     * must not be used in the equals/hashCode contract, unless
+     * Fields in JPA Entities that are marked @Id or @EmbeddedId are usually
+     * part of the entity's surrogate key. EqualsVerifier will therefore assume
+     * that it must not be used in the equals/hashCode contract, unless
      * {@link Warning#SURROGATE_KEY} is suppressed.
      */
     ID(false, "javax.persistence.Id", "javax.persistence.EmbeddedId") {

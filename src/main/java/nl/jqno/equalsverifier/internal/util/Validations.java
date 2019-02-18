@@ -102,8 +102,8 @@ public final class Validations {
     private static void validateFieldAnnotations(Class<?> type, AnnotationCache cache, Set<String> includedFields) {
         FieldIterable.of(type).forEach(f ->
             validate(includedFields.contains(f.getName()) && cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID),
-                "you can't use withOnlyTheseFields on a field marked @Id.\n" +
-                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id fields in equals.")
+                "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n" +
+                "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId fields in equals.")
         );
     }
 
