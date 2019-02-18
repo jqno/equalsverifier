@@ -11,12 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-### Fixed
-- Verifying interfaces directly causes NullPointerException. ([Issue 232](https://github.com/jqno/equalsverifier/issues/232))
-- Improved error messages regarding JPA's `@EmbeddedId` annotation. ([Issue 231](https://github.com/jqno/equalsverifier/issues/231))
 
 
 <a name="3.x"/>
+
+## [3.1.5] - 2019-02-18
+### Fixed
+- Verifying interfaces directly causes NullPointerException. ([Issue 232](https://github.com/jqno/equalsverifier/issues/232))
+- Improved error messages regarding JPA's `@EmbeddedId` annotation. ([Issue 231](https://github.com/jqno/equalsverifier/issues/231))
 
 ## [3.1.4] - 2018-12-31
 ### Added
@@ -642,8 +644,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.4...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.5...HEAD
 
+[3.1.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.4...equalsverifier-3.1.5
 [3.1.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.3...equalsverifier-3.1.4
 [3.1.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.2...equalsverifier-3.1.3
 [3.1.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.1...equalsverifier-3.1.2
