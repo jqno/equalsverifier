@@ -6,7 +6,6 @@ import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.*;
-import nl.jqno.equalsverifier.internal.util.Formatter;
 
 import java.util.*;
 
