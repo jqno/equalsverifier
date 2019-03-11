@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
+## [3.1.6] - 2019-03-11
+### Fixed
+- Testing a class with `StringBuilder` causes StringIndexOutOfBoundsException. ([Issue 234](https://github.com/jqno/equalsverifier/issues/234))
+
 ## [3.1.5] - 2019-02-18
 ### Fixed
 - Verifying interfaces directly causes NullPointerException. ([Issue 232](https://github.com/jqno/equalsverifier/issues/232))
@@ -644,8 +648,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.5...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.6...HEAD
 
+[3.1.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.5...equalsverifier-3.1.6
 [3.1.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.4...equalsverifier-3.1.5
 [3.1.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.3...equalsverifier-3.1.4
 [3.1.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.2...equalsverifier-3.1.3

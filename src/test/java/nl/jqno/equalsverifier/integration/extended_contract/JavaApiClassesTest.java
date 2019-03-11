@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
@@ -88,6 +89,13 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsAThreadLocalField() {
         EqualsVerifier.forClass(ThreadLocalContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
+        EqualsVerifier.forClass(StringBuilderContainer.class)
+                .suppress(Warning.NULL_FIELDS)
                 .verify();
     }
 
@@ -440,5 +448,27 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         }
 
         @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    static final class StringBuilderContainer {
+        private final StringBuilder stringBuilder;
+
+        public StringBuilderContainer(StringBuilder stringBuilder) {
+            this.stringBuilder = stringBuilder;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof StringBuilderContainer)) {
+                return false;
+            }
+            StringBuilderContainer other = (StringBuilderContainer)obj;
+            return Objects.equals(stringBuilder.toString(), other.stringBuilder.toString());
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

@@ -138,6 +138,7 @@ public final class JavaApiPrefabValues {
         addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
+        addValues(StringBuilder.class, new StringBuilder("one"), new StringBuilder("two"), new StringBuilder("three"));
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
