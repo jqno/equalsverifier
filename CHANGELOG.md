@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-
+### Changed
+- Performance improvement. ([Issue 235](https://github.com/jqno/equalsverifier/issues/235))
 
 <a name="3.x"/>
 

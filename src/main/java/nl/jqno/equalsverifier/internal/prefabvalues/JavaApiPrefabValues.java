@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.nio.*;
-import java.rmi.dgc.VMID;
-import java.rmi.server.UID;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -47,6 +45,7 @@ public final class JavaApiPrefabValues {
     private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
     private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactoryProvider");
     private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactoryProvider");
+    private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>("RmiFactoryProvider");
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
@@ -319,11 +318,8 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
 
-        VMID redVmid = new VMID();
-        addValues(VMID.class, redVmid, new VMID(), redVmid);
-        UID redUid = new UID();
-        addValues(UID.class, redUid, new UID(), redUid);
-
+        addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
+        addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
     }
 
     private void addJavaFxClasses() {
