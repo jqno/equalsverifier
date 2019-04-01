@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
 import com.google.common.collect.*;
+import com.google.common.reflect.TypeToken;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
@@ -102,6 +103,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
     private void putNewTypes(FactoryCache cache) {
         cache.put(Range.class, Factories.<Comparable<?>, Range<?>>simple(Range::atLeast, Range::all));
         cache.put(com.google.common.base.Optional.class, simple(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
+        cache.put(TypeToken.class, values(TypeToken.of(Object.class), TypeToken.of(String.class), TypeToken.of(Object.class)));
     }
 
     private <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {

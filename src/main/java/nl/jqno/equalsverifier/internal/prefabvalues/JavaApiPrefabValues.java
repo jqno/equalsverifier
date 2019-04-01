@@ -406,6 +406,7 @@ public final class JavaApiPrefabValues {
     private void addNewGoogleGuavaClasses() {
         addLazyFactory(GUAVA_PACKAGE + "Range", GUAVA_FACTORY);
         addLazyFactory("com.google.common.base.Optional", GUAVA_FACTORY);
+        addLazyFactory("com.google.common.reflect.TypeToken", GUAVA_FACTORY);
     }
 
     private void addJodaTimeClasses() {

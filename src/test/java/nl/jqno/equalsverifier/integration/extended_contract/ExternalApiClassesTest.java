@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.*;
+import com.google.common.reflect.TypeToken;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
 import org.junit.Test;
@@ -219,12 +220,14 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
+        private static final TypeToken<?> STATIC_TYPE_TOKEN = new TypeToken<Object>(){};
         private final Range<Integer> range;
         private final Optional<?> optional;
+        private final TypeToken<?> typeToken;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public GuavaOtherContainer(Range<Integer> range, Optional<?> optional) {
-            this.range = range; this.optional = optional;
+        public GuavaOtherContainer(Range<Integer> range, Optional<?> optional, TypeToken<?> typeToken) {
+            this.range = range; this.optional = optional; this.typeToken = typeToken;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

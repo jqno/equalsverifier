@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Fixed
+- Testing a class with Guava `TypeToken` causes AbstractMethodError. ([Issue 238](https://github.com/jqno/equalsverifier/issues/238))
 
 <a name="3.x"/>
 
