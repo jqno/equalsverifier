@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Changed
+- Updated to Byte-Buddy to support Java 13 EA. ([Issue 239](https://github.com/jqno/equalsverifier/issues/239); thanks William!)
 
 <a name="3.x"/>
 
