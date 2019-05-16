@@ -12,9 +12,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- Updated to Byte-Buddy to support Java 13 EA. ([Issue 239](https://github.com/jqno/equalsverifier/issues/239); thanks William!)
 
 <a name="3.x"/>
+
+## [3.1.8] - 2019-05-16
+### Changed
+- Fixed spelling of Apache License, Version 2.0. ([Issue 241](https://github.com/jqno/equalsverifier/issues/241); thanks Vincent!)
+
+### Fixed
+- Updated to Byte-Buddy to support Java 13 EA. ([Issue 239](https://github.com/jqno/equalsverifier/issues/239); thanks William!)
 
 ## [3.1.8] - 2019-04-04
 ### Fixed
@@ -657,8 +663,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.8...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.9...HEAD
 
+[3.1.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.8...equalsverifier-3.1.9
 [3.1.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.7...equalsverifier-3.1.8
 [3.1.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.6...equalsverifier-3.1.7
 [3.1.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.5...equalsverifier-3.1.6

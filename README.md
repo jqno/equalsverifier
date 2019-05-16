@@ -10,7 +10,7 @@ The Maven coordinates are:
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>3.1.8</version>
+    <version>3.1.9</version>
     <scope>test</scope>
 </dependency>
 ```
