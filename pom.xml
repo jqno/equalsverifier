@@ -57,9 +57,9 @@
     <properties>
         <encoding>UTF-8</encoding>
         <java.release>8</java.release>
-        <jacoco.version>0.8.3</jacoco.version>
+        <jacoco.version>0.8.4</jacoco.version>
 
-        <checkstyle.version>8.18</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
+        <checkstyle.version>8.20</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <checkstyle.maven.version>3.0.0</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
@@ -110,7 +110,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>3.9</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -136,19 +136,19 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit4</artifactId>
-            <version>0.9.3</version>
+            <version>0.10.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>1.7.26</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
+            <version>1.7.26</version>
             <scope>test</scope>
         </dependency>
 
@@ -162,7 +162,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.0.1-jre</version>
+            <version>27.1-jre</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -193,7 +193,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <source>${java.release}</source>
                     <target>${java.release}</target>
@@ -203,7 +203,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.0</version>
             </plugin>
 
             <plugin>
@@ -215,7 +215,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.2</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -232,7 +232,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -417,7 +417,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.4.3</version>
+                <version>1.4.7</version>
                 <configuration>
                     <threads>3</threads>
                     <targetClasses>
