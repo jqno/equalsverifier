@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <a name="3.x"/>
 
-## [3.1.8] - 2019-05-16
+## [3.1.9] - 2019-05-16
 ### Changed
 - Fixed spelling of Apache License, Version 2.0. ([Issue 241](https://github.com/jqno/equalsverifier/issues/241); thanks Vincent!)
 
