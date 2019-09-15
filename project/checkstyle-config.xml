@@ -17,6 +17,15 @@
     <module name="NewlineAtEndOfFile">
         <property name="lineSeparator" value="lf"/>
     </module>
+    <module name="LineLength">
+        <property name="fileExtensions" value="java"/>
+        <property name="max" value="150"/>
+    </module>
+    <module name="SuppressWithPlainTextCommentFilter">
+        <property name="offCommentFormat" value="CHECKSTYLE OFF\: ([\w\|]+)"/>
+        <property name="onCommentFormat" value="CHECKSTYLE ON\: ([\w\|]+)"/>
+        <property name="checkFormat" value="$1"/>
+    </module>
 
     <module name="TreeWalker">
         <module name="SuppressWithNearbyCommentFilter">
@@ -86,9 +95,6 @@
         <module name="JavadocStyle"/>
         <module name="JavadocTagContinuationIndentation"/>
         <module name="JavaNCSS"/>
-        <module name="LineLength">
-            <property name="max" value="150"/>
-        </module>
         <module name="LocalFinalVariableName"/>
         <module name="LocalVariableName"/>
         <module name="MemberName"/>

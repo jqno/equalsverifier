@@ -48,12 +48,13 @@ public class VersionedEntityTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    // CHECKSTYLE: ignore LineLength for 1 line.
+    // CHECKSTYLE OFF: LineLength.
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(StringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
     }
+    // CHECKSTYLE ON: LineLength.
 
     @Test
     public void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
@@ -63,20 +64,22 @@ public class VersionedEntityTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    // CHECKSTYLE: ignore LineLength for 1 line.
+    // CHECKSTYLE OFF: LineLength.
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 .verify();
     }
+    // CHECKSTYLE ON: LineLength.
 
     @Test
-    // CHECKSTYLE: ignore LineLength for 1 line.
+    // CHECKSTYLE OFF: LineLength
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(WeakStringVersionedEntity.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
+    // CHECKSTYLE ON: LineLength.
 
     @Test
     public void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {

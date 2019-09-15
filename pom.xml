@@ -59,7 +59,7 @@
         <java.release>8</java.release>
         <jacoco.version>0.8.4</jacoco.version>
 
-        <checkstyle.version>8.20</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
+        <checkstyle.version>8.24</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <checkstyle.maven.version>3.0.0</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
@@ -525,12 +525,12 @@
 
         <profile>
             <id>experimental-support-for-EA-version</id>
-            
+
             <properties>
                 <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
                 <surefire.argLine>--illegal-access=deny -Dnet.bytebuddy.experimental=true</surefire.argLine>
             </properties>
-            
+
             <build>
                 <plugins>
                     <!-- These plugins often lag behind a little when it comes to supporting new class file versions -->
