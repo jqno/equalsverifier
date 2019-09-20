@@ -9,7 +9,13 @@ commands:
         default: ""
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache
       - run: ./mvnw clean verify << parameters.flag >>
+      - save_cache:
+          key: dependency-cache
+          paths:
+            - ~/.m2
 
 jobs:
   jdk8:
