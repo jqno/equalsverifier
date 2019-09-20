@@ -1,57 +1,61 @@
-version: 2
+version: 2.1
+
+commands:
+  build:
+    description: "Compile, run tests and run static analysis"
+    parameters:
+      flag:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - run: ./mvnw clean verify << parameters.flag >>
 
 jobs:
   jdk8:
     docker:
       - image: openjdk:8-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk9:
     docker:
       - image: openjdk:9-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk10:
     docker:
       - image: openjdk:10-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk11:
     docker:
       - image: openjdk:11-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk12:
     docker:
       - image: openjdk:12-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk13:
     docker:
       - image: openjdk:13-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
   jdk-ea-experimental:
     docker:
       - image: openjdk:14-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify -Pexperimental-support-for-EA-version
+      - build:
+          flag: -Pexperimental-support-for-EA-version
   jdk-ea-full:
     docker:
       - image: openjdk:14-jdk
     steps:
-      - checkout
-      - run: ./mvnw clean verify
+      - build
 
 workflows:
-  version: 2
+  version: 2.1
   build_all:
     jobs:
       - jdk8
