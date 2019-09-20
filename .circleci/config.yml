@@ -1,0 +1,64 @@
+version: 2
+
+jobs:
+  jdk8:
+    docker:
+      - image: openjdk:8-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk9:
+    docker:
+      - image: openjdk:9-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk10:
+    docker:
+      - image: openjdk:10-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk11:
+    docker:
+      - image: openjdk:11-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk12:
+    docker:
+      - image: openjdk:12-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk13:
+    docker:
+      - image: openjdk:13-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+  jdk-ea-experimental:
+    docker:
+      - image: openjdk:14-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify -Pexperimental-support-for-EA-version
+  jdk-ea-full:
+    docker:
+      - image: openjdk:14-jdk
+    steps:
+      - checkout
+      - run: mvn clean verify
+
+workflows:
+  version: 2
+  build_all:
+    jobs:
+      - jdk8
+      - jdk9
+      - jdk10
+      - jdk11
+      - jdk12
+      - jdk13
+      - jdk-ea-experimental
+      - jdk-ea-full
