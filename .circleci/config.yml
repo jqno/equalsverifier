@@ -11,6 +11,7 @@ commands:
       - checkout
       - restore_cache:
           key: dependency-cache
+      - run: java -version
       - run: ./mvnw clean verify << parameters.flag >>
       - save_cache:
           key: dependency-cache
