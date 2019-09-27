@@ -63,7 +63,7 @@ jobs:
 
 workflows:
   version: 2.1
-  build_all:
+  on_push:
     jobs:
       - jdk8
       - jdk9
@@ -71,5 +71,29 @@ workflows:
       - jdk11
       - jdk12
       - jdk13
+  weekly-experimental:
+    triggers:
+      - schedule:
+          cron: "0 2 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
       - jdk-ea-experimental
       - jdk-ea-full
+  weekly-regression:
+    triggers:
+      - schedule:
+          cron: "30 2 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - jdk8
+      - jdk9
+      - jdk10
+      - jdk11
+      - jdk12
+      - jdk13
