@@ -1,0 +1,99 @@
+version: 2.1
+
+commands:
+  build:
+    description: "Compile, run tests and run static analysis"
+    parameters:
+      flag:
+        type: string
+        default: ""
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache
+      - run: java -version
+      - run: ./mvnw clean verify << parameters.flag >>
+      - save_cache:
+          key: dependency-cache
+          paths:
+            - ~/.m2
+
+jobs:
+  jdk8:
+    docker:
+      - image: openjdk:8-jdk
+    steps:
+      - build
+  jdk9:
+    docker:
+      - image: openjdk:9-jdk
+    steps:
+      - build
+  jdk10:
+    docker:
+      - image: openjdk:10-jdk
+    steps:
+      - build
+  jdk11:
+    docker:
+      - image: openjdk:11-jdk
+    steps:
+      - build
+  jdk12:
+    docker:
+      - image: openjdk:12-jdk
+    steps:
+      - build
+  jdk13:
+    docker:
+      - image: openjdk:13-jdk
+    steps:
+      - build
+  jdk-ea-experimental:
+    docker:
+      - image: openjdk:14-jdk
+    steps:
+      - build:
+          flag: -Pexperimental-support-for-EA-version
+  jdk-ea-full:
+    docker:
+      - image: openjdk:14-jdk
+    steps:
+      - build
+
+workflows:
+  version: 2.1
+  on_push:
+    jobs:
+      - jdk8
+      - jdk9
+      - jdk10
+      - jdk11
+      - jdk12
+      - jdk13
+  weekly-experimental:
+    triggers:
+      - schedule:
+          cron: "0 2 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - jdk-ea-experimental
+      - jdk-ea-full
+  weekly-regression:
+    triggers:
+      - schedule:
+          cron: "30 2 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - jdk8
+      - jdk9
+      - jdk10
+      - jdk11
+      - jdk12
+      - jdk13
