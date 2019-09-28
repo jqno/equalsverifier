@@ -1,5 +1,5 @@
-[![Apache License 2.0](https://img.shields.io/:license-Apache%20License%202.0-blue.svg?style=plastic)](https://github.com/jqno/equalsverifier/blob/master/LICENSE.md)
-[![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
+[![Apache License 2.0](https://img.shields.io/:license-Apache%20License%202.0-blue.svg?style=shield)](https://github.com/jqno/equalsverifier/blob/master/LICENSE.md)
+[![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=shield)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
 [![Build Status](https://circleci.com/gh/jqno/equalsverifier.svg?style=shield)](https://circleci.com/gh/jqno/equalsverifier)
 [![Issue resolution](http://isitmaintained.com/badge/resolution/jqno/equalsverifier.svg)](http://isitmaintained.com/project/jqno/equalsverifier "Average time to resolve an issue")
 
