@@ -7,6 +7,9 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -65,6 +68,13 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsACommonJavaApiClass() {
         EqualsVerifier.forClass(CommonClassesContainer.class)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsReflectionApiClass() {
+        EqualsVerifier.forClass(ReflectionClassesContainer.class)
+                .suppress(Warning.STRICT_HASHCODE) // Because java.lang.reflect.Constructor's hashCode() is unhelpful
                 .verify();
     }
 
@@ -299,7 +309,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     static final class CommonClassesContainer {
         private final String string;
         private final Integer integer;
-        private final Class<?> type;
         private final BitSet bitset;
         private final Calendar calendar;
         private final Date date;
@@ -318,11 +327,11 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.sql.Timestamp sqlTimestamp;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public CommonClassesContainer(String string, Integer integer, Class<?> type, BitSet bitset, Calendar calendar,
+        public CommonClassesContainer(String string, Integer integer, BitSet bitset, Calendar calendar,
                 Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
                 SimpleDateFormat simpleDateFormat, URI uri, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
                 Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp) {
-            this.string = string; this.integer = integer; this.type = type; this.bitset = bitset; this.calendar = calendar;
+            this.string = string; this.integer = integer; this.bitset = bitset; this.calendar = calendar;
             this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
             this.simpleDateFormat = simpleDateFormat; this.uri = uri; this.uuid = uuid; this.inetAddress = inetAddress;
             this.inet4Address = inet4Address; this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate;
@@ -366,6 +375,21 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             this.completableFuture = completableFuture; this.stampedLock = stampedLock; this.supplier = supplier;
             this.duration = duration; this.instant = instant; this.monthDay = monthDay; this.offsetDateTime = offsetDateTime;
             this.offsetTime = offsetTime; this.period = period; this.year = year; this.yearMonth = yearMonth;
+        }
+
+        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override public int hashCode() { return defaultHashCode(this); }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class ReflectionClassesContainer {
+        private final Class<?> type;
+        private final Method method;
+        private final Field field;
+        private final Constructor<?> constructor;
+
+        public ReflectionClassesContainer(Class<?> type, Method method, Field field, Constructor<?> constructor) {
+            this.type = type; this.method = method; this.field = field; this.constructor = constructor;
         }
 
         @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }

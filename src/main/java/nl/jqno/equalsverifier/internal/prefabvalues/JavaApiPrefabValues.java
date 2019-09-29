@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.ExternalFactory;
@@ -8,6 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 import java.io.File;
+import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
@@ -83,6 +85,7 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         addNioBuffers();
+        addReflectionClasses();
         addAtomicClasses();
         addAncientJavaApiClasses();
         addJavaFxClasses();
@@ -120,7 +123,6 @@ public final class JavaApiPrefabValues {
         addValues(Short.class, (short)1, (short)2, new Short((short)1));
 
         addValues(Object.class, new Object(), new Object(), new Object());
-        addValues(Class.class, Class.class, Object.class, Class.class);
         addValues(String.class, "one", "two", new String("one"));
         addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
     }
@@ -285,6 +287,49 @@ public final class JavaApiPrefabValues {
                 LongBuffer.wrap(new long[] { 0 }), LongBuffer.wrap(new long[] { 1 }), LongBuffer.wrap(new long[] { 0 }));
         addValues(ShortBuffer.class,
                 ShortBuffer.wrap(new short[] { 0 }), ShortBuffer.wrap(new short[] { 1 }), ShortBuffer.wrap(new short[] { 0 }));
+    }
+
+    @SuppressWarnings("unused")
+    private static class JavaApiReflectionClassesContainer {
+        Object a;
+        Object b;
+
+        public JavaApiReflectionClassesContainer() {}
+        public JavaApiReflectionClassesContainer(Object o) {}
+
+        void m1() {}
+        void m2() {}
+    }
+
+    private void addReflectionClasses() {
+        addValues(Class.class, Class.class, Object.class, Class.class);
+
+        try {
+            Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
+            Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
+            addValues(Field.class, f1, f2, f1);
+        }
+        catch (NoSuchFieldException e) {
+            throw new EqualsVerifierInternalBugException("Can't add prefab values for java.lang.reflect.Field", e);
+        }
+
+        try {
+            Constructor<?> c1 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
+            Constructor<?> c2 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
+            addValues(Constructor.class, c1, c2, c1);
+        }
+        catch (NoSuchMethodException e) {
+            throw new EqualsVerifierInternalBugException("Can't add prefab values for java.lang.reflect.Constructor", e);
+        }
+
+        try {
+            Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
+            Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
+            addValues(Method.class, m1, m2, m1);
+        }
+        catch (NoSuchMethodException e) {
+            throw new EqualsVerifierInternalBugException("Can't add prefab values for java.lang.reflect.Method", e);
+        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
