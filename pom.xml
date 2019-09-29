@@ -63,8 +63,8 @@
         <checkstyle.maven.version>3.1.0</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
-        <spotbugs.version>4.0.0-beta3</spotbugs.version>
-        <spotbugs.maven.version>3.1.7</spotbugs.maven.version>
+        <spotbugs.version>4.0.0-beta4</spotbugs.version>
+        <spotbugs.maven.version>3.1.11</spotbugs.maven.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
     </properties>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.9.14</version>
+            <version>1.10.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
@@ -128,7 +128,7 @@
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>2.2.200</version>
+            <version>2.2.300</version>
             <scope>test</scope>
         </dependency>
 
@@ -136,7 +136,7 @@
         <dependency>
             <groupId>com.tngtech.archunit</groupId>
             <artifactId>archunit-junit4</artifactId>
-            <version>0.10.2</version>
+            <version>0.11.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -156,13 +156,13 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.10.1</version>
+            <version>2.10.4</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
+            <version>28.1-jre</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -417,7 +417,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.4.7</version>
+                <version>1.4.9</version>
                 <configuration>
                     <threads>3</threads>
                     <targetClasses>
