@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
-### Changed
+### Fixed
+- Updated Byte-Buddy to support Java 14 EA.
 
 <a name="3.x"/>
 
