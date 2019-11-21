@@ -57,14 +57,14 @@
     <properties>
         <encoding>UTF-8</encoding>
         <java.release>8</java.release>
-        <jacoco.version>0.8.4</jacoco.version>
+        <jacoco.version>0.8.5</jacoco.version>
 
         <checkstyle.version>8.24</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <checkstyle.maven.version>3.1.0</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
         <spotbugs.version>4.0.0-beta4</spotbugs.version>
-        <spotbugs.maven.version>3.1.11</spotbugs.maven.version>
+        <spotbugs.maven.version>3.1.12.2</spotbugs.maven.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
     </properties>
@@ -203,7 +203,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>3.1.1</version>
                 <configuration>
                     <source>1.8</source>
                 </configuration>
@@ -218,7 +218,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.2.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -420,7 +420,7 @@
             <plugin>
                 <groupId>org.pitest</groupId>
                 <artifactId>pitest-maven</artifactId>
-                <version>1.4.9</version>
+                <version>1.4.10</version>
                 <configuration>
                     <threads>3</threads>
                     <targetClasses>
