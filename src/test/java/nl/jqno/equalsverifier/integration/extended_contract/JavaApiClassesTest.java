@@ -27,6 +27,8 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.Test;
 
+// CHECKSTYLE OFF: ParameterNumber
+
 public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsASuperCollection() {
@@ -66,8 +68,8 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier.forClass(ReflectionClassesContainer.class)
-                .suppress(Warning.STRICT_HASHCODE) // Because java.lang.reflect.Constructor's
-                // hashCode() is unhelpful
+                // Because java.lang.reflect.Constructor's hashCode() is unhelpful
+                .suppress(Warning.STRICT_HASHCODE)
                 .verify();
     }
 
@@ -247,7 +249,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final PriorityBlockingQueue<String> priorityBlockingQueue;
         private final SynchronousQueue<String> synchronousQueue;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public QueueContainer(
                 Queue<String> queue,
                 BlockingQueue<String> blockingQueue,
@@ -304,7 +305,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final WeakHashMap<String, String> weakHashMap;
         private final EnumMap<TypeHelper.Enum, String> enumMap;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public MapContainer(
                 Map<String, String> map,
                 SortedMap<String, String> sortedMap,
@@ -363,7 +363,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final LongBuffer longBuffer;
         private final ShortBuffer shortBuffer;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public NioBufferContainer(
                 Buffer buffer,
                 ByteBuffer byteBuffer,
@@ -415,7 +414,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.sql.Time sqlTime;
         private final java.sql.Timestamp sqlTimestamp;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public CommonClassesContainer(
                 String string,
                 Integer integer,
@@ -488,7 +486,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final Year year;
         private final YearMonth yearMonth;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public Java8ApiClassesContainer(
                 Optional<?> optional,
                 LocalDate localDate,
@@ -579,7 +576,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final AtomicReferenceArray<?> atomicReferenceArray;
         private final AtomicStampedReference<?> atomicStampedReference;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public AtomicClassesContainer(
                 AtomicBoolean atomicBoolean,
                 AtomicInteger atomicInteger,

@@ -274,7 +274,7 @@ public class ClassAccessorTest {
         @NonNull String t;
     }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    // CHECKSTYLE OFF: DeclarationOrder
     // Generated at runtime, so we don't actually have to put a class in the default package.
     private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
     private static final String DEFAULT_PACKAGE =
@@ -298,4 +298,5 @@ public class ClassAccessorTest {
                     + "\n        return i;"
                     + "\n    }"
                     + "\n}";
+    // CHECKSTYLE ON: DeclarationOrder
 }

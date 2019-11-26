@@ -23,12 +23,6 @@
     </module>
 
     <module name="TreeWalker">
-        <module name="SuppressWithNearbyCommentFilter">
-            <property name="commentFormat" value="CHECKSTYLE: ignore (\w+) for (\d+) lines?\."/>
-            <property name="checkFormat" value="$1"/>
-            <property name="influenceFormat" value="$2"/>
-        </module>
-
         <module name="AbbreviationAsWordInName">
             <property name="allowedAbbreviationLength" value="1"/>
         </module>

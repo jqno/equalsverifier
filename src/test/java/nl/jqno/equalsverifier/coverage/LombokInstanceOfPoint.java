@@ -19,8 +19,8 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  *    }
  * }
  */
-// CHECKSTYLE: ignore LocalFinalVariableName for 35 lines.
-// CHECKSTYLE: ignore NeedBraces for 35 lines.
+// CHECKSTYLE OFF: LocalFinalVariableName
+// CHECKSTYLE OFF: NeedBraces
 public final class LombokInstanceOfPoint {
     private final int x;
     private final int y;

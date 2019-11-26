@@ -7,8 +7,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  *
  * <p>Settings: - Accept subclasses as parameter to equals() method: false
  */
-// CHECKSTYLE: ignore NeedBraces for 35 lines.
-// CHECKSTYLE: ignore NoWhitespaceAfter for 35 lines.
+// CHECKSTYLE OFF: NeedBraces
 public final class IntelliJGetClassPoint {
     private final int y;
     private final int x;

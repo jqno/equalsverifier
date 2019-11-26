@@ -7,7 +7,6 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  *
  * <p>Settings: - Use 'instanceof' to compare types: true - Use blocks in 'if' statements: true
  */
-// CHECKSTYLE: ignore NoWhitespaceAfter for 35 lines.
 public final class EclipseInstanceOfPoint {
     private final int x;
     private final int y;

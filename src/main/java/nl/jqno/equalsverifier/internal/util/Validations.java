@@ -114,7 +114,7 @@ public final class Validations {
         validateFieldAnnotations(type, cache, includedFields);
     }
 
-    // CHECKSTYLE: ignore VariableDeclarationUsageDistance for 25 lines.
+    // CHECKSTYLE OFF: VariableDeclarationUsageDistance
     private static void validateClassAnnotations(
             Class<?> type,
             AnnotationCache cache,
@@ -141,6 +141,7 @@ public final class Validations {
                 hasNaturalId && hasVersionedEntity,
                 "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
     }
+    // CHECKSTYLE ON: VariableDeclarationUsageDistance
 
     private static void validateFieldAnnotations(
             Class<?> type, AnnotationCache cache, Set<String> includedFields) {

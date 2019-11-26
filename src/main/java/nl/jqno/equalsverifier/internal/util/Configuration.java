@@ -30,7 +30,7 @@ public final class Configuration<T> {
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
 
-    // CHECKSTYLE: ignore ParameterNumber for 1 line.
+    // CHECKSTYLE OFF: ParameterNumber
     private Configuration(
             Class<T> type,
             TypeTag typeTag,
@@ -62,7 +62,6 @@ public final class Configuration<T> {
         this.unequalExamples = unequalExamples;
     }
 
-    // CHECKSTYLE: ignore ParameterNumber for 1 line.
     public static <T> Configuration<T> build(
             Class<T> type,
             Set<String> excludedFields,
@@ -110,6 +109,7 @@ public final class Configuration<T> {
                 equalExamples,
                 unequals);
     }
+    // CHECKSTYLE ON: ParameterNumber
 
     private static <T> AnnotationCache buildAnnotationCache(
             Class<T> type, Set<String> ignoredAnnotationClassNames) {

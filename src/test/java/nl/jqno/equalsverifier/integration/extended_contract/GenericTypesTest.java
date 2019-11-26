@@ -107,7 +107,7 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             this.atomicReferenceArray = atomicReferenceArray;
         }
 
-        // CHECKSTYLE: ignore NPathComplexity for 2 lines.
+        // CHECKSTYLE OFF: NPathComplexity
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof JavaGenericTypeContainer)) {
@@ -125,6 +125,7 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
                     && Objects.equals(thisSupplierPoint, thatSupplierPoint)
                     && Objects.equals(thisAraPoint, thatAraPoint);
         }
+        // CHECKSTYLE ON: NPathComplexity
 
         @Override
         public int hashCode() {

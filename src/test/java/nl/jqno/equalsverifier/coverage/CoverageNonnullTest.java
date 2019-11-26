@@ -4,6 +4,9 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 import org.junit.Test;
 
+// CHECKSTYLE OFF: LocalFinalVariableName
+// CHECKSTYLE OFF: NeedBraces
+
 public class CoverageNonnullTest {
     @Test
     public void lombokCoverage() {
@@ -29,8 +32,6 @@ public class CoverageNonnullTest {
      *     }
      * }
      */
-    // CHECKSTYLE: ignore LocalFinalVariableName for 30 lines.
-    // CHECKSTYLE: ignore NeedBraces for 30 lines.
     public static final class LombokNonnullStringContainer {
         @Nonnull private final String s;
 

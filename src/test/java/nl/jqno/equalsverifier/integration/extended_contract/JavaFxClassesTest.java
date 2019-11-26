@@ -4,6 +4,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Test;
 
+// CHECKSTYLE OFF: DeclarationOrder
+
 public class JavaFxClassesTest extends StringCompilerTestBase {
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
@@ -97,7 +99,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
         return isTypeAvailable("javafx.collections.ObservableList");
     }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_CLASS_NAME = "JavaFXApiClassesContainer";
     private static final String JAVAFX_CLASS =
             "\nimport static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;"
@@ -172,7 +173,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME =
             "JavaFXObservableListContainer";
     private static final String JAVAFX_OBSERVABLELIST_CONTAINER_CLASS =
@@ -215,7 +215,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS_NAME =
             "JavaFXObservableMapContainer";
     private static final String JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS =
@@ -260,7 +259,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_OBSERVABLESET_CONTAINER_CLASS_NAME =
             "JavaFXObservableSetContainer";
     private static final String JAVAFX_OBSERVABLESET_CONTAINER_CLASS =
@@ -301,7 +299,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS_NAME =
             "JavaFXListPropertyContainer";
     private static final String JAVAFX_LISTPROPERTY_CONTAINER_CLASS =
@@ -339,7 +336,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS_NAME =
             "JavaFXMapPropertyContainer";
     private static final String JAVAFX_MAPPROPERTY_CONTAINER_CLASS =
@@ -376,7 +372,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
-    // CHECKSTYLE: ignore DeclarationOrder for 2 lines.
     private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS_NAME =
             "JavaFXSetPropertyContainer";
     private static final String JAVAFX_SETPROPERTY_CONTAINER_CLASS =

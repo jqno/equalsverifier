@@ -18,7 +18,7 @@ public class TypeHelper {
     }
 
     public static final class AllTypesContainer {
-        // CHECKSTYLE: ignore MemberName for 23 lines.
+        // CHECKSTYLE OFF: MemberName
         public boolean _boolean = false;
         public byte _byte = 0;
         public char _char = '\u0000';
@@ -42,6 +42,7 @@ public class TypeHelper {
         public Object _object = OBJECT;
         public Class<?> _type = Class.class;
         public String _string = "";
+        // CHECKSTYLE ON: MemberName
 
         @Override
         public boolean equals(Object obj) {
@@ -91,7 +92,7 @@ public class TypeHelper {
         long[] longs = {1L};
         short[] shorts = {1};
 
-        // CHECKSTYLE: ignore MemberName for 8 lines.
+        // CHECKSTYLE OFF: MemberName
         Boolean[] Booleans = {true};
         Byte[] Bytes = {1};
         Character[] Characters = {'a'};
@@ -100,6 +101,7 @@ public class TypeHelper {
         Integer[] Integers = {1};
         Long[] Longs = {1L};
         Short[] Shorts = {1};
+        // CHECKSTYLE ON: MemberName
 
         Enum[] enums = {Enum.FIRST};
         int[][] arrays = {{1}};

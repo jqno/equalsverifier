@@ -12,6 +12,8 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
 import org.junit.Test;
 
+// CHECKSTYLE OFF: ParameterNumber
+
 public class ExternalApiClassesTest {
     @Test
     public void succeed_whenClassUsesJavaxClasses() {
@@ -89,7 +91,6 @@ public class ExternalApiClassesTest {
         private final ImmutableMultiset<?> immutableMultiset;
         private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaMultisetContainer(
                 Multiset<?> multiset,
                 SortedMultiset<?> sortedMultiset,
@@ -137,7 +138,6 @@ public class ExternalApiClassesTest {
         private final ImmutableListMultimap<?, ?> immutableListMultimap;
         private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaMultimapContainer(
                 Multimap<?, ?> multimap,
                 ListMultimap<?, ?> listMultimap,
@@ -248,7 +248,6 @@ public class ExternalApiClassesTest {
         private final ImmutableRangeSet<String> immutableRangeSet;
         private final TreeRangeSet<BigDecimal> treeRangeSet;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaRegularCollectionsContainer(
                 EvictingQueue<?> evictingQueue,
                 MinMaxPriorityQueue<?> minMaxPriorityQueue,
@@ -282,7 +281,6 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedMap<?, ?> iSortedMap;
         private final ImmutableSortedSet<?> iSortedSet;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaImmutableContainer(
                 ImmutableCollection<?> immutableCollection,
                 ImmutableList<?> immutableList,
@@ -316,7 +314,6 @@ public class ExternalApiClassesTest {
         private final Optional<?> optional;
         private final TypeToken<?> typeToken;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public GuavaOtherContainer(
                 Range<Integer> range, Optional<?> optional, TypeToken<?> typeToken) {
             this.range = range;
@@ -348,7 +345,6 @@ public class ExternalApiClassesTest {
         private final YearMonth yearMonth;
         private final MonthDay monthDay;
 
-        // CHECKSTYLE: ignore ParameterNumber for 1 line.
         public JodaTimeContainer(
                 LocalDate localDate,
                 LocalTime localTime,
