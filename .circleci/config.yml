@@ -54,7 +54,7 @@ jobs:
       - image: openjdk:14-jdk
     steps:
       - build:
-          flag: -Pexperimental-support-for-EA-version
+          flag: -Dexperimental
   jdk-ea-full:
     docker:
       - image: openjdk:14-jdk
