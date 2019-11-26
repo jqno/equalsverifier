@@ -1,5 +1,9 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
+
+import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
@@ -9,14 +13,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.LinkedHashSet;
-
-import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
-import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
-
 public class AbstractGenericFactoryTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Rule public ExpectedException thrown = ExpectedException.none();
 
     private String receiver;
     private AbstractGenericFactory<String> factory;
@@ -24,12 +22,16 @@ public class AbstractGenericFactoryTest {
     @Before
     public void setUp() {
         receiver = "";
-        factory = new AbstractGenericFactory<String>() {
-            @Override
-            public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-                return Tuple.of("red", "black", new String("red"));
-            }
-        };
+        factory =
+                new AbstractGenericFactory<String>() {
+                    @Override
+                    public Tuple<String> createValues(
+                            TypeTag tag,
+                            PrefabValues prefabValues,
+                            LinkedHashSet<TypeTag> typeStack) {
+                        return Tuple.of("red", "black", new String("red"));
+                    }
+                };
     }
 
     @Test

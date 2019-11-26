@@ -20,7 +20,7 @@ public final class CanEqualColorPoint extends CanEqualPoint {
         if (!(obj instanceof CanEqualColorPoint)) {
             return false;
         }
-        CanEqualColorPoint p = (CanEqualColorPoint)obj;
+        CanEqualColorPoint p = (CanEqualColorPoint) obj;
         return p.canEqual(this) && super.equals(p) && color == p.color;
     }
 

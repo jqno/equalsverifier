@@ -1,5 +1,11 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
+import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
+
+import java.lang.reflect.Field;
+import java.util.EnumSet;
+import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -9,13 +15,6 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import java.lang.reflect.Field;
-import java.util.EnumSet;
-import java.util.Set;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
-import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck {
     private final TypeTag typeTag;
@@ -43,11 +42,13 @@ public class ReflexivityFieldCheck<T> implements FieldCheck {
         checkNullReflexivity(referenceAccessor, changedAccessor);
     }
 
-    private void checkReferenceReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+    private void checkReferenceReflexivity(
+            FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
         checkReflexivityFor(referenceAccessor, changedAccessor);
     }
 
-    private void checkValueReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+    private void checkValueReflexivity(
+            FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
         Class<?> fieldType = changedAccessor.getFieldType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
@@ -72,19 +73,25 @@ public class ReflexivityFieldCheck<T> implements FieldCheck {
         referenceAccessor.set(prefabValues.giveRed(tag));
         changedAccessor.set(prefabValues.giveRedCopy(tag));
 
-        Formatter f = Formatter.of("Reflexivity: == used instead of .equals() on field: %%" +
-                "\nIf this is intentional, consider suppressing Warning.%%",
-                changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
+        Formatter f =
+                Formatter.of(
+                        "Reflexivity: == used instead of .equals() on field: %%"
+                                + "\nIf this is intentional, consider suppressing Warning.%%",
+                        changedAccessor.getFieldName(), Warning.REFERENCE_EQUALITY.toString());
         Object left = referenceAccessor.getObject();
         Object right = changedAccessor.getObject();
         assertEquals(f, left, right);
     }
 
-    private void checkNullReflexivity(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+    private void checkNullReflexivity(
+            FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
         Field field = referenceAccessor.getField();
         boolean fieldIsPrimitive = referenceAccessor.fieldIsPrimitive();
         boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
-        boolean ignoreNull = fieldIsNonNull || warningsToSuppress.contains(Warning.NULL_FIELDS) || nonnullFields.contains(field.getName());
+        boolean ignoreNull =
+                fieldIsNonNull
+                        || warningsToSuppress.contains(Warning.NULL_FIELDS)
+                        || nonnullFields.contains(field.getName());
         if (fieldIsPrimitive || !ignoreNull) {
             referenceAccessor.defaultField();
             changedAccessor.defaultField();
@@ -92,17 +99,23 @@ public class ReflexivityFieldCheck<T> implements FieldCheck {
         }
     }
 
-    private void checkReflexivityFor(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+    private void checkReflexivityFor(
+            FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
         Object left = referenceAccessor.getObject();
         Object right = changedAccessor.getObject();
 
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-            assertFalse(Formatter.of("Unnecessary suppression: %%. Two identical copies are equal.", Warning.IDENTICAL_COPY.toString()),
+            assertFalse(
+                    Formatter.of(
+                            "Unnecessary suppression: %%. Two identical copies are equal.",
+                            Warning.IDENTICAL_COPY.toString()),
                     left.equals(right));
-        }
-        else {
-            Formatter f = Formatter.of("Reflexivity: object does not equal an identical copy of itself:\n  %%" +
-                    "\nIf this is intentional, consider suppressing Warning.%%", left, Warning.IDENTICAL_COPY.toString());
+        } else {
+            Formatter f =
+                    Formatter.of(
+                            "Reflexivity: object does not equal an identical copy of itself:\n  %%"
+                                    + "\nIf this is intentional, consider suppressing Warning.%%",
+                            left, Warning.IDENTICAL_COPY.toString());
             assertEquals(f, left, right);
         }
     }

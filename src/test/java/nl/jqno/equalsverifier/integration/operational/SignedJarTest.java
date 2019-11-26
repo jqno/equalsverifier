@@ -7,14 +7,12 @@ import org.junit.Test;
 public class SignedJarTest {
     @Test
     public void succeed_whenTestingAClassFromASignedJar() {
-        EqualsVerifier.forClass(SignedJarPoint.class)
-                .verify();
+        EqualsVerifier.forClass(SignedJarPoint.class).verify();
     }
 
     @Test
     public void succeed_whenTestingAClassThatExtendsFromAClassFromASignedJar() {
-        EqualsVerifier.forClass(SubclassOfSignedJarPoint.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassOfSignedJarPoint.class).verify();
     }
 
     static final class SubclassOfSignedJarPoint extends SignedJarPoint {

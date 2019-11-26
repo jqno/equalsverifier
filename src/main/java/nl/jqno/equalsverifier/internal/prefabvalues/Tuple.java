@@ -1,7 +1,8 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 /**
- * Container for three values of the same type: a "red" one, a "black" one, and a shallow copy of the "red" one.
+ * Container for three values of the same type: a "red" one, a "black" one, and a shallow copy of
+ * the "red" one.
  */
 public final class Tuple<T> {
     private final T red;
@@ -32,45 +33,35 @@ public final class Tuple<T> {
      */
     @SuppressWarnings("unchecked")
     public static <U> Tuple<U> of(Object red, Object black, Object redCopy) {
-        return new Tuple<>((U)red, (U)black, (U)redCopy);
+        return new Tuple<>((U) red, (U) black, (U) redCopy);
     }
 
-    /**
-     * @return The red value.
-     */
+    /** @return The red value. */
     public T getRed() {
         return red;
     }
 
-    /**
-     * @return The black value.
-     */
+    /** @return The black value. */
     public T getBlack() {
         return black;
     }
 
-    /**
-     * @return The shallow copy of the red value.
-     */
+    /** @return The shallow copy of the red value. */
     public T getRedCopy() {
         return redCopy;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Tuple)) {
             return false;
         }
-        Tuple<?> other = (Tuple<?>)obj;
+        Tuple<?> other = (Tuple<?>) obj;
         return red.equals(other.red) && black.equals(other.black) && redCopy.equals(other.redCopy);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         int result = 37;
@@ -80,9 +71,7 @@ public final class Tuple<T> {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "Tuple [" + red + ", " + black + ", " + redCopy + "]";

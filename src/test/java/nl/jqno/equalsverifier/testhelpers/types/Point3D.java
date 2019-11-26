@@ -13,7 +13,7 @@ public class Point3D extends Point {
         if (!(obj instanceof Point3D)) {
             return false;
         }
-        return super.equals(obj) && ((Point3D)obj).z == z;
+        return super.equals(obj) && ((Point3D) obj).z == z;
     }
 
     @Override

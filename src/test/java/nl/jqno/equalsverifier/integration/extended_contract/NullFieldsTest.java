@@ -1,13 +1,13 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class NullFieldsTest extends ExpectedExceptionTestBase {
@@ -19,97 +19,85 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsThrowsNpeOnThissField() {
         expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
-                .verify();
+        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify();
     }
 
     @Test
     public void fail_whenEqualsThrowsNpeOnOthersField() {
         expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-        EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class)
-                .verify();
+        EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify();
     }
 
     @Test
     public void fail_whenEqualsThrowsNpeOnStaticField() {
         expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "color");
-        EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class)
-                .verify();
+        EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class).verify();
     }
 
     @Test
     public void fail_whenHashCodeThrowsNpe() {
-        expectFailureWithCause(NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
-        EqualsVerifier.forClass(HashCodeThrowsNpe.class)
-                .verify();
+        expectFailureWithCause(
+                NullPointerException.class, NON_NULLITY, HASHCODE, ON_FIELD, "color");
+        EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenEqualsTestFieldWhichThrowsNpe() {
-        EqualsVerifier.forClass(CheckedDeepNullA.class)
-                .verify();
+        EqualsVerifier.forClass(CheckedDeepNullA.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsThrowsNpeOnFieldWhichAlsoThrowsNpe_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(DeepNullA.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier.forClass(DeepNullA.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(DeepNullB.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+    public void
+            succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
+        EqualsVerifier.forClass(DeepNullB.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenConstantFieldIsNull() {
-        EqualsVerifier.forClass(ConstantFieldIsNull.class)
-                .verify();
+        EqualsVerifier.forClass(ConstantFieldIsNull.class).verify();
     }
 
     @Test
     public void fail_whenClassHasNullChecksForOnlySomeFields() {
         expectFailureWithCause(NullPointerException.class, NON_NULLITY, EQUALS, ON_FIELD, "o");
-        EqualsVerifier.forClass(MixedNullFields.class)
-                .verify();
+        EqualsVerifier.forClass(MixedNullFields.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasNullChecksForOnlySomeFields_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(MixedNullFields.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier.forClass(MixedNullFields.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenClassHasNullChecksForOnlySomeFields_givenTheOtherFieldIsFlagged() {
-        EqualsVerifier.forClass(MixedNullFields.class)
-                .withNonnullFields("o")
-                .verify();
+        EqualsVerifier.forClass(MixedNullFields.class).withNonnullFields("o").verify();
     }
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
-        expectException(IllegalStateException.class,
-                "Precondition", "class MixedNullFields does not contain field thisFieldDoesNotExist.");
-        EqualsVerifier.forClass(MixedNullFields.class)
-                .withNonnullFields("thisFieldDoesNotExist");
+        expectException(
+                IllegalStateException.class,
+                "Precondition",
+                "class MixedNullFields does not contain field thisFieldDoesNotExist.");
+        EqualsVerifier.forClass(MixedNullFields.class).withNonnullFields("thisFieldDoesNotExist");
     }
 
     @Test
     public void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
-        expectException(IllegalStateException.class,
-                "Precondition", "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        expectException(
+                IllegalStateException.class,
+                "Precondition",
+                "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         EqualsVerifier.forClass(MixedNullFields.class)
                 .withNonnullFields("o")
                 .suppress(Warning.NULL_FIELDS);
@@ -117,8 +105,10 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
-        expectException(IllegalStateException.class,
-                "Precondition", "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        expectException(
+                IllegalStateException.class,
+                "Precondition",
+                "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
         EqualsVerifier.forClass(MixedNullFields.class)
                 .suppress(Warning.NULL_FIELDS)
                 .withNonnullFields("o");
@@ -127,35 +117,45 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
     static final class EqualsThrowsNpeOnThis {
         private final Color color;
 
-        public EqualsThrowsNpeOnThis(Color color) { this.color = color; }
+        public EqualsThrowsNpeOnThis(Color color) {
+            this.color = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof EqualsThrowsNpeOnThis)) {
                 return false;
             }
-            EqualsThrowsNpeOnThis p = (EqualsThrowsNpeOnThis)obj;
+            EqualsThrowsNpeOnThis p = (EqualsThrowsNpeOnThis) obj;
             return color.equals(p.color);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class EqualsThrowsNpeOnOther {
         private final Color color;
 
-        public EqualsThrowsNpeOnOther(Color color) { this.color = color; }
+        public EqualsThrowsNpeOnOther(Color color) {
+            this.color = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof EqualsThrowsNpeOnOther)) {
                 return false;
             }
-            EqualsThrowsNpeOnOther p = (EqualsThrowsNpeOnOther)obj;
+            EqualsThrowsNpeOnOther p = (EqualsThrowsNpeOnOther) obj;
             return p.color.equals(color);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class EqualsThrowsNpeOnStatic {
@@ -166,19 +166,27 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof EqualsThrowsNpeOnStatic)) {
                 return false;
             }
-            EqualsThrowsNpeOnStatic p = (EqualsThrowsNpeOnStatic)obj;
+            EqualsThrowsNpeOnStatic p = (EqualsThrowsNpeOnStatic) obj;
             return color.equals(p.color);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class HashCodeThrowsNpe {
         private final Color color;
 
-        public HashCodeThrowsNpe(Color color) { this.color = color; }
+        public HashCodeThrowsNpe(Color color) {
+            this.color = color;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
 
         @Override
         public int hashCode() {
@@ -187,7 +195,7 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
 
         @Override
         public String toString() {
-            //Object.toString calls hashCode()
+            // Object.toString calls hashCode()
             return "";
         }
     }
@@ -195,10 +203,19 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
     static final class CheckedDeepNullA {
         private final DeepNullB b;
 
-        public CheckedDeepNullA(DeepNullB b) { this.b = b; }
+        public CheckedDeepNullA(DeepNullB b) {
+            this.b = b;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class DeepNullA {
@@ -212,8 +229,15 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
             this.b = b;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class DeepNullB {
@@ -227,8 +251,15 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
             this.o = o;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class ConstantFieldIsNull {
@@ -239,8 +270,15 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
             this.o = o;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class MixedNullFields {
@@ -260,11 +298,18 @@ public class NullFieldsTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof MixedNullFields)) {
                 return false;
             }
-            MixedNullFields other = (MixedNullFields)obj;
+            MixedNullFields other = (MixedNullFields) obj;
             return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "Mixed[" + o + ", " + p + "]"; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "Mixed[" + o + ", " + p + "]";
+        }
     }
 }

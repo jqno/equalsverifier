@@ -1,6 +1,9 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -9,10 +12,6 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import java.lang.reflect.Field;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 public class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
@@ -45,13 +44,13 @@ public class AbstractDelegationChecker<T> implements Checker {
         boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
 
         if (equalsIsAbstract && hashCodeIsAbstract) {
-            fail(Formatter.of("Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
-                    type.getSimpleName()));
-        }
-        else if (equalsIsAbstract) {
+            fail(
+                    Formatter.of(
+                            "Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
+                            type.getSimpleName()));
+        } else if (equalsIsAbstract) {
             fail(buildSingleAbstractMethodErrorMessage(type, true, true));
-        }
-        else if (hashCodeIsAbstract) {
+        } else if (hashCodeIsAbstract) {
             fail(buildSingleAbstractMethodErrorMessage(type, false, true));
         }
     }
@@ -71,8 +70,7 @@ public class AbstractDelegationChecker<T> implements Checker {
     private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
         try {
             return prefabValues.giveTuple(tag);
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.
             return null;
         }
@@ -82,43 +80,57 @@ public class AbstractDelegationChecker<T> implements Checker {
         checkAbstractMethods(type, instance, copy, false);
     }
 
-    private Formatter buildSingleAbstractMethodErrorMessage(Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
-        return Formatter.of("Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
+    private Formatter buildSingleAbstractMethodErrorMessage(
+            Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
+        return Formatter.of(
+                "Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
                 c.getSimpleName(),
                 isEqualsAbstract ? "equals" : "hashCode",
                 isEqualsAbstract ? "hashCode" : "equals",
-                bothShouldBeConcrete ? "Both should be concrete." : "Both should be either abstract or concrete.");
+                bothShouldBeConcrete
+                        ? "Both should be concrete."
+                        : "Both should be either abstract or concrete.");
     }
 
-    @SuppressFBWarnings(value = "DE_MIGHT_IGNORE", justification = "These exceptions will re-occur and be handled later.")
-    private <S> void checkAbstractMethods(Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
+    @SuppressFBWarnings(
+            value = "DE_MIGHT_IGNORE",
+            justification = "These exceptions will re-occur and be handled later.")
+    private <S> void checkAbstractMethods(
+            Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
         try {
             instance.equals(copy);
-        }
-        catch (AbstractMethodError e) {
-            fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "equals", e.getMessage()), e);
-        }
-        catch (Exception ignored) {
+        } catch (AbstractMethodError e) {
+            fail(
+                    buildAbstractDelegationErrorMessage(
+                            instanceClass, prefabPossible, "equals", e.getMessage()),
+                    e);
+        } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
             // other errors will be handled later.
         }
 
         try {
             cachedHashCodeInitializer.getInitializedHashCode(instance);
-        }
-        catch (AbstractMethodError e) {
-            fail(buildAbstractDelegationErrorMessage(instanceClass, prefabPossible, "hashCode", e.getMessage()), e);
-        }
-        catch (Exception ignored) {
+        } catch (AbstractMethodError e) {
+            fail(
+                    buildAbstractDelegationErrorMessage(
+                            instanceClass, prefabPossible, "hashCode", e.getMessage()),
+                    e);
+        } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
             // other errors will be handled later.
         }
     }
 
-    private Formatter buildAbstractDelegationErrorMessage(Class<?> c, boolean prefabPossible, String method, String originalMessage) {
+    private Formatter buildAbstractDelegationErrorMessage(
+            Class<?> c, boolean prefabPossible, String method, String originalMessage) {
         Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", c.getName());
 
-        return Formatter.of("Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
-                c.getSimpleName(), method, originalMessage, prefabPossible ? prefabFormatter.format() : "");
+        return Formatter.of(
+                "Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
+                c.getSimpleName(),
+                method,
+                originalMessage,
+                prefabPossible ? prefabFormatter.format() : "");
     }
 }

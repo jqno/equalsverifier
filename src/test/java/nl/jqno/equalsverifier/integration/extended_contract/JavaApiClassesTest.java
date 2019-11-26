@@ -1,10 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
-import org.junit.Test;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -24,82 +21,76 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
+import org.junit.Test;
 
 public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsASuperCollection() {
-        EqualsVerifier.forClass(SuperCollectionContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SuperCollectionContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAList() {
-        EqualsVerifier.forClass(ListContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ListContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsASet() {
-        EqualsVerifier.forClass(SetContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SetContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAQueue() {
-        EqualsVerifier.forClass(QueueContainer.class)
-                .verify();
+        EqualsVerifier.forClass(QueueContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAMap() {
-        EqualsVerifier.forClass(MapContainer.class)
-                .verify();
+        EqualsVerifier.forClass(MapContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsANioBuffer() {
-        EqualsVerifier.forClass(NioBufferContainer.class)
-                .verify();
+        EqualsVerifier.forClass(NioBufferContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsACommonJavaApiClass() {
-        EqualsVerifier.forClass(CommonClassesContainer.class)
-                .verify();
+        EqualsVerifier.forClass(CommonClassesContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier.forClass(ReflectionClassesContainer.class)
-                .suppress(Warning.STRICT_HASHCODE) // Because java.lang.reflect.Constructor's hashCode() is unhelpful
+                .suppress(
+                        Warning
+                                .STRICT_HASHCODE) // Because java.lang.reflect.Constructor's
+                                                  // hashCode() is unhelpful
                 .verify();
     }
 
     @Test
     public void succeed_whenClassContainsACommonJava8ApiClass() {
-        EqualsVerifier.forClass(Java8ApiClassesContainer.class)
-                .verify();
+        EqualsVerifier.forClass(Java8ApiClassesContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAnAtomicValue() {
-        EqualsVerifier.forClass(AtomicClassesContainer.class)
-                .verify();
+        EqualsVerifier.forClass(AtomicClassesContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAnAncientJavaApiClass() {
-        EqualsVerifier.forClass(AncientJavaApiClassesContainer.class)
-                .verify();
+        EqualsVerifier.forClass(AncientJavaApiClassesContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassContainsAThreadLocalField() {
-        EqualsVerifier.forClass(ThreadLocalContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ThreadLocalContainer.class).verify();
     }
 
     @Test
@@ -108,7 +99,6 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 .suppress(Warning.NULL_FIELDS)
                 .verify();
     }
-
 
     abstract static class CollectionContainer {
 
@@ -141,11 +131,19 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final Collection<String> collection;
 
         public SuperCollectionContainer(Iterable<String> iterable, Collection<String> collection) {
-            this.iterable = iterable; this.collection = collection;
+            this.iterable = iterable;
+            this.collection = collection;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return doHashCode(); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return doHashCode();
+        }
 
         @Override
         protected void callAbstractMethodsOnInterface() {
@@ -162,15 +160,30 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final Vector<String> vector;
         private final Stack<String> stack;
 
-        public ListContainer(List<String> list, CopyOnWriteArrayList<String> copyOnWriteArrayList, LinkedList<String> linkedList,
-                ArrayList<String> arrayList, Vector<String> vector, Stack<String> stack) {
+        public ListContainer(
+                List<String> list,
+                CopyOnWriteArrayList<String> copyOnWriteArrayList,
+                LinkedList<String> linkedList,
+                ArrayList<String> arrayList,
+                Vector<String> vector,
+                Stack<String> stack) {
             this.list = list;
-            this.copyOnWriteArrayList = copyOnWriteArrayList; this.linkedList = linkedList; this.arrayList = arrayList;
-            this.vector = vector; this.stack = stack;
+            this.copyOnWriteArrayList = copyOnWriteArrayList;
+            this.linkedList = linkedList;
+            this.arrayList = arrayList;
+            this.vector = vector;
+            this.stack = stack;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return doHashCode(); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return doHashCode();
+        }
 
         @Override
         protected void callAbstractMethodsOnInterface() {
@@ -189,16 +202,32 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final TreeSet<String> treeSet;
         private final EnumSet<TypeHelper.Enum> enumSet;
 
-        public SetContainer(Set<String> set, SortedSet<String> sortedSet, NavigableSet<String> navigableSet,
-                CopyOnWriteArraySet<String> copyOnWriteArraySet, HashSet<String> hashSet, TreeSet<String> treeSet,
+        public SetContainer(
+                Set<String> set,
+                SortedSet<String> sortedSet,
+                NavigableSet<String> navigableSet,
+                CopyOnWriteArraySet<String> copyOnWriteArraySet,
+                HashSet<String> hashSet,
+                TreeSet<String> treeSet,
                 EnumSet<TypeHelper.Enum> enumSet) {
-            this.set = set; this.sortedSet = sortedSet; this.navigableSet = navigableSet;
-            this.copyOnWriteArraySet = copyOnWriteArraySet; this.hashSet = hashSet; this.treeSet = treeSet;
+            this.set = set;
+            this.sortedSet = sortedSet;
+            this.navigableSet = navigableSet;
+            this.copyOnWriteArraySet = copyOnWriteArraySet;
+            this.hashSet = hashSet;
+            this.treeSet = treeSet;
             this.enumSet = enumSet;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return doHashCode(); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return doHashCode();
+        }
 
         @Override
         protected void callAbstractMethodsOnInterface() {
@@ -221,18 +250,38 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final SynchronousQueue<String> synchronousQueue;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public QueueContainer(Queue<String> queue, BlockingQueue<String> blockingQueue, Deque<String> deque, BlockingDeque<String> blockingDeque,
-                ArrayBlockingQueue<String> arrayBlockingQueue, ConcurrentLinkedQueue<String> concurrentLinkedQueue, DelayQueue<Delayed> delayQueue,
-                LinkedBlockingQueue<String> linkedBlockingQueue, PriorityBlockingQueue<String> priorityBlockingQueue,
+        public QueueContainer(
+                Queue<String> queue,
+                BlockingQueue<String> blockingQueue,
+                Deque<String> deque,
+                BlockingDeque<String> blockingDeque,
+                ArrayBlockingQueue<String> arrayBlockingQueue,
+                ConcurrentLinkedQueue<String> concurrentLinkedQueue,
+                DelayQueue<Delayed> delayQueue,
+                LinkedBlockingQueue<String> linkedBlockingQueue,
+                PriorityBlockingQueue<String> priorityBlockingQueue,
                 SynchronousQueue<String> synchronousQueue) {
-            this.queue = queue; this.blockingQueue = blockingQueue; this.deque = deque; this.blockingDeque = blockingDeque;
-            this.arrayBlockingQueue = arrayBlockingQueue; this.concurrentLinkedQueue = concurrentLinkedQueue; this.delayQueue = delayQueue;
-            this.linkedBlockingQueue = linkedBlockingQueue; this.priorityBlockingQueue = priorityBlockingQueue;
+            this.queue = queue;
+            this.blockingQueue = blockingQueue;
+            this.deque = deque;
+            this.blockingDeque = blockingDeque;
+            this.arrayBlockingQueue = arrayBlockingQueue;
+            this.concurrentLinkedQueue = concurrentLinkedQueue;
+            this.delayQueue = delayQueue;
+            this.linkedBlockingQueue = linkedBlockingQueue;
+            this.priorityBlockingQueue = priorityBlockingQueue;
             this.synchronousQueue = synchronousQueue;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return doHashCode(); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return doHashCode();
+        }
 
         @Override
         protected void callAbstractMethodsOnInterface() {
@@ -258,20 +307,42 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final EnumMap<TypeHelper.Enum, String> enumMap;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public MapContainer(Map<String, String> map, SortedMap<String, String> sortedMap, NavigableMap<String, String> navigableMap,
-                ConcurrentNavigableMap<String, String> concurrentNavigableMap, ConcurrentHashMap<String, String> concurrentHashMap,
-                HashMap<String, String> hashMap, Hashtable<String, String> hashtable, LinkedHashMap<String, String> linkedHashMap,
-                Properties properties, TreeMap<String, String> treeMap, WeakHashMap<String, String> weakHashMap,
+        public MapContainer(
+                Map<String, String> map,
+                SortedMap<String, String> sortedMap,
+                NavigableMap<String, String> navigableMap,
+                ConcurrentNavigableMap<String, String> concurrentNavigableMap,
+                ConcurrentHashMap<String, String> concurrentHashMap,
+                HashMap<String, String> hashMap,
+                Hashtable<String, String> hashtable,
+                LinkedHashMap<String, String> linkedHashMap,
+                Properties properties,
+                TreeMap<String, String> treeMap,
+                WeakHashMap<String, String> weakHashMap,
                 EnumMap<TypeHelper.Enum, String> enumMap) {
-            this.map = map; this.sortedMap = sortedMap; this.navigableMap = navigableMap;
-            this.concurrentNavigableMap = concurrentNavigableMap; this.concurrentHashMap = concurrentHashMap;
-            this.hashMap = hashMap; this.hashtable = hashtable; this.linkedHashMap = linkedHashMap;
-            this.properties = properties; this.treeMap = treeMap; this.weakHashMap = weakHashMap;
+            this.map = map;
+            this.sortedMap = sortedMap;
+            this.navigableMap = navigableMap;
+            this.concurrentNavigableMap = concurrentNavigableMap;
+            this.concurrentHashMap = concurrentHashMap;
+            this.hashMap = hashMap;
+            this.hashtable = hashtable;
+            this.linkedHashMap = linkedHashMap;
+            this.properties = properties;
+            this.treeMap = treeMap;
+            this.weakHashMap = weakHashMap;
             this.enumMap = enumMap;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return doHashCode(); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return doHashCode();
+        }
 
         @Override
         protected void callAbstractMethodsOnInterface() {
@@ -295,14 +366,34 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final ShortBuffer shortBuffer;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public NioBufferContainer(Buffer buffer, ByteBuffer byteBuffer, CharBuffer charBuffer, DoubleBuffer doubleBuffer,
-                FloatBuffer floatBuffer, IntBuffer intBuffer, LongBuffer longBuffer, ShortBuffer shortBuffer) {
-            this.buffer = buffer; this.byteBuffer = byteBuffer; this.charBuffer = charBuffer; this.doubleBuffer = doubleBuffer;
-            this.floatBuffer = floatBuffer; this.intBuffer = intBuffer; this.longBuffer = longBuffer; this.shortBuffer = shortBuffer;
+        public NioBufferContainer(
+                Buffer buffer,
+                ByteBuffer byteBuffer,
+                CharBuffer charBuffer,
+                DoubleBuffer doubleBuffer,
+                FloatBuffer floatBuffer,
+                IntBuffer intBuffer,
+                LongBuffer longBuffer,
+                ShortBuffer shortBuffer) {
+            this.buffer = buffer;
+            this.byteBuffer = byteBuffer;
+            this.charBuffer = charBuffer;
+            this.doubleBuffer = doubleBuffer;
+            this.floatBuffer = floatBuffer;
+            this.intBuffer = intBuffer;
+            this.longBuffer = longBuffer;
+            this.shortBuffer = shortBuffer;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
@@ -327,19 +418,54 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.sql.Timestamp sqlTimestamp;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public CommonClassesContainer(String string, Integer integer, BitSet bitset, Calendar calendar,
-                Date date, File file, GregorianCalendar gregorianCalendar, Pattern pattern,
-                SimpleDateFormat simpleDateFormat, URI uri, UUID uuid, InetAddress inetAddress, Inet4Address inet4Address,
-                Inet6Address inet6Address, Thread thread, java.sql.Date sqlDate, java.sql.Time sqlTime, java.sql.Timestamp sqlTimestamp) {
-            this.string = string; this.integer = integer; this.bitset = bitset; this.calendar = calendar;
-            this.date = date; this.file = file; this.gregorianCalendar = gregorianCalendar; this.pattern = pattern;
-            this.simpleDateFormat = simpleDateFormat; this.uri = uri; this.uuid = uuid; this.inetAddress = inetAddress;
-            this.inet4Address = inet4Address; this.inet6Address = inet6Address; this.thread = thread; this.sqlDate = sqlDate;
-            this.sqlTime = sqlTime; this.sqlTimestamp = sqlTimestamp;
+        public CommonClassesContainer(
+                String string,
+                Integer integer,
+                BitSet bitset,
+                Calendar calendar,
+                Date date,
+                File file,
+                GregorianCalendar gregorianCalendar,
+                Pattern pattern,
+                SimpleDateFormat simpleDateFormat,
+                URI uri,
+                UUID uuid,
+                InetAddress inetAddress,
+                Inet4Address inet4Address,
+                Inet6Address inet6Address,
+                Thread thread,
+                java.sql.Date sqlDate,
+                java.sql.Time sqlTime,
+                java.sql.Timestamp sqlTimestamp) {
+            this.string = string;
+            this.integer = integer;
+            this.bitset = bitset;
+            this.calendar = calendar;
+            this.date = date;
+            this.file = file;
+            this.gregorianCalendar = gregorianCalendar;
+            this.pattern = pattern;
+            this.simpleDateFormat = simpleDateFormat;
+            this.uri = uri;
+            this.uuid = uuid;
+            this.inetAddress = inetAddress;
+            this.inet4Address = inet4Address;
+            this.inet6Address = inet6Address;
+            this.thread = thread;
+            this.sqlDate = sqlDate;
+            this.sqlTime = sqlTime;
+            this.sqlTimestamp = sqlTimestamp;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
@@ -365,20 +491,56 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final YearMonth yearMonth;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public Java8ApiClassesContainer(Optional<?> optional, LocalDate localDate, LocalTime localTime, LocalDateTime localDateTime,
-                ZoneId zoneId, ZoneOffset zoneOffset, ZonedDateTime zonedDateTime, DateTimeFormatter dateTimeFormatter,
-                CompletableFuture<?> completableFuture, StampedLock stampedLock, Supplier<?> supplier,
-                Duration duration, Instant instant, MonthDay monthDay, OffsetDateTime offsetDateTime,
-                OffsetTime offsetTime, Period period, Year year, YearMonth yearMonth) {
-            this.optional = optional; this.localDate = localDate; this.localTime = localTime; this.localDateTime = localDateTime;
-            this.zoneId = zoneId; this.zoneOffset = zoneOffset; this.zonedDateTime = zonedDateTime; this.dateTimeFormatter = dateTimeFormatter;
-            this.completableFuture = completableFuture; this.stampedLock = stampedLock; this.supplier = supplier;
-            this.duration = duration; this.instant = instant; this.monthDay = monthDay; this.offsetDateTime = offsetDateTime;
-            this.offsetTime = offsetTime; this.period = period; this.year = year; this.yearMonth = yearMonth;
+        public Java8ApiClassesContainer(
+                Optional<?> optional,
+                LocalDate localDate,
+                LocalTime localTime,
+                LocalDateTime localDateTime,
+                ZoneId zoneId,
+                ZoneOffset zoneOffset,
+                ZonedDateTime zonedDateTime,
+                DateTimeFormatter dateTimeFormatter,
+                CompletableFuture<?> completableFuture,
+                StampedLock stampedLock,
+                Supplier<?> supplier,
+                Duration duration,
+                Instant instant,
+                MonthDay monthDay,
+                OffsetDateTime offsetDateTime,
+                OffsetTime offsetTime,
+                Period period,
+                Year year,
+                YearMonth yearMonth) {
+            this.optional = optional;
+            this.localDate = localDate;
+            this.localTime = localTime;
+            this.localDateTime = localDateTime;
+            this.zoneId = zoneId;
+            this.zoneOffset = zoneOffset;
+            this.zonedDateTime = zonedDateTime;
+            this.dateTimeFormatter = dateTimeFormatter;
+            this.completableFuture = completableFuture;
+            this.stampedLock = stampedLock;
+            this.supplier = supplier;
+            this.duration = duration;
+            this.instant = instant;
+            this.monthDay = monthDay;
+            this.offsetDateTime = offsetDateTime;
+            this.offsetTime = offsetTime;
+            this.period = period;
+            this.year = year;
+            this.yearMonth = yearMonth;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
@@ -388,12 +550,23 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final Field field;
         private final Constructor<?> constructor;
 
-        public ReflectionClassesContainer(Class<?> type, Method method, Field field, Constructor<?> constructor) {
-            this.type = type; this.method = method; this.field = field; this.constructor = constructor;
+        public ReflectionClassesContainer(
+                Class<?> type, Method method, Field field, Constructor<?> constructor) {
+            this.type = type;
+            this.method = method;
+            this.field = field;
+            this.constructor = constructor;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
@@ -409,19 +582,37 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final AtomicStampedReference<?> atomicStampedReference;
 
         // CHECKSTYLE: ignore ParameterNumber for 1 line.
-        public AtomicClassesContainer(AtomicBoolean atomicBoolean, AtomicInteger atomicInteger, AtomicIntegerArray atomicIntegerArray,
-                AtomicLong atomicLong, AtomicLongArray atomicLongArray, AtomicMarkableReference<?> atomicMarkableReference,
-                AtomicReference<?> atomicReference, AtomicReferenceArray<?> atomicReferenceArray, AtomicStampedReference<?> atomicStampedReference) {
-            this.atomicBoolean = atomicBoolean; this.atomicInteger = atomicInteger; this.atomicIntegerArray = atomicIntegerArray;
-            this.atomicLong = atomicLong; this.atomicLongArray = atomicLongArray; this.atomicMarkableReference = atomicMarkableReference;
-            this.atomicReference = atomicReference; this.atomicReferenceArray = atomicReferenceArray;
+        public AtomicClassesContainer(
+                AtomicBoolean atomicBoolean,
+                AtomicInteger atomicInteger,
+                AtomicIntegerArray atomicIntegerArray,
+                AtomicLong atomicLong,
+                AtomicLongArray atomicLongArray,
+                AtomicMarkableReference<?> atomicMarkableReference,
+                AtomicReference<?> atomicReference,
+                AtomicReferenceArray<?> atomicReferenceArray,
+                AtomicStampedReference<?> atomicStampedReference) {
+            this.atomicBoolean = atomicBoolean;
+            this.atomicInteger = atomicInteger;
+            this.atomicIntegerArray = atomicIntegerArray;
+            this.atomicLong = atomicLong;
+            this.atomicLongArray = atomicLongArray;
+            this.atomicMarkableReference = atomicMarkableReference;
+            this.atomicReference = atomicReference;
+            this.atomicReferenceArray = atomicReferenceArray;
             this.atomicStampedReference = atomicStampedReference;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
-    }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
 
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+    }
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class AncientJavaApiClassesContainer {
@@ -431,13 +622,28 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.rmi.dgc.VMID vmid;
         private final java.rmi.server.UID uid;
 
-        public AncientJavaApiClassesContainer(java.awt.color.ColorSpace awtColorSpace, java.awt.color.ICC_ColorSpace iccColorSpace,
-                                              java.awt.color.ICC_Profile iccProfile, java.rmi.dgc.VMID vmid, java.rmi.server.UID uid) {
-            this.awtColorSpace = awtColorSpace; this.iccColorSpace = iccColorSpace; this.iccProfile = iccProfile; this.vmid = vmid; this.uid = uid;
+        public AncientJavaApiClassesContainer(
+                java.awt.color.ColorSpace awtColorSpace,
+                java.awt.color.ICC_ColorSpace iccColorSpace,
+                java.awt.color.ICC_Profile iccProfile,
+                java.rmi.dgc.VMID vmid,
+                java.rmi.server.UID uid) {
+            this.awtColorSpace = awtColorSpace;
+            this.iccColorSpace = iccColorSpace;
+            this.iccProfile = iccProfile;
+            this.vmid = vmid;
+            this.uid = uid;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class ThreadLocalContainer {
@@ -458,7 +664,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof ThreadLocalContainer)) {
                 return false;
             }
-            ThreadLocalContainer other = (ThreadLocalContainer)obj;
+            ThreadLocalContainer other = (ThreadLocalContainer) obj;
             if (instance == null) {
                 return other.instance == null;
             }
@@ -471,7 +677,10 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             return instance.get().equals(other.instance.get());
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class StringBuilderContainer {
@@ -486,7 +695,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof StringBuilderContainer)) {
                 return false;
             }
-            StringBuilderContainer other = (StringBuilderContainer)obj;
+            StringBuilderContainer other = (StringBuilderContainer) obj;
             return Objects.equals(stringBuilder.toString(), other.stringBuilder.toString());
         }
 

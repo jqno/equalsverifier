@@ -1,11 +1,10 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
 import java.rmi.dgc.VMID;
 import java.rmi.server.UID;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 
 public final class RmiFactoryProvider implements FactoryProvider {
 

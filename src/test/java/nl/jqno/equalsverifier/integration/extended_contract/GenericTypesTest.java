@@ -1,113 +1,96 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import com.google.common.collect.*;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReferenceArray;
+import java.util.function.Supplier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReferenceArray;
-import java.util.function.Supplier;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 public class GenericTypesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
-        EqualsVerifier.forClass(JavaGenericTypeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtListFieldsGenericContent() {
-        EqualsVerifier.forClass(ListContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ListContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtSetFieldsGenericContent() {
-        EqualsVerifier.forClass(SetContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SetContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtMapFieldsGenericContent() {
-        EqualsVerifier.forClass(MapContainer.class)
-                .verify();
+        EqualsVerifier.forClass(MapContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtListOfTFieldsGenericContent() {
-        EqualsVerifier.forClass(ListOfTContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ListOfTContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
-        EqualsVerifier.forClass(ArrayOfTContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ArrayOfTContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtImmutableCollectionFieldsGenericContent() {
-        EqualsVerifier.forClass(ImmutableCollectionContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ImmutableCollectionContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtImmutableListFieldsGenericContent() {
-        EqualsVerifier.forClass(ImmutableListContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ImmutableListContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
-        EqualsVerifier.forClass(ImmutableMapContainer.class)
-                .verify();
+        EqualsVerifier.forClass(ImmutableMapContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtBiMapFieldsGenericContent() {
-        EqualsVerifier.forClass(BiMapContainer.class)
-                .verify();
+        EqualsVerifier.forClass(BiMapContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtRangeEndpointGenericContent() {
-        EqualsVerifier.forClass(RangeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(RangeContainer.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtNonCollectionGenericContent() {
-        EqualsVerifier.forClass(SparseArrayEqualsContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SparseArrayEqualsContainer.class).verify();
     }
 
     @Test
     public void succeed_whenHashCodeLooksAtNonCollectionGenericContent() {
-        EqualsVerifier.forClass(SparseArrayHashCodeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SparseArrayHashCodeContainer.class).verify();
     }
 
     @Test
     public void succeed_whenToStringLooksAtNonCollectionGenericContent() {
-        EqualsVerifier.forClass(SparseArrayToStringContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SparseArrayToStringContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
-        EqualsVerifier.forClass(TypeVariableExtendsContainer.class)
-                .verify();
+        EqualsVerifier.forClass(TypeVariableExtendsContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
-        EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class)
-                .verify();
+        EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class).verify();
     }
 
     static final class JavaGenericTypeContainer {
@@ -115,8 +98,13 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
         private final Supplier<Point> supplier;
         private final AtomicReferenceArray<Point> atomicReferenceArray;
 
-        public JavaGenericTypeContainer(Optional<Point> optional, Supplier<Point> supplier, AtomicReferenceArray<Point> atomicReferenceArray) {
-            this.optional = optional; this.supplier = supplier; this.atomicReferenceArray = atomicReferenceArray;
+        public JavaGenericTypeContainer(
+                Optional<Point> optional,
+                Supplier<Point> supplier,
+                AtomicReferenceArray<Point> atomicReferenceArray) {
+            this.optional = optional;
+            this.supplier = supplier;
+            this.atomicReferenceArray = atomicReferenceArray;
         }
 
         // CHECKSTYLE: ignore NPathComplexity for 2 lines.
@@ -125,33 +113,43 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof JavaGenericTypeContainer)) {
                 return false;
             }
-            JavaGenericTypeContainer other = (JavaGenericTypeContainer)obj;
+            JavaGenericTypeContainer other = (JavaGenericTypeContainer) obj;
             Point thisOptionalPoint = optional != null ? optional.orElse(null) : null;
             Point thatOptionalPoint = other.optional != null ? other.optional.orElse(null) : null;
             Point thisSupplierPoint = supplier != null ? supplier.get() : null;
             Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
             Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
-            Point thatAraPoint = other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
-            return Objects.equals(thisOptionalPoint, thatOptionalPoint) &&
-                Objects.equals(thisSupplierPoint, thatSupplierPoint) &&
-                Objects.equals(thisAraPoint, thatAraPoint);
+            Point thatAraPoint =
+                    other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
+            return Objects.equals(thisOptionalPoint, thatOptionalPoint)
+                    && Objects.equals(thisSupplierPoint, thatSupplierPoint)
+                    && Objects.equals(thisAraPoint, thatAraPoint);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "JavaGenericTypeContainer: " + optional + ", " + supplier.get(); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "JavaGenericTypeContainer: " + optional + ", " + supplier.get();
+        }
     }
 
     static final class ListContainer {
         private final List<Point> list;
 
-        public ListContainer(List<Point> list) { this.list = list; }
+        public ListContainer(List<Point> list) {
+            this.list = list;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ListContainer)) {
                 return false;
             }
-            ListContainer other = (ListContainer)obj;
+            ListContainer other = (ListContainer) obj;
             if (list == null || other.list == null) {
                 return list == other.list;
             }
@@ -168,20 +166,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ListContainer: " + list; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ListContainer: " + list;
+        }
     }
 
     static final class SetContainer {
         private final Set<Point> set;
 
-        public SetContainer(Set<Point> set) { this.set = set; }
+        public SetContainer(Set<Point> set) {
+            this.set = set;
+        }
+
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof SetContainer)) {
                 return false;
             }
-            SetContainer other = (SetContainer)obj;
+            SetContainer other = (SetContainer) obj;
             if (set == null || other.set == null) {
                 return set == other.set;
             }
@@ -196,21 +204,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "SetContainer: " + set; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "SetContainer: " + set;
+        }
     }
 
     static final class MapContainer {
         private final Map<Point, Point> map;
 
-        public MapContainer(Map<Point, Point> map) { this.map = map; }
+        public MapContainer(Map<Point, Point> map) {
+            this.map = map;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof MapContainer)) {
                 return false;
             }
-            MapContainer other = (MapContainer)obj;
+            MapContainer other = (MapContainer) obj;
             if (map == null || other.map == null) {
                 return map == other.map;
             }
@@ -228,21 +245,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "MapContainer: " + map; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "MapContainer: " + map;
+        }
     }
 
     static final class ListOfTContainer<T> {
         private final ArrayList<T> list;
 
-        public ListOfTContainer(ArrayList<T> list) { this.list = list; }
+        public ListOfTContainer(ArrayList<T> list) {
+            this.list = list;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ListOfTContainer)) {
                 return false;
             }
-            ListOfTContainer<?> other = (ListOfTContainer<?>)obj;
+            ListOfTContainer<?> other = (ListOfTContainer<?>) obj;
             if (list == null || other.list == null) {
                 return list == other.list;
             }
@@ -259,21 +285,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ListOfTContainer: " + list; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ListOfTContainer: " + list;
+        }
     }
 
     static final class ArrayOfTContainer<T> {
         private final T[] array;
 
-        public ArrayOfTContainer(T[] array) { this.array = array; }
+        public ArrayOfTContainer(T[] array) {
+            this.array = array;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ArrayOfTContainer)) {
                 return false;
             }
-            ArrayOfTContainer<?> other = (ArrayOfTContainer<?>)obj;
+            ArrayOfTContainer<?> other = (ArrayOfTContainer<?>) obj;
             if (array == null || other.array == null) {
                 return array == other.array;
             }
@@ -290,21 +325,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return Arrays.hashCode(array); }
-        @Override public String toString() { return "ArrayOfTContainer: " + array; }
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(array);
+        }
+
+        @Override
+        public String toString() {
+            return "ArrayOfTContainer: " + array;
+        }
     }
 
     static final class ImmutableCollectionContainer {
         private final ImmutableCollection<Point> coll;
 
-        public ImmutableCollectionContainer(ImmutableCollection<Point> coll) { this.coll = coll; }
+        public ImmutableCollectionContainer(ImmutableCollection<Point> coll) {
+            this.coll = coll;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ImmutableCollectionContainer)) {
                 return false;
             }
-            ImmutableCollectionContainer other = (ImmutableCollectionContainer)obj;
+            ImmutableCollectionContainer other = (ImmutableCollectionContainer) obj;
             if (coll == null || other.coll == null) {
                 return coll == other.coll;
             }
@@ -319,21 +363,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ImmutableCollectionContainer: " + coll; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ImmutableCollectionContainer: " + coll;
+        }
     }
 
     static final class ImmutableListContainer {
         private final ImmutableList<Point> list;
 
-        public ImmutableListContainer(ImmutableList<Point> list) { this.list = list; }
+        public ImmutableListContainer(ImmutableList<Point> list) {
+            this.list = list;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ImmutableListContainer)) {
                 return false;
             }
-            ImmutableListContainer other = (ImmutableListContainer)obj;
+            ImmutableListContainer other = (ImmutableListContainer) obj;
             if (list == null || other.list == null) {
                 return list == other.list;
             }
@@ -350,21 +403,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ImmutableListContainer: " + list; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ImmutableListContainer: " + list;
+        }
     }
 
     static final class ImmutableMapContainer {
         private final ImmutableMap<Point, Point> map;
 
-        public ImmutableMapContainer(ImmutableMap<Point, Point> map) { this.map = map; }
+        public ImmutableMapContainer(ImmutableMap<Point, Point> map) {
+            this.map = map;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof ImmutableMapContainer)) {
                 return false;
             }
-            ImmutableMapContainer other = (ImmutableMapContainer)obj;
+            ImmutableMapContainer other = (ImmutableMapContainer) obj;
             if (map == null || other.map == null) {
                 return map == other.map;
             }
@@ -382,21 +444,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ImmutableMapContainer: " + map; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ImmutableMapContainer: " + map;
+        }
     }
 
     static final class RangeContainer {
         private final Range<String> range;
 
-        public RangeContainer(Range<String> coll) { this.range = coll; }
+        public RangeContainer(Range<String> coll) {
+            this.range = coll;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof RangeContainer)) {
                 return false;
             }
-            RangeContainer other = (RangeContainer)obj;
+            RangeContainer other = (RangeContainer) obj;
             if (range == null || other.range == null) {
                 return range == other.range;
             }
@@ -408,21 +479,30 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return range.equals(other.range);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "ImmutableCollectionContainer: " + range; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "ImmutableCollectionContainer: " + range;
+        }
     }
 
     static final class BiMapContainer {
         private final BiMap<Point, Point> map;
 
-        public BiMapContainer(BiMap<Point, Point> map) { this.map = map; }
+        public BiMapContainer(BiMap<Point, Point> map) {
+            this.map = map;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof BiMapContainer)) {
                 return false;
             }
-            BiMapContainer other = (BiMapContainer)obj;
+            BiMapContainer other = (BiMapContainer) obj;
             if (map == null || other.map == null) {
                 return map == other.map;
             }
@@ -442,8 +522,15 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             return true;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
-        @Override public String toString() { return "BiMapContainer: " + map; }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "BiMapContainer: " + map;
+        }
     }
 
     static final class SparseArray<T> {
@@ -476,7 +563,7 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof SparseArrayEqualsContainer)) {
                 return false;
             }
-            SparseArrayEqualsContainer other = (SparseArrayEqualsContainer)obj;
+            SparseArrayEqualsContainer other = (SparseArrayEqualsContainer) obj;
             if (sparseArray == null || other.sparseArray == null) {
                 return sparseArray == other.sparseArray;
             }
@@ -536,8 +623,15 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
             this.sparseArray = sparseArray;
         }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
 
         @Override
         public String toString() {
@@ -555,17 +649,37 @@ public class GenericTypesTest extends ExpectedExceptionTestBase {
     static final class TypeVariableExtendsContainer<I extends Comparable<I>> {
         private final I id;
 
-        protected TypeVariableExtendsContainer(I id) { this.id = id; }
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        protected TypeVariableExtendsContainer(I id) {
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused")
     static final class TypeVariableExtendsWithSuperContainer<I extends Comparable<? super I>> {
         private final I id;
 
-        protected TypeVariableExtendsWithSuperContainer(I id) { this.id = id; }
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        protected TypeVariableExtendsWithSuperContainer(I id) {
+            this.id = id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

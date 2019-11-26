@@ -1,24 +1,20 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 
-/**
- * Contains a cache of factories, for {@link PrefabValues}.
- */
+/** Contains a cache of factories, for {@link PrefabValues}. */
 public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFactory<?>>> {
     /**
-     * We store Strings instead of Classes, so that the cache can be lazy
-     * and initializers won't be called until the class is actually needed.
+     * We store Strings instead of Classes, so that the cache can be lazy and initializers won't be
+     * called until the class is actually needed.
      */
     private final Map<String, PrefabValueFactory<?>> cache = new HashMap<>();
 
     /**
-     * Adds the given factory to the cache and associates it with the given
-     * type.
+     * Adds the given factory to the cache and associates it with the given type.
      *
      * @param <T> The type of the factory.
      * @param type The type to associate with the factory.
@@ -31,8 +27,7 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
     }
 
     /**
-     * Adds the given factory to the cache and associates it with the given
-     * type name.
+     * Adds the given factory to the cache and associates it with the given type name.
      *
      * @param <T> Should match {@code typeName}.
      * @param typeName The fully qualified name of the type.
@@ -47,20 +42,19 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
     /**
      * Retrieves the factory from the cache for the given type.
      *
-     * What happens when there is no factory, is undefined. Always call
-     * {@link #contains(Class)} first.
+     * <p>What happens when there is no factory, is undefined. Always call {@link #contains(Class)}
+     * first.
      *
      * @param <T> The returned factory will have this as generic type.
      * @param type The type for which a factory is needed.
-     * @return A factory for the given type, or {@code null} if none is
-     *          available.
+     * @return A factory for the given type, or {@code null} if none is available.
      */
     @SuppressWarnings("unchecked")
     public <T> PrefabValueFactory<T> get(Class<T> type) {
         if (type == null) {
             return null;
         }
-        return (PrefabValueFactory<T>)cache.get(type.getName());
+        return (PrefabValueFactory<T>) cache.get(type.getName());
     }
 
     /**
@@ -72,12 +66,11 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
     }
 
     /**
-     * Returns a new {@code FactoryCache} instance containing the factories
-     * from {@code this} and from the {@code other} cache.
+     * Returns a new {@code FactoryCache} instance containing the factories from {@code this} and
+     * from the {@code other} cache.
      *
      * @param other The other cache
-     * @return a new instance containing factories from {@code this} and
-     *          {@code other}
+     * @return a new instance containing factories from {@code this} and {@code other}
      */
     public FactoryCache merge(FactoryCache other) {
         FactoryCache result = new FactoryCache();
@@ -92,9 +85,7 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
         }
     }
 
-    /**
-     * Provides an iterator over all available factories.
-     */
+    /** Provides an iterator over all available factories. */
     @Override
     public Iterator<Map.Entry<String, PrefabValueFactory<?>>> iterator() {
         return cache.entrySet().iterator();

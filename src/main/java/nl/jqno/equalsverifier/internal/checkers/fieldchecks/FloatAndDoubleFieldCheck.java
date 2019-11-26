@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
+
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 public class FloatAndDoubleFieldCheck implements FieldCheck {
     @Override
@@ -12,14 +12,22 @@ public class FloatAndDoubleFieldCheck implements FieldCheck {
         if (isFloat(type)) {
             referenceAccessor.set(Float.NaN);
             changedAccessor.set(Float.NaN);
-            assertEquals(Formatter.of("Float: equals doesn't use Float.compare for field %%.", referenceAccessor.getFieldName()),
-                    referenceAccessor.getObject(), changedAccessor.getObject());
+            assertEquals(
+                    Formatter.of(
+                            "Float: equals doesn't use Float.compare for field %%.",
+                            referenceAccessor.getFieldName()),
+                    referenceAccessor.getObject(),
+                    changedAccessor.getObject());
         }
         if (isDouble(type)) {
             referenceAccessor.set(Double.NaN);
             changedAccessor.set(Double.NaN);
-            assertEquals(Formatter.of("Double: equals doesn't use Double.compare for field %%.", referenceAccessor.getFieldName()),
-                    referenceAccessor.getObject(), changedAccessor.getObject());
+            assertEquals(
+                    Formatter.of(
+                            "Double: equals doesn't use Double.compare for field %%.",
+                            referenceAccessor.getFieldName()),
+                    referenceAccessor.getObject(),
+                    changedAccessor.getObject());
         }
     }
 

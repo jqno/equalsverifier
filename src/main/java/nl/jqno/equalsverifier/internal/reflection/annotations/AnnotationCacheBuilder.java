@@ -1,24 +1,24 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import net.bytebuddy.description.annotation.AnnotationDescription;
-import net.bytebuddy.description.type.TypeDescription;
-import net.bytebuddy.pool.TypePool;
-import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
+import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
+import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.pool.TypePool;
+import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
 public class AnnotationCacheBuilder {
 
     private final List<Annotation> supportedAnnotations;
     private final Set<String> ignoredAnnotations;
 
-    public AnnotationCacheBuilder(Annotation[] supportedAnnotations, Set<String> ignoredAnnotations) {
+    public AnnotationCacheBuilder(
+            Annotation[] supportedAnnotations, Set<String> ignoredAnnotations) {
         this.supportedAnnotations = Arrays.asList(supportedAnnotations);
         this.ignoredAnnotations = ignoredAnnotations;
     }
@@ -36,22 +36,27 @@ public class AnnotationCacheBuilder {
             visitSuperclasses(type, cache, pool);
             visitOuterClasses(type, cache, pool);
             visitPackage(type, cache, pool);
-        }
-        catch (IllegalStateException ignored) {
+        } catch (IllegalStateException ignored) {
             // Just ignore this class if it can't be processed.
         }
     }
 
-    private void visitType(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
+    private void visitType(
+            Set<Class<?>> types,
+            AnnotationCache cache,
+            TypeDescription typeDescription,
+            boolean inheriting) {
         visitClass(types, cache, typeDescription, inheriting);
         visitFields(types, cache, typeDescription, inheriting);
     }
 
     private void visitSuperclasses(Class<?> type, AnnotationCache cache, TypePool pool) {
-        SuperclassIterable.of(type).forEach(c -> {
-            TypeDescription typeDescription = pool.describe(c.getName()).resolve();
-            visitType(setOf(type, c), cache, typeDescription, true);
-        });
+        SuperclassIterable.of(type)
+                .forEach(
+                        c -> {
+                            TypeDescription typeDescription = pool.describe(c.getName()).resolve();
+                            visitType(setOf(type, c), cache, typeDescription, true);
+                        });
     }
 
     private void visitOuterClasses(Class<?> type, AnnotationCache cache, TypePool pool) {
@@ -75,44 +80,95 @@ public class AnnotationCacheBuilder {
         try {
             TypeDescription typeDescription = pool.describe(className).resolve();
             visitType(setOf(type), cache, typeDescription, false);
-        }
-        catch (IllegalStateException e) {
+        } catch (IllegalStateException e) {
             // No package object; do nothing.
         }
     }
 
-    private void visitClass(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
+    private void visitClass(
+            Set<Class<?>> types,
+            AnnotationCache cache,
+            TypeDescription typeDescription,
+            boolean inheriting) {
         Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addClassAnnotation(t, a));
-        typeDescription.getDeclaredAnnotations()
-            .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
+        typeDescription
+                .getDeclaredAnnotations()
+                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
     }
 
-    private void visitFields(Set<Class<?>> types, AnnotationCache cache, TypeDescription typeDescription, boolean inheriting) {
-        typeDescription.getDeclaredFields().forEach(f -> {
-            Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addFieldAnnotation(t, f.getName(), a));
+    private void visitFields(
+            Set<Class<?>> types,
+            AnnotationCache cache,
+            TypeDescription typeDescription,
+            boolean inheriting) {
+        typeDescription
+                .getDeclaredFields()
+                .forEach(
+                        f -> {
+                            Consumer<Annotation> addToCache =
+                                    a ->
+                                            types.forEach(
+                                                    t ->
+                                                            cache.addFieldAnnotation(
+                                                                    t, f.getName(), a));
 
-            // Regular field annotations
-            f.getDeclaredAnnotations()
-                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
+                            // Regular field annotations
+                            f.getDeclaredAnnotations()
+                                    .forEach(
+                                            a ->
+                                                    cacheSupportedAnnotations(
+                                                            a,
+                                                            types,
+                                                            cache,
+                                                            addToCache,
+                                                            inheriting));
 
-            // Type-use annotations
-            f.getType().getDeclaredAnnotations()
-                .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
-        });
-        typeDescription.getDeclaredMethods()
-            .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3)
-            .forEach(m -> {
-                String methodName = m.getName();
-                String correspondingFieldName = Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
-                Consumer<Annotation> addToCache = a -> types.forEach(t -> cache.addFieldAnnotation(t, correspondingFieldName, a));
+                            // Type-use annotations
+                            f.getType()
+                                    .getDeclaredAnnotations()
+                                    .forEach(
+                                            a ->
+                                                    cacheSupportedAnnotations(
+                                                            a,
+                                                            types,
+                                                            cache,
+                                                            addToCache,
+                                                            inheriting));
+                        });
+        typeDescription
+                .getDeclaredMethods()
+                .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3)
+                .forEach(
+                        m -> {
+                            String methodName = m.getName();
+                            String correspondingFieldName =
+                                    Character.toLowerCase(methodName.charAt(3))
+                                            + methodName.substring(4);
+                            Consumer<Annotation> addToCache =
+                                    a ->
+                                            types.forEach(
+                                                    t ->
+                                                            cache.addFieldAnnotation(
+                                                                    t, correspondingFieldName, a));
 
-                m.getDeclaredAnnotations()
-                    .forEach(a -> cacheSupportedAnnotations(a, types, cache, addToCache, inheriting));
-            });
+                            m.getDeclaredAnnotations()
+                                    .forEach(
+                                            a ->
+                                                    cacheSupportedAnnotations(
+                                                            a,
+                                                            types,
+                                                            cache,
+                                                            addToCache,
+                                                            inheriting));
+                        });
     }
 
     private void cacheSupportedAnnotations(
-            AnnotationDescription annotation, Set<Class<?>> types, AnnotationCache cache, Consumer<Annotation> addToCache, boolean inheriting) {
+            AnnotationDescription annotation,
+            Set<Class<?>> types,
+            AnnotationCache cache,
+            Consumer<Annotation> addToCache,
+            boolean inheriting) {
 
         if (ignoredAnnotations.contains(annotation.getAnnotationType().getCanonicalName())) {
             return;
@@ -121,39 +177,41 @@ public class AnnotationCacheBuilder {
         Consumer<Annotation> postProcess = a -> a.postProcess(types, cache);
 
         AnnotationProperties props = buildAnnotationProperties(annotation);
-        supportedAnnotations
-            .stream()
-            .filter(sa -> matches(annotation, sa))
-            .filter(sa -> !inheriting || sa.inherits())
-            .filter(sa -> sa.validate(props, cache, ignoredAnnotations))
-            .forEach(addToCache.andThen(postProcess));
+        supportedAnnotations.stream()
+                .filter(sa -> matches(annotation, sa))
+                .filter(sa -> !inheriting || sa.inherits())
+                .filter(sa -> sa.validate(props, cache, ignoredAnnotations))
+                .forEach(addToCache.andThen(postProcess));
     }
 
     private AnnotationProperties buildAnnotationProperties(AnnotationDescription annotation) {
-        AnnotationProperties props = new AnnotationProperties(annotation.getAnnotationType().getCanonicalName());
-        annotation.getAnnotationType().getDeclaredMethods().forEach(m -> {
-            Object val = annotation.getValue(m).resolve();
-            if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
-                Object[] array = (Object[])val;
-                Set<String> values = new HashSet<>();
-                for (Object obj : array) {
-                    if (obj instanceof TypeDescription) {
-                        values.add(((TypeDescription)obj).getName());
-                    }
-                    else {
-                        values.add(obj.toString());
-                    }
-                }
-                props.putArrayValues(m.getName(), values);
-            }
-        });
+        AnnotationProperties props =
+                new AnnotationProperties(annotation.getAnnotationType().getCanonicalName());
+        annotation
+                .getAnnotationType()
+                .getDeclaredMethods()
+                .forEach(
+                        m -> {
+                            Object val = annotation.getValue(m).resolve();
+                            if (val.getClass().isArray()
+                                    && !val.getClass().getComponentType().isPrimitive()) {
+                                Object[] array = (Object[]) val;
+                                Set<String> values = new HashSet<>();
+                                for (Object obj : array) {
+                                    if (obj instanceof TypeDescription) {
+                                        values.add(((TypeDescription) obj).getName());
+                                    } else {
+                                        values.add(obj.toString());
+                                    }
+                                }
+                                props.putArrayValues(m.getName(), values);
+                            }
+                        });
         return props;
     }
 
     private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
         String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
-        return supportedAnnotation.partialClassNames()
-            .stream()
-            .anyMatch(canonicalName::endsWith);
+        return supportedAnnotation.partialClassNames().stream().anyMatch(canonicalName::endsWith);
     }
 }

@@ -7,26 +7,27 @@ import org.junit.Test;
 public class HashCodeTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenHashCodesAreInconsistent() {
-        expectFailure("hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(RandomHashCode.class)
-                .verify();
+        expectFailure(
+                "hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());
+        EqualsVerifier.forClass(RandomHashCode.class).verify();
     }
 
     @Test
     public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
         expectFailure("hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(NoHashCode.class)
-                .verify();
+        EqualsVerifier.forClass(NoHashCode.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsShortCircuitsOnHashCode() {
-        EqualsVerifier.forClass(ShortCircuitOnHashCode.class)
-                .verify();
+        EqualsVerifier.forClass(ShortCircuitOnHashCode.class).verify();
     }
 
     static final class RandomHashCode {
-        @Override public boolean equals(Object obj) { return super.equals(obj); }
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
+        }
 
         @Override
         public int hashCode() {
@@ -38,21 +39,25 @@ public class HashCodeTest extends ExpectedExceptionTestBase {
     static class NoHashCode {
         private final int i;
 
-        public NoHashCode(int i) { this.i = i; }
+        public NoHashCode(int i) {
+            this.i = i;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof NoHashCode)) {
                 return false;
             }
-            return i == ((NoHashCode)obj).i;
+            return i == ((NoHashCode) obj).i;
         }
     }
 
     static final class ShortCircuitOnHashCode {
         private final int i;
 
-        public ShortCircuitOnHashCode(int i) { this.i = i; }
+        public ShortCircuitOnHashCode(int i) {
+            this.i = i;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -62,7 +67,7 @@ public class HashCodeTest extends ExpectedExceptionTestBase {
             if (hashCode() != obj.hashCode()) {
                 return false;
             }
-            ShortCircuitOnHashCode other = (ShortCircuitOnHashCode)obj;
+            ShortCircuitOnHashCode other = (ShortCircuitOnHashCode) obj;
             return i == other.i;
         }
 

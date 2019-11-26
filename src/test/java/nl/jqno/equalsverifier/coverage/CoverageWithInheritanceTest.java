@@ -1,14 +1,13 @@
 package nl.jqno.equalsverifier.coverage;
 
+import java.util.Arrays;
+import java.util.Collection;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Arrays;
-import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
@@ -17,7 +16,7 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
     private final Class<U> subType;
     private final Class<V> endpointType;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public CoverageWithInheritanceTest(Class<?> containerType) {
         this.containerType = containerType;
         Class[] containingTypes = containerType.getClasses();
@@ -28,10 +27,7 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { HandwrittenCanEqual.class },
-                { LombokCanEqual.class }
-        });
+        return Arrays.asList(new Object[][] {{HandwrittenCanEqual.class}, {LombokCanEqual.class}});
     }
 
     @SuppressWarnings("rawtypes")
@@ -47,9 +43,7 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
 
     @Test
     public void testSuperCoverage() {
-        EqualsVerifier.forClass(superType)
-                .withRedefinedSubclass(subType)
-                .verify();
+        EqualsVerifier.forClass(superType).withRedefinedSubclass(subType).verify();
     }
 
     @Test
@@ -65,6 +59,8 @@ public class CoverageWithInheritanceTest<T, U extends T, V extends U> {
         containerType.getConstructor().newInstance();
         superType.getConstructor(int.class, int.class).newInstance(0, 0);
         subType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
-        endpointType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
+        endpointType
+                .getConstructor(int.class, int.class, Color.class)
+                .newInstance(0, 0, Color.INDIGO);
     }
 }

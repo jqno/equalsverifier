@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import javax.tools.*;
-import javax.tools.JavaCompiler.CompilationTask;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +12,13 @@ import java.net.URLClassLoader;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import javax.tools.*;
+import javax.tools.JavaCompiler.CompilationTask;
 
 /**
  * Compiles a class contained within a String.
  *
- * Useful for tests that refer to types that may or may not be present on the
- * classpath.
+ * <p>Useful for tests that refer to types that may or may not be present on the classpath.
  */
 public class ConditionalCompiler implements Closeable {
     private final File tempFolder;
@@ -28,9 +27,8 @@ public class ConditionalCompiler implements Closeable {
     /**
      * Constructor.
      *
-     * @param tempFolder
-     *            To be determined in a unit test by:
-     *            @Rule TemporaryFolder tempFolder = new TemporaryFolder();
+     * @param tempFolder To be determined in a unit test by: @Rule TemporaryFolder tempFolder = new
+     *     TemporaryFolder();
      */
     public ConditionalCompiler(File tempFolder) {
         this.tempFolder = tempFolder;
@@ -39,10 +37,9 @@ public class ConditionalCompiler implements Closeable {
 
     private static URLClassLoader createClassLoader(File tempFolder) {
         try {
-            URL[] urls = { tempFolder.toURI().toURL() };
+            URL[] urls = {tempFolder.toURI().toURL()};
             return new URLClassLoader(urls);
-        }
-        catch (MalformedURLException e) {
+        } catch (MalformedURLException e) {
             throw new AssertionError(e);
         }
     }
@@ -50,24 +47,19 @@ public class ConditionalCompiler implements Closeable {
     /**
      * Compiles the class. The class must be in the default package.
      *
-     * @param className
-     *            Must match the name of the class given in {@code code}.
-     * @param code
-     *            The class to compile.
+     * @param className Must match the name of the class given in {@code code}.
+     * @param code The class to compile.
      * @return {@code code} as a compiled class.
-     * @throws AssertionError
-     *             If any part of the compilation fails.
+     * @throws AssertionError If any part of the compilation fails.
      */
     public Class<?> compile(String className, String code) {
         try {
             JavaFileObject sourceFile = new StringJavaFileObject(className, code);
             compileClass(sourceFile);
             return classLoader.loadClass(className);
-        }
-        catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             throw new AssertionError("Failed to load newly compiled class:\n" + e.toString());
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             throw new AssertionError("Failed to write file:\n" + e.toString());
         }
     }
@@ -78,27 +70,42 @@ public class ConditionalCompiler implements Closeable {
         DiagnosticCollector<JavaFileObject> collector = new DiagnosticCollector<>();
         try {
             fileManager = compiler.getStandardFileManager(collector, Locale.ROOT, null);
-            fileManager.setLocation(StandardLocation.CLASS_OUTPUT, Collections.singletonList(tempFolder));
-            CompilationTask task = compiler.getTask(null, fileManager, collector, null, null, Collections.singletonList(sourceFile));
+            fileManager.setLocation(
+                    StandardLocation.CLASS_OUTPUT, Collections.singletonList(tempFolder));
+            CompilationTask task =
+                    compiler.getTask(
+                            null,
+                            fileManager,
+                            collector,
+                            null,
+                            null,
+                            Collections.singletonList(sourceFile));
 
             boolean success = task.call();
             if (!success) {
                 throw new AssertionError(buildErrorMessage(sourceFile, collector));
             }
-        }
-        finally {
+        } finally {
             if (fileManager != null) {
                 fileManager.close();
             }
         }
     }
 
-    private String buildErrorMessage(JavaFileObject sourceFile, DiagnosticCollector<JavaFileObject> collector) {
+    private String buildErrorMessage(
+            JavaFileObject sourceFile, DiagnosticCollector<JavaFileObject> collector) {
         String result = "Could not compile class " + sourceFile.getName() + ":";
         List<Diagnostic<? extends JavaFileObject>> diagnostics = collector.getDiagnostics();
         for (Diagnostic<? extends JavaFileObject> diag : diagnostics) {
-            result += "\n" + diag.getKind() + " at " + diag.getLineNumber() + "," + diag.getColumnNumber() +
-                    ": " + diag.getMessage(Locale.ROOT);
+            result +=
+                    "\n"
+                            + diag.getKind()
+                            + " at "
+                            + diag.getLineNumber()
+                            + ","
+                            + diag.getColumnNumber()
+                            + ": "
+                            + diag.getMessage(Locale.ROOT);
         }
         return result;
     }
@@ -111,11 +118,9 @@ public class ConditionalCompiler implements Closeable {
             Class<?> type = URLClassLoader.class;
             Method close = type.getDeclaredMethod("close");
             close.invoke(classLoader);
-        }
-        catch (NoSuchMethodException ignored) {
+        } catch (NoSuchMethodException ignored) {
             // Java 6: do nothing; this code won't be reached anyway.
-        }
-        catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InvocationTargetException e) {
             throw new AssertionError(e);
         }
     }
@@ -124,7 +129,9 @@ public class ConditionalCompiler implements Closeable {
         private final String code;
 
         protected StringJavaFileObject(String className, String code) {
-            super(URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension), Kind.SOURCE);
+            super(
+                    URI.create("string:///" + className.replace('.', '/') + Kind.SOURCE.extension),
+                    Kind.SOURCE);
             this.code = code;
         }
 

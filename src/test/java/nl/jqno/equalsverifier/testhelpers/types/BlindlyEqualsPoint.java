@@ -13,13 +13,13 @@ public class BlindlyEqualsPoint {
         if (!(o instanceof BlindlyEqualsPoint)) {
             return false;
         }
-        BlindlyEqualsPoint p = (BlindlyEqualsPoint)o;
+        BlindlyEqualsPoint p = (BlindlyEqualsPoint) o;
         return p.x == this.x && p.y == this.y;
     }
 
     @Override
-    public boolean equals(Object o){
-        return this.blindlyEquals(o) && ((BlindlyEqualsPoint)o).blindlyEquals(this);
+    public boolean equals(Object o) {
+        return this.blindlyEquals(o) && ((BlindlyEqualsPoint) o).blindlyEquals(this);
     }
 
     @Override

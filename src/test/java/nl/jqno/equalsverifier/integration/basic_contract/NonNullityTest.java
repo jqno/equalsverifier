@@ -9,19 +9,19 @@ public class NonNullityTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
         expectFailure("Non-nullity: NullPointerException thrown");
-        EqualsVerifier.forClass(NullPointerExceptionThrower.class)
-                .verify();
+        EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify();
     }
 
     @Test
     public void fail_whenEqualsReturnsTrue_givenNullInput() {
         expectFailure("Non-nullity: true returned for null value");
-        EqualsVerifier.forClass(NullReturnsTrue.class)
-                .verify();
+        EqualsVerifier.forClass(NullReturnsTrue.class).verify();
     }
 
     static final class NullPointerExceptionThrower extends Point {
-        public NullPointerExceptionThrower(int x, int y) { super(x, y); }
+        public NullPointerExceptionThrower(int x, int y) {
+            super(x, y);
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -33,7 +33,9 @@ public class NonNullityTest extends ExpectedExceptionTestBase {
     }
 
     static final class NullReturnsTrue extends Point {
-        public NullReturnsTrue(int x, int y) { super(x, y); }
+        public NullReturnsTrue(int x, int y) {
+            super(x, y);
+        }
 
         @Override
         public boolean equals(Object obj) {

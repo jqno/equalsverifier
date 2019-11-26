@@ -1,16 +1,15 @@
 package nl.jqno.equalsverifier.testhelpers;
 
+import static org.hamcrest.CoreMatchers.not;
+
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.CoreMatchers.not;
-
 public abstract class ExpectedExceptionTestBase {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Rule public ExpectedException thrown = ExpectedException.none();
 
     public void expectFailureWithCause(Class<? extends Throwable> cause, String... fragments) {
         thrown.expect(new CauseMatcher(cause));
@@ -55,7 +54,7 @@ public abstract class ExpectedExceptionTestBase {
 
         @Override
         public boolean matches(Object item) {
-            Throwable actual = ((Throwable)item).getCause();
+            Throwable actual = ((Throwable) item).getCause();
             if (cause == null) {
                 return actual == null;
             }
@@ -86,7 +85,7 @@ public abstract class ExpectedExceptionTestBase {
             if (!(item instanceof MessagingException)) {
                 return false;
             }
-            MessagingException me = (MessagingException)item;
+            MessagingException me = (MessagingException) item;
             if (me.getDescription() == null) {
                 return false;
             }
@@ -108,7 +107,7 @@ public abstract class ExpectedExceptionTestBase {
 
         @Override
         public boolean matches(Object item) {
-            Throwable cause = ((Throwable)item).getCause();
+            Throwable cause = ((Throwable) item).getCause();
             while (cause != null) {
                 if (cause.getMessage() != null && cause.getMessage().contains(description)) {
                     return true;

@@ -1,22 +1,22 @@
 package nl.jqno.equalsverifier.integration.inheritance;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.Test;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
-        EqualsVerifier.forClass(AbstractFinalMethodsPoint.class)
-                .verify();
+        EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
     }
 
     @Test
-    public void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
+    public void
+            succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
         EqualsVerifier.forClass(AbstractRedefinablePoint.class)
                 .withRedefinedSubclass(FinalRedefinedPoint.class)
                 .verify();
@@ -24,9 +24,9 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
-        expectFailureWithCause(NullPointerException.class, "Non-nullity: equals throws NullPointerException");
-        EqualsVerifier.forClass(NullThrowingColorContainer.class)
-                .verify();
+        expectFailureWithCause(
+                NullPointerException.class, "Non-nullity: equals throws NullPointerException");
+        EqualsVerifier.forClass(NullThrowingColorContainer.class).verify();
     }
 
     @Test
@@ -38,7 +38,8 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAbstractImplementationThrowsNpe() {
-        expectFailure("Abstract delegation: equals throws AbstractMethodError when field object is null");
+        expectFailure(
+                "Abstract delegation: equals throws AbstractMethodError when field object is null");
         EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
                 .suppress(Warning.NONFINAL_FIELDS)
                 .withIgnoredFields("objectFactory")
@@ -57,25 +58,34 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
         private final int x;
         private final int y;
 
-        public AbstractFinalMethodsPoint(int x, int y) { this.x = x; this.y = y; }
+        public AbstractFinalMethodsPoint(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof AbstractFinalMethodsPoint)) {
                 return false;
             }
-            AbstractFinalMethodsPoint p = (AbstractFinalMethodsPoint)obj;
+            AbstractFinalMethodsPoint p = (AbstractFinalMethodsPoint) obj;
             return x == p.x && y == p.y;
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class AbstractRedefinablePoint {
         private final int x;
         private final int y;
 
-        public AbstractRedefinablePoint(int x, int y) { this.x = x; this.y = y; }
+        public AbstractRedefinablePoint(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
 
         public boolean canEqual(Object obj) {
             return obj instanceof AbstractRedefinablePoint;
@@ -86,17 +96,23 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof AbstractRedefinablePoint)) {
                 return false;
             }
-            AbstractRedefinablePoint p = (AbstractRedefinablePoint)obj;
+            AbstractRedefinablePoint p = (AbstractRedefinablePoint) obj;
             return p.canEqual(this) && x == p.x && y == p.y;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class FinalRedefinedPoint extends AbstractRedefinablePoint {
         private final Color color;
 
-        public FinalRedefinedPoint(int x, int y, Color color) { super(x, y); this.color = color; }
+        public FinalRedefinedPoint(int x, int y, Color color) {
+            super(x, y);
+            this.color = color;
+        }
 
         @Override
         public boolean canEqual(Object obj) {
@@ -108,27 +124,35 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof FinalRedefinedPoint)) {
                 return false;
             }
-            FinalRedefinedPoint p = (FinalRedefinedPoint)obj;
+            FinalRedefinedPoint p = (FinalRedefinedPoint) obj;
             return p.canEqual(this) && super.equals(p) && color == p.color;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class NullThrowingColorContainer {
         private final Color color;
 
-        public NullThrowingColorContainer(Color color) { this.color = color; }
+        public NullThrowingColorContainer(Color color) {
+            this.color = color;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof NullThrowingColorContainer)) {
                 return false;
             }
-            return color.equals(((NullThrowingColorContainer)obj).color);
+            return color.equals(((NullThrowingColorContainer) obj).color);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class AbstractLazyObjectContainer {
@@ -148,11 +172,14 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof AbstractLazyObjectContainer)) {
                 return false;
             }
-            AbstractLazyObjectContainer other = (AbstractLazyObjectContainer)obj;
+            AbstractLazyObjectContainer other = (AbstractLazyObjectContainer) obj;
             return getObject().equals(other.getObject());
         }
 
-        @Override public int hashCode() { return getObject().hashCode(); }
+        @Override
+        public int hashCode() {
+            return getObject().hashCode();
+        }
     }
 
     interface SupplierThatDoesntHaveAPrefab<T> {
@@ -162,7 +189,10 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
     static final class NullThrowingLazyObjectContainer extends AbstractLazyObjectContainer {
         private final SupplierThatDoesntHaveAPrefab<Object> objectFactory;
 
-        protected NullThrowingLazyObjectContainer(SupplierThatDoesntHaveAPrefab<Object> flourFactory) { this.objectFactory = flourFactory; }
+        protected NullThrowingLazyObjectContainer(
+                SupplierThatDoesntHaveAPrefab<Object> flourFactory) {
+            this.objectFactory = flourFactory;
+        }
 
         @Override
         protected Object createObject() {

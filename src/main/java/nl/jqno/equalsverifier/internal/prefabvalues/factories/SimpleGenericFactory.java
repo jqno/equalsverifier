@@ -1,14 +1,13 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import nl.jqno.equalsverifier.Func;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Supplier;
+import nl.jqno.equalsverifier.Func;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
@@ -21,7 +20,8 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+    public Tuple<T> createValues(
+            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         List<Object> redValues = new ArrayList<>();
@@ -42,7 +42,8 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         }
 
         Object red = factory.apply(redValues);
-        Object black = useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blackValues);
+        Object black =
+                useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blackValues);
         Object redCopy = factory.apply(redValues);
 
         return Tuple.of(red, black, redCopy);

@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import static org.hamcrest.CoreMatchers.not;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -8,15 +10,14 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.Test;
 
-import static org.hamcrest.CoreMatchers.not;
-
 public class OutputTest extends ExpectedExceptionTestBase {
     private static final String SEE_ALSO = "For more information, go to";
     private static final String WIKIPAGE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
     private static final String MESSAGE = "a message for an exception";
 
     @Test
-    public void messageIsValid_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+    public void
+            messageIsValid_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         expectMessageIsValidFor(Point.class);
         expectFailureWithCause(AssertionException.class);
 
@@ -32,7 +33,8 @@ public class OutputTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
+    public void
+            messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
         expectMessageIsValidFor(AssertionExceptionWithCauseThrower.class);
         expectMessageContains(MESSAGE);
         expectMessageDoesNotContain(NullPointerException.class.getSimpleName());
@@ -43,7 +45,8 @@ public class OutputTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
+    public void
+            originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
         expectMessageIsValidFor(UnsupportedOperationExceptionWithMessageThrower.class);
         expectMessageContains(UnsupportedOperationException.class.getSimpleName(), MESSAGE);
         expectMessageDoesNotContain("null");
@@ -53,7 +56,8 @@ public class OutputTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
+    public void
+            messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
         expectMessageIsValidFor(IllegalStateExceptionThrower.class);
         expectMessageContains(IllegalStateException.class.getSimpleName());
         expectMessageDoesNotContain("null");

@@ -1,15 +1,14 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
-
-import static org.junit.Assert.*;
 
 public class ObjectAccessorCopyingTest {
     @Test
@@ -108,8 +107,7 @@ public class ObjectAccessorCopyingTest {
         for (Field field : FieldIterable.of(type)) {
             try {
                 assertEquals(field.get(original), field.get(copy));
-            }
-            catch (IllegalAccessException e) {
+            } catch (IllegalAccessException e) {
                 throw new IllegalStateException(e);
             }
         }

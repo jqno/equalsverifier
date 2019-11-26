@@ -18,8 +18,10 @@ public final class HandwrittenInstanceOfPoint {
         if (!(obj instanceof HandwrittenInstanceOfPoint)) {
             return false;
         }
-        HandwrittenInstanceOfPoint other = (HandwrittenInstanceOfPoint)obj;
-        return x == other.x && y == other.y && (color == null ? other.color == null : color.equals(other.color));
+        HandwrittenInstanceOfPoint other = (HandwrittenInstanceOfPoint) obj;
+        return x == other.x
+                && y == other.y
+                && (color == null ? other.color == null : color.equals(other.color));
     }
 
     @Override

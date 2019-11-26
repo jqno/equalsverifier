@@ -4,25 +4,20 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Iterable to iterate over all superclasses of a class.
- */
+/** Iterable to iterate over all superclasses of a class. */
 public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     private final Class<T> type;
     private final boolean includeSelf;
 
-    /**
-     * Private constructor. Call {@link #of(Class)} or
-     * {@link #ofIncludeSelf(Class)} instead.
-     */
+    /** Private constructor. Call {@link #of(Class)} or {@link #ofIncludeSelf(Class)} instead. */
     private SuperclassIterable(Class<T> type, boolean includeSelf) {
         this.type = type;
         this.includeSelf = includeSelf;
     }
 
     /**
-     * Factory method for a SuperlcassIterator that iterates over type's
-     * superclasses, excluding itself and excluding Object.
+     * Factory method for a SuperlcassIterator that iterates over type's superclasses, excluding
+     * itself and excluding Object.
      *
      * @param type The class over whose superclasses to iterate.
      * @param <T> Type parameter for type.
@@ -33,8 +28,8 @@ public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     }
 
     /**
-     * Factory method for a SuperlcassIterator that iterates over type's
-     * superclasses, including itself but excluding Object.
+     * Factory method for a SuperlcassIterator that iterates over type's superclasses, including
+     * itself but excluding Object.
      *
      * @param type The class over whose superclasses to iterate.
      * @param <T> Type parameter for type.
@@ -45,8 +40,8 @@ public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     }
 
     /**
-     * Returns an iterator over all superclasses of the class. Is empty if type
-     * has no superclasses and SuperclassIterable does not include self.
+     * Returns an iterator over all superclasses of the class. Is empty if type has no superclasses
+     * and SuperclassIterable does not include self.
      *
      * @return The iterator.
      */

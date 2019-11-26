@@ -1,73 +1,67 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-
-import java.util.Objects;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class JpaEntityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
-        EqualsVerifier.forClass(EntityByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(EntityByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
+    public void
+            fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class).verify();
     }
 
     @Test
     public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(EntityByNonJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(EntityByNonJpaAnnotation.class).verify();
     }
 
     @Test
     public void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
-        EqualsVerifier.forClass(EmbeddableByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(EmbeddableByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
+    public void
+            fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class).verify();
     }
 
     @Test
     public void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class).verify();
     }
 
     @Test
     public void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
-        EqualsVerifier.forClass(MappedSuperclassByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(MappedSuperclassByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
+    public void
+            fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
+    public void
+            fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
         expectFailure("Subclass");
-        EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class)
-                .verify();
+        EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class).verify();
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity
@@ -88,11 +82,14 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof EntityByJpaAnnotation)) {
                 return false;
             }
-            EntityByJpaAnnotation other = (EntityByJpaAnnotation)obj;
+            EntityByJpaAnnotation other = (EntityByJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class SubclassEntityByJpaAnnotation extends EntityByJpaAnnotation {}
@@ -115,11 +112,14 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof EntityByNonJpaAnnotation)) {
                 return false;
             }
-            EntityByNonJpaAnnotation other = (EntityByNonJpaAnnotation)obj;
+            EntityByNonJpaAnnotation other = (EntityByNonJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Embeddable
@@ -140,11 +140,14 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof EmbeddableByJpaAnnotation)) {
                 return false;
             }
-            EmbeddableByJpaAnnotation other = (EmbeddableByJpaAnnotation)obj;
+            EmbeddableByJpaAnnotation other = (EmbeddableByJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class SubclassEmbeddableByJpaAnnotation extends EmbeddableByJpaAnnotation {}
@@ -167,11 +170,14 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof EmbeddableByNonJpaAnnotation)) {
                 return false;
             }
-            EmbeddableByNonJpaAnnotation other = (EmbeddableByNonJpaAnnotation)obj;
+            EmbeddableByNonJpaAnnotation other = (EmbeddableByNonJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.MappedSuperclass
@@ -192,11 +198,14 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof MappedSuperclassByJpaAnnotation)) {
                 return false;
             }
-            MappedSuperclassByJpaAnnotation other = (MappedSuperclassByJpaAnnotation)obj;
+            MappedSuperclassByJpaAnnotation other = (MappedSuperclassByJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class SubclassMappedSuperclassByJpaAnnotation extends MappedSuperclassByJpaAnnotation {}
@@ -219,10 +228,13 @@ public class JpaEntityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof MappedSuperclassByNonJpaAnnotation)) {
                 return false;
             }
-            MappedSuperclassByNonJpaAnnotation other = (MappedSuperclassByNonJpaAnnotation)obj;
+            MappedSuperclassByNonJpaAnnotation other = (MappedSuperclassByNonJpaAnnotation) obj;
             return i == other.i && Objects.equals(s, other.s);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

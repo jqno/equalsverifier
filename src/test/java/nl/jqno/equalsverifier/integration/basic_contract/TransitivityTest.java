@@ -1,25 +1,25 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.Objects;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-
 public class TransitivityTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAnd() {
-        EqualsVerifier.forClass(TwoFieldsUsingAnd.class)
-                .verify();
+        EqualsVerifier.forClass(TwoFieldsUsingAnd.class).verify();
     }
 
     @Test
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
-        expectFailure("Transitivity", "two of these three instances are equal to each other, so the third one should be, too",
+        expectFailure(
+                "Transitivity",
+                "two of these three instances are equal to each other, so the third one should be, too",
                 TwoFieldsUsingOr.class.getSimpleName());
         EqualsVerifier.forClass(TwoFieldsUsingOr.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -28,8 +28,7 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenEqualityForThreeFieldsIsCombinedUsingAnd() {
-        EqualsVerifier.forClass(ThreeFieldsUsingAnd.class)
-                .verify();
+        EqualsVerifier.forClass(ThreeFieldsUsingAnd.class).verify();
     }
 
     @Test
@@ -99,36 +98,48 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String f;
         private final String g;
 
-        public TwoFieldsUsingAnd(String f, String g) { this.f = f; this.g = g; }
+        public TwoFieldsUsingAnd(String f, String g) {
+            this.f = f;
+            this.g = g;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof TwoFieldsUsingAnd)) {
                 return false;
             }
-            TwoFieldsUsingAnd other = (TwoFieldsUsingAnd)obj;
+            TwoFieldsUsingAnd other = (TwoFieldsUsingAnd) obj;
             return Objects.equals(f, other.f) && Objects.equals(g, other.g);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class TwoFieldsUsingOr {
         private final String f;
         private final String g;
 
-        public TwoFieldsUsingOr(String f, String g) { this.f = f; this.g = g; }
+        public TwoFieldsUsingOr(String f, String g) {
+            this.f = f;
+            this.g = g;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof TwoFieldsUsingOr)) {
                 return false;
             }
-            TwoFieldsUsingOr other = (TwoFieldsUsingOr)obj;
+            TwoFieldsUsingOr other = (TwoFieldsUsingOr) obj;
             return Objects.equals(f, other.f) || Objects.equals(g, other.g);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class ThreeFieldsUsingAnd {
@@ -137,7 +148,9 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String h;
 
         public ThreeFieldsUsingAnd(String f, String g, String h) {
-            this.f = f; this.g = g; this.h = h;
+            this.f = f;
+            this.g = g;
+            this.h = h;
         }
 
         @Override
@@ -145,11 +158,16 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof ThreeFieldsUsingAnd)) {
                 return false;
             }
-            ThreeFieldsUsingAnd other = (ThreeFieldsUsingAnd)obj;
-            return Objects.equals(f, other.f) && Objects.equals(g, other.g) && Objects.equals(h, other.h);
+            ThreeFieldsUsingAnd other = (ThreeFieldsUsingAnd) obj;
+            return Objects.equals(f, other.f)
+                    && Objects.equals(g, other.g)
+                    && Objects.equals(h, other.h);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class ThreeFieldsUsingOr {
@@ -158,7 +176,9 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String h;
 
         public ThreeFieldsUsingOr(String f, String g, String h) {
-            this.f = f; this.g = g; this.h = h;
+            this.f = f;
+            this.g = g;
+            this.h = h;
         }
 
         @Override
@@ -166,11 +186,16 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof ThreeFieldsUsingOr)) {
                 return false;
             }
-            ThreeFieldsUsingOr other = (ThreeFieldsUsingOr)obj;
-            return Objects.equals(f, other.f) || Objects.equals(g, other.g) || Objects.equals(h, other.h);
+            ThreeFieldsUsingOr other = (ThreeFieldsUsingOr) obj;
+            return Objects.equals(f, other.f)
+                    || Objects.equals(g, other.g)
+                    || Objects.equals(h, other.h);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class ThreeFieldsUsingAndOr {
@@ -179,7 +204,9 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String h;
 
         public ThreeFieldsUsingAndOr(String f, String g, String h) {
-            this.f = f; this.g = g; this.h = h;
+            this.f = f;
+            this.g = g;
+            this.h = h;
         }
 
         @Override
@@ -187,11 +214,15 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof ThreeFieldsUsingAndOr)) {
                 return false;
             }
-            ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr)obj;
-            return Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h);
+            ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr) obj;
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g)
+                    || Objects.equals(h, other.h);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class ThreeFieldsUsingOrAnd {
@@ -200,7 +231,9 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String h;
 
         public ThreeFieldsUsingOrAnd(String f, String g, String h) {
-            this.f = f; this.g = g; this.h = h;
+            this.f = f;
+            this.g = g;
+            this.h = h;
         }
 
         @Override
@@ -208,11 +241,15 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof ThreeFieldsUsingOrAnd)) {
                 return false;
             }
-            ThreeFieldsUsingOrAnd other = (ThreeFieldsUsingOrAnd)obj;
-            return Objects.equals(f, other.f) || Objects.equals(g, other.g) && Objects.equals(h, other.h);
+            ThreeFieldsUsingOrAnd other = (ThreeFieldsUsingOrAnd) obj;
+            return Objects.equals(f, other.f)
+                    || Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class FiveFieldsUsingOr {
@@ -223,7 +260,11 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String j;
 
         public FiveFieldsUsingOr(String f, String g, String h, String i, String j) {
-            this.f = f; this.g = g; this.h = h; this.i = i; this.j = j;
+            this.f = f;
+            this.g = g;
+            this.h = h;
+            this.i = i;
+            this.j = j;
         }
 
         @Override
@@ -231,12 +272,18 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof FiveFieldsUsingOr)) {
                 return false;
             }
-            FiveFieldsUsingOr other = (FiveFieldsUsingOr)obj;
-            return Objects.equals(f, other.f) || Objects.equals(g, other.g) ||
-                    Objects.equals(h, other.h) || Objects.equals(i, other.i) || Objects.equals(j, other.j);
+            FiveFieldsUsingOr other = (FiveFieldsUsingOr) obj;
+            return Objects.equals(f, other.f)
+                    || Objects.equals(g, other.g)
+                    || Objects.equals(h, other.h)
+                    || Objects.equals(i, other.i)
+                    || Objects.equals(j, other.j);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class FiveFieldsUsingAndsAndOrs {
@@ -247,7 +294,11 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final String j;
 
         public FiveFieldsUsingAndsAndOrs(String f, String g, String h, String i, String j) {
-            this.f = f; this.g = g; this.h = h; this.i = i; this.j = j;
+            this.f = f;
+            this.g = g;
+            this.h = h;
+            this.i = i;
+            this.j = j;
         }
 
         @Override
@@ -255,12 +306,16 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof FiveFieldsUsingAndsAndOrs)) {
                 return false;
             }
-            FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs)obj;
-            return Objects.equals(f, other.f) || Objects.equals(g, other.g) &&
-                    Objects.equals(h, other.h) || Objects.equals(i, other.i) && Objects.equals(j, other.j);
+            FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs) obj;
+            return Objects.equals(f, other.f)
+                    || Objects.equals(g, other.g) && Objects.equals(h, other.h)
+                    || Objects.equals(i, other.i) && Objects.equals(j, other.j);
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 
     static final class AtLeast2FieldsAreEqual {
@@ -270,7 +325,10 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         private final int l;
 
         public AtLeast2FieldsAreEqual(int i, int j, int k, int l) {
-            this.i = i; this.j = j; this.k = k; this.l = l;
+            this.i = i;
+            this.j = j;
+            this.k = k;
+            this.l = l;
         }
 
         @Override
@@ -278,15 +336,26 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof AtLeast2FieldsAreEqual)) {
                 return false;
             }
-            AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual)obj;
+            AtLeast2FieldsAreEqual other = (AtLeast2FieldsAreEqual) obj;
             int x = 0;
-            if (i == other.i) { x++; }
-            if (j == other.j) { x++; }
-            if (k == other.k) { x++; }
-            if (l == other.l) { x++; }
+            if (i == other.i) {
+                x++;
+            }
+            if (j == other.j) {
+                x++;
+            }
+            if (k == other.k) {
+                x++;
+            }
+            if (l == other.l) {
+                x++;
+            }
             return x >= 2;
         }
 
-        @Override public int hashCode() { return 42; }
+        @Override
+        public int hashCode() {
+            return 42;
+        }
     }
 }

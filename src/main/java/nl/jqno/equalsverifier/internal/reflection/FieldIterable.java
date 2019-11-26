@@ -6,26 +6,22 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Iterable to iterate over all declared fields in a class and, if needed,
- * over all declared fields of its superclasses.
+ * Iterable to iterate over all declared fields in a class and, if needed, over all declared fields
+ * of its superclasses.
  */
 public final class FieldIterable implements Iterable<Field> {
     private final Class<?> type;
     private final boolean includeSuperclasses;
 
-    /**
-     * Private constructor. Call {@link #of(Class)} or
-     * {@link #ofIgnoringSuper(Class)} instead.
-     */
+    /** Private constructor. Call {@link #of(Class)} or {@link #ofIgnoringSuper(Class)} instead. */
     private FieldIterable(Class<?> type, boolean includeSuperclasses) {
         this.type = type;
         this.includeSuperclasses = includeSuperclasses;
     }
 
     /**
-     * Factory method for a FieldIterator that iterates over all declared
-     * fields of {@code type} and over the declared fields of all of its
-     * superclasses.
+     * Factory method for a FieldIterator that iterates over all declared fields of {@code type} and
+     * over the declared fields of all of its superclasses.
      *
      * @param type The class that contains the fields over which to iterate.
      * @return A FieldIterator.
@@ -35,9 +31,8 @@ public final class FieldIterable implements Iterable<Field> {
     }
 
     /**
-     * Factory method for a FieldIterator that iterates over all declared
-     * fields of {@code type}, but that ignores the declared fields of its
-     * superclasses.
+     * Factory method for a FieldIterator that iterates over all declared fields of {@code type},
+     * but that ignores the declared fields of its superclasses.
      *
      * @param type The class that contains the fields over which to iterate.
      * @return A FieldIterator.
@@ -47,11 +42,9 @@ public final class FieldIterable implements Iterable<Field> {
     }
 
     /**
-     * Returns an iterator over all declared fields of the class and all of its
-     * superclasses.
+     * Returns an iterator over all declared fields of the class and all of its superclasses.
      *
-     * @return An iterator over all declared fields of the class and all of its
-     *          superclasses.
+     * @return An iterator over all declared fields of the class and all of its superclasses.
      */
     @Override
     public Iterator<Field> iterator() {

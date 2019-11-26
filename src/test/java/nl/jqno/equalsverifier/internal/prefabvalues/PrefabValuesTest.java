@@ -1,5 +1,13 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static org.junit.Assert.*;
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -8,23 +16,13 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.junit.Assert.*;
-
 public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
     private static final TypeTag STRING_ARRAY_TAG = new TypeTag(String[].class);
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Rule public ExpectedException thrown = ExpectedException.none();
 
     private FactoryCache factoryCache = new FactoryCache();
     private PrefabValues pv;
@@ -134,7 +132,7 @@ public class PrefabValuesTest {
     @Test
     public void giveOtherWhenValueIsPrimitive() {
         int expected = pv.giveRed(INT_TAG);
-        assertEquals(expected, (int)pv.giveOther(INT_TAG, -10));
+        assertEquals(expected, (int) pv.giveOther(INT_TAG, -10));
     }
 
     @Test
@@ -153,8 +151,8 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenValueIsCloneOfKnownArray() {
-        String[] red = { "r" };
-        String[] black = { "b" };
+        String[] red = {"r"};
+        String[] black = {"b"};
         assertArrayEquals(black, pv.giveOther(STRING_ARRAY_TAG, red));
         assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, black));
 
@@ -165,7 +163,7 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenValueIsUnknownArray() {
-        String[] value = { "hello world" };
+        String[] value = {"hello world"};
         String[] expected = pv.giveRed(STRING_ARRAY_TAG);
         assertArrayEquals(expected, pv.giveOther(STRING_ARRAY_TAG, value));
     }
@@ -193,20 +191,20 @@ public class PrefabValuesTest {
         List<Integer> ints = pv.giveRed(new TypeTag(List.class, INT_TAG));
 
         assertEquals("r", strings.get(0));
-        assertEquals(42, (int)ints.get(0));
+        assertEquals(42, (int) ints.get(0));
     }
 
     @Test
     public void addingNullDoesntBreakAnything() {
-        factoryCache.put((Class<?>)null, new ListTestFactory());
+        factoryCache.put((Class<?>) null, new ListTestFactory());
     }
 
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
         factoryCache.put(int.class, values(-1, -2, -1));
         pv = new PrefabValues(factoryCache);
-        assertEquals(-1, (int)pv.giveRed(INT_TAG));
-        assertEquals(-2, (int)pv.giveBlack(INT_TAG));
+        assertEquals(-1, (int) pv.giveRed(INT_TAG));
+        assertEquals(-2, (int) pv.giveBlack(INT_TAG));
     }
 
     @Test
@@ -225,16 +223,16 @@ public class PrefabValuesTest {
 
         // Doesn't throw:
         factoryCache.put(
-            ThrowingLazy.class.getName(),
-            (tag, prefabValues, typeStack) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
+                ThrowingLazy.class.getName(),
+                (tag, prefabValues, typeStack) ->
+                        Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
         pv = new PrefabValues(factoryCache);
 
         // Does throw:
         try {
             pv.giveRed(throwingLazyTag);
             fail("Expected an exception");
-        }
-        catch (ExceptionInInitializerError e) {
+        } catch (ExceptionInInitializerError e) {
             // succeed
         }
     }
@@ -243,11 +241,16 @@ public class PrefabValuesTest {
         private String red;
         private String black;
 
-        public AppendingStringTestFactory() { red = ""; black = ""; }
+        public AppendingStringTestFactory() {
+            red = "";
+            black = "";
+        }
 
         @Override
-        public Tuple<String> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
-            red += "r"; black += "b";
+        public Tuple<String> createValues(
+                TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            red += "r";
+            black += "b";
             return new Tuple<>(red, black, new String(red));
         }
     }
@@ -256,7 +259,8 @@ public class PrefabValuesTest {
     private static class ListTestFactory implements PrefabValueFactory<List> {
         @Override
         @SuppressWarnings("unchecked")
-        public Tuple<List> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        public Tuple<List> createValues(
+                TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
             List red = new ArrayList<>();
@@ -274,6 +278,7 @@ public class PrefabValuesTest {
 
     private static class StaticContainer {
         static int staticInt = 2;
+
         @SuppressWarnings("unused")
         int regularInt = 3;
     }
@@ -285,10 +290,19 @@ public class PrefabValuesTest {
 
         private final int i;
 
-        public Lazy(int i) { this.i = i; }
+        public Lazy(int i) {
+            this.i = i;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
 
         @Override
         public String toString() {
@@ -299,7 +313,9 @@ public class PrefabValuesTest {
     @SuppressWarnings("unused")
     public static class ThrowingLazy {
         {
-            if (true) { throw new IllegalStateException("initializing"); }
+            if (true) {
+                throw new IllegalStateException("initializing");
+            }
         }
 
         public static final ThrowingLazy X = new ThrowingLazy();

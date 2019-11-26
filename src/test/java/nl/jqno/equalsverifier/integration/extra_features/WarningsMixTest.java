@@ -9,30 +9,30 @@ import org.junit.Test;
 
 public class WarningsMixTest extends ExpectedExceptionTestBase {
     @Test
-    public void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
+    public void
+            fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
         expectFailure("Mutability:");
-        EqualsVerifier.forClass(MutablePoint.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .verify();
+        EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
+    public void
+            fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
         expectFailure("Subclass:");
-        EqualsVerifier.forClass(MutablePoint.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+        EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    public void
+            succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         EqualsVerifier.forClass(MutablePoint.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
                 .verify();
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
+    public void
+            fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
         expectFailureWithCause(NullPointerException.class, "Non-nullity:");
         EqualsVerifier.forClass(NeverNullColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE)
@@ -40,7 +40,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
+    public void
+            fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
         expectFailure("Subclass:");
         EqualsVerifier.forClass(NeverNullColorContainer.class)
                 .suppress(Warning.NULL_FIELDS)
@@ -48,7 +49,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+    public void
+            succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
         EqualsVerifier.forClass(NeverNullColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
                 .verify();
@@ -63,7 +65,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+    public void
+            fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
         expectFailure("Mutability:");
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
@@ -71,7 +74,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    public void
+            fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         expectFailureWithCause(NullPointerException.class, "Non-nullity:");
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
@@ -79,7 +83,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
+    public void
+            fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
         expectFailure("Subclass:");
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
@@ -87,7 +92,8 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
+    public void
+            succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
         EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
                 .verify();
@@ -96,14 +102,16 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     static class NeverNullColorContainer {
         private final Color color;
 
-        public NeverNullColorContainer(Color color) { this.color = color; }
+        public NeverNullColorContainer(Color color) {
+            this.color = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof NeverNullColorContainer)) {
                 return false;
             }
-            return color == ((NeverNullColorContainer)obj).color;
+            return color == ((NeverNullColorContainer) obj).color;
         }
 
         @Override
@@ -115,14 +123,16 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     static class NeverNullAndMutableColorContainer {
         private Color color;
 
-        public NeverNullAndMutableColorContainer(Color color) { this.color = color; }
+        public NeverNullAndMutableColorContainer(Color color) {
+            this.color = color;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof NeverNullAndMutableColorContainer)) {
                 return false;
             }
-            return color == ((NeverNullAndMutableColorContainer)obj).color;
+            return color == ((NeverNullAndMutableColorContainer) obj).color;
         }
 
         @Override

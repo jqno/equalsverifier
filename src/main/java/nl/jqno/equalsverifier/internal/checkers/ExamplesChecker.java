@@ -1,18 +1,17 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.*;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Objects;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
 public class ExamplesChecker<T> implements Checker {
     private final Class<T> type;
@@ -49,17 +48,25 @@ public class ExamplesChecker<T> implements Checker {
 
     private void checkPreconditions() {
         for (T example : equalExamples) {
-            assertTrue(Formatter.of("Precondition:\n  %%\nand\n  %%\nare of different classes", equalExamples.get(0), example),
+            assertTrue(
+                    Formatter.of(
+                            "Precondition:\n  %%\nand\n  %%\nare of different classes",
+                            equalExamples.get(0), example),
                     type.isAssignableFrom(example.getClass()));
         }
     }
 
     private void checkEqualButNotIdentical(T reference, T other) {
-        assertFalse(Formatter.of("Precondition: the same object appears twice:\n  %%", reference),
+        assertFalse(
+                Formatter.of("Precondition: the same object appears twice:\n  %%", reference),
                 reference == other);
-        assertFalse(Formatter.of("Precondition: two identical objects appear:\n  %%", reference),
+        assertFalse(
+                Formatter.of("Precondition: two identical objects appear:\n  %%", reference),
                 isIdentical(reference, other));
-        assertTrue(Formatter.of("Precondition: not all equal objects are equal:\n  %%\nand\n  %%", reference, other),
+        assertTrue(
+                Formatter.of(
+                        "Precondition: not all equal objects are equal:\n  %%\nand\n  %%",
+                        reference, other),
                 reference.equals(other));
     }
 
@@ -74,23 +81,26 @@ public class ExamplesChecker<T> implements Checker {
 
     private void checkReflexivity(T reference) {
         try {
-            assertEquals(Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
-                reference, reference);
-        }
-        catch (ClassCastException e) {
-            fail(Formatter.of(
-                "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for the type that triggered the exception."),
-                e);
+            assertEquals(
+                    Formatter.of("Reflexivity: object does not equal itself:\n  %%", reference),
+                    reference,
+                    reference);
+        } catch (ClassCastException e) {
+            fail(
+                    Formatter.of(
+                            "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for the type that triggered the exception."),
+                    e);
         }
     }
 
-    @SuppressFBWarnings(value = "EC_NULL_ARG", justification = "Check what happens when null is passed into equals.")
+    @SuppressFBWarnings(
+            value = "EC_NULL_ARG",
+            justification = "Check what happens when null is passed into equals.")
     private void checkNonNullity(T reference) {
         try {
             boolean nullity = reference.equals(null);
             assertFalse(Formatter.of("Non-nullity: true returned for null value"), nullity);
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             fail(Formatter.of("Non-nullity: NullPointerException thrown"), e);
         }
     }
@@ -99,32 +109,44 @@ public class ExamplesChecker<T> implements Checker {
         class SomethingElse {}
         SomethingElse somethingElse = new SomethingElse();
         try {
-            assertFalse(Formatter.of("Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check."),
+            assertFalse(
+                    Formatter.of(
+                            "Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check."),
                     reference.equals(somethingElse));
-        }
-        catch (AssertionException e) {
+        } catch (AssertionException e) {
             throw e;
-        }
-        catch (ClassCastException e) {
-            fail(Formatter.of("Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."), e);
-        }
-        catch (Exception e) {
-            fail(Formatter.of("Type-check: equals throws %%.\nAdd an instanceof or getClass() check.", e.getClass().getSimpleName()), e);
+        } catch (ClassCastException e) {
+            fail(
+                    Formatter.of(
+                            "Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."),
+                    e);
+        } catch (Exception e) {
+            fail(
+                    Formatter.of(
+                            "Type-check: equals throws %%.\nAdd an instanceof or getClass() check.",
+                            e.getClass().getSimpleName()),
+                    e);
         }
     }
 
     private void checkHashCode(T reference, T copy) {
         int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
-        assertEquals(Formatter.of("hashCode: hashCode should be consistent:\n  %% (%%)", reference, referenceHashCode),
-                referenceHashCode, cachedHashCodeInitializer.getInitializedHashCode(reference));
+        assertEquals(
+                Formatter.of(
+                        "hashCode: hashCode should be consistent:\n  %% (%%)",
+                        reference, referenceHashCode),
+                referenceHashCode,
+                cachedHashCodeInitializer.getInitializedHashCode(reference));
 
         if (!reference.equals(copy)) {
             return;
         }
 
         int copyHashCode = cachedHashCodeInitializer.getInitializedHashCode(copy);
-        Formatter f = Formatter.of("hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)",
-                reference, referenceHashCode, copy, copyHashCode);
+        Formatter f =
+                Formatter.of(
+                        "hashCode: hashCodes should be equal:\n  %% (%%)\nand\n  %% (%%)",
+                        reference, referenceHashCode, copy, copyHashCode);
         assertEquals(f, referenceHashCode, copyHashCode);
     }
 
@@ -135,8 +157,7 @@ public class ExamplesChecker<T> implements Checker {
                 if (!Objects.equals(field.get(reference), field.get(other))) {
                     return false;
                 }
-            }
-            catch (IllegalArgumentException | IllegalAccessException e) {
+            } catch (IllegalArgumentException | IllegalAccessException e) {
                 return false;
             }
         }

@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SymmetryTest extends ExpectedExceptionTestBase {
     private static final String SYMMETRY = "Symmetry";
@@ -13,16 +13,19 @@ public class SymmetryTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsNotSymmetrical() {
-        expectFailure(SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
-        EqualsVerifier.forClass(SymmetryIntentionallyBroken.class)
-                .verify();
+        expectFailure(
+                SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
+        EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify();
     }
 
     static final class SymmetryIntentionallyBroken {
         private final int x;
         private final int y;
 
-        public SymmetryIntentionallyBroken(int x, int y) { this.x = x; this.y = y; }
+        public SymmetryIntentionallyBroken(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
 
         @Override
         public boolean equals(Object obj) {
@@ -39,10 +42,13 @@ public class SymmetryTest extends ExpectedExceptionTestBase {
             if (!(obj instanceof SymmetryIntentionallyBroken)) {
                 return false;
             }
-            SymmetryIntentionallyBroken p = (SymmetryIntentionallyBroken)obj;
+            SymmetryIntentionallyBroken p = (SymmetryIntentionallyBroken) obj;
             return p.x == x && p.y == y;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

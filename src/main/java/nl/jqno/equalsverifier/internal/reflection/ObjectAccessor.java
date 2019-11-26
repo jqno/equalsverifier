@@ -1,13 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.Field;
-
 /**
- * Wraps an object to provide reflective access to it. ObjectAccessor can
- * copy and scramble the wrapped object.
+ * Wraps an object to provide reflective access to it. ObjectAccessor can copy and scramble the
+ * wrapped object.
  *
  * @param <T> The specified object's class.
  */
@@ -15,9 +14,7 @@ public final class ObjectAccessor<T> {
     private final T object;
     private final Class<T> type;
 
-    /**
-     * Private constructor. Call {@link #of(Object)} to instantiate.
-     */
+    /** Private constructor. Call {@link #of(Object)} to instantiate. */
     private ObjectAccessor(T object, Class<T> type) {
         this.object = object;
         this.type = type;
@@ -32,7 +29,7 @@ public final class ObjectAccessor<T> {
      */
     public static <T> ObjectAccessor<T> of(T object) {
         @SuppressWarnings("unchecked")
-        Class<T> type = (Class<T>)object.getClass();
+        Class<T> type = (Class<T>) object.getClass();
         return new ObjectAccessor<>(object, type);
     }
 
@@ -41,8 +38,8 @@ public final class ObjectAccessor<T> {
      *
      * @param <T> {@link #object}'s type, or a supertype.
      * @param object The object to wrap.
-     * @param type Superclass of {@link #object}'s type, as which it will be
-     *          treated by {@link ObjectAccessor}.
+     * @param type Superclass of {@link #object}'s type, as which it will be treated by {@link
+     *     ObjectAccessor}.
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
@@ -71,8 +68,7 @@ public final class ObjectAccessor<T> {
     /**
      * Creates a copy of the wrapped object.
      *
-     * Note: it does a "shallow" copy. Reference fields are not copied
-     * recursively.
+     * <p>Note: it does a "shallow" copy. Reference fields are not copied recursively.
      *
      * @return A shallow copy.
      */
@@ -82,11 +78,10 @@ public final class ObjectAccessor<T> {
     }
 
     /**
-     * Creates a copy of the wrapped object, where the copy's type is a
-     * specified subclass of the wrapped object's class.
+     * Creates a copy of the wrapped object, where the copy's type is a specified subclass of the
+     * wrapped object's class.
      *
-     * Note: it does a "shallow" copy. Reference fields are not copied
-     * recursively.
+     * <p>Note: it does a "shallow" copy. Reference fields are not copied recursively.
      *
      * @param subclass A subclass of the wrapped object's class.
      * @param <S> The subclass.
@@ -98,11 +93,10 @@ public final class ObjectAccessor<T> {
     }
 
     /**
-     * Creates a copy of the wrapped object, where the copy type is an
-     * anonymous subclass of the wrapped object's class.
+     * Creates a copy of the wrapped object, where the copy type is an anonymous subclass of the
+     * wrapped object's class.
      *
-     * Note: it does a "shallow" copy. Reference fields are not copied
-     * recursively.
+     * <p>Note: it does a "shallow" copy. Reference fields are not copied recursively.
      *
      * @return A shallow copy.
      */
@@ -120,22 +114,17 @@ public final class ObjectAccessor<T> {
     }
 
     /**
-     * Modifies all fields of the wrapped object that are declared in T and in
-     * its superclasses.
+     * Modifies all fields of the wrapped object that are declared in T and in its superclasses.
      *
-     * This method is consistent: given two equal objects; after scrambling
-     * both objects, they remain equal to each other.
+     * <p>This method is consistent: given two equal objects; after scrambling both objects, they
+     * remain equal to each other.
      *
-     * It cannot modifiy:
-     * 1. static final fields, and
-     * 2. final fields that are initialized to a compile-time constant in the
-     *      field declaration.
-     * These fields will be left unmodified.
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
-     * @param enclosingType Describes the type that contains this object as a
-     *                      field, to determine any generic parameters it may
-     *                      contain.
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
      */
     public void scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type)) {
@@ -145,22 +134,18 @@ public final class ObjectAccessor<T> {
     }
 
     /**
-     * Modifies all fields of the wrapped object that are declared in T, but
-     * not those inherited from superclasses.
+     * Modifies all fields of the wrapped object that are declared in T, but not those inherited
+     * from superclasses.
      *
-     * This method is consistent: given two equal objects; after scrambling
-     * both objects, they remain equal to each other.
+     * <p>This method is consistent: given two equal objects; after scrambling both objects, they
+     * remain equal to each other.
      *
-     * It cannot modifiy:
-     * 1. static final fields, and
-     * 2. final fields that are initialized to a compile-time constant in the
-     *      field declaration.
-     * These fields will be left unmodified.
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
-     * @param enclosingType Describes the type that contains this object as a
-     *                      field, to determine any generic parameters it may
-     *                      contain.
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
      */
     public void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.ofIgnoringSuper(type)) {

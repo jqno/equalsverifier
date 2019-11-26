@@ -18,11 +18,9 @@ import org.junit.Test;
 public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
 
     @Test
-    public void succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
-        EqualsVerifier.configure()
-                .usingGetClass()
-                .forClass(GetClassPoint.class)
-                .verify();
+    public void
+            succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
+        EqualsVerifier.configure().usingGetClass().forClass(GetClassPoint.class).verify();
     }
 
     @Test
@@ -36,14 +34,16 @@ public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
     @Test
     public void sanity_fail_whenTypeIsRecursive() {
         expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(RecursiveType.class)
-                .verify();
+        EqualsVerifier.forClass(RecursiveType.class).verify();
     }
 
     @Test
     public void succeed_whenTypeIsRecursive_givenPrefabValuesArePreconfigured() {
         EqualsVerifier.configure()
-                .withPrefabValues(RecursiveType.class, new RecursiveType(null), new RecursiveType(new RecursiveType(null)))
+                .withPrefabValues(
+                        RecursiveType.class,
+                        new RecursiveType(null),
+                        new RecursiveType(new RecursiveType(null)))
                 .forClass(RecursiveTypeContainer.class)
                 .verify();
     }
@@ -51,12 +51,12 @@ public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
     @Test
     public void sanity_fail_whenSingleGenericTypeIsRecursive() {
         expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(SingleGenericContainerContainer.class)
-                .verify();
+        EqualsVerifier.forClass(SingleGenericContainerContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenSingleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+    public void
+            succeed_whenSingleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
         EqualsVerifier.configure()
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
                 .forClass(SingleGenericContainerContainer.class)
@@ -66,12 +66,12 @@ public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
     @Test
     public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
         expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
-                .verify();
+        EqualsVerifier.forClass(DoubleGenericContainerContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenDoubleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+    public void
+            succeed_whenDoubleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
         EqualsVerifier.configure()
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
                 .forClass(DoubleGenericContainerContainer.class)
@@ -80,30 +80,28 @@ public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenConfigurationIsShared() {
-        ConfiguredEqualsVerifier ev = EqualsVerifier.configure()
-                .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
-                .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new);
+        ConfiguredEqualsVerifier ev =
+                EqualsVerifier.configure()
+                        .withGenericPrefabValues(
+                                SingleGenericContainer.class, SingleGenericContainer::new)
+                        .withGenericPrefabValues(
+                                DoubleGenericContainer.class, DoubleGenericContainer::new);
 
-        ev.forClass(SingleGenericContainerContainer.class)
-                .verify();
-        ev.forClass(DoubleGenericContainerContainer.class)
-                .verify();
+        ev.forClass(SingleGenericContainerContainer.class).verify();
+        ev.forClass(DoubleGenericContainerContainer.class).verify();
     }
 
     @Test
     public void individuallySuppressedWarningsAreNotAddedGlobally() {
-        ConfiguredEqualsVerifier ev = EqualsVerifier.configure()
-                .suppress(Warning.STRICT_INHERITANCE);
+        ConfiguredEqualsVerifier ev =
+                EqualsVerifier.configure().suppress(Warning.STRICT_INHERITANCE);
 
         // should succeed
-        ev.forClass(MutablePoint.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+        ev.forClass(MutablePoint.class).suppress(Warning.NONFINAL_FIELDS).verify();
 
         // NONFINAL_FIELDS is not added to configuration, so should fail
         expectFailure("Mutability");
-        ev.forClass(MutablePoint.class)
-                .verify();
+        ev.forClass(MutablePoint.class).verify();
     }
 
     @Test
@@ -117,12 +115,12 @@ public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
 
         // PrefabValues are not added to configuration, so should fail
         expectFailure("Recursive datastructure");
-        ev.forClass(SingleGenericContainerContainer.class)
-                .verify();
+        ev.forClass(SingleGenericContainerContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenTwoWarningsAreSuppressedButInDifferentPlaces() {
+    public void
+            succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenTwoWarningsAreSuppressedButInDifferentPlaces() {
         EqualsVerifier.configure()
                 .suppress(Warning.STRICT_INHERITANCE)
                 .forClass(MutablePoint.class)

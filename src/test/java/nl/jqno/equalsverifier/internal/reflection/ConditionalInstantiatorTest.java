@@ -1,16 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
-import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static org.hamcrest.CoreMatchers.is;
@@ -18,11 +7,20 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
+import java.math.BigDecimal;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.GregorianCalendar;
+import java.util.List;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Rule public ExpectedException thrown = ExpectedException.none();
 
     private ConditionalInstantiator ci;
 
@@ -47,7 +45,8 @@ public class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar");
         Calendar expected = new GregorianCalendar(1999, 11, 31);
 
-        Calendar actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
+        Calendar actual =
+                ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
         assertThat(actual, is(expected));
     }
 
@@ -70,7 +69,9 @@ public class ConditionalInstantiatorTest {
     public void nullIsReturned_whenInvalidConstructorParametersAreProvided_givenFalse() {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar", false);
 
-        Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
+        Object actual =
+                ci.instantiate(
+                        classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
         assertThat(actual, is(nullValue()));
     }
 
@@ -123,7 +124,8 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void objectIsInstantiatedCorrectly_whenValidExternalFactoryMethodAndParametersAreProvided() {
+    public void
+            objectIsInstantiatedCorrectly_whenValidExternalFactoryMethodAndParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
         List<?> expected = Collections.emptyList();
 
@@ -147,10 +149,12 @@ public class ConditionalInstantiatorTest {
     }
 
     @Test
-    public void nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist_givenFalse() {
+    public void
+            nullIsReturned_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist_givenFalse() {
         ci = new ConditionalInstantiator("java.util.List", false);
 
-        Object actual = ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+        Object actual =
+                ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
         assertThat(actual, is(nullValue()));
     }
 
@@ -166,7 +170,9 @@ public class ConditionalInstantiatorTest {
     public void nullIsReturned_whenInvalidExternalFactoryMethodNameIsProvided_givenFalse() {
         ci = new ConditionalInstantiator("java.util.List", false);
 
-        Object actual = ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
+        Object actual =
+                ci.callFactory(
+                        "java.util.Collections", "thisMethodDoesntExist", classes(), objects());
         assertThat(actual, is(nullValue()));
     }
 
@@ -182,7 +188,9 @@ public class ConditionalInstantiatorTest {
     public void nullIsReturned_whenInvalidExternalFactoryMethodParametersAreProvided_givenFalse() {
         ci = new ConditionalInstantiator("java.util.List", false);
 
-        Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
+        Object actual =
+                ci.callFactory(
+                        "java.util.Collections", "emptyList", classes(int.class), objects(42));
         assertThat(actual, is(nullValue()));
     }
 

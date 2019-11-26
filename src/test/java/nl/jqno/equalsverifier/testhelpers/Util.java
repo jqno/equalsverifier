@@ -1,13 +1,12 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
-
-import static org.junit.Assert.fail;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 
 public final class Util {
     private Util() {}
@@ -27,8 +26,7 @@ public final class Util {
                     equals &= Objects.equals(x, y);
                 }
             }
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             fail(e.toString());
         }
         return equals;
@@ -44,8 +42,7 @@ public final class Util {
                     hash += 59 * Objects.hashCode(val);
                 }
             }
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             fail(e.toString());
         }
         return hash;
@@ -61,8 +58,7 @@ public final class Util {
             Constructor<?> constructor = type.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             fail("Could not call constructor of " + type.getName());
         }
     }

@@ -1,5 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -10,11 +14,6 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
 
 public class FieldAccessorTest {
     private static final Point RED_NEW_POINT = new Point(10, 20);
@@ -193,7 +192,7 @@ public class FieldAccessorTest {
     @Test
     public void defaultFieldOnArraySetsNull() {
         AllTypesContainer foo = new AllTypesContainer();
-        foo._array = new int[] { 1, 2, 3 };
+        foo._array = new int[] {1, 2, 3};
         doNullField(foo, "_array");
         assertNull(foo._array);
     }
@@ -412,7 +411,10 @@ public class FieldAccessorTest {
     @Test
     public void changeTypeVariableGenericField() {
         GenericTypeVariableListContainer<String> foo = new GenericTypeVariableListContainer<>();
-        doChangeField(foo, "tList", new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+        doChangeField(
+                foo,
+                "tList",
+                new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertFalse(foo.tList.isEmpty());
     }
 
@@ -472,8 +474,7 @@ public class FieldAccessorTest {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
             return new FieldAccessor(object, field);
-        }
-        catch (NoSuchFieldException e) {
+        } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }
     }

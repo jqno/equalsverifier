@@ -1,6 +1,4 @@
-/**
- * Puts an annotation on a whole package.
- */
+/** Puts an annotation on a whole package. */
 @PackageAnnotation
 package nl.jqno.equalsverifier.internal.packageannotation;
 

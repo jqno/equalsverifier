@@ -18,8 +18,10 @@ public final class HandwrittenGetClassPoint {
         if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
-        HandwrittenGetClassPoint other = (HandwrittenGetClassPoint)obj;
-        return x == other.x && y == other.y && (color == null ? other.color == null : color.equals(other.color));
+        HandwrittenGetClassPoint other = (HandwrittenGetClassPoint) obj;
+        return x == other.x
+                && y == other.y
+                && (color == null ? other.color == null : color.equals(other.color));
     }
 
     @Override
