@@ -114,7 +114,7 @@ public final class Validations {
         validateFieldAnnotations(type, cache, includedFields);
     }
 
-    // CHECKSTYLE: ignore VariableDeclarationUsageDistance for 8 lines.
+    // CHECKSTYLE: ignore VariableDeclarationUsageDistance for 25 lines.
     private static void validateClassAnnotations(
             Class<?> type,
             AnnotationCache cache,

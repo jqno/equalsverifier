@@ -66,10 +66,8 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier.forClass(ReflectionClassesContainer.class)
-                .suppress(
-                        Warning
-                                .STRICT_HASHCODE) // Because java.lang.reflect.Constructor's
-                                                  // hashCode() is unhelpful
+                .suppress(Warning.STRICT_HASHCODE) // Because java.lang.reflect.Constructor's
+                // hashCode() is unhelpful
                 .verify();
     }
 

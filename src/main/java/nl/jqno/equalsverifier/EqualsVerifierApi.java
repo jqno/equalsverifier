@@ -315,7 +315,8 @@ public class EqualsVerifierApi<T> {
 
     private String buildErrorMessage(String description) {
         return Formatter.of(
-                        "EqualsVerifier found a problem in class %%.\n-> %%\n\nFor more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
+                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n"
+                                + "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
                         type.getSimpleName(), description)
                 .format();
     }

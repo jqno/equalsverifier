@@ -88,7 +88,8 @@ public class ExamplesChecker<T> implements Checker {
         } catch (ClassCastException e) {
             fail(
                     Formatter.of(
-                            "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for the type that triggered the exception."),
+                            "Generics: ClassCastException was thrown. "
+                                    + "Consider using withGenericPrefabValues for the type that triggered the exception."),
                     e);
         }
     }
