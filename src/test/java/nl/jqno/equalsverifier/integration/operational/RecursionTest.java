@@ -1,19 +1,18 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import com.google.common.collect.ImmutableList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class RecursionTest extends ExpectedExceptionTestBase {
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
@@ -35,29 +34,23 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
         expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-        EqualsVerifier.forClass(Node.class)
-                .verify();
+        EqualsVerifier.forClass(Node.class).verify();
     }
 
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
-        EqualsVerifier.forClass(Node.class)
-                .withPrefabValues(Node.class, red, black)
-                .verify();
+        EqualsVerifier.forClass(Node.class).withPrefabValues(Node.class, red, black).verify();
     }
 
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
-        EqualsVerifier.forClass(SubNode.class)
-                .withPrefabValues(Node.class, red, black)
-                .verify();
+        EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, black).verify();
     }
 
     @Test
     public void fail_whenFieldIsARecursiveType() {
         expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
-        EqualsVerifier.forClass(NodeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(NodeContainer.class).verify();
     }
 
     @Test
@@ -77,8 +70,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenDatastructureIsRecursiveInGenerics() {
         expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-        EqualsVerifier.forClass(Tree.class)
-                .verify();
+        EqualsVerifier.forClass(Tree.class).verify();
     }
 
     @Test
@@ -91,8 +83,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenFieldIsARecursiveTypeInGenerics() {
         expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Tree.class.getSimpleName());
-        EqualsVerifier.forClass(TreeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(TreeContainer.class).verify();
     }
 
     @Test
@@ -104,34 +95,40 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, ImmutableListTree.class.getSimpleName(),
+        expectFailure(
+                RECURSIVE_DATASTRUCTURE,
+                ImmutableListTree.class.getSimpleName(),
                 new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
-                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()); // I'd prefer not to have this last one though.
-        EqualsVerifier.forClass(ImmutableListTree.class)
-                .verify();
+                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class))
+                        .toString()); // I'd prefer not to have this last one though.
+        EqualsVerifier.forClass(ImmutableListTree.class).verify();
     }
 
     @Test
     public void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
-        EqualsVerifier.forClass(StaticFinalNodeContainer.class)
-                .verify();
+        EqualsVerifier.forClass(StaticFinalNodeContainer.class).verify();
     }
 
     static class Node {
         final Node node;
 
-        public Node(Node node) { this.node = node; }
+        public Node(Node node) {
+            this.node = node;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof Node)) {
                 return false;
             }
-            Node other = (Node)obj;
+            Node other = (Node) obj;
             return Objects.equals(node, other.node);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class SubNode extends Node {
@@ -143,18 +140,23 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     static class NodeContainer {
         final Node node;
 
-        public NodeContainer(Node node) { this.node = node; }
+        public NodeContainer(Node node) {
+            this.node = node;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof NodeContainer)) {
                 return false;
             }
-            NodeContainer other = (NodeContainer)obj;
+            NodeContainer other = (NodeContainer) obj;
             return Objects.equals(node, other.node);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class SubNodeContainer extends NodeContainer {
@@ -166,44 +168,63 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     static class Tree {
         final List<Tree> innerTrees;
 
-        public Tree(List<Tree> innerTrees) { this.innerTrees = innerTrees; }
+        public Tree(List<Tree> innerTrees) {
+            this.innerTrees = innerTrees;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof Tree)) {
                 return false;
             }
-            Tree other = (Tree)obj;
+            Tree other = (Tree) obj;
             return Objects.equals(innerTrees, other.innerTrees);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static class TreeContainer {
         final Tree tree;
 
-        public TreeContainer(Tree tree) { this.tree = tree; }
+        public TreeContainer(Tree tree) {
+            this.tree = tree;
+        }
 
         @Override
         public final boolean equals(Object obj) {
             if (!(obj instanceof TreeContainer)) {
                 return false;
             }
-            TreeContainer other = (TreeContainer)obj;
+            TreeContainer other = (TreeContainer) obj;
             return Objects.equals(tree, other.tree);
         }
 
-        @Override public final int hashCode() { return defaultHashCode(this); }
+        @Override
+        public final int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class ImmutableListTree {
         final ImmutableList<ImmutableListTree> tree;
 
-        public ImmutableListTree(ImmutableList<ImmutableListTree> tree) { this.tree = tree; }
+        public ImmutableListTree(ImmutableList<ImmutableListTree> tree) {
+            this.tree = tree;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -211,9 +232,18 @@ public class RecursionTest extends ExpectedExceptionTestBase {
         private static final Node NODE = new Node(null);
         private final int i;
 
-        public StaticFinalNodeContainer(int i) { this.i = i; }
+        public StaticFinalNodeContainer(int i) {
+            this.i = i;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

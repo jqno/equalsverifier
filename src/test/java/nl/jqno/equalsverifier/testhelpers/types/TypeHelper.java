@@ -1,22 +1,24 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import nl.jqno.equalsverifier.testhelpers.annotations.*;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import nl.jqno.equalsverifier.testhelpers.annotations.*;
 
 public class TypeHelper {
     private static final Object OBJECT = new Object();
 
-    public enum Enum { FIRST, SECOND }
+    public enum Enum {
+        FIRST,
+        SECOND
+    }
 
     public static final class AllTypesContainer {
-        // CHECKSTYLE: ignore MemberName for 23 lines.
+        // CHECKSTYLE OFF: MemberName
         public boolean _boolean = false;
         public byte _byte = 0;
         public char _char = '\u0000';
@@ -40,13 +42,14 @@ public class TypeHelper {
         public Object _object = OBJECT;
         public Class<?> _type = Class.class;
         public String _string = "";
+        // CHECKSTYLE ON: MemberName
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof AllTypesContainer)) {
                 return false;
             }
-            AllTypesContainer other = (AllTypesContainer)obj;
+            AllTypesContainer other = (AllTypesContainer) obj;
             boolean result = true;
             result &= _boolean == other._boolean;
             result &= _byte == other._byte;
@@ -59,8 +62,14 @@ public class TypeHelper {
             result &= _Boolean == other._Boolean;
             result &= Objects.equals(_Byte, other._Byte);
             result &= _Char == other._Char;
-            result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
-            result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
+            result &=
+                    _Double == null
+                            ? other._Double == null
+                            : Double.compare(_Double, other._Double) == 0;
+            result &=
+                    _Float == null
+                            ? other._Float == null
+                            : Float.compare(_Float, other._Float) == 0;
             result &= Objects.equals(_Int, other._Int);
             result &= Objects.equals(_Long, other._Long);
             result &= Objects.equals(_Short, other._Short);
@@ -74,37 +83,38 @@ public class TypeHelper {
     }
 
     public static final class AllArrayTypesContainer {
-        boolean[] booleans = { true };
-        byte[] bytes = { 1 };
-        char[] chars = { 'a' };
-        double[] doubles = { 1.0D };
-        float[] floats = { 1.0F };
-        int[] ints = { 1 };
-        long[] longs = { 1L };
-        short[] shorts = { 1 };
+        boolean[] booleans = {true};
+        byte[] bytes = {1};
+        char[] chars = {'a'};
+        double[] doubles = {1.0D};
+        float[] floats = {1.0F};
+        int[] ints = {1};
+        long[] longs = {1L};
+        short[] shorts = {1};
 
-        // CHECKSTYLE: ignore MemberName for 8 lines.
-        Boolean[] Booleans = { true };
-        Byte[] Bytes = { 1 };
-        Character[] Characters = { 'a' };
-        Double[] Doubles = { 1.0D };
-        Float[] Floats = { 1.0F };
-        Integer[] Integers = { 1 };
-        Long[] Longs = { 1L };
-        Short[] Shorts = { 1 };
+        // CHECKSTYLE OFF: MemberName
+        Boolean[] Booleans = {true};
+        Byte[] Bytes = {1};
+        Character[] Characters = {'a'};
+        Double[] Doubles = {1.0D};
+        Float[] Floats = {1.0F};
+        Integer[] Integers = {1};
+        Long[] Longs = {1L};
+        Short[] Shorts = {1};
+        // CHECKSTYLE ON: MemberName
 
-        Enum[] enums = { Enum.FIRST };
-        int[][] arrays = { { 1 } };
-        Object[] objects = { OBJECT };
-        Class<?>[] classes = { Class.class };
-        String[] strings = { "1" };
+        Enum[] enums = {Enum.FIRST};
+        int[][] arrays = {{1}};
+        Object[] objects = {OBJECT};
+        Class<?>[] classes = {Class.class};
+        String[] strings = {"1"};
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof AllArrayTypesContainer)) {
                 return false;
             }
-            AllArrayTypesContainer other = (AllArrayTypesContainer)obj;
+            AllArrayTypesContainer other = (AllArrayTypesContainer) obj;
             boolean result = true;
             result &= Arrays.equals(booleans, other.booleans);
             result &= Arrays.equals(bytes, other.bytes);
@@ -145,7 +155,8 @@ public class TypeHelper {
     }
 
     @SuppressWarnings("unused")
-    public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
+    public static class DifferentAccessModifiersSubFieldContainer
+            extends DifferentAccessModifiersFieldContainer {
         public final String d = "";
         protected final String c = "";
         final String b = "";
@@ -183,8 +194,8 @@ public class TypeHelper {
     }
 
     public static final class AbstractAndInterfaceArrayContainer {
-        public AbstractClass[] abstractClasses = new AbstractClass[] { null };
-        public Interface[] interfaces = new Interface[] { null };
+        public AbstractClass[] abstractClasses = new AbstractClass[] {null};
+        public Interface[] interfaces = new Interface[] {null};
     }
 
     public static final class GenericListContainer {
@@ -239,9 +250,14 @@ public class TypeHelper {
         public Object field;
     }
 
-    public enum TwoElementEnum { ONE, TWO }
+    public enum TwoElementEnum {
+        ONE,
+        TWO
+    }
 
-    public enum OneElementEnum { ONE }
+    public enum OneElementEnum {
+        ONE
+    }
 
     public enum EmptyEnum {}
 
@@ -253,7 +269,7 @@ public class TypeHelper {
     }
 
     public static final class PointArrayContainer {
-        public Point[] points = { new Point(1, 2) };
+        public Point[] points = {new Point(1, 2)};
     }
 
     @SuppressWarnings("unused")
@@ -261,18 +277,24 @@ public class TypeHelper {
         private final SingleGenericContainer<String> string;
         private final SingleGenericContainer<Integer> integer;
 
-        public SingleGenericContainerContainer(SingleGenericContainer<String> string, SingleGenericContainer<Integer> integer) {
+        public SingleGenericContainerContainer(
+                SingleGenericContainer<String> string, SingleGenericContainer<Integer> integer) {
             this.string = string;
             this.integer = integer;
         }
 
-        @Override public boolean equals(Object obj) {
+        @Override
+        public boolean equals(Object obj) {
             if (string != null) {
                 String s = string.t;
             }
             return defaultEquals(this, obj);
         }
-        @Override public int hashCode() { return defaultHashCode(this); }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -281,10 +303,19 @@ public class TypeHelper {
 
         private final T t;
 
-        public SingleGenericContainer(T t) { this.t = t; }
+        public SingleGenericContainer(T t) {
+            this.t = t;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -293,32 +324,48 @@ public class TypeHelper {
         private final DoubleGenericContainer<Integer, Byte> integerByte;
 
         public DoubleGenericContainerContainer(
-            DoubleGenericContainer<String, Boolean> stringBoolean,
-            DoubleGenericContainer<Integer, Byte> integerByte) {
+                DoubleGenericContainer<String, Boolean> stringBoolean,
+                DoubleGenericContainer<Integer, Byte> integerByte) {
             this.stringBoolean = stringBoolean;
             this.integerByte = integerByte;
         }
 
-        @Override public boolean equals(Object obj) {
+        @Override
+        public boolean equals(Object obj) {
             if (stringBoolean != null) {
                 String s = stringBoolean.t;
             }
             return defaultEquals(this, obj);
         }
-        @Override public int hashCode() { return defaultHashCode(this); }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @SuppressWarnings("unused")
     public static final class DoubleGenericContainer<T, U> {
-        private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues = null;
+        private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues =
+                null;
 
         private final T t;
         private final U u;
 
-        public DoubleGenericContainer(T t, U u) { this.t = t; this.u = u; }
+        public DoubleGenericContainer(T t, U u) {
+            this.t = t;
+            this.u = u;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     @TypeAnnotationRuntimeRetention
@@ -339,15 +386,11 @@ public class TypeHelper {
     }
 
     public static class AnnotatedFields {
-        @FieldAnnotationRuntimeRetention
-        public int runtimeRetention;
+        @FieldAnnotationRuntimeRetention public int runtimeRetention;
 
-        @FieldAnnotationClassRetention
-        public int classRetention;
+        @FieldAnnotationClassRetention public int classRetention;
 
-        @FieldAnnotationRuntimeRetention
-        @FieldAnnotationClassRetention
-        public int bothRetentions;
+        @FieldAnnotationRuntimeRetention @FieldAnnotationClassRetention public int bothRetentions;
 
         public int noRetention;
     }
@@ -355,7 +398,8 @@ public class TypeHelper {
     public static class AnnotatedTypes {
         public @TypeUseAnnotationRuntimeRetention int runtimeRetention;
         public @TypeUseAnnotationClassRetention int classRetention;
-        public @TypeUseAnnotationRuntimeRetention @TypeUseAnnotationClassRetention int bothRetentions;
+        public @TypeUseAnnotationRuntimeRetention @TypeUseAnnotationClassRetention int
+                bothRetentions;
         public int noRetention;
     }
 
@@ -366,39 +410,43 @@ public class TypeHelper {
         private int noRetention;
 
         @MethodAnnotationRuntimeRetention
-        public int getRuntimeRetention() { return runtimeRetention; }
+        public int getRuntimeRetention() {
+            return runtimeRetention;
+        }
 
         @MethodAnnotationClassRetention
-        public int getClassRetention() { return classRetention; }
+        public int getClassRetention() {
+            return classRetention;
+        }
 
         @MethodAnnotationRuntimeRetention
         @MethodAnnotationClassRetention
-        public int getBothRetentions() { return bothRetentions; }
+        public int getBothRetentions() {
+            return bothRetentions;
+        }
 
-        public int getNoRetention() { return noRetention; }
+        public int getNoRetention() {
+            return noRetention;
+        }
     }
 
     @TypeAnnotationInherits
     @TypeAnnotationDoesntInherit
     public static class SuperclassWithAnnotations {
-        @FieldAnnotationInherits
-        public @TypeUseAnnotationInherits int inherits;
+        @FieldAnnotationInherits public @TypeUseAnnotationInherits int inherits;
 
-        @FieldAnnotationDoesntInherit
-        public @TypeUseAnnotationDoesntInherit int doesntInherit;
+        @FieldAnnotationDoesntInherit public @TypeUseAnnotationDoesntInherit int doesntInherit;
     }
 
     public static class SubclassWithAnnotations extends SuperclassWithAnnotations {}
 
     @Inapplicable
     public static class InapplicableAnnotations {
-        @Inapplicable
-        public int inapplicable;
+        @Inapplicable public int inapplicable;
     }
 
     public static class PostProcessedFieldAnnotation {
-        @PostProcess
-        public int postProcessed;
+        @PostProcess public int postProcessed;
     }
 
     public abstract static class AbstractEqualsAndHashCode {
@@ -410,16 +458,19 @@ public class TypeHelper {
     }
 
     public static final class ClassContainsMethodNamedGet {
-        public int get() { return 1; }
+        public int get() {
+            return 1;
+        }
     }
 
     @DifficultAnnotation
     public static final class DifficultAnnotationHolder {
-        @DifficultAnnotation
-        private int i;
+        @DifficultAnnotation private int i;
 
         @DifficultAnnotation
-        public int getI() { return i; }
+        public int getI() {
+            return i;
+        }
     }
 
     @SuppressWarnings("serial")

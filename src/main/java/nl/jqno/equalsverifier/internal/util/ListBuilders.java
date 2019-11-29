@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-/**
- * Helper functions for building lists with examples.
- */
+/** Helper functions for building lists with examples. */
 public final class ListBuilders {
     private ListBuilders() {}
 

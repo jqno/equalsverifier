@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
+
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
@@ -7,8 +9,6 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 public class TransientFieldsCheck<T> implements FieldCheck {
     private final PrefabValues prefabValues;
@@ -29,11 +29,18 @@ public class TransientFieldsCheck<T> implements FieldCheck {
         changedAccessor.changeField(prefabValues, typeTag);
 
         boolean equalsChanged = !reference.equals(changed);
-        boolean fieldIsTransient = referenceAccessor.fieldIsTransient() ||
-                annotationCache.hasFieldAnnotation(typeTag.getType(), referenceAccessor.getFieldName(), SupportedAnnotations.TRANSIENT);
+        boolean fieldIsTransient =
+                referenceAccessor.fieldIsTransient()
+                        || annotationCache.hasFieldAnnotation(
+                                typeTag.getType(),
+                                referenceAccessor.getFieldName(),
+                                SupportedAnnotations.TRANSIENT);
 
         if (equalsChanged && fieldIsTransient) {
-            fail(Formatter.of("Transient field %% should not be included in equals/hashCode contract.", referenceAccessor.getFieldName()));
+            fail(
+                    Formatter.of(
+                            "Transient field %% should not be included in equals/hashCode contract.",
+                            referenceAccessor.getFieldName()));
         }
 
         referenceAccessor.changeField(prefabValues, typeTag);

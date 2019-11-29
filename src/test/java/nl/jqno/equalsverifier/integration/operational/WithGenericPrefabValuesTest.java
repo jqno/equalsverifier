@@ -16,11 +16,17 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
     @Test
     public void sanityCheck() {
         EqualsVerifier.forClass(SingleGenericContainer.class)
-                .withPrefabValues(SingleGenericContainer.class, new SingleGenericContainer<>(1), new SingleGenericContainer<>(2))
+                .withPrefabValues(
+                        SingleGenericContainer.class,
+                        new SingleGenericContainer<>(1),
+                        new SingleGenericContainer<>(2))
                 .verify();
 
         EqualsVerifier.forClass(DoubleGenericContainer.class)
-                .withPrefabValues(DoubleGenericContainer.class, new DoubleGenericContainer<>(1, 1), new DoubleGenericContainer<>(2, 2))
+                .withPrefabValues(
+                        DoubleGenericContainer.class,
+                        new DoubleGenericContainer<>(1, 1),
+                        new DoubleGenericContainer<>(2, 2))
                 .verify();
     }
 
@@ -30,23 +36,31 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
         expectFailureWithCause(ClassCastException.class);
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
-                .withPrefabValues(SingleGenericContainer.class, new SingleGenericContainer<>(1), new SingleGenericContainer<>(2))
+                .withPrefabValues(
+                        SingleGenericContainer.class,
+                        new SingleGenericContainer<>(1),
+                        new SingleGenericContainer<>(2))
                 .verify();
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given1GenericParameter() {
+    public void
+            fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given1GenericParameter() {
         expectFailure("Generics", "for the type that triggered the exception");
         expectFailureWithCause(ClassCastException.class);
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
                 .withNonnullFields("string", "integer")
-                .withPrefabValues(SingleGenericContainer.class, new SingleGenericContainer<>(1), new SingleGenericContainer<>(2))
+                .withPrefabValues(
+                        SingleGenericContainer.class,
+                        new SingleGenericContainer<>(1),
+                        new SingleGenericContainer<>(2))
                 .verify();
     }
 
     @Test
-    public void succeed_whenPrefabValuesMatchGenericParameterInClassUnderTest_given1GenericParameter() {
+    public void
+            succeed_whenPrefabValuesMatchGenericParameterInClassUnderTest_given1GenericParameter() {
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
                 .verify();
@@ -65,15 +79,20 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
         expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
-                .withGenericPrefabValues(SingleGenericContainer.class, (Func1)null);
+                .withGenericPrefabValues(SingleGenericContainer.class, (Func1) null);
     }
 
     @Test
     public void throw_whenFactoryHas2Parameters_given1GenericParameter() {
-        expectException(IllegalStateException.class, "Precondition", "number of generic type parameters doesn't match");
+        expectException(
+                IllegalStateException.class,
+                "Precondition",
+                "number of generic type parameters doesn't match");
 
         EqualsVerifier.forClass(SingleGenericContainerContainer.class)
-                .withGenericPrefabValues(SingleGenericContainer.class, (Func2)(a, b) -> new SingleGenericContainer<>(a));
+                .withGenericPrefabValues(
+                        SingleGenericContainer.class,
+                        (Func2) (a, b) -> new SingleGenericContainer<>(a));
     }
 
     @Test
@@ -82,23 +101,31 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
         expectFailureWithCause(ClassCastException.class);
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
-                .withPrefabValues(DoubleGenericContainer.class, new DoubleGenericContainer<>(1, 1), new DoubleGenericContainer<>(2, 2))
+                .withPrefabValues(
+                        DoubleGenericContainer.class,
+                        new DoubleGenericContainer<>(1, 1),
+                        new DoubleGenericContainer<>(2, 2))
                 .verify();
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given2GenericParameters() {
+    public void
+            fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given2GenericParameters() {
         expectFailure("Generics", "for the type that triggered the exception");
         expectFailureWithCause(ClassCastException.class);
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
                 .withNonnullFields("stringBoolean", "integerByte")
-                .withPrefabValues(DoubleGenericContainer.class, new DoubleGenericContainer<>(1, 1), new DoubleGenericContainer<>(2, 2))
+                .withPrefabValues(
+                        DoubleGenericContainer.class,
+                        new DoubleGenericContainer<>(1, 1),
+                        new DoubleGenericContainer<>(2, 2))
                 .verify();
     }
 
     @Test
-    public void succeed_whenPrefabValuesMatchGenericParametersInClassUnderTest_given2GenericParameters() {
+    public void
+            succeed_whenPrefabValuesMatchGenericParametersInClassUnderTest_given2GenericParameters() {
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
                 .verify();
@@ -117,14 +144,19 @@ public class WithGenericPrefabValuesTest extends ExpectedExceptionTestBase {
         expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
-                .withGenericPrefabValues(DoubleGenericContainer.class, (Func2)null);
+                .withGenericPrefabValues(DoubleGenericContainer.class, (Func2) null);
     }
 
     @Test
     public void throw_whenFactoryHas1Parameter_given2GenericParameters() {
-        expectException(IllegalStateException.class, "Precondition", "number of generic type parameters doesn't match");
+        expectException(
+                IllegalStateException.class,
+                "Precondition",
+                "number of generic type parameters doesn't match");
 
         EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
-                .withGenericPrefabValues(DoubleGenericContainer.class, (Func1)(a -> new DoubleGenericContainer<>(a, a)));
+                .withGenericPrefabValues(
+                        DoubleGenericContainer.class,
+                        (Func1) (a -> new DoubleGenericContainer<>(a, a)));
     }
 }

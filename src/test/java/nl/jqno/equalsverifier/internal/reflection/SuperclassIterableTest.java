@@ -1,15 +1,14 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
 
 public class SuperclassIterableTest {
     private List<Class<?>> actual;
@@ -48,7 +47,8 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubSubclass.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
+        assertEquals(
+                asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
     }
 
     @Test
@@ -84,9 +84,12 @@ public class SuperclassIterableTest {
     }
 
     static class SimpleClass {}
+
     static class SimpleSubclass extends SimpleClass {}
+
     static class SimpleSubSubclass extends SimpleSubclass {}
 
     interface SimpleInterface {}
+
     static class SimpleSubInterface implements SimpleInterface {}
 }

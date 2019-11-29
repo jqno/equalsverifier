@@ -14,7 +14,7 @@ public class FinalMethodsPoint {
         if (!(obj instanceof FinalMethodsPoint)) {
             return false;
         }
-        FinalMethodsPoint p = (FinalMethodsPoint)obj;
+        FinalMethodsPoint p = (FinalMethodsPoint) obj;
         return p.x == x && p.y == y;
     }
 

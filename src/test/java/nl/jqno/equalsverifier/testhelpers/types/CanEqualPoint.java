@@ -18,7 +18,7 @@ public class CanEqualPoint {
         if (!(obj instanceof CanEqualPoint)) {
             return false;
         }
-        CanEqualPoint p = (CanEqualPoint)obj;
+        CanEqualPoint p = (CanEqualPoint) obj;
         return p.canEqual(this) && p.x == x && p.y == y;
     }
 

@@ -1,16 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-
-/**
- * Provides reflective access to one field of an object.
- */
+/** Provides reflective access to one field of an object. */
 public class FieldAccessor {
     private final Object object;
     private final Field field;
@@ -26,65 +23,47 @@ public class FieldAccessor {
         this.field = field;
     }
 
-    /**
-     * @return The object that contains the field.
-     */
+    /** @return The object that contains the field. */
     public Object getObject() {
         return object;
     }
 
-    /**
-     * @return The field itself.
-     */
+    /** @return The field itself. */
     public Field getField() {
         return field;
     }
 
-    /**
-     * @return The field's type.
-     */
+    /** @return The field's type. */
     public Class<?> getFieldType() {
         return field.getType();
     }
 
-    /**
-     * @return The field's name.
-     */
+    /** @return The field's name. */
     public String getFieldName() {
         return field.getName();
     }
 
-    /**
-     * @return Whether the field is of a primitive type.
-     */
+    /** @return Whether the field is of a primitive type. */
     public boolean fieldIsPrimitive() {
         return getFieldType().isPrimitive();
     }
 
-    /**
-     * @return Whether the field is marked with the final modifier.
-     */
+    /** @return Whether the field is marked with the final modifier. */
     public boolean fieldIsFinal() {
         return Modifier.isFinal(field.getModifiers());
     }
 
-    /**
-     * @return Whether the field is marked with the static modifier.
-     */
+    /** @return Whether the field is marked with the static modifier. */
     public boolean fieldIsStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
 
-    /**
-     * @return Whether the field is marked with the transient modifier.
-     */
+    /** @return Whether the field is marked with the transient modifier. */
     public boolean fieldIsTransient() {
         return Modifier.isTransient(field.getModifiers());
     }
 
-    /**
-     * @return Whether the field is an enum with a single value.
-     */
+    /** @return Whether the field is an enum with a single value. */
     public boolean fieldIsEmptyOrSingleValueEnum() {
         Class<?> type = field.getType();
         return type.isEnum() && type.getEnumConstants().length <= 1;
@@ -96,13 +75,14 @@ public class FieldAccessor {
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
-    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "Only called in test code, not production.")
+    @SuppressFBWarnings(
+            value = "DP_DO_INSIDE_DO_PRIVILEGED",
+            justification = "Only called in test code, not production.")
     public Object get() {
         field.setAccessible(true);
         try {
             return field.get(object);
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new ReflectionException(e);
         }
     }
@@ -110,8 +90,7 @@ public class FieldAccessor {
     /**
      * Tries to set the field to the specified value.
      *
-     * Includes static fields but ignores fields that can't be modified
-     * reflectively.
+     * <p>Includes static fields but ignores fields that can't be modified reflectively.
      *
      * @param value The value that the field should get.
      * @throws ReflectionException If the operation fails.
@@ -121,8 +100,8 @@ public class FieldAccessor {
     }
 
     /**
-     * Tries to make the field null. Ignores static fields and fields that
-     * can't be modified reflectively.
+     * Tries to make the field null. Ignores static fields and fields that can't be modified
+     * reflectively.
      *
      * @throws ReflectionException If the operation fails.
      */
@@ -131,8 +110,8 @@ public class FieldAccessor {
     }
 
     /**
-     * Tries to make the field null. Includes static fields but ignores fields
-     * that can't be modified reflectively.
+     * Tries to make the field null. Includes static fields but ignores fields that can't be
+     * modified reflectively.
      *
      * @throws ReflectionException If the operation fails.
      */
@@ -142,31 +121,23 @@ public class FieldAccessor {
 
     private void setFieldToDefault() throws IllegalAccessException {
         Class<?> type = field.getType();
-        if (type == boolean.class){
+        if (type == boolean.class) {
             field.setBoolean(object, false);
-        }
-        else if (type == byte.class) {
-            field.setByte(object, (byte)0);
-        }
-        else if (type == char.class) {
+        } else if (type == byte.class) {
+            field.setByte(object, (byte) 0);
+        } else if (type == char.class) {
             field.setChar(object, '\u0000');
-        }
-        else if (type == double.class) {
+        } else if (type == double.class) {
             field.setDouble(object, 0.0);
-        }
-        else if (type == float.class) {
+        } else if (type == float.class) {
             field.setFloat(object, 0.0f);
-        }
-        else if (type == int.class){
+        } else if (type == int.class) {
             field.setInt(object, 0);
-        }
-        else if (type == long.class) {
+        } else if (type == long.class) {
             field.setLong(object, 0);
-        }
-        else if (type == short.class) {
-            field.setShort(object, (short)0);
-        }
-        else {
+        } else if (type == short.class) {
+            field.setShort(object, (short) 0);
+        } else {
             field.set(object, null);
         }
     }
@@ -174,7 +145,7 @@ public class FieldAccessor {
     /**
      * Copies field's value to the corresponding field in the specified object.
      *
-     * Ignores static fields and fields that can't be modified reflectively.
+     * <p>Ignores static fields and fields that can't be modified reflectively.
      *
      * @param to The object into which to copy the field.
      * @throws ReflectionException If the operation fails.
@@ -184,22 +155,26 @@ public class FieldAccessor {
     }
 
     /**
-     * Changes the field's value to something else. The new value will never be
-     * null. Other than that, the precise value is undefined.
+     * Changes the field's value to something else. The new value will never be null. Other than
+     * that, the precise value is undefined.
      *
-     * Ignores static fields and fields that can't be modified reflectively.
+     * <p>Ignores static fields and fields that can't be modified reflectively.
      *
-     * @param prefabValues If the field is of a type contained within
-     *          prefabValues, the new value will be taken from it.
-     * @param enclosingType A tag for the type that contains the field. Needed
-     *          to determine a generic type, if it has one..
+     * @param prefabValues If the field is of a type contained within prefabValues, the new value
+     *     will be taken from it.
+     * @param enclosingType A tag for the type that contains the field. Needed to determine a
+     *     generic type, if it has one..
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        modify(() -> {
-            Object newValue = prefabValues.giveOther(TypeTag.of(field, enclosingType), field.get(object));
-            field.set(object, newValue);
-        }, false);
+        modify(
+                () -> {
+                    Object newValue =
+                            prefabValues.giveOther(
+                                    TypeTag.of(field, enclosingType), field.get(object));
+                    field.set(object, newValue);
+                },
+                false);
     }
 
     private void modify(FieldModifier modifier, boolean includeStatic) {
@@ -213,8 +188,7 @@ public class FieldAccessor {
         field.setAccessible(true);
         try {
             modifier.modify();
-        }
-        catch (IllegalAccessException e) {
+        } catch (IllegalAccessException e) {
             throw new ReflectionException(e);
         }
     }

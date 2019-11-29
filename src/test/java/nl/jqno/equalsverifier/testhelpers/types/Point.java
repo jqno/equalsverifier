@@ -14,7 +14,7 @@ public class Point {
         if (!(obj instanceof Point)) {
             return false;
         }
-        Point p = (Point)obj;
+        Point p = (Point) obj;
         return p.x == x && p.y == y;
     }
 

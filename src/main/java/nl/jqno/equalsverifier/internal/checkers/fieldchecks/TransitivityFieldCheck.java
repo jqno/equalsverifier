@@ -1,15 +1,14 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
+
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-
-import java.lang.reflect.Field;
-
-import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 public class TransitivityFieldCheck implements FieldCheck {
     private final PrefabValues prefabValues;
@@ -31,10 +30,11 @@ public class TransitivityFieldCheck implements FieldCheck {
         boolean z = a1.equals(b2);
 
         if (countFalses(x, y, z) == 1) {
-            fail(Formatter.of(
-                    "Transitivity: two of these three instances are equal to each other," +
-                    " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
-                    a1, b1, b2));
+            fail(
+                    Formatter.of(
+                            "Transitivity: two of these three instances are equal to each other,"
+                                    + " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
+                            a1, b1, b2));
         }
     }
 

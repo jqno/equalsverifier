@@ -1,15 +1,14 @@
 package nl.jqno.equalsverifier.coverage;
 
+import java.lang.reflect.Constructor;
+import java.util.Arrays;
+import java.util.Collection;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
 
 @RunWith(Parameterized.class)
 public class CoverageNoInheritanceTest {
@@ -21,16 +20,17 @@ public class CoverageNoInheritanceTest {
 
     @Parameters
     public static Collection<Object[]> data() {
-        return Arrays.asList(new Object[][] {
-                { EclipseGetClassPoint.class },
-                { EclipseInstanceOfPoint.class },
-                { HandwrittenGetClassPoint.class },
-                { HandwrittenInstanceOfPoint.class },
-                { IntelliJGetClassPoint.class },
-                { IntelliJInstanceOfPoint.class },
-                { LombokInstanceOfPoint.class },
-                { NetBeansGetClassPoint.class }
-        });
+        return Arrays.asList(
+                new Object[][] {
+                    {EclipseGetClassPoint.class},
+                    {EclipseInstanceOfPoint.class},
+                    {HandwrittenGetClassPoint.class},
+                    {HandwrittenInstanceOfPoint.class},
+                    {IntelliJGetClassPoint.class},
+                    {IntelliJInstanceOfPoint.class},
+                    {LombokInstanceOfPoint.class},
+                    {NetBeansGetClassPoint.class}
+                });
     }
 
     @Test

@@ -21,7 +21,7 @@ public class HandwrittenCanEqual {
             if (!(obj instanceof Point)) {
                 return false;
             }
-            Point other = (Point)obj;
+            Point other = (Point) obj;
             return other.canEqual(this) && x == other.x && y == other.y;
         }
 
@@ -52,8 +52,10 @@ public class HandwrittenCanEqual {
             if (!(obj instanceof ColorPoint)) {
                 return false;
             }
-            ColorPoint other = (ColorPoint)obj;
-            return other.canEqual(this) && super.equals(other) && (color == null ? other.color == null : color.equals(other.color));
+            ColorPoint other = (ColorPoint) obj;
+            return other.canEqual(this)
+                    && super.equals(other)
+                    && (color == null ? other.color == null : color.equals(other.color));
         }
 
         @Override

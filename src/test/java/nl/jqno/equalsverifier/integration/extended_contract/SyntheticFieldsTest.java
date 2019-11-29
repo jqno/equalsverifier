@@ -1,49 +1,44 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import org.junit.Test;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.util.Comparator;
 import java.util.Objects;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import org.junit.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
     @Test
     public void succeed_whenClassHasASyntheticClassAsAField() {
-        EqualsVerifier.forClass(LambdaContainer.class)
-                .verify();
+        EqualsVerifier.forClass(LambdaContainer.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasASyntheticFieldBecauseItsInsideAUnitTestClass() {
-        EqualsVerifier.forClass(Outer.class)
-                .verify();
+        EqualsVerifier.forClass(Outer.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasASyntheticFieldBecauseItsAnInnerClass() {
-        EqualsVerifier.forClass(Outer.Inner.class)
-                .verify();
+        EqualsVerifier.forClass(Outer.Inner.class).verify();
     }
 
     @Test
     public void succeed_whenClassHasAFieldThatHasASyntheticField() {
-        EqualsVerifier.forClass(OuterContainer.class)
-                .verify();
+        EqualsVerifier.forClass(OuterContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
-        EqualsVerifier.forClass(CoberturaContainer.class)
-                .verify();
+    public void
+            succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
+        EqualsVerifier.forClass(CoberturaContainer.class).verify();
     }
 
     static final class LambdaContainer {
         private static final Comparator<LambdaContainer> COMPARATOR =
-            (c1, c2) -> 0;   // A lambda is a synthetic class
+                (c1, c2) -> 0; // A lambda is a synthetic class
 
         private final String s;
 
@@ -56,7 +51,7 @@ public class SyntheticFieldsTest {
             if (!(obj instanceof LambdaContainer)) {
                 return false;
             }
-            return Objects.equals(s, ((LambdaContainer)obj).s);
+            return Objects.equals(s, ((LambdaContainer) obj).s);
         }
 
         @Override
@@ -71,16 +66,34 @@ public class SyntheticFieldsTest {
         private /* non-static */ final class Inner {
             private final int foo;
 
-            public Inner(int foo) { this.foo = foo; }
+            public Inner(int foo) {
+                this.foo = foo;
+            }
 
-            @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-            @Override public int hashCode() { return defaultHashCode(this); }
+            @Override
+            public boolean equals(Object obj) {
+                return defaultEquals(this, obj);
+            }
+
+            @Override
+            public int hashCode() {
+                return defaultHashCode(this);
+            }
         }
 
-        public Outer() { inner = null; }
+        public Outer() {
+            inner = null;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     /* non-static */ final class OuterContainer {
@@ -95,7 +108,7 @@ public class SyntheticFieldsTest {
             if (!(obj instanceof OuterContainer)) {
                 return false;
             }
-            OuterContainer other = (OuterContainer)obj;
+            OuterContainer other = (OuterContainer) obj;
             return Objects.equals(outer, other.outer);
         }
 
@@ -106,8 +119,9 @@ public class SyntheticFieldsTest {
     }
 
     public static final class CoberturaContainer {
-        // CHECKSTYLE: ignore StaticVariableName for 1 line.
+        // CHECKSTYLE OFF: StaticVariableName
         public static transient int[] __cobertura_counters;
+        // CHECKSTYLE ON: StaticVariableName
         private final int i;
 
         public CoberturaContainer(int i) {
@@ -124,7 +138,7 @@ public class SyntheticFieldsTest {
             if (!(obj instanceof CoberturaContainer)) {
                 return false;
             }
-            CoberturaContainer p = (CoberturaContainer)obj;
+            CoberturaContainer p = (CoberturaContainer) obj;
             return p.i == i;
         }
 

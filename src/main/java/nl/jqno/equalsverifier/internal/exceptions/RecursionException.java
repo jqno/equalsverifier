@@ -1,15 +1,11 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-/**
- * Signals that a recursion has been detected while traversing the fields of a
- * data structure.
- */
+/** Signals that a recursion has been detected while traversing the fields of a data structure. */
 @SuppressWarnings("serial")
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")
 public class RecursionException extends MessagingException {
@@ -18,24 +14,22 @@ public class RecursionException extends MessagingException {
     /**
      * Constructor.
      *
-     * @param typeStack A collection of types that have been encountered prior
-     *          to detecting the recursion.
+     * @param typeStack A collection of types that have been encountered prior to detecting the
+     *     recursion.
      */
     public RecursionException(LinkedHashSet<TypeTag> typeStack) {
         super();
         this.typeStack = typeStack;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public String getDescription() {
         StringBuilder sb = new StringBuilder();
         sb.append("Recursive datastructure.\nAdd prefab values for one of the following types: ");
         Iterator<TypeTag> i = typeStack.iterator();
         sb.append(i.next().toString());
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             sb.append(", ");
             sb.append(i.next().toString());
         }

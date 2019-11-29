@@ -1,5 +1,10 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.util.List;
+import java.util.Map;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
@@ -9,12 +14,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.JavaFxFacto
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.List;
-import java.util.Map;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {
@@ -36,7 +35,7 @@ public class JavaFxFactoryProviderTest {
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
         PrefabValueFactory<GenericContainer> factory =
-            new PropertyFactory<>(GenericContainer.class.getName(), List.class);
+                new PropertyFactory<>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
@@ -46,17 +45,22 @@ public class JavaFxFactoryProviderTest {
 
     @Test
     public void createInstancesWithCorrectMultipleGenericParameter() {
-        TypeTag tag = new TypeTag(GenericMultiContainer.class, new TypeTag(String.class), new TypeTag(Point.class));
-        TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
+        TypeTag tag =
+                new TypeTag(
+                        GenericMultiContainer.class,
+                        new TypeTag(String.class),
+                        new TypeTag(Point.class));
+        TypeTag mapTag =
+                new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
         PrefabValueFactory<GenericMultiContainer> factory =
-            new PropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
+                new PropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
         assertEquals(prefabValues.giveBlack(mapTag), tuple.getBlack().t);
 
-        Map.Entry next = (Map.Entry)tuple.getRed().t.entrySet().iterator().next();
+        Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
         assertEquals(String.class, next.getKey().getClass());
         assertEquals(Point.class, next.getValue().getClass());
     }
@@ -65,13 +69,17 @@ public class JavaFxFactoryProviderTest {
         private final List<T> t;
 
         @SuppressWarnings("unused")
-        public GenericContainer(List<T> t) { this.t = t; }
+        public GenericContainer(List<T> t) {
+            this.t = t;
+        }
     }
 
     private static final class GenericMultiContainer<K, V> {
         private final Map<K, V> t;
 
         @SuppressWarnings("unused")
-        public GenericMultiContainer(Map<K, V> t) { this.t = t; }
+        public GenericMultiContainer(Map<K, V> t) {
+            this.t = t;
+        }
     }
 }

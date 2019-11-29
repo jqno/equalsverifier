@@ -1,23 +1,22 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.reflection.Util.*;
+
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Modifier;
+import java.util.Arrays;
+import java.util.List;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Modifier;
-import java.util.Arrays;
-import java.util.List;
-
-import static nl.jqno.equalsverifier.internal.reflection.Util.*;
-
 /**
  * Instantiates objects of a given class.
  *
- * @param <T> {@link Instantiator} instantiates objects of this class, or of an
- *          anonymous subclass of this class.
+ * @param <T> {@link Instantiator} instantiates objects of this class, or of an anonymous subclass
+ *     of this class.
  */
 public final class Instantiator<T> {
     private static final List<String> FORBIDDEN_PACKAGES =
@@ -27,9 +26,7 @@ public final class Instantiator<T> {
     private final Class<T> type;
     private Objenesis objenesis;
 
-    /**
-     * Private constructor. Call {@link #of(Class)} to instantiate.
-     */
+    /** Private constructor. Call {@link #of(Class)} to instantiate. */
     private Instantiator(Class<T> type) {
         this.type = type;
         this.objenesis = new ObjenesisStd();
@@ -39,8 +36,7 @@ public final class Instantiator<T> {
      * Factory method.
      *
      * @param <T> The class on which {@link Instantiator} operates.
-     * @param type The class on which {@link Instantiator} operates. Should be
-     *          the same as T.
+     * @param type The class on which {@link Instantiator} operates. Should be the same as T.
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type) {
@@ -53,8 +49,8 @@ public final class Instantiator<T> {
     /**
      * Instantiates an object of type T.
      *
-     * All fields will be initialized to their initial values.
-     * I.e., 0 for ints, null for objects, etc.
+     * <p>All fields will be initialized to their initial values. I.e., 0 for ints, null for
+     * objects, etc.
      *
      * @return An object of type T.
      */
@@ -63,8 +59,7 @@ public final class Instantiator<T> {
     }
 
     /**
-     * Instantiates an anonymous subclass of T. The subclass is
-     * generated dynamically.
+     * Instantiates an anonymous subclass of T. The subclass is generated dynamically.
      *
      * @return An instance of an anonymous subclass of T.
      */
@@ -78,22 +73,28 @@ public final class Instantiator<T> {
         boolean isSystemClass = isSystemClass(superclass.getName());
 
         String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
-        String name = namePrefix + "." + superclass.getSimpleName() + "$$DynamicSubclass$" + superclass.hashCode();
+        String name =
+                namePrefix
+                        + "."
+                        + superclass.getSimpleName()
+                        + "$$DynamicSubclass$"
+                        + superclass.hashCode();
 
-        Class<S> existsAlready = (Class<S>)classForName(name);
+        Class<S> existsAlready = (Class<S>) classForName(name);
         if (existsAlready != null) {
             return existsAlready;
         }
 
         Class<?> context = isSystemClass ? Instantiator.class : superclass;
         ClassLoadingStrategy<? super ClassLoader> cs = getClassLoadingStrategy(context);
-        return (Class<S>)new ByteBuddy()
-                .with(TypeValidation.DISABLED)
-                .subclass(superclass)
-                .name(name)
-                .make()
-                .load(context.getClassLoader(), cs)
-                .getLoaded();
+        return (Class<S>)
+                new ByteBuddy()
+                        .with(TypeValidation.DISABLED)
+                        .subclass(superclass)
+                        .name(name)
+                        .make()
+                        .load(context.getClassLoader(), cs)
+                        .getLoaded();
     }
 
     private static String getPackageName(Class<?> type) {
@@ -103,17 +104,19 @@ public final class Instantiator<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(Class<S> context) {
+    public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(
+            Class<S> context) {
         if (System.getProperty("java.version").startsWith("1.")) {
             return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
-        }
-        else {
-            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
-            Object lookup = ci.callFactory(
-                    "java.lang.invoke.MethodHandles",
-                    "privateLookupIn",
-                    classes(Class.class, MethodHandles.Lookup.class),
-                    objects(context, MethodHandles.lookup()));
+        } else {
+            ConditionalInstantiator ci =
+                    new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
+            Object lookup =
+                    ci.callFactory(
+                            "java.lang.invoke.MethodHandles",
+                            "privateLookupIn",
+                            classes(Class.class, MethodHandles.Lookup.class),
+                            objects(context, MethodHandles.lookup()));
             return ClassLoadingStrategy.UsingLookup.of(lookup);
         }
     }

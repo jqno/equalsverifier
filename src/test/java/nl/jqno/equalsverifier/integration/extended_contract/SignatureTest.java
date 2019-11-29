@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class SignatureTest extends ExpectedExceptionTestBase {
     private static final String OVERLOADED = "Overloaded";
@@ -14,30 +14,28 @@ public class SignatureTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
-        expectOverloadFailure("Parameter should be an Object, not " + OverloadedWithOwnType.class.getSimpleName());
-        EqualsVerifier.forClass(OverloadedWithOwnType.class)
-                .verify();
+        expectOverloadFailure(
+                "Parameter should be an Object, not "
+                        + OverloadedWithOwnType.class.getSimpleName());
+        EqualsVerifier.forClass(OverloadedWithOwnType.class).verify();
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithTwoParameters() {
         expectOverloadFailure("Too many parameters");
-        EqualsVerifier.forClass(OverloadedWithTwoParameters.class)
-                .verify();
+        EqualsVerifier.forClass(OverloadedWithTwoParameters.class).verify();
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithNoParameter() {
         expectOverloadFailure("No parameter");
-        EqualsVerifier.forClass(OverloadedWithNoParameter.class)
-                .verify();
+        EqualsVerifier.forClass(OverloadedWithNoParameter.class).verify();
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
         expectOverloadFailure("Parameter should be an Object");
-        EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class)
-                .verify();
+        EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class).verify();
     }
 
     @Test
@@ -49,7 +47,8 @@ public class SignatureTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded_givenInheritedDirectlyWarningIsSuppressed() {
+    public void
+            succeed_whenEqualsIsNeitherOverriddenOrOverloaded_givenInheritedDirectlyWarningIsSuppressed() {
         EqualsVerifier.forClass(NoEqualsMethod.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
@@ -62,7 +61,9 @@ public class SignatureTest extends ExpectedExceptionTestBase {
     static final class OverloadedWithOwnType {
         private final int i;
 
-        OverloadedWithOwnType(int i) { this.i = i; }
+        OverloadedWithOwnType(int i) {
+            this.i = i;
+        }
 
         public boolean equals(OverloadedWithOwnType obj) {
             if (obj == null) {
@@ -71,58 +72,78 @@ public class SignatureTest extends ExpectedExceptionTestBase {
             return i == obj.i;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class OverloadedWithTwoParameters {
         @SuppressWarnings("unused")
         private final int i;
 
-        OverloadedWithTwoParameters(int i) { this.i = i; }
+        OverloadedWithTwoParameters(int i) {
+            this.i = i;
+        }
 
         public boolean equals(Object red, Object black) {
             return red == null ? black == null : red.equals(black);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class OverloadedWithNoParameter {
         @SuppressWarnings("unused")
         private final int i;
 
-        OverloadedWithNoParameter(int i) { this.i = i; }
+        OverloadedWithNoParameter(int i) {
+            this.i = i;
+        }
 
         public boolean equals() {
             return false;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class OverloadedWithUnrelatedParameter {
         private final int i;
 
-        OverloadedWithUnrelatedParameter(int i) { this.i = i; }
+        OverloadedWithUnrelatedParameter(int i) {
+            this.i = i;
+        }
 
         public boolean equals(int obj) {
             return this.i == obj;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class OverloadedAndOverridden {
         private final int i;
 
-        OverloadedAndOverridden(int i) { this.i = i; }
+        OverloadedAndOverridden(int i) {
+            this.i = i;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof OverloadedAndOverridden)) {
                 return false;
             }
-            return i == ((OverloadedAndOverridden)obj).i;
+            return i == ((OverloadedAndOverridden) obj).i;
         }
 
         public boolean equals(OverloadedAndOverridden obj) {
@@ -132,15 +153,23 @@ public class SignatureTest extends ExpectedExceptionTestBase {
             return i == obj.i;
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class NoEqualsMethod {
         @SuppressWarnings("unused")
         private final int i;
 
-        public NoEqualsMethod(int i) { this.i = i; }
+        public NoEqualsMethod(int i) {
+            this.i = i;
+        }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 
 public class NonnullAnnotationVerifierTest extends ExpectedExceptionTestBase {
     @Test

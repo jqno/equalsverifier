@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
+
+import org.junit.Test;
 
 public class EqualsVerifierInternalBugExceptionTest {
     private EqualsVerifierInternalBugException actual;

@@ -1,5 +1,12 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+
+import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -14,14 +21,6 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.LinkedHashSet;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
 
 public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     private FallbackFactory<?> factory;
@@ -55,13 +54,14 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     @Test
     public void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues, typeStack);
-        assertArrayEquals(new int[]{ 42 }, (int[])tuple.getRed());
-        assertArrayEquals(new int[]{ 1337 }, (int[])tuple.getBlack());
+        assertArrayEquals(new int[] {42}, (int[]) tuple.getRed());
+        assertArrayEquals(new int[] {1337}, (int[]) tuple.getBlack());
     }
 
     @Test
     public void giveClassWithFields() {
-        assertCorrectTuple(IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
+        assertCorrectTuple(
+                IntContainer.class, new IntContainer(42, 42), new IntContainer(1337, 1337));
         // Assert that static fields are untouched
         assertEquals(-100, IntContainer.staticI);
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
@@ -93,14 +93,30 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     }
 
     private static final class IntContainer {
-        @SuppressWarnings("unused") private static int staticI = -100;
+        @SuppressWarnings("unused")
+        private static int staticI = -100;
+
         private static final int STATIC_FINAL_I = -10;
-        @SuppressWarnings("unused") private final int finalI;
-        @SuppressWarnings("unused") private int i;
 
-        public IntContainer(int finalI, int i) { this.finalI = finalI; this.i = i; }
+        @SuppressWarnings("unused")
+        private final int finalI;
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @SuppressWarnings("unused")
+        private int i;
+
+        public IntContainer(int finalI, int i) {
+            this.finalI = finalI;
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

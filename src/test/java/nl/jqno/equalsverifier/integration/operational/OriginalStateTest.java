@@ -1,16 +1,15 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
-
-import java.util.Objects;
-
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.util.Objects;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import org.junit.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest extends ExpectedExceptionTestBase {
@@ -50,13 +49,12 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
         try {
             EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify();
             fail("EqualsVerifier should have failed on FailingEqualsContainerContainer.");
-        }
-        catch (AssertionError e) {
+        } catch (AssertionError e) {
             // Make sure EV fails on a check that actually mutates fields.
             assertTrue(e.getMessage().contains("Mutability"));
-        }
-        catch (Throwable ignored) {
-            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
+        } catch (Throwable ignored) {
+            fail(
+                    "EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
         }
 
         assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
@@ -68,28 +66,55 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
         private static String staticValue = STATIC;
         private final String instanceValue;
 
-        public CorrectEquals(String instanceValue) { this.instanceValue = instanceValue; }
+        public CorrectEquals(String instanceValue) {
+            this.instanceValue = instanceValue;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class CorrectEqualsContainer {
         private final CorrectEquals foo;
 
-        public CorrectEqualsContainer(CorrectEquals foo) { this.foo = foo; }
+        public CorrectEqualsContainer(CorrectEquals foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class CorrectEqualsContainerContainer {
         private final CorrectEqualsContainer foo;
 
-        public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) { this.foo = foo; }
+        public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class SuperContainer {
@@ -98,18 +123,23 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
 
         private final CorrectEquals foo;
 
-        public SuperContainer(CorrectEquals foo) { this.foo = foo; }
+        public SuperContainer(CorrectEquals foo) {
+            this.foo = foo;
+        }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof SuperContainer)) {
                 return false;
             }
-            SuperContainer other = (SuperContainer)obj;
+            SuperContainer other = (SuperContainer) obj;
             return Objects.equals(foo, other.foo);
         }
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     static final class SubContainer extends SuperContainer {
@@ -121,9 +151,18 @@ public class OriginalStateTest extends ExpectedExceptionTestBase {
     static final class FailingEqualsContainerContainer {
         private CorrectEqualsContainer foo;
 
-        public FailingEqualsContainerContainer(CorrectEqualsContainer foo) { this.foo = foo; }
+        public FailingEqualsContainerContainer(CorrectEqualsContainer foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

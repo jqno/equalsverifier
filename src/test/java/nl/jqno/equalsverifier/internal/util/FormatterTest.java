@@ -1,17 +1,16 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
+
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 public class FormatterTest {
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    @Rule public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void noParameters() {
@@ -27,33 +26,46 @@ public class FormatterTest {
 
     @Test
     public void multipleSimpleParameters() {
-        Formatter f = Formatter.of("Multiple simple parameters: %% and %% and also %%", new Simple(0), new Simple(1), new Simple(2));
-        assertEquals("Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2", f.format());
+        Formatter f =
+                Formatter.of(
+                        "Multiple simple parameters: %% and %% and also %%",
+                        new Simple(0), new Simple(1), new Simple(2));
+        assertEquals(
+                "Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2",
+                f.format());
     }
 
     @Test
     public void oneThrowingParameter() {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, "string"));
-        assertEquals("One throwing parameter: [Throwing i=1337 s=string]-throws IllegalStateException(msg)", f.format());
+        assertEquals(
+                "One throwing parameter: [Throwing i=1337 s=string]-throws IllegalStateException(msg)",
+                f.format());
     }
 
     @Test
     public void oneThrowingParameterWithNullSubparameter() {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, null));
-        assertEquals("One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)", f.format());
+        assertEquals(
+                "One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)",
+                f.format());
     }
 
     @Test
     public void oneParameterWithNoFieldsAndThrowsWithNullMessage() {
-        Formatter f = Formatter.of("No fields, null message: %%", new NoFieldsAndThrowsNullMessage());
-        assertEquals("No fields, null message: [NoFieldsAndThrowsNullMessage]-throws NullPointerException(null)", f.format());
+        Formatter f =
+                Formatter.of("No fields, null message: %%", new NoFieldsAndThrowsNullMessage());
+        assertEquals(
+                "No fields, null message: [NoFieldsAndThrowsNullMessage]-throws NullPointerException(null)",
+                f.format());
     }
 
     @Test
     public void oneAbstractParameter() {
         Instantiator<Abstract> i = Instantiator.of(Abstract.class);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [Abstract x=0]-throws AbstractMethodError"));
+        assertThat(
+                f.format(), containsString("Abstract: [Abstract x=0]-throws AbstractMethodError"));
     }
 
     @Test
@@ -67,7 +79,9 @@ public class FormatterTest {
     public void oneDelegatedAbstractParameter() {
         Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [AbstractDelegation y=0]-throws AbstractMethodError"));
+        assertThat(
+                f.format(),
+                containsString("Abstract: [AbstractDelegation y=0]-throws AbstractMethodError"));
     }
 
     @Test
@@ -82,7 +96,8 @@ public class FormatterTest {
         Instantiator<Throwing> i = Instantiator.of(Throwing.class);
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
-        String expected = "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
+        String expected =
+                "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
         assertThat(f.format(), containsString(expected));
     }
 
@@ -93,8 +108,12 @@ public class FormatterTest {
 
         Formatter f = Formatter.of("AC: %%", ac);
         String actual = f.format();
-        // Split up the message, because on some JDKs, AbstractMethodError is sometimes empty while on others, it isn't.
-        assertThat(actual, containsString("AC: [AbstractContainer ad=[AbstractDelegation y=0]-throws AbstractMethodError"));
+        // Split up the message, because on some JDKs, AbstractMethodError is sometimes empty while
+        // on others, it isn't.
+        assertThat(
+                actual,
+                containsString(
+                        "AC: [AbstractContainer ad=[AbstractDelegation y=0]-throws AbstractMethodError"));
         assertThat(actual, containsString("]-throws AbstractMethodError"));
     }
 
@@ -104,8 +123,9 @@ public class FormatterTest {
         mix.throwing = new Throwing(42, "empty");
 
         Formatter f = Formatter.of("%%", mix);
-        String expected = "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]" +
-                "-throws UnsupportedOperationException(null)";
+        String expected =
+                "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]"
+                        + "-throws UnsupportedOperationException(null)";
         assertThat(f.format(), containsString(expected));
     }
 
@@ -117,7 +137,7 @@ public class FormatterTest {
 
     @Test
     public void nullParameter() {
-        Formatter f = Formatter.of("This parameter is null: %%", (Object)null);
+        Formatter f = Formatter.of("This parameter is null: %%", (Object) null);
         assertEquals("This parameter is null: null", f.format());
     }
 
@@ -164,6 +184,7 @@ public class FormatterTest {
     static class Throwing {
         @SuppressWarnings("unused")
         private final int i;
+
         @SuppressWarnings("unused")
         private final String s;
 

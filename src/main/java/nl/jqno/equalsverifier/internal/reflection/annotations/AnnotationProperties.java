@@ -5,11 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Contains all properties of an annotation necessary to to make decisions about
- * that annotation.
+ * Contains all properties of an annotation necessary to to make decisions about that annotation.
  *
- * Note that this object does not contain all possible properties; only the ones
- * that are actually used by EqualsVerifier.
+ * <p>Note that this object does not contain all possible properties; only the ones that are
+ * actually used by EqualsVerifier.
  */
 public class AnnotationProperties {
     private final String className;
@@ -24,9 +23,7 @@ public class AnnotationProperties {
         this.className = className;
     }
 
-    /**
-     * @return the annotation's className string.
-     */
+    /** @return the annotation's className string. */
     public String getClassName() {
         return className;
     }

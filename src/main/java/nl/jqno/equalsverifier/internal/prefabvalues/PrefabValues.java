@@ -1,24 +1,23 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.Map;
-
 /**
  * Container and creator of prefabricated instances of objects and classes.
  *
- * Only creates values ones, and caches them once they've been created. Takes
- * generics into account; i.e., {@code List<Integer>} is different from
- * {@code List<String>}.
+ * <p>Only creates values ones, and caches them once they've been created. Takes generics into
+ * account; i.e., {@code List<Integer>} is different from {@code List<String>}.
  */
 public class PrefabValues {
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
+    private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER =
+            createPrimitiveObjectMapper();
 
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache;
@@ -36,11 +35,10 @@ public class PrefabValues {
     /**
      * Returns the "red" prefabricated value of the specified type.
      *
-     * It's always a different value from the "black" one.
+     * <p>It's always a different value from the "black" one.
      *
      * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
+     * @param tag A description of the desired type, including generic parameters.
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
@@ -50,11 +48,10 @@ public class PrefabValues {
     /**
      * Returns the "black" prefabricated value of the specified type.
      *
-     * It's always a different value from the "red" one.
+     * <p>It's always a different value from the "red" one.
      *
      * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
+     * @param tag A description of the desired type, including generic parameters.
      * @return The "black" prefabricated value.
      */
     public <T> T giveBlack(TypeTag tag) {
@@ -62,14 +59,12 @@ public class PrefabValues {
     }
 
     /**
-     * Returns a shallow copy of the "red" prefabricated value of the specified
-     * type.
+     * Returns a shallow copy of the "red" prefabricated value of the specified type.
      *
-     * When possible, it's equal to but not the same as the "red" object.
+     * <p>When possible, it's equal to but not the same as the "red" object.
      *
      * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
+     * @param tag A description of the desired type, including generic parameters.
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
@@ -77,12 +72,10 @@ public class PrefabValues {
     }
 
     /**
-     * Returns a tuple of two different prefabricated values of the specified
-     * type.
+     * Returns a tuple of two different prefabricated values of the specified type.
      *
      * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
+     * @param tag A description of the desired type, including generic parameters.
      * @return A tuple of two different values of the given type.
      */
     public <T> Tuple<T> giveTuple(TypeTag tag) {
@@ -91,19 +84,19 @@ public class PrefabValues {
     }
 
     /**
-     * Returns a prefabricated value of the specified type, that is different
-     * from the specified value.
+     * Returns a prefabricated value of the specified type, that is different from the specified
+     * value.
      *
      * @param <T> The type of the value.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
-     * @param value A value that is different from the value that will be
-     *              returned.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param value A value that is different from the value that will be returned.
      * @return A value that is different from {@code value}.
      */
     public <T> T giveOther(TypeTag tag, T value) {
         Class<T> type = tag.getType();
-        if (value != null && !type.isAssignableFrom(value.getClass()) && !wraps(type, value.getClass())) {
+        if (value != null
+                && !type.isAssignableFrom(value.getClass())
+                && !wraps(type, value.getClass())) {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
@@ -126,7 +119,7 @@ public class PrefabValues {
 
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
         // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
-        return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
+        return Arrays.deepEquals(new Object[] {x}, new Object[] {y});
     }
 
     private LinkedHashSet<TypeTag> emptyStack() {
@@ -134,12 +127,11 @@ public class PrefabValues {
     }
 
     /**
-     * Makes sure that values for the specified type are present in the cache,
-     * but doesn't return them.
+     * Makes sure that values for the specified type are present in the cache, but doesn't return
+     * them.
      *
      * @param <T> The desired type.
-     * @param tag A description of the desired type, including generic
-     *            parameters.
+     * @param tag A description of the desired type, including generic parameters.
      * @param typeStack Keeps track of recursion in the type.
      */
     public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
@@ -161,7 +153,7 @@ public class PrefabValues {
         }
 
         @SuppressWarnings("unchecked")
-        Tuple<T> result = (Tuple<T>)fallbackFactory.createValues(tag, this, typeStack);
+        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
         return result;
     }
 

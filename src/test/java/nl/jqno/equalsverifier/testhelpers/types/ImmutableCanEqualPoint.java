@@ -21,7 +21,7 @@ public class ImmutableCanEqualPoint {
         if (!(obj instanceof ImmutableCanEqualPoint)) {
             return false;
         }
-        ImmutableCanEqualPoint p = (ImmutableCanEqualPoint)obj;
+        ImmutableCanEqualPoint p = (ImmutableCanEqualPoint) obj;
         return p.canEqual(this) && p.x == x && p.y == y;
     }
 

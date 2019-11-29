@@ -20,7 +20,7 @@ public final class MutableCanEqualColorPoint extends ImmutableCanEqualPoint {
         if (!(obj instanceof MutableCanEqualColorPoint)) {
             return false;
         }
-        MutableCanEqualColorPoint p = (MutableCanEqualColorPoint)obj;
+        MutableCanEqualColorPoint p = (MutableCanEqualColorPoint) obj;
         return p.canEqual(this) && super.equals(p) && color == p.color;
     }
 

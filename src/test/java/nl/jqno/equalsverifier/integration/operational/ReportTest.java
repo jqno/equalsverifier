@@ -1,14 +1,14 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import static org.hamcrest.CoreMatchers.startsWith;
+import static org.junit.Assert.*;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.junit.Assert.*;
 
 public class ReportTest {
     @Test
@@ -25,7 +25,8 @@ public class ReportTest {
         EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
 
         assertFalse(report.isSuccessful());
-        assertThat(report.getMessage(), startsWith("EqualsVerifier found a problem in class Point"));
+        assertThat(
+                report.getMessage(), startsWith("EqualsVerifier found a problem in class Point"));
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
     }
@@ -36,8 +37,7 @@ public class ReportTest {
         try {
             EqualsVerifier.forClass(Point.class).verify();
             fail("Should have failed");
-        }
-        catch (AssertionError e) {
+        } catch (AssertionError e) {
             assertEquals(e.getMessage(), report.getMessage());
             assertEquals(e.getCause().getClass(), report.getCause().getClass());
 

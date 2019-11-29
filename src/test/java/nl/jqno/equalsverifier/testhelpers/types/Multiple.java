@@ -14,7 +14,7 @@ public class Multiple {
         if (!(obj instanceof Multiple)) {
             return false;
         }
-        Multiple other = (Multiple)obj;
+        Multiple other = (Multiple) obj;
         return a * b == other.a * other.b;
     }
 

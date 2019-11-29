@@ -1,26 +1,22 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 /**
  * Formats a string with the contents of one or more objects.
  *
- * If possible, uses each object's {@code toString} method.
- * If this throws an exception, Formatter creates its own string
- * representation of the object, containing its class name and
- * the contents of its fields.
+ * <p>If possible, uses each object's {@code toString} method. If this throws an exception,
+ * Formatter creates its own string representation of the object, containing its class name and the
+ * contents of its fields.
  */
 public final class Formatter {
     private final String message;
     private Object[] objects;
 
-    /**
-     * Private constructor. Call {@link #of(String, Object...)} to instantiate.
-     */
+    /** Private constructor. Call {@link #of(String, Object...)} to instantiate. */
     private Formatter(String message, Object... objects) {
         if (message == null) {
             throw new NullPointerException();
@@ -32,11 +28,10 @@ public final class Formatter {
     /**
      * Factory method.
      *
-     * @param message The string that will be formatted.
-     *          The substring %% represents the location where each
-     *          object's will string representation will be inserted.
-     * @param objects The objects whose string representation will be inserted
-     *          into the message string.
+     * @param message The string that will be formatted. The substring %% represents the location
+     *     where each object's will string representation will be inserted.
+     * @param objects The objects whose string representation will be inserted into the message
+     *     string.
      * @return A {@code Formatter}.
      */
     public static Formatter of(String message, Object... objects) {
@@ -46,10 +41,9 @@ public final class Formatter {
     /**
      * Formats the message with the given objects.
      *
-     * @return The message, with the given objects's string representations
-     *          inserted into it.
-     * @throws IllegalStateException if the number of %%'s in the message does
-     *          not match the number of objects.
+     * @return The message, with the given objects's string representations inserted into it.
+     * @throws IllegalStateException if the number of %%'s in the message does not match the number
+     *     of objects.
      */
     public String format() {
         String result = message;
@@ -72,9 +66,13 @@ public final class Formatter {
         }
         try {
             return obj.toString();
-        }
-        catch (Throwable e) {
-            return stringifyByReflection(obj) + "-throws " + e.getClass().getSimpleName() + "(" + e.getMessage() + ")";
+        } catch (Throwable e) {
+            return stringifyByReflection(obj)
+                    + "-throws "
+                    + e.getClass().getSimpleName()
+                    + "("
+                    + e.getMessage()
+                    + ")";
         }
     }
 

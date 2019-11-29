@@ -10,12 +10,12 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsIsInheritedDirectlyFromObject() {
         expectFailure("Equals is inherited directly from Object");
-        EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class)
-                .verify();
+        EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
+    public void
+            succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
         EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .verify();
@@ -23,12 +23,12 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenEqualsIsInheritedButNotFromObject() {
-        EqualsVerifier.forClass(InheritedEqualsAndHashCodeMethod.class)
-                .verify();
+        EqualsVerifier.forClass(InheritedEqualsAndHashCodeMethod.class).verify();
     }
 
     @Test
-    public void succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
+    public void
+            succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
         EqualsVerifier.forClass(Pojo.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .suppress(Warning.NONFINAL_FIELDS, Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -38,7 +38,9 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
     static final class NoEqualsNoHashCodeMethod {}
 
     static final class InheritedEqualsAndHashCodeMethod extends Point {
-        InheritedEqualsAndHashCodeMethod(int x, int y) { super(x, y); }
+        InheritedEqualsAndHashCodeMethod(int x, int y) {
+            super(x, y);
+        }
     }
 
     public final class Pojo {

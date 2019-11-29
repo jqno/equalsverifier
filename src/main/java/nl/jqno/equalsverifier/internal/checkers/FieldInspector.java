@@ -1,14 +1,13 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
+import java.lang.reflect.Field;
+import java.util.Set;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-
-import java.lang.reflect.Field;
-import java.util.Set;
 
 public class FieldInspector<T> {
     private final ClassAccessor<T> classAccessor;
@@ -28,13 +27,15 @@ public class FieldInspector<T> {
         }
     }
 
-    public void checkWithNull(Set<String> nonnullFields, AnnotationCache annotationCache, FieldCheck check) {
+    public void checkWithNull(
+            Set<String> nonnullFields, AnnotationCache annotationCache, FieldCheck check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
-            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
+            ObjectAccessor<T> reference =
+                    classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
+            ObjectAccessor<T> changed =
+                    classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
 
             check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
         }
     }
-
 }

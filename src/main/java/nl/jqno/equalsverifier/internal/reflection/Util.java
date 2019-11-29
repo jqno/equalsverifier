@@ -19,9 +19,8 @@ public final class Util {
     @SuppressWarnings("unchecked")
     public static <T> Class<T> classForName(String className) {
         try {
-            return (Class<T>)Class.forName(className);
-        }
-        catch (ClassNotFoundException | VerifyError e) {
+            return (Class<T>) Class.forName(className);
+        } catch (ClassNotFoundException | VerifyError e) {
             // Catching VerifyError fixes issue #147. I don't know how to unit test it.
             return null;
         }
@@ -53,7 +52,7 @@ public final class Util {
      * @return An array with the given object.
      */
     public static Object[] objects(Object first) {
-        return new Object[] { first };
+        return new Object[] {first};
     }
 
     /**
@@ -64,7 +63,7 @@ public final class Util {
      * @return An array with the given objects.
      */
     public static Object[] objects(Object first, Object second) {
-        return new Object[] { first, second };
+        return new Object[] {first, second};
     }
 
     /**
@@ -76,7 +75,7 @@ public final class Util {
      * @return An array with the given objects.
      */
     public static Object[] objects(Object first, Object second, Object third) {
-        return new Object[] { first, second, third };
+        return new Object[] {first, second, third};
     }
 
     /**

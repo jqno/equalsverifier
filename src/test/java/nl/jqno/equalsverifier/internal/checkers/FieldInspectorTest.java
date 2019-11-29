@@ -1,5 +1,9 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
+import static org.junit.Assert.assertEquals;
+
+import java.util.HashSet;
+import java.util.Set;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -11,13 +15,9 @@ import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.Assert.assertEquals;
-
 public class FieldInspectorTest {
-    private final PrefabValues prefabValues = new PrefabValues(FactoryCacheFactory.withPrimitiveFactories());
+    private final PrefabValues prefabValues =
+            new PrefabValues(FactoryCacheFactory.withPrimitiveFactories());
     private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues);
 
     @Test
@@ -33,7 +33,8 @@ public class FieldInspectorTest {
         Set<String> nullFields = new HashSet<>();
         AnnotationCache annotationCache = new AnnotationCache();
 
-        inspector.checkWithNull(nullFields, annotationCache, new ResetObjectForEachIterationCheck());
+        inspector.checkWithNull(
+                nullFields, annotationCache, new ResetObjectForEachIterationCheck());
     }
 
     private final class ResetObjectForEachIterationCheck implements FieldCheck {
@@ -45,8 +46,7 @@ public class FieldInspectorTest {
             if (originalReference == null) {
                 originalReference = ObjectAccessor.of(referenceAccessor.getObject()).copy();
                 originalChanged = ObjectAccessor.of(changedAccessor.getObject()).copy();
-            }
-            else {
+            } else {
                 assertEquals(originalReference, referenceAccessor.getObject());
                 assertEquals(originalChanged, changedAccessor.getObject());
             }

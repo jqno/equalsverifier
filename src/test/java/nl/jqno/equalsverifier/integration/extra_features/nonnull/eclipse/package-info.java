@@ -1,6 +1,4 @@
-/**
- * Applies Eclipse's NonNullByDefault annotation to the package.
- */
+/** Applies Eclipse's NonNullByDefault annotation to the package. */
 @NonNullByDefault
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;
 

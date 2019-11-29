@@ -1,11 +1,10 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import java.time.LocalDate;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import org.junit.Test;
-
-import java.time.LocalDate;
 
 public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     private final FinalPoint red = new FinalPoint(1, 2);
@@ -22,8 +21,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     public void throw_whenTypeIsNull() {
         expectException(NullPointerException.class);
 
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(null, red, black);
+        EqualsVerifier.forClass(WithPrefabValuesTest.class).withPrefabValues(null, red, black);
     }
 
     @Test
@@ -64,7 +62,8 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     @Test
     public void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(LocalDate.class, LocalDate.of(2018, 12, 24), LocalDate.of(2018, 12, 25))
+                .withPrefabValues(
+                        LocalDate.class, LocalDate.of(2018, 12, 24), LocalDate.of(2018, 12, 25))
                 .verify();
     }
 }

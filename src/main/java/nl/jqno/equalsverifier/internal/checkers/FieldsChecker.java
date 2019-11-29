@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
+import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -9,8 +10,6 @@ import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
-
-import java.util.function.Predicate;
 
 public class FieldsChecker<T> implements Checker {
     private final Configuration<T> config;
@@ -30,14 +29,21 @@ public class FieldsChecker<T> implements Checker {
         PrefabValues prefabValues = config.getPrefabValues();
         TypeTag typeTag = config.getTypeTag();
         Predicate<FieldAccessor> isCachedHashCodeField =
-            a -> a.getFieldName().equals(config.getCachedHashCodeInitializer().getCachedHashCodeFieldName());
+                a ->
+                        a.getFieldName()
+                                .equals(
+                                        config.getCachedHashCodeInitializer()
+                                                .getCachedHashCodeFieldName());
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck();
-        this.mutableStateFieldCheck = new MutableStateFieldCheck(prefabValues, typeTag, isCachedHashCodeField);
+        this.mutableStateFieldCheck =
+                new MutableStateFieldCheck(prefabValues, typeTag, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
-        this.significantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
-        this.skippingSignificantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
+        this.significantFieldCheck =
+                new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
+        this.skippingSignificantFieldCheck =
+                new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
         this.symmetryFieldCheck = new SymmetryFieldCheck(prefabValues, typeTag);
         this.transientFieldsCheck = new TransientFieldsCheck<>(config);
         this.transitivityFieldCheck = new TransitivityFieldCheck(prefabValues, typeTag);
@@ -67,14 +73,17 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(transitivityFieldCheck);
 
         if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
-            inspector.checkWithNull(config.getNonnullFields(), config.getAnnotationCache(), skippingSignificantFieldCheck);
+            inspector.checkWithNull(
+                    config.getNonnullFields(),
+                    config.getAnnotationCache(),
+                    skippingSignificantFieldCheck);
         }
     }
 
     private boolean ignoreMutability(Class<?> type) {
         AnnotationCache cache = config.getAnnotationCache();
-        return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS) ||
-                cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE) ||
-                cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY);
+        return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS)
+                || cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE)
+                || cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY);
     }
 }

@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
@@ -29,7 +29,10 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsAbstract() {
-        expectFailure(EQUALS_IS_ABSTRACT, HASHCODE_IS_NOT, BOTH_SHOULD_BE_CONCRETE,
+        expectFailure(
+                EQUALS_IS_ABSTRACT,
+                HASHCODE_IS_NOT,
+                BOTH_SHOULD_BE_CONCRETE,
                 AbstractEquals.class.getSimpleName());
         EqualsVerifier.forClass(AbstractEquals.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
@@ -38,57 +41,69 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenHashCodeIsAbstract() {
-        expectFailure(HASHCODE_IS_ABSTRACT, EQUALS_IS_NOT, BOTH_SHOULD_BE_CONCRETE,
+        expectFailure(
+                HASHCODE_IS_ABSTRACT,
+                EQUALS_IS_NOT,
+                BOTH_SHOULD_BE_CONCRETE,
                 AbstractHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractHashCode.class)
-                .verify();
+        EqualsVerifier.forClass(AbstractHashCode.class).verify();
     }
 
     @Test
     public void succeed_whenBothAreAbstractInSuperclass() {
-        EqualsVerifier.forClass(SubclassOfAbstractBoth.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassOfAbstractBoth.class).verify();
     }
 
     @Test
     public void succeed_whenOnlyEqualsIsAbstractInSuperclass() {
-        EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class).verify();
     }
 
     @Test
     public void succeed_whenOnlyHashCodeIsAbstractInSuperclass() {
-        EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class).verify();
     }
 
     @Test
     public void succeed_whenBothAreAbstractInSuperclassOfSuperclass() {
-        EqualsVerifier.forClass(SubclassOfSubclassOfAbstractBoth.class)
-                .verify();
+        EqualsVerifier.forClass(SubclassOfSubclassOfAbstractBoth.class).verify();
     }
 
     abstract static class AbstractBoth {
         @Override
         public abstract boolean equals(Object obj);
+
         @Override
         public abstract int hashCode();
     }
 
     abstract static class AbstractEquals {
         private int i;
-        public AbstractEquals(int i) { this.i = i; }
+
+        public AbstractEquals(int i) {
+            this.i = i;
+        }
 
         @Override
         public abstract boolean equals(Object obj);
 
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class AbstractHashCode {
         private int i;
-        public AbstractHashCode(int i) { this.i = i; }
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
+
+        public AbstractHashCode(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
 
         @Override
         public abstract int hashCode();
@@ -97,10 +112,19 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
     static final class SubclassOfAbstractBoth extends AbstractBoth {
         private final int foo;
 
-        public SubclassOfAbstractBoth(int foo) { this.foo = foo; }
+        public SubclassOfAbstractBoth(int foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class AbstractEqualsButNotHashCode {
@@ -111,10 +135,19 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
     static final class SubclassOfAbstractEqualsButNotHashCode extends AbstractEqualsButNotHashCode {
         private final int foo;
 
-        public SubclassOfAbstractEqualsButNotHashCode(int foo) { this.foo = foo; }
+        public SubclassOfAbstractEqualsButNotHashCode(int foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class AbstractHashCodeButNotEquals {
@@ -125,10 +158,19 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
     static final class SubclassOfAbstractHashCodeButNotEquals extends AbstractHashCodeButNotEquals {
         private final int foo;
 
-        public SubclassOfAbstractHashCodeButNotEquals(int foo) { this.foo = foo; }
+        public SubclassOfAbstractHashCodeButNotEquals(int foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 
     abstract static class IntermediateSubclassOfAbstractBoth extends AbstractBoth {}
@@ -136,9 +178,18 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
     static final class SubclassOfSubclassOfAbstractBoth extends IntermediateSubclassOfAbstractBoth {
         private final int foo;
 
-        public SubclassOfSubclassOfAbstractBoth(int foo) { this.foo = foo; }
+        public SubclassOfSubclassOfAbstractBoth(int foo) {
+            this.foo = foo;
+        }
 
-        @Override public boolean equals(Object obj) { return defaultEquals(this, obj); }
-        @Override public int hashCode() { return defaultHashCode(this); }
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
     }
 }

@@ -1,5 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static org.junit.Assert.*;
+
+import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -19,17 +25,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
-import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
-
 public class ClassAccessorTest {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @Rule public TemporaryFolder tempFolder = new TemporaryFolder();
 
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
@@ -43,11 +41,13 @@ public class ClassAccessorTest {
         factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
-        abstractEqualsAndHashCodeAccessor = ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);
+        abstractEqualsAndHashCodeAccessor =
+                ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);
         defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues);
 
         defaultValuesAnnotationCache = new AnnotationCache();
-        new AnnotationCacheBuilder(SupportedAnnotations.values(), new HashSet<>()).build(DefaultValues.class, defaultValuesAnnotationCache);
+        new AnnotationCacheBuilder(SupportedAnnotations.values(), new HashSet<>())
+                .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
     @Test
@@ -114,7 +114,8 @@ public class ClassAccessorTest {
 
     @Test
     public void equalsIsInheritedFromObject() {
-        ClassAccessor<NoFieldsSubWithFields> accessor = ClassAccessor.of(NoFieldsSubWithFields.class, prefabValues);
+        ClassAccessor<NoFieldsSubWithFields> accessor =
+                ClassAccessor.of(NoFieldsSubWithFields.class, prefabValues);
         assertTrue(accessor.isEqualsInheritedFromObject());
     }
 
@@ -125,7 +126,8 @@ public class ClassAccessorTest {
 
     @Test
     public void getSuperAccessorForPojo() {
-        ClassAccessor<? super PointContainer> superAccessor = pointContainerAccessor.getSuperAccessor();
+        ClassAccessor<? super PointContainer> superAccessor =
+                pointContainerAccessor.getSuperAccessor();
         assertEquals(Object.class, superAccessor.getType());
     }
 
@@ -147,14 +149,17 @@ public class ClassAccessorTest {
         ClassAccessor<GenericTypeVariableListContainer> accessor =
                 ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues);
         GenericTypeVariableListContainer foo =
-                accessor.getRedObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+                accessor.getRedObject(
+                        new TypeTag(
+                                GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertEquals(String.class, foo.tList.get(0).getClass());
     }
 
     @Test
     public void getRedAccessor() {
         PointContainer foo = pointContainerAccessor.getRedObject(TypeTag.NULL);
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor(TypeTag.NULL);
+        ObjectAccessor<PointContainer> objectAccessor =
+                pointContainerAccessor.getRedAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
@@ -169,14 +174,17 @@ public class ClassAccessorTest {
         ClassAccessor<GenericTypeVariableListContainer> accessor =
                 ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues);
         GenericTypeVariableListContainer foo =
-                accessor.getBlackObject(new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+                accessor.getBlackObject(
+                        new TypeTag(
+                                GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertEquals(String.class, foo.tList.get(0).getClass());
     }
 
     @Test
     public void getBlackAccessor() {
         PointContainer foo = pointContainerAccessor.getBlackObject(TypeTag.NULL);
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlackAccessor(TypeTag.NULL);
+        ObjectAccessor<PointContainer> objectAccessor =
+                pointContainerAccessor.getBlackAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
@@ -190,7 +198,8 @@ public class ClassAccessorTest {
     @Test
     public void getDefaultValuesAccessor_withNoNonnullValues() {
         ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache);
+                defaultValuesClassAccessor.getDefaultValuesAccessor(
+                        TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache);
         DefaultValues foo = objectAccessor.get();
         assertEquals(null, foo.s);
         // The rest is tested in getDefaultValuesObject
@@ -201,7 +210,8 @@ public class ClassAccessorTest {
         Set<String> nonnullFields = new HashSet<>();
         nonnullFields.add("s");
         ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(TypeTag.NULL, nonnullFields, defaultValuesAnnotationCache);
+                defaultValuesClassAccessor.getDefaultValuesAccessor(
+                        TypeTag.NULL, nonnullFields, defaultValuesAnnotationCache);
         DefaultValues foo = objectAccessor.get();
         assertFalse(foo.s == null);
         // The rest is tested in getDefaultValuesObject
@@ -210,7 +220,10 @@ public class ClassAccessorTest {
     @Test
     public void getDefaultValuesAccessor_objectContent() {
         ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues);
-        DefaultValues foo = accessor.getDefaultValuesAccessor(TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache).get();
+        DefaultValues foo =
+                accessor.getDefaultValuesAccessor(
+                                TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache)
+                        .get();
         assertEquals(0, foo.i);
         assertEquals(null, foo.s);
         assertFalse(foo.t == null);
@@ -228,7 +241,9 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
-        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        factoryCache.put(
+                TwoStepNodeB.class,
+                values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
         prefabValues = new PrefabValues(factoryCache);
         ClassAccessor.of(TwoStepNodeA.class, prefabValues).getRedObject(TypeTag.NULL);
     }
@@ -259,28 +274,29 @@ public class ClassAccessorTest {
         @NonNull String t;
     }
 
-    // CHECKSTYLE: ignore DeclarationOrder for 3 lines.
+    // CHECKSTYLE OFF: DeclarationOrder
     // Generated at runtime, so we don't actually have to put a class in the default package.
     private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
     private static final String DEFAULT_PACKAGE =
-            "\npublic final class DefaultPackage {" +
-            "\n    private final int i;" +
-            "\n    " +
-            "\n    public DefaultPackage(int i) {" +
-            "\n        this.i = i;" +
-            "\n    }" +
-            "\n    " +
-            "\n    @Override" +
-            "\n    public boolean equals(Object obj) {" +
-            "\n        if (!(obj instanceof DefaultPackage)) {" +
-            "\n            return false;" +
-            "\n        }" +
-            "\n        return i == ((DefaultPackage)obj).i;" +
-            "\n    }" +
-            "\n    " +
-            "\n    @Override" +
-            "\n    public int hashCode() {" +
-            "\n        return i;" +
-            "\n    }" +
-            "\n}";
+            "\npublic final class DefaultPackage {"
+                    + "\n    private final int i;"
+                    + "\n    "
+                    + "\n    public DefaultPackage(int i) {"
+                    + "\n        this.i = i;"
+                    + "\n    }"
+                    + "\n    "
+                    + "\n    @Override"
+                    + "\n    public boolean equals(Object obj) {"
+                    + "\n        if (!(obj instanceof DefaultPackage)) {"
+                    + "\n            return false;"
+                    + "\n        }"
+                    + "\n        return i == ((DefaultPackage)obj).i;"
+                    + "\n    }"
+                    + "\n    "
+                    + "\n    @Override"
+                    + "\n    public int hashCode() {"
+                    + "\n        return i;"
+                    + "\n    }"
+                    + "\n}";
+    // CHECKSTYLE ON: DeclarationOrder
 }

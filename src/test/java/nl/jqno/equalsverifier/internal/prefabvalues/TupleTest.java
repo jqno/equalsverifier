@@ -1,20 +1,18 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 
 public class TupleTest {
     private Tuple<String> tuple = new Tuple<>("red", "black", new String("red"));
 
     @Test
     public void equalsAndHashCode() {
-        EqualsVerifier.forClass(Tuple.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier.forClass(Tuple.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test

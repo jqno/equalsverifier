@@ -1,5 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static org.junit.Assert.*;
+
+import java.util.List;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -8,10 +11,6 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.Test;
 import org.w3c.dom.Element;
-
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 public class InstantiatorTest {
     @Test

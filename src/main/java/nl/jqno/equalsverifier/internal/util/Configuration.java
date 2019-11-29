@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.util.*;
+import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
@@ -9,9 +11,6 @@ import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-
-import java.util.*;
-import java.util.stream.Collectors;
 
 public final class Configuration<T> {
     private final Class<T> type;
@@ -31,12 +30,22 @@ public final class Configuration<T> {
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
 
-    // CHECKSTYLE: ignore ParameterNumber for 1 line.
-    private Configuration(Class<T> type, TypeTag typeTag, ClassAccessor<T> classAccessor, PrefabValues prefabValues,
-                Set<String> ignoredFields, Set<String> nonnullFields, AnnotationCache annotationCache,
-                CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
-                Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
-                List<T> equalExamples, List<T> unequalExamples) {
+    // CHECKSTYLE OFF: ParameterNumber
+    private Configuration(
+            Class<T> type,
+            TypeTag typeTag,
+            ClassAccessor<T> classAccessor,
+            PrefabValues prefabValues,
+            Set<String> ignoredFields,
+            Set<String> nonnullFields,
+            AnnotationCache annotationCache,
+            CachedHashCodeInitializer<T> cachedHashCodeInitializer,
+            boolean hasRedefinedSuperclass,
+            Class<? extends T> redefinedSubclass,
+            boolean usingGetClass,
+            EnumSet<Warning> warningsToSuppress,
+            List<T> equalExamples,
+            List<T> unequalExamples) {
         this.type = type;
         this.typeTag = typeTag;
         this.classAccessor = classAccessor;
@@ -53,70 +62,119 @@ public final class Configuration<T> {
         this.unequalExamples = unequalExamples;
     }
 
-    // CHECKSTYLE: ignore ParameterNumber for 1 line.
-    public static <T> Configuration<T> build(Class<T> type, Set<String> excludedFields, Set<String> includedFields,
-                Set<String> nonnullFields, CachedHashCodeInitializer<T> cachedHashCodeInitializer, boolean hasRedefinedSuperclass,
-                Class<? extends T> redefinedSubclass, boolean usingGetClass, EnumSet<Warning> warningsToSuppress,
-                FactoryCache factoryCache, Set<String> ignoredAnnotationClassNames, Set<String> actualFields,
-                List<T> equalExamples, List<T> unequalExamples) {
+    public static <T> Configuration<T> build(
+            Class<T> type,
+            Set<String> excludedFields,
+            Set<String> includedFields,
+            Set<String> nonnullFields,
+            CachedHashCodeInitializer<T> cachedHashCodeInitializer,
+            boolean hasRedefinedSuperclass,
+            Class<? extends T> redefinedSubclass,
+            boolean usingGetClass,
+            EnumSet<Warning> warningsToSuppress,
+            FactoryCache factoryCache,
+            Set<String> ignoredAnnotationClassNames,
+            Set<String> actualFields,
+            List<T> equalExamples,
+            List<T> unequalExamples) {
 
         TypeTag typeTag = new TypeTag(type);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         PrefabValues prefabValues = new PrefabValues(cache);
         ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
         AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
-        Set<String> ignoredFields = determineIgnoredFields(type, annotationCache, warningsToSuppress, excludedFields, includedFields, actualFields);
+        Set<String> ignoredFields =
+                determineIgnoredFields(
+                        type,
+                        annotationCache,
+                        warningsToSuppress,
+                        excludedFields,
+                        includedFields,
+                        actualFields);
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
-        return new Configuration<>(type, typeTag, classAccessor, prefabValues, ignoredFields, nonnullFields,
-            annotationCache, cachedHashCodeInitializer, hasRedefinedSuperclass, redefinedSubclass, usingGetClass,
-            warningsToSuppress, equalExamples, unequals);
+        return new Configuration<>(
+                type,
+                typeTag,
+                classAccessor,
+                prefabValues,
+                ignoredFields,
+                nonnullFields,
+                annotationCache,
+                cachedHashCodeInitializer,
+                hasRedefinedSuperclass,
+                redefinedSubclass,
+                usingGetClass,
+                warningsToSuppress,
+                equalExamples,
+                unequals);
     }
+    // CHECKSTYLE ON: ParameterNumber
 
-    private static <T> AnnotationCache buildAnnotationCache(Class<T> type, Set<String> ignoredAnnotationClassNames) {
-        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(SupportedAnnotations.values(), ignoredAnnotationClassNames);
+    private static <T> AnnotationCache buildAnnotationCache(
+            Class<T> type, Set<String> ignoredAnnotationClassNames) {
+        AnnotationCacheBuilder acb =
+                new AnnotationCacheBuilder(
+                        SupportedAnnotations.values(), ignoredAnnotationClassNames);
         AnnotationCache cache = new AnnotationCache();
         acb.build(type, cache);
         return cache;
     }
 
-    private static <T> Set<String> determineIgnoredFields(Class<T> type, AnnotationCache annotationCache,
-            EnumSet<Warning> warningsToSuppress, Set<String> excludedFields, Set<String> includedFields, Set<String> actualFields) {
+    private static <T> Set<String> determineIgnoredFields(
+            Class<T> type,
+            AnnotationCache annotationCache,
+            EnumSet<Warning> warningsToSuppress,
+            Set<String> excludedFields,
+            Set<String> includedFields,
+            Set<String> actualFields) {
 
         if (annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID)) {
             return actualFields.stream()
-                .filter(f -> !annotationCache.hasFieldAnnotation(type, f, SupportedAnnotations.NATURALID))
-                .collect(Collectors.toSet());
+                    .filter(
+                            f ->
+                                    !annotationCache.hasFieldAnnotation(
+                                            type, f, SupportedAnnotations.NATURALID))
+                    .collect(Collectors.toSet());
         }
         if (annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID)) {
             if (warningsToSuppress.contains(Warning.SURROGATE_KEY)) {
                 return actualFields.stream()
-                    .filter(f -> !annotationCache.hasFieldAnnotation(type, f, SupportedAnnotations.ID))
-                    .collect(Collectors.toSet());
-            }
-            else {
-                Set<String> ignored = actualFields.stream()
-                    .filter(f -> annotationCache.hasFieldAnnotation(type, f, SupportedAnnotations.ID))
-                    .collect(Collectors.toSet());
-                ignored.addAll(determineAnnotationlessIgnoredFields(excludedFields, includedFields, actualFields));
+                        .filter(
+                                f ->
+                                        !annotationCache.hasFieldAnnotation(
+                                                type, f, SupportedAnnotations.ID))
+                        .collect(Collectors.toSet());
+            } else {
+                Set<String> ignored =
+                        actualFields.stream()
+                                .filter(
+                                        f ->
+                                                annotationCache.hasFieldAnnotation(
+                                                        type, f, SupportedAnnotations.ID))
+                                .collect(Collectors.toSet());
+                ignored.addAll(
+                        determineAnnotationlessIgnoredFields(
+                                excludedFields, includedFields, actualFields));
                 return ignored;
             }
         }
         return determineAnnotationlessIgnoredFields(excludedFields, includedFields, actualFields);
     }
 
-    private static Set<String> determineAnnotationlessIgnoredFields(Set<String> excludedFields,
-            Set<String> includedFields, Set<String> actualFields) {
+    private static Set<String> determineAnnotationlessIgnoredFields(
+            Set<String> excludedFields, Set<String> includedFields, Set<String> actualFields) {
 
         if (!includedFields.isEmpty()) {
             return actualFields.stream()
-                .filter(f -> !includedFields.contains(f))
-                .collect(Collectors.toSet());
+                    .filter(f -> !includedFields.contains(f))
+                    .collect(Collectors.toSet());
         }
         return excludedFields;
     }
 
-    private static <T> List<T> ensureUnequalExamples(TypeTag typeTag, ClassAccessor<T> classAccessor, List<T> examples) {
+    private static <T> List<T> ensureUnequalExamples(
+            TypeTag typeTag, ClassAccessor<T> classAccessor, List<T> examples) {
         if (examples.size() > 0) {
             return examples;
         }

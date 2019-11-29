@@ -1,5 +1,8 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static org.junit.Assert.*;
+
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
@@ -10,9 +13,6 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.Before;
 import org.junit.Test;
-
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
 
 public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
@@ -82,7 +82,8 @@ public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
 
     @Test
     public void oneStepRecursiveArrayType() {
-        factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
+        factoryCache.put(
+                NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
@@ -95,7 +96,9 @@ public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
 
     @Test
     public void addTwoStepRecursiveType() {
-        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+        factoryCache.put(
+                TwoStepNodeB.class,
+                values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
@@ -108,7 +111,9 @@ public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
 
     @Test
     public void twoStepRecursiveArrayType() {
-        factoryCache.put(TwoStepNodeArrayB.class, values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
+        factoryCache.put(
+                TwoStepNodeArrayB.class,
+                values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }

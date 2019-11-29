@@ -18,7 +18,7 @@ public class PointContainer {
         if (!(obj instanceof PointContainer)) {
             return false;
         }
-        PointContainer other = (PointContainer)obj;
+        PointContainer other = (PointContainer) obj;
         return Objects.equals(point, other.point);
     }
 

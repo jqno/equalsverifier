@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.METHOD, ElementType.TYPE, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DifficultAnnotation {
-    String[] strings() default { "a", "b", "c" };
-    int[] ints() default { 1, 2, 3 };
+    String[] strings() default {"a", "b", "c"};
+
+    int[] ints() default {1, 2, 3};
 }

@@ -4,14 +4,17 @@ public class MutablePoint {
     private int x;
     private int y;
 
-    public MutablePoint(int x, int y) { this.x = x; this.y = y; }
+    public MutablePoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof MutablePoint)) {
             return false;
         }
-        MutablePoint other = (MutablePoint)obj;
+        MutablePoint other = (MutablePoint) obj;
         return x == other.x && y == other.y;
     }
 

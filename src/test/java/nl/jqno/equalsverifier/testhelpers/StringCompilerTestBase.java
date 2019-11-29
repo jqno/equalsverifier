@@ -1,18 +1,16 @@
 package nl.jqno.equalsverifier.testhelpers;
 
+import java.io.File;
+import java.io.IOException;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TemporaryFolder;
 
-import java.io.File;
-import java.io.IOException;
-
 public abstract class StringCompilerTestBase extends ExpectedExceptionTestBase {
 
-    @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
+    @Rule public TemporaryFolder tempFolder = new TemporaryFolder();
 
     private ConditionalCompiler compiler;
 

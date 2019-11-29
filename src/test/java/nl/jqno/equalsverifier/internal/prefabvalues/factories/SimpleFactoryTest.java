@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
+
+import org.junit.Test;
 
 public class SimpleFactoryTest {
     private SimpleFactory<String> factory = new SimpleFactory<>("red", "black", new String("red"));

@@ -3,9 +3,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Contains a cache of prefabricated values, for {@link PrefabValues}.
- */
+/** Contains a cache of prefabricated values, for {@link PrefabValues}. */
 class Cache {
     @SuppressWarnings("rawtypes")
     private final Map<TypeTag, Tuple> cache = new HashMap<>();
@@ -25,8 +23,8 @@ class Cache {
     /**
      * Returns a {@link Tuple} of prefabricated values for the specified type.
      *
-     * What happens when there is no value, is undefined. Always call
-     * {@link #contains(TypeTag)} first.
+     * <p>What happens when there is no value, is undefined. Always call {@link #contains(TypeTag)}
+     * first.
      *
      * @param tag A description of the type. Takes generics into account.
      */
