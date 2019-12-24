@@ -26,7 +26,9 @@ public class ReportTest {
 
         assertFalse(report.isSuccessful());
         assertThat(
-                report.getMessage(), startsWith("EqualsVerifier found a problem in class Point"));
+                report.getMessage(),
+                startsWith(
+                        "EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"));
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
     }
