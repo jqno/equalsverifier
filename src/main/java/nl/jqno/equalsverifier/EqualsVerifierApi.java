@@ -317,7 +317,7 @@ public class EqualsVerifierApi<T> {
         return Formatter.of(
                         "EqualsVerifier found a problem in class %%.\n-> %%\n\n"
                                 + "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-                        type.getSimpleName(), description)
+                        type.getName(), description)
                 .format();
     }
 
