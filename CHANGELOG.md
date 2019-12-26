@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+## [3.1.11] - 2019-12-26
 ### Changed
 - Error message now shows fully qualified class name. ([Issue 261](https://github.com/jqno/equalsverifier/issues/261); thanks sullis!)
 
@@ -671,8 +673,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.10...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.11...HEAD
 
+[3.1.11]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.10...equalsverifier-3.1.11
 [3.1.10]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.9...equalsverifier-3.1.10
 [3.1.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.8...equalsverifier-3.1.9
 [3.1.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.7...equalsverifier-3.1.8
