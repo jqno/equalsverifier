@@ -3,7 +3,20 @@ title: "Significant fields: equals relies on foo, but hashCode does not"
 ---
 The cause for this message is usually the obvious one, and is easily fixed either by adding it to `hashCode()` or removing it from `equals()`.
 
-If that doesn't help, or if that's not desired, you can tell EqualsVerifier to ignore it by [calling `withIgnoredFields`](/equalsverifier/manual/ignoring-fields).
+If that doesn't help, or if that's not desired, you can tell EqualsVerifier to ignore a field by [calling `withIgnoredFields`](/equalsverifier/manual/ignoring-fields).
+
+One special case is when EqualsVerifier generates instances for the class's fields that happen to have the same hashCodes. For instance, the `Interval` class from [ThreeTen-extra](https://www.threeten.org/threeten-extra/apidocs/org.threeten.extra/org/threeten/extra/Interval.html) implements `hashCode()` like this: 
+
+{% highlight java %}
+@Override
+public int hashCode() {
+    return start.hashCode() ^ end.hashCode();
+}
+{% endhighlight %}
+
+EqualsVerifier selects the same values for `start` and `end`, causing the `hashCode()` method to return equal values for both instances.
+
+In such a case, the best way to solve this is by using `withPrefabValues` to provide more suitable instances for this type.
 
 Another special case is when one of the fields is a cached hashCode field, similar to the one in `java.lang.String`. For example, given the following (abridged) class:
 
