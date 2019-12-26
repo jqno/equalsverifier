@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Changed
+- Error message now shows fully qualified class name. ([Issue 261](https://github.com/jqno/equalsverifier/issues/261); thanks sullis!)
+
 ### Fixed
 - Updated Byte-Buddy to support Java 14 EA.
 
