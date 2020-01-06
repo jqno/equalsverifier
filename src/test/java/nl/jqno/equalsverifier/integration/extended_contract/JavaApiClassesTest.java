@@ -413,6 +413,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.sql.Date sqlDate;
         private final java.sql.Time sqlTime;
         private final java.sql.Timestamp sqlTimestamp;
+        private final Currency currency;
 
         public CommonClassesContainer(
                 String string,
@@ -432,7 +433,8 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 Thread thread,
                 java.sql.Date sqlDate,
                 java.sql.Time sqlTime,
-                java.sql.Timestamp sqlTimestamp) {
+                java.sql.Timestamp sqlTimestamp,
+                Currency currency) {
             this.string = string;
             this.integer = integer;
             this.bitset = bitset;
@@ -451,6 +453,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             this.sqlDate = sqlDate;
             this.sqlTime = sqlTime;
             this.sqlTimestamp = sqlTimestamp;
+            this.currency = currency;
         }
 
         @Override
