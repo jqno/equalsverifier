@@ -167,6 +167,11 @@ public final class JavaApiPrefabValues {
                 simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
+        addValues(
+                Currency.class,
+                Currency.getInstance("USD"),
+                Currency.getInstance("EUR"),
+                Currency.getInstance("JPY"));
     }
 
     private void addDateTimeClasses() {
