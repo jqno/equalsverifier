@@ -167,6 +167,19 @@
             <version>28.2-jre</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.javamoney</groupId>
+            <artifactId>moneta</artifactId>
+            <version>1.3</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>javax.money</groupId>
+            <artifactId>money-api</artifactId>
+            <version>1.0.3</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -402,7 +415,7 @@
                     <name>!experimental</name>
                 </property>
             </activation>
-            
+
             <build>
                 <plugins>
                     <plugin>

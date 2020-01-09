@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Added prefab values for `java.util.Currency`. ([Issue 268](https://github.com/jqno/equalsverifier/issues/268); thanks sullis!)
+- Added prefab values for `JavaMoney`. ([Issue 270](https://github.com/jqno/equalsverifier/issues/270); thanks sullis!)
 
 ## [3.1.11] - 2019-12-26
 ### Changed
