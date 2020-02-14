@@ -49,15 +49,20 @@ jobs:
       - image: openjdk:13-jdk
     steps:
       - build
-  jdk-ea-experimental:
+  jdk14:
     docker:
       - image: openjdk:14-jdk
+    steps:
+      - build
+  jdk-ea-experimental:
+    docker:
+      - image: openjdk:15-jdk
     steps:
       - build:
           flag: -Dexperimental
   jdk-ea-full:
     docker:
-      - image: openjdk:14-jdk
+      - image: openjdk:15-jdk
     steps:
       - build
 
@@ -71,6 +76,7 @@ workflows:
       - jdk11
       - jdk12
       - jdk13
+      - jdk14
       - jdk-ea-experimental
       - jdk-ea-full
   weekly-experimental:
@@ -99,3 +105,4 @@ workflows:
       - jdk11
       - jdk12
       - jdk13
+      - jdk14
