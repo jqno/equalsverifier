@@ -8,6 +8,7 @@ import com.google.common.collect.*;
 import com.google.common.reflect.TypeToken;
 import java.math.BigDecimal;
 import javax.naming.Reference;
+import javax.swing.tree.DefaultMutableTreeNode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
 import org.junit.Test;
@@ -63,9 +64,11 @@ public class ExternalApiClassesTest {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class JavaxContainer {
         private final Reference ref;
+        private final DefaultMutableTreeNode node;
 
-        public JavaxContainer(Reference ref) {
+        public JavaxContainer(Reference ref, DefaultMutableTreeNode node) {
             this.ref = ref;
+            this.node = node;
         }
 
         @Override

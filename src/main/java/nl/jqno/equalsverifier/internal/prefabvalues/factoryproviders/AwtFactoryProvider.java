@@ -35,6 +35,12 @@ public final class AwtFactoryProvider implements FactoryProvider {
                         ICC_Profile.getInstance(CS_RED),
                         ICC_Profile.getInstance(CS_BLACK),
                         ICC_Profile.getInstance(CS_RED)));
+        cache.put(
+                Font.class,
+                values(
+                        new Font(Font.SERIF, Font.PLAIN, 10),
+                        new Font(Font.SANS_SERIF, Font.PLAIN, 12),
+                        new Font(Font.SERIF, Font.PLAIN, 10)));
 
         return cache;
     }
