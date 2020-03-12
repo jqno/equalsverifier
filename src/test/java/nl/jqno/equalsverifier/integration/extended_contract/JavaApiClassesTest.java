@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -97,6 +98,13 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
         EqualsVerifier.forClass(StringBuilderContainer.class)
                 .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
+        EqualsVerifier.forClass(UnusedInEqualsButPresentInClassContainer.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -714,6 +722,14 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         @Override
         public int hashCode() {
             return defaultHashCode(this);
+        }
+    }
+
+    static final class UnusedInEqualsButPresentInClassContainer {
+        private final PropertyChangeSupport pcs;
+
+        public UnusedInEqualsButPresentInClassContainer(PropertyChangeSupport pcs) {
+            this.pcs = pcs;
         }
     }
 }

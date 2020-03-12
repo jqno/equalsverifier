@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
@@ -497,6 +498,13 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
         addLazyFactory("java.awt.Font", AWT_FACTORY);
+
+        addFactory(
+                PropertyChangeSupport.class,
+                values(
+                        new PropertyChangeSupport("this"),
+                        new PropertyChangeSupport("that"),
+                        new PropertyChangeSupport("this")));
 
         addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
