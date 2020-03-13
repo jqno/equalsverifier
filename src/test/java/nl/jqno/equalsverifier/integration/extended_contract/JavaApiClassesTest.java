@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -97,6 +98,13 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
         EqualsVerifier.forClass(StringBuilderContainer.class)
                 .suppress(Warning.NULL_FIELDS)
+                .verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
+        EqualsVerifier.forClass(UnusedInEqualsButPresentInClassContainer.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
                 .verify();
     }
 
@@ -414,6 +422,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.sql.Time sqlTime;
         private final java.sql.Timestamp sqlTimestamp;
         private final Currency currency;
+        private final EventObject eventObject;
 
         public CommonClassesContainer(
                 String string,
@@ -434,7 +443,8 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 java.sql.Date sqlDate,
                 java.sql.Time sqlTime,
                 java.sql.Timestamp sqlTimestamp,
-                Currency currency) {
+                Currency currency,
+                EventObject eventObject) {
             this.string = string;
             this.integer = integer;
             this.bitset = bitset;
@@ -454,6 +464,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             this.sqlTime = sqlTime;
             this.sqlTimestamp = sqlTimestamp;
             this.currency = currency;
+            this.eventObject = eventObject;
         }
 
         @Override
@@ -470,6 +481,9 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class Java8ApiClassesContainer {
         private final Optional<?> optional;
+        private final OptionalDouble optionalDouble;
+        private final OptionalInt optionalInt;
+        private final OptionalLong optionalLong;
         private final LocalDate localDate;
         private final LocalTime localTime;
         private final LocalDateTime localDateTime;
@@ -491,6 +505,9 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
 
         public Java8ApiClassesContainer(
                 Optional<?> optional,
+                OptionalDouble optionalDouble,
+                OptionalInt optionalInt,
+                OptionalLong optionalLong,
                 LocalDate localDate,
                 LocalTime localTime,
                 LocalDateTime localDateTime,
@@ -510,6 +527,9 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 Year year,
                 YearMonth yearMonth) {
             this.optional = optional;
+            this.optionalDouble = optionalDouble;
+            this.optionalInt = optionalInt;
+            this.optionalLong = optionalLong;
             this.localDate = localDate;
             this.localTime = localTime;
             this.localDateTime = localDateTime;
@@ -616,6 +636,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final java.awt.color.ColorSpace awtColorSpace;
         private final java.awt.color.ICC_ColorSpace iccColorSpace;
         private final java.awt.color.ICC_Profile iccProfile;
+        private final java.awt.Font font;
         private final java.rmi.dgc.VMID vmid;
         private final java.rmi.server.UID uid;
 
@@ -623,11 +644,13 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 java.awt.color.ColorSpace awtColorSpace,
                 java.awt.color.ICC_ColorSpace iccColorSpace,
                 java.awt.color.ICC_Profile iccProfile,
+                java.awt.Font font,
                 java.rmi.dgc.VMID vmid,
                 java.rmi.server.UID uid) {
             this.awtColorSpace = awtColorSpace;
             this.iccColorSpace = iccColorSpace;
             this.iccProfile = iccProfile;
+            this.font = font;
             this.vmid = vmid;
             this.uid = uid;
         }
@@ -699,6 +722,14 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         @Override
         public int hashCode() {
             return defaultHashCode(this);
+        }
+    }
+
+    static final class UnusedInEqualsButPresentInClassContainer {
+        private final PropertyChangeSupport pcs;
+
+        public UnusedInEqualsButPresentInClassContainer(PropertyChangeSupport pcs) {
+            this.pcs = pcs;
         }
     }
 }

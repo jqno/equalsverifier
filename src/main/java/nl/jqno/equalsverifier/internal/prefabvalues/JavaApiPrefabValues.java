@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
@@ -166,6 +167,13 @@ public final class JavaApiPrefabValues {
                 CompletableFuture.class,
                 simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
+        addValues(
+                OptionalDouble.class,
+                OptionalDouble.of(0.5),
+                OptionalDouble.of(1.0),
+                OptionalDouble.of(0.5));
+        addValues(OptionalInt.class, OptionalInt.of(1), OptionalInt.of(2), OptionalInt.of(1));
+        addValues(OptionalLong.class, OptionalLong.of(1), OptionalLong.of(2), OptionalLong.of(1));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
         addValues(
                 Currency.class,
@@ -252,6 +260,8 @@ public final class JavaApiPrefabValues {
                 new java.sql.Timestamp(1337),
                 new java.sql.Timestamp(42),
                 new java.sql.Timestamp(1337));
+
+        addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.
@@ -487,6 +497,14 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
+        addLazyFactory("java.awt.Font", AWT_FACTORY);
+
+        addFactory(
+                PropertyChangeSupport.class,
+                values(
+                        new PropertyChangeSupport("this"),
+                        new PropertyChangeSupport("that"),
+                        new PropertyChangeSupport("this")));
 
         addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
@@ -510,6 +528,7 @@ public final class JavaApiPrefabValues {
 
     private void addJavaxApiClasses() {
         addLazyFactory("javax.naming.Reference", JAVAX_FACTORY);
+        addLazyFactory("javax.swing.tree.DefaultMutableTreeNode", JAVAX_FACTORY);
     }
 
     private void addGoogleGuavaMultisetCollectionsClasses() {

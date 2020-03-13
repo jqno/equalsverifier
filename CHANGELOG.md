@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+- Added prefab values for `java.util.OptionalDouble`, `java.util.OptionalInt`, `java.util.OptionalLong`, `java.util.EventObject`, `java.awt.Font`, `javax.swing.tree.DefaultMutableTreeNode` and `java.beans.PropertyChangeSupport`. ([Issue 286](https://github.com/jqno/equalsverifier/issues/286))
 
 ## [3.1.12] - 2020-01-27
 ### Fixed
