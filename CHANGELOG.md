@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+## [3.1.13] - 2020-03-14
 - Added prefab values for `java.util.OptionalDouble`, `java.util.OptionalInt`, `java.util.OptionalLong`, `java.util.EventObject`, `java.awt.Font`, `javax.swing.tree.DefaultMutableTreeNode` and `java.beans.PropertyChangeSupport`. ([Issue 286](https://github.com/jqno/equalsverifier/issues/286))
 
 ## [3.1.12] - 2020-01-27
@@ -678,8 +680,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.12...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.13...HEAD
 
+[3.1.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.12...equalsverifier-3.1.13
 [3.1.12]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.11...equalsverifier-3.1.12
 [3.1.11]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.10...equalsverifier-3.1.11
 [3.1.10]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.9...equalsverifier-3.1.10
