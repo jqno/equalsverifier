@@ -77,8 +77,6 @@ workflows:
       - jdk12
       - jdk13
       - jdk14
-      - jdk-ea-experimental
-      - jdk-ea-full
   weekly-experimental:
     triggers:
       - schedule:
