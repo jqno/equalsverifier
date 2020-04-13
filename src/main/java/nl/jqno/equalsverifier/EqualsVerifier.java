@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier;
 
 import java.util.List;
+import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
@@ -49,6 +50,17 @@ public final class EqualsVerifier {
      */
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
         return new SingleTypeEqualsVerifierApi<>(type);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param first A class for which the {@code equals} method should be tested.
+     * @param more More classes for which the {@code equals} method should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public static MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?>... more) {
+        return new MultipleTypeEqualsVerifierApi(ListBuilders.buildListOfAtLeastOne(first, more));
     }
 
     /**
