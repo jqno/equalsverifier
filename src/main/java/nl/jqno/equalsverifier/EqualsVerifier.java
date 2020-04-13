@@ -45,8 +45,8 @@ public final class EqualsVerifier {
      * @param <T> The type.
      * @return A fluent API for EqualsVerifier.
      */
-    public static <T> EqualsVerifierApi<T> forClass(Class<T> type) {
-        return new EqualsVerifierApi<>(type);
+    public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
+        return new SingleTypeEqualsVerifierApi<>(type);
     }
 
     /**

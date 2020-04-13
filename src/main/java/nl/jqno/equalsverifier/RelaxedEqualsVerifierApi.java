@@ -30,7 +30,7 @@ public class RelaxedEqualsVerifierApi<T> {
      * @param example An instance of T that is unequal to the previously supplied equal examples.
      * @return An instance of {@link EqualsVerifier}.
      */
-    public EqualsVerifierApi<T> andUnequalExample(T example) {
+    public SingleTypeEqualsVerifierApi<T> andUnequalExample(T example) {
         return andUnequalExamples(example);
     }
 
@@ -45,10 +45,10 @@ public class RelaxedEqualsVerifierApi<T> {
      * @return An instance of {@link EqualsVerifier}.
      */
     @SafeVarargs
-    public final EqualsVerifierApi<T> andUnequalExamples(T first, T... more) {
+    public final SingleTypeEqualsVerifierApi<T> andUnequalExamples(T first, T... more) {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
         Validations.validateUnequalExamples(unequalExamples, equalExamples);
-        return new EqualsVerifierApi<>(type, equalExamples, unequalExamples)
+        return new SingleTypeEqualsVerifierApi<>(type, equalExamples, unequalExamples)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }
 }
