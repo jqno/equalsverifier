@@ -16,9 +16,14 @@ public class EqualsVerifierReport {
     private final String message;
     private final Throwable cause;
 
-    /** Constructor, only to be called by {@link EqualsVerifierApi#report()}. */
-    /* package protected */ EqualsVerifierReport(
-            boolean successful, String message, Throwable cause) {
+    /**
+     * Constructor.
+     *
+     * @param successful Whether the {@code EqualsVerifier} run was successful.
+     * @param message Error message when the run is unsuccessful.
+     * @param cause Exception when the run is unsuccessful.
+     */
+    public EqualsVerifierReport(boolean successful, String message, Throwable cause) {
         this.successful = successful;
         this.message = message;
         this.cause = cause;

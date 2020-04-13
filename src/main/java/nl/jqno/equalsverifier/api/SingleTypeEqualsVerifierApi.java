@@ -1,8 +1,10 @@
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.api;
 
 import java.util.*;
+import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -32,14 +34,26 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
 
-    /** Constructor, only to be called by {@link EqualsVerifier#forClass(Class)}. */
-    /* package protected */ SingleTypeEqualsVerifierApi(Class<T> type) {
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     */
+    public SingleTypeEqualsVerifierApi(Class<T> type) {
         this.type = type;
         actualFields = FieldNameExtractor.extractFieldNames(type);
     }
 
-    /** Constructor, only to be called by {@link ConfiguredEqualsVerifier#forClass(Class)}. */
-    /* package protected */ SingleTypeEqualsVerifierApi(
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param factoryCache Factories that can be used to create values.
+     * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
+     *     equals} method, instead of an {@code instanceof} check.
+     */
+    public SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
             FactoryCache factoryCache,

@@ -1,8 +1,9 @@
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.api;
 
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLeastOne;
 
 import java.util.List;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
@@ -15,10 +16,12 @@ public class RelaxedEqualsVerifierApi<T> {
     private final List<T> equalExamples;
 
     /**
-     * Constructor, only to be called by {@link EqualsVerifier#forRelaxedEqualExamples(Object,
-     * Object, Object...)}.
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     * @param examples A list of example instances that are equal but not identical to one another.
      */
-    /* package protected */ RelaxedEqualsVerifierApi(Class<T> type, List<T> examples) {
+    public RelaxedEqualsVerifierApi(Class<T> type, List<T> examples) {
         this.type = type;
         this.equalExamples = examples;
     }

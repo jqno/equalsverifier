@@ -1,8 +1,9 @@
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.api;
 
 import java.util.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.util.*;
 

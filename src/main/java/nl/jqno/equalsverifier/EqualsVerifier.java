@@ -1,6 +1,8 @@
 package nl.jqno.equalsverifier;
 
 import java.util.List;
+import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 
 /**
