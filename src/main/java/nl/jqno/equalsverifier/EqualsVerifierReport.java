@@ -7,9 +7,9 @@ package nl.jqno.equalsverifier;
  * was unsuccessful, the message is identical to the message of the exception that {@link
  * EqualsVerifierApi#verify()} would throw, and the cause would be identical to its cause.
  */
-public class EqualsVerifierReport {
+public final class EqualsVerifierReport {
 
-    /** Represents a successful run of EqualsVerifier. */
+    /** Represents a successful run of {@code EqualsVerifier}. */
     public static final EqualsVerifierReport SUCCESS = new EqualsVerifierReport(true, "", null);
 
     private final boolean successful;
@@ -17,13 +17,19 @@ public class EqualsVerifierReport {
     private final Throwable cause;
 
     /**
-     * Constructor.
+     * Factory method for an unsuccessful run of {@code EqualsVerifier}.
      *
-     * @param successful Whether the {@code EqualsVerifier} run was successful.
      * @param message Error message when the run is unsuccessful.
      * @param cause Exception when the run is unsuccessful.
+     * @return an {@code EqualsVerifierReport} representing the result of a run of {@code
+     *     EqualsVerifier}.
      */
-    public EqualsVerifierReport(boolean successful, String message, Throwable cause) {
+    public static EqualsVerifierReport failure(String message, Throwable cause) {
+        return new EqualsVerifierReport(false, message, cause);
+    }
+
+    /** Private constructor. Use {@link #SUCCESS} or {@link #failure(String, Throwable)} instead. */
+    private EqualsVerifierReport(boolean successful, String message, Throwable cause) {
         this.successful = successful;
         this.message = message;
         this.cause = cause;
