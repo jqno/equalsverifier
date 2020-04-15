@@ -68,8 +68,9 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         }
         String messages =
                 Formatter.of(
-                                "EqualsVerifier found a problem in %% classes.\n---\n%%",
+                                "EqualsVerifier found a problem in %% %%.\n---\n%%",
                                 failures.size(),
+                                failures.size() == 1 ? "class" : "classes",
                                 failures.stream()
                                         .map(r -> r.getMessage())
                                         .collect(Collectors.joining("\n---\n")))
