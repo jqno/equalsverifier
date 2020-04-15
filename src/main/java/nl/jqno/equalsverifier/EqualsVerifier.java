@@ -56,11 +56,14 @@ public final class EqualsVerifier {
      * Factory method. For general use.
      *
      * @param first A class for which the {@code equals} method should be tested.
+     * @param second Another class for which the {@code equals} method should be tested.
      * @param more More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
-    public static MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?>... more) {
-        return new MultipleTypeEqualsVerifierApi(ListBuilders.buildListOfAtLeastOne(first, more));
+    public static MultipleTypeEqualsVerifierApi forClasses(
+            Class<?> first, Class<?> second, Class<?>... more) {
+        return new MultipleTypeEqualsVerifierApi(
+                ListBuilders.buildListOfAtLeastTwo(first, second, more));
     }
 
     /**
