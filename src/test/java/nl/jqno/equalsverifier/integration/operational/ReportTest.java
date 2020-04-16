@@ -15,6 +15,7 @@ public class ReportTest {
     public void isEmptyWhenClassIsCorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(FinalPoint.class).report();
 
+        assertEquals(FinalPoint.class, report.getType());
         assertTrue(report.isSuccessful());
         assertEquals("", report.getMessage());
         assertNull(report.getCause());
@@ -24,6 +25,7 @@ public class ReportTest {
     public void containsAppropriateErrorMessageAndExceptionWhenClassIsIncorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
 
+        assertEquals(Point.class, report.getType());
         assertFalse(report.isSuccessful());
         assertThat(
                 report.getMessage(),

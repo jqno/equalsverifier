@@ -281,11 +281,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     public EqualsVerifierReport report() {
         try {
             performVerification();
-            return EqualsVerifierReport.SUCCESS;
+            return EqualsVerifierReport.success(type);
         } catch (MessagingException e) {
-            return EqualsVerifierReport.failure(buildErrorMessage(e.getDescription()), e);
+            return EqualsVerifierReport.failure(type, buildErrorMessage(e.getDescription()), e);
         } catch (Throwable e) {
-            return EqualsVerifierReport.failure(buildErrorMessage(e.getMessage()), e);
+            return EqualsVerifierReport.failure(type, buildErrorMessage(e.getMessage()), e);
         }
     }
 
