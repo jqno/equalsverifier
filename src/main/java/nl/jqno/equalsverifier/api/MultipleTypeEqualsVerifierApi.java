@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.api;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
@@ -20,7 +21,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     private final ConfiguredEqualsVerifier ev = new ConfiguredEqualsVerifier();
 
     public MultipleTypeEqualsVerifierApi(List<Class<?>> types) {
-        this.types = types;
+        this.types = new ArrayList<>(types);
     }
 
     /** {@inheritDoc} */
