@@ -18,10 +18,11 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     private final List<Class<?>> types;
-    private final ConfiguredEqualsVerifier ev = new ConfiguredEqualsVerifier();
+    private final ConfiguredEqualsVerifier ev;
 
-    public MultipleTypeEqualsVerifierApi(List<Class<?>> types) {
+    public MultipleTypeEqualsVerifierApi(List<Class<?>> types, ConfiguredEqualsVerifier ev) {
         this.types = new ArrayList<>(types);
+        this.ev = ev.copy();
     }
 
     /** {@inheritDoc} */

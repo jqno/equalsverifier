@@ -63,7 +63,8 @@ public final class EqualsVerifier {
     public static MultipleTypeEqualsVerifierApi forClasses(
             Class<?> first, Class<?> second, Class<?>... more) {
         return new MultipleTypeEqualsVerifierApi(
-                ListBuilders.buildListOfAtLeastTwo(first, second, more));
+                ListBuilders.buildListOfAtLeastTwo(first, second, more),
+                new ConfiguredEqualsVerifier());
     }
 
     /**
