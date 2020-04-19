@@ -22,9 +22,8 @@ public final class PrefabValuesApi {
             try {
                 T redCopy = ObjectAccessor.of(red).copy();
                 factoryCache.put(otherType, values(red, black, redCopy));
-            } catch (
-                    RuntimeException /* specifically, on Java 9+: InacessibleObjectException */
-                            ignored) {
+            } catch (RuntimeException ignored) {
+                /* specifically, on Java 9+: InacessibleObjectException */
                 factoryCache.put(otherType, values(red, black, red));
             }
         }
