@@ -25,6 +25,26 @@ import org.junit.Test;
 public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestBase {
 
     @Test
+    public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
+        EqualsVerifier.configure()
+                .forPackage("nl.jqno.equalsverifier.testhelpers.packages.correct")
+                .verify();
+    }
+
+    @Test
+    public void fail_whenCallingForPackage_givenTwoClassesInPackageAreIncorrect() {
+        expectFailure(
+                "EqualsVerifier found a problem in 2 classes.",
+                "IncorrectM",
+                "IncorrectN",
+                "Subclass: equals is not final.",
+                "Reflexivity: object does not equal itself:");
+
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect")
+                .verify();
+    }
+
+    @Test
     public void
             succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
         List<EqualsVerifierReport> reports =

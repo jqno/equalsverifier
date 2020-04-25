@@ -2,12 +2,14 @@ package nl.jqno.equalsverifier;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.api.EqualsVerifierApi;
 import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 
@@ -102,5 +104,16 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
             Class<?> first, Class<?> second, Class<?>... more) {
         return new MultipleTypeEqualsVerifierApi(
                 ListBuilders.buildListOfAtLeastTwo(first, second, more), this);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public MultipleTypeEqualsVerifierApi forPackage(String packageName) {
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 }

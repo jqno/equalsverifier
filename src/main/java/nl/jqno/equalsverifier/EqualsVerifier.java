@@ -4,6 +4,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 
 /**
@@ -65,6 +66,17 @@ public final class EqualsVerifier {
         return new MultipleTypeEqualsVerifierApi(
                 ListBuilders.buildListOfAtLeastTwo(first, second, more),
                 new ConfiguredEqualsVerifier());
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public static MultipleTypeEqualsVerifierApi forPackage(String packageName) {
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 
     /**
