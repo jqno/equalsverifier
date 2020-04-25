@@ -45,6 +45,7 @@ public final class PackageScanner {
         return Arrays.stream(dir.listFiles())
                 .filter(f -> f.getName().endsWith(".class"))
                 .map(f -> fileToClass(packageName, f))
+                .filter(c -> !c.getName().endsWith("Test"))
                 .collect(Collectors.toList());
     }
 
