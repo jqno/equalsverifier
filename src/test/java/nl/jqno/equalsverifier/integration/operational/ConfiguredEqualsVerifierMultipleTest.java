@@ -45,6 +45,16 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
     }
 
     @Test
+    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
+        expectException(
+                IllegalStateException.class,
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types");
+
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
+    }
+
+    @Test
     public void
             succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
         List<EqualsVerifierReport> reports =

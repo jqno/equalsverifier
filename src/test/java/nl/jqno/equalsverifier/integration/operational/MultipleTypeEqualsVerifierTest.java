@@ -33,6 +33,16 @@ public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
+        expectException(
+                IllegalStateException.class,
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types");
+
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
+    }
+
+    @Test
     public void fail_whenVerifyingOneIncorrectClass() {
         expectFailure(
                 "EqualsVerifier found a problem in 1 class.",

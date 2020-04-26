@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the contract for the {@code
@@ -76,6 +77,7 @@ public final class EqualsVerifier {
      */
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName) {
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 

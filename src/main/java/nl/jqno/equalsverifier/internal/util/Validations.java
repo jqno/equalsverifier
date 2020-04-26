@@ -159,6 +159,12 @@ public final class Validations {
                         + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId fields in equals.");
     }
 
+    public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {
+        validate(
+                types.size() == 0,
+                "package " + packageName + " doesn't contain any (non-Test) types.");
+    }
+
     public static void validateNotNull(Object object, String errormessage) {
         if (object == null) {
             throw new NullPointerException("Precondition: " + errormessage);

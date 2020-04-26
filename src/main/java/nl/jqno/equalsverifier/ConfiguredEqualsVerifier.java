@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     private final EnumSet<Warning> warningsToSuppress;
@@ -114,6 +115,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     public MultipleTypeEqualsVerifierApi forPackage(String packageName) {
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 }
