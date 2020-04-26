@@ -24,29 +24,9 @@ jobs:
       - image: openjdk:8-jdk
     steps:
       - build
-  jdk9:
-    docker:
-      - image: openjdk:9-jdk
-    steps:
-      - build
-  jdk10:
-    docker:
-      - image: openjdk:10-jdk
-    steps:
-      - build
   jdk11:
     docker:
       - image: openjdk:11-jdk
-    steps:
-      - build
-  jdk12:
-    docker:
-      - image: openjdk:12-jdk
-    steps:
-      - build
-  jdk13:
-    docker:
-      - image: openjdk:13-jdk
     steps:
       - build
   jdk14:
@@ -71,11 +51,7 @@ workflows:
   on_push:
     jobs:
       - jdk8
-      - jdk9
-      - jdk10
       - jdk11
-      - jdk12
-      - jdk13
       - jdk14
   weekly-experimental:
     triggers:
@@ -98,9 +74,5 @@ workflows:
                 - master
     jobs:
       - jdk8
-      - jdk9
-      - jdk10
       - jdk11
-      - jdk12
-      - jdk13
       - jdk14
