@@ -62,6 +62,13 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         return this;
     }
 
+    /**
+     * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws
+     * an {@link AssertionError} if there is a problem.
+     *
+     * @throws AssertionError If one of the contracts is not met, or if {@link EqualsVerifier}'s
+     *     preconditions do not hold.
+     */
     public void verify() {
         List<EqualsVerifierReport> failures =
                 report().stream().filter(r -> !r.isSuccessful()).collect(Collectors.toList());
@@ -83,6 +90,13 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         throw new AssertionError(messages);
     }
 
+    /**
+     * Performs the verifications of the contracts for {@code equals} and {@code hashCode} and
+     * returns a List of {@link EqualsVerifierReport} with the results of the verifications.
+     *
+     * @return A List of {@link EqualsVerifierReport} that indicates whether the contracts are met
+     *     and whether {@link EqualsVerifier}'s preconditions hold.
+     */
     public List<EqualsVerifierReport> report() {
         return types.stream().map(t -> ev.forClass(t).report()).collect(Collectors.toList());
     }
