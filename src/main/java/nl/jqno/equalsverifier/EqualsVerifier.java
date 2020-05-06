@@ -72,6 +72,9 @@ public final class EqualsVerifier {
     /**
      * Factory method. For general use.
      *
+     * <p>Note that this operation may be slow. If the test is too slow, use {@link
+     * #forClasses(Class, Class, Class...)} instead.
+     *
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @return A fluent API for EqualsVerifier.
      */
