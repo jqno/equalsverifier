@@ -18,6 +18,7 @@ public abstract class ExpectedExceptionTestBase {
 
     public void expectFailureWithoutCause(Class<? extends Throwable> notCause) {
         thrown.expect(not(new CauseMatcher(notCause)));
+        expectException(AssertionError.class);
     }
 
     public void expectFailure(String... fragments) {
