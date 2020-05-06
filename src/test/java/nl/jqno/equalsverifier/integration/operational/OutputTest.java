@@ -6,22 +6,32 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.Test;
 
 public class OutputTest extends ExpectedExceptionTestBase {
     private static final String SEE_ALSO = "For more information, go to";
-    private static final String WIKIPAGE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
+    private static final String WEBSITE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
     private static final String MESSAGE = "a message for an exception";
 
     @Test
     public void
-            messageIsValid_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+            messageIsValidForSingleType_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         expectMessageIsValidFor(Point.class);
         expectFailureWithCause(AssertionException.class);
 
         EqualsVerifier.forClass(Point.class).verify();
+    }
+
+    @Test
+    public void
+            messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+        expectMessageIsValidFor(Point.class);
+        expectFailure("---");
+
+        EqualsVerifier.forClasses(A.class, Point.class).verify();
     }
 
     @Test
@@ -76,7 +86,7 @@ public class OutputTest extends ExpectedExceptionTestBase {
 
     private void expectMessageIsValidFor(Class<?> type) {
         expectMessageContains(type.getSimpleName());
-        expectMessageContains(SEE_ALSO, WIKIPAGE_URL);
+        expectMessageContains(SEE_ALSO, WEBSITE_URL);
     }
 
     private void expectMessageContains(String... contains) {

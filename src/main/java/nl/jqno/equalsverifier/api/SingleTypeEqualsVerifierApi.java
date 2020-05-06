@@ -265,9 +265,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         try {
             performVerification();
         } catch (MessagingException e) {
-            throw new AssertionError(buildErrorMessage(e.getDescription()), e);
+            throw new AssertionError(buildErrorMessage(e.getDescription(), true), e);
         } catch (Throwable e) {
-            throw new AssertionError(buildErrorMessage(e.getMessage()), e);
+            throw new AssertionError(buildErrorMessage(e.getMessage(), true), e);
         }
     }
 
@@ -279,21 +279,27 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     whether {@link EqualsVerifier}'s preconditions hold.
      */
     public EqualsVerifierReport report() {
+        return report(true);
+    }
+
+    public EqualsVerifierReport report(boolean showUrl) {
         try {
             performVerification();
             return EqualsVerifierReport.success(type);
         } catch (MessagingException e) {
-            return EqualsVerifierReport.failure(type, buildErrorMessage(e.getDescription()), e);
+            return EqualsVerifierReport.failure(
+                    type, buildErrorMessage(e.getDescription(), showUrl), e);
         } catch (Throwable e) {
-            return EqualsVerifierReport.failure(type, buildErrorMessage(e.getMessage()), e);
+            return EqualsVerifierReport.failure(
+                    type, buildErrorMessage(e.getMessage(), showUrl), e);
         }
     }
 
-    private String buildErrorMessage(String description) {
+    private String buildErrorMessage(String description, boolean showUrl) {
         return Formatter.of(
-                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n"
-                                + "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-                        type.getName(), description)
+                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
+                        type.getName(),
+                        description)
                 .format();
     }
 

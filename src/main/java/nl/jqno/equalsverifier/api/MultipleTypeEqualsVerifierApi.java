@@ -93,7 +93,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         }
         String messages =
                 Formatter.of(
-                                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%",
+                                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%"
+                                        + WEBSITE_URL,
                                 failures.size(),
                                 failures.size() == 1 ? "class" : "classes",
                                 failures.stream()
@@ -114,6 +115,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      *     and whether {@link EqualsVerifier}'s preconditions hold.
      */
     public List<EqualsVerifierReport> report() {
-        return types.stream().map(t -> ev.forClass(t).report()).collect(Collectors.toList());
+        return types.stream().map(t -> ev.forClass(t).report(false)).collect(Collectors.toList());
     }
 }
