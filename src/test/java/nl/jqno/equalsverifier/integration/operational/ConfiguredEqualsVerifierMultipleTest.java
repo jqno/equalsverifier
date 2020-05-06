@@ -10,6 +10,8 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectM;
+import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
@@ -52,6 +54,22 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
                 "doesn't contain any (non-Test) types");
 
         EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
+    }
+
+    @Test
+    public void
+            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect")
+                .except(IncorrectM.class, IncorrectN.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenExceptingAClassThatDoesntExistInThePackage() {
+        expectException(IllegalStateException.class, "Unknown class(es) found", "IncorrectM");
+
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.testhelpers.packages.correct")
+                .except(IncorrectM.class);
     }
 
     @Test

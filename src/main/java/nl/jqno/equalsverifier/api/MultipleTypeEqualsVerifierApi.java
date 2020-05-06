@@ -9,6 +9,8 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.ListBuilders;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test for several types at once with a fluent API.
@@ -59,6 +61,20 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @Override
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
+        return this;
+    }
+
+    /**
+     * Removes the given type or types from the list of types to verify.
+     *
+     * @param type A type to remove from the list of types to verify.
+     * @param more More types to remove from the list of types to verify.
+     * @return {@code this}, for easy method chaining.
+     */
+    public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
+        List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
+        Validations.validateTypesAreKnown(typesToRemove, types);
+        types.removeAll(typesToRemove);
         return this;
     }
 

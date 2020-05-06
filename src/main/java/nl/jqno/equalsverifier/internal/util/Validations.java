@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -163,6 +164,17 @@ public final class Validations {
         validate(
                 types.size() == 0,
                 "package " + packageName + " doesn't contain any (non-Test) types.");
+    }
+
+    public static void validateTypesAreKnown(List<Class<?>> types, List<Class<?>> knownTypes) {
+        List<Class<?>> unknownTypes =
+                types.stream().filter(t -> !knownTypes.contains(t)).collect(Collectors.toList());
+        validate(
+                !unknownTypes.isEmpty(),
+                "Unknown class(es) found: "
+                        + unknownTypes.stream()
+                                .map(t -> t.getCanonicalName())
+                                .collect(Collectors.joining(", ")));
     }
 
     public static void validateNotNull(Object object, String errormessage) {
