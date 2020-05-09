@@ -1,5 +1,9 @@
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.api.EqualsVerifierApi;
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+
 /**
  * Enum of warnings that can be suppressed in {@link EqualsVerifier}.
  *
@@ -140,7 +144,7 @@ public enum Warning {
      * <p>Some may find that too strict for their liking; suppressing this warning disables that
      * test.
      *
-     * @see EqualsVerifierApi#withRedefinedSubclass(Class)
+     * @see SingleTypeEqualsVerifierApi#withRedefinedSubclass(Class)
      */
     STRICT_INHERITANCE,
 

@@ -1,11 +1,13 @@
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+
 /**
- * Contains the results of an {@link EqualsVerifier} run.
+ * Contains the results of an {@link nl.jqno.equalsverifier.EqualsVerifier} run.
  *
  * <p>When the run was successful, should contain an empty message and a null cause. When the run
  * was unsuccessful, the message is identical to the message of the exception that {@link
- * EqualsVerifierApi#verify()} would throw, and the cause would be identical to its cause.
+ * SingleTypeEqualsVerifierApi#verify()} would throw, and the cause would be identical to its cause.
  */
 public final class EqualsVerifierReport {
 
@@ -53,17 +55,18 @@ public final class EqualsVerifierReport {
     }
 
     /**
-     * @return whether the class tested by {@link EqualsVerifierApi#report()} conforms to the {@link
-     *     Object#equals(Object)} and {@link Object#hashCode()} contracts.
+     * @return whether the class tested by {@link SingleTypeEqualsVerifierApi#report()} conforms to
+     *     the {@link Object#equals(Object)} and {@link Object#hashCode()} contracts.
      */
     public boolean isSuccessful() {
         return successful;
     }
 
     /**
-     * @return a detailed error message if the class tested by {@link EqualsVerifierApi#report()}
-     *     does not conform to the {@link Object#equals(Object)} and {@link Object#hashCode()}
-     *     contracts; or an empty string if it does.
+     * @return a detailed error message if the class tested by {@link
+     *     SingleTypeEqualsVerifierApi#report()} does not conform to the {@link
+     *     Object#equals(Object)} and {@link Object#hashCode()} contracts; or an empty string if it
+     *     does.
      */
     public String getMessage() {
         return message;
@@ -71,8 +74,8 @@ public final class EqualsVerifierReport {
 
     /**
      * @return an exception indicating the source of the failure if the class tested by {@link
-     *     EqualsVerifierApi#report()} does not conform to the {@link Object#equals(Object)} and
-     *     {@link Object#hashCode()} contracts; or null if it does.
+     *     SingleTypeEqualsVerifierApi#report()} does not conform to the {@link
+     *     Object#equals(Object)} and {@link Object#hashCode()} contracts; or null if it does.
      */
     public Throwable getCause() {
         return cause;

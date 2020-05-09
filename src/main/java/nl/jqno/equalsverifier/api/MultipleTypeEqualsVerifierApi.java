@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
@@ -14,8 +15,6 @@ import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test for several types at once with a fluent API.
- *
- * @param <T> The class under test.
  */
 public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 

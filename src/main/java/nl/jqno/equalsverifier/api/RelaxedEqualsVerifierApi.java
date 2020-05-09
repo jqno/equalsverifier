@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.api;
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLeastOne;
 
 import java.util.List;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
