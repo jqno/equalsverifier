@@ -11,7 +11,7 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)
 * [Dealing with null](/equalsverifier/manual/null)
 * [Ignoring fields](/equalsverifier/manual/ignoring-fields)
-* [Re-using configurations](/equalsverifier/manual/reusing-configurations)
+* [Testing several classes at once](/equalsverifier/manual/several-classes-at-once)
 * [Handling inheritance](/equalsverifier/manual/inheritance)
 * [JPA entities](/equalsverifier/manual/jpa-entities)
 * [Cached hashCodes](/equalsverifier/manual/caching-hashcodes)

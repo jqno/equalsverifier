@@ -1,6 +1,6 @@
 ---
-title: Re-using configurations
-permalink: /manual/reusing-configurations/
+title: Testing several classes at once
+permalink: /manual/several-classes-at-once/
 ---
 When you have a large domain with many classes that all have `equals` methods to be tested, using EqualsVerifier the way we have been until now can get a bit unwieldy, because you have to repeat the call to EqualsVerifier for each class that you want to test.
 
