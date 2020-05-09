@@ -1,11 +1,10 @@
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.api.EqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 
 /**
- * Enum of warnings that can be suppressed in {@link EqualsVerifier}.
+ * Enum of warnings that can be suppressed in {@link nl.jqno.equalsverifier.EqualsVerifier}.
  *
  * @see EqualsVerifierApi#suppress(Warning...)
  */
@@ -42,40 +41,43 @@ public enum Warning {
      */
     REFERENCE_EQUALITY,
 
-    /**
-     * Disables the check, when the {@code equals} method is overridden in the class under test,
-     * that an instance of this class should be equal to an identical copy of itself.
-     *
-     * <p>Normally, it is important that an object be equal to an identical copy of itself: after
-     * all, this is the point of overriding {@code equals} in the first place.
-     *
-     * <p>However, when the class is part of a hierarchy, but should be (pseudo-)singleton, it can
-     * be useful to suppress this warning. This can happen in certain implementations of the Null
-     * Object Pattern, for example.
-     *
-     * <p>If this warning is suppressed, and it turns out that an instance of the class under test
-     * is equal to an identical copy of itself after all, {@link EqualsVerifier} will fail.
-     */
-    IDENTICAL_COPY,
+  /**
+   * Disables the check, when the {@code equals} method is overridden in the class under test, that
+   * an instance of this class should be equal to an identical copy of itself.
+   *
+   * <p>Normally, it is important that an object be equal to an identical copy of itself: after all,
+   * this is the point of overriding {@code equals} in the first place.
+   *
+   * <p>However, when the class is part of a hierarchy, but should be (pseudo-)singleton, it can be
+   * useful to suppress this warning. This can happen in certain implementations of the Null Object
+   * Pattern, for example.
+   *
+   * <p>If this warning is suppressed, and it turns out that an instance of the class under test is
+   * equal to an identical copy of itself after all, {@link nl.jqno.equalsverifier.EqualsVerifier}
+   * will fail.
+   */
+  IDENTICAL_COPY,
 
-    /**
-     * Disables the check, when the {@code equals} method is overridden in the class under test,
-     * that an instance of this class should be equal to an identical copy of itself.
-     *
-     * <p>Normally, it is important that an object be equal to an identical copy of itself: after
-     * all, this is the point of overriding {@code equals} in the first place.
-     *
-     * <p>However, when the class is a kind of versioned entity and there is an {@code id} field
-     * that is zero when the object is new, it is often the case that two new objects are never
-     * equal to each other. In these cases, it can be useful to suppress this warning.
-     *
-     * <p>You cannot use {@link #IDENTICAL_COPY} in these cases, because when the {@code id}s are
-     * equal, the objects should be, too, and {@link EqualsVerifier} would fail in this case.
-     *
-     * <p>If this warning is suppressed, and it turns out that an instance of the class under test
-     * is equal to an identical copy of itself after all, {@link EqualsVerifier} will NOT fail.
-     */
-    IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
+  /**
+   * Disables the check, when the {@code equals} method is overridden in the class under test, that
+   * an instance of this class should be equal to an identical copy of itself.
+   *
+   * <p>Normally, it is important that an object be equal to an identical copy of itself: after all,
+   * this is the point of overriding {@code equals} in the first place.
+   *
+   * <p>However, when the class is a kind of versioned entity and there is an {@code id} field that
+   * is zero when the object is new, it is often the case that two new objects are never equal to
+   * each other. In these cases, it can be useful to suppress this warning.
+   *
+   * <p>You cannot use {@link #IDENTICAL_COPY} in these cases, because when the {@code id}s are
+   * equal, the objects should be, too, and {@link nl.jqno.equalsverifier.EqualsVerifier} would fail
+   * in this case.
+   *
+   * <p>If this warning is suppressed, and it turns out that an instance of the class under test is
+   * equal to an identical copy of itself after all, {@link nl.jqno.equalsverifier.EqualsVerifier}
+   * will NOT fail.
+   */
+  IDENTICAL_COPY_FOR_VERSIONED_ENTITY,
 
     /**
      * Disables the check that verifies {@code equals} is actually overridden.
@@ -97,18 +99,18 @@ public enum Warning {
      */
     NO_EXAMPLE_FOR_CACHED_HASHCODE,
 
-    /**
-     * Disables checks for non-final fields on which {@code equals} and {@code hashCode} depend.
-     *
-     * <p>{@link EqualsVerifier}'s standard behaviour is to disallow non-final fields being used in
-     * {@code equals} and {@code hashCode} methods, since classes that depend on non-final fields in
-     * these methods cannot reliably be used in collections.
-     *
-     * <p>However, sometimes an external library requires that fields be non-final. An example of
-     * this are Java Beans. In such a case, suppress this warning to prevent {@link EqualsVerifier}
-     * from checking for non-final fields.
-     */
-    NONFINAL_FIELDS,
+  /**
+   * Disables checks for non-final fields on which {@code equals} and {@code hashCode} depend.
+   *
+   * <p>{@link nl.jqno.equalsverifier.EqualsVerifier}'s standard behaviour is to disallow non-final
+   * fields being used in {@code equals} and {@code hashCode} methods, since classes that depend on
+   * non-final fields in these methods cannot reliably be used in collections.
+   *
+   * <p>However, sometimes an external library requires that fields be non-final. An example of this
+   * are Java Beans. In such a case, suppress this warning to prevent {@link
+   * nl.jqno.equalsverifier.EqualsVerifier} from checking for non-final fields.
+   */
+  NONFINAL_FIELDS,
 
     /**
      * Disables checks for {@link NullPointerException} within {@code equals}, {@code hashCode} and
@@ -133,20 +135,19 @@ public enum Warning {
      */
     STRICT_HASHCODE,
 
-    /**
-     * Disables some of the stricter inheritance tests; use at your own risk!
-     *
-     * <p>{@link EqualsVerifier}'s standard behaviour, if T is not final and neither are its {@code
-     * equals} and {@code hashCode} methods, is to require a reference to a subclass of T for which
-     * no instance can be equal to any instance of T, to make sure that subclasses that can redefine
-     * {@code equals} or {@code hashCode} don't break the contract.
-     *
-     * <p>Some may find that too strict for their liking; suppressing this warning disables that
-     * test.
-     *
-     * @see SingleTypeEqualsVerifierApi#withRedefinedSubclass(Class)
-     */
-    STRICT_INHERITANCE,
+  /**
+   * Disables some of the stricter inheritance tests; use at your own risk!
+   *
+   * <p>{@link nl.jqno.equalsverifier.EqualsVerifier}'s standard behaviour, if T is not final and
+   * neither are its {@code equals} and {@code hashCode} methods, is to require a reference to a
+   * subclass of T for which no instance can be equal to any instance of T, to make sure that
+   * subclasses that can redefine {@code equals} or {@code hashCode} don't break the contract.
+   *
+   * <p>Some may find that too strict for their liking; suppressing this warning disables that test.
+   *
+   * @see SingleTypeEqualsVerifierApi#withRedefinedSubclass(Class)
+   */
+  STRICT_INHERITANCE,
 
     /**
      * Disables the check that fields marked with the @Id or @EmbeddedId annotations in JPA entities
@@ -158,15 +159,15 @@ public enum Warning {
      */
     SURROGATE_KEY,
 
-    /**
-     * Disables the check that transient fields not be part of the {@code equals} contract.
-     *
-     * <p>{@link EqualsVerifier}'s standard behaviour is to disallow transient fields being used in
-     * {@code equals} and {@code hashCode} methods, since these fields may not be restored to their
-     * original state after deserialization, which would break {@code equals}.
-     *
-     * <p>If measures are taken that this will never happen, this warning can be suppressed to
-     * disable {@link EqualsVerifier}'s transience test.
-     */
-    TRANSIENT_FIELDS
+  /**
+   * Disables the check that transient fields not be part of the {@code equals} contract.
+   *
+   * <p>{@link nl.jqno.equalsverifier.EqualsVerifier}'s standard behaviour is to disallow transient
+   * fields being used in {@code equals} and {@code hashCode} methods, since these fields may not be
+   * restored to their original state after deserialization, which would break {@code equals}.
+   *
+   * <p>If measures are taken that this will never happen, this warning can be suppressed to disable
+   * {@link nl.jqno.equalsverifier.EqualsVerifier}'s transience test.
+   */
+  TRANSIENT_FIELDS
 }
