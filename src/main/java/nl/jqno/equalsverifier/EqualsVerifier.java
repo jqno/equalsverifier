@@ -1,7 +1,12 @@
 package nl.jqno.equalsverifier;
 
 import java.util.List;
+import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
  * {@code EqualsVerifier} can be used in unit tests to verify whether the contract for the {@code
@@ -45,8 +50,38 @@ public final class EqualsVerifier {
      * @param <T> The type.
      * @return A fluent API for EqualsVerifier.
      */
-    public static <T> EqualsVerifierApi<T> forClass(Class<T> type) {
-        return new EqualsVerifierApi<>(type);
+    public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
+        return new SingleTypeEqualsVerifierApi<>(type);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param first A class for which the {@code equals} method should be tested.
+     * @param second Another class for which the {@code equals} method should be tested.
+     * @param more More classes for which the {@code equals} method should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public static MultipleTypeEqualsVerifierApi forClasses(
+            Class<?> first, Class<?> second, Class<?>... more) {
+        return new MultipleTypeEqualsVerifierApi(
+                ListBuilders.buildListOfAtLeastTwo(first, second, more),
+                new ConfiguredEqualsVerifier());
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * <p>Note that this operation may be slow. If the test is too slow, use {@link
+     * #forClasses(Class, Class, Class...)} instead.
+     *
+     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public static MultipleTypeEqualsVerifierApi forPackage(String packageName) {
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        Validations.validatePackageContainsClasses(packageName, classes);
+        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 
     /**

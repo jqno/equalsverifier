@@ -20,24 +20,32 @@ The Maven coordinates are:
 </dependency>
 ```
 
-For documentation, please see the [project's website](http://www.jqno.nl/equalsverifier).
+
+# Documentation
+
+Please see the [project's website](http://www.jqno.nl/equalsverifier).
+
+
+# Contribution
 
 Pull requests are welcome! If you open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it.
 
 
-Build
----
+# Development
+
+## Build
 
 To build EqualsVerifier, you need [Maven](http://maven.apache.org/). Just call `mvn clean verify` from the command-line, and you're done. Alternatively, you can use any IDE with Maven support.
 
 
-Project structure
----
+## Project structure
 
 `src/`
 
 * `nl.jqno.equalsverifier`
   External API
+* `nl.jqno.equalsverifier`
+  Supporting classes for the external API that aren't used in client code directly
 * `nl.jqno.equalsverifier.internal`
   Classes internal to the operation of EqualsVerifier
 * `nl.jqno.equalsverifier.internal.checkers`
@@ -95,6 +103,6 @@ Project structure
   </pre>
   The signed jar itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
 
-Disclaimer
----
-Copyright 2009-2019 Jan Ouwens
+# Disclaimer
+
+Copyright 2009-2020 Jan Ouwens

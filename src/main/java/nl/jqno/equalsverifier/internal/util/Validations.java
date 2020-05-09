@@ -2,9 +2,11 @@ package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.listContainsDuplicates;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -16,15 +18,14 @@ public final class Validations {
 
     public static void validateFieldNamesExist(
             Class<?> type, List<String> givenFields, Set<String> actualFields) {
-        givenFields.forEach(
-                f ->
-                        validate(
-                                !actualFields.contains(f),
-                                "class "
-                                        + type.getSimpleName()
-                                        + " does not contain field "
-                                        + f
-                                        + "."));
+        givenFields.forEach(f -> validateFieldNameExists(type, f, actualFields));
+    }
+
+    private static void validateFieldNameExists(
+            Class<?> type, String field, Set<String> actualFields) {
+        validate(
+                !actualFields.contains(field),
+                "class " + type.getSimpleName() + " does not contain field " + field + ".");
     }
 
     public static void validateWarnings(Set<Warning> warnings) {
@@ -49,11 +50,13 @@ public final class Validations {
     public static <T> void validateUnequalExamples(List<T> unequalExamples, List<T> equalExamples) {
         validate(listContainsDuplicates(unequalExamples), "two objects are equal to each other.");
 
-        unequalExamples.forEach(
-                u ->
-                        validate(
-                                equalExamples.contains(u),
-                                "an equal example also appears as unequal example."));
+        unequalExamples.forEach(u -> validateExampleIsUnequal(u, equalExamples));
+    }
+
+    private static <T> void validateExampleIsUnequal(T example, List<T> equalExamples) {
+        validate(
+                equalExamples.contains(example),
+                "an equal example also appears as unequal example.");
     }
 
     public static <T> void validateRedAndBlackPrefabValues(Class<T> type, T red, T black) {
@@ -93,14 +96,13 @@ public final class Validations {
     }
 
     public static void validateGivenAnnotations(Class<?>... givenAnnotations) {
-        Arrays.stream(givenAnnotations)
-                .forEach(
-                        a ->
-                                validate(
-                                        !a.isAnnotation(),
-                                        "class "
-                                                + a.getCanonicalName()
-                                                + " is not an annotation."));
+        Arrays.stream(givenAnnotations).forEach(a -> validateIsAnnotation(a));
+    }
+
+    private static void validateIsAnnotation(Class<?> type) {
+        validate(
+                !type.isAnnotation(),
+                "class " + type.getCanonicalName() + " is not an annotation.");
     }
 
     public static void validateProcessedAnnotations(
@@ -146,14 +148,33 @@ public final class Validations {
     private static void validateFieldAnnotations(
             Class<?> type, AnnotationCache cache, Set<String> includedFields) {
         FieldIterable.of(type)
-                .forEach(
-                        f ->
-                                validate(
-                                        includedFields.contains(f.getName())
-                                                && cache.hasFieldAnnotation(
-                                                        type, f.getName(), SupportedAnnotations.ID),
-                                        "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n"
-                                                + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId fields in equals."));
+                .forEach(f -> validateFieldAnnotation(type, f, cache, includedFields));
+    }
+
+    private static void validateFieldAnnotation(
+            Class<?> type, Field f, AnnotationCache cache, Set<String> includedFields) {
+        validate(
+                includedFields.contains(f.getName())
+                        && cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID),
+                "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n"
+                        + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId fields in equals.");
+    }
+
+    public static void validatePackageContainsClasses(String packageName, List<Class<?>> types) {
+        validate(
+                types.size() == 0,
+                "package " + packageName + " doesn't contain any (non-Test) types.");
+    }
+
+    public static void validateTypesAreKnown(List<Class<?>> types, List<Class<?>> knownTypes) {
+        List<Class<?>> unknownTypes =
+                types.stream().filter(t -> !knownTypes.contains(t)).collect(Collectors.toList());
+        validate(
+                !unknownTypes.isEmpty(),
+                "Unknown class(es) found: "
+                        + unknownTypes.stream()
+                                .map(t -> t.getCanonicalName())
+                                .collect(Collectors.joining(", ")));
     }
 
     public static void validateNotNull(Object object, String errormessage) {

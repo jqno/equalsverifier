@@ -15,6 +15,7 @@ public class ReportTest {
     public void isEmptyWhenClassIsCorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(FinalPoint.class).report();
 
+        assertEquals(FinalPoint.class, report.getType());
         assertTrue(report.isSuccessful());
         assertEquals("", report.getMessage());
         assertNull(report.getCause());
@@ -24,6 +25,7 @@ public class ReportTest {
     public void containsAppropriateErrorMessageAndExceptionWhenClassIsIncorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
 
+        assertEquals(Point.class, report.getType());
         assertFalse(report.isSuccessful());
         assertThat(
                 report.getMessage(),
@@ -45,7 +47,9 @@ public class ReportTest {
 
             StackTraceElement[] verified = e.getCause().getStackTrace();
             StackTraceElement[] reported = report.getCause().getStackTrace();
-            assertEquals(verified.length, reported.length);
+            // Implementation detail:
+            // `report` has 1 extra stack frame because it delegates to an overload.
+            assertEquals(verified.length + 1, reported.length);
 
             for (int i = 0; i < verified.length; i++) {
                 if (!verified[i].getMethodName().equals("verify")) {

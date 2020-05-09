@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.Test;
 
-public class ConfiguredEqualsVerifierTest extends ExpectedExceptionTestBase {
+public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBase {
 
     @Test
     public void

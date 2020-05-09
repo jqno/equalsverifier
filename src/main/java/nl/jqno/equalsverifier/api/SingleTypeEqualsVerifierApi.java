@@ -1,8 +1,10 @@
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.api;
 
 import java.util.*;
+import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -14,7 +16,7 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
  *
  * @param <T> The class under test.
  */
-public class EqualsVerifierApi<T> {
+public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private final Class<T> type;
     private final Set<String> actualFields;
 
@@ -32,14 +34,26 @@ public class EqualsVerifierApi<T> {
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
 
-    /** Constructor, only to be called by {@link EqualsVerifier#forClass(Class)}. */
-    /* package protected */ EqualsVerifierApi(Class<T> type) {
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     */
+    public SingleTypeEqualsVerifierApi(Class<T> type) {
         this.type = type;
         actualFields = FieldNameExtractor.extractFieldNames(type);
     }
 
-    /** Constructor, only to be called by {@link ConfiguredEqualsVerifier#forClass(Class)}. */
-    /* package protected */ EqualsVerifierApi(
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param factoryCache Factories that can be used to create values.
+     * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
+     *     equals} method, instead of an {@code instanceof} check.
+     */
+    public SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
             FactoryCache factoryCache,
@@ -54,21 +68,16 @@ public class EqualsVerifierApi<T> {
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object,
      * Object[])}.
      */
-    /* package protected */ EqualsVerifierApi(
+    /* package protected */ SingleTypeEqualsVerifierApi(
             Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
         this(type);
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
     }
 
-    /**
-     * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning} to see what warnings
-     * can be suppressed.
-     *
-     * @param warnings A list of warnings to suppress in {@code EqualsVerifier}.
-     * @return {@code this}, for easy method chaining.
-     */
-    public EqualsVerifierApi<T> suppress(Warning... warnings) {
+    /** {@inheritDoc} */
+    @Override
+    public SingleTypeEqualsVerifierApi<T> suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
         Validations.validateWarnings(warningsToSuppress);
         Validations.validateWarningsAndFields(
@@ -77,65 +86,32 @@ public class EqualsVerifierApi<T> {
         return this;
     }
 
-    /**
-     * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot
-     * instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param red An instance of {@code S}.
-     * @param black Another instance of {@code S}, not equal to {@code red}.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException If either {@code otherType}, {@code red}, or {@code black} is
-     *     null.
-     * @throws IllegalArgumentException If {@code red} equals {@code black}.
-     */
-    public <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S black) {
+    /** {@inheritDoc} */
+    @Override
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S black) {
         PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, black);
         return this;
     }
 
-    /**
-     * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic
-     * type parameter that EqualsVerifier cannot instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param factory A factory to generate an instance of {@code S}, given a value of its generic
-     *     type parameter.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
-     */
-    public <S> EqualsVerifierApi<T> withGenericPrefabValues(
+    /** {@inheritDoc} */
+    @Override
+    public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(
             Class<S> otherType, Func1<?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
-    /**
-     * Adds a factory to generate prefabricated values for instance fields of classes with 2 generic
-     * type parameters that EqualsVerifier cannot instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param factory A factory to generate an instance of {@code S}, given a value of each of its
-     *     generic type parameters.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
-     */
-    public <S> EqualsVerifierApi<T> withGenericPrefabValues(
+    /** {@inheritDoc} */
+    @Override
+    public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(
             Class<S> otherType, Func2<?, ?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
-    /**
-     * Signals that {@code getClass} is used in the implementation of the {@code equals} method,
-     * instead of an {@code instanceof} check.
-     *
-     * @return {@code this}, for easy method chaining.
-     */
-    public EqualsVerifierApi<T> usingGetClass() {
+    /** {@inheritDoc} */
+    @Override
+    public SingleTypeEqualsVerifierApi<T> usingGetClass() {
         this.usingGetClass = true;
         return this;
     }
@@ -150,7 +126,7 @@ public class EqualsVerifierApi<T> {
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withIgnoredFields(String... fields) {
+    public SingleTypeEqualsVerifierApi<T> withIgnoredFields(String... fields) {
         return withFieldsAddedAndValidated(allExcludedFields, Arrays.asList(fields));
     }
 
@@ -163,11 +139,11 @@ public class EqualsVerifierApi<T> {
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
+    public SingleTypeEqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
         return withFieldsAddedAndValidated(allIncludedFields, Arrays.asList(fields));
     }
 
-    private EqualsVerifierApi<T> withFieldsAddedAndValidated(
+    private SingleTypeEqualsVerifierApi<T> withFieldsAddedAndValidated(
             Set<String> collection, List<String> specifiedFields) {
         collection.addAll(specifiedFields);
 
@@ -188,7 +164,7 @@ public class EqualsVerifierApi<T> {
      * @param fields Fields that can never be null.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withNonnullFields(String... fields) {
+    public SingleTypeEqualsVerifierApi<T> withNonnullFields(String... fields) {
         List<String> fieldsAsList = Arrays.asList(fields);
         nonnullFields.addAll(fieldsAsList);
         Validations.validateFieldNamesExist(type, fieldsAsList, actualFields);
@@ -206,7 +182,7 @@ public class EqualsVerifierApi<T> {
      * @param annotations Annotations to ignore.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
+    public SingleTypeEqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
         Validations.validateGivenAnnotations(annotations);
         for (Class<?> ignoredAnnotation : annotations) {
             ignoredAnnotationClassNames.add(ignoredAnnotation.getCanonicalName());
@@ -224,7 +200,7 @@ public class EqualsVerifierApi<T> {
      *
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withRedefinedSuperclass() {
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass() {
         this.hasRedefinedSuperclass = true;
         return this;
     }
@@ -240,7 +216,7 @@ public class EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @see Warning#STRICT_INHERITANCE
      */
-    public EqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
+    public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
         this.redefinedSubclass = subclass;
         return this;
     }
@@ -270,7 +246,7 @@ public class EqualsVerifierApi<T> {
      *     initialized properly.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withCachedHashCode(
+    public SingleTypeEqualsVerifierApi<T> withCachedHashCode(
             String cachedHashCodeField, String calculateHashCodeMethod, T example) {
         cachedHashCodeInitializer =
                 new CachedHashCodeInitializer<>(
@@ -289,9 +265,9 @@ public class EqualsVerifierApi<T> {
         try {
             performVerification();
         } catch (MessagingException e) {
-            throw new AssertionError(buildErrorMessage(e.getDescription()), e);
+            throw new AssertionError(buildErrorMessage(e.getDescription(), true), e);
         } catch (Throwable e) {
-            throw new AssertionError(buildErrorMessage(e.getMessage()), e);
+            throw new AssertionError(buildErrorMessage(e.getMessage(), true), e);
         }
     }
 
@@ -303,21 +279,27 @@ public class EqualsVerifierApi<T> {
      *     whether {@link EqualsVerifier}'s preconditions hold.
      */
     public EqualsVerifierReport report() {
+        return report(true);
+    }
+
+    public EqualsVerifierReport report(boolean showUrl) {
         try {
             performVerification();
-            return EqualsVerifierReport.SUCCESS;
+            return EqualsVerifierReport.success(type);
         } catch (MessagingException e) {
-            return new EqualsVerifierReport(false, buildErrorMessage(e.getDescription()), e);
+            return EqualsVerifierReport.failure(
+                    type, buildErrorMessage(e.getDescription(), showUrl), e);
         } catch (Throwable e) {
-            return new EqualsVerifierReport(false, buildErrorMessage(e.getMessage()), e);
+            return EqualsVerifierReport.failure(
+                    type, buildErrorMessage(e.getMessage(), showUrl), e);
         }
     }
 
-    private String buildErrorMessage(String description) {
+    private String buildErrorMessage(String description, boolean showUrl) {
         return Formatter.of(
-                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n"
-                                + "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages",
-                        type.getName(), description)
+                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
+                        type.getName(),
+                        description)
                 .format();
     }
 

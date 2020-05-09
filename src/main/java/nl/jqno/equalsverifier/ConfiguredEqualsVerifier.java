@@ -2,86 +2,80 @@ package nl.jqno.equalsverifier;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.api.EqualsVerifierApi;
+import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
+import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
-public final class ConfiguredEqualsVerifier {
-    private final EnumSet<Warning> warningsToSuppress = EnumSet.noneOf(Warning.class);
-    private final FactoryCache factoryCache = new FactoryCache();
-    private boolean usingGetClass = false;
+public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
+    private final EnumSet<Warning> warningsToSuppress;
+    private final FactoryCache factoryCache;
+    private boolean usingGetClass;
+
+    /** Constructor. */
+    public ConfiguredEqualsVerifier() {
+        this(EnumSet.noneOf(Warning.class), new FactoryCache(), false);
+    }
+
+    /** Private constructor. For internal use only. */
+    private ConfiguredEqualsVerifier(
+            EnumSet<Warning> warningsToSuppress, FactoryCache factoryCache, boolean usingGetClass) {
+        this.warningsToSuppress = warningsToSuppress;
+        this.factoryCache = factoryCache;
+        this.usingGetClass = usingGetClass;
+    }
 
     /**
-     * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning} to see what warnings
-     * can be suppressed.
+     * Returns a copy of the configuration.
      *
-     * @param warnings A list of warnings to suppress in {@code EqualsVerifier}.
-     * @return {@code this}, for easy method chaining.
+     * @return a copy of the configuration.
      */
+    public ConfiguredEqualsVerifier copy() {
+        return new ConfiguredEqualsVerifier(
+                EnumSet.copyOf(warningsToSuppress),
+                new FactoryCache().merge(factoryCache),
+                usingGetClass);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public ConfiguredEqualsVerifier suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
         return this;
     }
 
-    /**
-     * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot
-     * instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param red An instance of {@code S}.
-     * @param black Another instance of {@code S}, not equal to {@code red}.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException If either {@code otherType}, {@code red}, or {@code black} is
-     *     null.
-     * @throws IllegalArgumentException If {@code red} equals {@code black}.
-     */
+    /** {@inheritDoc} */
+    @Override
     public <S> ConfiguredEqualsVerifier withPrefabValues(Class<S> otherType, S red, S black) {
         PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, black);
         return this;
     }
 
-    /**
-     * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic
-     * type parameter that EqualsVerifier cannot instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param factory A factory to generate an instance of {@code S}, given a value of its generic
-     *     type parameter.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
-     */
+    /** {@inheritDoc} */
+    @Override
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
             Class<S> otherType, Func1<?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
-    /**
-     * Adds a factory to generate prefabricated values for instance fields of classes with 2 generic
-     * type parameters that EqualsVerifier cannot instantiate by itself.
-     *
-     * @param <S> The class of the prefabricated values.
-     * @param otherType The class of the prefabricated values.
-     * @param factory A factory to generate an instance of {@code S}, given a value of each of its
-     *     generic type parameters.
-     * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
-     */
+    /** {@inheritDoc} */
+    @Override
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
             Class<S> otherType, Func2<?, ?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
-    /**
-     * Signals that {@code getClass} is used in the implementation of the {@code equals} method,
-     * instead of an {@code instanceof} check.
-     *
-     * @return {@code this}, for easy method chaining.
-     */
+    /** {@inheritDoc} */
+    @Override
     public ConfiguredEqualsVerifier usingGetClass() {
         usingGetClass = true;
         return this;
@@ -94,8 +88,37 @@ public final class ConfiguredEqualsVerifier {
      * @param type The class for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
-    public <T> EqualsVerifierApi<T> forClass(Class<T> type) {
-        return new EqualsVerifierApi<>(
+    public <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
+        return new SingleTypeEqualsVerifierApi<>(
                 type, EnumSet.copyOf(warningsToSuppress), factoryCache, usingGetClass);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * @param first A class for which the {@code equals} method should be tested.
+     * @param second Another class for which the {@code equals} method should be tested.
+     * @param more More classes for which the {@code equals} method should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public MultipleTypeEqualsVerifierApi forClasses(
+            Class<?> first, Class<?> second, Class<?>... more) {
+        return new MultipleTypeEqualsVerifierApi(
+                ListBuilders.buildListOfAtLeastTwo(first, second, more), this);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * <p>Note that this operation may be slow. If the test is too slow, use {@link
+     * #forClasses(Class, Class, Class...)} instead.
+     *
+     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @return A fluent API for EqualsVerifier.
+     */
+    public MultipleTypeEqualsVerifierApi forPackage(String packageName) {
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        Validations.validatePackageContainsClasses(packageName, classes);
+        return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }
 }
