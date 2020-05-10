@@ -6,7 +6,7 @@
 [![Dependabot](https://flat.badgen.net/dependabot/jqno/equalsverifier?icon=dependabot)](https://dependabot.com/)
 [![SemVer stability](https://api.dependabot.com/badges/compatibility_score?dependency-name=nl.jqno.equalsverifier:equalsverifier&package-manager=maven&version-scheme=semver)](https://dependabot.com/compatibility-score/?dependency-name=nl.jqno.equalsverifier:equalsverifier&package-manager=maven&version-scheme=semver)
 
-[![Issue resolution](http://isitmaintained.com/badge/resolution/jqno/equalsverifier.svg)](http://isitmaintained.com/project/jqno/equalsverifier "Average time to resolve an issue")
+[![Issue resolution](https://isitmaintained.com/badge/resolution/jqno/equalsverifier.svg)](https://isitmaintained.com/project/jqno/equalsverifier "Average time to resolve an issue")
 
 **EqualsVerifier** can be used in Java unit tests to verify whether the contract for the equals and hashCode methods in a class is met.
 The Maven coordinates are:
@@ -23,7 +23,7 @@ The Maven coordinates are:
 
 # Documentation
 
-Please see the [project's website](http://www.jqno.nl/equalsverifier).
+Please see the [project's website](https://www.jqno.nl/equalsverifier).
 
 
 # Contribution
@@ -35,7 +35,7 @@ Pull requests are welcome! If you open one, please also [register an issue](http
 
 ## Build
 
-To build EqualsVerifier, you need [Maven](http://maven.apache.org/). Just call `mvn` from the command-line, without any parameters, and you're done. Alternatively, you can use any IDE with Maven support.
+To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call `mvn` from the command-line, without any parameters, and you're done. Alternatively, you can use any IDE with Maven support.
 
 
 ## Formatting
