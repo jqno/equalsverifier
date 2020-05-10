@@ -9,7 +9,7 @@ If all classes tot test live within the same package, you can simplify quite a b
 {% highlight java %}
 EqualsVerifier.forPackage("com.example.app.domain")
     .verify();
-{% highlight java %}
+{% endhighlight %}
 
 This will test each class within the `com.example.app.domain` package.
 
@@ -19,14 +19,14 @@ If there's a class within that package that you don't want to test with EqualsVe
 EqualsVerifier.forPackage("com.example.app.domain")
     .except(Helper.class)
     .verify();
-{% highlight java %}
+{% endhighlight %}
 
 You can achieve even more granularity:
 
 {% highlight java %}
 EqualsVerifier.forClasses(Student.class, Teacher.class, Staff.class, Address.class)
     .verify();
-{% highlight java %}
+{% endhighlight %}
 
 Both `.forPackage(...)` and `.forClasses(...)` can be configured with `.usingGetClass()`, `.suppress(...)`, `.withPrefabValues(...)` and `.withGenericPrefabValues(...)`, since these are not specific to a single class.
 
