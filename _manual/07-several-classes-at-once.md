@@ -4,7 +4,7 @@ permalink: /manual/several-classes-at-once/
 ---
 When you have a large domain with many classes that all have `equals` methods to be tested, using EqualsVerifier the way we have been until now can get a bit unwieldy, because you have to repeat the call to EqualsVerifier for each class that you want to test.
 
-If all classes tot test live within the same package, you can simplify quite a bit:
+If all classes to test live within the same package, you can simplify quite a bit:
 
 {% highlight java %}
 EqualsVerifier.forPackage("com.example.app.domain")
