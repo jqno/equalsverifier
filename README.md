@@ -35,7 +35,12 @@ Pull requests are welcome! If you open one, please also [register an issue](http
 
 ## Build
 
-To build EqualsVerifier, you need [Maven](http://maven.apache.org/). Just call `mvn clean verify` from the command-line, and you're done. Alternatively, you can use any IDE with Maven support.
+To build EqualsVerifier, you need [Maven](http://maven.apache.org/). Just call `mvn` from the command-line, without any parameters, and you're done. Alternatively, you can use any IDE with Maven support.
+
+
+## Formatting
+
+EqualsVerifier uses [Google Java Format](https://github.com/google/google-java-format) to format Java files. You can call it using `mvn` (without any parameters), which will also run the tests and all the other static analysis. Or run `mvn com.coveo:fmt-maven-plugin:format` to only run the formatter.
 
 
 ## Project structure

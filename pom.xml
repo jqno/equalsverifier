@@ -170,6 +170,8 @@
     </dependencies>
 
     <build>
+        <defaultGoal>clean com.coveo:fmt-maven-plugin:format verify</defaultGoal>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -209,6 +211,22 @@
                 <configuration>
                     <source>1.8</source>
                 </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.coveo</groupId>
+                <artifactId>fmt-maven-plugin</artifactId>
+                <version>${fmt-plugin.version}</version>
+                <configuration>
+                    <style>aosp</style>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -330,64 +348,6 @@
                                 <configuration>
                                     <propertyName>surefire.argLine</propertyName>
                                 </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>LOCAL-format--reformat</id>
-            <activation>
-                <property>
-                    <name>!CI</name>
-                </property>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.coveo</groupId>
-                        <artifactId>fmt-maven-plugin</artifactId>
-                        <version>${fmt-plugin.version}</version>
-                        <configuration>
-                            <style>aosp</style>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>format</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>CI-format--check-formatting</id>
-            <activation>
-                <property>
-                    <name>CI</name>
-                </property>
-            </activation>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.coveo</groupId>
-                        <artifactId>fmt-maven-plugin</artifactId>
-                        <version>${fmt-plugin.version}</version>
-                        <configuration>
-                            <style>aosp</style>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
                             </execution>
                         </executions>
                     </plugin>
