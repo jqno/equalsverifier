@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+
+## [3.2] - 2020-05-10
 ### Added
 - Support for test multiple classes at once, through `#forClasses()` and `#forPackage()`. See the [manual entry](https://jqno.nl/equalsverifier/manual/several-classes-at-once) for more information. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
 
@@ -683,7 +685,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.13...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.2...HEAD
+
+[3.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.13...equalsverifier-3.2
 
 [3.1.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.12...equalsverifier-3.1.13
 [3.1.12]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.1.11...equalsverifier-3.1.12
