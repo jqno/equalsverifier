@@ -39,8 +39,8 @@
     </developers>
 
     <ciManagement>
-        <system>Travis CI</system>
-        <url>https://travis-ci.org/jqno/equalsverifier</url>
+        <system>Circle CI</system>
+        <url>https://circleci.com/gh/jqno/equalsverifier</url>
     </ciManagement>
 
     <mailingLists>
