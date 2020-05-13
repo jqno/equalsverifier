@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -72,9 +73,27 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      */
     public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
         List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
+        removeTypes(typesToRemove);
+        return this;
+    }
+
+    /**
+     * Removes all types matching the given Predicate.
+     *
+     * @param exclusionPredicate A Predicate matching classes to remove from the list of types to
+     *     verify.
+     * @return {@code this}, for easy method chaining.
+     */
+    public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
+        List<Class<?>> typesToRemove =
+                types.stream().filter(exclusionPredicate).collect(Collectors.toList());
+        removeTypes(typesToRemove);
+        return this;
+    }
+
+    private void removeTypes(List<Class<?>> typesToRemove) {
         Validations.validateTypesAreKnown(typesToRemove, types);
         types.removeAll(typesToRemove);
-        return this;
     }
 
     /**
