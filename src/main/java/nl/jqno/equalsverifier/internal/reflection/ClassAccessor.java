@@ -44,6 +44,19 @@ public class ClassAccessor<T> {
     }
 
     /**
+     * Determines whether T is a Java Record.
+     *
+     * @return True if T is a Java Record.
+     */
+    public boolean isRecord() {
+        Class<?> record = Util.classForName("java.lang.Record");
+        if (record == null) {
+            return false;
+        }
+        return record.isAssignableFrom(type);
+    }
+
+    /**
      * Determines whether T declares a field. This does not include inherited fields.
      *
      * @param field The field that we want to detect.

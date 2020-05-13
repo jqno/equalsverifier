@@ -50,6 +50,12 @@ public class ClassAccessorTest {
                 .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
+    /** Tests the false case. The true case is tested in {@link RecordReflectionTest}. */
+    @Test
+    public void isRecord() {
+        assertFalse(pointContainerAccessor.isRecord());
+    }
+
     @Test
     public void getType() {
         assertSame(PointContainer.class, pointContainerAccessor.getType());

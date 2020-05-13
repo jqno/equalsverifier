@@ -309,7 +309,8 @@
             </activation>
 
             <properties>
-                <surefire.argLine>--illegal-access=deny</surefire.argLine>
+                <additional.argLine></additional.argLine> <!-- Can be set from the command-line to enable JVM preview features -->
+                <surefire.argLine>--illegal-access=deny ${additional.argLine}</surefire.argLine>
             </properties>
 
             <build>
