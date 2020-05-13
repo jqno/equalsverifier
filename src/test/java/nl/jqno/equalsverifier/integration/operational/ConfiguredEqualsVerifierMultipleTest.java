@@ -26,6 +26,13 @@ import org.junit.Test;
 public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestBase {
 
     @Test
+    public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
+        EqualsVerifier.configure()
+                .forPackage("nl.jqno.equalsverifier.testhelpers.packages.correct")
+                .verify();
+    }
+
+    @Test
     public void
             succeed_whenEqualsVerifierUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured_forIterableOverload() {
         List<EqualsVerifierReport> reports =

@@ -77,11 +77,6 @@ public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
     }
 
     @Test
-    public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
-        EqualsVerifier.configure().forPackage(CORRECT_PACKAGE).verify();
-    }
-
-    @Test
     public void fail_whenCallingForPackage_givenTwoClassesInPackageAreIncorrect() {
         expectFailure(
                 "EqualsVerifier found a problem in 2 classes.",
