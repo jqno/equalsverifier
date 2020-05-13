@@ -1,13 +1,15 @@
 package nl.jqno.equalsverifier.integration.operational;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectM;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
@@ -20,81 +22,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.Test;
 
-import java.util.List;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestBase {
-
-    private final String PACKAGE_WITH_ONLY_CORRECT_FILES =
-            "nl.jqno.equalsverifier.testhelpers.packages.correct";
-    private final String PACKAGE_WITH_TWO_INCORRECT_FILES =
-            "nl.jqno.equalsverifier.testhelpers.packages.twoincorrect";
-
-    @Test
-    public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
-        EqualsVerifier.configure().forPackage(PACKAGE_WITH_ONLY_CORRECT_FILES).verify();
-    }
-
-    @Test
-    public void fail_whenCallingForPackage_givenTwoClassesInPackageAreIncorrect() {
-        expectFailure(
-                "EqualsVerifier found a problem in 2 classes.",
-                "IncorrectM",
-                "IncorrectN",
-                "Subclass: equals is not final.",
-                "Reflexivity: object does not equal itself:");
-
-        EqualsVerifier.forPackage(PACKAGE_WITH_TWO_INCORRECT_FILES).verify();
-    }
-
-    @Test
-    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
-        expectException(
-                IllegalStateException.class,
-                "nl.jqno.equalsverifier.doesnotexist",
-                "doesn't contain any (non-Test) types");
-
-        EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
-    }
-
-    @Test
-    public void
-            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
-        EqualsVerifier.forPackage(PACKAGE_WITH_TWO_INCORRECT_FILES)
-                .except(IncorrectM.class, IncorrectN.class)
-                .verify();
-    }
-
-    @Test
-    public void fail_whenExceptingAClassThatDoesntExistInThePackage() {
-        expectException(IllegalStateException.class, "Unknown class(es) found", "IncorrectM");
-
-        EqualsVerifier.forPackage(PACKAGE_WITH_ONLY_CORRECT_FILES).except(IncorrectM.class);
-    }
-
-    @Test
-    public void
-            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(PACKAGE_WITH_TWO_INCORRECT_FILES)
-                .except(c -> c.getSimpleName().contains("Incorrect"))
-                .verify();
-    }
-
-    @Test
-    public void
-            fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
-        expectFailure("EqualsVerifier found a problem in 2 classes");
-
-        EqualsVerifier.forPackage(PACKAGE_WITH_TWO_INCORRECT_FILES).except(c -> false).verify();
-    }
-
-    @Test
-    public void
-            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(PACKAGE_WITH_TWO_INCORRECT_FILES).except(c -> true).verify();
-    }
 
     @Test
     public void
