@@ -11,10 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Added
+- Overload for `#except()` when using `#forPackage()` that takes a predicate instead of a set list of elements. ([Issue 307](https://github.com/jqno/equalsverifier/issues/307); thanks Tom!)
 
 ## [3.2] - 2020-05-10
 ### Added
-- Support for test multiple classes at once, through `#forClasses()` and `#forPackage()`. See the [manual entry](https://jqno.nl/equalsverifier/manual/several-classes-at-once/) for more information. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
+- Support for testing multiple classes at once, through `#forClasses()` and `#forPackage()`. See the [manual entry](https://jqno.nl/equalsverifier/manual/several-classes-at-once/) for more information. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
 
 ## [3.1.13] - 2020-03-14
 ### Fixed
