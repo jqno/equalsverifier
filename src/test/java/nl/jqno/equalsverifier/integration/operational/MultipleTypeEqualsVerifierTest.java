@@ -10,8 +10,11 @@ import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import nl.jqno.equalsverifier.testhelpers.packages.correct.*;
-import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.*;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
+import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
+import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectM;
+import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN;
 import org.junit.Test;
 
 public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
@@ -30,16 +33,6 @@ public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenVerifyingACorrectPackage() {
         EqualsVerifier.forPackage(CORRECT_PACKAGE).verify();
-    }
-
-    @Test
-    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
-        expectException(
-                IllegalStateException.class,
-                "nl.jqno.equalsverifier.doesnotexist",
-                "doesn't contain any (non-Test) types");
-
-        EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
     }
 
     @Test
@@ -74,6 +67,70 @@ public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
                 "Reflexivity: object does not equal itself:");
 
         EqualsVerifier.forPackage(INCORRECT_PACKAGE).verify();
+    }
+
+    @Test
+    public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
+        EqualsVerifier.configure().forPackage(CORRECT_PACKAGE).verify();
+    }
+
+    @Test
+    public void fail_whenCallingForPackage_givenTwoClassesInPackageAreIncorrect() {
+        expectFailure(
+                "EqualsVerifier found a problem in 2 classes.",
+                "IncorrectM",
+                "IncorrectN",
+                "Subclass: equals is not final.",
+                "Reflexivity: object does not equal itself:");
+
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE).verify();
+    }
+
+    @Test
+    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
+        expectException(
+                IllegalStateException.class,
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types");
+
+        EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist");
+    }
+
+    @Test
+    public void
+            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE)
+                .except(IncorrectM.class, IncorrectN.class)
+                .verify();
+    }
+
+    @Test
+    public void fail_whenExceptingAClassThatDoesntExistInThePackage() {
+        expectException(IllegalStateException.class, "Unknown class(es) found", "IncorrectM");
+
+        EqualsVerifier.forPackage(CORRECT_PACKAGE).except(IncorrectM.class);
+    }
+
+    @Test
+    public void
+            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE)
+                .except(c -> c.getSimpleName().contains("Incorrect"))
+                .verify();
+    }
+
+    @Test
+    public void
+            fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
+        expectFailure("EqualsVerifier found a problem in 2 classes");
+
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> false).verify();
+    }
+
+    @Test
+    public void
+            succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> true).verify();
     }
 
     @Test
