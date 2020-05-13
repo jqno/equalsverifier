@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
@@ -26,7 +27,13 @@ public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
     private static final String INCORRECT_N = INCORRECT_PACKAGE + ".IncorrectN";
 
     @Test
-    public void succeed_whenVerifyingSeveralCorrectClasses() {
+    public void succeed_whenVerifyingSeveralCorrectClasses_givenIterableOverload() {
+        List<Class<?>> classes = Arrays.asList(A.class, B.class, C.class);
+        EqualsVerifier.forClasses(classes).verify();
+    }
+
+    @Test
+    public void succeed_whenVerifyingSeveralCorrectClasses_givenVarargsOverload() {
         EqualsVerifier.forClasses(A.class, B.class, C.class).verify();
     }
 

@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.List;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -26,7 +27,20 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
 
     @Test
     public void
-            succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
+            succeed_whenEqualsVerifierUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured_forIterableOverload() {
+        List<EqualsVerifierReport> reports =
+                EqualsVerifier.configure()
+                        .usingGetClass()
+                        .forClasses(Arrays.asList(GetClassPoint.class, FinalMethodsPoint.class))
+                        .report();
+
+        assertTrue(reports.get(0).isSuccessful());
+        assertFalse(reports.get(1).isSuccessful());
+    }
+
+    @Test
+    public void
+            succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured_forVarargOverload() {
         List<EqualsVerifierReport> reports =
                 EqualsVerifier.configure()
                         .usingGetClass()

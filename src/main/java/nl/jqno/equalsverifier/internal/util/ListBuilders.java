@@ -68,6 +68,21 @@ public final class ListBuilders {
     }
 
     /**
+     * Builds a list from the elements of an Iterable.
+     *
+     * @param iterable The iterable containing the elements.
+     * @param <T> The type of the elements.
+     * @return A list with the elements of the Iterable.
+     */
+    public static <T> List<T> fromIterable(Iterable<T> iterable) {
+        List<T> result = new ArrayList<>();
+        for (T t : iterable) {
+            result.add(t);
+        }
+        return result;
+    }
+
+    /**
      * Determines whether a list contains the same example more than once.
      *
      * @param list The list that may or may not contain duplicates.

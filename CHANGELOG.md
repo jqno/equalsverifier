@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Overload for `#except()` when using `#forPackage()` that takes a predicate instead of a set list of elements. ([Issue 307](https://github.com/jqno/equalsverifier/issues/307); thanks Tom!)
+### Added
+- `#forClasses()` overload that takes an `Iterable<Class<?>>`. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
 
 ## [3.2] - 2020-05-10
 ### Added
