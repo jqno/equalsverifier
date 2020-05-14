@@ -24,7 +24,7 @@ Add it to your build like this (please adjust for your build system of choice):
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>3.2</version>
+    <version>3.3</version>
     <scope>test</scope>
 </dependency>
 {% endhighlight %}
