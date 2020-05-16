@@ -22,14 +22,6 @@ public class RecordReflectionTest extends StringCompilerTestBase {
     }
 
     @Test
-    public void sanity() {
-        if (!isRecordsAvailable) {
-            return;
-        }
-        assertTrue(false);
-    }
-
-    @Test
     public void isRecord() {
         if (!isRecordsAvailable) {
             return;
