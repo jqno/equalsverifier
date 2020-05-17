@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Before;
 import org.junit.Test;
 
-public class RecordReflectionTest extends StringCompilerTestBase {
+public class ClassAccessorCompilerTest extends StringCompilerTestBase {
 
     private boolean isRecordsAvailable = false;
     private PrefabValues prefabValues;

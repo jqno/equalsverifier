@@ -50,7 +50,7 @@ public class ClassAccessorTest {
                 .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
-    /** Tests the false case. The true case is tested in {@link RecordReflectionTest}. */
+    /** Tests the false case. The true case is tested in {@link ClassAccessorCompilerTest}. */
     @Test
     public void isRecord() {
         assertFalse(pointContainerAccessor.isRecord());
