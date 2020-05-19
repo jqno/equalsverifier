@@ -24,6 +24,48 @@ public class RecordsTest extends StringCompilerTestBase {
     }
 
     @Test
+    public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
+        if (!isRecordsAvailable) {
+            return;
+        }
+        Class<?> type =
+                compile(
+                        BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS_NAME,
+                        BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS);
+
+        expectFailure("Record invariant", "intField");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
+    public void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
+        if (!isRecordsAvailable) {
+            return;
+        }
+        Class<?> type =
+                compile(
+                        BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS_NAME,
+                        BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS);
+
+        expectFailure("Record invariant", "stringField");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
+    public void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
+        if (!isRecordsAvailable) {
+            return;
+        }
+        Class<?> type =
+                compile(
+                        BROKEN_INVARIANT_BOTH_RECORD_CLASS_NAME,
+                        BROKEN_INVARIANT_BOTH_RECORD_CLASS);
+
+        expectFailure("Record invariant", "intField", "stringField");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
     public void succeed_whenRecordImplementsItsOwnEquals() {
         if (!isRecordsAvailable) {
             return;
@@ -58,6 +100,36 @@ public class RecordsTest extends StringCompilerTestBase {
 
     private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
     private static final String SIMPLE_RECORD_CLASS = "record SimpleRecord(int i, String s) {}";
+
+    private static final String BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS_NAME =
+            "BrokenInvariantIntFieldRecord";
+    private static final String BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS =
+            "\nrecord BrokenInvariantIntFieldRecord(int intField, String stringField) {"
+                    + "\n    public BrokenInvariantIntFieldRecord(int intField, String stringField) {"
+                    + "\n        this.intField = intField + 1;"
+                    + "\n        this.stringField = stringField;"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS_NAME =
+            "BrokenInvariantStringFieldRecord";
+    private static final String BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS =
+            "\nrecord BrokenInvariantStringFieldRecord(int intField, String stringField) {"
+                    + "\n    public BrokenInvariantStringFieldRecord(int intField, String stringField) {"
+                    + "\n        this.intField = intField;"
+                    + "\n        this.stringField = stringField + \"x\";"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String BROKEN_INVARIANT_BOTH_RECORD_CLASS_NAME =
+            "BrokenInvariantBothRecord";
+    private static final String BROKEN_INVARIANT_BOTH_RECORD_CLASS =
+            "\nrecord BrokenInvariantBothRecord(int intField, String stringField) {"
+                    + "\n    public BrokenInvariantBothRecord(int intField, String stringField) {"
+                    + "\n        this.intField = intField + 1;"
+                    + "\n        this.stringField = stringField + \"x\";"
+                    + "\n    }"
+                    + "\n}";
 
     private static final String EQUALS_RECORD_CLASS_NAME = "EqualsRecord";
     private static final String EQUALS_RECORD_CLASS =
