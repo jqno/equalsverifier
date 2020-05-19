@@ -32,6 +32,17 @@ public class RecordsTest extends StringCompilerTestBase {
         EqualsVerifier.forClass(type).verify();
     }
 
+    @Test
+    public void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
+        if (!isRecordsAvailable) {
+            return;
+        }
+        Class<?> type = compile(NOT_ALL_FIELDS_RECORD_CLASS_NAME, NOT_ALL_FIELDS_RECORD_CLASS);
+
+        expectFailure("Significant fields");
+        EqualsVerifier.forClass(type).verify();
+    }
+
     public boolean determineIsRecordsAvailable() {
         if (!isTypeAvailable("java.lang.Record")) {
             return false;
@@ -56,6 +67,23 @@ public class RecordsTest extends StringCompilerTestBase {
                     + "\n    @Override"
                     + "\n    public boolean equals(Object obj) {"
                     + "\n        return defaultEquals(this, obj);"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String NOT_ALL_FIELDS_RECORD_CLASS_NAME = "NotAllFieldsRecord";
+    private static final String NOT_ALL_FIELDS_RECORD_CLASS =
+            "\nrecord NotAllFieldsRecord(int i, String s) {"
+                    + "\n    @Override"
+                    + "\n    public boolean equals(Object obj) {"
+                    + "\n        if (!(obj instanceof NotAllFieldsRecord)) {"
+                    + "\n            return false;"
+                    + "\n        }"
+                    + "\n        return i == ((NotAllFieldsRecord)obj).i;"
+                    + "\n    }"
+                    + "\n"
+                    + "\n    @Override"
+                    + "\n    public int hashCode() {"
+                    + "\n        return i;"
                     + "\n    }"
                     + "\n}";
 }
