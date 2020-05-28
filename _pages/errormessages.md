@@ -29,6 +29,7 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Precondition: two objects are equal to each other](/equalsverifier/errormessages/precondition-two-objects-are-equal-to-each-other)
 * [Recursive datastructure](/equalsverifier/errormessages/recursive-datastructure)
 * [Redefined superclass: object should not equal superclass instance](/equalsverifier/errormessages/redefined-superclass-object-should-not-equal-superclass-instance)
+* [Significant fields: equals does not use foo, or it is stateless](/equalsverifier/errormessages/significant-fields-equals-does-not-use-foo-or-it-is-stateless)
 * [Significant fields: equals relies on foo, but hashCode does not](/equalsverifier/errormessages/significant-fields-equals-relies-on-foo-but-hashcode-does-not)
 * [Subclass: equals is not final](/equalsverifier/errormessages/subclass-equals-is-not-final)
 * [Subclass: … equals subclass instance …](/equalsverifier/errormessages/subclass-equals-subclass-instance)
