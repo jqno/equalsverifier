@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static org.junit.Assume.*;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Before;
@@ -7,27 +9,19 @@ import org.junit.Test;
 
 public class RecordsTest extends StringCompilerTestBase {
 
-    private boolean isRecordsAvailable = false;
-
     @Before
     public void setup() {
-        isRecordsAvailable = determineIsRecordsAvailable();
+        assumeTrue(determineIsRecordsAvailable());
     }
 
     @Test
     public void succeed_whenClassIsARecord() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type = compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
         EqualsVerifier.forClass(type).verify();
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type =
                 compile(
                         BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS_NAME,
@@ -39,9 +33,6 @@ public class RecordsTest extends StringCompilerTestBase {
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type =
                 compile(
                         BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS_NAME,
@@ -53,9 +44,6 @@ public class RecordsTest extends StringCompilerTestBase {
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type =
                 compile(
                         BROKEN_INVARIANT_BOTH_RECORD_CLASS_NAME,
@@ -67,18 +55,12 @@ public class RecordsTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenRecordImplementsItsOwnEquals() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type = compile(EQUALS_RECORD_CLASS_NAME, EQUALS_RECORD_CLASS);
         EqualsVerifier.forClass(type).verify();
     }
 
     @Test
     public void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
-        if (!isRecordsAvailable) {
-            return;
-        }
         Class<?> type = compile(NOT_ALL_FIELDS_RECORD_CLASS_NAME, NOT_ALL_FIELDS_RECORD_CLASS);
 
         expectFailure("Significant fields");
