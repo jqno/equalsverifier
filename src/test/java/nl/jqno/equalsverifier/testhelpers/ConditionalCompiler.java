@@ -3,12 +3,14 @@ package nl.jqno.equalsverifier.testhelpers;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -72,12 +74,13 @@ public class ConditionalCompiler implements Closeable {
             fileManager = compiler.getStandardFileManager(collector, Locale.ROOT, null);
             fileManager.setLocation(
                     StandardLocation.CLASS_OUTPUT, Collections.singletonList(tempFolder));
+            List<String> options = compilerOptions();
             CompilationTask task =
                     compiler.getTask(
                             null,
                             fileManager,
                             collector,
-                            null,
+                            options,
                             null,
                             Collections.singletonList(sourceFile));
 
@@ -90,6 +93,23 @@ public class ConditionalCompiler implements Closeable {
                 fileManager.close();
             }
         }
+    }
+
+    private List<String> compilerOptions() {
+        List<String> result = new ArrayList<>();
+        List<String> inputArguments = ManagementFactory.getRuntimeMXBean().getInputArguments();
+        if (inputArguments.contains("--enable-preview")) {
+            String fullVersion = System.getProperty("java.version");
+            String majorVersion =
+                    fullVersion.contains(".")
+                            ? fullVersion.substring(0, fullVersion.indexOf('.'))
+                            : fullVersion;
+
+            result.add("--release");
+            result.add(majorVersion);
+            result.add("--enable-preview");
+        }
+        return result;
     }
 
     private String buildErrorMessage(

@@ -28,12 +28,11 @@ public class FieldsChecker<T> implements Checker {
 
         PrefabValues prefabValues = config.getPrefabValues();
         TypeTag typeTag = config.getTypeTag();
+
+        String cachedHashCodeFieldName =
+                config.getCachedHashCodeInitializer().getCachedHashCodeFieldName();
         Predicate<FieldAccessor> isCachedHashCodeField =
-                a ->
-                        a.getFieldName()
-                                .equals(
-                                        config.getCachedHashCodeInitializer()
-                                                .getCachedHashCodeFieldName());
+                a -> a.getFieldName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck();

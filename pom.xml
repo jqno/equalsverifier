@@ -309,7 +309,8 @@
             </activation>
 
             <properties>
-                <surefire.argLine>--illegal-access=deny</surefire.argLine>
+                <additional.argLine></additional.argLine> <!-- Can be set from the command-line to enable JVM preview features -->
+                <surefire.argLine>--illegal-access=deny ${additional.argLine}</surefire.argLine>
             </properties>
 
             <build>
@@ -433,7 +434,7 @@
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">
                                                 <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.96" />
+                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.95" />
                                                 </rule>
                                             </check>
                                             <html destdir="${project.build.directory}/jacoco-internal" />

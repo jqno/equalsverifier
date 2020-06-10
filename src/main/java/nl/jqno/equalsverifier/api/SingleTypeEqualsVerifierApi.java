@@ -344,6 +344,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             new SignatureChecker<>(config),
             new AbstractDelegationChecker<>(config),
             new NullChecker<>(config),
+            new RecordChecker<>(config),
             new CachedHashCodeChecker<>(config)
         };
 
