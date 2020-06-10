@@ -77,9 +77,25 @@ public class RecordsTest extends StringCompilerTestBase {
     }
 
     @Test
+    public void fail_whenRecordConstructorThrowsNpe() {
+        Class<?> type = compile(NULL_CONSTRUCTOR_RECORD_CLASS_NAME, NULL_CONSTRUCTOR_RECORD_CLASS);
+
+        expectFailure("Record", "failed to invoke constructor");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
     public void fail_whenRecordAccessorThrows() {
         Class<?> type =
                 compile(THROWING_ACCESSOR_RECORD_CLASS_NAME, THROWING_ACCESSOR_RECORD_CLASS);
+
+        expectFailure("Record", "failed to invoke accessor method");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
+    public void fail_whenRecordAccessorThrowsNpe() {
+        Class<?> type = compile(NULL_ACCESSOR_RECORD_CLASS_NAME, NULL_ACCESSOR_RECORD_CLASS);
 
         expectFailure("Record", "failed to invoke accessor method");
         EqualsVerifier.forClass(type).verify();
@@ -166,6 +182,14 @@ public class RecordsTest extends StringCompilerTestBase {
                     + "\n    }"
                     + "\n}";
 
+    private static final String NULL_CONSTRUCTOR_RECORD_CLASS_NAME = "NullFieldRecord";
+    private static final String NULL_CONSTRUCTOR_RECORD_CLASS =
+            "\nrecord NullFieldRecord(int i, String s) {"
+                    + "\n    public NullFieldRecord {"
+                    + "\n        s.length();"
+                    + "\n    }"
+                    + "\n}";
+
     private static final String THROWING_ACCESSOR_RECORD_CLASS_NAME = "ThrowingAccessorRecord";
     private static final String THROWING_ACCESSOR_RECORD_CLASS =
             "\nrecord ThrowingAccessorRecord(int i, String s) {"
@@ -175,6 +199,19 @@ public class RecordsTest extends StringCompilerTestBase {
                     + "\n"
                     + "\n    public int i() {"
                     + "\n        throw new IllegalStateException();"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String NULL_ACCESSOR_RECORD_CLASS_NAME = "NullAccessorRecord";
+    private static final String NULL_ACCESSOR_RECORD_CLASS =
+            "\nrecord NullAccessorRecord(String s, String t) {"
+                    + "\n    public NullAccessorRecord {"
+                    + "\n        this.t = \"\" + t;"
+                    + "\n    }"
+                    + "\n"
+                    + "\n    public String s() {"
+                    + "\n        s.length();"
+                    + "\n        return s;"
                     + "\n    }"
                     + "\n}";
 }

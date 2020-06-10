@@ -31,7 +31,14 @@ public class RecordChecker<T> implements Checker {
             return;
         }
         Constructor<T> constructor = getConstructorFor(config.getType());
+
         verifyRecordPrecondition(accessor.getRedAccessor(config.getTypeTag()), constructor);
+        verifyRecordPrecondition(
+                accessor.getDefaultValuesAccessor(
+                        config.getTypeTag(),
+                        config.getNonnullFields(),
+                        config.getAnnotationCache()),
+                constructor);
     }
 
     private void verifyRecordPrecondition(
