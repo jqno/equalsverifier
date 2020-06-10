@@ -67,7 +67,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - jdk-ea-experimental
       - jdk-ea-full
@@ -78,7 +78,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
     jobs:
       - jdk8
       - jdk11
