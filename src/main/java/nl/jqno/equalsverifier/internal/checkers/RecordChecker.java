@@ -53,20 +53,16 @@ public class RecordChecker<T> implements Checker {
                 if (!originalField.equals(copyField)) {
                     failedFields.add(f.getName());
                 }
-            } catch (IllegalAccessException
-                    | IllegalArgumentException
-                    | InvocationTargetException e) {
-                fail(Formatter.of("Failed to invoke accessor method"));
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                fail(Formatter.of("Record: failed to invoke accessor method"));
             }
         }
 
-        if (!failedFields.isEmpty()) {
-            fail(
-                    Formatter.of(
-                            "Record invariant: constructor invariant failed for field%%: %%",
-                            failedFields.size() > 1 ? "s" : "",
-                            failedFields.stream().collect(Collectors.joining(","))));
-        }
+        fail(
+                Formatter.of(
+                        "Record invariant: constructor invariant failed for field%%: %%",
+                        failedFields.size() > 1 ? "s" : "",
+                        failedFields.stream().collect(Collectors.joining(","))));
     }
 
     private static <T> Constructor<T> getConstructorFor(Class<T> type) {
@@ -81,7 +77,7 @@ public class RecordChecker<T> implements Checker {
             return constructor;
         } catch (NoSuchMethodException | SecurityException e) {
             fail(Formatter.of("Record: could not find suitable constructor."), e);
-            return null; // Will never be reached because `fail` throws an exception.
+            return null;
         }
     }
 

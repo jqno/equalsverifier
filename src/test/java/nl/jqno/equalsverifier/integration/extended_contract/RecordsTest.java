@@ -67,6 +67,24 @@ public class RecordsTest extends StringCompilerTestBase {
         EqualsVerifier.forClass(type).verify();
     }
 
+    @Test
+    public void fail_whenRecordConstructorThrows() {
+        Class<?> type =
+                compile(THROWING_CONSTRUCTOR_RECORD_CLASS_NAME, THROWING_CONSTRUCTOR_RECORD_CLASS);
+
+        expectFailure("Record", "failed to invoke constructor");
+        EqualsVerifier.forClass(type).verify();
+    }
+
+    @Test
+    public void fail_whenRecordAccessorThrows() {
+        Class<?> type =
+                compile(THROWING_ACCESSOR_RECORD_CLASS_NAME, THROWING_ACCESSOR_RECORD_CLASS);
+
+        expectFailure("Record", "failed to invoke accessor method");
+        EqualsVerifier.forClass(type).verify();
+    }
+
     public boolean determineIsRecordsAvailable() {
         if (!isTypeAvailable("java.lang.Record")) {
             return false;
@@ -87,9 +105,8 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantIntFieldRecord";
     private static final String BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS =
             "\nrecord BrokenInvariantIntFieldRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantIntFieldRecord(int intField, String stringField) {"
+                    + "\n    public BrokenInvariantIntFieldRecord {"
                     + "\n        this.intField = intField + 1;"
-                    + "\n        this.stringField = stringField;"
                     + "\n    }"
                     + "\n}";
 
@@ -97,8 +114,7 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantStringFieldRecord";
     private static final String BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS =
             "\nrecord BrokenInvariantStringFieldRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantStringFieldRecord(int intField, String stringField) {"
-                    + "\n        this.intField = intField;"
+                    + "\n    public BrokenInvariantStringFieldRecord {"
                     + "\n        this.stringField = stringField + \"x\";"
                     + "\n    }"
                     + "\n}";
@@ -107,7 +123,7 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantBothRecord";
     private static final String BROKEN_INVARIANT_BOTH_RECORD_CLASS =
             "\nrecord BrokenInvariantBothRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantBothRecord(int intField, String stringField) {"
+                    + "\n    public BrokenInvariantBothRecord {"
                     + "\n        this.intField = intField + 1;"
                     + "\n        this.stringField = stringField + \"x\";"
                     + "\n    }"
@@ -138,6 +154,27 @@ public class RecordsTest extends StringCompilerTestBase {
                     + "\n    @Override"
                     + "\n    public int hashCode() {"
                     + "\n        return i;"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS_NAME =
+            "ThrowingConstructorRecord";
+    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS =
+            "\nrecord ThrowingConstructorRecord(int i, String s) {"
+                    + "\n    public ThrowingConstructorRecord {"
+                    + "\n        throw new IllegalStateException();"
+                    + "\n    }"
+                    + "\n}";
+
+    private static final String THROWING_ACCESSOR_RECORD_CLASS_NAME = "ThrowingAccessorRecord";
+    private static final String THROWING_ACCESSOR_RECORD_CLASS =
+            "\nrecord ThrowingAccessorRecord(int i, String s) {"
+                    + "\n    public ThrowingAccessorRecord {"
+                    + "\n        this.s = s + \"x\";"
+                    + "\n    }"
+                    + "\n"
+                    + "\n    public int i() {"
+                    + "\n        throw new IllegalStateException();"
                     + "\n    }"
                     + "\n}";
 }
