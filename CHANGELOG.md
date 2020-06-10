@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Added
+- Initial support for Java 14's records and their [new equality invariant](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html).
 
 ## [3.3] - 2020-05-14
 ### Added
