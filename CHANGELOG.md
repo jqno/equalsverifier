@@ -13,11 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Initial support for Java 14's records and their [new equality invariant](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html).
+### Changed
+- Renames the project's main branch to `main`.
 
 ## [3.3] - 2020-05-14
 ### Added
 - Overload for `#except()` when using `#forPackage()` that takes a predicate instead of a set list of elements. ([Issue 307](https://github.com/jqno/equalsverifier/issues/307); thanks Tom!)
-### Added
 - `#forClasses()` overload that takes an `Iterable<Class<?>>`. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
 
 ## [3.2] - 2020-05-10
