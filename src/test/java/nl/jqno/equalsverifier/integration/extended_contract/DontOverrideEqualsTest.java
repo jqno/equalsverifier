@@ -40,7 +40,7 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
             succeed_whenClassIsAnExceptionAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
         EqualsVerifier.forClass(SimpleException.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED, Warning.TRANSIENT_FIELDS)
                 .verify();
     }
 
