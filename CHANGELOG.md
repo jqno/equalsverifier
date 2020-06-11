@@ -14,10 +14,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Initial support for Java 14's records and their [new equality invariant](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html).
 - Support for JSR305's `ParametersAreNonnullByDefault` annotation. ([Issue 308](https://github.com/jqno/equalsverifier/issues/308))
+
 ### Changed
 - Renames the project's main branch to `main`.
 - Replaces all references to the word 'black' to 'blue', including those in internal (but accessible) API's.
+
 ### Fixed
+- Testing a class with that has fields but doesn't override `equals` causes "Mutability: equals depends on mutable field" error. ([Issue 315](https://github.com/jqno/equalsverifier/issues/315))
 
 ## [3.3] - 2020-05-14
 ### Added

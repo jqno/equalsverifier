@@ -31,11 +31,11 @@ public class MutableStateFieldCheck implements FieldCheck {
         Object reference = referenceAccessor.getObject();
         Object changed = changedAccessor.getObject();
 
+        boolean equalBefore = reference.equals(changed);
         changedAccessor.changeField(prefabValues, typeTag);
+        boolean equalAfter = reference.equals(changed);
 
-        boolean equalsChanged = !reference.equals(changed);
-
-        if (equalsChanged && !referenceAccessor.fieldIsFinal()) {
+        if (equalBefore && !equalAfter && !referenceAccessor.fieldIsFinal()) {
             fail(
                     Formatter.of(
                             "Mutability: equals depends on mutable field %%.",

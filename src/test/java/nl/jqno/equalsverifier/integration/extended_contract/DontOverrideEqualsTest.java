@@ -35,6 +35,15 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
+    @Test
+    public void
+            succeed_whenClassIsAnExceptionAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
+        EqualsVerifier.forClass(SimpleException.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
+    }
+
     static final class NoEqualsNoHashCodeMethod {}
 
     static final class InheritedEqualsAndHashCodeMethod extends Point {
@@ -43,7 +52,7 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
         }
     }
 
-    public final class Pojo {
+    static final class Pojo {
         private String s;
 
         public void setS(String value) {
@@ -59,4 +68,7 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
             return getClass().getName() + " " + s;
         }
     }
+
+    @SuppressWarnings("serial")
+    static final class SimpleException extends Exception {}
 }
