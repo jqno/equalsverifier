@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
@@ -11,9 +12,16 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Test;
 
 public class GetClassTest extends ExpectedExceptionTestBase {
+
     @Test
     public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
         EqualsVerifier.forClass(GetClassPoint.class).usingGetClass().verify();
+    }
+
+    @Test
+    public void
+            succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenWarningStrictInheritanceIsSuppressed() {
+        EqualsVerifier.forClass(GetClassPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Renames the project's main branch to `main`.
 - Replaces all references to the word 'black' to 'blue', including those in internal (but accessible) API's.
+- `Warning.STRICT_INHERITANCE` now also takes away the requirement to call `#usingGetClass()`
 
 ### Fixed
 - Testing a class with that has fields but doesn't override `equals` causes "Mutability: equals depends on mutable field" error. ([Issue 315](https://github.com/jqno/equalsverifier/issues/315))

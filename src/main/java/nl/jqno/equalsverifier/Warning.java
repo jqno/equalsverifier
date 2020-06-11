@@ -130,12 +130,14 @@ public enum Warning {
     STRICT_HASHCODE,
 
     /**
-     * Disables some of the stricter inheritance tests; use at your own risk!
+     * Disables some of the stricter inheritance tests.
      *
      * <p>{@link EqualsVerifier}'s standard behaviour, if T is not final and neither are its {@code
      * equals} and {@code hashCode} methods, is to require a reference to a subclass of T for which
      * no instance can be equal to any instance of T, to make sure that subclasses that can redefine
-     * {@code equals} or {@code hashCode} don't break the contract.
+     * {@code equals} or {@code hashCode} don't break the contract; or it asks to call the {@code
+     * usingGetClass} method if T uses {@code getClass()} instead of {@code instanceof} in its
+     * {@code equals} method.
      *
      * <p>Some may find that too strict for their liking; suppressing this warning disables that
      * test.

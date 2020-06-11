@@ -126,7 +126,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkSubclass() {
-        if (typeIsFinal) {
+        if (typeIsFinal || config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
             return;
         }
 
