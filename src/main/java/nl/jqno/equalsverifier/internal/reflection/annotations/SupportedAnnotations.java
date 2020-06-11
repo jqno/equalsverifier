@@ -104,14 +104,15 @@ public enum SupportedAnnotations implements Annotation {
                 AnnotationProperties properties,
                 AnnotationCache annotationCache,
                 Set<String> ignoredAnnotations) {
-            return properties.getArrayValues("value").contains("FIELD");
+            Set<String> value = properties.getArrayValues("value");
+            return value.contains("FIELD") || value.contains("PARAMETER");
         }
     },
 
     /**
-     * If a class or package is marked with @DefaultAnnotation(Nonnull.class), EqualsVerifier will
-     * not complain about potential {@link NullPointerException}s being thrown if any of the fields
-     * in that class or package are null.
+     * If a class or package is marked with @NonNullByDefault, EqualsVerifier will not complain
+     * about potential {@link NullPointerException}s being thrown if any of the fields in that class
+     * or package are null.
      */
     ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
         @Override
