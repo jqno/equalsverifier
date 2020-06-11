@@ -35,7 +35,7 @@ public class PrefabValues {
     /**
      * Returns the "red" prefabricated value of the specified type.
      *
-     * <p>It's always a different value from the "black" one.
+     * <p>It's always a different value from the "blue" one.
      *
      * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic parameters.
@@ -46,16 +46,16 @@ public class PrefabValues {
     }
 
     /**
-     * Returns the "black" prefabricated value of the specified type.
+     * Returns the "blue" prefabricated value of the specified type.
      *
      * <p>It's always a different value from the "red" one.
      *
      * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic parameters.
-     * @return The "black" prefabricated value.
+     * @return The "blue" prefabricated value.
      */
-    public <T> T giveBlack(TypeTag tag) {
-        return this.<T>giveTuple(tag).getBlack();
+    public <T> T giveBlue(TypeTag tag) {
+        return this.<T>giveTuple(tag).getBlue();
     }
 
     /**
@@ -105,10 +105,10 @@ public class PrefabValues {
             return null;
         }
         if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
-            return tuple.getBlack();
+            return tuple.getBlue();
         }
         if (!type.isArray() && tuple.getRed().equals(value)) {
-            return tuple.getBlack();
+            return tuple.getBlue();
         }
         return tuple.getRed();
     }
@@ -158,7 +158,7 @@ public class PrefabValues {
     }
 
     private void addToCache(TypeTag tag, Tuple<?> tuple) {
-        cache.put(tag, tuple.getRed(), tuple.getBlack(), tuple.getRedCopy());
+        cache.put(tag, tuple.getRed(), tuple.getBlue(), tuple.getRedCopy());
     }
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {

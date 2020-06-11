@@ -17,8 +17,8 @@ public class AssertTest extends ExpectedExceptionTestBase {
     @Test
     public void assertEqualsObjectSuccess() {
         String red = new String("text");
-        String black = new String("text");
-        Assert.assertEquals(FAIL, red, black);
+        String blue = new String("text");
+        Assert.assertEquals(FAIL, red, blue);
     }
 
     @Test

@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class FieldAccessorTest {
     private static final Point RED_NEW_POINT = new Point(10, 20);
-    private static final Point BLACK_NEW_POINT = new Point(20, 10);
+    private static final Point BLUE_NEW_POINT = new Point(20, 10);
     private static final Point REDCOPY_NEW_POINT = new Point(10, 20);
     private static final String FIELD_NAME = "field";
 
@@ -26,7 +26,7 @@ public class FieldAccessorTest {
     @Before
     public void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
-        factoryCache.put(Point.class, values(RED_NEW_POINT, BLACK_NEW_POINT, REDCOPY_NEW_POINT));
+        factoryCache.put(Point.class, values(RED_NEW_POINT, BLUE_NEW_POINT, REDCOPY_NEW_POINT));
         prefabValues = new PrefabValues(factoryCache);
     }
 
@@ -426,7 +426,7 @@ public class FieldAccessorTest {
         assertEquals(RED_NEW_POINT, foo.getPoint());
 
         doChangeField(foo, "point");
-        assertEquals(BLACK_NEW_POINT, foo.getPoint());
+        assertEquals(BLUE_NEW_POINT, foo.getPoint());
 
         doChangeField(foo, "point");
         assertEquals(RED_NEW_POINT, foo.getPoint());
@@ -440,7 +440,7 @@ public class FieldAccessorTest {
         assertEquals(RED_NEW_POINT, foo.points[0]);
 
         doChangeField(foo, "points");
-        assertEquals(BLACK_NEW_POINT, foo.points[0]);
+        assertEquals(BLUE_NEW_POINT, foo.points[0]);
 
         doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);

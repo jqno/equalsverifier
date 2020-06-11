@@ -36,8 +36,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
-    public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S black) {
-        ev.withPrefabValues(otherType, red, black);
+    public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
+        ev.withPrefabValues(otherType, red, blue);
         return this;
     }
 

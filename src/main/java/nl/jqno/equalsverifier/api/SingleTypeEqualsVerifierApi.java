@@ -89,8 +89,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
-    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S black) {
-        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, black);
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
+        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, blue);
         return this;
     }
 

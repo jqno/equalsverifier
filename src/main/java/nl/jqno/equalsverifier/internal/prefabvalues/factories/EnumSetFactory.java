@@ -27,12 +27,12 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
 
         Collection red = new HashSet<>();
-        Collection black = new HashSet<>();
+        Collection blue = new HashSet<>();
         Collection redCopy = new HashSet<>();
         red.add(prefabValues.giveRed(entryTag));
-        black.add(prefabValues.giveBlack(entryTag));
+        blue.add(prefabValues.giveBlue(entryTag));
         redCopy.add(prefabValues.giveRed(entryTag));
 
-        return new Tuple<>(factory.apply(red), factory.apply(black), factory.apply(redCopy));
+        return new Tuple<>(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }
 }

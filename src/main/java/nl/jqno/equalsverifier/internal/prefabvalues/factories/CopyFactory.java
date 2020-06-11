@@ -23,9 +23,9 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
         prefabValues.realizeCacheFor(sourceTag, clone);
 
         S redSource = prefabValues.giveRed(sourceTag);
-        S blackSource = prefabValues.giveBlack(sourceTag);
+        S blueSource = prefabValues.giveBlue(sourceTag);
         S redCopySource = prefabValues.giveRedCopy(sourceTag);
 
-        return Tuple.of(copy.apply(redSource), copy.apply(blackSource), copy.apply(redCopySource));
+        return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
     }
 }

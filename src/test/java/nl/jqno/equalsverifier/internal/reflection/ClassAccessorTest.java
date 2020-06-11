@@ -170,35 +170,35 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getBlackObject() {
-        assertObjectHasNoNullFields(pointContainerAccessor.getBlackObject(TypeTag.NULL));
+    public void getBlueObject() {
+        assertObjectHasNoNullFields(pointContainerAccessor.getBlueObject(TypeTag.NULL));
     }
 
     @Test
     @SuppressWarnings("rawtypes")
-    public void getBlackObjectGeneric() {
+    public void getBlueObjectGeneric() {
         ClassAccessor<GenericTypeVariableListContainer> accessor =
                 ClassAccessor.of(GenericTypeVariableListContainer.class, prefabValues);
         GenericTypeVariableListContainer foo =
-                accessor.getBlackObject(
+                accessor.getBlueObject(
                         new TypeTag(
                                 GenericTypeVariableListContainer.class, new TypeTag(String.class)));
         assertEquals(String.class, foo.tList.get(0).getClass());
     }
 
     @Test
-    public void getBlackAccessor() {
-        PointContainer foo = pointContainerAccessor.getBlackObject(TypeTag.NULL);
+    public void getBlueAccessor() {
+        PointContainer foo = pointContainerAccessor.getBlueObject(TypeTag.NULL);
         ObjectAccessor<PointContainer> objectAccessor =
-                pointContainerAccessor.getBlackAccessor(TypeTag.NULL);
+                pointContainerAccessor.getBlueAccessor(TypeTag.NULL);
         assertEquals(foo, objectAccessor.get());
     }
 
     @Test
-    public void redAndBlackNotEqual() {
+    public void redAndBlueNotEqual() {
         PointContainer red = pointContainerAccessor.getRedObject(TypeTag.NULL);
-        PointContainer black = pointContainerAccessor.getBlackObject(TypeTag.NULL);
-        assertFalse(red.equals(black));
+        PointContainer blue = pointContainerAccessor.getBlueObject(TypeTag.NULL);
+        assertFalse(red.equals(blue));
     }
 
     @Test

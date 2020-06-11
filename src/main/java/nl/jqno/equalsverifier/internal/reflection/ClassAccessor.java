@@ -152,7 +152,7 @@ public class ClassAccessor<T> {
 
     /**
      * Returns an instance of T that is not equal to the instance of T returned by {@link
-     * #getBlackObject(TypeTag)}.
+     * #getBlueObject(TypeTag)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
@@ -183,18 +183,18 @@ public class ClassAccessor<T> {
      *     any generic parameters it may contain.
      * @return An instance of T.
      */
-    public T getBlackObject(TypeTag enclosingType) {
-        return getBlackAccessor(enclosingType).get();
+    public T getBlueObject(TypeTag enclosingType) {
+        return getBlueAccessor(enclosingType).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getBlackObject(TypeTag)}.
+     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @return An {@link ObjectAccessor} for {@link #getBlackObject(TypeTag)}.
+     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      */
-    public ObjectAccessor<T> getBlackAccessor(TypeTag enclosingType) {
+    public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType) {
         ObjectAccessor<T> result = buildObjectAccessor();
         result.scramble(prefabValues, enclosingType);
         result.scramble(prefabValues, enclosingType);

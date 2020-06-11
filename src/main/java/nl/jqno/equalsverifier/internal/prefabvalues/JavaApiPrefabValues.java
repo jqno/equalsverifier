@@ -63,7 +63,7 @@ public final class JavaApiPrefabValues {
 
     private enum Dummy {
         RED,
-        BLACK
+        BLUE
     }
 
     /** Private constructor. Use {@link #build()}. */
@@ -133,7 +133,7 @@ public final class JavaApiPrefabValues {
 
         addValues(Object.class, new Object(), new Object(), new Object());
         addValues(String.class, "one", "two", new String("one"));
-        addValues(Enum.class, Dummy.RED, Dummy.BLACK, Dummy.RED);
+        addValues(Enum.class, Dummy.RED, Dummy.BLUE, Dummy.RED);
     }
 
     @SuppressFBWarnings(
@@ -483,11 +483,11 @@ public final class JavaApiPrefabValues {
                 (tag, pv, stack) -> {
                     TypeTag y = tag.getGenericTypes().get(0);
                     Object[] red = new Object[] {pv.giveRed(y)};
-                    Object[] black = new Object[] {pv.giveBlack(y)};
+                    Object[] blue = new Object[] {pv.giveBlue(y)};
                     Object[] redCopy = new Object[] {pv.giveRedCopy(y)};
                     return Tuple.of(
                             new AtomicReferenceArray(red),
-                            new AtomicReferenceArray(black),
+                            new AtomicReferenceArray(blue),
                             new AtomicReferenceArray(redCopy));
                 });
     }
@@ -607,8 +607,8 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> void addValues(Class<T> type, T red, T black, T redCopy) {
-        factoryCache.put(type, values(red, black, redCopy));
+    private <T> void addValues(Class<T> type, T red, T blue, T redCopy) {
+        factoryCache.put(type, values(red, blue, redCopy));
     }
 
     private <T> void addFactory(Class<T> type, PrefabValueFactory<T> factory) {

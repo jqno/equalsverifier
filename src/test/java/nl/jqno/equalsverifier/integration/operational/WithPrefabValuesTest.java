@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     private final FinalPoint red = new FinalPoint(1, 2);
-    private final FinalPoint black = new FinalPoint(2, 3);
+    private final FinalPoint blue = new FinalPoint(2, 3);
 
     @Test
     public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
         EqualsVerifier.forClass(FinalPoint.class)
-                .withPrefabValues(FinalPoint.class, red, black)
+                .withPrefabValues(FinalPoint.class, red, blue)
                 .verify();
     }
 
@@ -21,7 +21,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     public void throw_whenTypeIsNull() {
         expectException(NullPointerException.class);
 
-        EqualsVerifier.forClass(WithPrefabValuesTest.class).withPrefabValues(null, red, black);
+        EqualsVerifier.forClass(WithPrefabValuesTest.class).withPrefabValues(null, red, blue);
     }
 
     @Test
@@ -29,7 +29,7 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
         expectException(NullPointerException.class);
 
         EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(FinalPoint.class, null, black);
+                .withPrefabValues(FinalPoint.class, null, blue);
     }
 
     @Test

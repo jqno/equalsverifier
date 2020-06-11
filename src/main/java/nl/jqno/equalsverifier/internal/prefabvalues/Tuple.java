@@ -1,24 +1,24 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 /**
- * Container for three values of the same type: a "red" one, a "black" one, and a shallow copy of
- * the "red" one.
+ * Container for three values of the same type: a "red" one, a "blue" one, and a shallow copy of the
+ * "red" one.
  */
 public final class Tuple<T> {
     private final T red;
-    private final T black;
+    private final T blue;
     private final T redCopy;
 
     /**
      * Constructor.
      *
      * @param red The red value.
-     * @param black The black value.
+     * @param blue The blue value.
      * @param redCopy A shallow copy of the red value.
      */
-    public Tuple(T red, T black, T redCopy) {
+    public Tuple(T red, T blue, T redCopy) {
         this.red = red;
-        this.black = black;
+        this.blue = blue;
         this.redCopy = redCopy;
     }
 
@@ -26,14 +26,14 @@ public final class Tuple<T> {
      * Factory method that turns three untyped values into a typed tuple.
      *
      * @param red The red value.
-     * @param black The black value.
+     * @param blue The blue value.
      * @param redCopy A shallow copy of the red value.
      * @param <U> The assumed type of the values.
      * @return A typed tuple with the three given values.
      */
     @SuppressWarnings("unchecked")
-    public static <U> Tuple<U> of(Object red, Object black, Object redCopy) {
-        return new Tuple<>((U) red, (U) black, (U) redCopy);
+    public static <U> Tuple<U> of(Object red, Object blue, Object redCopy) {
+        return new Tuple<>((U) red, (U) blue, (U) redCopy);
     }
 
     /** @return The red value. */
@@ -41,9 +41,9 @@ public final class Tuple<T> {
         return red;
     }
 
-    /** @return The black value. */
-    public T getBlack() {
-        return black;
+    /** @return The blue value. */
+    public T getBlue() {
+        return blue;
     }
 
     /** @return The shallow copy of the red value. */
@@ -58,7 +58,7 @@ public final class Tuple<T> {
             return false;
         }
         Tuple<?> other = (Tuple<?>) obj;
-        return red.equals(other.red) && black.equals(other.black) && redCopy.equals(other.redCopy);
+        return red.equals(other.red) && blue.equals(other.blue) && redCopy.equals(other.redCopy);
     }
 
     /** {@inheritDoc} */
@@ -66,7 +66,7 @@ public final class Tuple<T> {
     public int hashCode() {
         int result = 37;
         result = (59 * result) + red.hashCode();
-        result = (59 * result) + black.hashCode();
+        result = (59 * result) + blue.hashCode();
         result = (59 * result) + redCopy.hashCode();
         return result;
     }
@@ -74,6 +74,6 @@ public final class Tuple<T> {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "Tuple [" + red + ", " + black + ", " + redCopy + "]";
+        return "Tuple [" + red + ", " + blue + ", " + redCopy + "]";
     }
 }

@@ -86,8 +86,8 @@ public class SignatureTest extends ExpectedExceptionTestBase {
             this.i = i;
         }
 
-        public boolean equals(Object red, Object black) {
-            return red == null ? black == null : red.equals(black);
+        public boolean equals(Object red, Object blue) {
+            return red == null ? blue == null : red.equals(blue);
         }
 
         @Override

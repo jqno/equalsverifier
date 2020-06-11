@@ -29,7 +29,7 @@ public class AbstractGenericFactoryTest {
                             TypeTag tag,
                             PrefabValues prefabValues,
                             LinkedHashSet<TypeTag> typeStack) {
-                        return Tuple.of("red", "black", new String("red"));
+                        return Tuple.of("red", "blue", new String("red"));
                     }
                 };
     }

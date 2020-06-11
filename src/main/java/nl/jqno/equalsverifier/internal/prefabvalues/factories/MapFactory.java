@@ -26,25 +26,25 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
-        // Use red for key and black for value in the Red map to avoid having identical keys and
+        // Use red for key and blue for value in the Red map to avoid having identical keys and
         // values.
-        // But don't do it in the Black map, or they may cancel each other out again.
+        // But don't do it in the Blue map, or they may cancel each other out again.
 
         Object redKey = prefabValues.giveRed(keyTag);
-        Object blackKey = prefabValues.giveBlack(keyTag);
-        Object blackValue = prefabValues.giveBlack(valueTag);
+        Object blueKey = prefabValues.giveBlue(keyTag);
+        Object blueValue = prefabValues.giveBlue(valueTag);
 
         T red = createEmpty.get();
-        red.put(redKey, blackValue);
+        red.put(redKey, blueValue);
 
-        T black = createEmpty.get();
-        if (!redKey.equals(blackKey)) { // This happens with single-element enums
-            black.put(prefabValues.giveBlack(keyTag), blackValue);
+        T blue = createEmpty.get();
+        if (!redKey.equals(blueKey)) { // This happens with single-element enums
+            blue.put(prefabValues.giveBlue(keyTag), blueValue);
         }
 
         T redCopy = createEmpty.get();
-        redCopy.put(redKey, blackValue);
+        redCopy.put(redKey, blueValue);
 
-        return new Tuple<>(red, black, redCopy);
+        return new Tuple<>(red, blue, redCopy);
     }
 }

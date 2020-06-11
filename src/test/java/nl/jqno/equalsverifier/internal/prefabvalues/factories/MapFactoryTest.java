@@ -31,49 +31,49 @@ public class MapFactoryTest {
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private PrefabValues prefabValues;
     private String red;
-    private String black;
+    private String blue;
     private Object redObject;
-    private Object blackObject;
+    private Object blueObject;
     private OneElementEnum redEnum;
 
     @Before
     public void setUp() {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         red = prefabValues.giveRed(STRING_TYPETAG);
-        black = prefabValues.giveBlack(STRING_TYPETAG);
+        blue = prefabValues.giveBlue(STRING_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);
-        blackObject = prefabValues.giveBlack(OBJECT_TYPETAG);
-        redEnum = prefabValues.giveBlack(ONEELEMENTENUM_TYPETAG);
+        blueObject = prefabValues.giveBlue(OBJECT_TYPETAG);
+        redEnum = prefabValues.giveBlue(ONEELEMENTENUM_TYPETAG);
     }
 
     @Test
     public void createMapsOfStringToString() {
         Tuple<Map> tuple =
                 MAP_FACTORY.createValues(STRINGSTRINGMAP_TYPETAG, prefabValues, typeStack);
-        assertEquals(mapOf(red, black), tuple.getRed());
-        assertEquals(mapOf(black, black), tuple.getBlack());
+        assertEquals(mapOf(red, blue), tuple.getRed());
+        assertEquals(mapOf(blue, blue), tuple.getBlue());
     }
 
     @Test
     public void createMapsOfWildcard() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, prefabValues, typeStack);
-        assertEquals(mapOf(redObject, blackObject), tuple.getRed());
-        assertEquals(mapOf(blackObject, blackObject), tuple.getBlack());
+        assertEquals(mapOf(redObject, blueObject), tuple.getRed());
+        assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }
 
     @Test
     public void createRawMaps() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, prefabValues, typeStack);
-        assertEquals(mapOf(redObject, blackObject), tuple.getRed());
-        assertEquals(mapOf(blackObject, blackObject), tuple.getBlack());
+        assertEquals(mapOf(redObject, blueObject), tuple.getRed());
+        assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }
 
     @Test
     public void createMapOfOneElementEnumKey() {
         Tuple<Map> tuple =
                 MAP_FACTORY.createValues(ONEELEMENTENUMKEYMAP_TYPETAG, prefabValues, typeStack);
-        assertEquals(mapOf(redEnum, blackObject), tuple.getRed());
-        assertEquals(new HashMap<>(), tuple.getBlack());
+        assertEquals(mapOf(redEnum, blueObject), tuple.getRed());
+        assertEquals(new HashMap<>(), tuple.getBlue());
     }
 
     private <K, V> Map<K, V> mapOf(K key, V value) {

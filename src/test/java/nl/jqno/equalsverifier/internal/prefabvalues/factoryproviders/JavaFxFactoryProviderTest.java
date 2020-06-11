@@ -39,7 +39,7 @@ public class JavaFxFactoryProviderTest {
         Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
-        assertEquals(prefabValues.giveBlack(listTag), tuple.getBlack().t);
+        assertEquals(prefabValues.giveBlue(listTag), tuple.getBlue().t);
         assertEquals(String.class, tuple.getRed().t.get(0).getClass());
     }
 
@@ -58,7 +58,7 @@ public class JavaFxFactoryProviderTest {
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
 
         assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
-        assertEquals(prefabValues.giveBlack(mapTag), tuple.getBlack().t);
+        assertEquals(prefabValues.giveBlue(mapTag), tuple.getBlue().t);
 
         Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
         assertEquals(String.class, next.getKey().getClass());

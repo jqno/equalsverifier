@@ -36,35 +36,35 @@ public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
     @Test
     public void simple() {
         Point red = prefabValues.giveRed(POINT_TAG);
-        Point black = prefabValues.giveBlack(POINT_TAG);
-        assertFalse(red.equals(black));
+        Point blue = prefabValues.giveBlue(POINT_TAG);
+        assertFalse(red.equals(blue));
     }
 
     @Test
     public void createSecondTimeIsNoOp() {
         Point red = prefabValues.giveRed(POINT_TAG);
-        Point black = prefabValues.giveBlack(POINT_TAG);
+        Point blue = prefabValues.giveBlue(POINT_TAG);
 
         assertSame(red, prefabValues.giveRed(POINT_TAG));
-        assertSame(black, prefabValues.giveBlack(POINT_TAG));
+        assertSame(blue, prefabValues.giveBlue(POINT_TAG));
     }
 
     @Test
     public void createEnum() {
         assertNotNull(prefabValues.giveRed(ENUM_TAG));
-        assertNotNull(prefabValues.giveBlack(ENUM_TAG));
+        assertNotNull(prefabValues.giveBlue(ENUM_TAG));
     }
 
     @Test
     public void createOneElementEnum() {
         assertNotNull(prefabValues.giveRed(ONE_ELT_ENUM_TAG));
-        assertNotNull(prefabValues.giveBlack(ONE_ELT_ENUM_TAG));
+        assertNotNull(prefabValues.giveBlue(ONE_ELT_ENUM_TAG));
     }
 
     @Test
     public void createEmptyEnum() {
         assertNull(prefabValues.giveRed(EMPTY_ENUM_TAG));
-        assertNull(prefabValues.giveBlack(EMPTY_ENUM_TAG));
+        assertNull(prefabValues.giveBlue(EMPTY_ENUM_TAG));
     }
 
     @Test

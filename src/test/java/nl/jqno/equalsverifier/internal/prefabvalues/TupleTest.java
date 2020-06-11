@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.Test;
 
 public class TupleTest {
-    private Tuple<String> tuple = new Tuple<>("red", "black", new String("red"));
+    private Tuple<String> tuple = new Tuple<>("red", "blue", new String("red"));
 
     @Test
     public void equalsAndHashCode() {
@@ -21,8 +21,8 @@ public class TupleTest {
     }
 
     @Test
-    public void getBlack() {
-        assertEquals("black", tuple.getBlack());
+    public void getBlue() {
+        assertEquals("blue", tuple.getBlue());
     }
 
     @Test

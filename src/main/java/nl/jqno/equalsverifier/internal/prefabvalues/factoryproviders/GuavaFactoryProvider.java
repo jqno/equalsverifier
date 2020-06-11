@@ -152,13 +152,13 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
 
             T red = factory.get();
-            T black = factory.get();
+            T blue = factory.get();
             T redCopy = factory.get();
-            red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
-            black.put(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
-            redCopy.put(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+            red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
+            blue.put(prefabValues.giveBlue(keyTag), prefabValues.giveBlue(valueTag));
+            redCopy.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
 
-            return Tuple.of(red, black, redCopy);
+            return Tuple.of(red, blue, redCopy);
         }
     }
 
@@ -179,22 +179,22 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, prefabValues, clone);
 
             T red = factory.get();
-            T black = factory.get();
+            T blue = factory.get();
             T redCopy = factory.get();
             red.put(
                     prefabValues.giveRed(columnTag),
                     prefabValues.giveRed(rowTag),
-                    prefabValues.giveBlack(valueTag));
-            black.put(
-                    prefabValues.giveBlack(columnTag),
-                    prefabValues.giveBlack(rowTag),
-                    prefabValues.giveBlack(valueTag));
+                    prefabValues.giveBlue(valueTag));
+            blue.put(
+                    prefabValues.giveBlue(columnTag),
+                    prefabValues.giveBlue(rowTag),
+                    prefabValues.giveBlue(valueTag));
             redCopy.put(
                     prefabValues.giveRed(columnTag),
                     prefabValues.giveRed(rowTag),
-                    prefabValues.giveBlack(valueTag));
+                    prefabValues.giveBlue(valueTag));
 
-            return Tuple.of(red, black, redCopy);
+            return Tuple.of(red, blue, redCopy);
         }
     }
 }

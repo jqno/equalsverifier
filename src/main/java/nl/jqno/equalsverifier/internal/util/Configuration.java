@@ -181,7 +181,7 @@ public final class Configuration<T> {
 
         List<T> result = new ArrayList<>();
         result.add(classAccessor.getRedObject(typeTag));
-        result.add(classAccessor.getBlackObject(typeTag));
+        result.add(classAccessor.getBlueObject(typeTag));
         return result;
     }
 

@@ -60,12 +60,12 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
         T red = (T) Array.newInstance(componentType, 1);
         Array.set(red, 0, prefabValues.giveRed(componentTag));
-        T black = (T) Array.newInstance(componentType, 1);
-        Array.set(black, 0, prefabValues.giveBlack(componentTag));
+        T blue = (T) Array.newInstance(componentType, 1);
+        Array.set(blue, 0, prefabValues.giveBlue(componentTag));
         T redCopy = (T) Array.newInstance(componentType, 1);
         Array.set(redCopy, 0, prefabValues.giveRed(componentTag));
 
-        return new Tuple<>(red, black, redCopy);
+        return new Tuple<>(red, blue, redCopy);
     }
 
     private void traverseFields(
@@ -83,8 +83,8 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
         T red = accessor.getRedObject(tag);
-        T black = accessor.getBlackObject(tag);
+        T blue = accessor.getBlueObject(tag);
         T redCopy = accessor.getRedObject(tag);
-        return new Tuple<>(red, black, redCopy);
+        return new Tuple<>(red, blue, redCopy);
     }
 }

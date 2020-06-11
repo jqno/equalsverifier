@@ -19,16 +19,16 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     private static final String PREFAB = "Add prefab values for one of the following types";
 
     private Node red;
-    private Node black;
+    private Node blue;
     private Tree redTree;
-    private Tree blackTree;
+    private Tree blueTree;
 
     @Before
     public void createSomeNodes() {
         red = new Node(null);
-        black = new Node(new Node(null));
+        blue = new Node(new Node(null));
         redTree = new Tree(Collections.<Tree>emptyList());
-        blackTree = new Tree(Collections.singletonList(new Tree(Collections.<Tree>emptyList())));
+        blueTree = new Tree(Collections.singletonList(new Tree(Collections.<Tree>emptyList())));
     }
 
     @Test
@@ -39,12 +39,12 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
-        EqualsVerifier.forClass(Node.class).withPrefabValues(Node.class, red, black).verify();
+        EqualsVerifier.forClass(Node.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
-        EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, black).verify();
+        EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
@@ -56,14 +56,14 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
         EqualsVerifier.forClass(NodeContainer.class)
-                .withPrefabValues(Node.class, red, black)
+                .withPrefabValues(Node.class, red, blue)
                 .verify();
     }
 
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNodeContainer.class)
-                .withPrefabValues(Node.class, red, black)
+                .withPrefabValues(Node.class, red, blue)
                 .verify();
     }
 
@@ -76,7 +76,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenDatastructureIsRecursiveInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(Tree.class)
-                .withPrefabValues(Tree.class, redTree, blackTree)
+                .withPrefabValues(Tree.class, redTree, blueTree)
                 .verify();
     }
 
@@ -89,7 +89,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     @Test
     public void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(TreeContainer.class)
-                .withPrefabValues(Tree.class, redTree, blackTree)
+                .withPrefabValues(Tree.class, redTree, blueTree)
                 .verify();
     }
 

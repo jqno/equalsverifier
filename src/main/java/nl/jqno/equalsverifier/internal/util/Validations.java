@@ -59,11 +59,11 @@ public final class Validations {
                 "an equal example also appears as unequal example.");
     }
 
-    public static <T> void validateRedAndBlackPrefabValues(Class<T> type, T red, T black) {
+    public static <T> void validateRedAndBluePrefabValues(Class<T> type, T red, T blue) {
         validateNotNull(type, "type is null.");
         validateNotNull(red, "red value is null.");
-        validateNotNull(black, "black value is null.");
-        validate(red.equals(black), "both values are equal.");
+        validateNotNull(blue, "blue value is null.");
+        validate(red.equals(blue), "both values are equal.");
     }
 
     public static <T> void validateGenericPrefabValues(

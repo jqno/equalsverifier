@@ -6,7 +6,7 @@ import static org.junit.Assert.assertNotSame;
 import org.junit.Test;
 
 public class SimpleFactoryTest {
-    private SimpleFactory<String> factory = new SimpleFactory<>("red", "black", new String("red"));
+    private SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));
 
     @Test
     public void createRed() {
@@ -14,8 +14,8 @@ public class SimpleFactoryTest {
     }
 
     @Test
-    public void createBlack() {
-        assertEquals("black", factory.createValues(null, null, null).getBlack());
+    public void createBlue() {
+        assertEquals("blue", factory.createValues(null, null, null).getBlue());
     }
 
     @Test

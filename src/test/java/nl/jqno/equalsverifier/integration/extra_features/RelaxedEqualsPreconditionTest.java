@@ -17,20 +17,20 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     private static final String TWO_OBJECTS_ARE_EQUAL = "two objects are equal to each other";
 
     private Multiple red;
-    private Multiple black;
+    private Multiple blue;
     private Multiple green;
 
     @Before
     public void setup() {
         red = new Multiple(1, 2);
-        black = new Multiple(2, 1);
+        blue = new Multiple(2, 1);
         green = new Multiple(2, 2);
     }
 
     @Test
     public void throw_whenTheFirstExampleIsNull() {
         expectException(IllegalArgumentException.class, "First example is null.");
-        EqualsVerifier.forRelaxedEqualExamples(null, black);
+        EqualsVerifier.forRelaxedEqualExamples(null, blue);
     }
 
     @Test
@@ -41,7 +41,7 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void succeed_whenTheVarargArrayIsNull() {
-        EqualsVerifier.forRelaxedEqualExamples(red, black, (Multiple[]) null)
+        EqualsVerifier.forRelaxedEqualExamples(red, blue, (Multiple[]) null)
                 .andUnequalExample(green)
                 .verify();
     }
@@ -50,18 +50,18 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     public void fail_whenAVarargParameterIsNull() {
         expectException(IllegalArgumentException.class, "One of the examples is null.");
         Multiple another = new Multiple(-1, -2);
-        EqualsVerifier.forRelaxedEqualExamples(red, black, another, null);
+        EqualsVerifier.forRelaxedEqualExamples(red, blue, another, null);
     }
 
     @Test
     public void fail_whenTheUnequalExampleIsNull() {
         expectException(IllegalArgumentException.class, "First example is null.");
-        EqualsVerifier.forRelaxedEqualExamples(red, black).andUnequalExample(null);
+        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExample(null);
     }
 
     @Test
     public void succeed_whenTheUnequalVarargArrayIsNull() {
-        EqualsVerifier.forRelaxedEqualExamples(red, black)
+        EqualsVerifier.forRelaxedEqualExamples(red, blue)
                 .andUnequalExamples(green, (Multiple[]) null)
                 .verify();
     }
@@ -70,7 +70,7 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     public void fail_whenAnUnequalVarargParameterIsNull() {
         expectException(IllegalArgumentException.class);
         Multiple another = new Multiple(3, 3);
-        EqualsVerifier.forRelaxedEqualExamples(red, black).andUnequalExamples(green, another, null);
+        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, another, null);
     }
 
     @Test
@@ -113,14 +113,14 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenTheSameUnequalExampleIsGivenTwice() {
         expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
-        EqualsVerifier.forRelaxedEqualExamples(red, black).andUnequalExamples(green, green);
+        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, green);
     }
 
     @Test
     public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
         expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
         Multiple xx = new Multiple(2, 2);
-        EqualsVerifier.forRelaxedEqualExamples(red, black).andUnequalExamples(green, xx);
+        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, xx);
     }
 
     public static class SubMultiple extends Multiple {

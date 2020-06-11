@@ -12,8 +12,8 @@ public final class Factories {
         // Do not instantiate
     }
 
-    public static <T> PrefabValueFactory<T> values(T red, T black, T redCopy) {
-        return new SimpleFactory<>(red, black, redCopy);
+    public static <T> PrefabValueFactory<T> values(T red, T blue, T redCopy) {
+        return new SimpleFactory<>(red, blue, redCopy);
     }
 
     public static <A, T> PrefabValueFactory<T> simple(

@@ -54,14 +54,14 @@ public class PrefabValuesTest {
     }
 
     @Test
-    public void giveBlackFromFactory() {
-        assertEquals("b", pv.giveBlack(STRING_TAG));
+    public void giveBlueFromFactory() {
+        assertEquals("b", pv.giveBlue(STRING_TAG));
     }
 
     @Test
-    public void giveBlackFromCache() {
-        pv.giveBlack(STRING_TAG);
-        assertEquals("b", pv.giveBlack(STRING_TAG));
+    public void giveBlueFromCache() {
+        pv.giveBlue(STRING_TAG);
+        assertEquals("b", pv.giveBlue(STRING_TAG));
     }
 
     @Test
@@ -84,8 +84,8 @@ public class PrefabValuesTest {
     }
 
     @Test
-    public void giveBlackFromFallbackFactory() {
-        Point actual = pv.giveBlack(POINT_TAG);
+    public void giveBlueFromFallbackFactory() {
+        Point actual = pv.giveBlue(POINT_TAG);
         assertEquals(new Point(1337, 1337), actual);
     }
 
@@ -105,21 +105,21 @@ public class PrefabValuesTest {
     @Test
     public void giveOtherWhenValueIsKnown() {
         Point red = pv.giveRed(POINT_TAG);
-        Point black = pv.giveBlack(POINT_TAG);
-        assertEquals(black, pv.giveOther(POINT_TAG, red));
-        assertEquals(red, pv.giveOther(POINT_TAG, black));
+        Point blue = pv.giveBlue(POINT_TAG);
+        assertEquals(blue, pv.giveOther(POINT_TAG, red));
+        assertEquals(red, pv.giveOther(POINT_TAG, blue));
     }
 
     @Test
     public void giveOtherWhenValueIsCloneOfKnown() {
         Point red = new Point(42, 42);
-        Point black = new Point(1337, 1337);
-        assertEquals(black, pv.giveOther(POINT_TAG, red));
-        assertEquals(red, pv.giveOther(POINT_TAG, black));
+        Point blue = new Point(1337, 1337);
+        assertEquals(blue, pv.giveOther(POINT_TAG, red));
+        assertEquals(red, pv.giveOther(POINT_TAG, blue));
 
         // Sanity check
         assertEquals(red, pv.giveRed(POINT_TAG));
-        assertEquals(black, pv.giveBlack(POINT_TAG));
+        assertEquals(blue, pv.giveBlue(POINT_TAG));
     }
 
     @Test
@@ -144,21 +144,21 @@ public class PrefabValuesTest {
     @Test
     public void giveOtherWhenValueIsKnownArray() {
         String[] red = pv.giveRed(STRING_ARRAY_TAG);
-        String[] black = pv.giveBlack(STRING_ARRAY_TAG);
-        assertArrayEquals(black, pv.giveOther(STRING_ARRAY_TAG, red));
-        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, black));
+        String[] blue = pv.giveBlue(STRING_ARRAY_TAG);
+        assertArrayEquals(blue, pv.giveOther(STRING_ARRAY_TAG, red));
+        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, blue));
     }
 
     @Test
     public void giveOtherWhenValueIsCloneOfKnownArray() {
         String[] red = {"r"};
-        String[] black = {"b"};
-        assertArrayEquals(black, pv.giveOther(STRING_ARRAY_TAG, red));
-        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, black));
+        String[] blue = {"b"};
+        assertArrayEquals(blue, pv.giveOther(STRING_ARRAY_TAG, red));
+        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, blue));
 
         // Sanity check
         assertArrayEquals(red, pv.<String[]>giveRed(STRING_ARRAY_TAG));
-        assertArrayEquals(black, pv.<String[]>giveBlack(STRING_ARRAY_TAG));
+        assertArrayEquals(blue, pv.<String[]>giveBlue(STRING_ARRAY_TAG));
     }
 
     @Test
@@ -204,7 +204,7 @@ public class PrefabValuesTest {
         factoryCache.put(int.class, values(-1, -2, -1));
         pv = new PrefabValues(factoryCache);
         assertEquals(-1, (int) pv.giveRed(INT_TAG));
-        assertEquals(-2, (int) pv.giveBlack(INT_TAG));
+        assertEquals(-2, (int) pv.giveBlue(INT_TAG));
     }
 
     @Test
@@ -213,7 +213,7 @@ public class PrefabValuesTest {
         factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
         pv = new PrefabValues(factoryCache);
         assertEquals(Lazy.X, pv.giveRed(lazyTag));
-        assertEquals(Lazy.Y, pv.giveBlack(lazyTag));
+        assertEquals(Lazy.Y, pv.giveBlue(lazyTag));
         assertEquals(Lazy.X, pv.giveRedCopy(lazyTag));
     }
 
@@ -239,19 +239,19 @@ public class PrefabValuesTest {
 
     private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
         private String red;
-        private String black;
+        private String blue;
 
         public AppendingStringTestFactory() {
             red = "";
-            black = "";
+            blue = "";
         }
 
         @Override
         public Tuple<String> createValues(
                 TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
             red += "r";
-            black += "b";
-            return new Tuple<>(red, black, new String(red));
+            blue += "b";
+            return new Tuple<>(red, blue, new String(red));
         }
     }
 
@@ -266,13 +266,13 @@ public class PrefabValuesTest {
             List red = new ArrayList<>();
             red.add(prefabValues.giveRed(subtag));
 
-            List black = new ArrayList<>();
-            black.add(prefabValues.giveBlack(subtag));
+            List blue = new ArrayList<>();
+            blue.add(prefabValues.giveBlue(subtag));
 
             List redCopy = new ArrayList<>();
             redCopy.add(prefabValues.giveRed(subtag));
 
-            return new Tuple<>(red, black, redCopy);
+            return new Tuple<>(red, blue, redCopy);
         }
     }
 

@@ -24,12 +24,12 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone, Enum.class);
 
         Map red = new HashMap<>();
-        Map black = new HashMap<>();
+        Map blue = new HashMap<>();
         Map redCopy = new HashMap<>();
-        red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
-        black.put(prefabValues.giveBlack(keyTag), prefabValues.giveBlack(valueTag));
-        redCopy.put(prefabValues.giveRed(keyTag), prefabValues.giveBlack(valueTag));
+        red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
+        blue.put(prefabValues.giveBlue(keyTag), prefabValues.giveBlue(valueTag));
+        redCopy.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
 
-        return Tuple.of(factory.apply(red), factory.apply(black), factory.apply(redCopy));
+        return Tuple.of(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }
 }

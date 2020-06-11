@@ -25,7 +25,7 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         List<Object> redValues = new ArrayList<>();
-        List<Object> blackValues = new ArrayList<>();
+        List<Object> blueValues = new ArrayList<>();
 
         boolean useEmpty = false;
         int n = tag.getType().getTypeParameters().length;
@@ -33,19 +33,19 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
             TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, prefabValues, clone);
 
             Object redValue = prefabValues.giveRed(paramTag);
-            Object blackValue = prefabValues.giveBlack(paramTag);
-            if (redValue.equals(blackValue)) { // This happens with single-element enums
+            Object blueValue = prefabValues.giveBlue(paramTag);
+            if (redValue.equals(blueValue)) { // This happens with single-element enums
                 useEmpty = true;
             }
             redValues.add(redValue);
-            blackValues.add(blackValue);
+            blueValues.add(blueValue);
         }
 
         Object red = factory.apply(redValues);
-        Object black =
-                useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blackValues);
+        Object blue =
+                useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blueValues);
         Object redCopy = factory.apply(redValues);
 
-        return Tuple.of(red, black, redCopy);
+        return Tuple.of(red, blue, redCopy);
     }
 }

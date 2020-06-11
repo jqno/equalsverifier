@@ -35,7 +35,7 @@ public class AbstractDelegationChecker<T> implements Checker {
         checkAbstractDelegationInFields();
 
         T instance = prefabValues.giveRed(typeTag);
-        T copy = prefabValues.giveBlack(typeTag);
+        T copy = prefabValues.giveBlue(typeTag);
         checkAbstractDelegation(instance, copy);
     }
 
@@ -61,7 +61,7 @@ public class AbstractDelegationChecker<T> implements Checker {
             Tuple<?> tuple = safelyGetTuple(tag);
             if (tuple != null) {
                 Object instance = tuple.getRed();
-                Object copy = tuple.getBlack();
+                Object copy = tuple.getBlue();
                 checkAbstractMethods(tag.getType(), instance, copy, true);
             }
         }

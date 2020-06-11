@@ -9,7 +9,7 @@ import org.junit.Test;
 public class FactoryCacheTest {
     private static final Class<String> STRING_CLASS = String.class;
     private static final PrefabValueFactory<String> STRING_FACTORY =
-            new SimpleFactory<>("red", "black", new String("red"));
+            new SimpleFactory<>("red", "blue", new String("red"));
     private static final Class<Integer> INT_CLASS = int.class;
     private static final PrefabValueFactory<Integer> INT_FACTORY =
             new SimpleFactory<>(42, 1337, 42);

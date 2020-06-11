@@ -55,7 +55,7 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     public void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues, typeStack);
         assertArrayEquals(new int[] {42}, (int[]) tuple.getRed());
-        assertArrayEquals(new int[] {1337}, (int[]) tuple.getBlack());
+        assertArrayEquals(new int[] {1337}, (int[]) tuple.getBlue());
     }
 
     @Test
@@ -86,10 +86,10 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
         factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack);
     }
 
-    private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlack) {
+    private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
         Tuple<?> tuple = factory.createValues(new TypeTag(type), prefabValues, typeStack);
         assertEquals(expectedRed, tuple.getRed());
-        assertEquals(expectedBlack, tuple.getBlack());
+        assertEquals(expectedBlue, tuple.getBlue());
     }
 
     private static final class IntContainer {

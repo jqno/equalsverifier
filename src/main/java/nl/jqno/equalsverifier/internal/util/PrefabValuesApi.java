@@ -13,18 +13,18 @@ public final class PrefabValuesApi {
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-            FactoryCache factoryCache, Class<T> otherType, T red, T black) {
-        Validations.validateRedAndBlackPrefabValues(otherType, red, black);
+            FactoryCache factoryCache, Class<T> otherType, T red, T blue) {
+        Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
-            factoryCache.put(otherType, values(red, black, red));
+            factoryCache.put(otherType, values(red, blue, red));
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy();
-                factoryCache.put(otherType, values(red, black, redCopy));
+                factoryCache.put(otherType, values(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                factoryCache.put(otherType, values(red, black, red));
+                factoryCache.put(otherType, values(red, blue, red));
             }
         }
     }

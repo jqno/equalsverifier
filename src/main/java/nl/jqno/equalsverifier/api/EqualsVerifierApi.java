@@ -31,13 +31,13 @@ public interface EqualsVerifierApi<T> {
      * @param <S> The class of the prefabricated values.
      * @param otherType The class of the prefabricated values.
      * @param red An instance of {@code S}.
-     * @param black Another instance of {@code S}, not equal to {@code red}.
+     * @param blue Another instance of {@code S}, not equal to {@code red}.
      * @return {@code this}, for easy method chaining.
-     * @throws NullPointerException If either {@code otherType}, {@code red}, or {@code black} is
+     * @throws NullPointerException If either {@code otherType}, {@code red}, or {@code blue} is
      *     null.
-     * @throws IllegalArgumentException If {@code red} equals {@code black}.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
      */
-    public <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S black);
+    public <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic

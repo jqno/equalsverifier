@@ -136,7 +136,7 @@ public class MutableStateTest extends ExpectedExceptionTestBase {
     static final class EnumMutableField {
         public enum Enum {
             RED,
-            BLACK
+            BLUE
         }
 
         private Enum field;

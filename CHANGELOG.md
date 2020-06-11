@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial support for Java 14's records and their [new equality invariant](https://docs.oracle.com/en/java/javase/14/docs/api/java.base/java/lang/Record.html).
 ### Changed
 - Renames the project's main branch to `main`.
+- Replaces all references to the word 'black' to 'blue', including those in internal (but accessible) API's.
 
 ## [3.3] - 2020-05-14
 ### Added

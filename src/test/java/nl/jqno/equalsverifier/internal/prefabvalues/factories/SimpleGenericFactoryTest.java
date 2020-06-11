@@ -32,21 +32,21 @@ public class SimpleGenericFactoryTest {
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
     private PrefabValues prefabValues;
     private String redString;
-    private String blackString;
+    private String blueString;
     private Integer redInt;
-    private Integer blackInt;
+    private Integer blueInt;
     private Object redObject;
-    private Object blackObject;
+    private Object blueObject;
 
     @Before
     public void setUp() {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         redString = prefabValues.giveRed(STRING_TYPETAG);
-        blackString = prefabValues.giveBlack(STRING_TYPETAG);
+        blueString = prefabValues.giveBlue(STRING_TYPETAG);
         redInt = prefabValues.giveRed(INTEGER_TYPETAG);
-        blackInt = prefabValues.giveBlack(INTEGER_TYPETAG);
+        blueInt = prefabValues.giveBlue(INTEGER_TYPETAG);
         redObject = prefabValues.giveRed(OBJECT_TYPETAG);
-        blackObject = prefabValues.giveBlack(OBJECT_TYPETAG);
+        blueObject = prefabValues.giveBlue(OBJECT_TYPETAG);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple =
                 OPTIONAL_FACTORY.createValues(STRINGOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(redString), tuple.getRed());
-        assertEquals(Optional.of(blackString), tuple.getBlack());
+        assertEquals(Optional.of(blueString), tuple.getBlue());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple =
                 OPTIONAL_FACTORY.createValues(WILDCARDOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(redObject), tuple.getRed());
-        assertEquals(Optional.of(blackObject), tuple.getBlack());
+        assertEquals(Optional.of(blueObject), tuple.getBlue());
     }
 
     @Test
@@ -70,13 +70,13 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple =
                 OPTIONAL_FACTORY.createValues(RAWOPTIONAL_TYPETAG, prefabValues, typeStack);
         assertEquals(Optional.of(redObject), tuple.getRed());
-        assertEquals(Optional.of(blackObject), tuple.getBlack());
+        assertEquals(Optional.of(blueObject), tuple.getBlue());
     }
 
     @Test
     public void createSomethingWithMoreThanOneTypeParameter() {
         Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, prefabValues, typeStack);
         assertEquals(new Pair<>(redString, redInt), tuple.getRed());
-        assertEquals(new Pair<>(blackString, blackInt), tuple.getBlack());
+        assertEquals(new Pair<>(blueString, blueInt), tuple.getBlue());
     }
 }
