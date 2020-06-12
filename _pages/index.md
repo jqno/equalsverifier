@@ -36,7 +36,7 @@ Add it to your build like this (please adjust for your build system of choice):
 If you're interested, there's more to read:
 
 * The [FAQ](/equalsverifier/faq).
-* The [changelog](https://github.com/jqno/equalsverifier/blob/master/CHANGELOG.md).
+* The [changelog](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md).
 * The migration guides:
     * [2.x to 3.x](/equalsverifier/migration2to3)
     * [1.x to 2.x](/equalsverifier/migration1to2)

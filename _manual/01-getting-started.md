@@ -8,7 +8,7 @@ Requirements:
 * EqualsVerifier 2.x → Java 7 or higher
 * EqualsVerifier 1.x → Java 6 or higher
 
-First, add the EqualsVerifier dependency to your build script. You can find the coordinates on [the homepage](/equalsverifier) and in [the README](https://github.com/jqno/equalsverifier/blob/master/README.md).
+First, add the EqualsVerifier dependency to your build script. You can find the coordinates on [the homepage](/equalsverifier) and in [the README](https://github.com/jqno/equalsverifier/blob/main/README.md).
 
 If you need to download the jar file directly, you can download it from [maven.org](http://search.maven.org/#search&#124;gav&#124;1&#124;g%3A%22nl.jqno.equalsverifier%22%20AND%20a%3A%22equalsverifier%22). EqualsVerifier doesn't have any transitive dependencies, so this jar is all you need.
 
