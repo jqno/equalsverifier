@@ -28,7 +28,7 @@ public class SubclassTest extends ExpectedExceptionTestBase {
                 "Subclass",
                 "object is not equal to an instance of a trivial subclass with equal fields",
                 "Maybe you forgot to add usingGetClass()",
-                "consider making the class final.");
+                "consider making the class final");
         EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class).verify();
     }
 

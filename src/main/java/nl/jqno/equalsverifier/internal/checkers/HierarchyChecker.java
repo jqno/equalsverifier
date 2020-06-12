@@ -145,7 +145,8 @@ public class HierarchyChecker<T> implements Checker {
             Formatter formatter =
                     Formatter.of(
                             "Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\n"
-                                    + "Maybe you forgot to add usingGetClass(). Otherwise, consider making the class final.",
+                                    + "Maybe you forgot to add usingGetClass(). Otherwise, "
+                                    + "consider making the class final or use EqualsVerifier.simple().",
                             reference);
             assertTrue(formatter, reference.equals(equalSub));
         }

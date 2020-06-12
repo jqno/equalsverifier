@@ -38,7 +38,8 @@ public class MutableStateFieldCheck implements FieldCheck {
         if (equalBefore && !equalAfter && !referenceAccessor.fieldIsFinal()) {
             fail(
                     Formatter.of(
-                            "Mutability: equals depends on mutable field %%.",
+                            "Mutability: equals depends on mutable field %%.\n"
+                                    + "Make the field final, suppress Warning.NONFINAL_FIELDS or use EqualsVerifier.simple()",
                             referenceAccessor.getFieldName()));
         }
 

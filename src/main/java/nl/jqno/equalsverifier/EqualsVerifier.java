@@ -20,6 +20,10 @@ import nl.jqno.equalsverifier.internal.util.Validations;
  *
  * <p>{@code EqualsVerifier.forClass(My.class).verify();}
  *
+ * <p>Or, if that's too strict:
+ *
+ * <p>{@code EqualsVerifier.simple().forClass(My.class).verify();}
+ *
  * <p>For more information, see the documentation at http://www.jqno.nl/equalsverifier
  */
 public final class EqualsVerifier {
@@ -42,6 +46,17 @@ public final class EqualsVerifier {
      */
     public static ConfiguredEqualsVerifier configure() {
         return new ConfiguredEqualsVerifier();
+    }
+
+    /**
+     * Creates a configuration object that is pre-configured so that it can be used with most
+     * IDE-generated {@code equals} and {@code hashCode} methods without any further configuration.
+     *
+     * @return A reusable configuration object with a fluent API.
+     */
+    public static ConfiguredEqualsVerifier simple() {
+        return new ConfiguredEqualsVerifier()
+                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
     }
 
     /**
