@@ -72,6 +72,7 @@ public interface EqualsVerifierApi<T> {
      * instead of an {@code instanceof} check.
      *
      * @return {@code this}, for easy method chaining.
+     * @see Warning#STRICT_INHERITANCE
      */
     public EqualsVerifierApi<T> usingGetClass();
 }
