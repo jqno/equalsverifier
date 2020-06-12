@@ -13,6 +13,15 @@ public void equalsContract() {
 }
 {% endhighlight %}
 
+If you feel EqualsVerifier is too strict, you can make it more lenient:
+
+{% highlight java %}
+@Test
+public void simpleEqualsContract() {
+    EqualsVerifier.simple().forClass(Foo.class).verify();
+}
+{% endhighlight %}
+
 And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` methods.
 
 
