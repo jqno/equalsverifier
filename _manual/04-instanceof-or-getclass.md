@@ -36,7 +36,7 @@ If you use `getClass()` and you forget to add `usingGetClass()`, you might get t
 
     Subclass: object is not equal to an instance of a trivial subclass with equal fields:
       nl.jqno.equalsverifier.Foo@123456
-    Maybe you forgot to add usingGetClass(). Otherwise, consider making the class final.
+    Maybe you forgot to add usingGetClass(). Otherwise, consider making the class final or use EqualsVerifier.simple().
 
 This is an example where the Liskov substitution principle and `getClass()` clash. EqualsVerifier creates a subclass of `Foo`, but adds nothing to it. Then it expects that `equals` treats it the same as an actual `Foo`. It doesn't because `getClass()` returns different values for `Foo` and for the subclass.
 
@@ -57,6 +57,8 @@ System.out.println(a.equals(b));
 Should this print `true` or `false`? SubFoo doesn't change anything about Foo, so `true` seems to make most sense. However, with `getClass()`, it prints `false`.
 
 Making `Foo` final is another way to avoid this problem.
+
+Finally, if you think this is too strict, you can suppress `Warning.STRICT_INHERITANCE` or use `EqualsVerifier.simple()` instead.
 
 If you want to know more about this, read Effective Java's chapter on `equals`.
 

@@ -36,3 +36,16 @@ Here are the most common issues you might run into on your first try:
 * [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)
 * [Dealing with null](/equalsverifier/manual/null)
 
+If you still think EqualsVerifier is too strict, you can make it more lenient:
+
+{% highlight java %}
+@Test
+public void equalsContract() {
+    EqualsVerifier.simple()
+            .forClass(Foo.class)
+            .verify();
+}
+{% endhighlight %}
+
+This way, `Warning.STRICT_INHERITANCE` and `Warning.NONFINAL_FIELDS` are automatically suppressed.
+

@@ -13,6 +13,15 @@ public void equalsContract() {
 }
 {% endhighlight %}
 
+If you feel EqualsVerifier is too strict, you can make it more lenient:
+
+{% highlight java %}
+@Test
+public void simpleEqualsContract() {
+    EqualsVerifier.simple().forClass(Foo.class).verify();
+}
+{% endhighlight %}
+
 And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` methods.
 
 
@@ -24,7 +33,7 @@ Add it to your build like this (please adjust for your build system of choice):
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>3.3</version>
+    <version>3.4</version>
     <scope>test</scope>
 </dependency>
 {% endhighlight %}
