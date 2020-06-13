@@ -5,7 +5,7 @@
     <packaging>jar</packaging>
 
     <name>EqualsVerifier</name>
-    <version>3.4-SNAPSHOT</version>
+    <version>3.4</version>
     <description>EqualsVerifier can be used in JUnit 4 unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
     <url>http://www.jqno.nl/equalsverifier</url>
 
@@ -309,7 +309,7 @@
             </activation>
 
             <properties>
-                <additional.argLine></additional.argLine> <!-- Can be set from the command-line to enable JVM preview features -->
+                <additional.argLine /> <!-- Can be set from the command-line to enable JVM preview features -->
                 <surefire.argLine>--illegal-access=deny ${additional.argLine}</surefire.argLine>
             </properties>
 
