@@ -11,7 +11,7 @@ public class RecordsTest extends StringCompilerTestBase {
 
     @Before
     public void setup() {
-        assumeTrue(determineIsRecordsAvailable());
+        assumeTrue(isRecordsAvailable());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class RecordsTest extends StringCompilerTestBase {
         EqualsVerifier.forClass(type).verify();
     }
 
-    public boolean determineIsRecordsAvailable() {
+    public boolean isRecordsAvailable() {
         if (!isTypeAvailable("java.lang.Record")) {
             return false;
         }

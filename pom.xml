@@ -303,6 +303,22 @@
 
     <profiles>
         <profile>
+            <id>enables-javafx-tests-for-jdk11-and-up</id>
+            <activation>
+                <jdk>[11,)</jdk>
+            </activation>
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>javafx-base</artifactId>
+                    <version>14.0.1</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+
+        <profile>
             <id>adds-module-checks-and-linting-for-java9-and-up</id>
             <activation>
                 <jdk>[9,)</jdk>

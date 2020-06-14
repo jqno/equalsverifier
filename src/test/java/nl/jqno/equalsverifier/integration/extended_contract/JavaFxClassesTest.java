@@ -1,28 +1,26 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import static org.junit.Assume.*;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
+import org.junit.Before;
 import org.junit.Test;
 
-// CHECKSTYLE OFF: DeclarationOrder
-
 public class JavaFxClassesTest extends StringCompilerTestBase {
+    @Before
+    public void setup() {
+        assumeTrue(isJavaFxAvailable());
+    }
+
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> javafxClass = compile(JAVAFX_CLASS_NAME, JAVAFX_CLASS);
         EqualsVerifier.forClass(javafxClass).verify();
     }
 
     @Test
     public void succeed_whenEqualsLooksAtObservableListFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_OBSERVABLELIST_CONTAINER_CLASS_NAME,
@@ -32,10 +30,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtObservableMapFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_OBSERVABLEMAP_CONTAINER_CLASS_NAME,
@@ -45,10 +39,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtObservableSetFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_OBSERVABLESET_CONTAINER_CLASS_NAME,
@@ -58,10 +48,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtListPropertyFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_LISTPROPERTY_CONTAINER_CLASS_NAME,
@@ -71,10 +57,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtMapPropertyFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_MAPPROPERTY_CONTAINER_CLASS_NAME,
@@ -84,10 +66,6 @@ public class JavaFxClassesTest extends StringCompilerTestBase {
 
     @Test
     public void succeed_whenEqualsLooksAtSetPropertyFieldsGenericContent() {
-        if (!isJavaFxAvailable()) {
-            return;
-        }
-
         Class<?> type =
                 compile(
                         JAVAFX_SETPROPERTY_CONTAINER_CLASS_NAME,
