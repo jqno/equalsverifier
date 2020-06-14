@@ -224,8 +224,7 @@ public class PrefabValuesTest {
         // Doesn't throw:
         factoryCache.put(
                 ThrowingLazy.class.getName(),
-                (tag, prefabValues, typeStack) ->
-                        Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
+                (t, p, ts) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
         pv = new PrefabValues(factoryCache);
 
         // Does throw:

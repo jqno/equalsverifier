@@ -279,30 +279,4 @@ public class ClassAccessorTest {
         String s;
         @NonNull String t;
     }
-
-    // CHECKSTYLE OFF: DeclarationOrder
-    // Generated at runtime, so we don't actually have to put a class in the default package.
-    private static final String DEFAULT_PACKAGE_NAME = "DefaultPackage";
-    private static final String DEFAULT_PACKAGE =
-            "\npublic final class DefaultPackage {"
-                    + "\n    private final int i;"
-                    + "\n    "
-                    + "\n    public DefaultPackage(int i) {"
-                    + "\n        this.i = i;"
-                    + "\n    }"
-                    + "\n    "
-                    + "\n    @Override"
-                    + "\n    public boolean equals(Object obj) {"
-                    + "\n        if (!(obj instanceof DefaultPackage)) {"
-                    + "\n            return false;"
-                    + "\n        }"
-                    + "\n        return i == ((DefaultPackage)obj).i;"
-                    + "\n    }"
-                    + "\n    "
-                    + "\n    @Override"
-                    + "\n    public int hashCode() {"
-                    + "\n        return i;"
-                    + "\n    }"
-                    + "\n}";
-    // CHECKSTYLE ON: DeclarationOrder
 }
