@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -8,6 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -129,29 +131,23 @@ public final class Configuration<T> {
             Set<String> includedFields,
             Set<String> actualFields) {
 
+        BiFunction<String, Annotation, Boolean> fieldHas =
+                (f, a) -> annotationCache.hasFieldAnnotation(type, f, a);
+
         if (annotationCache.hasClassAnnotation(type, SupportedAnnotations.NATURALID)) {
             return actualFields.stream()
-                    .filter(
-                            f ->
-                                    !annotationCache.hasFieldAnnotation(
-                                            type, f, SupportedAnnotations.NATURALID))
+                    .filter(f -> !fieldHas.apply(f, SupportedAnnotations.NATURALID))
                     .collect(Collectors.toSet());
         }
         if (annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID)) {
             if (warningsToSuppress.contains(Warning.SURROGATE_KEY)) {
                 return actualFields.stream()
-                        .filter(
-                                f ->
-                                        !annotationCache.hasFieldAnnotation(
-                                                type, f, SupportedAnnotations.ID))
+                        .filter(f -> !fieldHas.apply(f, SupportedAnnotations.ID))
                         .collect(Collectors.toSet());
             } else {
                 Set<String> ignored =
                         actualFields.stream()
-                                .filter(
-                                        f ->
-                                                annotationCache.hasFieldAnnotation(
-                                                        type, f, SupportedAnnotations.ID))
+                                .filter(f -> fieldHas.apply(f, SupportedAnnotations.ID))
                                 .collect(Collectors.toSet());
                 ignored.addAll(
                         determineAnnotationlessIgnoredFields(

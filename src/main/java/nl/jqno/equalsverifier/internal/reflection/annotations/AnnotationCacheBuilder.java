@@ -8,6 +8,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.field.FieldDescription;
+import net.bytebuddy.description.method.MethodDescription;
+import net.bytebuddy.description.method.MethodList;
 import net.bytebuddy.description.type.TypeDescription;
 import net.bytebuddy.pool.TypePool;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
@@ -51,12 +54,10 @@ public class AnnotationCacheBuilder {
     }
 
     private void visitSuperclasses(Class<?> type, AnnotationCache cache, TypePool pool) {
-        SuperclassIterable.of(type)
-                .forEach(
-                        c -> {
-                            TypeDescription typeDescription = pool.describe(c.getName()).resolve();
-                            visitType(setOf(type, c), cache, typeDescription, true);
-                        });
+        for (Class<?> c : SuperclassIterable.of(type)) {
+            TypeDescription typeDescription = pool.describe(c.getName()).resolve();
+            visitType(setOf(type, c), cache, typeDescription, true);
+        }
     }
 
     private void visitOuterClasses(Class<?> type, AnnotationCache cache, TypePool pool) {
@@ -101,66 +102,36 @@ public class AnnotationCacheBuilder {
             AnnotationCache cache,
             TypeDescription typeDescription,
             boolean inheriting) {
-        typeDescription
-                .getDeclaredFields()
-                .forEach(
-                        f -> {
-                            Consumer<Annotation> addToCache =
-                                    a ->
-                                            types.forEach(
-                                                    t ->
-                                                            cache.addFieldAnnotation(
-                                                                    t, f.getName(), a));
+        for (FieldDescription.InDefinedShape f : typeDescription.getDeclaredFields()) {
+            Consumer<Annotation> addToCache =
+                    a -> types.forEach(t -> cache.addFieldAnnotation(t, f.getName(), a));
 
-                            // Regular field annotations
-                            f.getDeclaredAnnotations()
-                                    .forEach(
-                                            a ->
-                                                    cacheSupportedAnnotations(
-                                                            a,
-                                                            types,
-                                                            cache,
-                                                            addToCache,
-                                                            inheriting));
+            // Regular field annotations
+            for (AnnotationDescription a : f.getDeclaredAnnotations()) {
+                cacheSupportedAnnotations(a, types, cache, addToCache, inheriting);
+            }
 
-                            // Type-use annotations
-                            f.getType()
-                                    .getDeclaredAnnotations()
-                                    .forEach(
-                                            a ->
-                                                    cacheSupportedAnnotations(
-                                                            a,
-                                                            types,
-                                                            cache,
-                                                            addToCache,
-                                                            inheriting));
-                        });
-        typeDescription
-                .getDeclaredMethods()
-                .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3)
-                .forEach(
-                        m -> {
-                            String methodName = m.getName();
-                            String correspondingFieldName =
-                                    Character.toLowerCase(methodName.charAt(3))
-                                            + methodName.substring(4);
-                            Consumer<Annotation> addToCache =
-                                    a ->
-                                            types.forEach(
-                                                    t ->
-                                                            cache.addFieldAnnotation(
-                                                                    t, correspondingFieldName, a));
+            // Type-use annotations
+            for (AnnotationDescription a : f.getType().getDeclaredAnnotations()) {
+                cacheSupportedAnnotations(a, types, cache, addToCache, inheriting);
+            }
+        }
 
-                            m.getDeclaredAnnotations()
-                                    .forEach(
-                                            a ->
-                                                    cacheSupportedAnnotations(
-                                                            a,
-                                                            types,
-                                                            cache,
-                                                            addToCache,
-                                                            inheriting));
-                        });
+        MethodList<MethodDescription.InDefinedShape> methods =
+                typeDescription
+                        .getDeclaredMethods()
+                        .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3);
+        for (MethodDescription.InDefinedShape m : methods) {
+            String methodName = m.getName();
+            String correspondingFieldName =
+                    Character.toLowerCase(methodName.charAt(3)) + methodName.substring(4);
+            Consumer<Annotation> addToCache =
+                    a -> types.forEach(t -> cache.addFieldAnnotation(t, correspondingFieldName, a));
+
+            for (AnnotationDescription a : m.getDeclaredAnnotations()) {
+                cacheSupportedAnnotations(a, types, cache, addToCache, inheriting);
+            }
+        }
     }
 
     private void cacheSupportedAnnotations(
@@ -187,26 +158,22 @@ public class AnnotationCacheBuilder {
     private AnnotationProperties buildAnnotationProperties(AnnotationDescription annotation) {
         AnnotationProperties props =
                 new AnnotationProperties(annotation.getAnnotationType().getCanonicalName());
-        annotation
-                .getAnnotationType()
-                .getDeclaredMethods()
-                .forEach(
-                        m -> {
-                            Object val = annotation.getValue(m).resolve();
-                            if (val.getClass().isArray()
-                                    && !val.getClass().getComponentType().isPrimitive()) {
-                                Object[] array = (Object[]) val;
-                                Set<String> values = new HashSet<>();
-                                for (Object obj : array) {
-                                    if (obj instanceof TypeDescription) {
-                                        values.add(((TypeDescription) obj).getName());
-                                    } else {
-                                        values.add(obj.toString());
-                                    }
-                                }
-                                props.putArrayValues(m.getName(), values);
-                            }
-                        });
+        for (MethodDescription.InDefinedShape m :
+                annotation.getAnnotationType().getDeclaredMethods()) {
+            Object val = annotation.getValue(m).resolve();
+            if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
+                Object[] array = (Object[]) val;
+                Set<String> values = new HashSet<>();
+                for (Object obj : array) {
+                    if (obj instanceof TypeDescription) {
+                        values.add(((TypeDescription) obj).getName());
+                    } else {
+                        values.add(obj.toString());
+                    }
+                }
+                props.putArrayValues(m.getName(), values);
+            }
+        }
         return props;
     }
 

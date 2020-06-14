@@ -71,14 +71,14 @@ public final class Validations {
         validateNotNull(type, "type is null.");
 
         int n = type.getTypeParameters().length;
-        validate(
-                n != arity,
+        String message =
                 "number of generic type parameters doesn't match:\n  "
                         + type.getName()
                         + " has "
                         + n
                         + "\n  Factory has "
-                        + arity);
+                        + arity;
+        validate(n != arity, message);
     }
 
     public static void validateWarningsAndFields(
@@ -169,12 +169,12 @@ public final class Validations {
     public static void validateTypesAreKnown(List<Class<?>> types, List<Class<?>> knownTypes) {
         List<Class<?>> unknownTypes =
                 types.stream().filter(t -> !knownTypes.contains(t)).collect(Collectors.toList());
-        validate(
-                !unknownTypes.isEmpty(),
+        String message =
                 "Unknown class(es) found: "
                         + unknownTypes.stream()
                                 .map(t -> t.getCanonicalName())
-                                .collect(Collectors.joining(", ")));
+                                .collect(Collectors.joining(", "));
+        validate(!unknownTypes.isEmpty(), message);
     }
 
     public static void validateNotNull(Object object, String errormessage) {

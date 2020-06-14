@@ -167,14 +167,13 @@ public class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        modify(
+        FieldModifier fm =
                 () -> {
-                    Object newValue =
-                            prefabValues.giveOther(
-                                    TypeTag.of(field, enclosingType), field.get(object));
+                    TypeTag tag = TypeTag.of(field, enclosingType);
+                    Object newValue = prefabValues.giveOther(tag, field.get(object));
                     field.set(object, newValue);
-                },
-                false);
+                };
+        modify(fm, false);
     }
 
     private void modify(FieldModifier modifier, boolean includeStatic) {

@@ -29,13 +29,12 @@ public class TransientFieldsCheck<T> implements FieldCheck {
         changedAccessor.changeField(prefabValues, typeTag);
 
         boolean equalsChanged = !reference.equals(changed);
-        boolean fieldIsTransient =
-                referenceAccessor.fieldIsTransient()
-                        || annotationCache.hasFieldAnnotation(
-                                typeTag.getType(),
-                                referenceAccessor.getFieldName(),
-                                SupportedAnnotations.TRANSIENT);
-
+        boolean hasAnnotation =
+                annotationCache.hasFieldAnnotation(
+                        typeTag.getType(),
+                        referenceAccessor.getFieldName(),
+                        SupportedAnnotations.TRANSIENT);
+        boolean fieldIsTransient = referenceAccessor.fieldIsTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                     Formatter.of(

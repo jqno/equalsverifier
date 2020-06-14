@@ -7,6 +7,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
@@ -115,13 +116,10 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
     @SuppressWarnings("unchecked")
     private static <T, S> PrefabValueFactory<T> fxCollection(
             Class<S> source, String copyMethodName) {
-        return copy(
-                source,
-                a -> {
-                    ConditionalInstantiator ci =
-                            new ConditionalInstantiator(
-                                    JAVAFX_COLLECTIONS_PACKAGE + "FXCollections");
-                    return ci.callFactory(copyMethodName, classes(source), objects(a));
-                });
+        Function<S, T> f =
+                a ->
+                        new ConditionalInstantiator(JAVAFX_COLLECTIONS_PACKAGE + "FXCollections")
+                                .callFactory(copyMethodName, classes(source), objects(a));
+        return copy(source, f);
     }
 }

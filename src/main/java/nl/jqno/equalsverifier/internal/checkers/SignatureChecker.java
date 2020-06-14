@@ -35,10 +35,10 @@ public class SignatureChecker<T> implements Checker {
     }
 
     private void checkEqualsIsDefined() {
-        boolean fail =
-                !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                        && classAccessor.isEqualsInheritedFromObject();
-        if (fail) {
+        boolean dontAllowDirectlyInherited =
+                !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT);
+        boolean isDirectlyInherited = classAccessor.isEqualsInheritedFromObject();
+        if (dontAllowDirectlyInherited && isDirectlyInherited) {
             fail(
                     Formatter.of(
                             "Equals is inherited directly from Object.\n"

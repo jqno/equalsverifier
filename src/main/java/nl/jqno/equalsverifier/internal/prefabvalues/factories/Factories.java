@@ -28,13 +28,13 @@ public final class Factories {
 
     public static <A, T extends Collection<A>> PrefabValueFactory<T> collection(
             Supplier<T> emptyFactory) {
-        return Factories.<A, T>simple(
+        Func1<A, T> f =
                 a -> {
                     T coll = emptyFactory.get();
                     coll.add(a);
                     return coll;
-                },
-                emptyFactory);
+                };
+        return Factories.<A, T>simple(f, emptyFactory);
     }
 
     public static <T, S> PrefabValueFactory<T> copy(Class<S> source, Function<S, T> copy) {

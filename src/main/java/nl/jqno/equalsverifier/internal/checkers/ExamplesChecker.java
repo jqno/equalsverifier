@@ -86,11 +86,11 @@ public class ExamplesChecker<T> implements Checker {
                     reference,
                     reference);
         } catch (ClassCastException e) {
-            fail(
+            Formatter f =
                     Formatter.of(
                             "Generics: ClassCastException was thrown. "
-                                    + "Consider using withGenericPrefabValues for the type that triggered the exception."),
-                    e);
+                                    + "Consider using withGenericPrefabValues for the type that triggered the exception.");
+            fail(f, e);
         }
     }
 
@@ -110,23 +110,23 @@ public class ExamplesChecker<T> implements Checker {
         class SomethingElse {}
         SomethingElse somethingElse = new SomethingElse();
         try {
-            assertFalse(
+            Formatter f =
                     Formatter.of(
-                            "Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check."),
-                    reference.equals(somethingElse));
+                            "Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check.");
+            assertFalse(f, reference.equals(somethingElse));
         } catch (AssertionException e) {
             throw e;
         } catch (ClassCastException e) {
-            fail(
+            Formatter f =
                     Formatter.of(
-                            "Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check."),
-                    e);
+                            "Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check.");
+            fail(f, e);
         } catch (Exception e) {
-            fail(
+            Formatter f =
                     Formatter.of(
                             "Type-check: equals throws %%.\nAdd an instanceof or getClass() check.",
-                            e.getClass().getSimpleName()),
-                    e);
+                            e.getClass().getSimpleName());
+            fail(f, e);
         }
     }
 

@@ -105,11 +105,11 @@ public class ReflexivityFieldCheck<T> implements FieldCheck {
         Object right = changedAccessor.getObject();
 
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-            assertFalse(
+            Formatter f =
                     Formatter.of(
                             "Unnecessary suppression: %%. Two identical copies are equal.",
-                            Warning.IDENTICAL_COPY.toString()),
-                    left.equals(right));
+                            Warning.IDENTICAL_COPY.toString());
+            assertFalse(f, left.equals(right));
         } else {
             Formatter f =
                     Formatter.of(

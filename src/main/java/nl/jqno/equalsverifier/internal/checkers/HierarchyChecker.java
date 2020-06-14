@@ -26,8 +26,9 @@ public class HierarchyChecker<T> implements Checker {
     public HierarchyChecker(Configuration<T> config) {
         this.config = config;
 
-        if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)
-                && config.getRedefinedSubclass() != null) {
+        boolean nonStrict = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
+        boolean hasRedefinedSubclass = config.getRedefinedSubclass() != null;
+        if (nonStrict && hasRedefinedSubclass) {
             fail(
                     Formatter.of(
                             "withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
@@ -174,13 +175,10 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkFinalEqualsMethod() {
-        boolean ignore =
-                config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)
-                        || config.getAnnotationCache()
-                                .hasClassAnnotation(type, SupportedAnnotations.ENTITY)
-                        || typeIsFinal
-                        || redefinedSubclass != null;
-        if (ignore) {
+        boolean nonStrict = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
+        boolean isEntity =
+                config.getAnnotationCache().hasClassAnnotation(type, SupportedAnnotations.ENTITY);
+        if (nonStrict || isEntity || typeIsFinal || redefinedSubclass != null) {
             return;
         }
 

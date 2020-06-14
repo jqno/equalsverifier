@@ -100,10 +100,10 @@ public class AbstractDelegationChecker<T> implements Checker {
         try {
             instance.equals(copy);
         } catch (AbstractMethodError e) {
-            fail(
+            Formatter f =
                     buildAbstractDelegationErrorMessage(
-                            instanceClass, prefabPossible, "equals", e.getMessage()),
-                    e);
+                            instanceClass, prefabPossible, "equals", e.getMessage());
+            fail(f, e);
         } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
             // other errors will be handled later.
@@ -112,10 +112,10 @@ public class AbstractDelegationChecker<T> implements Checker {
         try {
             cachedHashCodeInitializer.getInitializedHashCode(instance);
         } catch (AbstractMethodError e) {
-            fail(
+            Formatter f =
                     buildAbstractDelegationErrorMessage(
-                            instanceClass, prefabPossible, "hashCode", e.getMessage()),
-                    e);
+                            instanceClass, prefabPossible, "hashCode", e.getMessage());
+            fail(f, e);
         } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
             // other errors will be handled later.
