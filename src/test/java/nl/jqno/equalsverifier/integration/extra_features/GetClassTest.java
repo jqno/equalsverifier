@@ -14,6 +14,15 @@ import org.junit.Test;
 public class GetClassTest extends ExpectedExceptionTestBase {
 
     @Test
+    public void fail_whenEqualsUsesGetClassInsteadOfInstanceof() {
+        expectFailure(
+                "Subclass",
+                "object is not equal to an instance of a trivial subclass with equal fields",
+                "Maybe you forgot to add usingGetClass()");
+        EqualsVerifier.forClass(GetClassPoint.class).verify();
+    }
+
+    @Test
     public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
         EqualsVerifier.forClass(GetClassPoint.class).usingGetClass().verify();
     }
@@ -41,8 +50,21 @@ public class GetClassTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void fail_whenSuperclassUsesGetClass() {
+        expectFailure("Symmetry", "does not equal superclass instance");
+        EqualsVerifier.forClass(GetClassColorPoint.class).verify();
+    }
+
+    @Test
     public void succeed_whenSuperclassUsesGetClass_givenUsingGetClassIsUsed() {
         EqualsVerifier.forClass(GetClassColorPoint.class).usingGetClass().verify();
+    }
+
+    @Test
+    public void succeed_whenSuperclassUsesGetClass_givenWarningStrictInheritanceIsSuppressed() {
+        EqualsVerifier.forClass(GetClassColorPoint.class)
+                .suppress(Warning.STRICT_INHERITANCE)
+                .verify();
     }
 
     @Test

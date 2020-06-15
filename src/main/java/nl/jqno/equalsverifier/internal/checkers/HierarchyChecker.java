@@ -82,6 +82,10 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
+        if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
+            return;
+        }
+
         T reference = referenceAccessor.get();
         Object equalSuper = getEqualSuper(reference);
 
