@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.4.1] - 2020-06-15
 ### Fixed
-- `Warning.STRICT_INHERITANCE` doesn't take away the requirement to call `#usingGetClass()` when superclass has fields.
+- `Warning.STRICT_INHERITANCE` doesn't take away the requirement to call `#usingGetClass()` when superclass has fields. ([Issue 316](https://github.com/jqno/equalsverifier/issues/316))
 
 ## [3.4] - 2020-06-13
 ### Added
