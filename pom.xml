@@ -68,7 +68,7 @@
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
 
-        <fmt-plugin.version>2.9</fmt-plugin.version>
+        <fmt-plugin.version>2.10</fmt-plugin.version>
     </properties>
 
     <repositories>
