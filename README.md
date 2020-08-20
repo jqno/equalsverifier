@@ -2,7 +2,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/nl.jqno.equalsverifier/equalsverifier.svg?style=shield)](https://maven-badges.herokuapp.com/maven-central/nl.jqno.equalsverifier/equalsverifier/)
 [![Javadoc](https://javadoc.io/badge/nl.jqno.equalsverifier/equalsverifier.svg?color=blue)](https://javadoc.io/doc/nl.jqno.equalsverifier/equalsverifier)
 
-[![Build Status](https://circleci.com/gh/jqno/equalsverifier.svg?style=shield)](https://circleci.com/gh/jqno/equalsverifier)
+[![Build Status](https://circleci.com/gh/jqno/equalsverifier.svg?style=shield)](https://app.circleci.com/pipelines/github/jqno/equalsverifier)
 [![Dependabot](https://flat.badgen.net/dependabot/jqno/equalsverifier?icon=dependabot)](https://dependabot.com/)
 [![SemVer stability](https://api.dependabot.com/badges/compatibility_score?dependency-name=nl.jqno.equalsverifier:equalsverifier&package-manager=maven&version-scheme=semver)](https://dependabot.com/compatibility-score/?dependency-name=nl.jqno.equalsverifier:equalsverifier&package-manager=maven&version-scheme=semver)
 
@@ -15,7 +15,7 @@ The Maven coordinates are:
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
     <scope>test</scope>
 </dependency>
 ```

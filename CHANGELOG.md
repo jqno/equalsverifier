@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.4.2] - 2020-08-20
+### Fixed
+- Added prefab values for `java.net.InetSocketAddress`. ([Issue 336](https://github.com/jqno/equalsverifier/issues/336))
+
 ## [3.4.1] - 2020-06-15
 ### Fixed
 - `Warning.STRICT_INHERITANCE` doesn't take away the requirement to call `#usingGetClass()` when superclass has fields. ([Issue 316](https://github.com/jqno/equalsverifier/issues/316))
@@ -708,8 +712,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.1...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.2...HEAD
 
+[3.4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.1...equalsverifier-3.4.2
 [3.4.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4...equalsverifier-3.4.1
 [3.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.3...equalsverifier-3.4
 
