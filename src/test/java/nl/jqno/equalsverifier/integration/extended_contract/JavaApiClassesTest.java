@@ -8,10 +8,7 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
-import java.net.URI;
+import java.net.*;
 import java.nio.*;
 import java.text.SimpleDateFormat;
 import java.time.*;
@@ -417,6 +414,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final InetAddress inetAddress;
         private final Inet4Address inet4Address;
         private final Inet6Address inet6Address;
+        private final InetSocketAddress inetSocketAddress;
         private final Thread thread;
         private final java.sql.Date sqlDate;
         private final java.sql.Time sqlTime;
@@ -439,6 +437,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 InetAddress inetAddress,
                 Inet4Address inet4Address,
                 Inet6Address inet6Address,
+                InetSocketAddress inetSocketAddress,
                 Thread thread,
                 java.sql.Date sqlDate,
                 java.sql.Time sqlTime,
@@ -459,6 +458,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             this.inetAddress = inetAddress;
             this.inet4Address = inet4Address;
             this.inet6Address = inet6Address;
+            this.inetSocketAddress = inetSocketAddress;
             this.thread = thread;
             this.sqlDate = sqlDate;
             this.sqlTime = sqlTime;

@@ -10,6 +10,7 @@ import java.io.File;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.*;
 import java.text.DateFormat;
@@ -262,6 +263,11 @@ public final class JavaApiPrefabValues {
                 new java.sql.Timestamp(1337));
 
         addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
+        addValues(
+                InetSocketAddress.class,
+                InetSocketAddress.createUnresolved("localhost", 8080),
+                InetSocketAddress.createUnresolved("127.0.0.1", 8080),
+                InetSocketAddress.createUnresolved("localhost", 8080));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.
@@ -275,14 +281,14 @@ public final class JavaApiPrefabValues {
                 inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(
                 inet4Address.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
+                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(
                 inet6Address.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("::1")));
+                inet6Address.callFactory("getByName", classes(String.class), objects("::1")),
+                inet6Address.callFactory("getByName", classes(String.class), objects("::")),
+                inet6Address.callFactory("getByName", classes(String.class), objects("::1")));
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
