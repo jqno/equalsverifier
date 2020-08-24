@@ -148,7 +148,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](ht
   - the name of a failing class is mentioned more clearly in the error message ([Issue 202](https://github.com/jqno/equalsverifier/issues/202));
   - the error message no longer edits out EqualsVerifier-internal calls from the stack trace;
   - the layout of the text in the error messages has been improved.
-- Perfomance improvements. ([Issue 190](https://github.com/jqno/equalsverifier/issues/190); see also [this tweet](https://twitter.com/jqno/status/1002562042862231552))
+- Performance improvements. ([Issue 190](https://github.com/jqno/equalsverifier/issues/190); see also [this tweet](https://twitter.com/jqno/status/1002562042862231552))
 - Code base now uses Java 8 language features.
 - JavaDoc has been updated.
 
@@ -178,7 +178,7 @@ If you're upgrading from EqualsVerifier 2.x, please see the [migration guide](ht
 - `Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED` when only the final fields are relevant to your `equals` method. ([Issue 200](https://github.com/jqno/equalsverifier/issues/200))
 
 ### Fixed
-- Using both abstract methods and lazy iniitalizers throws an unexplained `NullPointerException`. ([Issue 201](https://github.com/jqno/equalsverifier/issues/201))
+- Using both abstract methods and lazy initializers throws an unexplained `NullPointerException`. ([Issue 201](https://github.com/jqno/equalsverifier/issues/201))
 - Empty enum fields throw `ReflectionException`. ([Issue 199](https://github.com/jqno/equalsverifier/issues/199))
 
 
@@ -666,7 +666,7 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 ## [0.6] - 2010-01-30
 ### Changed
-- The API is more consistend. `#with(Feature)` is now `#suppress(Warning)`, which feels more Java-y. Former features that were not warnings, are now proper methods on `EqualsVerifier`: `#verbose()` and `#withRedefinedSuperclass()`.
+- The API is more consistent. `#with(Feature)` is now `#suppress(Warning)`, which feels more Java-y. Former features that were not warnings, are now proper methods on `EqualsVerifier`: `#verbose()` and `#withRedefinedSuperclass()`.
 - Error messages have been improved:
   - many messages now span multiple lines for improved readability;
   - hashCodes are printed (where relevant);
