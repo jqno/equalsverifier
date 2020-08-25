@@ -36,7 +36,7 @@ jobs:
       - build
   jdk15-with-JDK-preview-features:
     docker:
-      - image: openjdk:14-jdk
+      - image: openjdk:15-jdk
     steps:
       - build:
           flag: -Dadditional.argLine=--enable-preview
