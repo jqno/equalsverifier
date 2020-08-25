@@ -29,12 +29,12 @@ jobs:
       - image: openjdk:11-jdk
     steps:
       - build
-  jdk14:
+  jdk15:
     docker:
-      - image: openjdk:14-jdk
+      - image: openjdk:15-jdk
     steps:
       - build
-  jdk14-with-JDK-preview-features:
+  jdk15-with-JDK-preview-features:
     docker:
       - image: openjdk:14-jdk
     steps:
@@ -42,13 +42,13 @@ jobs:
           flag: -Dadditional.argLine=--enable-preview
   jdk-ea-experimental:
     docker:
-      - image: openjdk:15-jdk
+      - image: openjdk:16-jdk
     steps:
       - build:
           flag: -Dexperimental
   jdk-ea-full:
     docker:
-      - image: openjdk:15-jdk
+      - image: openjdk:16-jdk
     steps:
       - build
 
@@ -58,8 +58,8 @@ workflows:
     jobs:
       - jdk8
       - jdk11
-      - jdk14
-      - jdk14-with-JDK-preview-features
+      - jdk15
+      - jdk15-with-JDK-preview-features
   weekly-experimental:
     triggers:
       - schedule:
@@ -82,5 +82,5 @@ workflows:
     jobs:
       - jdk8
       - jdk11
-      - jdk14
-      - jdk14-with-JDK-preview-features
+      - jdk15
+      - jdk15-with-JDK-preview-features
