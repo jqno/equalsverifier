@@ -127,8 +127,9 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantIntFieldRecord";
     private static final String BROKEN_INVARIANT_INT_FIELD_RECORD_CLASS =
             "\nrecord BrokenInvariantIntFieldRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantIntFieldRecord {"
+                    + "\n    public BrokenInvariantIntFieldRecord(int intField, String stringField) {"
                     + "\n        this.intField = intField + 1;"
+                    + "\n        this.stringField = stringField;"
                     + "\n    }"
                     + "\n}";
 
@@ -136,7 +137,8 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantStringFieldRecord";
     private static final String BROKEN_INVARIANT_STRING_FIELD_RECORD_CLASS =
             "\nrecord BrokenInvariantStringFieldRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantStringFieldRecord {"
+                    + "\n    public BrokenInvariantStringFieldRecord(int intField, String stringField) {"
+                    + "\n        this.intField = intField;"
                     + "\n        this.stringField = stringField + \"x\";"
                     + "\n    }"
                     + "\n}";
@@ -145,7 +147,7 @@ public class RecordsTest extends StringCompilerTestBase {
             "BrokenInvariantBothRecord";
     private static final String BROKEN_INVARIANT_BOTH_RECORD_CLASS =
             "\nrecord BrokenInvariantBothRecord(int intField, String stringField) {"
-                    + "\n    public BrokenInvariantBothRecord {"
+                    + "\n    public BrokenInvariantBothRecord(int intField, String stringField) {"
                     + "\n        this.intField = intField + 1;"
                     + "\n        this.stringField = stringField + \"x\";"
                     + "\n    }"
@@ -199,7 +201,8 @@ public class RecordsTest extends StringCompilerTestBase {
     private static final String THROWING_ACCESSOR_RECORD_CLASS_NAME = "ThrowingAccessorRecord";
     private static final String THROWING_ACCESSOR_RECORD_CLASS =
             "\nrecord ThrowingAccessorRecord(int i, String s) {"
-                    + "\n    public ThrowingAccessorRecord {"
+                    + "\n    public ThrowingAccessorRecord(int i, String s) {"
+                    + "\n        this.i = i;"
                     + "\n        this.s = s + \"x\";"
                     + "\n    }"
                     + "\n"
@@ -211,7 +214,8 @@ public class RecordsTest extends StringCompilerTestBase {
     private static final String NULL_ACCESSOR_RECORD_CLASS_NAME = "NullAccessorRecord";
     private static final String NULL_ACCESSOR_RECORD_CLASS =
             "\nrecord NullAccessorRecord(String s, String t) {"
-                    + "\n    public NullAccessorRecord {"
+                    + "\n    public NullAccessorRecord(String s, String t) {"
+                    + "\n        this.s = s;"
                     + "\n        this.t = \"\" + t;"
                     + "\n    }"
                     + "\n"
