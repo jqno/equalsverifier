@@ -608,7 +608,6 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "ImmutableSortedSet", GUAVA_FACTORY);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     private void addNewGoogleGuavaClasses() {
         addLazyFactory(GUAVA_PACKAGE + "Range", GUAVA_FACTORY);
         addLazyFactory("com.google.common.base.Optional", GUAVA_FACTORY);
@@ -623,7 +622,6 @@ public final class JavaApiPrefabValues {
         addLazyFactory(JODA_PACKAGE + "MonthDay", JODA_FACTORY);
     }
 
-    @SuppressWarnings("unchecked")
     private <T> void addValues(Class<T> type, T red, T blue, T redCopy) {
         factoryCache.put(type, values(red, blue, redCopy));
     }
