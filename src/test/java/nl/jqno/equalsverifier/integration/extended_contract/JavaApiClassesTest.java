@@ -410,6 +410,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
         private final Pattern pattern;
         private final SimpleDateFormat simpleDateFormat;
         private final URI uri;
+        private final URL url;
         private final UUID uuid;
         private final InetAddress inetAddress;
         private final Inet4Address inet4Address;
@@ -433,6 +434,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
                 Pattern pattern,
                 SimpleDateFormat simpleDateFormat,
                 URI uri,
+                URL url,
                 UUID uuid,
                 InetAddress inetAddress,
                 Inet4Address inet4Address,
@@ -454,6 +456,7 @@ public class JavaApiClassesTest extends ExpectedExceptionTestBase {
             this.pattern = pattern;
             this.simpleDateFormat = simpleDateFormat;
             this.uri = uri;
+            this.url = url;
             this.uuid = uuid;
             this.inetAddress = inetAddress;
             this.inet4Address = inet4Address;

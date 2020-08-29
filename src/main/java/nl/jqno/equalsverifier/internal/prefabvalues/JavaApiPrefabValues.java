@@ -10,8 +10,8 @@ import java.io.File;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.*;
 import java.net.InetSocketAddress;
-import java.net.URI;
 import java.nio.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -163,6 +163,17 @@ public final class JavaApiPrefabValues {
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
+
+        try {
+            addValues(
+                    URL.class,
+                    new URL("http://example.com"),
+                    new URL("http://localhost"),
+                    new URL("http://example.com"));
+        } catch (MalformedURLException e) {
+            throw new EqualsVerifierInternalBugException(
+                    "Can't add prefab values for java.net.URL", e);
+        }
 
         addFactory(
                 CompletableFuture.class,
