@@ -274,6 +274,9 @@
                                 <relocation>
                                     <pattern>net.bytebuddy</pattern>
                                     <shadedPattern>nl.jqno.equalsverifier.internal.lib.bytebuddy</shadedPattern>
+                                    <excludes>
+                                        <exclude>net/bytebuddy/experimental</exclude>
+                                    </excludes>
                                 </relocation>
                                 <relocation>
                                     <pattern>org.objenesis</pattern>
