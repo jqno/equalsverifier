@@ -1,8 +1,14 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -224,6 +230,35 @@ public class ClassAccessor<T> {
             }
         }
         return result;
+    }
+
+    private static <T> Stream<Field> instanceFieldFor(Class<T> type) {
+        return StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
+                .filter(field -> !Modifier.isStatic(field.getModifiers()));
+    }
+
+    public Constructor<T> getRecordConstructor() {
+        try {
+            List<Class<?>> constructorTypes =
+                    instanceFieldFor(type).map(Field::getType).collect(Collectors.toList());
+            Constructor<T> constructor =
+                    type.getConstructor(constructorTypes.toArray(new Class<?>[0]));
+            constructor.setAccessible(true);
+            return constructor;
+        } catch (NoSuchMethodException | SecurityException e) {
+            return null;
+        }
+    }
+
+    public T callRecordConstructor(Constructor<T> constructor, List<?> params) {
+        try {
+            return constructor.newInstance(params.toArray(new Object[0]));
+        } catch (InstantiationException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e) {
+            return null;
+        }
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {
