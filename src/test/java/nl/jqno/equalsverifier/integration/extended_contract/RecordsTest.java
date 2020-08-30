@@ -97,7 +97,7 @@ public class RecordsTest extends StringCompilerTestBase {
     public void fail_whenRecordAccessorThrowsNpe() {
         Class<?> type = compile(NULL_ACCESSOR_RECORD_CLASS_NAME, NULL_ACCESSOR_RECORD_CLASS);
 
-        expectFailure("Record", "failed to invoke accessor method");
+        expectFailure("Record", "failed to invoke accessor method", "s()");
         EqualsVerifier.forClass(type).verify();
     }
 
@@ -216,12 +216,11 @@ public class RecordsTest extends StringCompilerTestBase {
             "\nrecord NullAccessorRecord(String s, String t) {"
                     + "\n    public NullAccessorRecord(String s, String t) {"
                     + "\n        this.s = s;"
-                    + "\n        this.t = \"\" + t;"
+                    + "\n        this.t = t + \"x\";"
                     + "\n    }"
                     + "\n"
                     + "\n    public String s() {"
-                    + "\n        s.length();"
-                    + "\n        return s;"
+                    + "\n        throw new NullPointerException();"
                     + "\n    }"
                     + "\n}";
 
