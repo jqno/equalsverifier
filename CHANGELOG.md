@@ -15,9 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added prefab values for `java.net.URL`. ([Issue 340](https://github.com/jqno/equalsverifier/issues/340))
 
 ## [3.4.2] - 2020-08-20
+### Changed
+- Updated Byte-Buddy to support Java 16 EA. ([11fd38c28c](https://github.com/jqno/equalsverifier/commit/11fd38c28c29f68bb40e1327af5bddee65ce468d) and [2fcf9a0117](https://github.com/jqno/equalsverifier/commit/2fcf9a01173fffaeeacf59d56011d3af901947df))
+
 ### Fixed
 - Added prefab values for `java.net.InetSocketAddress`. ([Issue 336](https://github.com/jqno/equalsverifier/issues/336))
-- Updated Byte-Buddy to support Java 16 EA. ([11fd38c28c](https://github.com/jqno/equalsverifier/commit/11fd38c28c29f68bb40e1327af5bddee65ce468d) and [2fcf9a0117](https://github.com/jqno/equalsverifier/commit/2fcf9a01173fffaeeacf59d56011d3af901947df))
 
 
 ## [3.4.1] - 2020-06-15
