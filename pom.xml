@@ -59,7 +59,7 @@
         <java.release>8</java.release>
         <jacoco.version>0.8.5</jacoco.version>
 
-        <checkstyle.version>8.35</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
+        <checkstyle.version>8.36</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <checkstyle.maven.version>3.1.1</checkstyle.maven.version>
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
