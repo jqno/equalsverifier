@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Fixed
 - Added prefab values for `java.net.URL`. ([Issue 340](https://github.com/jqno/equalsverifier/issues/340))
+- Fixed support for records with static fields in JDK 14. ([Issue 346](https://github.com/jqno/equalsverifier/issues/346); thanks Edgar!)
 - ByteBuddy experimental support (needed for Java 16 support) can now be accessed via `-Dnet.bytebuddy.experimental=true` again instead of `-Dnl.jqno.equalsverifier.internal.lib.bytebuddy.experimental=true`. ([Issue 339](https://github.com/jqno/equalsverifier/issues/339); thanks Stefano!)
 
 ## [3.4.2] - 2020-08-20
