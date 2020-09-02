@@ -34,6 +34,12 @@ jobs:
       - image: openjdk:15-jdk
     steps:
       - build
+  jdk14-with-JDK-preview-features:
+    docker:
+      - image: openjdk:14-jdk
+    steps:
+      - build:
+          flag: -Dadditional.argLine=--enable-preview
   jdk15-with-JDK-preview-features:
     docker:
       - image: openjdk:15-jdk
@@ -59,6 +65,7 @@ workflows:
       - jdk8
       - jdk11
       - jdk15
+      - jdk14-with-JDK-preview-features
       # - jdk15-with-JDK-preview-features
   weekly-experimental:
     triggers:
@@ -83,4 +90,5 @@ workflows:
       - jdk8
       - jdk11
       - jdk15
+      - jdk14-with-JDK-preview-features
       - jdk15-with-JDK-preview-features
