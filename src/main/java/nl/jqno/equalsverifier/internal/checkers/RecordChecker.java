@@ -6,9 +6,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
@@ -72,12 +74,15 @@ public class RecordChecker<T> implements Checker {
                         failedFields.stream().collect(Collectors.joining(","))));
     }
 
+    private static <T> Stream<Field> instanceFieldFor(Class<T> type) {
+        return StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
+                .filter(field -> !Modifier.isStatic(field.getModifiers()));
+    }
+
     private static <T> Constructor<T> getConstructorFor(Class<T> type) {
         try {
             List<Class<?>> constructorTypes =
-                    StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
-                            .map(Field::getType)
-                            .collect(Collectors.toList());
+                    instanceFieldFor(type).map(Field::getType).collect(Collectors.toList());
             Constructor<T> constructor =
                     type.getConstructor(constructorTypes.toArray(new Class<?>[0]));
             constructor.setAccessible(true);
@@ -91,7 +96,7 @@ public class RecordChecker<T> implements Checker {
     private T callConstructor(
             Class<T> type, Constructor<T> constructor, ObjectAccessor<T> accessor) {
         List<?> params =
-                StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
+                instanceFieldFor(type)
                         .map(accessor::fieldAccessorFor)
                         .map(FieldAccessor::get)
                         .collect(Collectors.toList());

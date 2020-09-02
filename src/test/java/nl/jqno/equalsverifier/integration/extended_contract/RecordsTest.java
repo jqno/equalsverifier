@@ -101,6 +101,12 @@ public class RecordsTest extends StringCompilerTestBase {
         EqualsVerifier.forClass(type).verify();
     }
 
+    @Test
+    public void succeed_whenRecordContainsStaticField() {
+        Class<?> type = compile(STATIC_FIELD_RECORD_CLASS_NAME, STATIC_FIELD_RECORD_CLASS);
+        EqualsVerifier.forClass(type).verify();
+    }
+
     public boolean isRecordsAvailable() {
         if (!isTypeAvailable("java.lang.Record")) {
             return false;
@@ -214,4 +220,9 @@ public class RecordsTest extends StringCompilerTestBase {
                     + "\n        return s;"
                     + "\n    }"
                     + "\n}";
+    private static final String STATIC_FIELD_RECORD_CLASS_NAME = "StaticFieldRecord";
+    private static final String STATIC_FIELD_RECORD_CLASS =
+            "record StaticFieldRecord(int i, String s) {\n"
+                    + "    private static final int X = 0;\n"
+                    + "}";
 }
