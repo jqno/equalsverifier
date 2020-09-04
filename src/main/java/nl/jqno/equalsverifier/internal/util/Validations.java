@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.util;
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.listContainsDuplicates;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -15,6 +16,12 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 
 public final class Validations {
     private Validations() {}
+
+    public static void validateClassCanBeVerified(Class<?> type) {
+        validate(
+                ArrayList.class.isAssignableFrom(type),
+                "EqualsVerfifier cannot verify subclasses of java.util.ArrayList: its invariants are too complex for EqualsVerifier to maintain.");
+    }
 
     public static void validateFieldNamesExist(
             Class<?> type, List<String> givenFields, Set<String> actualFields) {

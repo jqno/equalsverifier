@@ -308,6 +308,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         if (type.isEnum() || type.isInterface()) {
             return;
         }
+        Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
         Validations.validateProcessedAnnotations(

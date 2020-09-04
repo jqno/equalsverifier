@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [Unreleased]
+### Changed
+- Added more helpful error message explaining why EqualsVerifier can't verify subclasses of `java.util.ArrayList`. ([Issue 341](https://github.com/jqno/equalsverifier/issues/341))
+
 ### Fixed
 - Added prefab values for `java.net.URL`. ([Issue 340](https://github.com/jqno/equalsverifier/issues/340))
 - Fixed support for records with static fields in JDK 14. ([Issue 346](https://github.com/jqno/equalsverifier/issues/346); thanks Edgar!)
