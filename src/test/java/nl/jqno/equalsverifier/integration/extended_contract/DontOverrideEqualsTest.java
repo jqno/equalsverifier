@@ -37,8 +37,8 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void
-            succeed_whenClassIsAnExceptionAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
-        EqualsVerifier.forClass(SimpleException.class)
+            succeed_whenClassInheritsFromSomethingWithStateAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
+        EqualsVerifier.forClass(SubclassWithoutEqualsButWithStateFromSuper.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED, Warning.TRANSIENT_FIELDS)
                 .verify();
@@ -69,6 +69,11 @@ public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
         }
     }
 
-    @SuppressWarnings("serial")
-    static final class SimpleException extends Exception {}
+    static class SomethingWithoutEqualsButWithState {
+        @SuppressWarnings("unused")
+        private int i = 10;
+    }
+
+    static final class SubclassWithoutEqualsButWithStateFromSuper
+            extends SomethingWithoutEqualsButWithState {}
 }
