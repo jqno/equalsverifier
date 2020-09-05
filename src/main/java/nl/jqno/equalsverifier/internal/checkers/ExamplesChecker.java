@@ -107,7 +107,6 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     private void checkTypeCheck(T reference) {
-        class SomethingElse {}
         SomethingElse somethingElse = new SomethingElse();
         try {
             Formatter f =
@@ -164,5 +163,18 @@ public class ExamplesChecker<T> implements Checker {
         }
 
         return true;
+    }
+
+    @SuppressFBWarnings(
+            value = "HE_HASHCODE_USE_OBJECT_EQUALS",
+            justification =
+                    "The hashCode must be stable, the class has no state so we don't need to override equals")
+    private static final class SomethingElse {
+        @Override
+        public int hashCode() {
+            // Must return a stable, high-value hashCode,
+            // otherwise the SymmetryTest (which depends on the hashCode) becomes flaky.
+            return Integer.MAX_VALUE;
+        }
     }
 }
