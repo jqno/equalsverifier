@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -66,14 +67,22 @@ public final class FieldIterable implements Iterable<Field> {
     }
 
     private List<Field> addFieldsFor(Class<?> c) {
-        List<Field> result = new ArrayList<>();
+        List<Field> fields = new ArrayList<>();
+        List<Field> statics = new ArrayList<>();
 
         for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic() && !"__cobertura_counters".equals(field.getName())) {
-                result.add(field);
+                if (Modifier.isStatic(field.getModifiers())) {
+                    statics.add(field);
+                } else {
+                    fields.add(field);
+                }
             }
         }
 
+        List<Field> result = new ArrayList<>();
+        result.addAll(fields);
+        result.addAll(statics);
         return result;
     }
 }

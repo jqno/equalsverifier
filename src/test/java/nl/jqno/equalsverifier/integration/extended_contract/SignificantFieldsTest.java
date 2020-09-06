@@ -324,6 +324,15 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
         EqualsVerifier.forClass(BugWhenFieldIsNull.class).verify();
     }
 
+    @Test
+    public void giveCorrectMessage_whenStaticFieldIsNotUsed_givenStaticFieldIsFirstField() {
+        // See https://github.com/jqno/equalsverifier/issues/159
+        expectFailure("Significant fields", "equals does not use i");
+        EqualsVerifier.forClass(IdentityIntContainer.class)
+                .suppress(Warning.IDENTICAL_COPY)
+                .verify();
+    }
+
     static final class ConstantHashCode {
         private final int x;
         private final int y;
@@ -684,6 +693,25 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
         @Override
         public int hashCode() {
             return Objects.hashCode(s);
+        }
+    }
+
+    public static final class IdentityIntContainer {
+        public static final int WHATEVER = 1;
+        private final int i;
+
+        private IdentityIntContainer(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return super.equals(obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return i;
         }
     }
 }

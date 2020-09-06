@@ -93,6 +93,17 @@ public class FieldIterableTest {
     }
 
     @Test
+    public void orderingTest() {
+        FieldIterable iterable = FieldIterable.of(UnorderedFieldContainer.class);
+        List<String> actual = new ArrayList<>();
+        for (Field f : iterable) {
+            actual.add(f.getName());
+        }
+
+        assertEquals(Arrays.asList("one", "two", "THREE", "FOUR"), actual);
+    }
+
+    @Test
     public void interfaceTest() {
         FieldIterable iterable = FieldIterable.of(Interface.class);
         assertFalse(iterable.iterator().hasNext());

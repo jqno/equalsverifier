@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Added more helpful error message explaining why EqualsVerifier can't verify subclasses of `java.util.ArrayList`. ([Issue 341](https://github.com/jqno/equalsverifier/issues/341))
+- Changes order of processing fields (non-statics first, statics later) so static fields don't obscure issues that are really in non-static fields. ([Issue 159](https://github.com/jqno/equalsverifier/issues/159))
 
 ### Fixed
 - Added prefab values for `java.net.URL`. ([Issue 340](https://github.com/jqno/equalsverifier/issues/340))

@@ -169,6 +169,14 @@ public class TypeHelper {
         public long field = 0;
     }
 
+    @SuppressWarnings("unused")
+    public static class UnorderedFieldContainer {
+        public static final int THREE = 3;
+        public final int one = 1;
+        private static final int FOUR = 4;
+        private final int two = 2;
+    }
+
     public interface Interface {}
 
     public abstract static class AbstractClass {
