@@ -23,7 +23,8 @@ jobs:
     docker:
       - image: openjdk:8-jdk
     steps:
-      - build
+      - build:
+          flag: -DdisableStaticAnalysis
   jdk11:
     docker:
       - image: openjdk:11-jdk
@@ -34,7 +35,7 @@ jobs:
       - image: openjdk:15-jdk
     steps:
       - build:
-          flag: -Dexperimental
+          flag: -Dexperimental -DdisableStaticAnalysis
   jdk14-with-JDK-preview-features:
     docker:
       - image: openjdk:14-jdk
@@ -46,13 +47,13 @@ jobs:
       - image: openjdk:15-jdk
     steps:
       - build:
-          flag: -Dexperimental -Dadditional.argLine=--enable-preview
+          flag: -Dexperimental -DdisableStaticAnalysis -Dadditional.argLine=--enable-preview
   jdk-ea-experimental:
     docker:
       - image: openjdk:16-jdk
     steps:
       - build:
-          flag: -Dexperimental
+          flag: -Dexperimental -DdisableStaticAnalysis
   jdk-ea-full:
     docker:
       - image: openjdk:16-jdk

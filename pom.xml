@@ -355,31 +355,15 @@
                             <useSystemClassLoader>false</useSystemClassLoader>
                         </configuration>
                     </plugin>
-
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>default-prepare-agent</id>
-                                <goals>
-                                    <goal>prepare-agent</goal>
-                                </goals>
-                                <configuration>
-                                    <propertyName>surefire.argLine</propertyName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
                 </plugins>
             </build>
         </profile>
 
         <profile>
-            <id>SUPPORTED-static-analysis-enabled</id>
+            <id>static-analysis</id>
             <activation>
                 <property>
-                    <name>!experimental</name>
+                    <name>!disableStaticAnalysis</name>
                 </property>
             </activation>
             
@@ -395,6 +379,9 @@
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
+                                <configuration>
+                                    <propertyName>surefire.argLine</propertyName>
+                                </configuration>
                             </execution>
                         </executions>
                     </plugin>
@@ -581,15 +568,12 @@
         </profile>
 
         <profile>
-            <id>EXPERIMENTAL-for-EA-versions--no-static-analysis</id>
+            <id>EXPERIMENTAL-for-EA-versions</id>
             <activation>
                 <property>
                     <name>experimental</name>
                 </property>
             </activation>
-
-            <!-- Static analysis plugins often lag behind a little when it comes to supporting new class file versions, -->
-            <!-- so they're not included in the experimental build. -->
 
             <properties>
                 <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
