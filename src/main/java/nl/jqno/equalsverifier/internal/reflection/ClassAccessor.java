@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -231,7 +230,7 @@ public class ClassAccessor<T> {
             TypeTag enclosingType, Set<String> nonnullFields, AnnotationCache annotationCache) {
         if (isRecord()) {
             List<?> values = new ArrayList<>();
-            for (Field field : FieldIterable.of(type)) {
+            for (Field field : FieldIterable.ofIgnoringStatic(type)) {
                 if (shouldHaveNonDefaultValue(field, nonnullFields, annotationCache)) {
                     values.add(prefabValues.giveRed(TypeTag.of(field, enclosingType)));
                 } else {
@@ -251,11 +250,6 @@ public class ClassAccessor<T> {
         return result;
     }
 
-    private static <T> Stream<Field> instanceFieldFor(Class<T> type) {
-        return StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
-                .filter(field -> !Modifier.isStatic(field.getModifiers()));
-    }
-
     private boolean shouldHaveNonDefaultValue(
             Field field, Set<String> nonnullFields, AnnotationCache annotationCache) {
         return NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache)
@@ -265,7 +259,7 @@ public class ClassAccessor<T> {
     private ObjectAccessor<T> getRecordObjectAccessor(
             TypeTag enclosingType, Function<TypeTag, ?> color) {
         List<?> params =
-                instanceFieldFor(type)
+                StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false)
                         .map(f -> TypeTag.of(f, enclosingType))
                         .map(color)
                         .collect(Collectors.toList());
@@ -276,7 +270,9 @@ public class ClassAccessor<T> {
     public Constructor<T> getRecordConstructor() {
         try {
             List<Class<?>> constructorTypes =
-                    instanceFieldFor(type).map(Field::getType).collect(Collectors.toList());
+                    StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false)
+                            .map(Field::getType)
+                            .collect(Collectors.toList());
             Constructor<T> constructor =
                     type.getConstructor(constructorTypes.toArray(new Class<?>[0]));
             constructor.setAccessible(true);

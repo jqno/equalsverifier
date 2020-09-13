@@ -53,7 +53,7 @@ public class RecordChecker<T> implements Checker {
         Class<T> type = config.getType();
         T original = originalAccessor.get();
         List<?> params =
-                StreamSupport.stream(FieldIterable.of(type).spliterator(), false)
+                StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false)
                         .map(originalAccessor::fieldAccessorFor)
                         .map(FieldAccessor::get)
                         .collect(Collectors.toList());
