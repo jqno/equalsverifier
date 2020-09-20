@@ -34,14 +34,13 @@ jobs:
     docker:
       - image: openjdk:15-jdk
     steps:
-      - build:
-          flag: -Dexperimental
+      - build
   jdk15-with-JDK-preview-features:
     docker:
       - image: openjdk:15-jdk
     steps:
       - build:
-          flag: -Dexperimental -Dadditional.argLine=--enable-preview
+          flag: -Dadditional.argLine=--enable-preview
   jdk-ea-experimental:
     docker:
       - image: openjdk:16-jdk
