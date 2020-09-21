@@ -274,7 +274,7 @@ public class ClassAccessor<T> {
                             .map(Field::getType)
                             .collect(Collectors.toList());
             Constructor<T> constructor =
-                    type.getConstructor(constructorTypes.toArray(new Class<?>[0]));
+                    type.getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
             constructor.setAccessible(true);
             return constructor;
         } catch (NoSuchMethodException | SecurityException e) {
