@@ -81,7 +81,7 @@ public class InPlaceObjectAccessorCopyingTest {
     @Test
     public void copyToAnonymousSub() {
         Point original = new Point(2, 3);
-        ObjectAccessor<Point> accessor = ObjectAccessor.of(original);
+        InPlaceObjectAccessor<Point> accessor = create(original);
         Point copy = accessor.copyIntoAnonymousSubclass();
 
         assertAllFieldsEqual(original, copy, Point.class);
@@ -90,16 +90,21 @@ public class InPlaceObjectAccessorCopyingTest {
         assertTrue(original.getClass().isAssignableFrom(copy.getClass()));
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> InPlaceObjectAccessor<T> create(T object) {
+        return new InPlaceObjectAccessor<T>(object, (Class<T>) object.getClass());
+    }
+
     private <T> T copyOf(T from) {
-        return ObjectAccessor.of(from).copy();
+        return create(from).copy();
     }
 
     private <T> T copyOf(T from, Class<T> type) {
-        return ObjectAccessor.of(from, type).copy();
+        return new InPlaceObjectAccessor<T>(from, type).copy();
     }
 
     private <T, S extends T> S copyIntoSubclass(T from, Class<S> subclass) {
-        return ObjectAccessor.of(from).copyIntoSubclass(subclass);
+        return create(from).copyIntoSubclass(subclass);
     }
 
     private static <T> void assertAllFieldsEqual(T original, T copy, Class<? extends T> type) {

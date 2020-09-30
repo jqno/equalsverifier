@@ -2,17 +2,25 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import org.junit.Test;
 
-public class ObjectAccessorTest {
+public class InPlaceObjectAccessorTest {
+    @Test
+    public void of() {
+        Point p = new Point(1, 2);
+        ObjectAccessor<Point> actual = ObjectAccessor.of(p);
+        assertTrue(actual instanceof InPlaceObjectAccessor);
+    }
+
     @Test
     public void get() {
         Object foo = new Object();
-        ObjectAccessor<Object> accessor = ObjectAccessor.of(foo);
+        InPlaceObjectAccessor<Object> accessor = create(foo);
         assertSame(foo, accessor.get());
     }
 
@@ -21,10 +29,15 @@ public class ObjectAccessorTest {
         PointContainer foo = new PointContainer(new Point(1, 2));
         Field field = PointContainer.class.getDeclaredField("point");
 
-        ObjectAccessor<PointContainer> accessor = ObjectAccessor.of(foo);
+        ObjectAccessor<PointContainer> accessor = create(foo);
         FieldAccessor fieldAccessor = accessor.fieldAccessorFor(field);
 
         fieldAccessor.defaultField();
         assertNull(foo.getPoint());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> InPlaceObjectAccessor<T> create(T object) {
+        return new InPlaceObjectAccessor<T>(object, (Class<T>) object.getClass());
     }
 }

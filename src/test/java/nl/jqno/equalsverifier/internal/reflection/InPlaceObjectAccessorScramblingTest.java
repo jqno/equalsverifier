@@ -61,7 +61,7 @@ public class InPlaceObjectAccessorScramblingTest {
         Point3D modified = new Point3D(2, 3, 4);
         Point3D reference = copy(modified);
 
-        ObjectAccessor.of(modified).shallowScramble(prefabValues, TypeTag.NULL);
+        create(modified).shallowScramble(prefabValues, TypeTag.NULL);
 
         assertFalse(modified.equals(reference));
         modified.z = 4;
@@ -124,12 +124,17 @@ public class InPlaceObjectAccessorScramblingTest {
         assertEquals(Point.class, foo.points.ts.get(0).getClass());
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> InPlaceObjectAccessor<T> create(T object) {
+        return new InPlaceObjectAccessor<T>(object, (Class<T>) object.getClass());
+    }
+
     private <T> T copy(T object) {
-        return ObjectAccessor.of(object).copy();
+        return create(object).copy();
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return ObjectAccessor.of(object).scramble(prefabValues, TypeTag.NULL);
+        return create(object).scramble(prefabValues, TypeTag.NULL);
     }
 
     static final class StringContainer {
