@@ -5,14 +5,13 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 /**
- * Wraps an object to provide reflective access to it. ObjectAccessor can copy and scramble the
- * wrapped object.
+ * Implementation of ObjectAccessor that modifies its wrapped object in-place through reflection.
  *
  * @param <T> The specified object's class.
  */
 public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
-    /** Private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
+    /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
     /* default */ InPlaceObjectAccessor(T object, Class<T> type) {
         super(object, type);
     }
@@ -48,19 +47,21 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public void scramble(PrefabValues prefabValues, TypeTag enclosingType) {
+    public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type())) {
             FieldAccessor accessor = new FieldAccessor(get(), field);
             accessor.changeField(prefabValues, enclosingType);
         }
+        return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
+    public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.ofIgnoringSuper(type())) {
             FieldAccessor accessor = new FieldAccessor(get(), field);
             accessor.changeField(prefabValues, enclosingType);
         }
+        return this;
     }
 }

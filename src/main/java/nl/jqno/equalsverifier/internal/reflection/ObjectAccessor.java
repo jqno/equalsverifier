@@ -4,11 +4,16 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
+/**
+ * Wraps an object to provide access to it. ObjectAccessor can copy and scramble the wrapped object.
+ *
+ * @param <T> The specified object's class.
+ */
 public abstract class ObjectAccessor<T> {
     private final T object;
     private final Class<T> type;
 
-    /** Private constructor. Call {@link #of(Object)} to instantiate. */
+    /** Package private constructor. Call {@link #of(Object)} to instantiate. */
     /* default */ ObjectAccessor(T object, Class<T> type) {
         this.object = object;
         this.type = type;
@@ -111,8 +116,9 @@ public abstract class ObjectAccessor<T> {
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
+     * @return An accessor to the scrambled object.
      */
-    public abstract void scramble(PrefabValues prefabValues, TypeTag enclosingType);
+    public abstract ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType);
 
     /**
      * Modifies all fields of the wrapped object that are declared in T, but not those inherited
@@ -127,6 +133,8 @@ public abstract class ObjectAccessor<T> {
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
+     * @return An accessor to the scrambled object.
      */
-    public abstract void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType);
+    public abstract ObjectAccessor<T> shallowScramble(
+            PrefabValues prefabValues, TypeTag enclosingType);
 }

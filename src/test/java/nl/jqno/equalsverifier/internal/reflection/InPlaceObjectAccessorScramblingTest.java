@@ -26,6 +26,15 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     @Test
+    public void scrambleReturnsThis() {
+        Point original = new Point(2, 3);
+        Point copy = copy(original);
+
+        ObjectAccessor<Object> actual = doScramble(copy);
+        assertSame(copy, actual.get());
+    }
+
+    @Test
     public void scramble() {
         Point original = new Point(2, 3);
         Point copy = copy(original);
@@ -119,8 +128,8 @@ public class InPlaceObjectAccessorScramblingTest {
         return ObjectAccessor.of(object).copy();
     }
 
-    private void doScramble(Object object) {
-        ObjectAccessor.of(object).scramble(prefabValues, TypeTag.NULL);
+    private ObjectAccessor<Object> doScramble(Object object) {
+        return ObjectAccessor.of(object).scramble(prefabValues, TypeTag.NULL);
     }
 
     static final class StringContainer {

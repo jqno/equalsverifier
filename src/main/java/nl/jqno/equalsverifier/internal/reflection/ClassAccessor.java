@@ -180,9 +180,7 @@ public class ClassAccessor<T> {
         if (isRecord()) {
             return getRecordObjectAccessor(enclosingType, prefabValues::giveRed);
         }
-        ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues, enclosingType);
-        return result;
+        return buildObjectAccessor().scramble(prefabValues, enclosingType);
     }
 
     /**
@@ -208,10 +206,9 @@ public class ClassAccessor<T> {
         if (isRecord()) {
             return getRecordObjectAccessor(enclosingType, prefabValues::giveBlue);
         }
-        ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues, enclosingType);
-        result.scramble(prefabValues, enclosingType);
-        return result;
+        return buildObjectAccessor()
+                .scramble(prefabValues, enclosingType)
+                .scramble(prefabValues, enclosingType);
     }
 
     /**
