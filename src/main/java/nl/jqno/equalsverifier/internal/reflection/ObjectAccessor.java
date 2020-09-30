@@ -4,18 +4,12 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-/**
- * Wraps an object to provide reflective access to it. ObjectAccessor can copy and scramble the
- * wrapped object.
- *
- * @param <T> The specified object's class.
- */
-public final class ObjectAccessor<T> {
+public abstract class ObjectAccessor<T> {
     private final T object;
     private final Class<T> type;
 
     /** Private constructor. Call {@link #of(Object)} to instantiate. */
-    private ObjectAccessor(T object, Class<T> type) {
+    /* default */ ObjectAccessor(T object, Class<T> type) {
         this.object = object;
         this.type = type;
     }
@@ -30,7 +24,7 @@ public final class ObjectAccessor<T> {
     public static <T> ObjectAccessor<T> of(T object) {
         @SuppressWarnings("unchecked")
         Class<T> type = (Class<T>) object.getClass();
-        return new ObjectAccessor<>(object, type);
+        return new InPlaceObjectAccessor<>(object, type);
     }
 
     /**
@@ -43,7 +37,7 @@ public final class ObjectAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
-        return new ObjectAccessor<>(object, type);
+        return new InPlaceObjectAccessor<>(object, type);
     }
 
     /**
@@ -53,6 +47,15 @@ public final class ObjectAccessor<T> {
      */
     public T get() {
         return object;
+    }
+
+    /**
+     * Returns the type of the object.
+     *
+     * @return The type of the object.
+     */
+    public Class<T> type() {
+        return type;
     }
 
     /**
@@ -72,10 +75,7 @@ public final class ObjectAccessor<T> {
      *
      * @return A shallow copy.
      */
-    public T copy() {
-        T copy = Instantiator.of(type).instantiate();
-        return copyInto(copy);
-    }
+    public abstract T copy();
 
     /**
      * Creates a copy of the wrapped object, where the copy's type is a specified subclass of the
@@ -87,10 +87,7 @@ public final class ObjectAccessor<T> {
      * @param <S> The subclass.
      * @return A shallow copy.
      */
-    public <S extends T> S copyIntoSubclass(Class<S> subclass) {
-        S copy = Instantiator.of(subclass).instantiate();
-        return copyInto(copy);
-    }
+    public abstract <S extends T> S copyIntoSubclass(Class<S> subclass);
 
     /**
      * Creates a copy of the wrapped object, where the copy type is an anonymous subclass of the
@@ -100,18 +97,7 @@ public final class ObjectAccessor<T> {
      *
      * @return A shallow copy.
      */
-    public T copyIntoAnonymousSubclass() {
-        T copy = Instantiator.of(type).instantiateAnonymousSubclass();
-        return copyInto(copy);
-    }
-
-    private <S> S copyInto(S copy) {
-        for (Field field : FieldIterable.of(type)) {
-            FieldAccessor accessor = new FieldAccessor(object, field);
-            accessor.copyTo(copy);
-        }
-        return copy;
-    }
+    public abstract T copyIntoAnonymousSubclass();
 
     /**
      * Modifies all fields of the wrapped object that are declared in T and in its superclasses.
@@ -126,12 +112,7 @@ public final class ObjectAccessor<T> {
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
      */
-    public void scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        for (Field field : FieldIterable.of(type)) {
-            FieldAccessor accessor = new FieldAccessor(object, field);
-            accessor.changeField(prefabValues, enclosingType);
-        }
-    }
+    public abstract void scramble(PrefabValues prefabValues, TypeTag enclosingType);
 
     /**
      * Modifies all fields of the wrapped object that are declared in T, but not those inherited
@@ -147,10 +128,5 @@ public final class ObjectAccessor<T> {
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
      */
-    public void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        for (Field field : FieldIterable.ofIgnoringSuper(type)) {
-            FieldAccessor accessor = new FieldAccessor(object, field);
-            accessor.changeField(prefabValues, enclosingType);
-        }
-    }
+    public abstract void shallowScramble(PrefabValues prefabValues, TypeTag enclosingType);
 }

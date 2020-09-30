@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ObjectAccessorScramblingTest {
+public class InPlaceObjectAccessorScramblingTest {
     private PrefabValues prefabValues;
 
     @Before

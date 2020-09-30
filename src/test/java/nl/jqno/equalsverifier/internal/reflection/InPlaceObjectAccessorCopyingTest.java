@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.Test;
 
-public class ObjectAccessorCopyingTest {
+public class InPlaceObjectAccessorCopyingTest {
     @Test
     public void copyHappyPath() {
         Point original = new Point(2, 3);
