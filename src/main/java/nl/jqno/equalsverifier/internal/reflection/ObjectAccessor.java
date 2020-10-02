@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -148,4 +149,7 @@ public abstract class ObjectAccessor<T> {
      */
     public abstract ObjectAccessor<T> shallowScramble(
             PrefabValues prefabValues, TypeTag enclosingType);
+
+    public abstract ObjectAccessor<T> clear(
+            Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType);
 }

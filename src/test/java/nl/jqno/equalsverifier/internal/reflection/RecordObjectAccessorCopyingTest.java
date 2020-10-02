@@ -56,6 +56,5 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
 
     private static final String RECORD_CONTAINER_CLASS_NAME = "RecordContainer";
     private static final String RECORD_CONTAINER_CLASS =
-            "record SimpleRecord(int i) {}"
-                    + "\npublic record RecordContainer(SimpleRecord r) {}";
+            "record SimpleRecord(int i) {}" + "\npublic record RecordContainer(SimpleRecord r) {}";
 }

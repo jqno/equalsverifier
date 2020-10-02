@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -61,6 +62,18 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         for (Field field : FieldIterable.ofIgnoringSuper(type())) {
             FieldAccessor accessor = new FieldAccessor(get(), field);
             accessor.changeField(prefabValues, enclosingType);
+        }
+        return this;
+    }
+
+    public ObjectAccessor<T> clear(
+            Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
+        for (Field field : FieldIterable.of(type())) {
+            FieldAccessor accessor = new FieldAccessor(get(), field);
+            accessor.defaultField();
+            if (!canBeDefault.test(field)) {
+                accessor.changeField(prefabValues, enclosingType);
+            }
         }
         return this;
     }

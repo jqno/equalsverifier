@@ -2,16 +2,13 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -30,37 +27,19 @@ public class RecordChecker<T> implements Checker {
         if (!accessor.isRecord()) {
             return;
         }
-        Constructor<T> constructor = accessor.getRecordConstructor();
-        if (constructor == null) {
-            fail(Formatter.of("Record: could not find suitable constructor."));
-        }
 
+        verifyRecordPrecondition(accessor.getRedAccessor(config.getTypeTag()));
         verifyRecordPrecondition(
-                accessor, accessor.getRedAccessor(config.getTypeTag()), constructor);
-        verifyRecordPrecondition(
-                accessor,
                 accessor.getDefaultValuesAccessor(
                         config.getTypeTag(),
                         config.getNonnullFields(),
-                        config.getAnnotationCache()),
-                constructor);
+                        config.getAnnotationCache()));
     }
 
-    private void verifyRecordPrecondition(
-            ClassAccessor<T> accessor,
-            ObjectAccessor<T> originalAccessor,
-            Constructor<T> constructor) {
+    private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {
         Class<T> type = config.getType();
         T original = originalAccessor.get();
-        List<?> params =
-                StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false)
-                        .map(originalAccessor::fieldAccessorFor)
-                        .map(FieldAccessor::get)
-                        .collect(Collectors.toList());
-        T copy = accessor.callRecordConstructor(constructor, params);
-        if (copy == null) {
-            fail(Formatter.of("Record: failed to invoke constructor."));
-        }
+        T copy = originalAccessor.copy();
 
         if (original.equals(copy)) {
             return;

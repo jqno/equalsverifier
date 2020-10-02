@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -64,6 +65,22 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
         throw new EqualsVerifierInternalBugException("Can't shallow-scramble a record.");
+    }
+
+    @Override
+    public ObjectAccessor<T> clear(
+            Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
+        List<Object> params = new ArrayList<>();
+        for (Field f : FieldIterable.ofIgnoringStatic(type())) {
+            TypeTag tag = TypeTag.of(f, enclosingType);
+            if (canBeDefault.test(f)) {
+                params.add(null);
+            } else {
+                params.add(prefabValues.giveRed(tag));
+            }
+        }
+        T newObject = callRecordConstructor(constructor, params);
+        return ObjectAccessor.of(newObject);
     }
 
     private Stream<Field> fields() {
