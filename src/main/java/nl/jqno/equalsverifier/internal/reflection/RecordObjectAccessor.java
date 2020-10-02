@@ -52,7 +52,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         List<Object> params = new ArrayList<>();
         for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            Object value = fieldAccessorFor(f);
+            Object value = fieldAccessorFor(f).get();
             TypeTag tag = TypeTag.of(f, enclosingType);
             params.add(prefabValues.giveOther(tag, value));
         }

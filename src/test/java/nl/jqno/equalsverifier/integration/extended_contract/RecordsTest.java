@@ -107,19 +107,6 @@ public class RecordsTest extends StringCompilerTestBase {
         EqualsVerifier.forClass(type).verify();
     }
 
-    public boolean isRecordsAvailable() {
-        if (!isTypeAvailable("java.lang.Record")) {
-            return false;
-        }
-        try {
-            compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
-            return true;
-        } catch (AssertionError ignored) {
-            // We're in Java 14 and preview features aren't enabled
-            return false;
-        }
-    }
-
     private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
     private static final String SIMPLE_RECORD_CLASS = "record SimpleRecord(int i, String s) {}";
 
