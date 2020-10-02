@@ -14,7 +14,7 @@ public class RecordObjectAccessorTest extends StringCompilerTestBase {
         Class<?> type = compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
         Object instance = Instantiator.of(type).instantiate();
         ObjectAccessor<?> actual = ObjectAccessor.of(instance);
-        assertTrue((actual instanceof RecordObjectAccessor));
+        assertTrue(actual instanceof RecordObjectAccessor);
     }
 
     private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";

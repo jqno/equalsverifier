@@ -32,7 +32,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
                 fields().map(this::fieldAccessorFor)
                         .map(FieldAccessor::get)
                         .collect(Collectors.toList());
-        return callRecordConstructor(constructor, params);
+        return callRecordConstructor(params);
     }
 
     /** {@inheritDoc} */
@@ -58,7 +58,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
             TypeTag tag = TypeTag.of(f, enclosingType);
             params.add(prefabValues.giveOther(tag, value));
         }
-        T newObject = callRecordConstructor(constructor, params);
+        T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
     }
 
@@ -80,7 +80,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
                 params.add(prefabValues.giveRed(tag));
             }
         }
-        T newObject = callRecordConstructor(constructor, params);
+        T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
     }
 
@@ -92,16 +92,16 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
         try {
             List<Class<?>> constructorTypes =
                     fields().map(Field::getType).collect(Collectors.toList());
-            Constructor<T> constructor =
+            Constructor<T> result =
                     type().getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
-            constructor.setAccessible(true);
-            return constructor;
+            result.setAccessible(true);
+            return result;
         } catch (NoSuchMethodException | SecurityException e) {
             return null;
         }
     }
 
-    private T callRecordConstructor(Constructor<T> constructor, List<?> params) {
+    private T callRecordConstructor(List<?> params) {
         try {
             return constructor.newInstance(params.toArray(new Object[0]));
         } catch (InvocationTargetException e) {

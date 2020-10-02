@@ -4,7 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PrimitiveMappers {
+public final class PrimitiveMappers {
+
+    private PrimitiveMappers() {}
 
     public static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER =
             createPrimitiveObjectMapper();
