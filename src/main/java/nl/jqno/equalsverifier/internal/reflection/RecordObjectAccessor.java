@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugExcep
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
@@ -72,10 +73,10 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
         List<Object> params = new ArrayList<>();
         for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            TypeTag tag = TypeTag.of(f, enclosingType);
             if (canBeDefault.test(f)) {
-                params.add(null);
+                params.add(PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
             } else {
+                TypeTag tag = TypeTag.of(f, enclosingType);
                 params.add(prefabValues.giveRed(tag));
             }
         }

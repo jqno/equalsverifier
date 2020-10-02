@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /** Provides reflective access to one field of an object. */
 public class FieldAccessor {
@@ -121,25 +122,7 @@ public class FieldAccessor {
 
     private void setFieldToDefault() throws IllegalAccessException {
         Class<?> type = field.getType();
-        if (type == boolean.class) {
-            field.setBoolean(object, false);
-        } else if (type == byte.class) {
-            field.setByte(object, (byte) 0);
-        } else if (type == char.class) {
-            field.setChar(object, '\u0000');
-        } else if (type == double.class) {
-            field.setDouble(object, 0.0);
-        } else if (type == float.class) {
-            field.setFloat(object, 0.0f);
-        } else if (type == int.class) {
-            field.setInt(object, 0);
-        } else if (type == long.class) {
-            field.setLong(object, 0);
-        } else if (type == short.class) {
-            field.setShort(object, (short) 0);
-        } else {
-            field.set(object, null);
-        }
+        field.set(object, PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(type));
     }
 
     /**

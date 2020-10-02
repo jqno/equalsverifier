@@ -1,13 +1,12 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /**
  * Container and creator of prefabricated instances of objects and classes.
@@ -16,10 +15,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory
  * account; i.e., {@code List<Integer>} is different from {@code List<String>}.
  */
 public class PrefabValues {
-    private static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER =
-            createPrimitiveObjectMapper();
-    private static final Map<Class<?>, Object> DEFAULT_VALUE_MAPPER = createDefaultValueMapper();
-
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
@@ -116,11 +111,11 @@ public class PrefabValues {
 
     @SuppressWarnings("unchecked")
     public <T> T giveDefault(TypeTag tag) {
-        return (T) DEFAULT_VALUE_MAPPER.get(tag.getType());
+        return (T) PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.get(tag.getType());
     }
 
     private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
-        return PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
+        return PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
     }
 
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
@@ -165,39 +160,5 @@ public class PrefabValues {
 
     private void addToCache(TypeTag tag, Tuple<?> tuple) {
         cache.put(tag, tuple.getRed(), tuple.getBlue(), tuple.getRedCopy());
-    }
-
-    private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
-        Map<Class<?>, Class<?>> result = new HashMap<>();
-        result.put(boolean.class, Boolean.class);
-        result.put(byte.class, Byte.class);
-        result.put(char.class, Character.class);
-        result.put(double.class, Double.class);
-        result.put(float.class, Float.class);
-        result.put(int.class, Integer.class);
-        result.put(long.class, Long.class);
-        result.put(short.class, Short.class);
-        return result;
-    }
-
-    private static Map<Class<?>, Object> createDefaultValueMapper() {
-        Map<Class<?>, Object> result = new HashMap<>();
-        result.put(boolean.class, false);
-        result.put(Boolean.class, false);
-        result.put(byte.class, Byte.valueOf((byte) 0));
-        result.put(Byte.class, Byte.valueOf((byte) 0));
-        result.put(char.class, Character.valueOf((char) 0));
-        result.put(Character.class, Character.valueOf((char) 0));
-        result.put(double.class, Double.valueOf(0));
-        result.put(Double.class, Double.valueOf(0));
-        result.put(float.class, Float.valueOf(0));
-        result.put(Float.class, Float.valueOf(0));
-        result.put(int.class, Integer.valueOf(0));
-        result.put(Integer.class, Integer.valueOf(0));
-        result.put(long.class, Long.valueOf(0));
-        result.put(Long.class, Long.valueOf(0));
-        result.put(short.class, Short.valueOf((short) 0));
-        result.put(Short.class, Short.valueOf((short) 0));
-        return result;
     }
 }
