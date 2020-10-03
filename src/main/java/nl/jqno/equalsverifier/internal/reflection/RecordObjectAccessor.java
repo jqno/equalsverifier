@@ -1,5 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -9,11 +15,6 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
@@ -78,6 +79,26 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
             } else {
                 TypeTag tag = TypeTag.of(f, enclosingType);
                 params.add(prefabValues.giveRed(tag));
+            }
+        }
+        T newObject = callRecordConstructor(params);
+        return ObjectAccessor.of(newObject);
+    }
+
+    @Override
+    public ObjectAccessor<T> withDefaultedField(Field field) {
+        List<Object> params = new ArrayList<>();
+        for (Field f : FieldIterable.ofIgnoringStatic((type()))) {
+            if (f.equals(field)) {
+                params.add(PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
+            } else {
+                try {
+                    f.setAccessible(true);
+                    Object value = f.get(get());
+                    params.add(value);
+                } catch (IllegalAccessException e) {
+                    throw new ReflectionException("Can't get field's value", e);
+                }
             }
         }
         T newObject = callRecordConstructor(params);

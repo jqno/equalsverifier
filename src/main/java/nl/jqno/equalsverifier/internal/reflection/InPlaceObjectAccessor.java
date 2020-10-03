@@ -66,6 +66,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         return this;
     }
 
+    @Override
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type())) {
@@ -75,6 +76,13 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
                 accessor.changeField(prefabValues, enclosingType);
             }
         }
+        return this;
+    }
+
+    @Override
+    public ObjectAccessor<T> withDefaultedField(Field field) {
+        FieldAccessor accessor = new FieldAccessor(get(), field);
+        accessor.defaultField();
         return this;
     }
 }
