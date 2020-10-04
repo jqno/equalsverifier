@@ -21,8 +21,8 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Field field = referenceAccessor.getField();
+    public void execute(
+            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
         if (config.getNonnullFields().contains(field.getName())) {
             return;
         }
@@ -33,18 +33,16 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        if (referenceAccessor.fieldIsStatic()) {
-            Object saved = referenceAccessor.get();
-            referenceAccessor.defaultStaticField();
-            performTests(field, referenceAccessor.getObject(), changedAccessor.getObject());
-            referenceAccessor.set(saved);
+        FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
+        if (fieldAccessor.fieldIsStatic()) {
+            Object saved = fieldAccessor.get();
+            fieldAccessor.defaultStaticField();
+            performTests(field, referenceAccessor.get(), copyAccessor.get());
+            fieldAccessor.set(saved);
         } else {
-            ObjectAccessor<?> referenceOA = ObjectAccessor.of(referenceAccessor.getObject());
-            ObjectAccessor<?> changedOA = ObjectAccessor.of(changedAccessor.getObject());
-
-            ObjectAccessor<?> changed = changedOA.withDefaultedField(changedAccessor.getField());
-            performTests(field, referenceAccessor.getObject(), changed.get());
-            referenceOA.withDefaultedField(changedAccessor.getField());
+            ObjectAccessor<?> changed = copyAccessor.withDefaultedField(field);
+            performTests(field, referenceAccessor.get(), changed.get());
+            referenceAccessor.withDefaultedField(field);
         }
     }
 
