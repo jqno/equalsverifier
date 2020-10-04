@@ -154,4 +154,6 @@ public abstract class ObjectAccessor<T> {
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType);
 
     public abstract ObjectAccessor<T> withDefaultedField(Field field);
+
+    public abstract ObjectAccessor<T> withFieldSetTo(Field field, Object newValue);
 }

@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -86,10 +87,20 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
+        return modify(field, f -> PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
+    }
+
+    @Override
+    public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
+        return modify(field, f -> newValue);
+    }
+
+    private ObjectAccessor<T> modify(Field field, Function<Field, Object> fn) {
         List<Object> params = new ArrayList<>();
         for (Field f : FieldIterable.ofIgnoringStatic(type())) {
             if (f.equals(field)) {
-                params.add(PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
+                Object value = fn.apply(f);
+                params.add(value);
             } else {
                 try {
                     f.setAccessible(true);

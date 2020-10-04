@@ -81,8 +81,13 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
-        FieldAccessor accessor = new FieldAccessor(get(), field);
-        accessor.defaultField();
+        fieldAccessorFor(field).defaultField();
+        return this;
+    }
+
+    @Override
+    public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
+        fieldAccessorFor(field).set(newValue);
         return this;
     }
 }
