@@ -18,7 +18,7 @@ public class FieldInspector<T> {
         this.typeTag = typeTag;
     }
 
-    public void check(FieldCheck check) {
+    public void checkWithFieldAccessor(FieldCheck<T> check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
             ObjectAccessor<T> reference = classAccessor.getRedAccessor(typeTag);
             ObjectAccessor<T> changed = classAccessor.getRedAccessor(typeTag);
@@ -27,8 +27,17 @@ public class FieldInspector<T> {
         }
     }
 
+    public void check(FieldCheck<T> check) {
+        for (Field field : FieldIterable.of(classAccessor.getType())) {
+            ObjectAccessor<T> reference = classAccessor.getRedAccessor(typeTag);
+            ObjectAccessor<T> copy = classAccessor.getRedAccessor(typeTag);
+
+            check.execute(reference, copy, field);
+        }
+    }
+
     public void checkWithNull(
-            Set<String> nonnullFields, AnnotationCache annotationCache, FieldCheck check) {
+            Set<String> nonnullFields, AnnotationCache annotationCache, FieldCheck<T> check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
             ObjectAccessor<T> reference =
                     classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);

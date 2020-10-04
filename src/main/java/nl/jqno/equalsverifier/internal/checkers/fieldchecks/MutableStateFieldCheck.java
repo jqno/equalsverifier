@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class MutableStateFieldCheck implements FieldCheck {
+public class MutableStateFieldCheck<T> implements FieldCheck<T> {
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
     private final Predicate<FieldAccessor> isCachedHashCodeField;

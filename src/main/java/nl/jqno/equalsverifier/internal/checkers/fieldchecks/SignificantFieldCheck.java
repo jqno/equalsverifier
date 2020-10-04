@@ -16,7 +16,7 @@ import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class SignificantFieldCheck<T> implements FieldCheck {
+public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private final Class<?> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;

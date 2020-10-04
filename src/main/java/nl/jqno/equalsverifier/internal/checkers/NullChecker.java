@@ -20,6 +20,6 @@ public class NullChecker<T> implements Checker {
 
         ClassAccessor<T> classAccessor = config.getClassAccessor();
         FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
-        inspector.check(new NullPointerExceptionFieldCheck<>(config));
+        inspector.checkWithFieldAccessor(new NullPointerExceptionFieldCheck<>(config));
     }
 }

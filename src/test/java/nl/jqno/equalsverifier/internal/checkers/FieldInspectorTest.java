@@ -24,7 +24,7 @@ public class FieldInspectorTest {
     public void objectsAreReset_whenEachIterationBegins() {
         FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
-        inspector.check(new ResetObjectForEachIterationCheck());
+        inspector.checkWithFieldAccessor(new ResetObjectForEachIterationCheck<>());
     }
 
     @Test
@@ -34,10 +34,10 @@ public class FieldInspectorTest {
         AnnotationCache annotationCache = new AnnotationCache();
 
         inspector.checkWithNull(
-                nullFields, annotationCache, new ResetObjectForEachIterationCheck());
+                nullFields, annotationCache, new ResetObjectForEachIterationCheck<>());
     }
 
-    private final class ResetObjectForEachIterationCheck implements FieldCheck {
+    private final class ResetObjectForEachIterationCheck<T> implements FieldCheck<T> {
         private Object originalReference;
         private Object originalChanged;
 

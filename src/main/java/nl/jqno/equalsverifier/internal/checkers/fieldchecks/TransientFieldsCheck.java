@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class TransientFieldsCheck<T> implements FieldCheck {
+public class TransientFieldsCheck<T> implements FieldCheck<T> {
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
     private final AnnotationCache annotationCache;

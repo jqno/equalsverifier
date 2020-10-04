@@ -14,14 +14,14 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 public class FieldsChecker<T> implements Checker {
     private final Configuration<T> config;
     private final ArrayFieldCheck<T> arrayFieldCheck;
-    private final FloatAndDoubleFieldCheck floatAndDoubleFieldCheck;
-    private final MutableStateFieldCheck mutableStateFieldCheck;
+    private final FloatAndDoubleFieldCheck<T> floatAndDoubleFieldCheck;
+    private final MutableStateFieldCheck<T> mutableStateFieldCheck;
     private final ReflexivityFieldCheck<T> reflexivityFieldCheck;
     private final SignificantFieldCheck<T> significantFieldCheck;
     private final SignificantFieldCheck<T> skippingSignificantFieldCheck;
-    private final SymmetryFieldCheck symmetryFieldCheck;
+    private final SymmetryFieldCheck<T> symmetryFieldCheck;
     private final TransientFieldsCheck<T> transientFieldsCheck;
-    private final TransitivityFieldCheck transitivityFieldCheck;
+    private final TransitivityFieldCheck<T> transitivityFieldCheck;
 
     public FieldsChecker(Configuration<T> config) {
         this.config = config;
@@ -35,17 +35,17 @@ public class FieldsChecker<T> implements Checker {
                 a -> a.getFieldName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
-        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck();
+        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>();
         this.mutableStateFieldCheck =
-                new MutableStateFieldCheck(prefabValues, typeTag, isCachedHashCodeField);
+                new MutableStateFieldCheck<>(prefabValues, typeTag, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
         this.significantFieldCheck =
                 new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
         this.skippingSignificantFieldCheck =
                 new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
-        this.symmetryFieldCheck = new SymmetryFieldCheck(prefabValues, typeTag);
+        this.symmetryFieldCheck = new SymmetryFieldCheck<>(prefabValues, typeTag);
         this.transientFieldsCheck = new TransientFieldsCheck<>(config);
-        this.transitivityFieldCheck = new TransitivityFieldCheck(prefabValues, typeTag);
+        this.transitivityFieldCheck = new TransitivityFieldCheck<>(prefabValues, typeTag);
     }
 
     @Override
@@ -54,22 +54,22 @@ public class FieldsChecker<T> implements Checker {
         FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
 
         if (!classAccessor.isEqualsInheritedFromObject()) {
-            inspector.check(arrayFieldCheck);
-            inspector.check(floatAndDoubleFieldCheck);
-            inspector.check(reflexivityFieldCheck);
+            inspector.checkWithFieldAccessor(arrayFieldCheck);
+            inspector.checkWithFieldAccessor(floatAndDoubleFieldCheck);
+            inspector.checkWithFieldAccessor(reflexivityFieldCheck);
         }
 
         if (!ignoreMutability(config.getType())) {
-            inspector.check(mutableStateFieldCheck);
+            inspector.checkWithFieldAccessor(mutableStateFieldCheck);
         }
 
         if (!config.getWarningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
-            inspector.check(transientFieldsCheck);
+            inspector.checkWithFieldAccessor(transientFieldsCheck);
         }
 
-        inspector.check(significantFieldCheck);
-        inspector.check(symmetryFieldCheck);
-        inspector.check(transitivityFieldCheck);
+        inspector.checkWithFieldAccessor(significantFieldCheck);
+        inspector.checkWithFieldAccessor(symmetryFieldCheck);
+        inspector.checkWithFieldAccessor(transitivityFieldCheck);
 
         if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
             inspector.checkWithNull(

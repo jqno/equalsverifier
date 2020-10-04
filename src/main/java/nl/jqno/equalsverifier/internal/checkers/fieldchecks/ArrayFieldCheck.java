@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class ArrayFieldCheck<T> implements FieldCheck {
+public class ArrayFieldCheck<T> implements FieldCheck<T> {
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public ArrayFieldCheck(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {

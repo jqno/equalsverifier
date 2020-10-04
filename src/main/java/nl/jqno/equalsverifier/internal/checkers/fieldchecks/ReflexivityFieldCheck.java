@@ -16,7 +16,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationV
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class ReflexivityFieldCheck<T> implements FieldCheck {
+public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;

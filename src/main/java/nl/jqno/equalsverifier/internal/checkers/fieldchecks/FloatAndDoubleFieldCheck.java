@@ -5,7 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class FloatAndDoubleFieldCheck implements FieldCheck {
+public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
     @Override
     public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
         Class<?> type = referenceAccessor.getFieldType();

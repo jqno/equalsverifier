@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class TransitivityFieldCheck implements FieldCheck {
+public class TransitivityFieldCheck<T> implements FieldCheck<T> {
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
 

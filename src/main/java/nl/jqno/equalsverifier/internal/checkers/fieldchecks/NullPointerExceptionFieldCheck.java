@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
@@ -14,7 +13,7 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 @SuppressFBWarnings(
         value = "RV_RETURN_VALUE_IGNORED",
         justification = "We only want to see if it throws an exception.")
-public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
+public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     private Configuration<T> config;
 
     public NullPointerExceptionFieldCheck(Configuration<T> config) {
