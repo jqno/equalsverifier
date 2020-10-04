@@ -87,7 +87,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
         List<Object> params = new ArrayList<>();
-        for (Field f : FieldIterable.ofIgnoringStatic((type()))) {
+        for (Field f : FieldIterable.ofIgnoringStatic(type())) {
             if (f.equals(field)) {
                 params.add(PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
             } else {
