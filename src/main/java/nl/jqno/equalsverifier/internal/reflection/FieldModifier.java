@@ -87,7 +87,7 @@ public class FieldModifier {
     }
 
     private void change(FieldChanger changer, boolean includeStatic) {
-        FieldAccessor accessor = new FieldAccessor(object, field);
+        FieldAccessor accessor = FieldAccessor.of(field);
         if (!accessor.canBeModifiedReflectively()) {
             return;
         }

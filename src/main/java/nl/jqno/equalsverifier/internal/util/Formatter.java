@@ -91,7 +91,7 @@ public final class Formatter {
             result.append(" ");
             result.append(fieldName);
             result.append("=");
-            Object value = accessor.fieldAccessorFor(field).get();
+            Object value = accessor.getField(field);
             result.append(stringify(value));
         }
 

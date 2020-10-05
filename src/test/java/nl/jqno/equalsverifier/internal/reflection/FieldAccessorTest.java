@@ -1,44 +1,19 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Before;
 import org.junit.Test;
 
 public class FieldAccessorTest {
-    private static final Point RED_NEW_POINT = new Point(10, 20);
-    private static final Point BLUE_NEW_POINT = new Point(20, 10);
-    private static final Point REDCOPY_NEW_POINT = new Point(10, 20);
     private static final String FIELD_NAME = "field";
-
-    private PrefabValues prefabValues;
-
-    @Before
-    public void setup() {
-        FactoryCache factoryCache = JavaApiPrefabValues.build();
-        factoryCache.put(Point.class, values(RED_NEW_POINT, BLUE_NEW_POINT, REDCOPY_NEW_POINT));
-        prefabValues = new PrefabValues(factoryCache);
-    }
-
-    @Test
-    public void getObject() {
-        ObjectContainer foo = new ObjectContainer();
-        FieldAccessor fieldAccessor = getAccessorFor(foo, FIELD_NAME);
-        assertSame(foo, fieldAccessor.getObject());
-    }
 
     @Test
     public void getField() throws NoSuchFieldException {
         ObjectContainer foo = new ObjectContainer();
         Field field = foo.getClass().getDeclaredField(FIELD_NAME);
-        FieldAccessor fieldAccessor = new FieldAccessor(foo, field);
+        FieldAccessor fieldAccessor = FieldAccessor.of(field);
         assertSame(field, fieldAccessor.getField());
     }
 
@@ -164,13 +139,13 @@ public class FieldAccessorTest {
     }
 
     private Object getValue(Object object, String fieldName) {
-        return getAccessorFor(object, fieldName).get();
+        return getAccessorFor(object, fieldName).get(object);
     }
 
     private FieldAccessor getAccessorFor(Object object, String fieldName) {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
-            return new FieldAccessor(object, field);
+            return FieldAccessor.of(field);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }

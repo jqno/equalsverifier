@@ -37,7 +37,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
         if (fieldAccessor.fieldIsStatic()) {
             FieldModifier fieldModifier = referenceAccessor.fieldModifierFor(field);
-            Object saved = fieldAccessor.get();
+            Object saved = referenceAccessor.getField(field);
 
             fieldModifier.defaultStaticField();
             performTests(field, referenceAccessor.get(), copyAccessor.get());

@@ -29,10 +29,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public T copy() {
-        List<?> params =
-                fields().map(this::fieldAccessorFor)
-                        .map(FieldAccessor::get)
-                        .collect(Collectors.toList());
+        List<?> params = fields().map(this::getField).collect(Collectors.toList());
         return callRecordConstructor(params);
     }
 
@@ -55,7 +52,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         List<Object> params = new ArrayList<>();
         for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            Object value = fieldAccessorFor(f).get();
+            Object value = getField(f);
             TypeTag tag = TypeTag.of(f, enclosingType);
             params.add(prefabValues.giveOther(tag, value));
         }
@@ -97,7 +94,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
                 field,
                 f -> {
                     TypeTag tag = TypeTag.of(f, enclosingType);
-                    Object newValue = fieldAccessorFor(f).get();
+                    Object newValue = getField(f);
                     return prefabValues.giveOther(tag, newValue);
                 });
     }

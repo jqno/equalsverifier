@@ -7,23 +7,21 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /** Provides reflective access to one field of an object. */
 public class FieldAccessor {
-    private final Object object;
     private final Field field;
 
+    /** Private constructor. Call {@link #of(Field)} to instantiate. */
+    private FieldAccessor(Field field) {
+        this.field = field;
+    }
+
     /**
-     * Constructor.
+     * Factory method.
      *
      * @param object The object that contains the field we want to access.
      * @param field A field of object.
      */
-    public FieldAccessor(Object object, Field field) {
-        this.object = object;
-        this.field = field;
-    }
-
-    /** @return The object that contains the field. */
-    public Object getObject() {
-        return object;
+    public static FieldAccessor of(Field field) {
+        return new FieldAccessor(field);
     }
 
     /** @return The field itself. */
@@ -70,13 +68,14 @@ public class FieldAccessor {
     /**
      * Tries to get the field's value.
      *
+     * @param object The object that contains the field whose value we want to get.
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
     @SuppressFBWarnings(
             value = "DP_DO_INSIDE_DO_PRIVILEGED",
             justification = "Only called in test code, not production.")
-    public Object get() {
+    public Object get(Object object) {
         field.setAccessible(true);
         try {
             return field.get(object);

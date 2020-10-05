@@ -38,7 +38,7 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     }
 
     private ObjectAccessor<T> replaceInnermostArrayValue(ObjectAccessor<T> accessor, Field field) {
-        Object newArray = arrayCopy(accessor.fieldAccessorFor(field).get());
+        Object newArray = arrayCopy(accessor.getField(field));
         return accessor.withFieldSetTo(field, newArray);
     }
 

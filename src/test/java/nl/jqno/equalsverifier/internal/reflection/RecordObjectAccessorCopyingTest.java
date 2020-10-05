@@ -35,8 +35,8 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
 
         assertNotSame(original, copy);
         for (Field f : FieldIterable.of(type)) {
-            Object a = originalAccessor.fieldAccessorFor(f).get();
-            Object b = copyAccessor.fieldAccessorFor(f).get();
+            Object a = originalAccessor.getField(f);
+            Object b = copyAccessor.getField(f);
             assertSame(a, b);
         }
     }
