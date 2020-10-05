@@ -18,15 +18,6 @@ public class FieldInspector<T> {
         this.typeTag = typeTag;
     }
 
-    public void checkWithFieldAccessor(FieldCheck<T> check) {
-        for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference = classAccessor.getRedAccessor(typeTag);
-            ObjectAccessor<T> changed = classAccessor.getRedAccessor(typeTag);
-
-            check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
-        }
-    }
-
     public void check(FieldCheck<T> check) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
             ObjectAccessor<T> reference = classAccessor.getRedAccessor(typeTag);
