@@ -68,8 +68,8 @@ public class FieldsChecker<T> implements Checker {
         }
 
         inspector.check(significantFieldCheck);
-        inspector.checkWithFieldAccessor(symmetryFieldCheck);
-        inspector.checkWithFieldAccessor(transitivityFieldCheck);
+        inspector.check(symmetryFieldCheck);
+        inspector.check(transitivityFieldCheck);
 
         if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
             inspector.checkWithNull(
