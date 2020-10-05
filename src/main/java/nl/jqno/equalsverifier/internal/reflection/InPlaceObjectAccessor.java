@@ -40,8 +40,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     private <S> S copyInto(S copy) {
         for (Field field : FieldIterable.of(type())) {
-            FieldAccessor accessor = new FieldAccessor(get(), field);
-            accessor.copyTo(copy);
+            fieldModifierFor(field).copyTo(copy);
         }
         return copy;
     }
@@ -50,8 +49,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type())) {
-            FieldAccessor accessor = new FieldAccessor(get(), field);
-            accessor.changeField(prefabValues, enclosingType);
+            fieldModifierFor(field).changeField(prefabValues, enclosingType);
         }
         return this;
     }
@@ -60,8 +58,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.ofIgnoringSuper(type())) {
-            FieldAccessor accessor = new FieldAccessor(get(), field);
-            accessor.changeField(prefabValues, enclosingType);
+            fieldModifierFor(field).changeField(prefabValues, enclosingType);
         }
         return this;
     }
@@ -70,10 +67,10 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type())) {
-            FieldAccessor accessor = new FieldAccessor(get(), field);
-            accessor.defaultField();
+            FieldModifier modifier = new FieldModifier(get(), field);
+            modifier.defaultField();
             if (!canBeDefault.test(field)) {
-                accessor.changeField(prefabValues, enclosingType);
+                modifier.changeField(prefabValues, enclosingType);
             }
         }
         return this;
@@ -81,20 +78,20 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
-        fieldAccessorFor(field).defaultField();
+        fieldModifierFor(field).defaultField();
         return this;
     }
 
     @Override
     public ObjectAccessor<T> withChangedField(
             Field field, PrefabValues prefabValues, TypeTag enclosingType) {
-        fieldAccessorFor(field).changeField(prefabValues, enclosingType);
+        fieldModifierFor(field).changeField(prefabValues, enclosingType);
         return this;
     }
 
     @Override
     public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
-        fieldAccessorFor(field).set(newValue);
+        fieldModifierFor(field).set(newValue);
         return this;
     }
 }

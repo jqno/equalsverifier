@@ -85,6 +85,10 @@ public abstract class ObjectAccessor<T> {
         return new FieldAccessor(object, field);
     }
 
+    public FieldModifier fieldModifierFor(Field field) {
+        return new FieldModifier(get(), field);
+    }
+
     /**
      * Creates a copy of the wrapped object.
      *

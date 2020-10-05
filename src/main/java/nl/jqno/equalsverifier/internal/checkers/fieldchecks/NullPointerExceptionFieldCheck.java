@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -35,10 +36,12 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
         FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
         if (fieldAccessor.fieldIsStatic()) {
+            FieldModifier fieldModifier = referenceAccessor.fieldModifierFor(field);
             Object saved = fieldAccessor.get();
-            fieldAccessor.defaultStaticField();
+
+            fieldModifier.defaultStaticField();
             performTests(field, referenceAccessor.get(), copyAccessor.get());
-            fieldAccessor.set(saved);
+            fieldModifier.set(saved);
         } else {
             ObjectAccessor<?> changed = copyAccessor.withDefaultedField(field);
             performTests(field, referenceAccessor.get(), changed.get());
