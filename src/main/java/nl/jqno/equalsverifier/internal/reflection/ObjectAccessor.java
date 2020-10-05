@@ -155,5 +155,7 @@ public abstract class ObjectAccessor<T> {
 
     public abstract ObjectAccessor<T> withDefaultedField(Field field);
 
+    public abstract ObjectAccessor<T> withChangedField(Field field, PrefabValues prefabValues, TypeTag enclosingType);
+
     public abstract ObjectAccessor<T> withFieldSetTo(Field field, Object newValue);
 }
