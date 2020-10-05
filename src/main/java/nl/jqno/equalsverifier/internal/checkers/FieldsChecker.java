@@ -64,7 +64,7 @@ public class FieldsChecker<T> implements Checker {
         }
 
         if (!config.getWarningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
-            inspector.checkWithFieldAccessor(transientFieldsCheck);
+            inspector.check(transientFieldsCheck);
         }
 
         inspector.checkWithFieldAccessor(significantFieldCheck);

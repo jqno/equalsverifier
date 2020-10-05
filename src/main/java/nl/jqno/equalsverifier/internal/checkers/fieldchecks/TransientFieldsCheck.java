@@ -2,9 +2,10 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -22,26 +23,24 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Object reference = referenceAccessor.getObject();
-        Object changed = changedAccessor.getObject();
-
-        changedAccessor.changeField(prefabValues, typeTag);
+    public void execute(
+            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+        T reference = referenceAccessor.get();
+        T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
 
         boolean equalsChanged = !reference.equals(changed);
         boolean hasAnnotation =
                 annotationCache.hasFieldAnnotation(
-                        typeTag.getType(),
-                        referenceAccessor.getFieldName(),
-                        SupportedAnnotations.TRANSIENT);
-        boolean fieldIsTransient = referenceAccessor.fieldIsTransient() || hasAnnotation;
+                        typeTag.getType(), field.getName(), SupportedAnnotations.TRANSIENT);
+        boolean fieldIsTransient =
+                referenceAccessor.fieldAccessorFor(field).fieldIsTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                     Formatter.of(
                             "Transient field %% should not be included in equals/hashCode contract.",
-                            referenceAccessor.getFieldName()));
+                            field.getName()));
         }
 
-        referenceAccessor.changeField(prefabValues, typeTag);
+        referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
 }
