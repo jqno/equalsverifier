@@ -91,12 +91,15 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     @Override
-    public ObjectAccessor<T> withChangedField(Field field, PrefabValues prefabValues, TypeTag enclosingType) {
-        return modify(field, f -> {
-            TypeTag tag = TypeTag.of(f, enclosingType);
-            Object newValue = fieldAccessorFor(f).get();
-            return prefabValues.giveOther(tag, newValue);
-        });
+    public ObjectAccessor<T> withChangedField(
+            Field field, PrefabValues prefabValues, TypeTag enclosingType) {
+        return modify(
+                field,
+                f -> {
+                    TypeTag tag = TypeTag.of(f, enclosingType);
+                    Object newValue = fieldAccessorFor(f).get();
+                    return prefabValues.giveOther(tag, newValue);
+                });
     }
 
     @Override

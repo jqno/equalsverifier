@@ -86,7 +86,8 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     @Override
-    public ObjectAccessor<T> withChangedField(Field field, PrefabValues prefabValues, TypeTag enclosingType) {
+    public ObjectAccessor<T> withChangedField(
+            Field field, PrefabValues prefabValues, TypeTag enclosingType) {
         fieldAccessorFor(field).changeField(prefabValues, enclosingType);
         return this;
     }

@@ -60,7 +60,7 @@ public class FieldsChecker<T> implements Checker {
         }
 
         if (!ignoreMutability(config.getType())) {
-            inspector.checkWithFieldAccessor(mutableStateFieldCheck);
+            inspector.check(mutableStateFieldCheck);
         }
 
         if (!config.getWarningsToSuppress().contains(Warning.TRANSIENT_FIELDS)) {
