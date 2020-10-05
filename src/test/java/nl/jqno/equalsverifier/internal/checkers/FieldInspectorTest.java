@@ -2,13 +2,13 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import static org.junit.Assert.assertEquals;
 
+import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
@@ -24,7 +24,7 @@ public class FieldInspectorTest {
     public void objectsAreReset_whenEachIterationBegins() {
         FieldInspector<Point> inspector = new FieldInspector<>(accessor, TypeTag.NULL);
 
-        inspector.checkWithFieldAccessor(new ResetObjectForEachIterationCheck<>());
+        inspector.check(new ResetObjectForEachIterationCheck<>());
     }
 
     @Test
@@ -42,17 +42,18 @@ public class FieldInspectorTest {
         private Object originalChanged;
 
         @Override
-        public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
+        public void execute(
+                ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
             if (originalReference == null) {
-                originalReference = ObjectAccessor.of(referenceAccessor.getObject()).copy();
-                originalChanged = ObjectAccessor.of(changedAccessor.getObject()).copy();
+                originalReference = referenceAccessor.copy();
+                originalChanged = copyAccessor.copy();
             } else {
-                assertEquals(originalReference, referenceAccessor.getObject());
-                assertEquals(originalChanged, changedAccessor.getObject());
+                assertEquals(originalReference, referenceAccessor.get());
+                assertEquals(originalChanged, copyAccessor.get());
             }
 
-            referenceAccessor.changeField(prefabValues, TypeTag.NULL);
-            changedAccessor.changeField(prefabValues, TypeTag.NULL);
+            referenceAccessor.withChangedField(field, prefabValues, TypeTag.NULL);
+            copyAccessor.withChangedField(field, prefabValues, TypeTag.NULL);
         }
     }
 }

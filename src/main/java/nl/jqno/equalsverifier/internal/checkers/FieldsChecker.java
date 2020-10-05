@@ -67,7 +67,7 @@ public class FieldsChecker<T> implements Checker {
             inspector.check(transientFieldsCheck);
         }
 
-        inspector.checkWithFieldAccessor(significantFieldCheck);
+        inspector.check(significantFieldCheck);
         inspector.checkWithFieldAccessor(symmetryFieldCheck);
         inspector.checkWithFieldAccessor(transitivityFieldCheck);
 

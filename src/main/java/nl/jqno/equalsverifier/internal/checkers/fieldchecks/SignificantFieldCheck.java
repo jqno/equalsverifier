@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -10,6 +11,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -44,18 +46,20 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        if (isCachedHashCodeField.test(referenceAccessor)) {
+    public void execute(
+            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+        FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
+        if (isCachedHashCodeField.test(fieldAccessor)) {
             return;
         }
 
-        Object reference = referenceAccessor.getObject();
-        Object changed = changedAccessor.getObject();
-        String fieldName = referenceAccessor.getFieldName();
+        T reference = referenceAccessor.get();
+        T copy = copyAccessor.get();
+        String fieldName = field.getName();
 
-        boolean equalToItself = reference.equals(changed);
+        boolean equalToItself = reference.equals(copy);
 
-        changedAccessor.changeField(prefabValues, typeTag);
+        T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
 
         boolean equalsChanged = !reference.equals(changed);
         boolean hashCodeChanged =
@@ -64,16 +68,16 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
         assertEqualsAndHashCodeRelyOnSameFields(
                 equalsChanged, hashCodeChanged, reference, changed, fieldName);
-        assertFieldShouldBeIgnored(equalToItself, equalsChanged, referenceAccessor, fieldName);
+        assertFieldShouldBeIgnored(equalToItself, equalsChanged, fieldAccessor, fieldName);
 
-        referenceAccessor.changeField(prefabValues, typeTag);
+        referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
 
     private void assertEqualsAndHashCodeRelyOnSameFields(
             boolean equalsChanged,
             boolean hashCodeChanged,
-            Object reference,
-            Object changed,
+            T reference,
+            T changed,
             String fieldName) {
 
         if (equalsChanged != hashCodeChanged) {
@@ -94,8 +98,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             }
             Formatter formatter =
                     Formatter.of(
-                            "Significant fields: hashCode relies on %%, but equals does not."
-                                    + "\nThese objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
+                            "Significant fields: hashCode relies on %%, but equals does not.\n"
+                                    + "These objects are equal, but probably shouldn't be:\n"
+                                    + "  %%\n"
+                                    + "and\n"
+                                    + "  %%",
                             fieldName, reference, changed);
             assertFalse(formatter, hashCodeChanged);
         }
@@ -160,11 +167,13 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         final String message;
         if (thisFieldIsMarkedAsId) {
             message =
-                    "Significant fields: %% is marked @Id or @EmbeddedId and Warning.SURROGATE_KEY is suppressed, but equals does not use it.";
+                    "Significant fields: %% is marked @Id or @EmbeddedId and Warning.SURROGATE_KEY"
+                            + " is suppressed, but equals does not use it.";
         } else if (anotherFieldIsMarkedAsId) {
             message =
                     "Significant fields: equals does not use %%, or it is stateless.\n"
-                            + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).";
+                            + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or"
+                            + " @EmbeddedId field(s).";
         } else {
             message = "Significant fields: equals does not use %%, or it is stateless.";
         }
@@ -182,12 +191,14 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         final String message;
         if (thisFieldIsMarkedAsId) {
             message =
-                    "Significant fields: %% is marked @Id or @EmbeddedId so equals should not use it, but it does.\n"
-                            + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId field(s).";
+                    "Significant fields: %% is marked @Id or @EmbeddedId so equals should not use"
+                            + " it, but it does.\n"
+                            + "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or"
+                            + " @EmbeddedId field(s).";
         } else if (anotherFieldIsMarkedAsId) {
             message =
-                    "Significant fields: equals should not use %% because Warning.SURROGATE_KEY is suppressed"
-                            + " and it is not marked as @Id or @EmbeddedId, but it does.";
+                    "Significant fields: equals should not use %% because Warning.SURROGATE_KEY is"
+                            + " suppressed and it is not marked as @Id or @EmbeddedId, but it does.";
         } else {
             message = "Significant fields: equals should not use %%, but it does.";
         }

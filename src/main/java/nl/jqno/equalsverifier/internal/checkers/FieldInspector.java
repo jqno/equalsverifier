@@ -44,7 +44,7 @@ public class FieldInspector<T> {
             ObjectAccessor<T> changed =
                     classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
 
-            check.execute(reference.fieldAccessorFor(field), changed.fieldAccessorFor(field));
+            check.execute(reference, changed, field);
         }
     }
 }
