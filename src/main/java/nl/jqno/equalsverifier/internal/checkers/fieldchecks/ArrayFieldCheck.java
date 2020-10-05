@@ -3,7 +3,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -15,19 +16,19 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Class<?> arrayType = referenceAccessor.getFieldType();
+    public void execute(
+            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+        Class<?> arrayType = field.getType();
         if (!arrayType.isArray()) {
             return;
         }
-        if (!referenceAccessor.canBeModifiedReflectively()) {
+        if (!referenceAccessor.fieldAccessorFor(field).canBeModifiedReflectively()) {
             return;
         }
 
-        String fieldName = referenceAccessor.getFieldName();
-        Object reference = referenceAccessor.getObject();
-        Object changed = changedAccessor.getObject();
-        replaceInnermostArrayValue(changedAccessor);
+        String fieldName = field.getName();
+        T reference = referenceAccessor.get();
+        T changed = replaceInnermostArrayValue(copyAccessor, field).get();
 
         if (arrayType.getComponentType().isArray()) {
             assertDeep(fieldName, reference, changed);
@@ -36,9 +37,9 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private void replaceInnermostArrayValue(FieldAccessor accessor) {
-        Object newArray = arrayCopy(accessor.get());
-        accessor.set(newArray);
+    private ObjectAccessor<T> replaceInnermostArrayValue(ObjectAccessor<T> accessor, Field field) {
+        Object newArray = arrayCopy(accessor.fieldAccessorFor(field).get());
+        return accessor.withFieldSetTo(field, newArray);
     }
 
     private Object arrayCopy(Object array) {

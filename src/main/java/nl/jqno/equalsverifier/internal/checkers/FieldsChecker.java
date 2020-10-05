@@ -54,7 +54,7 @@ public class FieldsChecker<T> implements Checker {
         FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
 
         if (!classAccessor.isEqualsInheritedFromObject()) {
-            inspector.checkWithFieldAccessor(arrayFieldCheck);
+            inspector.check(arrayFieldCheck);
             inspector.check(floatAndDoubleFieldCheck);
             inspector.check(reflexivityFieldCheck);
         }
