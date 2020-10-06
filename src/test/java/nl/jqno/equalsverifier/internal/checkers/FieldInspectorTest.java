@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
@@ -43,7 +44,9 @@ public class FieldInspectorTest {
 
         @Override
         public void execute(
-                ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+                ObjectAccessor<T> referenceAccessor,
+                ObjectAccessor<T> copyAccessor,
+                FieldAccessor fieldAccessor) {
             if (originalReference == null) {
                 originalReference = referenceAccessor.copy();
                 originalChanged = copyAccessor.copy();
@@ -51,6 +54,7 @@ public class FieldInspectorTest {
                 assertEquals(originalReference, referenceAccessor.get());
                 assertEquals(originalChanged, copyAccessor.get());
             }
+            Field field = fieldAccessor.getField();
 
             referenceAccessor.withChangedField(field, prefabValues, TypeTag.NULL);
             copyAccessor.withChangedField(field, prefabValues, TypeTag.NULL);

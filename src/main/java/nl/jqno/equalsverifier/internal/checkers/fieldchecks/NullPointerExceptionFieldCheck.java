@@ -23,18 +23,20 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
-        if (config.getNonnullFields().contains(field.getName())) {
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        if (config.getNonnullFields().contains(fieldAccessor.getFieldName())) {
             return;
         }
-        if (field.getType().isPrimitive()) {
+        if (fieldAccessor.getFieldType().isPrimitive()) {
             return;
         }
+        Field field = fieldAccessor.getField();
         if (NonnullAnnotationVerifier.fieldIsNonnull(field, config.getAnnotationCache())) {
             return;
         }
 
-        FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
         if (fieldAccessor.fieldIsStatic()) {
             FieldModifier fieldModifier = referenceAccessor.fieldModifierFor(field);
             Object saved = referenceAccessor.getField(field);

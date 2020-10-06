@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -24,7 +25,10 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Field field = fieldAccessor.getField();
         T reference = referenceAccessor.get();
         T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
 
@@ -32,8 +36,7 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
         boolean hasAnnotation =
                 annotationCache.hasFieldAnnotation(
                         typeTag.getType(), field.getName(), SupportedAnnotations.TRANSIENT);
-        boolean fieldIsTransient =
-                referenceAccessor.fieldAccessorFor(field).fieldIsTransient() || hasAnnotation;
+        boolean fieldIsTransient = fieldAccessor.fieldIsTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                     Formatter.of(

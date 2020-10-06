@@ -26,12 +26,14 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
-        FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
         if (isCachedHashCodeField.test(fieldAccessor)) {
             return;
         }
 
+        Field field = fieldAccessor.getField();
         T reference = referenceAccessor.get();
         T copy = copyAccessor.get();
 

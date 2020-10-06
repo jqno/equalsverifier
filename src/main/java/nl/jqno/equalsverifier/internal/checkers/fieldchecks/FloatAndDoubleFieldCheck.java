@@ -3,14 +3,18 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
-        Class<?> type = field.getType();
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Class<?> type = fieldAccessor.getFieldType();
+        Field field = fieldAccessor.getField();
         if (isFloat(type)) {
             T reference = referenceAccessor.withFieldSetTo(field, Float.NaN).get();
             T copy = copyAccessor.withFieldSetTo(field, Float.NaN).get();

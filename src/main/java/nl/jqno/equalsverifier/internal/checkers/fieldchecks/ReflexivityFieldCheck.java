@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
@@ -33,25 +34,30 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
             return;
         }
 
-        checkReferenceReflexivity(referenceAccessor, copyAccessor, field);
-        checkValueReflexivity(referenceAccessor, copyAccessor, field);
-        checkNullReflexivity(referenceAccessor, copyAccessor, field);
+        checkReferenceReflexivity(referenceAccessor, copyAccessor);
+        checkValueReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
+        checkNullReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
     }
 
     private void checkReferenceReflexivity(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor) {
         T left = referenceAccessor.get();
         T right = copyAccessor.get();
         checkReflexivityFor(left, right);
     }
 
     private void checkValueReflexivity(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Field field = fieldAccessor.getField();
         Class<?> fieldType = field.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
@@ -59,7 +65,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         if (fieldType.equals(Object.class) || fieldType.isInterface()) {
             return;
         }
-        if (referenceAccessor.fieldAccessorFor(field).fieldIsStatic()) {
+        if (fieldAccessor.fieldIsStatic()) {
             return;
         }
         ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
@@ -84,8 +90,11 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void checkNullReflexivity(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
-        boolean fieldIsPrimitive = referenceAccessor.fieldAccessorFor(field).fieldIsPrimitive();
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Field field = fieldAccessor.getField();
+        boolean fieldIsPrimitive = fieldAccessor.fieldIsPrimitive();
         boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
         boolean ignoreNull =
                 fieldIsNonNull

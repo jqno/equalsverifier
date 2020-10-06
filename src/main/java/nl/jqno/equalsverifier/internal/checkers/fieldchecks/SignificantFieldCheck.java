@@ -47,12 +47,14 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor, Field field) {
-        FieldAccessor fieldAccessor = referenceAccessor.fieldAccessorFor(field);
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
         if (isCachedHashCodeField.test(fieldAccessor)) {
             return;
         }
 
+        Field field = fieldAccessor.getField();
         T reference = referenceAccessor.get();
         T copy = copyAccessor.get();
         String fieldName = field.getName();
@@ -111,10 +113,10 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private void assertFieldShouldBeIgnored(
             boolean equalToItself,
             boolean equalsChanged,
-            FieldAccessor referenceAccessor,
+            FieldAccessor fieldAccessor,
             String fieldName) {
 
-        if (shouldAllFieldsBeUsed(referenceAccessor) && isFieldEligible(referenceAccessor)) {
+        if (shouldAllFieldsBeUsed(fieldAccessor) && isFieldEligible(fieldAccessor)) {
             boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
             boolean thisFieldIsMarkedAsId =
                     annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.ID);
@@ -140,21 +142,19 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private boolean shouldAllFieldsBeUsed(FieldAccessor referenceAccessor) {
+    private boolean shouldAllFieldsBeUsed(FieldAccessor fieldAccessor) {
         return !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED)
                 && !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
                 && !(warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
-                        && !referenceAccessor.fieldIsFinal());
+                        && !fieldAccessor.fieldIsFinal());
     }
 
-    private boolean isFieldEligible(FieldAccessor referenceAccessor) {
-        return !referenceAccessor.fieldIsStatic()
-                && !referenceAccessor.fieldIsTransient()
-                && !referenceAccessor.fieldIsEmptyOrSingleValueEnum()
+    private boolean isFieldEligible(FieldAccessor fieldAccessor) {
+        return !fieldAccessor.fieldIsStatic()
+                && !fieldAccessor.fieldIsTransient()
+                && !fieldAccessor.fieldIsEmptyOrSingleValueEnum()
                 && !annotationCache.hasFieldAnnotation(
-                        type,
-                        referenceAccessor.getField().getName(),
-                        SupportedAnnotations.TRANSIENT);
+                        type, fieldAccessor.getField().getName(), SupportedAnnotations.TRANSIENT);
     }
 
     private void assertFieldShouldHaveBeenUsed(
