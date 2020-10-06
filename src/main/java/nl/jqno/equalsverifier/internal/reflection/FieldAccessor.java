@@ -6,7 +6,7 @@ import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /** Provides reflective access to one field of an object. */
-public class FieldAccessor {
+public final class FieldAccessor {
     private final Field field;
 
     /** Private constructor. Call {@link #of(Field)} to instantiate. */
@@ -17,8 +17,8 @@ public class FieldAccessor {
     /**
      * Factory method.
      *
-     * @param object The object that contains the field we want to access.
-     * @param field A field of object.
+     * @param field The field to access.
+     * @return A {@link FieldAccessor} for {@link #field}.
      */
     public static FieldAccessor of(Field field) {
         return new FieldAccessor(field);
