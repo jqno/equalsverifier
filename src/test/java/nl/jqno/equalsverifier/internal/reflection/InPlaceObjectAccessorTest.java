@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -23,17 +22,6 @@ public class InPlaceObjectAccessorTest {
         Object foo = new Object();
         InPlaceObjectAccessor<Object> accessor = create(foo);
         assertSame(foo, accessor.get());
-    }
-
-    @Test
-    public void fieldAccessorFor() throws NoSuchFieldException {
-        PointContainer foo = new PointContainer(new Point(1, 2));
-        Field field = PointContainer.class.getDeclaredField("point");
-
-        ObjectAccessor<PointContainer> accessor = create(foo);
-        FieldAccessor fieldAccessor = accessor.fieldAccessorFor(field);
-
-        assertEquals("point", fieldAccessor.getFieldName());
     }
 
     @Test

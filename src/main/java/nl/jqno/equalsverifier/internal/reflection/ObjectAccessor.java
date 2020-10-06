@@ -76,16 +76,6 @@ public abstract class ObjectAccessor<T> {
     }
 
     /**
-     * Returns a FieldAccessor for the wrapped object and the specified field.
-     *
-     * @param field A field in T.
-     * @return A FieldAccessor for the wrapped object and the specified field.
-     */
-    public FieldAccessor fieldAccessorFor(Field field) {
-        return FieldAccessor.of(field);
-    }
-
-    /**
      * Returns a FieldModifier for the wrapped object and the specified field.
      *
      * @param field A field in T.
