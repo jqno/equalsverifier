@@ -63,6 +63,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
         throw new EqualsVerifierInternalBugException("Can't shallow-scramble a record.");
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
@@ -73,11 +74,13 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
                                 : prefabValues.giveRed(TypeTag.of(f, enclosingType)));
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
         return modify(field, PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(field.getType()));
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withChangedField(
             Field field, PrefabValues prefabValues, TypeTag enclosingType) {
@@ -87,6 +90,7 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
         return modify(field, newValue);
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
         return modify(field, newValue);

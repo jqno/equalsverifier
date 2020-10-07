@@ -75,6 +75,12 @@ public abstract class ObjectAccessor<T> {
         return type;
     }
 
+    /**
+     * Returns the value of the given field.
+     *
+     * @param field The field whose value we want to get.
+     * @return The value of the given field.
+     */
     @SuppressWarnings("unchecked")
     public T getField(Field field) {
         return (T) FieldAccessor.of(field).get(object);
@@ -112,7 +118,10 @@ public abstract class ObjectAccessor<T> {
     public abstract T copyIntoAnonymousSubclass();
 
     /**
-     * Modifies all fields of the wrapped object that are declared in T and in its superclasses.
+     * Modifies all fields of the wrapped object that are declared in T and in its superclasses. It
+     * may or may not mutate the object of the current ObjectAccessor. Either way, the current
+     * ObjectAccessor and any reference to its object should be considered 'spent' after calling
+     * this method. The returned ObjectAccessor can safely be used.
      *
      * <p>This method is consistent: given two equal objects; after scrambling both objects, they
      * remain equal to each other.
@@ -129,7 +138,9 @@ public abstract class ObjectAccessor<T> {
 
     /**
      * Modifies all fields of the wrapped object that are declared in T, but not those inherited
-     * from superclasses.
+     * from superclasses. It may or may not mutate the object of the current ObjectAccessor. Either
+     * way, the current ObjectAccessor and any reference to its object should be considered 'spent'
+     * after calling this method. The returned ObjectAccessor can safely be used.
      *
      * <p>This method is consistent: given two equal objects; after scrambling both objects, they
      * remain equal to each other.
@@ -145,13 +156,71 @@ public abstract class ObjectAccessor<T> {
     public abstract ObjectAccessor<T> shallowScramble(
             PrefabValues prefabValues, TypeTag enclosingType);
 
+    /**
+     * Clears all fields of the wrapped object to their default values, but only if {@link
+     * canBeDefault} for the given field returns true. Otherwise, leaves the value intact. It may or
+     * may not mutate the object of the current ObjectAccessor. Either way, the current
+     * ObjectAccessor and any reference to its object should be considered 'spent' after calling
+     * this method. The returned ObjectAccessor can safely be used.
+     *
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
+     *
+     * @param canBeDefault A predicate that determines for the wrapped object's fields whether or
+     *     not they are allowed to be 'default', i.e. 0 or null. If a field is marked with @NonNull,
+     *     for example, it may not be default.
+     * @param prefabValues Prefabricated values to take values from.
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @return An accessor to the cleared object.
+     */
     public abstract ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType);
 
+    /**
+     * Clears the given field of the wrapped object to its default value. It may or may not mutate
+     * the object of the current ObjectAccessor. Either way, the current ObjectAccessor and any
+     * reference to its object should be considered 'spent' after calling this method. The returned
+     * ObjectAccessor can safely be used.
+     *
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
+     *
+     * @param field The field to set to its default value.
+     * @return An accessor to the object with the defaulted field.
+     */
     public abstract ObjectAccessor<T> withDefaultedField(Field field);
 
+    /**
+     * Changes the given field of the wrapped object to some unspecified, but different value. It
+     * may or may not mutate the object of the current ObjectAccessor. Either way, the current
+     * ObjectAccessor and any reference to its object should be considered 'spent' after calling
+     * this method. The returned ObjectAccessor can safely be used.
+     *
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
+     *
+     * @param field The field to set to a different value.
+     * @param prefabValues Prefabricated values to take values from.
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @return An accessor to the object with the changed field.
+     */
     public abstract ObjectAccessor<T> withChangedField(
             Field field, PrefabValues prefabValues, TypeTag enclosingType);
 
+    /**
+     * Changes the given field of the wrapped object to the given value. It may or may not mutate
+     * the object of the current ObjectAccessor. Either way, the current ObjectAccessor and any
+     * reference to its object should be considered 'spent' after calling this method. The returned
+     * ObjectAccessor can safely be used.
+     *
+     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
+     * compile-time constant in the field declaration. These fields will be left unmodified.
+     *
+     * @param field The field to set to the given value.
+     * @param newValue The value to set the field to.
+     * @return An accessor to the object with the defaulted field.
+     */
     public abstract ObjectAccessor<T> withFieldSetTo(Field field, Object newValue);
 }

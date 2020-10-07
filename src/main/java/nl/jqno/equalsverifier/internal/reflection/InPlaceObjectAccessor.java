@@ -63,6 +63,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
@@ -76,12 +77,14 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
         fieldModifierFor(field).defaultField();
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withChangedField(
             Field field, PrefabValues prefabValues, TypeTag enclosingType) {
@@ -89,6 +92,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
         fieldModifierFor(field).set(newValue);
