@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -50,14 +49,12 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        List<Object> params = new ArrayList<>();
-        for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            Object value = getField(f);
-            TypeTag tag = TypeTag.of(f, enclosingType);
-            params.add(prefabValues.giveOther(tag, value));
-        }
-        T newObject = callRecordConstructor(params);
-        return ObjectAccessor.of(newObject);
+        return makeAccessor(
+                f -> {
+                    Object value = getField(f);
+                    TypeTag tag = TypeTag.of(f, enclosingType);
+                    return prefabValues.giveOther(tag, value);
+                });
     }
 
     /** {@inheritDoc} */
@@ -69,57 +66,38 @@ public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
-        List<Object> params = new ArrayList<>();
-        for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            if (canBeDefault.test(f)) {
-                params.add(PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
-            } else {
-                TypeTag tag = TypeTag.of(f, enclosingType);
-                params.add(prefabValues.giveRed(tag));
-            }
-        }
-        T newObject = callRecordConstructor(params);
-        return ObjectAccessor.of(newObject);
+        return makeAccessor(
+                f ->
+                        canBeDefault.test(f)
+                                ? PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType())
+                                : prefabValues.giveRed(TypeTag.of(f, enclosingType)));
     }
 
     @Override
     public ObjectAccessor<T> withDefaultedField(Field field) {
-        return modify(field, f -> PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType()));
+        return modify(field, PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(field.getType()));
     }
 
     @Override
     public ObjectAccessor<T> withChangedField(
             Field field, PrefabValues prefabValues, TypeTag enclosingType) {
-        return modify(
-                field,
-                f -> {
-                    TypeTag tag = TypeTag.of(f, enclosingType);
-                    Object newValue = getField(f);
-                    return prefabValues.giveOther(tag, newValue);
-                });
+        TypeTag tag = TypeTag.of(field, enclosingType);
+        Object currentValue = getField(field);
+        Object newValue = prefabValues.giveOther(tag, currentValue);
+        return modify(field, newValue);
     }
 
     @Override
     public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
-        return modify(field, f -> newValue);
+        return modify(field, newValue);
     }
 
-    private ObjectAccessor<T> modify(Field field, Function<Field, Object> fn) {
-        List<Object> params = new ArrayList<>();
-        for (Field f : FieldIterable.ofIgnoringStatic(type())) {
-            if (f.equals(field)) {
-                Object value = fn.apply(f);
-                params.add(value);
-            } else {
-                try {
-                    f.setAccessible(true);
-                    Object value = f.get(get());
-                    params.add(value);
-                } catch (IllegalAccessException e) {
-                    throw new ReflectionException("Can't get field's value", e);
-                }
-            }
-        }
+    private ObjectAccessor<T> modify(Field field, Object value) {
+        return makeAccessor(f -> f.equals(field) ? value : getField(f));
+    }
+
+    private ObjectAccessor<T> makeAccessor(Function<Field, Object> determineValue) {
+        List<Object> params = fields().map(determineValue).collect(Collectors.toList());
         T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
     }
