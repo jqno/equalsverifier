@@ -75,16 +75,6 @@ public abstract class ObjectAccessor<T> {
         return type;
     }
 
-    /**
-     * Returns a FieldModifier for the wrapped object and the specified field.
-     *
-     * @param field A field in T.
-     * @return A FieldModifier for the wrapped object and the specified field.
-     */
-    public FieldModifier fieldModifierFor(Field field) {
-        return new FieldModifier(get(), field);
-    }
-
     @SuppressWarnings("unchecked")
     public T getField(Field field) {
         return (T) FieldAccessor.of(field).get(object);

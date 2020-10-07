@@ -6,13 +6,25 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
-public class FieldModifier {
-    private final Object object;
+public final class FieldModifier {
     private final Field field;
+    private final Object object;
 
-    public FieldModifier(Object object, Field field) {
-        this.object = object;
+    /** Private constructor. Call {@link #of(Field, Object)} to instantiate. */
+    private FieldModifier(Field field, Object object) {
         this.field = field;
+        this.object = object;
+    }
+
+    /**
+     * Factory method.
+     *
+     * @param field The field to modify.
+     * @param object An object that contains the field we want to modify.
+     * @return A {@link FieldModifier} for {@link field} in {@link object}.
+     */
+    public static FieldModifier of(Field field, Object object) {
+        return new FieldModifier(field, object);
     }
 
     /**

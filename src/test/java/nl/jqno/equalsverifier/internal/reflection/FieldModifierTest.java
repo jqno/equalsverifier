@@ -198,9 +198,9 @@ public class FieldModifierTest {
         assertTrue(reference.equals(changed));
 
         for (Field field : FieldIterable.of(AllTypesContainer.class)) {
-            new FieldModifier(changed, field).changeField(prefabValues, TypeTag.NULL);
+            FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
             assertFalse("On field: " + field.getName(), reference.equals(changed));
-            new FieldModifier(reference, field).changeField(prefabValues, TypeTag.NULL);
+            FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
             assertTrue("On field: " + field.getName(), reference.equals(changed));
         }
     }
@@ -243,9 +243,9 @@ public class FieldModifierTest {
         assertTrue(reference.equals(changed));
 
         for (Field field : FieldIterable.of(AllArrayTypesContainer.class)) {
-            new FieldModifier(changed, field).changeField(prefabValues, TypeTag.NULL);
+            FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
             assertFalse("On field: " + field.getName(), reference.equals(changed));
-            new FieldModifier(reference, field).changeField(prefabValues, TypeTag.NULL);
+            FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
             assertTrue("On field: " + field.getName(), reference.equals(changed));
         }
     }
@@ -333,7 +333,7 @@ public class FieldModifierTest {
     private FieldModifier getAccessorFor(Object object, String fieldName) {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
-            return new FieldModifier(object, field);
+            return FieldModifier.of(field, object);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }

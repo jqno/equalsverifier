@@ -67,7 +67,7 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> clear(
             Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
         for (Field field : FieldIterable.of(type())) {
-            FieldModifier modifier = new FieldModifier(get(), field);
+            FieldModifier modifier = fieldModifierFor(field);
             modifier.defaultField();
             if (!canBeDefault.test(field)) {
                 modifier.changeField(prefabValues, enclosingType);
@@ -93,5 +93,9 @@ public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> withFieldSetTo(Field field, Object newValue) {
         fieldModifierFor(field).set(newValue);
         return this;
+    }
+
+    private FieldModifier fieldModifierFor(Field field) {
+        return FieldModifier.of(field, get());
     }
 }
