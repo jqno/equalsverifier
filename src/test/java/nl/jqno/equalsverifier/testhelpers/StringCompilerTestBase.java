@@ -38,12 +38,16 @@ public abstract class StringCompilerTestBase extends ExpectedExceptionTestBase {
             return false;
         }
         try {
-            compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+            compileSimpleRecord();
             return true;
         } catch (AssertionError ignored) {
             // We're in Java 15 and preview features aren't enabled
             return false;
         }
+    }
+
+    public Class<?> compileSimpleRecord() {
+        return compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
     }
 
     private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";

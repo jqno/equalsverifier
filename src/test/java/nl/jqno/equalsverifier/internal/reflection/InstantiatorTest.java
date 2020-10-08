@@ -1,8 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.Assert.*;
+import static org.junit.Assume.assumeTrue;
 
 import java.util.List;
+import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -12,7 +14,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.Test;
 import org.w3c.dom.Element;
 
-public class InstantiatorTest {
+public class InstantiatorTest extends StringCompilerTestBase {
     @Test
     public void instantiateClass() {
         Instantiator<Point> instantiator = Instantiator.of(Point.class);
@@ -85,5 +87,14 @@ public class InstantiatorTest {
         Class<?> expected = instantiator.instantiateAnonymousSubclass().getClass();
         Class<?> actual = instantiator.instantiateAnonymousSubclass().getClass();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void instantiateRecord() {
+        assumeTrue(isRecordsAvailable());
+        Class<?> simpleRecordClass = compileSimpleRecord();
+        Instantiator<?> instantiator = Instantiator.of(simpleRecordClass);
+        Object simpleRecord = instantiator.instantiate();
+        assertEquals(simpleRecordClass, simpleRecord.getClass());
     }
 }
