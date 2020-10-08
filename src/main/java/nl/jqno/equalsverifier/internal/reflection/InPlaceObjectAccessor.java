@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  *
  * @param <T> The specified object's class.
  */
-public final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
+final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
     /* default */ InPlaceObjectAccessor(T object, Class<T> type) {

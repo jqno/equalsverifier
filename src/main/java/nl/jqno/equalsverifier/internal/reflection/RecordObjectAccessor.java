@@ -15,7 +15,14 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
-public final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
+/**
+ * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through
+ * calling its class's constructor. This only works when the constructor matches the class's fields
+ * exactly, such as in a record.
+ *
+ * @param <T> The specified object's class.
+ */
+final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
     private final Constructor<T> constructor;
 
