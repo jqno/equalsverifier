@@ -109,11 +109,6 @@ public class PrefabValues {
         return tuple.getRed();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T giveDefault(TypeTag tag) {
-        return (T) PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.get(tag.getType());
-    }
-
     private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
         return PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
     }
