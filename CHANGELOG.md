@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Jump to [version 1.x](#1.x)
 
 
+<a name="3.x"/>
+
 ## [Unreleased]
 
 ## [3.4.3] - 2020-09-08
@@ -71,8 +73,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Updated Byte-Buddy to support Java 14 EA.
-
-<a name="3.x"/>
 
 ## [3.1.10] - 2019-09-29
 ### Fixed
