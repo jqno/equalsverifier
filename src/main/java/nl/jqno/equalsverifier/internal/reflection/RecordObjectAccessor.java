@@ -67,7 +67,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        throw new EqualsVerifierInternalBugException("Can't shallow-scramble a record.");
+        throw new EqualsVerifierInternalBugException("Record: can't shallow-scramble a record.");
     }
 
     /** {@inheritDoc} */

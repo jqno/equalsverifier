@@ -3,13 +3,11 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.Assert.*;
 import static org.junit.Assume.assumeTrue;
 
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
-
 import org.junit.Before;
 import org.junit.Test;
-
-import java.lang.reflect.Field;
 
 public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
 

@@ -7,6 +7,7 @@ import static org.junit.Assume.assumeTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,16 @@ public class RecordObjectAccessorTest extends StringCompilerTestBase {
         assertEquals(42, accessor.getField(f));
     }
 
+    @Test
+    public void fail_whenConstructorThrowsNpe() {
+        recordClass =
+                compile(THROWING_CONSTRUCTOR_RECORD_CLASS_NAME, THROWING_CONSTRUCTOR_RECORD_CLASS);
+        Object instance = Instantiator.of(recordClass).instantiate();
+
+        expectException(ReflectionException.class, "Record:", "failed to invoke constructor");
+        create(instance).copy();
+    }
+
     @SuppressWarnings("unchecked")
     private <T> RecordObjectAccessor<T> create(T object) {
         return new RecordObjectAccessor<T>(object, (Class<T>) object.getClass());
@@ -52,4 +63,13 @@ public class RecordObjectAccessorTest extends StringCompilerTestBase {
     private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
     private static final String SIMPLE_RECORD_CLASS =
             "public record SimpleRecord(int i, String s) {}";
+
+    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS_NAME =
+            "ThrowingConstructorRecord";
+    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS =
+            "public record ThrowingConstructorRecord(int i, String s) {"
+                    + "\n    public ThrowingConstructorRecord {"
+                    + "\n        throw new IllegalStateException();"
+                    + "\n    }"
+                    + "\n}";
 }
