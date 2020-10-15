@@ -126,8 +126,9 @@ public abstract class ObjectAccessor<T> {
      * <p>This method is consistent: given two equal objects; after scrambling both objects, they
      * remain equal to each other.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
@@ -145,8 +146,9 @@ public abstract class ObjectAccessor<T> {
      * <p>This method is consistent: given two equal objects; after scrambling both objects, they
      * remain equal to each other.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
@@ -163,8 +165,9 @@ public abstract class ObjectAccessor<T> {
      * ObjectAccessor and any reference to its object should be considered 'spent' after calling
      * this method. The returned ObjectAccessor can safely be used.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param canBeDefault A predicate that determines for the wrapped object's fields whether or
      *     not they are allowed to be 'default', i.e. 0 or null. If a field is marked with @NonNull,
@@ -183,8 +186,9 @@ public abstract class ObjectAccessor<T> {
      * reference to its object should be considered 'spent' after calling this method. The returned
      * ObjectAccessor can safely be used.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param field The field to set to its default value.
      * @return An accessor to the object with the defaulted field.
@@ -197,8 +201,9 @@ public abstract class ObjectAccessor<T> {
      * ObjectAccessor and any reference to its object should be considered 'spent' after calling
      * this method. The returned ObjectAccessor can safely be used.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param field The field to set to a different value.
      * @param prefabValues Prefabricated values to take values from.
@@ -215,8 +220,9 @@ public abstract class ObjectAccessor<T> {
      * reference to its object should be considered 'spent' after calling this method. The returned
      * ObjectAccessor can safely be used.
      *
-     * <p>It cannot modifiy: 1. static final fields, and 2. final fields that are initialized to a
-     * compile-time constant in the field declaration. These fields will be left unmodified.
+     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
+     * initialized to a compile-time constant in the field declaration. These fields may be left
+     * unmodified.
      *
      * @param field The field to set to the given value.
      * @param newValue The value to set the field to.
