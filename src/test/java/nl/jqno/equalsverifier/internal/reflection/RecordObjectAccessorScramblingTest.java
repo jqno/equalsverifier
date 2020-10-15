@@ -30,6 +30,15 @@ public class RecordObjectAccessorScramblingTest extends StringCompilerTestBase {
     }
 
     @Test
+    public void scrambleLeavesOriginalUnaffected() throws Exception {
+        Class<?> type = compile(POINT_RECORD_CLASS_NAME, POINT_RECORD_CLASS);
+        Constructor<?> c = type.getDeclaredConstructor(int.class, int.class);
+        Object original = c.newInstance(2, 3);
+        Object copy = doScramble(original).get();
+        assertNotSame(original, copy);
+    }
+
+    @Test
     public void scramble() throws Exception {
         Class<?> type = compile(POINT_RECORD_CLASS_NAME, POINT_RECORD_CLASS);
         Constructor<?> constructor = type.getDeclaredConstructor(int.class, int.class);
