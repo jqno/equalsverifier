@@ -440,7 +440,7 @@
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">
                                                 <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.93" />
+                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="0.94" />
                                                 </rule>
                                             </check>
                                             <html destdir="${project.build.directory}/jacoco-internal" />
