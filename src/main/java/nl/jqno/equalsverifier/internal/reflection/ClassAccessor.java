@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
+import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -170,9 +171,7 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      */
     public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType) {
-        ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues, enclosingType);
-        return result;
+        return buildObjectAccessor().scramble(prefabValues, enclosingType);
     }
 
     /**
@@ -195,10 +194,9 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      */
     public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType) {
-        ObjectAccessor<T> result = buildObjectAccessor();
-        result.scramble(prefabValues, enclosingType);
-        result.scramble(prefabValues, enclosingType);
-        return result;
+        return buildObjectAccessor()
+                .scramble(prefabValues, enclosingType)
+                .scramble(prefabValues, enclosingType);
     }
 
     /**
@@ -215,15 +213,11 @@ public class ClassAccessor<T> {
      */
     public ObjectAccessor<T> getDefaultValuesAccessor(
             TypeTag enclosingType, Set<String> nonnullFields, AnnotationCache annotationCache) {
-        ObjectAccessor<T> result = buildObjectAccessor();
-        for (Field field : FieldIterable.of(type)) {
-            if (NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache)
-                    || nonnullFields.contains(field.getName())) {
-                FieldAccessor accessor = result.fieldAccessorFor(field);
-                accessor.changeField(prefabValues, enclosingType);
-            }
-        }
-        return result;
+        Predicate<Field> canBeDefault =
+                f ->
+                        !NonnullAnnotationVerifier.fieldIsNonnull(f, annotationCache)
+                                && !nonnullFields.contains(f.getName());
+        return buildObjectAccessor().clear(canBeDefault, prefabValues, enclosingType);
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {

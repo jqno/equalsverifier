@@ -5,6 +5,8 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -12,7 +14,7 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 @SuppressFBWarnings(
         value = "RV_RETURN_VALUE_IGNORED",
         justification = "We only want to see if it throws an exception.")
-public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
+public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     private Configuration<T> config;
 
     public NullPointerExceptionFieldCheck(Configuration<T> config) {
@@ -20,27 +22,32 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Field field = referenceAccessor.getField();
-        if (config.getNonnullFields().contains(field.getName())) {
+    public void execute(
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        if (config.getNonnullFields().contains(fieldAccessor.getFieldName())) {
             return;
         }
-        if (field.getType().isPrimitive()) {
+        if (fieldAccessor.getFieldType().isPrimitive()) {
             return;
         }
+        Field field = fieldAccessor.getField();
         if (NonnullAnnotationVerifier.fieldIsNonnull(field, config.getAnnotationCache())) {
             return;
         }
 
-        if (referenceAccessor.fieldIsStatic()) {
-            Object saved = referenceAccessor.get();
-            referenceAccessor.defaultStaticField();
-            performTests(field, referenceAccessor.getObject(), changedAccessor.getObject());
-            referenceAccessor.set(saved);
+        if (fieldAccessor.fieldIsStatic()) {
+            FieldModifier fieldModifier = FieldModifier.of(field, referenceAccessor.get());
+            Object saved = referenceAccessor.getField(field);
+
+            fieldModifier.defaultStaticField();
+            performTests(field, referenceAccessor.get(), copyAccessor.get());
+            fieldModifier.set(saved);
         } else {
-            changedAccessor.defaultField();
-            performTests(field, referenceAccessor.getObject(), changedAccessor.getObject());
-            referenceAccessor.defaultField();
+            ObjectAccessor<?> changed = copyAccessor.withDefaultedField(field);
+            performTests(field, referenceAccessor.get(), changed.get());
+            referenceAccessor.withDefaultedField(field);
         }
     }
 

@@ -13,33 +13,46 @@ import java.util.List;
 public final class FieldIterable implements Iterable<Field> {
     private final Class<?> type;
     private final boolean includeSuperclasses;
+    private final boolean includeStatic;
 
     /** Private constructor. Call {@link #of(Class)} or {@link #ofIgnoringSuper(Class)} instead. */
-    private FieldIterable(Class<?> type, boolean includeSuperclasses) {
+    private FieldIterable(Class<?> type, boolean includeSuperclasses, boolean includeStatic) {
         this.type = type;
         this.includeSuperclasses = includeSuperclasses;
+        this.includeStatic = includeStatic;
     }
 
     /**
-     * Factory method for a FieldIterator that iterates over all declared fields of {@code type} and
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type} and
      * over the declared fields of all of its superclasses.
      *
      * @param type The class that contains the fields over which to iterate.
-     * @return A FieldIterator.
+     * @return A FieldIterable.
      */
     public static FieldIterable of(Class<?> type) {
-        return new FieldIterable(type, true);
+        return new FieldIterable(type, true, true);
     }
 
     /**
-     * Factory method for a FieldIterator that iterates over all declared fields of {@code type},
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type},
      * but that ignores the declared fields of its superclasses.
      *
      * @param type The class that contains the fields over which to iterate.
-     * @return A FieldIterator.
+     * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringSuper(Class<?> type) {
-        return new FieldIterable(type, false);
+        return new FieldIterable(type, false, true);
+    }
+
+    /**
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type},
+     * but that ignores its static fields.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterable.
+     */
+    public static FieldIterable ofIgnoringStatic(Class<?> type) {
+        return new FieldIterable(type, true, false);
     }
 
     /**
@@ -72,9 +85,11 @@ public final class FieldIterable implements Iterable<Field> {
 
         for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic() && !"__cobertura_counters".equals(field.getName())) {
-                if (Modifier.isStatic(field.getModifiers())) {
+                boolean isStatic = Modifier.isStatic(field.getModifiers());
+                if (isStatic && includeStatic) {
                     statics.add(field);
-                } else {
+                }
+                if (!isStatic) {
                     fields.add(field);
                 }
             }

@@ -4,28 +4,24 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
 /** Provides reflective access to one field of an object. */
-public class FieldAccessor {
-    private final Object object;
+public final class FieldAccessor {
     private final Field field;
 
-    /**
-     * Constructor.
-     *
-     * @param object The object that contains the field we want to access.
-     * @param field A field of object.
-     */
-    public FieldAccessor(Object object, Field field) {
-        this.object = object;
+    /** Private constructor. Call {@link #of(Field)} to instantiate. */
+    private FieldAccessor(Field field) {
         this.field = field;
     }
 
-    /** @return The object that contains the field. */
-    public Object getObject() {
-        return object;
+    /**
+     * Factory method.
+     *
+     * @param field The field to access.
+     * @return A {@link FieldAccessor} for {@link #field}.
+     */
+    public static FieldAccessor of(Field field) {
+        return new FieldAccessor(field);
     }
 
     /** @return The field itself. */
@@ -72,129 +68,20 @@ public class FieldAccessor {
     /**
      * Tries to get the field's value.
      *
+     * @param object The object that contains the field whose value we want to get.
      * @return The field's value.
      * @throws ReflectionException If the operation fails.
      */
     @SuppressFBWarnings(
             value = "DP_DO_INSIDE_DO_PRIVILEGED",
             justification = "Only called in test code, not production.")
-    public Object get() {
+    public Object get(Object object) {
         field.setAccessible(true);
         try {
             return field.get(object);
         } catch (IllegalAccessException e) {
             throw new ReflectionException(e);
         }
-    }
-
-    /**
-     * Tries to set the field to the specified value.
-     *
-     * <p>Includes static fields but ignores fields that can't be modified reflectively.
-     *
-     * @param value The value that the field should get.
-     * @throws ReflectionException If the operation fails.
-     */
-    public void set(Object value) {
-        modify(() -> field.set(object, value), true);
-    }
-
-    /**
-     * Tries to make the field null. Ignores static fields and fields that can't be modified
-     * reflectively.
-     *
-     * @throws ReflectionException If the operation fails.
-     */
-    public void defaultField() {
-        modify(this::setFieldToDefault, false);
-    }
-
-    /**
-     * Tries to make the field null. Includes static fields but ignores fields that can't be
-     * modified reflectively.
-     *
-     * @throws ReflectionException If the operation fails.
-     */
-    public void defaultStaticField() {
-        modify(this::setFieldToDefault, true);
-    }
-
-    private void setFieldToDefault() throws IllegalAccessException {
-        Class<?> type = field.getType();
-        if (type == boolean.class) {
-            field.setBoolean(object, false);
-        } else if (type == byte.class) {
-            field.setByte(object, (byte) 0);
-        } else if (type == char.class) {
-            field.setChar(object, '\u0000');
-        } else if (type == double.class) {
-            field.setDouble(object, 0.0);
-        } else if (type == float.class) {
-            field.setFloat(object, 0.0f);
-        } else if (type == int.class) {
-            field.setInt(object, 0);
-        } else if (type == long.class) {
-            field.setLong(object, 0);
-        } else if (type == short.class) {
-            field.setShort(object, (short) 0);
-        } else {
-            field.set(object, null);
-        }
-    }
-
-    /**
-     * Copies field's value to the corresponding field in the specified object.
-     *
-     * <p>Ignores static fields and fields that can't be modified reflectively.
-     *
-     * @param to The object into which to copy the field.
-     * @throws ReflectionException If the operation fails.
-     */
-    public void copyTo(Object to) {
-        modify(() -> field.set(to, field.get(object)), false);
-    }
-
-    /**
-     * Changes the field's value to something else. The new value will never be null. Other than
-     * that, the precise value is undefined.
-     *
-     * <p>Ignores static fields and fields that can't be modified reflectively.
-     *
-     * @param prefabValues If the field is of a type contained within prefabValues, the new value
-     *     will be taken from it.
-     * @param enclosingType A tag for the type that contains the field. Needed to determine a
-     *     generic type, if it has one..
-     * @throws ReflectionException If the operation fails.
-     */
-    public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        FieldModifier fm =
-                () -> {
-                    TypeTag tag = TypeTag.of(field, enclosingType);
-                    Object newValue = prefabValues.giveOther(tag, field.get(object));
-                    field.set(object, newValue);
-                };
-        modify(fm, false);
-    }
-
-    private void modify(FieldModifier modifier, boolean includeStatic) {
-        if (!canBeModifiedReflectively()) {
-            return;
-        }
-        if (!includeStatic && fieldIsStatic()) {
-            return;
-        }
-
-        field.setAccessible(true);
-        try {
-            modifier.modify();
-        } catch (IllegalAccessException e) {
-            throw new ReflectionException(e);
-        }
-    }
-
-    @FunctionalInterface
-    private interface FieldModifier {
-        void modify() throws IllegalAccessException;
     }
 
     /**

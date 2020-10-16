@@ -3,11 +3,13 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class ArrayFieldCheck<T> implements FieldCheck {
+public class ArrayFieldCheck<T> implements FieldCheck<T> {
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public ArrayFieldCheck(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
@@ -15,19 +17,21 @@ public class ArrayFieldCheck<T> implements FieldCheck {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Class<?> arrayType = referenceAccessor.getFieldType();
+    public void execute(
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Class<?> arrayType = fieldAccessor.getFieldType();
         if (!arrayType.isArray()) {
             return;
         }
-        if (!referenceAccessor.canBeModifiedReflectively()) {
+        if (!fieldAccessor.canBeModifiedReflectively()) {
             return;
         }
 
-        String fieldName = referenceAccessor.getFieldName();
-        Object reference = referenceAccessor.getObject();
-        Object changed = changedAccessor.getObject();
-        replaceInnermostArrayValue(changedAccessor);
+        String fieldName = fieldAccessor.getFieldName();
+        T reference = referenceAccessor.get();
+        T changed = replaceInnermostArrayValue(copyAccessor, fieldAccessor.getField()).get();
 
         if (arrayType.getComponentType().isArray()) {
             assertDeep(fieldName, reference, changed);
@@ -36,9 +40,9 @@ public class ArrayFieldCheck<T> implements FieldCheck {
         }
     }
 
-    private void replaceInnermostArrayValue(FieldAccessor accessor) {
-        Object newArray = arrayCopy(accessor.get());
-        accessor.set(newArray);
+    private ObjectAccessor<T> replaceInnermostArrayValue(ObjectAccessor<T> accessor, Field field) {
+        Object newArray = arrayCopy(accessor.getField(field));
+        return accessor.withFieldSetTo(field, newArray);
     }
 
     private Object arrayCopy(Object array) {
@@ -61,13 +65,15 @@ public class ArrayFieldCheck<T> implements FieldCheck {
     private void assertDeep(String fieldName, Object reference, Object changed) {
         Formatter eqEqFormatter =
                 Formatter.of(
-                        "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field %%.",
+                        "Multidimensional array: ==, regular equals() or Arrays.equals() used"
+                                + " instead of Arrays.deepEquals() for field %%.",
                         fieldName);
         assertEquals(eqEqFormatter, reference, changed);
 
         Formatter regularFormatter =
                 Formatter.of(
-                        "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field %%.",
+                        "Multidimensional array: regular hashCode() or Arrays.hashCode() used"
+                                + " instead of Arrays.deepHashCode() for field %%.",
                         fieldName);
         assertEquals(
                 regularFormatter,
@@ -78,7 +84,8 @@ public class ArrayFieldCheck<T> implements FieldCheck {
     private void assertArray(String fieldName, Object reference, Object changed) {
         assertEquals(
                 Formatter.of(
-                        "Array: == or regular equals() used instead of Arrays.equals() for field %%.",
+                        "Array: == or regular equals() used instead of Arrays.equals() for field"
+                                + " %%.",
                         fieldName),
                 reference,
                 changed);

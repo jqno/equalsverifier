@@ -15,7 +15,7 @@ public abstract class StringCompilerTestBase extends ExpectedExceptionTestBase {
     private ConditionalCompiler compiler;
 
     @Before
-    public void setUp() throws IOException {
+    public void configureCompiler() throws IOException {
         File tempFileLocation = tempFolder.newFolder();
         compiler = new ConditionalCompiler(tempFileLocation);
     }
@@ -32,4 +32,24 @@ public abstract class StringCompilerTestBase extends ExpectedExceptionTestBase {
     public boolean isTypeAvailable(String fullyQualifiedTypeName) {
         return new ConditionalInstantiator(fullyQualifiedTypeName).resolve() != null;
     }
+
+    public boolean isRecordsAvailable() {
+        if (!isTypeAvailable("java.lang.Record")) {
+            return false;
+        }
+        try {
+            compileSimpleRecord();
+            return true;
+        } catch (AssertionError ignored) {
+            // We're in Java 15 and preview features aren't enabled
+            return false;
+        }
+    }
+
+    public Class<?> compileSimpleRecord() {
+        return compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+    }
+
+    private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
+    private static final String SIMPLE_RECORD_CLASS = "record SimpleRecord(int i, String s) {}";
 }

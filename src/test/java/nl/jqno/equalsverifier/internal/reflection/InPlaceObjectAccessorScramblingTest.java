@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ObjectAccessorScramblingTest {
+public class InPlaceObjectAccessorScramblingTest {
     private PrefabValues prefabValues;
 
     @Before
@@ -23,6 +23,15 @@ public class ObjectAccessorScramblingTest {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         prefabValues = new PrefabValues(factoryCache);
+    }
+
+    @Test
+    public void scrambleReturnsThis() {
+        Point original = new Point(2, 3);
+        Point copy = copy(original);
+
+        ObjectAccessor<Object> actual = doScramble(copy);
+        assertSame(copy, actual.get());
     }
 
     @Test
@@ -52,7 +61,7 @@ public class ObjectAccessorScramblingTest {
         Point3D modified = new Point3D(2, 3, 4);
         Point3D reference = copy(modified);
 
-        ObjectAccessor.of(modified).shallowScramble(prefabValues, TypeTag.NULL);
+        create(modified).shallowScramble(prefabValues, TypeTag.NULL);
 
         assertFalse(modified.equals(reference));
         modified.z = 4;
@@ -115,12 +124,17 @@ public class ObjectAccessorScramblingTest {
         assertEquals(Point.class, foo.points.ts.get(0).getClass());
     }
 
-    private <T> T copy(T object) {
-        return ObjectAccessor.of(object).copy();
+    @SuppressWarnings("unchecked")
+    private <T> InPlaceObjectAccessor<T> create(T object) {
+        return new InPlaceObjectAccessor<T>(object, (Class<T>) object.getClass());
     }
 
-    private void doScramble(Object object) {
-        ObjectAccessor.of(object).scramble(prefabValues, TypeTag.NULL);
+    private <T> T copy(T object) {
+        return create(object).copy();
+    }
+
+    private ObjectAccessor<Object> doScramble(Object object) {
+        return create(object).scramble(prefabValues, TypeTag.NULL);
     }
 
     static final class StringContainer {

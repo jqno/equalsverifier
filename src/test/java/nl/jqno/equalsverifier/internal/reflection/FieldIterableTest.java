@@ -12,6 +12,8 @@ import org.junit.rules.ExpectedException;
 
 public class FieldIterableTest {
     private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
+    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS =
+            createNonStaticFieldContainerFields();
     private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
     private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS =
             createFieldAndSubFieldContainerFields();
@@ -26,6 +28,17 @@ public class FieldIterableTest {
         }
 
         assertEquals(FIELD_CONTAINER_FIELDS, actual);
+    }
+
+    @Test
+    public void simpleFieldsWithoutStatics() {
+        Set<Field> actual = new HashSet<>();
+        for (Field field :
+                FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
+            actual.add(field);
+        }
+
+        assertEquals(NONSTATIC_FIELD_CONTAINER_FIELDS, actual);
     }
 
     @Test
@@ -157,6 +170,21 @@ public class FieldIterableTest {
             result.add(type.getDeclaredField("J"));
             result.add(type.getDeclaredField("K"));
             result.add(type.getDeclaredField("L"));
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException(e);
+        }
+        return result;
+    }
+
+    private static Set<Field> createNonStaticFieldContainerFields() {
+        Set<Field> result = new HashSet<>();
+        Class<DifferentAccessModifiersFieldContainer> type =
+                DifferentAccessModifiersFieldContainer.class;
+        try {
+            result.add(type.getDeclaredField("i"));
+            result.add(type.getDeclaredField("j"));
+            result.add(type.getDeclaredField("k"));
+            result.add(type.getDeclaredField("l"));
         } catch (NoSuchFieldException e) {
             throw new IllegalStateException(e);
         }

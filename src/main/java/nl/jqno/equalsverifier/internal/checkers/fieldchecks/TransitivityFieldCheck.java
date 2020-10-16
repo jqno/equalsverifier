@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
-public class TransitivityFieldCheck implements FieldCheck {
+public class TransitivityFieldCheck<T> implements FieldCheck<T> {
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
 
@@ -20,10 +20,14 @@ public class TransitivityFieldCheck implements FieldCheck {
     }
 
     @Override
-    public void execute(FieldAccessor referenceAccessor, FieldAccessor changedAccessor) {
-        Object a1 = referenceAccessor.getObject();
-        Object b1 = buildB1(changedAccessor);
-        Object b2 = buildB2(a1, referenceAccessor.getField());
+    public void execute(
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor) {
+        Field field = fieldAccessor.getField();
+        T a1 = referenceAccessor.get();
+        T b1 = buildB1(copyAccessor, field);
+        T b2 = buildB2(referenceAccessor, field);
 
         boolean x = a1.equals(b1);
         boolean y = b1.equals(b2);
@@ -38,21 +42,21 @@ public class TransitivityFieldCheck implements FieldCheck {
         }
     }
 
-    private Object buildB1(FieldAccessor accessor) {
-        accessor.changeField(prefabValues, typeTag);
-        return accessor.getObject();
+    private T buildB1(ObjectAccessor<T> accessor, Field field) {
+        accessor.withChangedField(field, prefabValues, typeTag);
+        return accessor.get();
     }
 
-    private Object buildB2(Object a1, Field referenceField) {
-        Object result = ObjectAccessor.of(a1).copy();
-        ObjectAccessor<?> objectAccessor = ObjectAccessor.of(result);
-        objectAccessor.fieldAccessorFor(referenceField).changeField(prefabValues, typeTag);
-        for (Field field : FieldIterable.of(result.getClass())) {
-            if (!field.equals(referenceField)) {
-                objectAccessor.fieldAccessorFor(field).changeField(prefabValues, typeTag);
+    private T buildB2(ObjectAccessor<T> referenceAccessor, Field field) {
+        T copy = referenceAccessor.copy();
+        ObjectAccessor<T> objectAccessor = ObjectAccessor.of(copy);
+        objectAccessor = objectAccessor.withChangedField(field, prefabValues, typeTag);
+        for (Field f : FieldIterable.of(referenceAccessor.type())) {
+            if (!f.equals(field)) {
+                objectAccessor = objectAccessor.withChangedField(f, prefabValues, typeTag);
             }
         }
-        return result;
+        return objectAccessor.get();
     }
 
     private int countFalses(boolean... bools) {

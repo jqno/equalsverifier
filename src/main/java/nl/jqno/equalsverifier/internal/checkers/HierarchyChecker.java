@@ -90,10 +90,11 @@ public class HierarchyChecker<T> implements Checker {
         Object equalSuper = getEqualSuper(reference);
 
         T shallowCopy = referenceAccessor.copy();
-        ObjectAccessor.of(shallowCopy).shallowScramble(config.getPrefabValues(), typeTag);
+        ObjectAccessor<T> scrambledAccessor =
+                ObjectAccessor.of(shallowCopy).shallowScramble(config.getPrefabValues(), typeTag);
 
         try {
-            checkSuperProperties(reference, equalSuper, shallowCopy);
+            checkSuperProperties(reference, equalSuper, scrambledAccessor.get());
         } catch (AbstractMethodError | NullPointerException ignored) {
             // In these cases, we'll assume all super properties hold.
             // The problems we test for, can never occur anyway if you can't instantiate a super

@@ -19,7 +19,7 @@ public final class Util {
         boolean equals = true;
         try {
             for (Field f : FieldIterable.of(type)) {
-                if (isRelevant(here, f)) {
+                if (isRelevant(f)) {
                     f.setAccessible(true);
                     Object x = f.get(here);
                     Object y = f.get(there);
@@ -36,7 +36,7 @@ public final class Util {
         int hash = 59;
         try {
             for (Field f : FieldIterable.of(x.getClass())) {
-                if (isRelevant(x, f)) {
+                if (isRelevant(f)) {
                     f.setAccessible(true);
                     Object val = f.get(x);
                     hash += 59 * Objects.hashCode(val);
@@ -48,9 +48,8 @@ public final class Util {
         return hash;
     }
 
-    private static boolean isRelevant(Object x, Field f) {
-        FieldAccessor acc = new FieldAccessor(x, f);
-        return acc.canBeModifiedReflectively();
+    private static boolean isRelevant(Field f) {
+        return FieldAccessor.of(f).canBeModifiedReflectively();
     }
 
     public static void coverThePrivateConstructor(Class<?> type) {
