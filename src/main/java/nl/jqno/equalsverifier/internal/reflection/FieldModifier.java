@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -108,11 +110,7 @@ public final class FieldModifier {
         }
 
         field.setAccessible(true);
-        try {
-            changer.change();
-        } catch (IllegalAccessException e) {
-            throw new ReflectionException(e);
-        }
+        rethrow(() -> changer.change());
     }
 
     @FunctionalInterface

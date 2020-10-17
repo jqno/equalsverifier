@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.*;
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.beans.PropertyChangeSupport;
@@ -23,7 +24,6 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.ExternalFactory;
@@ -164,16 +164,14 @@ public final class JavaApiPrefabValues {
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
 
-        try {
-            addValues(
-                    URL.class,
-                    new URL("http://example.com"),
-                    new URL("http://localhost"),
-                    new URL("http://example.com"));
-        } catch (MalformedURLException e) {
-            throw new EqualsVerifierInternalBugException(
-                    "Can't add prefab values for java.net.URL", e);
-        }
+        rethrow(
+                () ->
+                        addValues(
+                                URL.class,
+                                new URL("http://example.com"),
+                                new URL("http://localhost"),
+                                new URL("http://example.com")),
+                "Can't add prefab values for java.net.URL");
 
         addFactory(
                 CompletableFuture.class,
@@ -437,33 +435,32 @@ public final class JavaApiPrefabValues {
     private void addReflectionClasses() {
         addValues(Class.class, Class.class, Object.class, Class.class);
 
-        try {
-            Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
-            Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
-            addValues(Field.class, f1, f2, f1);
-        } catch (NoSuchFieldException e) {
-            throw new EqualsVerifierInternalBugException(
-                    "Can't add prefab values for java.lang.reflect.Field", e);
-        }
+        rethrow(
+                () -> {
+                    Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
+                    Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
+                    addValues(Field.class, f1, f2, f1);
+                },
+                "Can't add prefab values for java.lang.reflect.Field");
 
-        try {
-            Constructor<?> c1 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
-            Constructor<?> c2 =
-                    JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
-            addValues(Constructor.class, c1, c2, c1);
-        } catch (NoSuchMethodException e) {
-            throw new EqualsVerifierInternalBugException(
-                    "Can't add prefab values for java.lang.reflect.Constructor", e);
-        }
+        rethrow(
+                () -> {
+                    Constructor<?> c1 =
+                            JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
+                    Constructor<?> c2 =
+                            JavaApiReflectionClassesContainer.class.getDeclaredConstructor(
+                                    Object.class);
+                    addValues(Constructor.class, c1, c2, c1);
+                },
+                "Can't add prefab values for java.lang.reflect.Constructor");
 
-        try {
-            Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
-            Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
-            addValues(Method.class, m1, m2, m1);
-        } catch (NoSuchMethodException e) {
-            throw new EqualsVerifierInternalBugException(
-                    "Can't add prefab values for java.lang.reflect.Method", e);
-        }
+        rethrow(
+                () -> {
+                    Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
+                    Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
+                    addValues(Method.class, m1, m2, m1);
+                },
+                "Can't add prefab values for java.lang.reflect.Method");
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

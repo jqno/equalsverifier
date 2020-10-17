@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -31,7 +31,8 @@ public class HierarchyChecker<T> implements Checker {
         if (nonStrict && hasRedefinedSubclass) {
             fail(
                     Formatter.of(
-                            "withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."));
+                            "withRedefinedSubclass and weakInheritanceCheck are mutually"
+                                    + " exclusive."));
         }
 
         this.type = config.getType();
@@ -63,7 +64,11 @@ public class HierarchyChecker<T> implements Checker {
 
             Formatter formatter =
                     Formatter.of(
-                            "Redefined superclass:\n  %%\nshould not equal superclass instance\n  %%\nbut it does.",
+                            "Redefined superclass:\n"
+                                    + "  %%\n"
+                                    + "should not equal superclass instance\n"
+                                    + "  %%\n"
+                                    + "but it does.",
                             reference, equalSuper);
             try {
                 assertFalse(
@@ -111,7 +116,13 @@ public class HierarchyChecker<T> implements Checker {
 
         Formatter transitivityFormatter =
                 Formatter.of(
-                        "Transitivity:\n  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.",
+                        "Transitivity:\n"
+                                + "  %%\n"
+                                + "and\n"
+                                + "  %%\n"
+                                + "both equal superclass instance\n"
+                                + "  %%\n"
+                                + "which implies they equal each other.",
                         reference, shallow, equalSuper);
         assertTrue(
                 transitivityFormatter,
@@ -122,7 +133,10 @@ public class HierarchyChecker<T> implements Checker {
         int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
         Formatter superclassFormatter =
                 Formatter.of(
-                        "Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)",
+                        "Superclass: hashCode for\n"
+                                + "  %% (%%)\n"
+                                + "should be equal to hashCode for superclass instance\n"
+                                + "  %% (%%)",
                         reference, referenceHashCode, equalSuper, equalSuperHashCode);
         assertTrue(superclassFormatter, referenceHashCode == equalSuperHashCode);
     }
@@ -143,16 +157,20 @@ public class HierarchyChecker<T> implements Checker {
         if (config.isUsingGetClass()) {
             Formatter formatter =
                     Formatter.of(
-                            "Subclass: object is equal to an instance of a trivial subclass with equal fields:"
-                                    + "\n  %%\nThis should not happen when using getClass().",
+                            "Subclass: object is equal to an instance of a trivial subclass with"
+                                    + " equal fields:\n"
+                                    + "  %%\n"
+                                    + "This should not happen when using getClass().",
                             reference);
             assertFalse(formatter, reference.equals(equalSub));
         } else {
             Formatter formatter =
                     Formatter.of(
-                            "Subclass: object is not equal to an instance of a trivial subclass with equal fields:\n  %%\n"
-                                    + "Maybe you forgot to add usingGetClass(). Otherwise, "
-                                    + "consider making the class final or use EqualsVerifier.simple().",
+                            "Subclass: object is not equal to an instance of a trivial subclass"
+                                    + " with equal fields:\n"
+                                    + "  %%\n"
+                                    + "Maybe you forgot to add usingGetClass(). Otherwise, consider"
+                                    + " making the class final or use EqualsVerifier.simple().",
                             reference);
             assertTrue(formatter, reference.equals(equalSub));
         }
@@ -166,7 +184,8 @@ public class HierarchyChecker<T> implements Checker {
         if (methodIsFinal("equals", Object.class)) {
             fail(
                     Formatter.of(
-                            "Subclass: %% has a final equals method.\nNo need to supply a redefined subclass.",
+                            "Subclass: %% has a final equals method.\n"
+                                    + "No need to supply a redefined subclass.",
                             type.getSimpleName()));
         }
 
@@ -193,33 +212,34 @@ public class HierarchyChecker<T> implements Checker {
         if (config.isUsingGetClass()) {
             assertEquals(
                     Formatter.of(
-                            "Finality: equals and hashCode must both be final or both be non-final."),
+                            "Finality: equals and hashCode must both be final or both be"
+                                    + " non-final."),
                     equalsIsFinal,
                     hashCodeIsFinal);
         } else {
             Formatter equalsFormatter =
                     Formatter.of(
-                            "Subclass: equals is not final."
-                                    + "\nMake your class or your equals method final,"
-                                    + " or supply an instance of a redefined subclass using withRedefinedSubclass if equals cannot be final.");
+                            "Subclass: equals is not final.\n"
+                                    + "Make your class or your equals method final, or supply an"
+                                    + " instance of a redefined subclass using withRedefinedSubclass"
+                                    + " if equals cannot be final.");
             assertTrue(equalsFormatter, equalsIsFinal);
 
             Formatter hashCodeFormatter =
                     Formatter.of(
-                            "Subclass: hashCode is not final."
-                                    + "\nMake your class or your hashCode method final,"
-                                    + " or supply an instance of a redefined subclass using withRedefinedSubclass if hashCode cannot be final.");
+                            "Subclass: hashCode is not final.\n"
+                                    + "Make your class or your hashCode method final, or supply an"
+                                    + " instance of a redefined subclass using withRedefinedSubclass"
+                                    + " if hashCode cannot be final.");
             assertTrue(hashCodeFormatter, hashCodeIsFinal);
         }
     }
 
     private boolean methodIsFinal(String methodName, Class<?>... parameterTypes) {
-        try {
-            Method method = type.getMethod(methodName, parameterTypes);
-            return Modifier.isFinal(method.getModifiers());
-        } catch (SecurityException | NoSuchMethodException e) {
-            throw new ReflectionException(
-                    "Should never occur: cannot find " + type.getName() + "." + methodName);
-        }
+        return rethrow(
+                () -> {
+                    Method method = type.getMethod(methodName, parameterTypes);
+                    return Modifier.isFinal(method.getModifiers());
+                });
     }
 }

@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -77,11 +79,7 @@ public final class FieldAccessor {
             justification = "Only called in test code, not production.")
     public Object get(Object object) {
         field.setAccessible(true);
-        try {
-            return field.get(object);
-        } catch (IllegalAccessException e) {
-            throw new ReflectionException(e);
-        }
+        return rethrow(() -> field.get(object));
     }
 
     /**

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -67,13 +68,11 @@ public class RecordChecker<T> implements Checker {
     }
 
     private Method getAccessorMethodFor(Class<T> type, Field f) {
-        try {
-            Method result = type.getDeclaredMethod(f.getName());
-            result.setAccessible(true);
-            return result;
-        } catch (NoSuchMethodException | SecurityException e) {
-            fail(Formatter.of("Record: failed to find accessor method for field %%", f.getName()));
-            return null;
-        }
+        return rethrow(
+                () -> {
+                    Method result = type.getDeclaredMethod(f.getName());
+                    result.setAccessible(true);
+                    return result;
+                });
     }
 }

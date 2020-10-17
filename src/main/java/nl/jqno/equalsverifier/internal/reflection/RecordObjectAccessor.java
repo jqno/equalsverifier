@@ -1,8 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -10,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -118,25 +118,21 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     private Constructor<T> getRecordConstructor() {
-        try {
-            List<Class<?>> constructorTypes =
-                    fields().map(Field::getType).collect(Collectors.toList());
-            Constructor<T> result =
-                    type().getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
-            result.setAccessible(true);
-            return result;
-        } catch (NoSuchMethodException | SecurityException e) {
-            return null;
-        }
+        return rethrow(
+                () -> {
+                    List<Class<?>> constructorTypes =
+                            fields().map(Field::getType).collect(Collectors.toList());
+                    Constructor<T> result =
+                            type().getDeclaredConstructor(
+                                            constructorTypes.toArray(new Class<?>[0]));
+                    result.setAccessible(true);
+                    return result;
+                });
     }
 
     private T callRecordConstructor(List<?> params) {
-        try {
-            return constructor.newInstance(params.toArray(new Object[0]));
-        } catch (InvocationTargetException e) {
-            throw new ReflectionException("Record: failed to invoke constructor.", e);
-        } catch (InstantiationException | IllegalAccessException | IllegalArgumentException e) {
-            return null;
-        }
+        return rethrow(
+                () -> constructor.newInstance(params.toArray(new Object[0])),
+                "Record: failed to invoke constructor.");
     }
 }

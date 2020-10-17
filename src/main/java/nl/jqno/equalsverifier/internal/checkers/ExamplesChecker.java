@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
@@ -88,8 +89,9 @@ public class ExamplesChecker<T> implements Checker {
         } catch (ClassCastException e) {
             Formatter f =
                     Formatter.of(
-                            "Generics: ClassCastException was thrown. "
-                                    + "Consider using withGenericPrefabValues for the type that triggered the exception.");
+                            "Generics: ClassCastException was thrown. Consider using"
+                                    + " withGenericPrefabValues for the type that triggered the"
+                                    + " exception.");
             fail(f, e);
         }
     }
@@ -111,14 +113,16 @@ public class ExamplesChecker<T> implements Checker {
         try {
             Formatter f =
                     Formatter.of(
-                            "Type-check: equals returns true for an unrelated type.\nAdd an instanceof or getClass() check.");
+                            "Type-check: equals returns true for an unrelated type.\n"
+                                    + "Add an instanceof or getClass() check.");
             assertFalse(f, reference.equals(somethingElse));
         } catch (AssertionException e) {
             throw e;
         } catch (ClassCastException e) {
             Formatter f =
                     Formatter.of(
-                            "Type-check: equals throws ClassCastException.\nAdd an instanceof or getClass() check.");
+                            "Type-check: equals throws ClassCastException.\n"
+                                    + "Add an instanceof or getClass() check.");
             fail(f, e);
         } catch (Exception e) {
             Formatter f =
@@ -151,24 +155,24 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     private boolean isIdentical(T reference, T other) {
-        for (Field field : FieldIterable.of(reference.getClass())) {
-            try {
-                field.setAccessible(true);
-                if (!Objects.equals(field.get(reference), field.get(other))) {
-                    return false;
-                }
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                return false;
-            }
-        }
+        return rethrow(
+                () -> {
+                    for (Field field : FieldIterable.of(reference.getClass())) {
+                        field.setAccessible(true);
+                        if (!Objects.equals(field.get(reference), field.get(other))) {
+                            return false;
+                        }
+                    }
 
-        return true;
+                    return true;
+                });
     }
 
     @SuppressFBWarnings(
             value = "HE_HASHCODE_USE_OBJECT_EQUALS",
             justification =
-                    "The hashCode must be stable, the class has no state so we don't need to override equals")
+                    "The hashCode must be stable, the class has no state so we don't need to"
+                            + " override equals")
     private static final class SomethingElse {
         @Override
         public int hashCode() {

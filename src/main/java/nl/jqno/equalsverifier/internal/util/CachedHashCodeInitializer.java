@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
@@ -70,14 +70,13 @@ public class CachedHashCodeInitializer<T> {
     }
 
     private void recomputeCachedHashCode(Object object) {
-        try {
-            cachedHashCodeField.set(
-                    object, 0); // zero the field first, in case calculateMethod checks it
-            Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
-            cachedHashCodeField.set(object, recomputedHashCode);
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            throw new ReflectionException(e);
-        }
+        rethrow(
+                () -> {
+                    // zero the field first, in case calculateMethod checks it
+                    cachedHashCodeField.set(object, 0);
+                    Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
+                    cachedHashCodeField.set(object, recomputedHashCode);
+                });
     }
 
     private Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {

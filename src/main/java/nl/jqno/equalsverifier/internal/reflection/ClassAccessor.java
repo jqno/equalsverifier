@@ -1,10 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Predicate;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -118,11 +119,8 @@ public class ClassAccessor<T> {
     }
 
     private boolean isMethodAbstract(String name, Class<?>... parameterTypes) {
-        try {
-            return Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers());
-        } catch (NoSuchMethodException e) {
-            throw new ReflectionException("Should never occur (famous last words)");
-        }
+        return rethrow(
+                () -> Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers()));
     }
 
     /**
