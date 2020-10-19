@@ -515,6 +515,9 @@
                         <artifactId>pitest-maven</artifactId>
                         <version>1.5.2</version>
                         <configuration>
+                            <jvmArgs>
+                                <jvmArg>${additional.argLine}</jvmArg>
+                            </jvmArgs>
                             <threads>3</threads>
                             <targetClasses>
                                 <param>nl.jqno.equalsverifier.*</param>
