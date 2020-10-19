@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -13,6 +14,11 @@ public class FieldNameExtractorTest {
     private static final String FIELD_OBJECT = "fieldObject";
     private static final String FIELD_LIST = "fieldList";
     private static final String FIELD_PRIMITIVE_INT = "fieldPrimitiveInt";
+
+    @Test
+    public void coverTheConstructor() {
+        coverThePrivateConstructor(FieldNameExtractor.class);
+    }
 
     @Test
     public void should_extractFields_succesfully() throws Exception {

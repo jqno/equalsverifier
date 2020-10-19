@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 
 import java.io.IOException;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
@@ -13,6 +14,11 @@ import org.junit.Test;
 public class RethrowTest extends ExpectedExceptionTestBase {
     private static final String PROVIDED_MSG = "this message is provided";
     private static final String CAUSE_MSG = "this message came from the exception";
+
+    @Test
+    public void coverTheConstructor() {
+        coverThePrivateConstructor(Rethrow.class);
+    }
 
     @Test
     public void supplierWithIgnoredMessageThrowsRuntimeException() {

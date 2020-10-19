@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -11,6 +12,11 @@ import nl.jqno.equalsverifier.testhelpers.packages.correct.*;
 import org.junit.Test;
 
 public class PackageScannerTest {
+
+    @Test
+    public void coverTheConstructor() {
+        coverThePrivateConstructor(PackageScanner.class);
+    }
 
     @Test
     public void happyPath() {
