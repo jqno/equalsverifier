@@ -12,7 +12,7 @@ commands:
       - restore_cache:
           key: dependency-cache
       - run: java -version
-      - run: ./mvnw -B --no-transfer-progress clean verify << parameters.flag >>
+      - run: ./mvnw -B --no-transfer-progress clean verify javadoc:javadoc << parameters.flag >>
       - save_cache:
           key: dependency-cache
           paths:
