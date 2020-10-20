@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.5] - 2020-10-20
+### Added
+- Updated support for Java 15's records.
+
 ## [3.4.3] - 2020-09-08
 ### Changed
 - Added more helpful error message explaining why EqualsVerifier can't verify subclasses of `java.util.ArrayList`. ([Issue 341](https://github.com/jqno/equalsverifier/issues/341))
@@ -726,7 +730,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.3...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5...HEAD
+
+[3.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.3...equalsverifier-3.5
 
 [3.4.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.2...equalsverifier-3.4.3
 [3.4.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.1...equalsverifier-3.4.2
