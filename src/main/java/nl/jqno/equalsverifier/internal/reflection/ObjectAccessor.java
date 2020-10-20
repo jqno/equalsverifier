@@ -159,7 +159,7 @@ public abstract class ObjectAccessor<T> {
             PrefabValues prefabValues, TypeTag enclosingType);
 
     /**
-     * Clears all fields of the wrapped object to their default values, but only if {@link
+     * Clears all fields of the wrapped object to their default values, but only if {@code
      * canBeDefault} for the given field returns true. Otherwise, leaves the value intact. It may or
      * may not mutate the object of the current ObjectAccessor. Either way, the current
      * ObjectAccessor and any reference to its object should be considered 'spent' after calling
