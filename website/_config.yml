@@ -20,6 +20,7 @@
 
 locale: "ie"
 title: "EqualsVerifier"
+subtitle: "jqno.nl"
 name: "Jan Ouwens"
 description: "EqualsVerifier"
 baseurl: "/equalsverifier"
@@ -44,6 +45,8 @@ defaults:
     values:
       layout: single
       author_profile: true
+      sidebar:
+        nav: "side"
       share: false
       related: false
 
