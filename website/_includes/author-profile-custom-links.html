@@ -1,0 +1,39 @@
+{% if author.github_project %}
+  <li>
+    <a href="https://github.com/{{ author.github_project }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+    </a>
+  </li>
+{% endif %}
+
+{% if author.email_project %}
+  <li>
+    <a href="{{ author.email_project }}" itemprop="url">
+      <i class="fas fa-fw fa-envelope-square" aria-hidden="true"></i><span class="label">{{ site.data.ui-text[site.locale].email_list }}</span>
+    </a>
+  </li>
+{% endif %}
+
+{% if author.stackoverflow_tag %}
+  <li>
+    <a href="https://stackoverflow.com/questions/tagged/{{ author.stackoverflow_tag }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fab fa-fw fa-stack-overflow" aria-hidden="true"></i><span class="label">Stack Overflow</span>
+    </a>
+  </li>
+{% endif %}
+
+{% if author.uri_author %}
+  <li>
+    <a href="{{ author.uri_author }}" itemprop="url">
+      <i class="fas fa-fw fa-link" aria-hidden="true"></i><span class="label">{{ site.data.ui-text[site.locale].made_by }}</span>
+    </a>
+  </li>
+{% endif %}
+
+{% if author.twitter_author %}
+  <li>
+    <a href="https://twitter.com/{{ author.twitter_author }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fab fa-fw fa-twitter-square" aria-hidden="true"></i><span class="label">Twitter</span>
+    </a>
+  </li>
+{% endif %}

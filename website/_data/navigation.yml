@@ -1,0 +1,12 @@
+# main links
+main:
+  - title: "Manual"
+    url: /manual
+  - title: "Error messages explained"
+    url: /errormessages
+  - title: "Blog"
+    url: http://jqno.nl/blog
+  - title: "Talks"
+    url: http://jqno.nl/talks
+  - title: "EqualsVerifier"
+    url: http://jqno.nl/equalsverifier
