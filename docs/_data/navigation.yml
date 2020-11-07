@@ -7,7 +7,7 @@ main:
   - title: "Talks"
     url: http://jqno.nl/talks
   - title: "EqualsVerifier"
-    url: http://jqno.nl/equalsverifier
+    url: /equalsverifier
 
 side:
   - title: "Documentation"
