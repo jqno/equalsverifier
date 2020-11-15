@@ -3,18 +3,18 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assume.assumeTrue;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class RecordObjectAccessorModificationTest extends StringCompilerTestBase {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+
+public class RecordObjectAccessorModificationTest {
     private static final int INITIAL_INT = 42;
     private static final boolean INITIAL_BOOLEAN = true;
     private static final String INITIAL_STRING = "hello";
@@ -29,10 +29,9 @@ public class RecordObjectAccessorModificationTest extends StringCompilerTestBase
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isRecordsAvailable());
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
 
-        modifiable = compile(MODIFIABLE_RECORD_CLASS_NAME, MODIFIABLE_RECORD_CLASS);
+        modifiable = ModifiableRecord.class;
         Constructor<?> c =
                 modifiable.getDeclaredConstructor(
                         int.class, boolean.class, String.class, Object.class);
@@ -121,7 +120,5 @@ public class RecordObjectAccessorModificationTest extends StringCompilerTestBase
         return objectAccessor.getField(field);
     }
 
-    private static final String MODIFIABLE_RECORD_CLASS_NAME = "Modifiable";
-    private static final String MODIFIABLE_RECORD_CLASS =
-            "public record Modifiable(int i, boolean b, String s, Object o) {}";
+    record ModifiableRecord(int i, boolean b, String s, Object o) {}
 }

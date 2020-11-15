@@ -1,18 +1,16 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
 
-import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
 import org.junit.Test;
 
-public class RecordInstantiatorTest extends StringCompilerTestBase {
+public class RecordInstantiatorTest {
     @Test
     public void instantiateRecord() {
-        assumeTrue(isRecordsAvailable());
-        Class<?> simpleRecordClass = compileSimpleRecord();
-        Instantiator<?> instantiator = Instantiator.of(simpleRecordClass);
+        Instantiator<?> instantiator = Instantiator.of(SimpleRecord.class);
         Object simpleRecord = instantiator.instantiate();
-        assertEquals(simpleRecordClass, simpleRecord.getClass());
+        assertEquals(SimpleRecord.class, simpleRecord.getClass());
     }
+
+    record SimpleRecord(int i) {}
 }

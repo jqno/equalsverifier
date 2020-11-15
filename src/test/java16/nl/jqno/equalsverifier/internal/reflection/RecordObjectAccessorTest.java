@@ -3,25 +3,24 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assume.assumeTrue;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+
 import org.junit.Before;
 import org.junit.Test;
 
-public class RecordObjectAccessorTest extends StringCompilerTestBase {
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 
-    private Class<?> recordClass;
+public class RecordObjectAccessorTest extends ExpectedExceptionTestBase {
+
     private Object recordInstance;
 
     @Before
     public void setUp() throws Exception {
-        assumeTrue(isRecordsAvailable());
-        recordClass = compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
-        Constructor<?> constructor = recordClass.getDeclaredConstructor(int.class, String.class);
+        Constructor<?> constructor =
+                SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
         constructor.setAccessible(true);
         recordInstance = constructor.newInstance(42, "hello");
     }
@@ -40,16 +39,14 @@ public class RecordObjectAccessorTest extends StringCompilerTestBase {
 
     @Test
     public void getField() throws Exception {
-        Field f = recordClass.getDeclaredField("i");
+        Field f = SimpleRecord.class.getDeclaredField("i");
         RecordObjectAccessor<?> accessor = create(recordInstance);
         assertEquals(42, accessor.getField(f));
     }
 
     @Test
     public void fail_whenConstructorThrowsNpe() {
-        recordClass =
-                compile(THROWING_CONSTRUCTOR_RECORD_CLASS_NAME, THROWING_CONSTRUCTOR_RECORD_CLASS);
-        Object instance = Instantiator.of(recordClass).instantiate();
+        Object instance = Instantiator.of(ThrowingConstructorRecord.class).instantiate();
 
         expectException(ReflectionException.class, "Record:", "failed to invoke constructor");
         create(instance).copy();
@@ -60,16 +57,11 @@ public class RecordObjectAccessorTest extends StringCompilerTestBase {
         return new RecordObjectAccessor<T>(object, (Class<T>) object.getClass());
     }
 
-    private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
-    private static final String SIMPLE_RECORD_CLASS =
-            "public record SimpleRecord(int i, String s) {}";
+    record SimpleRecord(int i, String s) {}
 
-    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS_NAME =
-            "ThrowingConstructorRecord";
-    private static final String THROWING_CONSTRUCTOR_RECORD_CLASS =
-            "public record ThrowingConstructorRecord(int i, String s) {"
-                    + "\n    public ThrowingConstructorRecord {"
-                    + "\n        throw new IllegalStateException();"
-                    + "\n    }"
-                    + "\n}";
+    record ThrowingConstructorRecord(int i, String s) {
+        public ThrowingConstructorRecord {
+            throw new IllegalStateException();
+        }
+    }
 }
