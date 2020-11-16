@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
 import static org.hamcrest.CoreMatchers.*;
-import static org.junit.jupiter.api.Assertions.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 
