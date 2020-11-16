@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.Rule;

@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;

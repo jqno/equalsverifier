@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;

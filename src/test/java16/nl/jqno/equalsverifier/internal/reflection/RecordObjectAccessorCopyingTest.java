@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;

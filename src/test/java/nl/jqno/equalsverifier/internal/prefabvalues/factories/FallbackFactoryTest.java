@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;

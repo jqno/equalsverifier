@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Set;

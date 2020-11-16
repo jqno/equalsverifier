@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;

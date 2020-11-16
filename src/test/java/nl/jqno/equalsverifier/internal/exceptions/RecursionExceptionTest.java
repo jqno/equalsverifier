@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
