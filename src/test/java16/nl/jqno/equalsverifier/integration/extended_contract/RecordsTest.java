@@ -15,6 +15,11 @@ public class RecordsTest extends ExpectedExceptionTestBase {
     }
 
     @Test
+    public void succeed_whenClassIsAPrivateRecord() {
+        EqualsVerifier.forClass(PrivateSimpleRecord.class).verify();
+    }
+
+    @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
         expectFailure("Record invariant", "intField");
         EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify();
@@ -73,6 +78,8 @@ public class RecordsTest extends ExpectedExceptionTestBase {
     }
 
     record SimpleRecord(int i, String s) {}
+
+    private record PrivateSimpleRecord(int i, String s) {}
 
     record BrokenInvariantIntFieldRecord(int intField, String stringField) {
         public BrokenInvariantIntFieldRecord(int intField, String stringField) {
