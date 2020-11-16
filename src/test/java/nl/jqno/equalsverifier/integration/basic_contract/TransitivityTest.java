@@ -6,7 +6,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class TransitivityTest extends ExpectedExceptionTestBase {
@@ -85,7 +85,7 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    @Ignore("This class is not transitive, and it should fail. See issue 78.")
+    @Disabled("This class is not transitive, and it should fail. See issue 78.")
     @Test
     public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
         expectFailure("Transitivity");

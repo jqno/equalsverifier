@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
@@ -11,7 +11,7 @@ public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
     private Multiple b;
     private Multiple x;
 
-    @Before
+    @BeforeEach
     public void setup() {
         a = new Multiple(1, 2);
         b = new Multiple(2, 1);

@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FieldModifierTest {
@@ -23,7 +23,7 @@ public class FieldModifierTest {
 
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(RED_NEW_POINT, BLUE_NEW_POINT, REDCOPY_NEW_POINT));

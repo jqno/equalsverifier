@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -17,7 +17,7 @@ public class RecordObjectAccessorTest extends ExpectedExceptionTestBase {
 
     private Object recordInstance;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         Constructor<?> constructor =
                 SimpleRecord.class.getDeclaredConstructor(int.class, String.class);

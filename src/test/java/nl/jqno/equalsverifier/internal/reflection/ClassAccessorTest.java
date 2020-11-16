@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.TemporaryFolder;
@@ -36,7 +36,7 @@ public class ClassAccessorTest {
     private ClassAccessor<DefaultValues> defaultValuesClassAccessor;
     private AnnotationCache defaultValuesAnnotationCache;
 
-    @Before
+    @BeforeEach
     public void setup() {
         factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);

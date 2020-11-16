@@ -11,7 +11,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
@@ -27,7 +27,7 @@ public class PrefabValuesTest {
     private FactoryCache factoryCache = new FactoryCache();
     private PrefabValues pv;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));

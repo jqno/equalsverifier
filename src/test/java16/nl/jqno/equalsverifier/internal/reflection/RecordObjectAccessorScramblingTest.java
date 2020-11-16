@@ -13,7 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.RecordObjectAccessorScrambling
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -25,7 +25,7 @@ public class RecordObjectAccessorScramblingTest extends ExpectedExceptionTestBas
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);

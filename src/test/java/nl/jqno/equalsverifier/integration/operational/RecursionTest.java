@@ -11,7 +11,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RecursionTest extends ExpectedExceptionTestBase {
@@ -23,7 +23,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     private Tree redTree;
     private Tree blueTree;
 
-    @Before
+    @BeforeEach
     public void createSomeNodes() {
         red = new Node(null);
         blue = new Node(new Node(null));

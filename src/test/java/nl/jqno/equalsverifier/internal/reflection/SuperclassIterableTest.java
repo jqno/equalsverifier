@@ -7,13 +7,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SuperclassIterableTest {
     private List<Class<?>> actual;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         actual = new ArrayList<>();
     }

@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.Rule;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
@@ -19,7 +19,7 @@ public class AbstractGenericFactoryTest {
     private String receiver;
     private AbstractGenericFactory<String> factory;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         receiver = "";
         factory =

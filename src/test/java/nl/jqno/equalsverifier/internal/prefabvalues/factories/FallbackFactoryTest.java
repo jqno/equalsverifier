@@ -19,7 +19,7 @@ import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FallbackFactoryTest extends ExpectedExceptionTestBase {
@@ -27,7 +27,7 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     private PrefabValues prefabValues;
     private LinkedHashSet<TypeTag> typeStack;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         factory = new FallbackFactory<>();
         FactoryCache factoryCache = new FactoryCache();

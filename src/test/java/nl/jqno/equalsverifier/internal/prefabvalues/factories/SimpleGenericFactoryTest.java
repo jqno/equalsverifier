@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("rawtypes")
@@ -38,7 +38,7 @@ public class SimpleGenericFactoryTest {
     private Object redObject;
     private Object blueObject;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         redString = prefabValues.giveRed(STRING_TYPETAG);

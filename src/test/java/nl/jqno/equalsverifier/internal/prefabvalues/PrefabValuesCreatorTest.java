@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
@@ -27,7 +27,7 @@ public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setup() {
         factoryCache = FactoryCacheFactory.withPrimitiveFactories();
         prefabValues = new PrefabValues(factoryCache);

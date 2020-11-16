@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
@@ -27,7 +27,7 @@ public class RecordObjectAccessorModificationTest {
     private Field stringField;
     private ObjectAccessor<?> modified;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
 
