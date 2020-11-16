@@ -1,24 +1,19 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.Assert.*;
-import static org.junit.Assume.assumeTrue;
 
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.testhelpers.StringCompilerTestBase;
-import org.junit.Before;
+import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+
 import org.junit.Test;
 
-public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
+import java.lang.reflect.Field;
 
-    @Before
-    public void setUp() {
-        assumeTrue(isRecordsAvailable());
-    }
+public class RecordObjectAccessorCopyingTest extends ExpectedExceptionTestBase {
 
     @Test
     public void copyHappyPath() {
-        Object original = instantiate(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+        Object original = instantiate(SimpleRecord.class);
         Object copy = copyOf(original);
 
         assertNotSame(original, copy);
@@ -27,7 +22,7 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
 
     @Test
     public void shallowCopy() {
-        Object original = instantiate(RECORD_CONTAINER_CLASS_NAME, RECORD_CONTAINER_CLASS);
+        Object original = instantiate(RecordContainer.class);
         Object copy = copyOf(original);
         ObjectAccessor<?> originalAccessor = create(original);
         ObjectAccessor<?> copyAccessor = create(copy);
@@ -45,7 +40,7 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
         expectException(
                 EqualsVerifierInternalBugException.class,
                 "Can't copy a record into a subclass of itself.");
-        Object object = instantiate(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+        Object object = instantiate(SimpleRecord.class);
         create(object).copyIntoSubclass(null);
     }
 
@@ -54,7 +49,7 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
         expectException(
                 EqualsVerifierInternalBugException.class,
                 "Can't copy a record into an anonymous subclass of itself.");
-        Object object = instantiate(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+        Object object = instantiate(SimpleRecord.class);
         create(object).copyIntoAnonymousSubclass();
     }
 
@@ -64,8 +59,7 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T instantiate(String className, String code) {
-        Class<T> type = (Class<T>) compile(SIMPLE_RECORD_CLASS_NAME, SIMPLE_RECORD_CLASS);
+    private <T> T instantiate(Class<T> type) {
         return Instantiator.of(type).instantiate();
     }
 
@@ -73,11 +67,7 @@ public class RecordObjectAccessorCopyingTest extends StringCompilerTestBase {
         return create(from).copy();
     }
 
-    private static final String SIMPLE_RECORD_CLASS_NAME = "SimpleRecord";
-    private static final String SIMPLE_RECORD_CLASS =
-            "public record SimpleRecord(int i, String s) {}";
+    record SimpleRecord(int i, String s) {}
 
-    private static final String RECORD_CONTAINER_CLASS_NAME = "RecordContainer";
-    private static final String RECORD_CONTAINER_CLASS =
-            "record SimpleRecord(int i) {}" + "\npublic record RecordContainer(SimpleRecord r) {}";
+    record RecordContainer(SimpleRecord r) {}
 }
