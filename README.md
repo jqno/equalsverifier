@@ -40,7 +40,7 @@ To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call 
 
 ## Formatting
 
-EqualsVerifier uses [Google Java Format](https://github.com/google/google-java-format) to format Java files. You can call it using `mvn` (without any parameters), which will also run the tests and all the other static analysis. Or run `mvn com.coveo:fmt-maven-plugin:format` to only run the formatter.
+EqualsVerifier uses [Google Java Format](https://github.com/google/google-java-format) to format Java files. You can call it using `mvn` (without any parameters), which will also run the tests and all the other static analysis. Or run `mvn spotless:apply` to only run the formatter.
 
 
 ## Project structure
