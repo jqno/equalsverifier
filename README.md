@@ -43,70 +43,24 @@ To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call 
 EqualsVerifier uses [Google Java Format](https://github.com/google/google-java-format) to format Java files. You can call it using `mvn` (without any parameters), which will also run the tests and all the other static analysis. Or run `mvn spotless:apply` to only run the formatter.
 
 
-## Project structure
+## Conditional tests
 
-`src/`
+The `src/test` folder contains, apart from the regular `java` folder, some version-specific `javaXX` folders that target specific JDKs. For instance, the `src/test/java16` folder contains unit tests that test things related to records. A Maven profile automatically picks up these folders if the JDK that runs the tests has at least that version. `nl.jqno.equalsverifier.internal.architecture.TestPresenceTest` checks that the tests are indeed picked up when the JDK version matches.
 
-* `nl.jqno.equalsverifier`
-  External API
-* `nl.jqno.equalsverifier`
-  Supporting classes for the external API that aren't used in client code directly
-* `nl.jqno.equalsverifier.internal`
-  Classes internal to the operation of EqualsVerifier
-* `nl.jqno.equalsverifier.internal.checkers`
-  Checkers that perform EqualsVerifier's actual verifications
-* `nl.jqno.equalsverifier.internal.exceptions`
-  Internally used exceptions
-* `nl.jqno.equalsverifier.internal.prefabvalues`
-  Cache and factories for instances of all types
-* `nl.jqno.equalsverifier.internal.reflection`
-  Helpers for reflection-based tasks
-* `nl.jqno.equalsverifier.internal.util`
-  Various helpers
 
-`test/`
+## Signed Jar
 
-* `javax.persistence`
-  Annotations used by integration tests
-* `nl.jqno.equalsverifier`
-  Unit tests for specific subcomponents of EqualsVerifier
-* `nl.jqno.equalsverifier.coverage`
-  Code coverage tests, which fail if coverage is less than 100%
-* `nl.jqno.equalsverifier.integration.basic_contract`
-  Integration tests that cover the contract as stated in `java.lang.Object`'s javadoc
-* `nl.jqno.equalsverifier.integration.extended_contract`
-  Integration tests that cover specific corner cases in the Java language, and other essential points that are discussed in other sources, such as Effective Java, but not in the javadoc
-* `nl.jqno.equalsverifier.integration.extra_features`
-  Integration tests that cover non-standard situations that EqualsVerifier supports
-* `nl.jqno.equalsverifier.integration.inheritance`
-  Integration tests that cover inheritance in equality relations
-* `nl.jqno.equalsverifier.integration.operational`
-  Integration tests that cover issues that don't pertain to equals or hashCode themselves, but to EqualsVerifier's operation
-* `nl.jqno.equalsverifier.testhelpers`
-  Utility classes for use in tests
-* `nl.jqno.equalsverifier.testhelpers.annotations`
-  Annotations used by unit tests and integration tests
-* `nl.jqno.equalsverifier.testhelpers.annotations.casefolding`
-  More annotations which would clash with other annotations because of casing
-* `nl.jqno.equalsverifier.testhelpers.types`
-   Various data classes for use in unit tests and integration tests
-* `nl.jqno.equalsverifier.util`
-  Unit tests for the reflection helpers
-
-`lib/`
-
-* `equalsverifier-signedjar-test.jar`
-  A local Maven repository containing a signed jar, used to test potential ClassLoader issues
-  <br/>
-  Here's how to install a jar into it:<br>
-  <pre>
-  mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
-                           -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
-                           -DartifactId=&lt;myArtifactId> -Dversion=&lt;myVersion> \
-                           -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
-                           -DlocalRepositoryPath=lib
-  </pre>
-  The signed jar itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
+The `lib/` folder contains a local Maven repository containing a signed jar, used to test potential ClassLoader issues
+<br/>
+Here's how to install a jar into it:<br>
+<pre>
+mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
+                        -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
+                        -DartifactId=&lt;myArtifactId> -Dversion=&lt;myVersion> \
+                        -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
+                        -DlocalRepositoryPath=lib
+</pre>
+The signed jar itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
 
 # Disclaimer
 
