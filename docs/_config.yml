@@ -37,7 +37,7 @@ author:
 footer:
   links:
     - label: "Privacy policy"
-      url: "/equalsverifier/privacy"
+      url: "https://jqno.nl/privacy"
 
 defaults:
   - scope:
