@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import java.util.ArrayList;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class JavaCollectionSubclassTest extends ExpectedExceptionTestBase {
     private static final String MESSAGE_FRAGMENT = "cannot verify subclasses of";

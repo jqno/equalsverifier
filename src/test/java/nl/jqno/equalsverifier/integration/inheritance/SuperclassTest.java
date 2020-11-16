@@ -14,7 +14,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractEqualsAndHash
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Empty;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SuperclassTest extends ExpectedExceptionTestBase {
     @Test

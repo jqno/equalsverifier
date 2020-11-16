@@ -4,7 +4,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AssertTest extends ExpectedExceptionTestBase {
     private static final Formatter FAIL = Formatter.of("fail");

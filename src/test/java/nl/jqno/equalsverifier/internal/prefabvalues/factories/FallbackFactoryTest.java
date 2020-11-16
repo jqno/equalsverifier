@@ -20,7 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FallbackFactoryTest extends ExpectedExceptionTestBase {
     private FallbackFactory<?> factory;

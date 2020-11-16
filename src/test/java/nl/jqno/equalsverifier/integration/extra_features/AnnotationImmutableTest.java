@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationImmutableTest extends ExpectedExceptionTestBase {
     @Test

@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class OutputTest extends ExpectedExceptionTestBase {
     private static final String SEE_ALSO = "For more information, go to";

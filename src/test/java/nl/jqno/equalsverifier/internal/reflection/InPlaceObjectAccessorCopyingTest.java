@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorCopyingTest {
     @Test

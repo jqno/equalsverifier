@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingRunnable;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingSupplier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RethrowTest extends ExpectedExceptionTestBase {
     private static final String PROVIDED_MSG = "this message is provided";

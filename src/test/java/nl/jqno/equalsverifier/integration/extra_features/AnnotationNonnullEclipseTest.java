@@ -9,7 +9,7 @@ import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
     @Test

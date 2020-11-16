@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 public class FieldIterableTest {

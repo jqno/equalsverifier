@@ -6,7 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 public class FormatterTest {

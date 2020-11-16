@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PrefabValuesCreatorTest extends ExpectedExceptionTestBase {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);

@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
     private final FinalPoint red = new FinalPoint(1, 2);

@@ -13,7 +13,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory
 import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {

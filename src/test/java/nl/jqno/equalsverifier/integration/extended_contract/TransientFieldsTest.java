@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TransientFieldsTest extends ExpectedExceptionTestBase {
     @Test

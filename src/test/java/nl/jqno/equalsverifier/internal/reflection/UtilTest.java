@@ -8,7 +8,7 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UtilTest {
     @Test

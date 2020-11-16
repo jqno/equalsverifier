@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SimpleFactoryTest {
     private SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));

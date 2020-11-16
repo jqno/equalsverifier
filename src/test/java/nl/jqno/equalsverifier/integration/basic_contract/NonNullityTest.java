@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class NonNullityTest extends ExpectedExceptionTestBase {
     @Test

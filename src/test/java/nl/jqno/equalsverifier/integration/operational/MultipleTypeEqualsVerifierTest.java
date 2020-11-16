@@ -16,7 +16,7 @@ import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
 import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectM;
 import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MultipleTypeEqualsVerifierTest extends ExpectedExceptionTestBase {
     private static final String CORRECT_PACKAGE =

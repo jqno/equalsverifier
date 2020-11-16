@@ -18,7 +18,7 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.No
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test

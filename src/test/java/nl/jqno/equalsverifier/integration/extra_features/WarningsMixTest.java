@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class WarningsMixTest extends ExpectedExceptionTestBase {
     @Test

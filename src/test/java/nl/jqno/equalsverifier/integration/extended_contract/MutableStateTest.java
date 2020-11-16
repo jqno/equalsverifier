@@ -7,7 +7,7 @@ import java.util.Arrays;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class MutableStateTest extends ExpectedExceptionTestBase {
     private static final String MUTABILITY = "Mutability: equals depends on mutable field";

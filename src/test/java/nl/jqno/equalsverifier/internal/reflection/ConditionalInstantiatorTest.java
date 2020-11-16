@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.rules.ExpectedException;
 
 public class ConditionalInstantiatorTest {

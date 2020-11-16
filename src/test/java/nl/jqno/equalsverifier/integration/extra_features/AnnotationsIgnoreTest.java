@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationsIgnoreTest extends ExpectedExceptionTestBase {
     @Test

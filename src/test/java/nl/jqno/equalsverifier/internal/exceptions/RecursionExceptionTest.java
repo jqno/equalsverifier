@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RecursionExceptionTest {
     @Test

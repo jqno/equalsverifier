@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.coverage;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: LocalFinalVariableName
 // CHECKSTYLE OFF: NeedBraces

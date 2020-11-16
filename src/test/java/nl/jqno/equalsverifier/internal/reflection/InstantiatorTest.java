@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClass;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
 
 public class InstantiatorTest {

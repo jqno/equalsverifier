@@ -5,7 +5,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class RecordsTest extends ExpectedExceptionTestBase {
 

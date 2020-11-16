@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Embedded
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
 public class JpaIdTest extends ExpectedExceptionTestBase {

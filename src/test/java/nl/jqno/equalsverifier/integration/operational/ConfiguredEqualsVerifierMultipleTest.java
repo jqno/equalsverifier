@@ -21,7 +21,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestBase {
 

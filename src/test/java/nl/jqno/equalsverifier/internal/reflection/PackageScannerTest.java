@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PackageScannerTest {
 

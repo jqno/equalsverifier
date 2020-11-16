@@ -4,7 +4,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FloatAndDoubleTest extends ExpectedExceptionTestBase {
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";

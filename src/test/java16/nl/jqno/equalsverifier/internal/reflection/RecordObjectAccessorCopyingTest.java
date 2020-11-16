@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
 
