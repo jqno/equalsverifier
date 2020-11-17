@@ -6,10 +6,14 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.junit.Rule;
+import org.junit.jupiter.migrationsupport.rules.EnableRuleMigrationSupport;
 import org.junit.rules.ExpectedException;
 
+@EnableRuleMigrationSupport
 public abstract class ExpectedExceptionTestBase {
-    @Rule public ExpectedException thrown = ExpectedException.none();
+    @SuppressWarnings("deprecation")
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     public void expectFailureWithCause(Class<? extends Throwable> cause, String... fragments) {
         thrown.expect(new CauseMatcher(cause));
