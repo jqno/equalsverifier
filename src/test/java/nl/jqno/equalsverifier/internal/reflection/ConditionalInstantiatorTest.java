@@ -6,6 +6,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -13,14 +14,10 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class ConditionalInstantiatorTest {
     private static final String THIS_TYPE_DOES_NOT_EXIST = "this.type.does.not.Exist";
-
-    @Rule public ExpectedException thrown = ExpectedException.none();
 
     private ConditionalInstantiator ci;
 
@@ -61,8 +58,12 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenInvalidConstructorParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar");
 
-        thrown.expect(ReflectionException.class);
-        ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
+        assertThrows(
+                ReflectionException.class,
+                () ->
+                        ci.instantiate(
+                                classes(int.class, int.class, int.class),
+                                objects(1999, 31, "hello")));
     }
 
     @Test
@@ -95,8 +96,9 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenInvalidMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
-        thrown.expect(ReflectionException.class);
-        ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42));
+        assertThrows(
+                ReflectionException.class,
+                () -> ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42)));
     }
 
     @Test
@@ -111,8 +113,9 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenInvalidFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.lang.Integer");
 
-        thrown.expect(ReflectionException.class);
-        ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
+        assertThrows(
+                ReflectionException.class,
+                () -> ci.callFactory("valueOf", classes(int.class, int.class), objects(42)));
     }
 
     @Test
@@ -144,8 +147,14 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenExternalFactoryIsCalled_givenFactoryTypeDoesNotExist() {
         ci = new ConditionalInstantiator("java.util.List");
 
-        thrown.expect(ReflectionException.class);
-        ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
+        assertThrows(
+                ReflectionException.class,
+                () ->
+                        ci.callFactory(
+                                "java.util.ThisTypeDoesNotExist",
+                                "emptyList",
+                                classes(),
+                                objects()));
     }
 
     @Test
@@ -162,8 +171,14 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenInvalidExternalFactoryMethodNameIsProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
-        thrown.expect(ReflectionException.class);
-        ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
+        assertThrows(
+                ReflectionException.class,
+                () ->
+                        ci.callFactory(
+                                "java.util.Collections",
+                                "thisMethodDoesntExist",
+                                classes(),
+                                objects()));
     }
 
     @Test
@@ -180,8 +195,14 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenInvalidExternalFactoryMethodParametersAreProvided() {
         ci = new ConditionalInstantiator("java.util.List");
 
-        thrown.expect(ReflectionException.class);
-        ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
+        assertThrows(
+                ReflectionException.class,
+                () ->
+                        ci.callFactory(
+                                "java.util.Collections",
+                                "emptyList",
+                                classes(int.class),
+                                objects(42)));
     }
 
     @Test
@@ -214,8 +235,7 @@ public class ConditionalInstantiatorTest {
     public void throwsIse_whenConstantDoesNotExist() {
         ci = new ConditionalInstantiator("java.math.BigDecimal");
 
-        thrown.expect(ReflectionException.class);
-        ci.returnConstant("FORTY-TWO");
+        assertThrows(ReflectionException.class, () -> ci.returnConstant("FORTY-TWO"));
     }
 
     @Test

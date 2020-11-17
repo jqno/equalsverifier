@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -9,9 +10,7 @@ import java.util.Map;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class TypeTagTest {
     private static final TypeTag SOME_LONG_TYPETAG =
@@ -19,8 +18,6 @@ public class TypeTagTest {
                     Map.class,
                     new TypeTag(Integer.class),
                     new TypeTag(List.class, new TypeTag(String.class)));
-
-    @Rule public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void equalsAndHashCode() {
@@ -32,8 +29,7 @@ public class TypeTagTest {
 
     @Test
     public void typeCannotBeNull() {
-        thrown.expect(NullPointerException.class);
-        new TypeTag(null);
+        assertThrows(NullPointerException.class, () -> new TypeTag(null));
     }
 
     @Test

@@ -1,17 +1,15 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static nl.jqno.equalsverifier.testhelpers.Util.assertThrows;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class FormatterTest {
-    @Rule public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void noParameters() {
         Formatter f = Formatter.of("No parameters");
@@ -143,29 +141,21 @@ public class FormatterTest {
 
     @Test
     public void nullMessage() {
-        thrown.expect(NullPointerException.class);
-
-        Formatter.of(null);
+        assertThrows(NullPointerException.class, () -> Formatter.of(null));
     }
 
     @Test
     public void notEnoughParameters() {
         Formatter f = Formatter.of("Not enough: %% and %%");
 
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Not enough parameters");
-
-        f.format();
+        assertThrows(IllegalStateException.class, "Not enough parameters", () -> f.format());
     }
 
     @Test
     public void tooManyParameters() {
         Formatter f = Formatter.of("Too many!", new Simple(0));
 
-        thrown.expect(IllegalStateException.class);
-        thrown.expectMessage("Too many parameters");
-
-        f.format();
+        assertThrows(IllegalStateException.class, "Too many parameters", () -> f.format());
     }
 
     static class Simple {

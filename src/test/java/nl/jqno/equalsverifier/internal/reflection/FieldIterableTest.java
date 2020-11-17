@@ -2,13 +2,12 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class FieldIterableTest {
     private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
@@ -17,8 +16,6 @@ public class FieldIterableTest {
     private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
     private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS =
             createFieldAndSubFieldContainerFields();
-
-    @Rule public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void simpleFields() {
@@ -130,8 +127,7 @@ public class FieldIterableTest {
             iterator.next();
         }
 
-        thrown.expect(NoSuchElementException.class);
-        iterator.next();
+        assertThrows(NoSuchElementException.class, () -> iterator.next());
     }
 
     @Test

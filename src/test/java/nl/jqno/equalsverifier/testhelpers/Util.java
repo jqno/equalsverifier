@@ -1,12 +1,14 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.function.Executable;
 
 public final class Util {
     private Util() {}
@@ -50,6 +52,31 @@ public final class Util {
 
     private static boolean isRelevant(Field f) {
         return FieldAccessor.of(f).canBeModifiedReflectively();
+    }
+
+    public static <T extends Throwable> T assertThrows(
+            Class<T> expectedType, String partialMessage, Executable executable) {
+        T result = Assertions.assertThrows(expectedType, executable);
+        assertMessageContains(result, partialMessage);
+        return result;
+    }
+
+    public static void assertMessageContains(Throwable e, String... needles) {
+        String haystack = e.getMessage();
+        for (String needle : needles) {
+            if (!haystack.contains(needle)) {
+                fail("Message [" + haystack + "] does not contain [" + needle + "]");
+            }
+        }
+    }
+
+    public static void assertMessageDoesNotContain(Throwable e, String... needles) {
+        String haystack = e.getMessage();
+        for (String needle : needles) {
+            if (haystack.contains(needle)) {
+                fail("Message [" + haystack + "] contains [" + needle + "]");
+            }
+        }
     }
 
     public static void coverThePrivateConstructor(Class<?> type) {

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -33,20 +34,21 @@ public class FieldNameExtractorTest {
         assertTrue("Total number of fields was not equal to expected value", 4 == fields.size());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void should_disallow_adding_extra_fields() throws Exception {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        fields.add("illegally added field");
+        assertThrows(
+                UnsupportedOperationException.class, () -> fields.add("illegally added field"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void should_disallow_removing_fields() throws Exception {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        fields.remove(FIELD_STRING);
+        assertThrows(UnsupportedOperationException.class, () -> fields.remove(FIELD_STRING));
     }
 
     class FieldNameExtractorTestHelper {

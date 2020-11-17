@@ -18,10 +18,8 @@ import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRete
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class AnnotationCacheBuilderTest {
     private static final String RUNTIME_RETENTION = "runtimeRetention";
@@ -30,8 +28,6 @@ public class AnnotationCacheBuilderTest {
     private static final String NO_RETENTION = "noRetention";
 
     private static final Set<String> NO_INGORED_ANNOTATIONS = new HashSet<>();
-
-    @Rule public ExpectedException thrown = ExpectedException.none();
 
     private AnnotationCacheBuilder cacheBuilder;
     private AnnotationCache cache;
