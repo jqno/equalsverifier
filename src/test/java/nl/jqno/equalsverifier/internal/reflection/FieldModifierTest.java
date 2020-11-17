@@ -199,9 +199,9 @@ public class FieldModifierTest {
 
         for (Field field : FieldIterable.of(AllTypesContainer.class)) {
             FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
-            assertFalse("On field: " + field.getName(), reference.equals(changed));
+            assertFalse(reference.equals(changed), "On field: " + field.getName());
             FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
-            assertTrue("On field: " + field.getName(), reference.equals(changed));
+            assertTrue(reference.equals(changed), "On field: " + field.getName());
         }
     }
 
@@ -244,9 +244,9 @@ public class FieldModifierTest {
 
         for (Field field : FieldIterable.of(AllArrayTypesContainer.class)) {
             FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
-            assertFalse("On field: " + field.getName(), reference.equals(changed));
+            assertFalse(reference.equals(changed), "On field: " + field.getName());
             FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
-            assertTrue("On field: " + field.getName(), reference.equals(changed));
+            assertTrue(reference.equals(changed), "On field: " + field.getName());
         }
     }
 

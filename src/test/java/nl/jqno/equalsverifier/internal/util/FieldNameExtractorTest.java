@@ -26,12 +26,12 @@ public class FieldNameExtractorTest {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        assertTrue(FIELD_NOT_FOUND + FIELD_STRING, fields.contains(FIELD_STRING));
-        assertTrue(FIELD_NOT_FOUND + FIELD_OBJECT, fields.contains(FIELD_OBJECT));
-        assertTrue(FIELD_NOT_FOUND + FIELD_LIST, fields.contains(FIELD_LIST));
-        assertTrue(FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT, fields.contains(FIELD_PRIMITIVE_INT));
+        assertTrue(fields.contains(FIELD_STRING), FIELD_NOT_FOUND + FIELD_STRING);
+        assertTrue(fields.contains(FIELD_OBJECT), FIELD_NOT_FOUND + FIELD_OBJECT);
+        assertTrue(fields.contains(FIELD_LIST), FIELD_NOT_FOUND + FIELD_LIST);
+        assertTrue(fields.contains(FIELD_PRIMITIVE_INT), FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT);
 
-        assertTrue("Total number of fields was not equal to expected value", 4 == fields.size());
+        assertTrue(4 == fields.size(), "Total number of fields was not equal to expected value");
     }
 
     @Test
