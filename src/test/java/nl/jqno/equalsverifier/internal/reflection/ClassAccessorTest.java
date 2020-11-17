@@ -20,14 +20,10 @@ import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Rule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.TemporaryFolder;
 
 public class ClassAccessorTest {
-
-    @Rule public TemporaryFolder tempFolder = new TemporaryFolder();
 
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
