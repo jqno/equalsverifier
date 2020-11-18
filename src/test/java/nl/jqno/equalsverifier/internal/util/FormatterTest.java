@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.assertThrows;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class FormatterTest {
@@ -148,14 +148,18 @@ public class FormatterTest {
     public void notEnoughParameters() {
         Formatter f = Formatter.of("Not enough: %% and %%");
 
-        assertThrows(IllegalStateException.class, "Not enough parameters", () -> f.format());
+        ExpectedException.when(() -> f.format())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Not enough parameters");
     }
 
     @Test
     public void tooManyParameters() {
         Formatter f = Formatter.of("Too many!", new Simple(0));
 
-        assertThrows(IllegalStateException.class, "Too many parameters", () -> f.format());
+        ExpectedException.when(() -> f.format())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Too many parameters");
     }
 
     static class Simple {

@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static nl.jqno.equalsverifier.testhelpers.Util.assertThrows;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -167,10 +167,9 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenTagDoesntMatchValue() {
-        assertThrows(
-                ReflectionException.class,
-                "TypeTag does not match value.",
-                () -> pv.giveOther(POINT_TAG, "not a Point"));
+        ExpectedException.when(() -> pv.giveOther(POINT_TAG, "not a point"))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("TypeTag does not match value.");
     }
 
     @Test
