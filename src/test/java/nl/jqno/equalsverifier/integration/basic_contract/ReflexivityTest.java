@@ -5,34 +5,42 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class ReflexivityTest extends ExpectedExceptionTestBase {
+public class ReflexivityTest {
     @Test
     public void fail_whenReferencesAreNotEqual() {
-        expectFailure(
-                "Reflexivity",
-                "object does not equal itself",
-                ReflexivityIntentionallyBroken.class.getSimpleName());
-        EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity",
+                        "object does not equal itself",
+                        ReflexivityIntentionallyBroken.class.getSimpleName());
     }
 
     @Test
     public void fail_whenTheWrongFieldsAreComparedInEquals() {
-        expectFailure(
-                "Reflexivity",
-                "object does not equal an identical copy of itself",
-                FieldsMixedUpInEquals.class.getSimpleName());
-        EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity",
+                        "object does not equal an identical copy of itself",
+                        FieldsMixedUpInEquals.class.getSimpleName());
     }
 
     @Test
     public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
-        expectFailure("Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
-        EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
     }
 
     @Test
@@ -44,17 +52,20 @@ public class ReflexivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
-        expectFailure(
-                "Reflexivity",
-                "object does not equal an identical copy of itself",
-                WrongInstanceofCheck.class.getSimpleName());
-        EqualsVerifier.forClass(WrongInstanceofCheck.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(WrongInstanceofCheck.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity",
+                        "object does not equal an identical copy of itself",
+                        WrongInstanceofCheck.class.getSimpleName());
     }
 
     @Test
     public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
-        expectFailure("Reflexivity", "identical copy");
-        EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "identical copy");
     }
 
     @Test
@@ -67,8 +78,13 @@ public class ReflexivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
-        expectFailure("Unnecessary suppression", "IDENTICAL_COPY");
-        EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .suppress(Warning.IDENTICAL_COPY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Unnecessary suppression", "IDENTICAL_COPY");
     }
 
     static final class ReflexivityIntentionallyBroken extends Point {

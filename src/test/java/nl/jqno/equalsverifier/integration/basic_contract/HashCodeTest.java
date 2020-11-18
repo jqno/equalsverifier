@@ -1,21 +1,25 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class HashCodeTest extends ExpectedExceptionTestBase {
+public class HashCodeTest {
     @Test
     public void fail_whenHashCodesAreInconsistent() {
-        expectFailure(
-                "hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(RandomHashCode.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "hashCode: hashCode should be consistent",
+                        RandomHashCode.class.getSimpleName());
     }
 
     @Test
     public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
-        expectFailure("hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(NoHashCode.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
     }
 
     @Test
