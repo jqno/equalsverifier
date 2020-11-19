@@ -6,18 +6,22 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class SignificantFieldsTest extends ExpectedExceptionTestBase {
+public class SignificantFieldsTest {
     @Test
     public void fail_whenEqualsUsesAFieldAndHashCodeDoesnt() {
-        expectFailure(
-                "Significant fields", "equals relies on", "yNotUsed", "but hashCode does not");
-        EqualsVerifier.forClass(ExtraFieldInEquals.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ExtraFieldInEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "equals relies on",
+                        "yNotUsed",
+                        "but hashCode does not");
     }
 
     @Test
@@ -30,8 +34,10 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenHashCodeIsConstant() {
-        expectFailure("Significant fields", "equals relies on", "but hashCode does not");
-        EqualsVerifier.forClass(ConstantHashCode.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ConstantHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals relies on", "but hashCode does not");
     }
 
     @Test
@@ -41,19 +47,28 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt() {
-        expectFailure(
-                "Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
-        EqualsVerifier.forClass(ExtraFieldInHashCode.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ExtraFieldInHashCode.class).verify())
+                .assertMessageContains(
+                        "Significant fields",
+                        "hashCode relies on",
+                        "yNotUsed",
+                        "but equals does not");
     }
 
     @Test
     public void
             fail_whenHashCodeUsesAFieldAndEqualsDoesnt_givenStrictHashCodeWarningIsSuppressed() {
-        expectFailure(
-                "Significant fields", "hashCode relies on", "yNotUsed", "but equals does not");
-        EqualsVerifier.forClass(ExtraFieldInHashCode.class)
-                .suppress(Warning.STRICT_HASHCODE)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ExtraFieldInHashCode.class)
+                                        .suppress(Warning.STRICT_HASHCODE)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "hashCode relies on",
+                        "yNotUsed",
+                        "but equals does not");
     }
 
     @Test
@@ -70,14 +85,16 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAFieldIsUnused() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
-        EqualsVerifier.forClass(OneFieldUnused.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(OneFieldUnused.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
     }
 
     @Test
     public void fail_whenANonfinalFieldIsUnused() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
-        EqualsVerifier.forClass(OneNonfinalFieldUnused.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(OneNonfinalFieldUnused.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
     }
 
     @Test
@@ -89,10 +106,13 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAFieldIsUnused_givenOnlyAllNonfinalFieldsWarningIsSuppressed() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
-        EqualsVerifier.forClass(OneFieldUnused.class)
-                .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OneFieldUnused.class)
+                                        .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
     }
 
     @Test
@@ -114,8 +134,9 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAFieldIsUnusedInASubclass() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
-        EqualsVerifier.forClass(OneFieldUnusedExtended.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(OneFieldUnusedExtended.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
     }
 
     @Test
@@ -132,19 +153,25 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenNoFieldsAreUsed() {
-        expectFailure("Significant fields", "equals does not use", "color");
-        EqualsVerifier.forClass(NoFieldsUsed.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NoFieldsUsed.class)
+                                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "color");
     }
 
     @Test
     public void fail_whenNoFieldsAreUsed_givenUsingGetClass() {
-        expectFailure("Significant fields", "equals does not use", "color");
-        EqualsVerifier.forClass(NoFieldsUsed.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .usingGetClass()
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NoFieldsUsed.class)
+                                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                                        .usingGetClass()
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "color");
     }
 
     @Test
@@ -178,45 +205,64 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenCombiningWithOnlyTheseFieldsAndWithIgnoredFields() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        EqualsVerifier.forClass(OneFieldUnused.class)
-                .withOnlyTheseFields("x", "y")
-                .withIgnoredFields("colorNotUsed")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OneFieldUnused.class)
+                                        .withOnlyTheseFields("x", "y")
+                                        .withIgnoredFields("colorNotUsed")
+                                        .verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
     }
 
     @Test
     public void fail_whenTwoFieldsAreUnUsed_givenAllFieldsShouldBeUsedExceptOneOfThemButNotBoth() {
-        expectFailure("Significant fields", "equals does not use", "colorAlsoNotUsed");
-        EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
-                .withIgnoredFields("colorNotUsed")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(TwoFieldsUnusedColorPoint.class)
+                                        .withIgnoredFields("colorNotUsed")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals does not use", "colorAlsoNotUsed");
     }
 
     @Test
     public void fail_whenAllFieldsAreUsed_givenAllFieldsShouldBeUsedExceptOneThatActuallyIsUsed() {
-        expectFailure("Significant fields", "equals should not use", "x", "but it does");
-        EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("x").verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withIgnoredFields("x")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals should not use", "x", "but it does");
     }
 
     @Test
     public void fail_whenOneFieldIsUnused_givenAllFieldsShouldBeUsedExceptTwoFields() {
-        expectFailure("Significant fields", "equals should not use", "x", "but it does");
-        EqualsVerifier.forClass(OneFieldUnused.class)
-                .withIgnoredFields("x", "colorNotUsed")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OneFieldUnused.class)
+                                        .withIgnoredFields("x", "colorNotUsed")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals should not use", "x", "but it does");
     }
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsExcepted() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "class FinalPoint does not contain field thisFieldDoesNotExist.");
-        EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("thisFieldDoesNotExist");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withIgnoredFields("thisFieldDoesNotExist"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "class FinalPoint does not contain field thisFieldDoesNotExist.");
     }
 
     @Test
@@ -226,43 +272,63 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAllFieldsAreUsed_givenTheUsedFieldsAreSpecifiedButWeMissedOne() {
-        expectFailure("Significant fields", "equals should not use", "y", "but it does");
-        EqualsVerifier.forClass(FinalPoint.class).withOnlyTheseFields("x").verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withOnlyTheseFields("x")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals should not use", "y", "but it does");
     }
 
     @Test
     public void fail_whenAFieldIsUnused_givenTheUnusedFieldIsAlsoSpecified() {
-        expectFailure("Significant fields", "equals does not use", "colorNotUsed");
-        EqualsVerifier.forClass(OneFieldUnused.class)
-                .withOnlyTheseFields("x", "y", "colorNotUsed")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OneFieldUnused.class)
+                                        .withOnlyTheseFields("x", "y", "colorNotUsed")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
     }
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "class FinalPoint does not contain field thisFieldDoesNotExist.");
-        EqualsVerifier.forClass(FinalPoint.class).withOnlyTheseFields("thisFieldDoesNotExist");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withOnlyTheseFields("thisFieldDoesNotExist"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "class FinalPoint does not contain field thisFieldDoesNotExist.");
     }
 
     @Test
     public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        EqualsVerifier.forClass(FinalPoint.class).withOnlyTheseFields("x").withIgnoredFields("x");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withOnlyTheseFields("x")
+                                        .withIgnoredFields("x"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
     }
 
     @Test
     public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
-        EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("x").withOnlyTheseFields("x");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalPoint.class)
+                                        .withIgnoredFields("x")
+                                        .withOnlyTheseFields("x"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can call either withOnlyTheseFields or withIgnoredFields, but not both.");
     }
 
     @Test
@@ -275,8 +341,11 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenUnusedFieldIsStateless() {
-        expectFailure("Significant fields", "statelessField", "or it is stateless");
-        EqualsVerifier.forClass(UnusedStatelessContainer.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(UnusedStatelessContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "statelessField", "or it is stateless");
     }
 
     @Test
@@ -288,8 +357,10 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenUsedFieldIsStateless() {
-        expectFailure("Significant fields", "statelessField", "or it is stateless");
-        EqualsVerifier.forClass(UsedStatelessContainer.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(UsedStatelessContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "statelessField", "or it is stateless");
     }
 
     @Test
@@ -315,22 +386,26 @@ public class SignificantFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenNonNullFieldIsEqualToNullField() {
-        expectFailure(
-                "Significant fields",
-                "hashCode relies on",
-                "s",
-                "equals does not",
-                "These objects are equal, but probably shouldn't be");
-        EqualsVerifier.forClass(BugWhenFieldIsNull.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(BugWhenFieldIsNull.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "hashCode relies on",
+                        "s",
+                        "equals does not",
+                        "These objects are equal, but probably shouldn't be");
     }
 
     @Test
     public void giveCorrectMessage_whenStaticFieldIsNotUsed_givenStaticFieldIsFirstField() {
         // See https://github.com/jqno/equalsverifier/issues/159
-        expectFailure("Significant fields", "equals does not use i");
-        EqualsVerifier.forClass(IdentityIntContainer.class)
-                .suppress(Warning.IDENTICAL_COPY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(IdentityIntContainer.class)
+                                        .suppress(Warning.IDENTICAL_COPY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use i");
     }
 
     static final class ConstantHashCode {

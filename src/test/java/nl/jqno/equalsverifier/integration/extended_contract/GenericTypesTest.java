@@ -8,11 +8,10 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class GenericTypesTest extends ExpectedExceptionTestBase {
+public class GenericTypesTest {
     @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();

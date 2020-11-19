@@ -5,11 +5,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
+public class BalancedAbstractnessTest {
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String BOTH_ARE_ABSTRACT = "equals and hashCode methods are both abstract";
     private static final String EQUALS_IS_ABSTRACT = "equals method is abstract";
@@ -21,32 +21,39 @@ public class BalancedAbstractnessTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenBothEqualsAndHashCodeAreAbstract() {
-        expectFailure(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractBoth.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(AbstractBoth.class)
+                                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
     }
 
     @Test
     public void fail_whenEqualsIsAbstract() {
-        expectFailure(
-                EQUALS_IS_ABSTRACT,
-                HASHCODE_IS_NOT,
-                BOTH_SHOULD_BE_CONCRETE,
-                AbstractEquals.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractEquals.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(AbstractEquals.class)
+                                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        EQUALS_IS_ABSTRACT,
+                        HASHCODE_IS_NOT,
+                        BOTH_SHOULD_BE_CONCRETE,
+                        AbstractEquals.class.getSimpleName());
     }
 
     @Test
     public void fail_whenHashCodeIsAbstract() {
-        expectFailure(
-                HASHCODE_IS_ABSTRACT,
-                EQUALS_IS_NOT,
-                BOTH_SHOULD_BE_CONCRETE,
-                AbstractHashCode.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractHashCode.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(AbstractHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        HASHCODE_IS_ABSTRACT,
+                        EQUALS_IS_NOT,
+                        BOTH_SHOULD_BE_CONCRETE,
+                        AbstractHashCode.class.getSimpleName());
     }
 
     @Test

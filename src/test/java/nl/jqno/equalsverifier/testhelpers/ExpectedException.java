@@ -38,6 +38,18 @@ public final class ExpectedException {
         return assertThrows(AssertionError.class);
     }
 
+    public ExpectedException assertCause(Class<? extends Throwable> expectedCause) {
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause.getClass().equals(expectedCause)) {
+                return this;
+            }
+            cause = cause.getCause();
+        }
+        fail("Expected " + expectedCause.getSimpleName() + " to be in the cause but it wasn't.");
+        return this;
+    }
+
     public ExpectedException assertMessageContains(String... fragments) {
         String message = e.getMessage();
         for (String fragment : fragments) {

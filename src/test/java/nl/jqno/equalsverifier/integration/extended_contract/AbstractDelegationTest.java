@@ -5,11 +5,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class AbstractDelegationTest extends ExpectedExceptionTestBase {
+public class AbstractDelegationTest {
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
     private static final String HASHCODE_DELEGATES =
@@ -23,22 +23,26 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failGracefully_whenEqualsCallsAnAbstractMethod() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                AbstractEqualsDelegator.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractEqualsDelegator.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(AbstractEqualsDelegator.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        EQUALS_DELEGATES,
+                        AbstractEqualsDelegator.class.getSimpleName());
     }
 
     @Test
     public void failGracefully_whenHashCodeCallsAnAbstractMethod() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                AbstractHashCodeDelegator.class.getSimpleName());
-        EqualsVerifier.forClass(AbstractHashCodeDelegator.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(AbstractHashCodeDelegator.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        HASHCODE_DELEGATES,
+                        AbstractHashCodeDelegator.class.getSimpleName());
     }
 
     @Test
@@ -48,12 +52,17 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failGracefully_whenEqualsCallsAnAbstractFieldsAbstractMethod() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
-        EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                EqualsDelegatesToAbstractMethodInField.class)
+                                        .verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        EQUALS_DELEGATES,
+                        EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
     }
 
     @Test
@@ -69,12 +78,17 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failGracefully_whenHashCodeCallsAnAbstractFieldsAbstactMethod() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
-        EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                HashCodeDelegatesToAbstractMethodInField.class)
+                                        .verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        HASHCODE_DELEGATES,
+                        HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
     }
 
     @Test
@@ -95,13 +109,18 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failGracefully_whenAFieldsEqualsMethodCallsAnAbstractField() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                PREFAB,
-                AbstractEqualsDelegator.class.getSimpleName());
-        EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                EqualsInFieldDelegatesToAbstractMethod.class)
+                                        .verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        EQUALS_DELEGATES,
+                        PREFAB,
+                        AbstractEqualsDelegator.class.getSimpleName());
     }
 
     @Test
@@ -117,13 +136,18 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failGracefully_whenAFieldsHashCodeMethodCallsAnAbstractField() {
-        expectFailureWithCause(
-                AbstractMethodError.class,
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                PREFAB,
-                AbstractHashCodeDelegator.class.getSimpleName());
-        EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                HashCodeInFieldDelegatesToAbstractMethod.class)
+                                        .verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                        ABSTRACT_DELEGATION,
+                        HASHCODE_DELEGATES,
+                        PREFAB,
+                        AbstractHashCodeDelegator.class.getSimpleName());
     }
 
     @Test
@@ -167,8 +191,12 @@ public class AbstractDelegationTest extends ExpectedExceptionTestBase {
     @Test
     public void
             originalMessageIsIncludedInErrorMessage_whenEqualsVerifierSignalsAnAbstractDelegationIssue() {
-        expectFailure("This is AbstractMethodError's original message");
-        EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("This is AbstractMethodError's original message");
     }
 
     private abstract static class AbstractClass {

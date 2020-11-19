@@ -21,13 +21,12 @@ import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
-public class JavaApiClassesTest extends ExpectedExceptionTestBase {
+public class JavaApiClassesTest {
     @Test
     public void succeed_whenClassContainsASuperCollection() {
         EqualsVerifier.forClass(SuperCollectionContainer.class).verify();

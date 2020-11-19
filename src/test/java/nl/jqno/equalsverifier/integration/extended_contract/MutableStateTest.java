@@ -6,17 +6,18 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Arrays;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class MutableStateTest extends ExpectedExceptionTestBase {
+public class MutableStateTest {
     private static final String MUTABILITY = "Mutability: equals depends on mutable field";
     private static final String FIELD_NAME = "field";
 
     @Test
     public void fail_whenClassHasAMutablePrimitiveField() {
-        expectFailure(MUTABILITY, "second");
-        EqualsVerifier.forClass(PrimitiveMutableField.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, "second");
     }
 
     @Test
@@ -35,8 +36,9 @@ public class MutableStateTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenClassHasAMutableObjectField() {
-        expectFailure(MUTABILITY, FIELD_NAME);
-        EqualsVerifier.forClass(ObjectMutableField.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -48,8 +50,9 @@ public class MutableStateTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenClassHasAMutableEnumField() {
-        expectFailure(MUTABILITY, FIELD_NAME);
-        EqualsVerifier.forClass(EnumMutableField.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -59,8 +62,9 @@ public class MutableStateTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenClassHasAMutableArrayField() {
-        expectFailure(MUTABILITY, FIELD_NAME);
-        EqualsVerifier.forClass(ArrayMutableField.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test

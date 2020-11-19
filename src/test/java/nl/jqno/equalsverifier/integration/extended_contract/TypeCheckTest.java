@@ -1,28 +1,35 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class TypeCheckTest extends ExpectedExceptionTestBase {
+public class TypeCheckTest {
     @Test
     public void fail_whenEqualsReturnsTrueForACompletelyUnrelatedType() {
-        expectFailure("Type-check: equals returns true for an unrelated type.");
-        EqualsVerifier.forClass(WrongTypeCheck.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(WrongTypeCheck.class).verify())
+                .assertFailure()
+                .assertMessageContains("Type-check: equals returns true for an unrelated type.");
     }
 
     @Test
     public void fail_whenEqualsDoesNotTypeCheck() {
-        expectFailureWithCause(
-                ClassCastException.class, "Type-check: equals throws ClassCastException");
-        EqualsVerifier.forClass(NoTypeCheck.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NoTypeCheck.class).verify())
+                .assertFailure()
+                .assertCause(ClassCastException.class)
+                .assertMessageContains("Type-check: equals throws ClassCastException");
     }
 
     @Test
     public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
-        expectFailureWithCause(
-                IllegalStateException.class, "Type-check: equals throws IllegalStateException");
-        EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NoTypeCheckButNoClassCastExceptionEither.class)
+                                        .verify())
+                .assertFailure()
+                .assertCause(IllegalStateException.class)
+                .assertMessageContains("Type-check: equals throws IllegalStateException");
     }
 
     static final class WrongTypeCheck {
