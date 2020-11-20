@@ -4,22 +4,23 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class GetClassTest extends ExpectedExceptionTestBase {
+public class GetClassTest {
 
     @Test
     public void fail_whenEqualsUsesGetClassInsteadOfInstanceof() {
-        expectFailure(
-                "Subclass",
-                "object is not equal to an instance of a trivial subclass with equal fields",
-                "Maybe you forgot to add usingGetClass()");
-        EqualsVerifier.forClass(GetClassPoint.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(GetClassPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        "object is not equal to an instance of a trivial subclass with equal fields",
+                        "Maybe you forgot to add usingGetClass()");
     }
 
     @Test
@@ -35,24 +36,35 @@ public class GetClassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsUsesGetClassButForgetsToCheckNull_givenUsingGetClassIsUsed() {
-        expectFailureWithCause(
-                NullPointerException.class, "Non-nullity: NullPointerException thrown");
-        EqualsVerifier.forClass(GetClassPointNull.class).usingGetClass().verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(GetClassPointNull.class)
+                                        .usingGetClass()
+                                        .verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains("Non-nullity: NullPointerException thrown");
     }
 
     @Test
     public void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
-        expectFailure(
-                "Subclass",
-                "object is equal to an instance of a trivial subclass with equal fields",
-                "This should not happen when using getClass().");
-        EqualsVerifier.forClass(FinalMethodsPoint.class).usingGetClass().verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalMethodsPoint.class)
+                                        .usingGetClass()
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        "object is equal to an instance of a trivial subclass with equal fields",
+                        "This should not happen when using getClass().");
     }
 
     @Test
     public void fail_whenSuperclassUsesGetClass() {
-        expectFailure("Symmetry", "does not equal superclass instance");
-        EqualsVerifier.forClass(GetClassColorPoint.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(GetClassColorPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains("Symmetry", "does not equal superclass instance");
     }
 
     @Test
@@ -69,13 +81,18 @@ public class GetClassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
-        expectFailure(
-                "Redefined superclass",
-                GetClassColorPointWithEqualSuper.class.getSimpleName(),
-                "should not equal superclass instance",
-                Point.class.getSimpleName(),
-                "but it does");
-        EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class).usingGetClass().verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class)
+                                        .usingGetClass()
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Redefined superclass",
+                        GetClassColorPointWithEqualSuper.class.getSimpleName(),
+                        "should not equal superclass instance",
+                        Point.class.getSimpleName(),
+                        "but it does");
     }
 
     static class GetClassPointNull {

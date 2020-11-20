@@ -2,24 +2,34 @@ package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import org.junit.jupiter.api.Test;
 
-public class WarningsMixTest extends ExpectedExceptionTestBase {
+public class WarningsMixTest {
     @Test
     public void
             fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
-        expectFailure("Mutability:");
-        EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MutablePoint.class)
+                                        .suppress(Warning.STRICT_INHERITANCE)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Mutability:");
     }
 
     @Test
     public void
             fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
-        expectFailure("Subclass:");
-        EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.NONFINAL_FIELDS).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MutablePoint.class)
+                                        .suppress(Warning.NONFINAL_FIELDS)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Subclass:");
     }
 
     @Test
@@ -33,19 +43,26 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
-        expectFailureWithCause(NullPointerException.class, "Non-nullity:");
-        EqualsVerifier.forClass(NeverNullColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NeverNullColorContainer.class)
+                                        .suppress(Warning.STRICT_INHERITANCE)
+                                        .verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains("Non-nullity:");
     }
 
     @Test
     public void
             fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
-        expectFailure("Subclass:");
-        EqualsVerifier.forClass(NeverNullColorContainer.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NeverNullColorContainer.class)
+                                        .suppress(Warning.NULL_FIELDS)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Subclass:");
     }
 
     @Test
@@ -67,28 +84,39 @@ public class WarningsMixTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
-        expectFailure("Mutability:");
-        EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+                                        .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Mutability:");
     }
 
     @Test
     public void
             fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
-        expectFailureWithCause(NullPointerException.class, "Non-nullity:");
-        EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+                                        .suppress(
+                                                Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
+                                        .verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains("Non-nullity:");
     }
 
     @Test
     public void
             fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
-        expectFailure("Subclass:");
-        EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
+                                        .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Subclass:");
     }
 
     @Test

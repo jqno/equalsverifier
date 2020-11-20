@@ -16,11 +16,11 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom.N
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable.NonnullJsr305InapplicableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305JavaxOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
+public class AnnotationNonnullTest {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotation() {
         EqualsVerifier.forClass(NonnullManual.class).verify();
@@ -28,12 +28,13 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
-        expectFailureWithCause(
-                NullPointerException.class,
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "on field noAnnotation");
-        EqualsVerifier.forClass(NonnullManualMissedOne.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NonnullManualMissedOne.class).verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains(
+                        "Non-nullity",
+                        "equals throws NullPointerException",
+                        "on field noAnnotation");
     }
 
     @Test
@@ -56,15 +57,21 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEmptyFindbugs1xDefaultAnnotationOnClass() {
-        expectFailure("Non-nullity");
-        EqualsVerifier.forClass(EmptyFindbugs1xCustomOnClass.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(EmptyFindbugs1xCustomOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithoutNonnullAnnotationOnClass() {
-        expectFailure("Non-nullity");
-        EqualsVerifier.forClass(NotNonnullFindbugs1xCustomOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NotNonnullFindbugs1xCustomOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity");
     }
 
     @Test
@@ -86,8 +93,13 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForParameters() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test
@@ -105,29 +117,52 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullFindbugs1xWithCheckForNullOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnPackage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullFindbugs1xWithNullableOnPackage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullFindbugs1xWithCheckForNullOnPackage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
@@ -159,8 +194,13 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullJsr305InapplicableOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullJsr305InapplicableOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test
@@ -178,14 +218,24 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test
     public void
             succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullJsr305InapplicableOnPackage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullJsr305InapplicableOnPackage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
@@ -202,22 +252,38 @@ public class AnnotationNonnullTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field p");
-        EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnPackage.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullJsr305WithCheckForNullOnPackage.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field p");
     }
 
     @Test
