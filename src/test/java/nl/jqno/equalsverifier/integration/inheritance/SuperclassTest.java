@@ -5,7 +5,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.CanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
@@ -16,7 +16,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.jupiter.api.Test;
 
-public class SuperclassTest extends ExpectedExceptionTestBase {
+public class SuperclassTest {
     @Test
     public void
             succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
@@ -27,34 +27,39 @@ public class SuperclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsRedefinedSoItBreaksSymmetry_givenSuperHasRedefinedAlso() {
-        expectFailure(
-                "Symmetry",
-                SymmetryBrokenColorPoint.class.getSimpleName(),
-                "does not equal superclass instance",
-                Point.class.getSimpleName());
-        EqualsVerifier.forClass(SymmetryBrokenColorPoint.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(SymmetryBrokenColorPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Symmetry",
+                        SymmetryBrokenColorPoint.class.getSimpleName(),
+                        "does not equal superclass instance",
+                        Point.class.getSimpleName());
     }
 
     @Test
     public void fail_whenEqualsIsRedefinedSoItBreaksTransitivity_givenSuperHasRedefinedAlso() {
-        expectFailure(
-                "Transitivity",
-                TransitivityBrokenColorPoint.class.getSimpleName(),
-                "both equal superclass instance",
-                Point.class.getSimpleName(),
-                "which implies they equal each other.");
-        EqualsVerifier.forClass(TransitivityBrokenColorPoint.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(TransitivityBrokenColorPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transitivity",
+                        TransitivityBrokenColorPoint.class.getSimpleName(),
+                        "both equal superclass instance",
+                        Point.class.getSimpleName(),
+                        "which implies they equal each other.");
     }
 
     @Test
     public void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
-        expectFailure(
-                "Superclass",
-                "hashCode for",
-                HashCodeBrokenPoint.class.getSimpleName(),
-                "should be equal to hashCode for superclass instance",
-                Point.class.getSimpleName());
-        EqualsVerifier.forClass(HashCodeBrokenPoint.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(HashCodeBrokenPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Superclass",
+                        "hashCode for",
+                        HashCodeBrokenPoint.class.getSimpleName(),
+                        "should be equal to hashCode for superclass instance",
+                        Point.class.getSimpleName());
     }
 
     @Test
@@ -66,19 +71,30 @@ public class SuperclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
-        expectFailure("Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
-        EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                BrokenCanEqualColorPointWithEmptySuper.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Symmetry", BrokenCanEqualColorPointWithEmptySuper.class.getSimpleName());
     }
 
     @Test
     public void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
-        expectFailure(
-                "Redefined superclass",
-                ColorBlindColorPoint.class.getSimpleName(),
-                "should not equal superclass instance",
-                Point.class.getSimpleName(),
-                "but it does");
-        EqualsVerifier.forClass(ColorBlindColorPoint.class).withRedefinedSuperclass().verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ColorBlindColorPoint.class)
+                                        .withRedefinedSuperclass()
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Redefined superclass",
+                        ColorBlindColorPoint.class.getSimpleName(),
+                        "should not equal superclass instance",
+                        Point.class.getSimpleName(),
+                        "but it does");
     }
 
     @Test
@@ -96,8 +112,14 @@ public class SuperclassTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenSuperclassIsVersionedEntityAndIncorrectlyImplementsCanEqual_givenASubclassThatExploitsTheIncorrectness() {
-        expectFailure("Symmetry", "does not equal superclass instance");
-        EqualsVerifier.forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSub.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                SymmetryBrokenForNullIdWithIncorrectCanEqualSub
+                                                        .class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Symmetry", "does not equal superclass instance");
     }
 
     static class SymmetryBrokenColorPoint extends Point {

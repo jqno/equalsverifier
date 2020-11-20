@@ -4,11 +4,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class FinalityTest extends ExpectedExceptionTestBase {
+public class FinalityTest {
     private static final String BOTH_FINAL_OR_NONFINAL =
             "Finality: equals and hashCode must both be final or both be non-final";
     private static final String SUBCLASS = "Subclass";
@@ -22,12 +22,13 @@ public class FinalityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsNotFinal_givenAClassThatIsNotFinal() {
-        expectFailure(
-                SUBCLASS,
-                "equals is not final",
-                String.format(SUPPLY_AN_INSTANCE, "equals"),
-                "if equals cannot be final");
-        EqualsVerifier.forClass(Point.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Point.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        SUBCLASS,
+                        "equals is not final",
+                        String.format(SUPPLY_AN_INSTANCE, "equals"),
+                        "if equals cannot be final");
     }
 
     @Test
@@ -51,12 +52,13 @@ public class FinalityTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinal() {
-        expectFailure(
-                SUBCLASS,
-                "hashCode is not final",
-                String.format(SUPPLY_AN_INSTANCE, "hashCode"),
-                "if hashCode cannot be final");
-        EqualsVerifier.forClass(FinalEqualsPoint.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(FinalEqualsPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        SUBCLASS,
+                        "hashCode is not final",
+                        String.format(SUPPLY_AN_INSTANCE, "hashCode"),
+                        "if hashCode cannot be final");
     }
 
     @Test
@@ -76,8 +78,9 @@ public class FinalityTest extends ExpectedExceptionTestBase {
     }
 
     private <T> void check(Class<T> type) {
-        expectFailure(BOTH_FINAL_OR_NONFINAL);
-        EqualsVerifier.forClass(type).usingGetClass().verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(type).usingGetClass().verify())
+                .assertFailure()
+                .assertMessageContains(BOTH_FINAL_OR_NONFINAL);
     }
 
     static class FinalEqualsNonFinalHashCode {
