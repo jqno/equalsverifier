@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
@@ -23,7 +23,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.jupiter.api.Test;
 
-public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestBase {
+public class ConfiguredEqualsVerifierMultipleTest {
 
     @Test
     public void succeed_whenCallingForPackage_givenAllClassesInPackageAreCorrect() {
@@ -68,8 +68,10 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
 
     @Test
     public void sanity_fail_whenTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClasses(RecursiveType.class, A.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClasses(RecursiveType.class, A.class).verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -85,8 +87,13 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
 
     @Test
     public void sanity_fail_whenSingleGenericTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClasses(SingleGenericContainerContainer.class, A.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClasses(
+                                                SingleGenericContainerContainer.class, A.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -100,8 +107,13 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
 
     @Test
     public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClasses(DoubleGenericContainerContainer.class, A.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClasses(
+                                                DoubleGenericContainerContainer.class, A.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -135,8 +147,9 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
         ev.forClasses(MutablePoint.class, A.class).suppress(Warning.NONFINAL_FIELDS).verify();
 
         // NONFINAL_FIELDS is not added to configuration, so should fail
-        expectFailure("Mutability");
-        ev.forClasses(MutablePoint.class, A.class).verify();
+        ExpectedException.when(() -> ev.forClasses(MutablePoint.class, A.class).verify())
+                .assertFailure()
+                .assertMessageContains("Mutability");
     }
 
     @Test
@@ -149,8 +162,12 @@ public class ConfiguredEqualsVerifierMultipleTest extends ExpectedExceptionTestB
                 .verify();
 
         // PrefabValues are not added to configuration, so should fail
-        expectFailure("Recursive datastructure");
-        ev.forClasses(SingleGenericContainerContainer.class, A.class).verify();
+        ExpectedException.when(
+                        () ->
+                                ev.forClasses(SingleGenericContainerContainer.class, A.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test

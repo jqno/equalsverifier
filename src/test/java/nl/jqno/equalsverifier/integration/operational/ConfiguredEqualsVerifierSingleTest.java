@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.jupiter.api.Test;
 
-public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBase {
+public class ConfiguredEqualsVerifierSingleTest {
 
     @Test
     public void
@@ -33,8 +33,9 @@ public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBas
 
     @Test
     public void sanity_fail_whenTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(RecursiveType.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(RecursiveType.class).verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -50,8 +51,12 @@ public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBas
 
     @Test
     public void sanity_fail_whenSingleGenericTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(SingleGenericContainerContainer.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(SingleGenericContainerContainer.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -65,8 +70,12 @@ public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBas
 
     @Test
     public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
-        expectFailure("Recursive datastructure");
-        EqualsVerifier.forClass(DoubleGenericContainerContainer.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(DoubleGenericContainerContainer.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
@@ -100,8 +109,9 @@ public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBas
         ev.forClass(MutablePoint.class).suppress(Warning.NONFINAL_FIELDS).verify();
 
         // NONFINAL_FIELDS is not added to configuration, so should fail
-        expectFailure("Mutability");
-        ev.forClass(MutablePoint.class).verify();
+        ExpectedException.when(() -> ev.forClass(MutablePoint.class).verify())
+                .assertFailure()
+                .assertMessageContains("Mutability");
     }
 
     @Test
@@ -114,8 +124,9 @@ public class ConfiguredEqualsVerifierSingleTest extends ExpectedExceptionTestBas
                 .verify();
 
         // PrefabValues are not added to configuration, so should fail
-        expectFailure("Recursive datastructure");
-        ev.forClass(SingleGenericContainerContainer.class).verify();
+        ExpectedException.when(() -> ev.forClass(SingleGenericContainerContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test

@@ -8,11 +8,10 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class OriginalStateTest extends ExpectedExceptionTestBase {
+public class OriginalStateTest {
     private static final String INSTANCE_1 = "instance 1";
     private static final String INSTANCE_2 = "instance 2";
     private static final String STATIC = "static";
