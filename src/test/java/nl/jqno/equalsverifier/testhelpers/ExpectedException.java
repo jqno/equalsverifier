@@ -50,6 +50,43 @@ public final class ExpectedException {
         return this;
     }
 
+    public ExpectedException assertNotCause(Class<? extends Throwable> expectedCause) {
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause.getClass().equals(expectedCause)) {
+                fail(
+                        "Expected "
+                                + expectedCause.getSimpleName()
+                                + " not to be in the cause but it was.");
+            }
+            cause = cause.getCause();
+        }
+        return this;
+    }
+
+    public ExpectedException assertCauseMessageContains(String fragment) {
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause.getMessage() != null && cause.getMessage().contains(fragment)) {
+                return this;
+            }
+            cause = cause.getCause();
+        }
+        fail("Expected cause to contain " + fragment + " but it doesn't.");
+        return this;
+    }
+
+    public ExpectedException assertCauseMessageDoesNotContain(String fragment) {
+        Throwable cause = e.getCause();
+        while (cause != null) {
+            if (cause.getMessage() != null && cause.getMessage().contains(fragment)) {
+                fail("Expected cause not to contain " + fragment + " but it does.");
+            }
+            cause = cause.getCause();
+        }
+        return this;
+    }
+
     public ExpectedException assertMessageContains(String... fragments) {
         String message = e.getMessage();
         for (String fragment : fragments) {
