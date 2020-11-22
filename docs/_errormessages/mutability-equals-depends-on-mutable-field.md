@@ -6,8 +6,14 @@ Your `equals` method references a field that is not final. This means that if th
 There are three ways to solve this:
 
 * Make your field final. This is the preferred solution.
-* Add an `@Immutable` annotation to your class if you _know_ that the class is immutable, but the fields cannot be final for some reason.
-* Suppress `Warning.NONFINAL_FIELDS` if your class has to be mutable. This is not recommended.
+* If your class is immutable, you can add an `@Immutable` annotation to your class. (A class can theoretically be immutable if its fields aren't final; however, with non-final fields you probably need a formal proof to make sure that it is indeed immutable.)
+* Suppress `Warning.NONFINAL_FIELDS` if your class has to be mutable. For example:
+
+{% highlight java %}
+EqualsVerifier.forClass(Foo.class)
+    .suppress(Warning.NONFINAL_FIELDS)
+    .verify();
+{% endhighlight %}
 
 Note: Unfortunately, EqualsVerifier cannot detect if your fields are truly immutable, which is what's actually needed here. It can only see if fields are final, or if the class has an `@Immutable` annotation. 
 
