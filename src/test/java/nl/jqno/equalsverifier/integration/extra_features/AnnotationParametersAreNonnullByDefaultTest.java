@@ -6,10 +6,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.parametersarenonnullbydefault.ParametersAreNonnullByDefaultOnPackage;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class AnnotationParametersAreNonnullByDefaultTest extends ExpectedExceptionTestBase {
+public class AnnotationParametersAreNonnullByDefaultTest {
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
@@ -36,8 +36,15 @@ public class AnnotationParametersAreNonnullByDefaultTest extends ExpectedExcepti
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                ParametersAreNonnullByDefaultWithNullableOnClass
+                                                        .class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test

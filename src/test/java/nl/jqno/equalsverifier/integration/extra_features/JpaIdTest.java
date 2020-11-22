@@ -5,15 +5,15 @@ import java.util.Objects;
 import java.util.UUID;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.EmbeddedId;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.NaturalId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
-public class JpaIdTest extends ExpectedExceptionTestBase {
+public class JpaIdTest {
 
     @Test
     public void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
@@ -34,55 +34,71 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
-        expectFailure("Significant fields", "equals does not use id");
-        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
-                .withIgnoredAnnotations(Id.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                                        .withIgnoredAnnotations(Id.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use id");
     }
 
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
-        expectFailure(
-                "Significant fields",
-                "id is marked @Id",
-                "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY if");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "id is marked @Id",
+                        "equals should not use it",
+                        "Suppress Warning.SURROGATE_KEY if");
     }
 
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
-        expectFailure(
-                "Significant fields",
-                "equals does not use socialSecurity",
-                "Suppress Warning.SURROGATE_KEY if");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                JpaIdSurrogateKeyPersonReorderedFields.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "equals does not use socialSecurity",
+                        "Suppress Warning.SURROGATE_KEY if");
     }
 
     @Test
     public void
             fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
-        expectFailure(
-                "Significant fields",
-                "id is marked @Id",
-                "Warning.SURROGATE_KEY",
-                "equals does not use");
-        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "id is marked @Id",
+                        "Warning.SURROGATE_KEY",
+                        "equals does not use");
     }
 
     @Test
     public void
             fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
-        expectFailure(
-                "Significant fields",
-                "equals should not use socialSecurity",
-                "Warning.SURROGATE_KEY is suppressed and it is not marked as @Id",
-                "but it does");
-        EqualsVerifier.forClass(JpaIdBusinessKeyPersonReorderedFields.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdBusinessKeyPersonReorderedFields.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "equals should not use socialSecurity",
+                        "Warning.SURROGATE_KEY is suppressed and it is not marked as @Id",
+                        "but it does");
     }
 
     @Test
@@ -95,35 +111,45 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
-        expectFailure(
-                "Significant fields",
-                "id is marked @Id or @EmbeddedId",
-                "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY if");
-        EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "id is marked @Id or @EmbeddedId",
+                        "equals should not use it",
+                        "Suppress Warning.SURROGATE_KEY if");
     }
 
     @Test
     public void
             fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
-        expectFailure(
-                "Significant fields",
-                "id is marked @Id or @EmbeddedId",
-                "Warning.SURROGATE_KEY",
-                "equals does not use");
-        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields",
+                        "id is marked @Id or @EmbeddedId",
+                        "Warning.SURROGATE_KEY",
+                        "equals does not use");
     }
 
     @Test
     public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
-        expectFailure(
-                "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if");
-        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
-                .withOnlyTheseFields("id")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                                        .withOnlyTheseFields("id")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
+                        "Suppress Warning.SURROGATE_KEY if");
     }
 
     @Test
@@ -140,10 +166,13 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
-        expectFailure("Significant fields", "equals does not use name");
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
-                .withIgnoredAnnotations(NaturalId.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                                        .withIgnoredAnnotations(NaturalId.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use name");
     }
 
     @Test
@@ -185,112 +214,148 @@ public class JpaIdTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
-        expectFailure(
-                "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if");
-        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class).withOnlyTheseFields("id").verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                                        .withOnlyTheseFields("id")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
+                        "Suppress Warning.SURROGATE_KEY if");
     }
 
     @Test
     public void
             fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
-        expectFailure(
-                "Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
-                .withOnlyTheseFields("socialSecurity")
-                .suppress(Warning.SURROGATE_KEY);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                                        .withOnlyTheseFields("socialSecurity")
+                                        .suppress(Warning.SURROGATE_KEY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .withOnlyTheseFields("socialSecurity");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .withOnlyTheseFields("socialSecurity"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
-                .withIgnoredFields("socialSecurity")
-                .suppress(Warning.SURROGATE_KEY);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                                        .withIgnoredFields("socialSecurity")
+                                        .suppress(Warning.SURROGATE_KEY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
-        EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY)
-                .withIgnoredFields("socialSecurity");
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class)
+                                        .suppress(Warning.SURROGATE_KEY)
+                                        .withIgnoredFields("socialSecurity"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
-        expectFailure(
-                "Precondition: you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
-                .withOnlyTheseFields("socialSecurity")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                                        .withOnlyTheseFields("socialSecurity")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
-        expectFailure(
-                "Precondition: you can't use withIgnoredFields when fields are marked with @NaturalId.");
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
-                .withIgnoredFields("socialSecurity")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                                        .withIgnoredFields("socialSecurity")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't use withIgnoredFields when fields are marked with @NaturalId.");
     }
 
     @Test
     public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
-        expectFailure(
-                "Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
-        EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
-                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class)
+                                        .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
     }
 
     @Test
     public void
             fail_whenWarningVersionedEntityIsSuppressed_givenWarningSurrogateKeyIsAlsoSuppressed() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
-        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
-                .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class)
+                                        .suppress(
+                                                Warning.SURROGATE_KEY,
+                                                Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition",
+                        "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed.");
     }
 
     @Test
     public void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
-        expectFailure("Significant fields");
-        EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
     public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
-        expectFailure("Significant fields");
-        EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonHibernateNaturalIdBusinessKeyPerson.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     static final class JpaIdBusinessKeyPerson {

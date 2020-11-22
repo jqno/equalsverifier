@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -10,8 +10,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("rawtypes")
 public class MapFactoryTest {
@@ -36,7 +36,7 @@ public class MapFactoryTest {
     private Object blueObject;
     private OneElementEnum redEnum;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         red = prefabValues.giveRed(STRING_TYPETAG);

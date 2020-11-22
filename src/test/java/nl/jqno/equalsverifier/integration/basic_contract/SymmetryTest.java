@@ -3,19 +3,24 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class SymmetryTest extends ExpectedExceptionTestBase {
+public class SymmetryTest {
     private static final String SYMMETRY = "Symmetry";
     private static final String NOT_SYMMETRIC = "objects are not symmetric";
     private static final String AND = "and";
 
     @Test
     public void fail_whenEqualsIsNotSymmetrical() {
-        expectFailure(
-                SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
-        EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        SYMMETRY,
+                        NOT_SYMMETRIC,
+                        AND,
+                        SymmetryIntentionallyBroken.class.getSimpleName());
     }
 
     static final class SymmetryIntentionallyBroken {

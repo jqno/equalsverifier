@@ -1,45 +1,35 @@
 package nl.jqno.equalsverifier.coverage;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.stream.Stream;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class CoverageNoInheritanceTest {
-    private final Class<?> type;
-
-    public CoverageNoInheritanceTest(Class<?> type) {
-        this.type = type;
+    private static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of(EclipseGetClassPoint.class),
+                Arguments.of(EclipseInstanceOfPoint.class),
+                Arguments.of(HandwrittenGetClassPoint.class),
+                Arguments.of(HandwrittenInstanceOfPoint.class),
+                Arguments.of(IntelliJGetClassPoint.class),
+                Arguments.of(IntelliJInstanceOfPoint.class),
+                Arguments.of(LombokInstanceOfPoint.class),
+                Arguments.of(NetBeansGetClassPoint.class));
     }
 
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(
-                new Object[][] {
-                    {EclipseGetClassPoint.class},
-                    {EclipseInstanceOfPoint.class},
-                    {HandwrittenGetClassPoint.class},
-                    {HandwrittenInstanceOfPoint.class},
-                    {IntelliJGetClassPoint.class},
-                    {IntelliJInstanceOfPoint.class},
-                    {LombokInstanceOfPoint.class},
-                    {NetBeansGetClassPoint.class}
-                });
-    }
-
-    @Test
-    public void testCoverage() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void testCoverage(Class<?> type) {
         EqualsVerifier.forClass(type).verify();
     }
 
-    @Test
-    public void callTheConstructor() throws Exception {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void callTheConstructor(Class<?> type) throws Exception {
         Constructor<?> constructor = type.getConstructor(int.class, int.class, Color.class);
         constructor.newInstance(0, 0, Color.INDIGO);
     }

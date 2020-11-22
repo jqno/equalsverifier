@@ -1,20 +1,17 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-@RunWith(Parameterized.class)
 public class TypeTagParameterizedTest<T> {
     @SuppressWarnings("unused")
     private final String simpleField = null;
@@ -59,36 +56,23 @@ public class TypeTagParameterizedTest<T> {
     @SuppressWarnings("unused")
     private final String[] arrayField = null;
 
-    private final String fieldName;
-    private final TypeTag expected;
-
-    public TypeTagParameterizedTest(String fieldName, TypeTag expected) {
-        this.fieldName = fieldName;
-        this.expected = expected;
-    }
-
-    @Parameters(name = "Field {0} should be {1}")
-    public static Collection<Object[]> data() {
-        return Arrays.asList(
-                new Object[][] {
-                    {"simpleField", new TypeTag(String.class)},
-                    {
+    private static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.of("simpleField", new TypeTag(String.class)),
+                Arguments.of(
                         "fieldWithSingleTypeParameter",
-                        new TypeTag(List.class, new TypeTag(String.class))
-                    },
-                    {
+                        new TypeTag(List.class, new TypeTag(String.class))),
+                Arguments.of(
                         "fieldWithTwoTypeParameters",
                         new TypeTag(
-                                Map.class, new TypeTag(String.class), new TypeTag(Integer.class))
-                    },
-                    {
+                                Map.class, new TypeTag(String.class), new TypeTag(Integer.class))),
+                Arguments.of(
                         "fieldWithNestedTypeParameters",
                         new TypeTag(
                                 Map.class,
                                 new TypeTag(String.class),
-                                new TypeTag(List.class, new TypeTag(String.class)))
-                    },
-                    {
+                                new TypeTag(List.class, new TypeTag(String.class)))),
+                Arguments.of(
                         "fieldWithRidiculousTypeParameters",
                         new TypeTag(
                                 Map.class,
@@ -99,42 +83,38 @@ public class TypeTagParameterizedTest<T> {
                                         new TypeTag(
                                                 Map.class,
                                                 new TypeTag(String.class),
-                                                new TypeTag(Float.class))))
-                    },
-                    {"rawMapField", new TypeTag(Map.class)},
-                    {
+                                                new TypeTag(Float.class))))),
+                Arguments.of("rawMapField", new TypeTag(Map.class)),
+                Arguments.of(
                         "fieldWithWildcardParameter",
-                        new TypeTag(List.class, new TypeTag(Object.class))
-                    },
-                    {
+                        new TypeTag(List.class, new TypeTag(Object.class))),
+                Arguments.of(
                         "fieldWithExtendingWildcardWithTypeVariable",
                         new TypeTag(
                                 List.class,
-                                new TypeTag(Comparable.class, new TypeTag(Object.class)))
-                    },
-                    {
+                                new TypeTag(Comparable.class, new TypeTag(Object.class)))),
+                Arguments.of(
                         "fieldWithExtendingWildcardWithWildcard",
                         new TypeTag(
                                 List.class,
-                                new TypeTag(Comparable.class, new TypeTag(Object.class)))
-                    },
-                    {
+                                new TypeTag(Comparable.class, new TypeTag(Object.class)))),
+                Arguments.of(
                         "fieldWithSuperingWildcard",
-                        new TypeTag(List.class, new TypeTag(Point.class))
-                    },
-                    {
+                        new TypeTag(List.class, new TypeTag(Point.class))),
+                Arguments.of(
                         "fieldWithGenericArrayParameter",
-                        new TypeTag(Class[].class, new TypeTag(String.class))
-                    },
-                    {"fieldWithTypeVariable", new TypeTag(List.class, new TypeTag(Object.class))},
-                    // See TypeTagTest for fieldWithBoundedTypeVariable
-                    {"primitiveField", new TypeTag(int.class)},
-                    {"arrayField", new TypeTag(String[].class)}
-                });
+                        new TypeTag(Class[].class, new TypeTag(String.class))),
+                Arguments.of(
+                        "fieldWithTypeVariable",
+                        new TypeTag(List.class, new TypeTag(Object.class))),
+                // See TypeTagTest for fieldWithBoundedTypeVariable
+                Arguments.of("primitiveField", new TypeTag(int.class)),
+                Arguments.of("arrayField", new TypeTag(String[].class)));
     }
 
-    @Test
-    public void correctness() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public void correctness(String fieldName, TypeTag expected) {
         TypeTag actual = TypeTag.of(getField(fieldName), TypeTag.NULL);
         assertEquals(expected, actual);
     }

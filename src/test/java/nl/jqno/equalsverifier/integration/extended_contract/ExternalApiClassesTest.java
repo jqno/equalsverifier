@@ -11,7 +11,7 @@ import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 

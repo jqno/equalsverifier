@@ -4,9 +4,9 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Tests, among other things, the following approaches to inheritance with added fields:
@@ -16,7 +16,7 @@ import org.junit.Test;
  *
  * <p>2. "can equal", as described by Odersky, Spoon and Venners in Programming in Scala.
  */
-public class SubclassTest extends ExpectedExceptionTestBase {
+public class SubclassTest {
     @Test
     public void succeed_whenClassIsFinal() {
         EqualsVerifier.forClass(FinalPoint.class).verify();
@@ -24,24 +24,32 @@ public class SubclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
-        expectFailure(
-                "Subclass",
-                "object is not equal to an instance of a trivial subclass with equal fields",
-                "Maybe you forgot to add usingGetClass()",
-                "consider making the class final");
-        EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        "object is not equal to an instance of a trivial subclass with equal fields",
+                        "Maybe you forgot to add usingGetClass()",
+                        "consider making the class final");
     }
 
     @Test
     public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
-        expectFailure(
-                "Subclass",
-                BlindlyEqualsPoint.class.getSimpleName(),
-                "equals subclass instance",
-                EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
-        EqualsVerifier.forClass(BlindlyEqualsPoint.class)
-                .withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(BlindlyEqualsPoint.class)
+                                        .withRedefinedSubclass(
+                                                EqualSubclassForBlindlyEqualsPoint.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        BlindlyEqualsPoint.class.getSimpleName(),
+                        "equals subclass instance",
+                        EqualSubclassForBlindlyEqualsPoint.class.getSimpleName());
     }
 
     @Test
@@ -59,14 +67,17 @@ public class SubclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
-        expectFailure(
-                "Subclass",
-                CanEqualPoint.class.getSimpleName(),
-                "equals subclass instance",
-                EqualSubclassForCanEqualPoint.class.getSimpleName());
-        EqualsVerifier.forClass(CanEqualPoint.class)
-                .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(CanEqualPoint.class)
+                                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        CanEqualPoint.class.getSimpleName(),
+                        "equals subclass instance",
+                        EqualSubclassForCanEqualPoint.class.getSimpleName());
     }
 
     @Test
@@ -83,14 +94,17 @@ public class SubclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
-        expectFailure(
-                "Subclass",
-                FinalEqualsAndHashCode.class.getSimpleName(),
-                "has a final equals method",
-                "No need to supply a redefined subclass");
-        EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
-                .withRedefinedSubclass(RedeFinalSubPoint.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FinalEqualsAndHashCode.class)
+                                        .withRedefinedSubclass(RedeFinalSubPoint.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Subclass",
+                        FinalEqualsAndHashCode.class.getSimpleName(),
+                        "has a final equals method",
+                        "No need to supply a redefined subclass");
     }
 
     @Test
@@ -103,20 +117,28 @@ public class SubclassTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
-        expectFailure("withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
-        EqualsVerifier.forClass(CanEqualPoint.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(CanEqualPoint.class)
+                                        .suppress(Warning.STRICT_INHERITANCE)
+                                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
     }
 
     @Test
     public void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
-        expectFailure("withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
-        EqualsVerifier.forClass(CanEqualPoint.class)
-                .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(CanEqualPoint.class)
+                                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                                        .suppress(Warning.STRICT_INHERITANCE)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "withRedefinedSubclass", "weakInheritanceCheck", "are mutually exclusive");
     }
 
     static class LiskovSubstitutionPrincipleBroken {

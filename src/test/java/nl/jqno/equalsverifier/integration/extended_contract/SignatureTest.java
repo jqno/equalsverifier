@@ -4,10 +4,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-public class SignatureTest extends ExpectedExceptionTestBase {
+public class SignatureTest {
     private static final String OVERLOADED = "Overloaded";
     private static final String SIGNATURE_SHOULD_BE = "Signature should be";
     private static final String SIGNATURE = "public boolean equals(Object obj)";
@@ -15,35 +16,39 @@ public class SignatureTest extends ExpectedExceptionTestBase {
     @Test
     public void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
         expectOverloadFailure(
-                "Parameter should be an Object, not "
-                        + OverloadedWithOwnType.class.getSimpleName());
-        EqualsVerifier.forClass(OverloadedWithOwnType.class).verify();
+                "Parameter should be an Object, not " + OverloadedWithOwnType.class.getSimpleName(),
+                () -> EqualsVerifier.forClass(OverloadedWithOwnType.class).verify());
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithTwoParameters() {
-        expectOverloadFailure("Too many parameters");
-        EqualsVerifier.forClass(OverloadedWithTwoParameters.class).verify();
+        expectOverloadFailure(
+                "Too many parameters",
+                () -> EqualsVerifier.forClass(OverloadedWithTwoParameters.class).verify());
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithNoParameter() {
-        expectOverloadFailure("No parameter");
-        EqualsVerifier.forClass(OverloadedWithNoParameter.class).verify();
+        expectOverloadFailure(
+                "No parameter",
+                () -> EqualsVerifier.forClass(OverloadedWithNoParameter.class).verify());
     }
 
     @Test
     public void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
-        expectOverloadFailure("Parameter should be an Object");
-        EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class).verify();
+        expectOverloadFailure(
+                "Parameter should be an Object",
+                () -> EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class).verify());
     }
 
     @Test
     public void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
-        expectOverloadFailure("More than one equals method found");
-        EqualsVerifier.forClass(OverloadedAndOverridden.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                .verify();
+        expectOverloadFailure(
+                "More than one equals method found",
+                () ->
+                        EqualsVerifier.forClass(OverloadedAndOverridden.class)
+                                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                                .verify());
     }
 
     @Test
@@ -54,8 +59,10 @@ public class SignatureTest extends ExpectedExceptionTestBase {
                 .verify();
     }
 
-    private void expectOverloadFailure(String extraMessage) {
-        expectFailure(OVERLOADED, SIGNATURE_SHOULD_BE, SIGNATURE, extraMessage);
+    private void expectOverloadFailure(String extraMessage, Executable executable) {
+        ExpectedException.when(executable)
+                .assertFailure()
+                .assertMessageContains(OVERLOADED, SIGNATURE_SHOULD_BE, SIGNATURE, extraMessage);
     }
 
     static final class OverloadedWithOwnType {

@@ -1,17 +1,17 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
+public class RelaxedEqualsTest {
     private Multiple a;
     private Multiple b;
     private Multiple x;
 
-    @Before
+    @BeforeEach
     public void setup() {
         a = new Multiple(1, 2);
         b = new Multiple(2, 1);
@@ -20,8 +20,9 @@ public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenObjectsWithDifferentFieldsAreEqual() {
-        expectFailure("Significant fields");
-        EqualsVerifier.forClass(Multiple.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Multiple.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
@@ -32,11 +33,11 @@ public class RelaxedEqualsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
-        expectException(
-                IllegalStateException.class,
-                "Precondition",
-                "an equal example also appears as unequal example.");
-        EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a);
+        ExpectedException.when(
+                        () -> EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                        "Precondition", "an equal example also appears as unequal example.");
     }
 
     @Test

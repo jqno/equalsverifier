@@ -6,10 +6,10 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class ExtendedReflexivityTest extends ExpectedExceptionTestBase {
+public class ExtendedReflexivityTest {
     @Test
     public void succeed_whenEqualsUsesEqualsMethodForObjects() {
         EqualsVerifier.forClass(UsesEqualsMethod.class).verify();
@@ -17,8 +17,10 @@ public class ExtendedReflexivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForObjects() {
-        expectFailure("Reflexivity", "== used instead of .equals()", "stringField");
-        EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity", "== used instead of .equals()", "stringField");
     }
 
     @Test
@@ -31,8 +33,13 @@ public class ExtendedReflexivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedPrimitives() {
-        expectFailure("Reflexivity", "== used instead of .equals()", "integerField");
-        EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Reflexivity", "== used instead of .equals()", "integerField");
     }
 
     @Test

@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class TupleTest {
     private Tuple<String> tuple = new Tuple<>("red", "blue", new String("red"));

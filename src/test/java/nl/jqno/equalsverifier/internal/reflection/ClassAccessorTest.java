@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -20,14 +20,10 @@ import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class ClassAccessorTest {
-
-    @Rule public TemporaryFolder tempFolder = new TemporaryFolder();
 
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
@@ -36,7 +32,7 @@ public class ClassAccessorTest {
     private ClassAccessor<DefaultValues> defaultValuesClassAccessor;
     private AnnotationCache defaultValuesAnnotationCache;
 
-    @Before
+    @BeforeEach
     public void setup() {
         factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);

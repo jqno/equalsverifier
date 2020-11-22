@@ -3,18 +3,17 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
@@ -22,12 +21,10 @@ public class PrefabValuesTest {
     private static final TypeTag INT_TAG = new TypeTag(int.class);
     private static final TypeTag STRING_ARRAY_TAG = new TypeTag(String[].class);
 
-    @Rule public ExpectedException thrown = ExpectedException.none();
-
     private FactoryCache factoryCache = new FactoryCache();
     private PrefabValues pv;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));
@@ -170,9 +167,9 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenTagDoesntMatchValue() {
-        thrown.expect(ReflectionException.class);
-        thrown.expectMessage("TypeTag does not match value.");
-        pv.giveOther(POINT_TAG, "not a Point");
+        ExpectedException.when(() -> pv.giveOther(POINT_TAG, "not a point"))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("TypeTag does not match value.");
     }
 
     @Test

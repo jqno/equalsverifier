@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FieldInspectorTest {
     private final PrefabValues prefabValues =

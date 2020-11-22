@@ -2,13 +2,13 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class UtilTest {
     @Test

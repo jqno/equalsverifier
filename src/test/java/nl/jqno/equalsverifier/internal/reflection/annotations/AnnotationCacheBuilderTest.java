@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,10 +18,8 @@ import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRete
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class AnnotationCacheBuilderTest {
     private static final String RUNTIME_RETENTION = "runtimeRetention";
@@ -31,12 +29,10 @@ public class AnnotationCacheBuilderTest {
 
     private static final Set<String> NO_INGORED_ANNOTATIONS = new HashSet<>();
 
-    @Rule public ExpectedException thrown = ExpectedException.none();
-
     private AnnotationCacheBuilder cacheBuilder;
     private AnnotationCache cache;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         cache = new AnnotationCache();
         cacheBuilder =

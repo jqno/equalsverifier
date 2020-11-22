@@ -1,21 +1,24 @@
 package nl.jqno.equalsverifier.integration.basic_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class NonNullityTest extends ExpectedExceptionTestBase {
+public class NonNullityTest {
     @Test
     public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
-        expectFailure("Non-nullity: NullPointerException thrown");
-        EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity: NullPointerException thrown");
     }
 
     @Test
     public void fail_whenEqualsReturnsTrue_givenNullInput() {
-        expectFailure("Non-nullity: true returned for null value");
-        EqualsVerifier.forClass(NullReturnsTrue.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NullReturnsTrue.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity: true returned for null value");
     }
 
     static final class NullPointerExceptionThrower extends Point {

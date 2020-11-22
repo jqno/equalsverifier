@@ -4,11 +4,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
+public class AbstractHierarchyTest {
     @Test
     public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
         EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
@@ -24,9 +24,11 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
-        expectFailureWithCause(
-                NullPointerException.class, "Non-nullity: equals throws NullPointerException");
-        EqualsVerifier.forClass(NullThrowingColorContainer.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains("Non-nullity: equals throws NullPointerException");
     }
 
     @Test
@@ -38,12 +40,15 @@ public class AbstractHierarchyTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAbstractImplementationThrowsNpe() {
-        expectFailure(
-                "Abstract delegation: equals throws AbstractMethodError when field object is null");
-        EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .withIgnoredFields("objectFactory")
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
+                                        .suppress(Warning.NONFINAL_FIELDS)
+                                        .withIgnoredFields("objectFactory")
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Abstract delegation: equals throws AbstractMethodError when field object is null");
     }
 
     @Test

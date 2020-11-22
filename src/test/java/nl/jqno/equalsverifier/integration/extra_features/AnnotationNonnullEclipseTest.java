@@ -4,14 +4,14 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.eclipse.jdt.annotation.DefaultLocation;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
+public class AnnotationNonnullEclipseTest {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseAnnotationOnFieldType() {
         EqualsVerifier.forClass(NonnullTypeUse.class).verify();
@@ -41,8 +41,13 @@ public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test
@@ -62,9 +67,15 @@ public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullEclipseWithNullableOnPackageAndNullCheckInEquals
+                                                        .class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test
@@ -78,8 +89,14 @@ public class AnnotationNonnullEclipseTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
-        expectFailure("Non-nullity", "equals throws NullPointerException", "on field o");
-        EqualsVerifier.forClass(NonnullEclipseWithInapplicableLocationOnClass.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NonnullEclipseWithInapplicableLocationOnClass.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Non-nullity", "equals throws NullPointerException", "on field o");
     }
 
     @Test

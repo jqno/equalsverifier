@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Before;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RecursionTest extends ExpectedExceptionTestBase {
+public class RecursionTest {
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
     private static final String PREFAB = "Add prefab values for one of the following types";
 
@@ -23,7 +23,7 @@ public class RecursionTest extends ExpectedExceptionTestBase {
     private Tree redTree;
     private Tree blueTree;
 
-    @Before
+    @BeforeEach
     public void createSomeNodes() {
         red = new Node(null);
         blue = new Node(new Node(null));
@@ -33,8 +33,9 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-        EqualsVerifier.forClass(Node.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Node.class).verify())
+                .assertFailure()
+                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
     }
 
     @Test
@@ -49,8 +50,9 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenFieldIsARecursiveType() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
-        EqualsVerifier.forClass(NodeContainer.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NodeContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
     }
 
     @Test
@@ -69,8 +71,9 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenDatastructureIsRecursiveInGenerics() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB);
-        EqualsVerifier.forClass(Tree.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Tree.class).verify())
+                .assertFailure()
+                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
     }
 
     @Test
@@ -82,8 +85,9 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenFieldIsARecursiveTypeInGenerics() {
-        expectFailure(RECURSIVE_DATASTRUCTURE, PREFAB, Tree.class.getSimpleName());
-        EqualsVerifier.forClass(TreeContainer.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(TreeContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Tree.class.getSimpleName());
     }
 
     @Test
@@ -95,13 +99,15 @@ public class RecursionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
-        expectFailure(
-                RECURSIVE_DATASTRUCTURE,
-                ImmutableListTree.class.getSimpleName(),
-                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
-                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class))
-                        .toString()); // I'd prefer not to have this last one though.
-        EqualsVerifier.forClass(ImmutableListTree.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ImmutableListTree.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        RECURSIVE_DATASTRUCTURE,
+                        ImmutableListTree.class.getSimpleName(),
+                        new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class))
+                                .toString(),
+                        new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class))
+                                .toString()); // I'd prefer not to have this last one though.
     }
 
     @Test

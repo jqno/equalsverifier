@@ -1,10 +1,9 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class GetClassInEqualityComparisonTest extends ExpectedExceptionTestBase {
+public class GetClassInEqualityComparisonTest {
     @Test
     public void
             succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {

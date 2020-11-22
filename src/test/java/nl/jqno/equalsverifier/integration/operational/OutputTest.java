@@ -1,17 +1,15 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static org.hamcrest.CoreMatchers.not;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OutputTest extends ExpectedExceptionTestBase {
+public class OutputTest {
     private static final String SEE_ALSO = "For more information, go to";
     private static final String WEBSITE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
     private static final String MESSAGE = "a message for an exception";
@@ -19,86 +17,73 @@ public class OutputTest extends ExpectedExceptionTestBase {
     @Test
     public void
             messageIsValidForSingleType_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
-        expectMessageIsValidFor(Point.class);
-        expectFailureWithCause(AssertionException.class);
-
-        EqualsVerifier.forClass(Point.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Point.class).verify())
+                .assertCause(AssertionException.class)
+                .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL);
     }
 
     @Test
     public void
             messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
-        expectMessageIsValidFor(Point.class);
-        expectFailure("---");
-
-        EqualsVerifier.forClasses(A.class, Point.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClasses(A.class, Point.class).verify())
+                .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, "---");
     }
 
     @Test
     public void errorDescriptionAppearsOnlyAtTopOfStacktrace_notInOneOfItsCauses() {
-        expectMessageContains("Subclass");
-        expectCauseMessageDoesNotContain("Subclass");
-
-        EqualsVerifier.forClass(Point.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(Point.class).verify())
+                .assertMessageContains("Subclass")
+                .assertCauseMessageDoesNotContain("Subclass");
     }
 
     @Test
     public void
             messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
-        expectMessageIsValidFor(AssertionExceptionWithCauseThrower.class);
-        expectMessageContains(MESSAGE);
-        expectMessageDoesNotContain(NullPointerException.class.getSimpleName());
-        expectFailureWithCause(AssertionException.class);
-        expectFailureWithCause(NullPointerException.class);
-
-        EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class)
+                                        .verify())
+                .assertMessageContains(AssertionExceptionWithCauseThrower.class.getSimpleName())
+                .assertMessageContains(SEE_ALSO, WEBSITE_URL, MESSAGE)
+                .assertMessageDoesNotContain(NullPointerException.class.getSimpleName())
+                .assertCause(AssertionException.class)
+                .assertCause(NullPointerException.class);
     }
 
     @Test
     public void
             originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
-        expectMessageIsValidFor(UnsupportedOperationExceptionWithMessageThrower.class);
-        expectMessageContains(UnsupportedOperationException.class.getSimpleName(), MESSAGE);
-        expectMessageDoesNotContain("null");
-        expectFailureWithCause(UnsupportedOperationException.class, MESSAGE);
-
-        EqualsVerifier.forClass(UnsupportedOperationExceptionWithMessageThrower.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                UnsupportedOperationExceptionWithMessageThrower
+                                                        .class)
+                                        .verify())
+                .assertMessageContains(
+                        UnsupportedOperationExceptionWithMessageThrower.class.getSimpleName())
+                .assertMessageContains(UnsupportedOperationException.class.getSimpleName())
+                .assertMessageContains(SEE_ALSO, WEBSITE_URL, MESSAGE)
+                .assertMessageDoesNotContain("null")
+                .assertCause(UnsupportedOperationException.class)
+                .assertCauseMessageContains(MESSAGE);
     }
 
     @Test
     public void
             messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
-        expectMessageIsValidFor(IllegalStateExceptionThrower.class);
-        expectMessageContains(IllegalStateException.class.getSimpleName());
-        expectMessageDoesNotContain("null");
-        expectFailureWithCause(IllegalStateException.class);
-
-        EqualsVerifier.forClass(IllegalStateExceptionThrower.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(IllegalStateExceptionThrower.class).verify())
+                .assertMessageContains(IllegalStateExceptionThrower.class.getSimpleName())
+                .assertMessageContains(SEE_ALSO, WEBSITE_URL, "<no message>")
+                .assertMessageDoesNotContain("null")
+                .assertCause(IllegalStateException.class);
     }
 
     @Test
     public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
-        expectMessageIsValidFor(Node.class);
-        expectFailureWithoutCause(StackOverflowError.class);
-
-        EqualsVerifier.forClass(Node.class).verify();
-    }
-
-    private void expectMessageIsValidFor(Class<?> type) {
-        expectMessageContains(type.getSimpleName());
-        expectMessageContains(SEE_ALSO, WEBSITE_URL);
-    }
-
-    private void expectMessageContains(String... contains) {
-        for (String s : contains) {
-            thrown.expectMessage(s);
-        }
-    }
-
-    private void expectMessageDoesNotContain(String... doesNotContain) {
-        for (String s : doesNotContain) {
-            thrown.expect(not(s));
-        }
+        ExpectedException.when(() -> EqualsVerifier.forClass(Node.class).verify())
+                .assertMessageContains(Node.class.getSimpleName(), SEE_ALSO, WEBSITE_URL)
+                .assertNotCause(StackOverflowError.class);
     }
 
     private static class AssertionExceptionWithCauseThrower {

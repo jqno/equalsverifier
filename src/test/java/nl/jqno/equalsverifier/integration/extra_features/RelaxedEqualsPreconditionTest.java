@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Multiple;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
+public class RelaxedEqualsPreconditionTest {
     private static final String PRECONDITION = "Precondition";
     private static final String DIFFERENT_CLASSES = "are of different classes";
     private static final String TWO_IDENTICAL_OBJECTS_APPEAR = "two identical objects appear";
@@ -20,7 +20,7 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
     private Multiple blue;
     private Multiple green;
 
-    @Before
+    @BeforeEach
     public void setup() {
         red = new Multiple(1, 2);
         blue = new Multiple(2, 1);
@@ -29,14 +29,16 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenTheFirstExampleIsNull() {
-        expectException(IllegalArgumentException.class, "First example is null.");
-        EqualsVerifier.forRelaxedEqualExamples(null, blue);
+        ExpectedException.when(() -> EqualsVerifier.forRelaxedEqualExamples(null, blue))
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains("First example is null.");
     }
 
     @Test
     public void throw_whenTheSecondExampleIsNull() {
-        expectException(IllegalArgumentException.class, "Second example is null.");
-        EqualsVerifier.forRelaxedEqualExamples(red, null);
+        ExpectedException.when(() -> EqualsVerifier.forRelaxedEqualExamples(red, null))
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains("Second example is null.");
     }
 
     @Test
@@ -48,15 +50,21 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAVarargParameterIsNull() {
-        expectException(IllegalArgumentException.class, "One of the examples is null.");
         Multiple another = new Multiple(-1, -2);
-        EqualsVerifier.forRelaxedEqualExamples(red, blue, another, null);
+        ExpectedException.when(
+                        () -> EqualsVerifier.forRelaxedEqualExamples(red, blue, another, null))
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains("One of the examples is null.");
     }
 
     @Test
     public void fail_whenTheUnequalExampleIsNull() {
-        expectException(IllegalArgumentException.class, "First example is null.");
-        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExample(null);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, blue)
+                                        .andUnequalExample(null))
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains("First example is null.");
     }
 
     @Test
@@ -68,59 +76,99 @@ public class RelaxedEqualsPreconditionTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenAnUnequalVarargParameterIsNull() {
-        expectException(IllegalArgumentException.class);
         Multiple another = new Multiple(3, 3);
-        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, another, null);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, blue)
+                                        .andUnequalExamples(green, another, null))
+                .assertThrows(IllegalArgumentException.class);
     }
 
     @Test
     public void fail_whenEqualExamplesAreOfDifferentRuntimeTypes() {
-        expectFailure(
-                PRECONDITION,
-                DIFFERENT_CLASSES,
-                SubMultiple.class.getSimpleName(),
-                Multiple.class.getSimpleName());
         SubMultiple sm = new SubMultiple(1, 2);
-        EqualsVerifier.forRelaxedEqualExamples(sm, red).andUnequalExample(green).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(sm, red)
+                                        .andUnequalExample(green)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        PRECONDITION,
+                        DIFFERENT_CLASSES,
+                        SubMultiple.class.getSimpleName(),
+                        Multiple.class.getSimpleName());
     }
 
     @Test
     public void fail_whenTheSameExampleIsGivenTwice() {
-        expectFailure(PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
-        EqualsVerifier.forRelaxedEqualExamples(red, red).andUnequalExample(green).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, red)
+                                        .andUnequalExample(green)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        PRECONDITION, OBJECT_APPEARS_TWICE, Multiple.class.getSimpleName());
     }
 
     @Test
     public void fail_whenTwoExamplesAreIdentical() {
-        expectFailure(PRECONDITION, TWO_IDENTICAL_OBJECTS_APPEAR, Multiple.class.getSimpleName());
         Multiple aa = new Multiple(1, 2);
-        EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, aa)
+                                        .andUnequalExample(green)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        PRECONDITION, TWO_IDENTICAL_OBJECTS_APPEAR, Multiple.class.getSimpleName());
     }
 
     @Test
     public void fail_whenTwoExamplesAreNotEqualAtAll() {
-        expectFailure(PRECONDITION, NOT_ALL_EQUAL_OBJECT_ARE_EQUAL, Multiple.class.getSimpleName());
         Multiple aa = new Multiple(42, 42);
-        EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, aa)
+                                        .andUnequalExample(green)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        PRECONDITION,
+                        NOT_ALL_EQUAL_OBJECT_ARE_EQUAL,
+                        Multiple.class.getSimpleName());
     }
 
     @Test
     public void fail_whenAnEqualExampleIsAlsoGivenAsAnUnequalExample() {
-        expectException(IllegalStateException.class, PRECONDITION, EQUAL_IS_UNEQUAL);
-        EqualsVerifier.forRelaxedEqualExamples(red, green).andUnequalExample(green);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, green)
+                                        .andUnequalExample(green))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(PRECONDITION, EQUAL_IS_UNEQUAL);
     }
 
     @Test
     public void fail_whenTheSameUnequalExampleIsGivenTwice() {
-        expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
-        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, green);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, blue)
+                                        .andUnequalExamples(green, green))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
     }
 
     @Test
     public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
-        expectException(IllegalStateException.class, PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
         Multiple xx = new Multiple(2, 2);
-        EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, xx);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(red, blue)
+                                        .andUnequalExamples(green, xx))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
     }
 
     public static class SubMultiple extends Multiple {

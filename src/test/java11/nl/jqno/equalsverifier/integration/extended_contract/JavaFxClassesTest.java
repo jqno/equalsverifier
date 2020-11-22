@@ -8,7 +8,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javafx.beans.property.*;
 import javafx.collections.*;

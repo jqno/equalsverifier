@@ -3,11 +3,11 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class RecordsTest extends ExpectedExceptionTestBase {
+public class RecordsTest {
 
     @Test
     public void succeed_whenClassIsARecord() {
@@ -21,20 +21,28 @@ public class RecordsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
-        expectFailure("Record invariant", "intField");
-        EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "intField");
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
-        expectFailure("Record invariant", "stringField");
-        EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "stringField");
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
-        expectFailure("Record invariant", "intField", "stringField");
-        EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "intField", "stringField");
     }
 
     @Test
@@ -44,32 +52,38 @@ public class RecordsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
-        expectFailure("Significant fields");
-        EqualsVerifier.forClass(NotAllFieldsRecord.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NotAllFieldsRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
     public void fail_whenRecordConstructorThrows() {
-        expectFailure("Record", "failed to invoke constructor");
-        EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to invoke constructor");
     }
 
     @Test
     public void fail_whenRecordConstructorThrowsNpe() {
-        expectFailure("Record", "failed to invoke constructor");
-        EqualsVerifier.forClass(NullFieldRecord.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NullFieldRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to invoke constructor");
     }
 
     @Test
     public void fail_whenRecordAccessorThrows() {
-        expectFailure("Record", "failed to invoke accessor method");
-        EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to invoke accessor method");
     }
 
     @Test
     public void fail_whenRecordAccessorThrowsNpe() {
-        expectFailure("Record", "failed to invoke accessor method", "s()");
-        EqualsVerifier.forClass(NullAccessorRecord.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to invoke accessor method", "s()");
     }
 
     @Test

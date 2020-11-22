@@ -8,10 +8,10 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugExcep
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingRunnable;
 import nl.jqno.equalsverifier.internal.util.Rethrow.ThrowingSupplier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class RethrowTest extends ExpectedExceptionTestBase {
+public class RethrowTest {
     private static final String PROVIDED_MSG = "this message is provided";
     private static final String CAUSE_MSG = "this message came from the exception";
 
@@ -22,74 +22,88 @@ public class RethrowTest extends ExpectedExceptionTestBase {
 
     @Test
     public void supplierWithIgnoredMessageThrowsRuntimeException() {
-        expectException(RuntimeException.class, CAUSE_MSG);
-        rethrow(supply(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(() -> rethrow(supply(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(RuntimeException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void supplierWithMessageThrowsReflectiveOperationException() {
-        expectException(ReflectionException.class, PROVIDED_MSG);
-        rethrow(supply(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(
+                        () -> rethrow(supply(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains(PROVIDED_MSG);
     }
 
     @Test
     public void supplierWithMessageThrowsException() {
-        expectException(EqualsVerifierInternalBugException.class, PROVIDED_MSG);
-        rethrow(supply(new IOException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(() -> rethrow(supply(new IOException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains(PROVIDED_MSG);
     }
 
     @Test
     public void supplierWithNoMessageThrowsRuntimeException() {
-        expectException(RuntimeException.class, CAUSE_MSG);
-        rethrow(supply(new RuntimeException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(supply(new RuntimeException(CAUSE_MSG))))
+                .assertThrows(RuntimeException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void supplierWithNoMessageThrowsReflectiveOperationException() {
-        expectException(ReflectionException.class, CAUSE_MSG);
-        rethrow(supply(new IllegalAccessException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(supply(new IllegalAccessException(CAUSE_MSG))))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void supplierWithNoMessageThrowsException() {
-        expectException(EqualsVerifierInternalBugException.class, CAUSE_MSG);
-        rethrow(supply(new IOException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(supply(new IOException(CAUSE_MSG))))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void runnableWithIgnoredMessageThrowsRuntimeException() {
-        expectException(RuntimeException.class, CAUSE_MSG);
-        rethrow(run(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(() -> rethrow(run(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(RuntimeException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void runnableWithMessageThrowsReflectiveOperationException() {
-        expectException(ReflectionException.class, PROVIDED_MSG);
-        rethrow(run(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(
+                        () -> rethrow(run(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains(PROVIDED_MSG);
     }
 
     @Test
     public void runnableWithMessageThrowsException() {
-        expectException(EqualsVerifierInternalBugException.class, PROVIDED_MSG);
-        rethrow(run(new IOException(CAUSE_MSG)), PROVIDED_MSG);
+        ExpectedException.when(() -> rethrow(run(new IOException(CAUSE_MSG)), PROVIDED_MSG))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains(PROVIDED_MSG);
     }
 
     @Test
     public void runnableWithNoMessageThrowsRuntimeException() {
-        expectException(RuntimeException.class, CAUSE_MSG);
-        rethrow(run(new RuntimeException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(run(new RuntimeException(CAUSE_MSG))))
+                .assertThrows(RuntimeException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void runnableWithNoMessageThrowsReflectiveOperationException() {
-        expectException(ReflectionException.class, CAUSE_MSG);
-        rethrow(run(new IllegalAccessException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(run(new IllegalAccessException(CAUSE_MSG))))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     @Test
     public void runnableWithNoMessageThrowsException() {
-        expectException(EqualsVerifierInternalBugException.class, CAUSE_MSG);
-        rethrow(run(new IOException(CAUSE_MSG)));
+        ExpectedException.when(() -> rethrow(run(new IOException(CAUSE_MSG))))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains(CAUSE_MSG);
     }
 
     private ThrowingSupplier<?> supply(Exception e) {

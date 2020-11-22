@@ -1,11 +1,12 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FieldNameExtractorTest {
     private static final String FIELD_NOT_FOUND = "field not found: ";
@@ -25,28 +26,29 @@ public class FieldNameExtractorTest {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        assertTrue(FIELD_NOT_FOUND + FIELD_STRING, fields.contains(FIELD_STRING));
-        assertTrue(FIELD_NOT_FOUND + FIELD_OBJECT, fields.contains(FIELD_OBJECT));
-        assertTrue(FIELD_NOT_FOUND + FIELD_LIST, fields.contains(FIELD_LIST));
-        assertTrue(FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT, fields.contains(FIELD_PRIMITIVE_INT));
+        assertTrue(fields.contains(FIELD_STRING), FIELD_NOT_FOUND + FIELD_STRING);
+        assertTrue(fields.contains(FIELD_OBJECT), FIELD_NOT_FOUND + FIELD_OBJECT);
+        assertTrue(fields.contains(FIELD_LIST), FIELD_NOT_FOUND + FIELD_LIST);
+        assertTrue(fields.contains(FIELD_PRIMITIVE_INT), FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT);
 
-        assertTrue("Total number of fields was not equal to expected value", 4 == fields.size());
+        assertTrue(4 == fields.size(), "Total number of fields was not equal to expected value");
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void should_disallow_adding_extra_fields() throws Exception {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        fields.add("illegally added field");
+        assertThrows(
+                UnsupportedOperationException.class, () -> fields.add("illegally added field"));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void should_disallow_removing_fields() throws Exception {
         Set<String> fields =
                 FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        fields.remove(FIELD_STRING);
+        assertThrows(UnsupportedOperationException.class, () -> fields.remove(FIELD_STRING));
     }
 
     class FieldNameExtractorTestHelper {

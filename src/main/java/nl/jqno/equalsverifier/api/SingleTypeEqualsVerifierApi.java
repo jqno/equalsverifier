@@ -297,10 +297,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private String buildErrorMessage(String description, boolean showUrl) {
+        String message = description == null ? "<no message>" : description;
         return Formatter.of(
                         "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
                         type.getName(),
-                        description)
+                        message)
                 .format();
     }
 

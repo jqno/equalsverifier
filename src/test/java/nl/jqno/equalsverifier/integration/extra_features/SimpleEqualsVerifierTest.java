@@ -3,11 +3,11 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class SimpleEqualsVerifierTest extends ExpectedExceptionTestBase {
+public class SimpleEqualsVerifierTest {
 
     @Test
     public void succeed_whenTestingGeneratedClass_givenASimpleEqualsVerifier() {
@@ -16,14 +16,20 @@ public class SimpleEqualsVerifierTest extends ExpectedExceptionTestBase {
 
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenNothingSpecial() {
-        expectFailure("or use EqualsVerifier.simple()");
-        EqualsVerifier.forClass(IntelliJPoint.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(IntelliJPoint.class).verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenSuppressWarningStrictInheritance() {
-        expectFailure("or use EqualsVerifier.simple()");
-        EqualsVerifier.forClass(IntelliJPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(IntelliJPoint.class)
+                                        .suppress(Warning.STRICT_INHERITANCE)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     public static class IntelliJPoint {

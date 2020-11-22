@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -10,22 +10,22 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordObjectAccessorScramblingTest.GenericContainer;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordObjectAccessorScramblingTest extends ExpectedExceptionTestBase {
+public class RecordObjectAccessorScramblingTest {
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
         prefabValues = new PrefabValues(factoryCache);
@@ -75,11 +75,9 @@ public class RecordObjectAccessorScramblingTest extends ExpectedExceptionTestBas
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
         Object original = constructor.newInstance(1, 2);
 
-        expectException(
-                EqualsVerifierInternalBugException.class,
-                "Record:",
-                "can't shallow-scramble a record.");
-        create(original).shallowScramble(prefabValues, TypeTag.NULL);
+        ExpectedException.when(() -> create(original).shallowScramble(prefabValues, TypeTag.NULL))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains("Record:", "can't shallow-scramble a record.");
     }
 
     @Test

@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SupportedAnnotationsTest {
     private static final Set<String> NO_IGNORED_ANNOTATIONS = new HashSet<>();

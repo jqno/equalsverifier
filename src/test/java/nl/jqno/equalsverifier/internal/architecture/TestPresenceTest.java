@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.architecture;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.jqno.equalsverifier.internal.reflection.Util;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public final class TestPresenceTest {
     @Test

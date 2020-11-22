@@ -3,11 +3,11 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TransientFieldsTest extends ExpectedExceptionTestBase {
+public class TransientFieldsTest {
     @Test
     public void succeed_whenFieldsWithTransientModifierAreNotUsedInEquals() {
         EqualsVerifier.forClass(NotUsingFieldsWithTransientModifier.class).verify();
@@ -15,8 +15,13 @@ public class TransientFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenFieldsWithTransientModifierAreUsedInEquals() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
@@ -30,8 +35,14 @@ public class TransientFieldsTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenFieldsWithTransientModifierAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                SubclassUsingFieldsWithTransientModifier.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
@@ -41,8 +52,13 @@ public class TransientFieldsTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
@@ -56,15 +72,27 @@ public class TransientFieldsTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenFieldsWithTransientAnnotationAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
-        expectFailure("Transient field", "should not be included in equals/hashCode contract");
-        EqualsVerifier.forClass(SubclassUsingFieldsWithTransientAnnotation.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                SubclassUsingFieldsWithTransientAnnotation.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
     public void
             fail_whenFieldsWithTransientAnnotationAreNotUsedInEquals_givenAnnotationIsNotAJpaAnnotation() {
-        expectFailure("Significant fields", "equals does not use j, or it is stateless");
-        EqualsVerifier.forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                NotUsingFieldsWithNonJpaTransientAnnotation.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Significant fields", "equals does not use j, or it is stateless");
     }
 
     static class NotUsingFieldsWithTransientModifier {

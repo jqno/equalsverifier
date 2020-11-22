@@ -5,11 +5,11 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Ignore;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-public class TransitivityTest extends ExpectedExceptionTestBase {
+public class TransitivityTest {
     @Test
     public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAnd() {
         EqualsVerifier.forClass(TwoFieldsUsingAnd.class).verify();
@@ -17,13 +17,17 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
-        expectFailure(
-                "Transitivity",
-                "two of these three instances are equal to each other, so the third one should be, too",
-                TwoFieldsUsingOr.class.getSimpleName());
-        EqualsVerifier.forClass(TwoFieldsUsingOr.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(TwoFieldsUsingOr.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Transitivity",
+                        "two of these three instances are equal to each other, so the third one"
+                                + " should be, too",
+                        TwoFieldsUsingOr.class.getSimpleName());
     }
 
     @Test
@@ -33,10 +37,13 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingOr.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ThreeFieldsUsingOr.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
@@ -46,52 +53,70 @@ public class TransitivityTest extends ExpectedExceptionTestBase {
         ThreeFieldsUsingOr three = new ThreeFieldsUsingOr("c", "1", "alpha");
         ThreeFieldsUsingOr other = new ThreeFieldsUsingOr("d", "4", "delta");
 
-        expectFailure("Transitivity");
-        EqualsVerifier.forRelaxedEqualExamples(one, two, three)
-                .andUnequalExample(other)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forRelaxedEqualExamples(one, two, three)
+                                        .andUnequalExample(other)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingAndOr.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ThreeFieldsUsingAndOr.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(ThreeFieldsUsingOrAnd.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ThreeFieldsUsingOrAnd.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(FiveFieldsUsingOr.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FiveFieldsUsingOr.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(FiveFieldsUsingAndsAndOrs.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(FiveFieldsUsingAndsAndOrs.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
-    @Ignore("This class is not transitive, and it should fail. See issue 78.")
+    @Disabled("This class is not transitive, and it should fail. See issue 78.")
     @Test
     public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
-        expectFailure("Transitivity");
-        EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(AtLeast2FieldsAreEqual.class)
+                                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     static final class TwoFieldsUsingAnd {

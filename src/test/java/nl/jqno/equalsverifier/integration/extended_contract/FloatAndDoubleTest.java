@@ -3,23 +3,29 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class FloatAndDoubleTest extends ExpectedExceptionTestBase {
+public class FloatAndDoubleTest {
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
     private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
 
     @Test
     public void fail_whenFloatsAreComparedByReference() {
-        expectFailure(FLOAT, "f");
-        EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(FLOAT, "f");
     }
 
     @Test
     public void fail_whenObjectFloatsAreComparedByReference() {
-        expectFailure(FLOAT, "f");
-        EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
+                .assertFailure()
+                .assertMessageContains(FLOAT, "f");
     }
 
     @Test
@@ -29,14 +35,22 @@ public class FloatAndDoubleTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenDoublesAreComparedByReference() {
-        expectFailure(DOUBLE, "d");
-        EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(DOUBLE, "d");
     }
 
     @Test
     public void fail_whenObjectDoublesAreComparedByReference() {
-        expectFailure(DOUBLE, "d");
-        EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(CompareObjectDoubleByReference.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(DOUBLE, "d");
     }
 
     @Test

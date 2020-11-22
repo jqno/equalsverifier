@@ -2,15 +2,17 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DontOverrideEqualsTest extends ExpectedExceptionTestBase {
+public class DontOverrideEqualsTest {
     @Test
     public void fail_whenEqualsIsInheritedDirectlyFromObject() {
-        expectFailure("Equals is inherited directly from Object");
-        EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify())
+                .assertFailure()
+                .assertMessageContains("Equals is inherited directly from Object");
     }
 
     @Test

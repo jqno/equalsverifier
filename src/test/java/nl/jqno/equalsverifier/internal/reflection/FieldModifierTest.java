@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -12,8 +12,8 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class FieldModifierTest {
     private static final Point RED_NEW_POINT = new Point(10, 20);
@@ -23,7 +23,7 @@ public class FieldModifierTest {
 
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(RED_NEW_POINT, BLUE_NEW_POINT, REDCOPY_NEW_POINT));
@@ -199,9 +199,9 @@ public class FieldModifierTest {
 
         for (Field field : FieldIterable.of(AllTypesContainer.class)) {
             FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
-            assertFalse("On field: " + field.getName(), reference.equals(changed));
+            assertFalse(reference.equals(changed), "On field: " + field.getName());
             FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
-            assertTrue("On field: " + field.getName(), reference.equals(changed));
+            assertTrue(reference.equals(changed), "On field: " + field.getName());
         }
     }
 
@@ -244,9 +244,9 @@ public class FieldModifierTest {
 
         for (Field field : FieldIterable.of(AllArrayTypesContainer.class)) {
             FieldModifier.of(field, changed).changeField(prefabValues, TypeTag.NULL);
-            assertFalse("On field: " + field.getName(), reference.equals(changed));
+            assertFalse(reference.equals(changed), "On field: " + field.getName());
             FieldModifier.of(field, reference).changeField(prefabValues, TypeTag.NULL);
-            assertTrue("On field: " + field.getName(), reference.equals(changed));
+            assertTrue(reference.equals(changed), "On field: " + field.getName());
         }
     }
 

@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 import java.util.Map;
@@ -12,14 +12,14 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {
     private PrefabValues prefabValues;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
     }

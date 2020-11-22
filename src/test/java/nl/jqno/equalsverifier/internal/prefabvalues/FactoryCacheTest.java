@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.SimpleFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class FactoryCacheTest {
     private static final Class<String> STRING_CLASS = String.class;

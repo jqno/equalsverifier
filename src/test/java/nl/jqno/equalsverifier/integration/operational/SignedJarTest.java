@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.signedjar.SignedJarPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class SignedJarTest {
     @Test

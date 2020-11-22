@@ -2,16 +2,15 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
-import static org.hamcrest.CoreMatchers.containsString;
 
 import java.util.Arrays;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class ArrayTest extends ExpectedExceptionTestBase {
+public class ArrayTest {
     private static final String REGULAR_EQUALS =
             "Array: == or regular equals() used instead of Arrays.equals() for field";
     private static final String REGULAR_HASHCODE =
@@ -24,14 +23,18 @@ public class ArrayTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
-        expectFailure(REGULAR_EQUALS, FIELD_NAME);
-        EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
-        expectFailure(REGULAR_HASHCODE, FIELD_NAME);
-        EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
     }
 
     @Test
@@ -41,20 +44,32 @@ public class ArrayTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
-        expectFailure(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
-        EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
-        expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
-        EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
     }
 
     @Test
     public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
-        expectFailure(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
-        EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
     }
 
     @Test
@@ -65,8 +80,14 @@ public class ArrayTest extends ExpectedExceptionTestBase {
     @Test
     public void
             failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
-        expectFailure("second", MULTIDIMENSIONAL_HASHCODE);
-        EqualsVerifier.forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                TwoMultidimensionalArraysShallowHashCodeForSecond
+                                                        .class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("second", MULTIDIMENSIONAL_HASHCODE);
     }
 
     @Test
@@ -76,21 +97,29 @@ public class ArrayTest extends ExpectedExceptionTestBase {
 
     @Test
     public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
-        thrown.expect(AssertionError.class);
-        thrown.expectMessage(containsString("Recursive datastructure"));
-        EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(
+                                                MultiDimensionalArrayAndRecursion.Board.class)
+                                        .verify())
+                .assertThrows(AssertionError.class)
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
     public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAnObjectArray() {
-        expectFailure(REGULAR_EQUALS, FIELD_NAME);
-        EqualsVerifier.forClass(ObjectArrayRegularEquals.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(ObjectArrayRegularEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAnObjectArray() {
-        expectFailure(REGULAR_HASHCODE, FIELD_NAME);
-        EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
     }
 
     @Test

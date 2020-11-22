@@ -2,11 +2,11 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
+public class WithPrefabValuesTest {
     private final FinalPoint red = new FinalPoint(1, 2);
     private final FinalPoint blue = new FinalPoint(2, 3);
 
@@ -19,44 +19,52 @@ public class WithPrefabValuesTest extends ExpectedExceptionTestBase {
 
     @Test
     public void throw_whenTypeIsNull() {
-        expectException(NullPointerException.class);
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class).withPrefabValues(null, red, blue);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                                        .withPrefabValues(null, red, blue))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenFirstPrefabValueIsNull() {
-        expectException(NullPointerException.class);
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(FinalPoint.class, null, blue);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                                        .withPrefabValues(FinalPoint.class, null, blue))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenSecondPrefabValueIsNull() {
-        expectException(NullPointerException.class);
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(FinalPoint.class, red, null);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                                        .withPrefabValues(FinalPoint.class, red, null))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenThePrefabValuesAreTheSame() {
-        expectException(IllegalStateException.class, "Precondition", "both values are equal");
-
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(FinalPoint.class, red, red);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                                        .withPrefabValues(FinalPoint.class, red, red))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both values are equal");
     }
 
     @Test
     public void throw_whenThePrefabValuesAreEqual() {
-        expectException(IllegalStateException.class, "Precondition", "both values are equal");
-
         FinalPoint red1 = new FinalPoint(4, 4);
         FinalPoint red2 = new FinalPoint(4, 4);
 
-        EqualsVerifier.forClass(WithPrefabValuesTest.class)
-                .withPrefabValues(FinalPoint.class, red1, red2);
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(WithPrefabValuesTest.class)
+                                        .withPrefabValues(FinalPoint.class, red1, red2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both values are equal");
     }
 
     @Test

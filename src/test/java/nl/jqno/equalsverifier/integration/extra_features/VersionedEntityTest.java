@@ -5,25 +5,33 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
-import org.junit.Test;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Test;
 
-public class VersionedEntityTest extends ExpectedExceptionTestBase {
+public class VersionedEntityTest {
     @Test
     public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
-        expectFailure(
-                "object does not equal an identical copy of itself",
-                Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "object does not equal an identical copy of itself",
+                        Warning.IDENTICAL_COPY.toString());
     }
 
     @Test
     public void
             fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
-        expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
-                .suppress(Warning.IDENTICAL_COPY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class)
+                                        .suppress(Warning.IDENTICAL_COPY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
     }
 
     @Test
@@ -36,19 +44,24 @@ public class VersionedEntityTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenInstanceWithAZeroIdDoesNotEqualItself_givenAVersionedEntityWithState() {
-        expectFailure(
-                "object does not equal an identical copy of itself",
-                Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(StringVersionedEntity.class).verify();
+        ExpectedException.when(() -> EqualsVerifier.forClass(StringVersionedEntity.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "object does not equal an identical copy of itself",
+                        Warning.IDENTICAL_COPY.toString());
     }
 
     @Test
     public void
             fail_whenInstanceWithANonzeroIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
-        expectFailure("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
-        EqualsVerifier.forClass(StringVersionedEntity.class)
-                .suppress(Warning.IDENTICAL_COPY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(StringVersionedEntity.class)
+                                        .suppress(Warning.IDENTICAL_COPY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains(
+                        "Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
     }
 
     @Test
@@ -64,8 +77,10 @@ public class VersionedEntityTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
-        expectFailure("Significant fields");
-        EqualsVerifier.forClass(WeakStringVersionedEntity.class).verify();
+        ExpectedException.when(
+                        () -> EqualsVerifier.forClass(WeakStringVersionedEntity.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
@@ -91,17 +106,24 @@ public class VersionedEntityTest extends ExpectedExceptionTestBase {
     @Test
     public void
             fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
-        expectFailure("catch me if you can");
-        EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class).verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("catch me if you can");
     }
 
     @Test
     public void
             fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenVersionedEntityWarningIsSuppressed() {
-        expectFailure("catch me if you can");
-        EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
-                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                .verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class)
+                                        .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("catch me if you can");
     }
 
     @Test

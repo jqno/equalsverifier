@@ -4,13 +4,13 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class AnnotationImmutableTest extends ExpectedExceptionTestBase {
+public class AnnotationImmutableTest {
     @Test
     public void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
         EqualsVerifier.forClass(ImmutableByAnnotation.class).verify();
@@ -26,8 +26,13 @@ public class AnnotationImmutableTest extends ExpectedExceptionTestBase {
 
     @Test
     public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
-        expectFailure("Mutability", "equals depends on mutable field", "color");
-        EqualsVerifier.forClass(MutableCanEqualColorPoint.class).withRedefinedSuperclass().verify();
+        ExpectedException.when(
+                        () ->
+                                EqualsVerifier.forClass(MutableCanEqualColorPoint.class)
+                                        .withRedefinedSuperclass()
+                                        .verify())
+                .assertFailure()
+                .assertMessageContains("Mutability", "equals depends on mutable field", "color");
     }
 
     @Immutable

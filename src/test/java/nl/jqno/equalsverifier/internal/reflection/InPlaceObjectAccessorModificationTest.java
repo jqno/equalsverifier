@@ -1,15 +1,15 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorModificationTest {
     private static final int INITIAL_INT = 42;
@@ -22,7 +22,7 @@ public class InPlaceObjectAccessorModificationTest {
     private ObjectAccessor<Modifiable> accessor;
     private Field stringField;
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
         m = new Modifiable(INITIAL_INT, INITIAL_BOOLEAN, INITIAL_STRING, INITIAL_OBJECT);
