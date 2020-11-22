@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -22,7 +22,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class FallbackFactoryTest extends ExpectedExceptionTestBase {
+public class FallbackFactoryTest {
     private FallbackFactory<?> factory;
     private PrefabValues prefabValues;
     private LinkedHashSet<TypeTag> typeStack;
@@ -69,21 +69,30 @@ public class FallbackFactoryTest extends ExpectedExceptionTestBase {
 
     @Test
     public void dontGiveRecursiveClass() {
-        expectException(RecursionException.class);
-        factory.createValues(new TypeTag(Node.class), prefabValues, typeStack);
+        ExpectedException.when(
+                        () ->
+                                factory.createValues(
+                                        new TypeTag(Node.class), prefabValues, typeStack))
+                .assertThrows(RecursionException.class);
     }
 
     @Test
     public void dontGiveTwoStepRecursiveClass() {
-        expectException(RecursionException.class);
-        expectDescription("TwoStepNodeA", "TwoStepNodeB");
-        factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack);
+        ExpectedException.when(
+                        () ->
+                                factory.createValues(
+                                        new TypeTag(TwoStepNodeA.class), prefabValues, typeStack))
+                .assertThrows(RecursionException.class)
+                .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");
     }
 
     @Test
     public void dontGiveRecursiveArray() {
-        expectException(RecursionException.class);
-        factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack);
+        ExpectedException.when(
+                        () ->
+                                factory.createValues(
+                                        new TypeTag(NodeArray.class), prefabValues, typeStack))
+                .assertThrows(RecursionException.class);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {

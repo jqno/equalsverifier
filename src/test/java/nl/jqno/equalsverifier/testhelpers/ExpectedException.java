@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
+import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import org.junit.jupiter.api.function.Executable;
 
 public final class ExpectedException {
@@ -102,6 +103,34 @@ public final class ExpectedException {
         for (String fragment : fragments) {
             if (message.contains(fragment)) {
                 fail("Message [" + message + "] contains [" + fragment + "]");
+            }
+        }
+        return this;
+    }
+
+    public ExpectedException assertDescriptionContains(String... fragments) {
+        if (!(e instanceof MessagingException)) {
+            fail("Exception " + e.getClass().getSimpleName() + " is not a MessagingException.");
+        }
+        MessagingException me = (MessagingException) e;
+        String description = me.getDescription();
+        for (String fragment : fragments) {
+            if (!description.contains(fragment)) {
+                fail("Description [" + description + "] does not contain [" + fragment + "]");
+            }
+        }
+        return this;
+    }
+
+    public ExpectedException assertDescriptionDoesNotContain(String... fragments) {
+        if (!(e instanceof MessagingException)) {
+            fail("Exception " + e.getClass().getSimpleName() + " is not a MessagingException.");
+        }
+        MessagingException me = (MessagingException) e;
+        String description = me.getDescription();
+        for (String fragment : fragments) {
+            if (description.contains(fragment)) {
+                fail("Description [" + description + "] contains [" + fragment + "]");
             }
         }
         return this;
