@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Website is migrated from `gh-pages` branch to `docs` folder to make it more accessible.
 - JDK-specific unit tests, such as the `RecordsTest` which targets JDK16+, have now been migrated to `src/test/javaXX` (where `XX` is the version number of the JDK the test targets) so there is no longer a need to compile classes at run-time inside the test.
+- Upgraded unit tests to JUnit 5.
 
 ## [3.5] - 2020-10-20
 ### Added
