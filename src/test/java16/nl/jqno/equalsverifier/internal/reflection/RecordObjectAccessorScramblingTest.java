@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordObjectAccessorScramblingTest.GenericContainer;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +21,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordObjectAccessorScramblingTest extends ExpectedExceptionTestBase {
+public class RecordObjectAccessorScramblingTest {
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
@@ -75,11 +75,9 @@ public class RecordObjectAccessorScramblingTest extends ExpectedExceptionTestBas
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
         Object original = constructor.newInstance(1, 2);
 
-        expectException(
-                EqualsVerifierInternalBugException.class,
-                "Record:",
-                "can't shallow-scramble a record.");
-        create(original).shallowScramble(prefabValues, TypeTag.NULL);
+        ExpectedException.when(() -> create(original).shallowScramble(prefabValues, TypeTag.NULL))
+                .assertThrows(EqualsVerifierInternalBugException.class)
+                .assertMessageContains("Record:", "can't shallow-scramble a record.");
     }
 
     @Test
