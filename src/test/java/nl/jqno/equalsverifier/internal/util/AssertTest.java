@@ -3,10 +3,10 @@ package nl.jqno.equalsverifier.internal.util;
 import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.testhelpers.ExpectedExceptionTestBase;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class AssertTest extends ExpectedExceptionTestBase {
+public class AssertTest {
     private static final Formatter FAIL = Formatter.of("fail");
 
     @Test
@@ -23,9 +23,9 @@ public class AssertTest extends ExpectedExceptionTestBase {
 
     @Test
     public void assertEqualsObjectFailure() {
-        expectException(AssertionException.class);
-        expectDescription("fail");
-        Assert.assertEquals(FAIL, "one", "two");
+        ExpectedException.when(() -> Assert.assertEquals(FAIL, "one", "two"))
+                .assertThrows(AssertionException.class)
+                .assertDescriptionContains("fail");
     }
 
     @Test
@@ -35,9 +35,9 @@ public class AssertTest extends ExpectedExceptionTestBase {
 
     @Test
     public void assertFalseFailure() {
-        expectException(AssertionException.class);
-        expectDescription("fail");
-        Assert.assertFalse(FAIL, true);
+        ExpectedException.when(() -> Assert.assertFalse(FAIL, true))
+                .assertThrows(AssertionException.class)
+                .assertDescriptionContains("fail");
     }
 
     @Test
@@ -47,15 +47,15 @@ public class AssertTest extends ExpectedExceptionTestBase {
 
     @Test
     public void assertTrueFailure() {
-        expectException(AssertionException.class);
-        expectDescription("fail");
-        Assert.assertTrue(FAIL, false);
+        ExpectedException.when(() -> Assert.assertTrue(FAIL, false))
+                .assertThrows(AssertionException.class)
+                .assertDescriptionContains("fail");
     }
 
     @Test
     public void failFailure() {
-        expectException(AssertionException.class);
-        expectDescription("fail");
-        Assert.fail(FAIL);
+        ExpectedException.when(() -> Assert.fail(FAIL))
+                .assertThrows(AssertionException.class)
+                .assertDescriptionContains("fail");
     }
 }
