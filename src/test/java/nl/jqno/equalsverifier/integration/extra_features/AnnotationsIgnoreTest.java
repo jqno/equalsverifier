@@ -12,61 +12,73 @@ import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 import org.junit.jupiter.api.Test;
 
 public class AnnotationsIgnoreTest {
+
     @Test
-    public void
-            fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                                        .withIgnoredAnnotations(Immutable.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Mutability");
+    public void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(ImmutableByAnnotation.class)
+                        .withIgnoredAnnotations(Immutable.class)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Mutability");
     }
 
     @Test
-    public void
-            fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughDefaultAnnotation() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(DefaultAnnotationNonnull.class)
-                                        .withIgnoredAnnotations(Nonnull.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Non-nullity");
+    public void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughDefaultAnnotation() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(DefaultAnnotationNonnull.class)
+                        .withIgnoredAnnotations(Nonnull.class)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Non-nullity");
     }
 
     @Test
     public void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughJsr305() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(Jsr305Nonnull.class)
-                                        .withIgnoredAnnotations(Nonnull.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Non-nullity");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(Jsr305Nonnull.class)
+                        .withIgnoredAnnotations(Nonnull.class)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Non-nullity");
     }
 
     @Test
-    public void
-            succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
-        EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                .withIgnoredAnnotations(net.jcip.annotations.Immutable.class)
-                .verify();
+    public void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
+        EqualsVerifier
+            .forClass(ImmutableByAnnotation.class)
+            .withIgnoredAnnotations(net.jcip.annotations.Immutable.class)
+            .verify();
     }
 
     @Test
     public void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(ImmutableByAnnotation.class)
-                                        .withIgnoredAnnotations(String.class))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains("class", "java.lang.String", "is not an annotation");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(ImmutableByAnnotation.class)
+                        .withIgnoredAnnotations(String.class)
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains("class", "java.lang.String", "is not an annotation");
     }
 
     @Immutable
     public static final class ImmutableByAnnotation {
+
         private int i;
 
         public ImmutableByAnnotation(int i) {
@@ -86,6 +98,7 @@ public class AnnotationsIgnoreTest {
 
     @DefaultAnnotation(Nonnull.class)
     static final class DefaultAnnotationNonnull {
+
         private final Object o;
 
         public DefaultAnnotationNonnull(Object o) {
@@ -109,6 +122,7 @@ public class AnnotationsIgnoreTest {
 
     @DefaultNonnullJavax
     static final class Jsr305Nonnull {
+
         private final Object o;
 
         public Jsr305Nonnull(Object o) {

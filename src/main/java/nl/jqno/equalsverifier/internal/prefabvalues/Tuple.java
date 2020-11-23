@@ -5,6 +5,7 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
  * "red" one.
  */
 public final class Tuple<T> {
+
     private final T red;
     private final T blue;
     private final T redCopy;

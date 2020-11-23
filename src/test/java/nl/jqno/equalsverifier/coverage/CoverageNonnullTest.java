@@ -8,11 +8,13 @@ import org.junit.jupiter.api.Test;
 // CHECKSTYLE OFF: NeedBraces
 
 public class CoverageNonnullTest {
+
     @Test
     public void lombokCoverage() {
-        EqualsVerifier.forClass(LombokNonnullStringContainer.class)
-                .withIgnoredAnnotations(Nonnull.class)
-                .verify();
+        EqualsVerifier
+            .forClass(LombokNonnullStringContainer.class)
+            .withIgnoredAnnotations(Nonnull.class)
+            .verify();
 
         // Also cover the constructor
         new LombokNonnullStringContainer("");
@@ -33,7 +35,9 @@ public class CoverageNonnullTest {
      * }
      */
     public static final class LombokNonnullStringContainer {
-        @Nonnull private final String s;
+
+        @Nonnull
+        private final String s;
 
         public LombokNonnullStringContainer(String s) {
             this.s = s;

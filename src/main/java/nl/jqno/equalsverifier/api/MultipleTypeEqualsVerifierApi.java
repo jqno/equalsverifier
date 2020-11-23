@@ -44,7 +44,9 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(
-            Class<S> otherType, Func1<?, S> factory) {
+        Class<S> otherType,
+        Func1<?, S> factory
+    ) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
     }
@@ -52,7 +54,9 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(
-            Class<S> otherType, Func2<?, ?, S> factory) {
+        Class<S> otherType,
+        Func2<?, ?, S> factory
+    ) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
     }
@@ -85,8 +89,10 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @return {@code this}, for easy method chaining.
      */
     public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
-        List<Class<?>> typesToRemove =
-                types.stream().filter(exclusionPredicate).collect(Collectors.toList());
+        List<Class<?>> typesToRemove = types
+            .stream()
+            .filter(exclusionPredicate)
+            .collect(Collectors.toList());
         removeTypes(typesToRemove);
         return this;
     }
@@ -104,24 +110,25 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      *     preconditions do not hold.
      */
     public void verify() {
-        List<EqualsVerifierReport> failures =
-                report().stream().filter(r -> !r.isSuccessful()).collect(Collectors.toList());
+        List<EqualsVerifierReport> failures = report()
+            .stream()
+            .filter(r -> !r.isSuccessful())
+            .collect(Collectors.toList());
         if (failures.isEmpty()) {
             return;
         }
-        String messages =
-                Formatter.of(
-                                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%"
-                                        + WEBSITE_URL,
-                                failures.size(),
-                                failures.size() == 1 ? "class" : "classes",
-                                failures.stream()
-                                        .map(r -> "* " + r.getType().getName())
-                                        .collect(Collectors.joining("\n")),
-                                failures.stream()
-                                        .map(r -> r.getMessage())
-                                        .collect(Collectors.joining("\n---\n")))
-                        .format();
+        String messages = Formatter
+            .of(
+                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%" + WEBSITE_URL,
+                failures.size(),
+                failures.size() == 1 ? "class" : "classes",
+                failures
+                    .stream()
+                    .map(r -> "* " + r.getType().getName())
+                    .collect(Collectors.joining("\n")),
+                failures.stream().map(r -> r.getMessage()).collect(Collectors.joining("\n---\n"))
+            )
+            .format();
         throw new AssertionError(messages);
     }
 

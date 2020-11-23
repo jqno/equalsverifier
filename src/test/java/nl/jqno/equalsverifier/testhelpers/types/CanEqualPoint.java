@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class CanEqualPoint {
+
     private final int x;
     private final int y;
 

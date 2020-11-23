@@ -19,4 +19,5 @@ import javax.annotation.meta.TypeQualifier;
  */
 @TypeQualifier
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Nonnull {}
+public @interface Nonnull {
+}

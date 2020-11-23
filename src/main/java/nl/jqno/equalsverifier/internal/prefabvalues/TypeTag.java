@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugExcep
  * <p>If the type is not generic, the genericTypes list will be empty.
  */
 public final class TypeTag {
+
     /** Null object for TypeTag. */
     public static final TypeTag NULL = new TypeTag(NullType.class);
 
@@ -50,31 +51,42 @@ public final class TypeTag {
     }
 
     private static TypeTag resolve(
-            Type type, TypeTag enclosingType, boolean shortCircuitRecursiveTypeBound) {
+        Type type,
+        TypeTag enclosingType,
+        boolean shortCircuitRecursiveTypeBound
+    ) {
         List<TypeTag> nestedTags = new ArrayList<>();
         if (type instanceof Class) {
             return processClass((Class<?>) type, nestedTags);
         }
         if (type instanceof ParameterizedType) {
             return processParameterizedType(
-                    (ParameterizedType) type,
-                    enclosingType,
-                    nestedTags,
-                    shortCircuitRecursiveTypeBound);
+                (ParameterizedType) type,
+                enclosingType,
+                nestedTags,
+                shortCircuitRecursiveTypeBound
+            );
         }
         if (type instanceof GenericArrayType) {
             return processGenericArray((GenericArrayType) type, enclosingType);
         }
         if (type instanceof WildcardType) {
             return processWildcard(
-                    (WildcardType) type, enclosingType, shortCircuitRecursiveTypeBound);
+                (WildcardType) type,
+                enclosingType,
+                shortCircuitRecursiveTypeBound
+            );
         }
         if (type instanceof TypeVariable) {
             return processTypeVariable(
-                    (TypeVariable<?>) type, enclosingType, shortCircuitRecursiveTypeBound);
+                (TypeVariable<?>) type,
+                enclosingType,
+                shortCircuitRecursiveTypeBound
+            );
         }
         throw new EqualsVerifierInternalBugException(
-                "Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
+            "Failed to tag type " + type.toString() + " (" + type.getClass() + ")"
+        );
     }
 
     private static TypeTag processClass(Class<?> type, List<TypeTag> nestedTags) {
@@ -82,10 +94,11 @@ public final class TypeTag {
     }
 
     private static TypeTag processParameterizedType(
-            ParameterizedType type,
-            TypeTag enclosingType,
-            List<TypeTag> nestedTags,
-            boolean shortCircuitRecursiveTypeBound) {
+        ParameterizedType type,
+        TypeTag enclosingType,
+        List<TypeTag> nestedTags,
+        boolean shortCircuitRecursiveTypeBound
+    ) {
         Type[] typeArgs = type.getActualTypeArguments();
         for (Type typeArg : typeArgs) {
             nestedTags.add(resolve(typeArg, enclosingType, shortCircuitRecursiveTypeBound));
@@ -101,7 +114,10 @@ public final class TypeTag {
     }
 
     private static TypeTag processWildcard(
-            WildcardType type, TypeTag enclosingType, boolean shortCircuitRecursiveTypeBound) {
+        WildcardType type,
+        TypeTag enclosingType,
+        boolean shortCircuitRecursiveTypeBound
+    ) {
         for (Type b : type.getLowerBounds()) {
             return resolve(b, enclosingType, shortCircuitRecursiveTypeBound);
         }
@@ -112,7 +128,10 @@ public final class TypeTag {
     }
 
     private static TypeTag processTypeVariable(
-            TypeVariable<?> type, TypeTag enclosingType, boolean shortCircuitRecursiveTypeBound) {
+        TypeVariable<?> type,
+        TypeTag enclosingType,
+        boolean shortCircuitRecursiveTypeBound
+    ) {
         Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
         String typeVariableName = type.getName();
         if (typeVariableLookup.containsKey(typeVariableName)) {

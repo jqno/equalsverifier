@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
 public class FieldAccessorTest {
+
     private static final String FIELD_NAME = "field";
 
     @Test

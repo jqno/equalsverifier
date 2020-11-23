@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AnnotationCacheBuilderTest {
+
     private static final String RUNTIME_RETENTION = "runtimeRetention";
     private static final String CLASS_RETENTION = "classRetention";
     private static final String BOTH_RETENTIONS = "bothRetentions";
@@ -36,17 +37,17 @@ public class AnnotationCacheBuilderTest {
     public void setUp() {
         cache = new AnnotationCache();
         cacheBuilder =
-                new AnnotationCacheBuilder(
-                        TestSupportedAnnotations.values(), NO_INGORED_ANNOTATIONS);
+            new AnnotationCacheBuilder(TestSupportedAnnotations.values(), NO_INGORED_ANNOTATIONS);
     }
 
     @Test
     public void findRuntimeAnnotationInType() {
         build(
-                AnnotatedWithRuntime.class,
-                AnnotatedWithClass.class,
-                AnnotatedWithBoth.class,
-                AnnotatedFields.class);
+            AnnotatedWithRuntime.class,
+            AnnotatedWithClass.class,
+            AnnotatedWithBoth.class,
+            AnnotatedFields.class
+        );
 
         assertTypeHasAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
         assertTypeHasAnnotation(AnnotatedWithBoth.class, TYPE_RUNTIME_RETENTION);
@@ -57,10 +58,11 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void findClassAnnotationInType() {
         build(
-                AnnotatedWithRuntime.class,
-                AnnotatedWithClass.class,
-                AnnotatedWithBoth.class,
-                AnnotatedFields.class);
+            AnnotatedWithRuntime.class,
+            AnnotatedWithClass.class,
+            AnnotatedWithBoth.class,
+            AnnotatedFields.class
+        );
 
         assertTypeHasAnnotation(AnnotatedWithClass.class, TYPE_CLASS_RETENTION);
         assertTypeHasAnnotation(AnnotatedWithBoth.class, TYPE_CLASS_RETENTION);
@@ -75,9 +77,15 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(AnnotatedFields.class, RUNTIME_RETENTION, FIELD_RUNTIME_RETENTION);
         assertFieldHasAnnotation(AnnotatedFields.class, BOTH_RETENTIONS, FIELD_RUNTIME_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedFields.class, CLASS_RETENTION, FIELD_RUNTIME_RETENTION);
+            AnnotatedFields.class,
+            CLASS_RETENTION,
+            FIELD_RUNTIME_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedFields.class, NO_RETENTION, FIELD_RUNTIME_RETENTION);
+            AnnotatedFields.class,
+            NO_RETENTION,
+            FIELD_RUNTIME_RETENTION
+        );
     }
 
     @Test
@@ -87,9 +95,15 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(AnnotatedFields.class, CLASS_RETENTION, FIELD_CLASS_RETENTION);
         assertFieldHasAnnotation(AnnotatedFields.class, BOTH_RETENTIONS, FIELD_CLASS_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedFields.class, RUNTIME_RETENTION, FIELD_CLASS_RETENTION);
+            AnnotatedFields.class,
+            RUNTIME_RETENTION,
+            FIELD_CLASS_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedFields.class, NO_RETENTION, FIELD_CLASS_RETENTION);
+            AnnotatedFields.class,
+            NO_RETENTION,
+            FIELD_CLASS_RETENTION
+        );
     }
 
     @Test
@@ -97,12 +111,21 @@ public class AnnotationCacheBuilderTest {
         build(AnnotatedTypes.class);
 
         assertFieldHasAnnotation(
-                AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+            AnnotatedTypes.class,
+            RUNTIME_RETENTION,
+            TYPEUSE_RUNTIME_RETENTION
+        );
         assertFieldHasAnnotation(AnnotatedTypes.class, BOTH_RETENTIONS, TYPEUSE_RUNTIME_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedTypes.class, CLASS_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+            AnnotatedTypes.class,
+            CLASS_RETENTION,
+            TYPEUSE_RUNTIME_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedTypes.class, NO_RETENTION, TYPEUSE_RUNTIME_RETENTION);
+            AnnotatedTypes.class,
+            NO_RETENTION,
+            TYPEUSE_RUNTIME_RETENTION
+        );
     }
 
     @Test
@@ -112,9 +135,15 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(AnnotatedTypes.class, CLASS_RETENTION, TYPEUSE_CLASS_RETENTION);
         assertFieldHasAnnotation(AnnotatedTypes.class, BOTH_RETENTIONS, TYPEUSE_CLASS_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedTypes.class, RUNTIME_RETENTION, TYPEUSE_CLASS_RETENTION);
+            AnnotatedTypes.class,
+            RUNTIME_RETENTION,
+            TYPEUSE_CLASS_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedTypes.class, NO_RETENTION, TYPEUSE_CLASS_RETENTION);
+            AnnotatedTypes.class,
+            NO_RETENTION,
+            TYPEUSE_CLASS_RETENTION
+        );
     }
 
     @Test
@@ -122,12 +151,21 @@ public class AnnotationCacheBuilderTest {
         build(AnnotatedMethods.class);
 
         assertFieldHasAnnotation(
-                AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_RUNTIME_RETENTION);
+            AnnotatedMethods.class,
+            RUNTIME_RETENTION,
+            METHOD_RUNTIME_RETENTION
+        );
         assertFieldHasAnnotation(AnnotatedMethods.class, BOTH_RETENTIONS, METHOD_RUNTIME_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedMethods.class, CLASS_RETENTION, METHOD_RUNTIME_RETENTION);
+            AnnotatedMethods.class,
+            CLASS_RETENTION,
+            METHOD_RUNTIME_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedMethods.class, NO_RETENTION, METHOD_RUNTIME_RETENTION);
+            AnnotatedMethods.class,
+            NO_RETENTION,
+            METHOD_RUNTIME_RETENTION
+        );
     }
 
     @Test
@@ -137,57 +175,75 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(AnnotatedMethods.class, CLASS_RETENTION, METHOD_CLASS_RETENTION);
         assertFieldHasAnnotation(AnnotatedMethods.class, BOTH_RETENTIONS, METHOD_CLASS_RETENTION);
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedMethods.class, RUNTIME_RETENTION, METHOD_CLASS_RETENTION);
+            AnnotatedMethods.class,
+            RUNTIME_RETENTION,
+            METHOD_CLASS_RETENTION
+        );
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedMethods.class, NO_RETENTION, METHOD_CLASS_RETENTION);
+            AnnotatedMethods.class,
+            NO_RETENTION,
+            METHOD_CLASS_RETENTION
+        );
     }
 
     @Test
     public void findPartialAnnotationName() {
         build(
-                AnnotatedWithRuntime.class,
-                AnnotatedFields.class,
-                AnnotatedTypes.class,
-                AnnotatedMethods.class);
+            AnnotatedWithRuntime.class,
+            AnnotatedFields.class,
+            AnnotatedTypes.class,
+            AnnotatedMethods.class
+        );
 
         assertTypeHasAnnotation(
-                AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+            AnnotatedWithRuntime.class,
+            TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedFields.class,
-                RUNTIME_RETENTION,
-                FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+            AnnotatedFields.class,
+            RUNTIME_RETENTION,
+            FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedTypes.class,
-                RUNTIME_RETENTION,
-                TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+            AnnotatedTypes.class,
+            RUNTIME_RETENTION,
+            TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedMethods.class,
-                RUNTIME_RETENTION,
-                METHOD_RUNTIME_RETENTION_PARTIAL_CLASSNAME);
+            AnnotatedMethods.class,
+            RUNTIME_RETENTION,
+            METHOD_RUNTIME_RETENTION_PARTIAL_CLASSNAME
+        );
     }
 
     @Test
     public void findFullyQualifiedAnnotationName() {
         build(
-                AnnotatedWithRuntime.class,
-                AnnotatedFields.class,
-                AnnotatedTypes.class,
-                AnnotatedMethods.class);
+            AnnotatedWithRuntime.class,
+            AnnotatedFields.class,
+            AnnotatedTypes.class,
+            AnnotatedMethods.class
+        );
 
         assertTypeHasAnnotation(
-                AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+            AnnotatedWithRuntime.class,
+            TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedFields.class,
-                RUNTIME_RETENTION,
-                FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+            AnnotatedFields.class,
+            RUNTIME_RETENTION,
+            FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedTypes.class,
-                RUNTIME_RETENTION,
-                TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+            AnnotatedTypes.class,
+            RUNTIME_RETENTION,
+            TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME
+        );
         assertFieldHasAnnotation(
-                AnnotatedMethods.class,
-                RUNTIME_RETENTION,
-                METHOD_RUNTIME_RETENTION_CANONICAL_CLASSNAME);
+            AnnotatedMethods.class,
+            RUNTIME_RETENTION,
+            METHOD_RUNTIME_RETENTION_CANONICAL_CLASSNAME
+        );
     }
 
     @Test
@@ -206,7 +262,10 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", FIELD_INHERITS);
         assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", FIELD_INHERITS);
         assertFieldDoesNotHaveAnnotation(
-                SubclassWithAnnotations.class, "doesntInherit", FIELD_DOESNT_INHERIT);
+            SubclassWithAnnotations.class,
+            "doesntInherit",
+            FIELD_DOESNT_INHERIT
+        );
     }
 
     @Test
@@ -216,7 +275,10 @@ public class AnnotationCacheBuilderTest {
         assertFieldHasAnnotation(SubclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
         assertFieldHasAnnotation(SuperclassWithAnnotations.class, "inherits", TYPEUSE_INHERITS);
         assertFieldDoesNotHaveAnnotation(
-                SubclassWithAnnotations.class, "doesntInherit", TYPEUSE_DOESNT_INHERIT);
+            SubclassWithAnnotations.class,
+            "doesntInherit",
+            TYPEUSE_DOESNT_INHERIT
+        );
     }
 
     @Test
@@ -232,9 +294,13 @@ public class AnnotationCacheBuilderTest {
         build(AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class);
 
         assertTypeHasAnnotation(
-                AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class, TYPE_CLASS_RETENTION);
+            AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class,
+            TYPE_CLASS_RETENTION
+        );
         assertTypeDoesNotHaveAnnotation(
-                AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class, INAPPLICABLE);
+            AnnotatedOuter.AnnotatedMiddle.AnnotatedInner.class,
+            INAPPLICABLE
+        );
     }
 
     @Test
@@ -248,13 +314,17 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void searchIgnoredField() {
         cacheBuilder =
-                new AnnotationCacheBuilder(
-                        TestSupportedAnnotations.values(),
-                        Util.setOf(FieldAnnotationRuntimeRetention.class.getCanonicalName()));
+            new AnnotationCacheBuilder(
+                TestSupportedAnnotations.values(),
+                Util.setOf(FieldAnnotationRuntimeRetention.class.getCanonicalName())
+            );
         build(AnnotatedFields.class);
 
         assertFieldDoesNotHaveAnnotation(
-                AnnotatedFields.class, "runtimeRetention", FIELD_RUNTIME_RETENTION);
+            AnnotatedFields.class,
+            "runtimeRetention",
+            FIELD_RUNTIME_RETENTION
+        );
     }
 
     @Test
@@ -270,7 +340,10 @@ public class AnnotationCacheBuilderTest {
 
         assertTypeDoesNotHaveAnnotation(InapplicableAnnotations.class, INAPPLICABLE);
         assertFieldDoesNotHaveAnnotation(
-                InapplicableAnnotations.class, "inapplicable", INAPPLICABLE);
+            InapplicableAnnotations.class,
+            "inapplicable",
+            INAPPLICABLE
+        );
     }
 
     @Test
@@ -284,15 +357,18 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void annotationsArrayParametersAreFoundOnClass() {
         AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
-        Annotation[] supportedAnnotations = {annotation};
-        AnnotationCacheBuilder acb =
-                new AnnotationCacheBuilder(supportedAnnotations, NO_INGORED_ANNOTATIONS);
+        Annotation[] supportedAnnotations = { annotation };
+        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(
+            supportedAnnotations,
+            NO_INGORED_ANNOTATIONS
+        );
         acb.build(AnnotationWithClassValuesContainer.class, cache);
 
         assertTypeHasAnnotation(AnnotationWithClassValuesContainer.class, annotation);
 
-        Set<String> annotations =
-                new HashSet<>(annotation.properties.getArrayValues("annotations"));
+        Set<String> annotations = new HashSet<>(
+            annotation.properties.getArrayValues("annotations")
+        );
         assertTrue(annotations.contains("javax.annotation.Nonnull"));
         assertTrue(annotations.contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull"));
     }
@@ -314,10 +390,10 @@ public class AnnotationCacheBuilderTest {
 
     @Test
     public void dynamicClassDoesntGetProcessed_butDoesntThrowEither() {
-        Class<?> type =
-                Instantiator.of(AnnotatedWithRuntime.class)
-                        .instantiateAnonymousSubclass()
-                        .getClass();
+        Class<?> type = Instantiator
+            .of(AnnotatedWithRuntime.class)
+            .instantiateAnonymousSubclass()
+            .getClass();
         build(type);
 
         assertTypeDoesNotHaveAnnotation(AnnotatedWithRuntime.class, TYPE_RUNTIME_RETENTION);
@@ -326,16 +402,13 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void generatedClassWithGeneratedFieldDoesNotThrow() {
         class Super {}
-        Class<?> sub =
-                new ByteBuddy()
-                        .with(TypeValidation.DISABLED)
-                        .subclass(Super.class)
-                        .defineField("dynamicField", int.class, Visibility.PRIVATE)
-                        .make()
-                        .load(
-                                Super.class.getClassLoader(),
-                                Instantiator.getClassLoadingStrategy(Super.class))
-                        .getLoaded();
+        Class<?> sub = new ByteBuddy()
+            .with(TypeValidation.DISABLED)
+            .subclass(Super.class)
+            .defineField("dynamicField", int.class, Visibility.PRIVATE)
+            .make()
+            .load(Super.class.getClassLoader(), Instantiator.getClassLoadingStrategy(Super.class))
+            .getLoaded();
         build(sub);
     }
 
@@ -358,11 +431,15 @@ public class AnnotationCacheBuilderTest {
     }
 
     private void assertFieldDoesNotHaveAnnotation(
-            Class<?> type, String fieldName, Annotation annotation) {
+        Class<?> type,
+        String fieldName,
+        Annotation annotation
+    ) {
         assertFalse(cache.hasFieldAnnotation(type, fieldName, annotation));
     }
 
     private static class AnnotationWithClassValuesAnnotation implements Annotation {
+
         private AnnotationProperties properties;
 
         @Override
@@ -379,14 +456,15 @@ public class AnnotationCacheBuilderTest {
 
         @Override
         public boolean validate(
-                AnnotationProperties props,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties props,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             this.properties = props;
             return true;
         }
     }
 
-    @AnnotationWithClassValues(annotations = {Nonnull.class, NotNull.class})
+    @AnnotationWithClassValues(annotations = { Nonnull.class, NotNull.class })
     private static class AnnotationWithClassValuesContainer {}
 }

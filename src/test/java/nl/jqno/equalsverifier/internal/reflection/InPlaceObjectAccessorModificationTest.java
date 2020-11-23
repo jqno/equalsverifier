@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorModificationTest {
+
     private static final int INITIAL_INT = 42;
     private static final boolean INITIAL_BOOLEAN = true;
     private static final String INITIAL_STRING = "hello";
@@ -80,8 +81,11 @@ public class InPlaceObjectAccessorModificationTest {
 
     @Test
     public void withChangedFieldWorksInPlace() {
-        ObjectAccessor<Modifiable> modified =
-                accessor.withChangedField(stringField, prefabValues, TypeTag.NULL);
+        ObjectAccessor<Modifiable> modified = accessor.withChangedField(
+            stringField,
+            prefabValues,
+            TypeTag.NULL
+        );
         assertSame(m, modified.get());
     }
 
@@ -96,12 +100,15 @@ public class InPlaceObjectAccessorModificationTest {
 
     @Test
     public void withFieldSetToWorksInPlace() {
-        ObjectAccessor<Modifiable> modified =
-                accessor.withFieldSetTo(stringField, "something else");
+        ObjectAccessor<Modifiable> modified = accessor.withFieldSetTo(
+            stringField,
+            "something else"
+        );
         assertSame(m, modified.get());
     }
 
     static class Modifiable {
+
         private final int i;
         private final boolean b;
         private final String s;

@@ -22,5 +22,8 @@ public interface PrefabValueFactory<T> {
      * @return A "red" instance of {@code T}.
      */
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack);
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    );
 }

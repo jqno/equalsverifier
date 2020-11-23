@@ -39,14 +39,16 @@ public enum SupportedAnnotations implements Annotation {
      * it.
      */
     FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL(
-            false,
-            "edu.umd.cs.findbugs.annotations.DefaultAnnotation",
-            "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields") {
+        false,
+        "edu.umd.cs.findbugs.annotations.DefaultAnnotation",
+        "edu.umd.cs.findbugs.annotations.DefaultAnnotationForFields"
+    ) {
         @Override
         public boolean validate(
-                AnnotationProperties properties,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             Set<String> values = properties.getArrayValues("value");
             for (String value : values) {
                 for (String className : NONNULL.partialClassNames()) {
@@ -68,25 +70,29 @@ public enum SupportedAnnotations implements Annotation {
     JSR305_DEFAULT_ANNOTATION_NONNULL(false, "") {
         @Override
         public boolean validate(
-                AnnotationProperties properties,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             try {
                 Class<?> annotationType = classForName(properties.getClassName());
                 if (annotationType == null) {
                     return false;
                 }
-                AnnotationCacheBuilder builder =
-                        new AnnotationCacheBuilder(
-                                new Annotation[] {NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT},
-                                ignoredAnnotations);
+                AnnotationCacheBuilder builder = new AnnotationCacheBuilder(
+                    new Annotation[] { NONNULL, JSR305_TYPE_QUALIFIER_DEFAULT },
+                    ignoredAnnotations
+                );
                 builder.build(annotationType, annotationCache);
 
-                boolean hasNonnullAnnotation =
-                        annotationCache.hasClassAnnotation(annotationType, NONNULL);
-                boolean hasValidTypeQualifierDefault =
-                        annotationCache.hasClassAnnotation(
-                                annotationType, JSR305_TYPE_QUALIFIER_DEFAULT);
+                boolean hasNonnullAnnotation = annotationCache.hasClassAnnotation(
+                    annotationType,
+                    NONNULL
+                );
+                boolean hasValidTypeQualifierDefault = annotationCache.hasClassAnnotation(
+                    annotationType,
+                    JSR305_TYPE_QUALIFIER_DEFAULT
+                );
                 return hasNonnullAnnotation && hasValidTypeQualifierDefault;
             } catch (UnsupportedClassVersionError ignored) {
                 return false;
@@ -101,9 +107,10 @@ public enum SupportedAnnotations implements Annotation {
     JSR305_TYPE_QUALIFIER_DEFAULT(false, "javax.annotation.meta.TypeQualifierDefault") {
         @Override
         public boolean validate(
-                AnnotationProperties properties,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             Set<String> value = properties.getArrayValues("value");
             return value.contains("FIELD") || value.contains("PARAMETER");
         }
@@ -117,9 +124,10 @@ public enum SupportedAnnotations implements Annotation {
     ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
         @Override
         public boolean validate(
-                AnnotationProperties properties,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             Set<String> values = properties.getArrayValues("value");
             if (values == null) {
                 return true;
@@ -138,10 +146,11 @@ public enum SupportedAnnotations implements Annotation {
      * non-final fields on @Entity, @Embeddable and @MappedSuperclass classes.
      */
     ENTITY(
-            false,
-            "javax.persistence.Entity",
-            "javax.persistence.Embeddable",
-            "javax.persistence.MappedSuperclass"),
+        false,
+        "javax.persistence.Entity",
+        "javax.persistence.Embeddable",
+        "javax.persistence.MappedSuperclass"
+    ),
 
     /**
      * Fields in JPA Entities that are marked @Transient should not be included in the

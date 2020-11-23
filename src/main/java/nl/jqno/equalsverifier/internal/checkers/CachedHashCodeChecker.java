@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class CachedHashCodeChecker<T> implements Checker {
+
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final EnumSet<Warning> warningsToSuppress;
 
@@ -24,17 +25,21 @@ public class CachedHashCodeChecker<T> implements Checker {
         }
         if (warningsToSuppress.contains(Warning.NONFINAL_FIELDS)) {
             fail(
-                    Formatter.of(
-                            "Cached hashCode: EqualsVerifier can only check cached hashCodes for immutable classes."));
+                Formatter.of(
+                    "Cached hashCode: EqualsVerifier can only check cached hashCodes for immutable classes."
+                )
+            );
         }
 
         T reference = cachedHashCodeInitializer.getExample();
         if (warningsToSuppress.contains(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)) {
             if (reference != null) {
                 fail(
-                        Formatter.of(
-                                "Cached hashCode: example must be null if %% is suppressed",
-                                Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE.name()));
+                    Formatter.of(
+                        "Cached hashCode: example must be null if %% is suppressed",
+                        Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE.name()
+                    )
+                );
             }
         } else {
             if (reference == null) {
@@ -44,13 +49,16 @@ public class CachedHashCodeChecker<T> implements Checker {
             int recomputedHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
 
             assertEquals(
-                    Formatter.of("Cached hashCode: hashCode is not properly initialized."),
-                    actualHashCode,
-                    recomputedHashCode);
+                Formatter.of("Cached hashCode: hashCode is not properly initialized."),
+                actualHashCode,
+                recomputedHashCode
+            );
             assertFalse(
-                    Formatter.of(
-                            "Cached hashCode: example.hashCode() cannot be zero. Please choose a different example."),
-                    actualHashCode == 0);
+                Formatter.of(
+                    "Cached hashCode: example.hashCode() cannot be zero. Please choose a different example."
+                ),
+                actualHashCode == 0
+            );
         }
     }
 }

@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  */
 // CHECKSTYLE OFF: NeedBraces
 public final class IntelliJGetClassPoint {
+
     private final int y;
     private final int x;
     private final Color color;

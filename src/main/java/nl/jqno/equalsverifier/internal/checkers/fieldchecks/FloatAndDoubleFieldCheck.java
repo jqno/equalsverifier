@@ -8,32 +8,38 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
+
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         Class<?> type = fieldAccessor.getFieldType();
         Field field = fieldAccessor.getField();
         if (isFloat(type)) {
             T reference = referenceAccessor.withFieldSetTo(field, Float.NaN).get();
             T copy = copyAccessor.withFieldSetTo(field, Float.NaN).get();
             assertEquals(
-                    Formatter.of(
-                            "Float: equals doesn't use Float.compare for field %%.",
-                            field.getName()),
-                    reference,
-                    copy);
+                Formatter.of(
+                    "Float: equals doesn't use Float.compare for field %%.",
+                    field.getName()
+                ),
+                reference,
+                copy
+            );
         }
         if (isDouble(type)) {
             T reference = referenceAccessor.withFieldSetTo(field, Double.NaN).get();
             T copy = copyAccessor.withFieldSetTo(field, Double.NaN).get();
             assertEquals(
-                    Formatter.of(
-                            "Double: equals doesn't use Double.compare for field %%.",
-                            field.getName()),
-                    reference,
-                    copy);
+                Formatter.of(
+                    "Double: equals doesn't use Double.compare for field %%.",
+                    field.getName()
+                ),
+                reference,
+                copy
+            );
         }
     }
 

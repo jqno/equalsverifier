@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorScramblingTest {
+
     private PrefabValues prefabValues;
 
     @BeforeEach
@@ -138,25 +139,32 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     static final class StringContainer {
+
         private String s = "x";
     }
 
     static final class FinalAssignedStringContainer {
+
         private final String s = "x";
     }
 
     static final class FinalAssignedPointContainer {
+
         private final Point p = new Point(2, 3);
     }
 
     static final class GenericContainerContainer {
-        private final GenericContainer<String> strings =
-                new GenericContainer<>(new ArrayList<String>());
-        private final GenericContainer<Point> points =
-                new GenericContainer<>(new ArrayList<Point>());
+
+        private final GenericContainer<String> strings = new GenericContainer<>(
+            new ArrayList<String>()
+        );
+        private final GenericContainer<Point> points = new GenericContainer<>(
+            new ArrayList<Point>()
+        );
     }
 
     static final class GenericContainer<T> {
+
         private List<T> ts;
 
         public GenericContainer(List<T> ts) {

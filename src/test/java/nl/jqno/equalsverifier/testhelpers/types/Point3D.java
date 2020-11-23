@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class Point3D extends Point {
+
     public int z;
 
     public Point3D(int x, int y, int z) {

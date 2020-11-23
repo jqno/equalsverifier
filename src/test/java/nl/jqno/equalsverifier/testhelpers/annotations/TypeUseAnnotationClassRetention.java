@@ -7,4 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE_USE)
 @Retention(RetentionPolicy.CLASS)
-public @interface TypeUseAnnotationClassRetention {}
+public @interface TypeUseAnnotationClassRetention {
+}

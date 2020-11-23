@@ -12,8 +12,9 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.FactoryProv
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 
 public class ExternalFactory<T> implements PrefabValueFactory<T> {
+
     private static final String EXTERNAL_FACTORIES_PACKAGE =
-            "nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.";
+        "nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.";
 
     private final String factoryName;
     private FactoryCache factoryCache;
@@ -24,7 +25,10 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
 
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         if (factoryCache == null) {
             ConditionalInstantiator ci = new ConditionalInstantiator(factoryName);
             FactoryProvider provider = ci.instantiate(classes(), objects());

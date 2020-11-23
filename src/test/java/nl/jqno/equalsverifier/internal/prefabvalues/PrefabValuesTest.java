@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PrefabValuesTest {
+
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
@@ -148,8 +149,8 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenValueIsCloneOfKnownArray() {
-        String[] red = {"r"};
-        String[] blue = {"b"};
+        String[] red = { "r" };
+        String[] blue = { "b" };
         assertArrayEquals(blue, pv.giveOther(STRING_ARRAY_TAG, red));
         assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, blue));
 
@@ -160,16 +161,17 @@ public class PrefabValuesTest {
 
     @Test
     public void giveOtherWhenValueIsUnknownArray() {
-        String[] value = {"hello world"};
+        String[] value = { "hello world" };
         String[] expected = pv.giveRed(STRING_ARRAY_TAG);
         assertArrayEquals(expected, pv.giveOther(STRING_ARRAY_TAG, value));
     }
 
     @Test
     public void giveOtherWhenTagDoesntMatchValue() {
-        ExpectedException.when(() -> pv.giveOther(POINT_TAG, "not a point"))
-                .assertThrows(ReflectionException.class)
-                .assertMessageContains("TypeTag does not match value.");
+        ExpectedException
+            .when(() -> pv.giveOther(POINT_TAG, "not a point"))
+            .assertThrows(ReflectionException.class)
+            .assertMessageContains("TypeTag does not match value.");
     }
 
     @Test
@@ -220,8 +222,9 @@ public class PrefabValuesTest {
 
         // Doesn't throw:
         factoryCache.put(
-                ThrowingLazy.class.getName(),
-                (t, p, ts) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X));
+            ThrowingLazy.class.getName(),
+            (t, p, ts) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X)
+        );
         pv = new PrefabValues(factoryCache);
 
         // Does throw:
@@ -234,6 +237,7 @@ public class PrefabValuesTest {
     }
 
     private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
+
         private String red;
         private String blue;
 
@@ -244,7 +248,10 @@ public class PrefabValuesTest {
 
         @Override
         public Tuple<String> createValues(
-                TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            TypeTag tag,
+            PrefabValues prefabValues,
+            LinkedHashSet<TypeTag> typeStack
+        ) {
             red += "r";
             blue += "b";
             return new Tuple<>(red, blue, new String(red));
@@ -253,10 +260,14 @@ public class PrefabValuesTest {
 
     @SuppressWarnings("rawtypes")
     private static class ListTestFactory implements PrefabValueFactory<List> {
+
         @Override
         @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
-                TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+            TypeTag tag,
+            PrefabValues prefabValues,
+            LinkedHashSet<TypeTag> typeStack
+        ) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
             List red = new ArrayList<>();
@@ -273,6 +284,7 @@ public class PrefabValuesTest {
     }
 
     private static class StaticContainer {
+
         static int staticInt = 2;
 
         @SuppressWarnings("unused")
@@ -281,6 +293,7 @@ public class PrefabValuesTest {
 
     @SuppressWarnings("unused")
     public static class Lazy {
+
         public static final Lazy X = new Lazy(1);
         public static final Lazy Y = new Lazy(2);
 

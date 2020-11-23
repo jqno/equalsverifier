@@ -5,21 +5,27 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class HashCodeTest {
+
     @Test
     public void fail_whenHashCodesAreInconsistent() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "hashCode: hashCode should be consistent",
-                        RandomHashCode.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "hashCode: hashCode should be consistent",
+                RandomHashCode.class.getSimpleName()
+            );
     }
 
     @Test
     public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "hashCode: hashCodes should be equal",
+                NoHashCode.class.getSimpleName()
+            );
     }
 
     @Test
@@ -28,6 +34,7 @@ public class HashCodeTest {
     }
 
     static final class RandomHashCode {
+
         @Override
         public boolean equals(Object obj) {
             return super.equals(obj);
@@ -41,6 +48,7 @@ public class HashCodeTest {
     }
 
     static class NoHashCode {
+
         private final int i;
 
         public NoHashCode(int i) {
@@ -57,6 +65,7 @@ public class HashCodeTest {
     }
 
     static final class ShortCircuitOnHashCode {
+
         private final int i;
 
         public ShortCircuitOnHashCode(int i) {

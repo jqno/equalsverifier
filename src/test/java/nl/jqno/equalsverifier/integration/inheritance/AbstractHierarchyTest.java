@@ -9,57 +9,65 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
 public class AbstractHierarchyTest {
+
     @Test
     public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
         EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
     }
 
     @Test
-    public void
-            succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
-        EqualsVerifier.forClass(AbstractRedefinablePoint.class)
-                .withRedefinedSubclass(FinalRedefinedPoint.class)
-                .verify();
+    public void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
+        EqualsVerifier
+            .forClass(AbstractRedefinablePoint.class)
+            .withRedefinedSubclass(FinalRedefinedPoint.class)
+            .verify();
     }
 
     @Test
     public void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains("Non-nullity: equals throws NullPointerException");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains("Non-nullity: equals throws NullPointerException");
     }
 
     @Test
     public void succeed_whenEqualsThrowsNull_givenClassIsAbstractAndWarningIsSuppressed() {
-        EqualsVerifier.forClass(NullThrowingColorContainer.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(NullThrowingColorContainer.class)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
     public void fail_whenAbstractImplementationThrowsNpe() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
-                                        .suppress(Warning.NONFINAL_FIELDS)
-                                        .withIgnoredFields("objectFactory")
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Abstract delegation: equals throws AbstractMethodError when field object is null");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NullThrowingLazyObjectContainer.class)
+                        .suppress(Warning.NONFINAL_FIELDS)
+                        .withIgnoredFields("objectFactory")
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains(
+                "Abstract delegation: equals throws AbstractMethodError when field object is null"
+            );
     }
 
     @Test
     public void succeed_whenAbstractImplementationThrowsNpe_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(NullThrowingLazyObjectContainer.class)
-                .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
-                .withIgnoredFields("objectFactory")
-                .verify();
+        EqualsVerifier
+            .forClass(NullThrowingLazyObjectContainer.class)
+            .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
+            .withIgnoredFields("objectFactory")
+            .verify();
     }
 
     abstract static class AbstractFinalMethodsPoint {
+
         private final int x;
         private final int y;
 
@@ -84,6 +92,7 @@ public class AbstractHierarchyTest {
     }
 
     abstract static class AbstractRedefinablePoint {
+
         private final int x;
         private final int y;
 
@@ -112,6 +121,7 @@ public class AbstractHierarchyTest {
     }
 
     static final class FinalRedefinedPoint extends AbstractRedefinablePoint {
+
         private final Color color;
 
         public FinalRedefinedPoint(int x, int y, Color color) {
@@ -140,6 +150,7 @@ public class AbstractHierarchyTest {
     }
 
     abstract static class NullThrowingColorContainer {
+
         private final Color color;
 
         public NullThrowingColorContainer(Color color) {
@@ -161,6 +172,7 @@ public class AbstractHierarchyTest {
     }
 
     abstract static class AbstractLazyObjectContainer {
+
         private Object object;
 
         private Object getObject() {
@@ -192,10 +204,12 @@ public class AbstractHierarchyTest {
     }
 
     static final class NullThrowingLazyObjectContainer extends AbstractLazyObjectContainer {
+
         private final SupplierThatDoesntHaveAPrefab<Object> objectFactory;
 
         protected NullThrowingLazyObjectContainer(
-                SupplierThatDoesntHaveAPrefab<Object> flourFactory) {
+            SupplierThatDoesntHaveAPrefab<Object> flourFactory
+        ) {
             this.objectFactory = flourFactory;
         }
 

@@ -12,14 +12,17 @@ public final class JavaxFactoryProvider implements FactoryProvider {
         FactoryCache cache = new FactoryCache();
 
         cache.put(
-                Reference.class,
-                values(new Reference("one"), new Reference("two"), new Reference("one")));
+            Reference.class,
+            values(new Reference("one"), new Reference("two"), new Reference("one"))
+        );
         cache.put(
-                DefaultMutableTreeNode.class,
-                values(
-                        new DefaultMutableTreeNode(),
-                        new DefaultMutableTreeNode(new Object()),
-                        new DefaultMutableTreeNode()));
+            DefaultMutableTreeNode.class,
+            values(
+                new DefaultMutableTreeNode(),
+                new DefaultMutableTreeNode(new Object()),
+                new DefaultMutableTreeNode()
+            )
+        );
 
         return cache;
     }

@@ -7,4 +7,5 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface FieldAnnotationClassRetention {}
+public @interface FieldAnnotationClassRetention {
+}

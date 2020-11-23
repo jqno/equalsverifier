@@ -11,4 +11,5 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface NonNull {}
+public @interface NonNull {
+}

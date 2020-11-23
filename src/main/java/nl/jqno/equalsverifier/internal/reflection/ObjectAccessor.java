@@ -11,11 +11,12 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  * @param <T> The specified object's class.
  */
 public abstract class ObjectAccessor<T> {
+
     private final T object;
     private final Class<T> type;
 
     /** Package private constructor. Call {@link #of(Object)} to instantiate. */
-    /* default */ ObjectAccessor(T object, Class<T> type) {
+    /* default */ObjectAccessor(T object, Class<T> type) {
         this.object = object;
         this.type = type;
     }
@@ -156,7 +157,9 @@ public abstract class ObjectAccessor<T> {
      * @return An accessor to the scrambled object.
      */
     public abstract ObjectAccessor<T> shallowScramble(
-            PrefabValues prefabValues, TypeTag enclosingType);
+        PrefabValues prefabValues,
+        TypeTag enclosingType
+    );
 
     /**
      * Clears all fields of the wrapped object to their default values, but only if {@code
@@ -178,7 +181,10 @@ public abstract class ObjectAccessor<T> {
      * @return An accessor to the cleared object.
      */
     public abstract ObjectAccessor<T> clear(
-            Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType);
+        Predicate<Field> canBeDefault,
+        PrefabValues prefabValues,
+        TypeTag enclosingType
+    );
 
     /**
      * Clears the given field of the wrapped object to its default value. It may or may not mutate
@@ -212,7 +218,10 @@ public abstract class ObjectAccessor<T> {
      * @return An accessor to the object with the changed field.
      */
     public abstract ObjectAccessor<T> withChangedField(
-            Field field, PrefabValues prefabValues, TypeTag enclosingType);
+        Field field,
+        PrefabValues prefabValues,
+        TypeTag enclosingType
+    );
 
     /**
      * Changes the given field of the wrapped object to the given value. It may or may not mutate

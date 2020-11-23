@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.packages.twoincorrect;
 
 public final class X {
+
     private final int x;
     private final int y;
 

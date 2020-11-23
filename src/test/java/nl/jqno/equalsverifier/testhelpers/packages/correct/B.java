@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.packages.correct;
 
 public final class B {
+
     private final int x;
     private final int y;
 

@@ -4,6 +4,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 
 @Immutable
 public class ImmutableCanEqualPoint {
+
     private int x;
     private int y;
 

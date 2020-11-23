@@ -14,6 +14,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class AbstractDelegationChecker<T> implements Checker {
+
     private final Class<T> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
@@ -45,9 +46,11 @@ public class AbstractDelegationChecker<T> implements Checker {
 
         if (equalsIsAbstract && hashCodeIsAbstract) {
             fail(
-                    Formatter.of(
-                            "Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
-                            type.getSimpleName()));
+                Formatter.of(
+                    "Abstract delegation: %%'s equals and hashCode methods are both abstract. They should be concrete.",
+                    type.getSimpleName()
+                )
+            );
         } else if (equalsIsAbstract) {
             fail(buildSingleAbstractMethodErrorMessage(type, true, true));
         } else if (hashCodeIsAbstract) {
@@ -81,28 +84,40 @@ public class AbstractDelegationChecker<T> implements Checker {
     }
 
     private Formatter buildSingleAbstractMethodErrorMessage(
-            Class<?> c, boolean isEqualsAbstract, boolean bothShouldBeConcrete) {
+        Class<?> c,
+        boolean isEqualsAbstract,
+        boolean bothShouldBeConcrete
+    ) {
         return Formatter.of(
-                "Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
-                c.getSimpleName(),
-                isEqualsAbstract ? "equals" : "hashCode",
-                isEqualsAbstract ? "hashCode" : "equals",
-                bothShouldBeConcrete
-                        ? "Both should be concrete."
-                        : "Both should be either abstract or concrete.");
+            "Abstract delegation: %%'s %% method is abstract, but %% is not.\n%%",
+            c.getSimpleName(),
+            isEqualsAbstract ? "equals" : "hashCode",
+            isEqualsAbstract ? "hashCode" : "equals",
+            bothShouldBeConcrete
+                ? "Both should be concrete."
+                : "Both should be either abstract or concrete."
+        );
     }
 
     @SuppressFBWarnings(
-            value = "DE_MIGHT_IGNORE",
-            justification = "These exceptions will re-occur and be handled later.")
+        value = "DE_MIGHT_IGNORE",
+        justification = "These exceptions will re-occur and be handled later."
+    )
     private <S> void checkAbstractMethods(
-            Class<?> instanceClass, S instance, S copy, boolean prefabPossible) {
+        Class<?> instanceClass,
+        S instance,
+        S copy,
+        boolean prefabPossible
+    ) {
         try {
             instance.equals(copy);
         } catch (AbstractMethodError e) {
-            Formatter f =
-                    buildAbstractDelegationErrorMessage(
-                            instanceClass, prefabPossible, "equals", e.getMessage());
+            Formatter f = buildAbstractDelegationErrorMessage(
+                instanceClass,
+                prefabPossible,
+                "equals",
+                e.getMessage()
+            );
             fail(f, e);
         } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
@@ -112,9 +127,12 @@ public class AbstractDelegationChecker<T> implements Checker {
         try {
             cachedHashCodeInitializer.getInitializedHashCode(instance);
         } catch (AbstractMethodError e) {
-            Formatter f =
-                    buildAbstractDelegationErrorMessage(
-                            instanceClass, prefabPossible, "hashCode", e.getMessage());
+            Formatter f = buildAbstractDelegationErrorMessage(
+                instanceClass,
+                prefabPossible,
+                "hashCode",
+                e.getMessage()
+            );
             fail(f, e);
         } catch (Exception ignored) {
             // Skip. We only care about AbstractMethodError at this point;
@@ -123,14 +141,19 @@ public class AbstractDelegationChecker<T> implements Checker {
     }
 
     private Formatter buildAbstractDelegationErrorMessage(
-            Class<?> c, boolean prefabPossible, String method, String originalMessage) {
+        Class<?> c,
+        boolean prefabPossible,
+        String method,
+        String originalMessage
+    ) {
         Formatter prefabFormatter = Formatter.of("\nAdd prefab values for %%.", c.getName());
 
         return Formatter.of(
-                "Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
-                c.getSimpleName(),
-                method,
-                originalMessage,
-                prefabPossible ? prefabFormatter.format() : "");
+            "Abstract delegation: %%'s %% method delegates to an abstract method:\n %%%%",
+            c.getSimpleName(),
+            method,
+            originalMessage,
+            prefabPossible ? prefabFormatter.format() : ""
+        );
     }
 }

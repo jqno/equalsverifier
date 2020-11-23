@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 
 @Documented
 @Nonnull
-@TypeQualifierDefault({ElementType.FIELD, ElementType.TYPE})
+@TypeQualifierDefault({ ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.CLASS)
-public @interface DefaultNonnullJavax {}
+public @interface DefaultNonnullJavax {
+}

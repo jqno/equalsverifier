@@ -21,40 +21,43 @@ public final class PackageScanner {
      * @return the classes contained in the given package.
      */
     public static List<Class<?>> getClassesIn(String packageName) {
-        return getDirs(packageName).stream()
-                .flatMap(d -> getClassesInDir(packageName, d).stream())
-                .collect(Collectors.toList());
+        return getDirs(packageName)
+            .stream()
+            .flatMap(d -> getClassesInDir(packageName, d).stream())
+            .collect(Collectors.toList());
     }
 
     private static List<File> getDirs(String packageName) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         return rethrow(
-                () ->
-                        Collections.list(cl.getResources(path)).stream()
-                                .map(r -> new File(r.getFile()))
-                                .collect(Collectors.toList()),
-                "Could not scan package " + packageName);
+            () ->
+                Collections
+                    .list(cl.getResources(path))
+                    .stream()
+                    .map(r -> new File(r.getFile()))
+                    .collect(Collectors.toList()),
+            "Could not scan package " + packageName
+        );
     }
 
     private static List<Class<?>> getClassesInDir(String packageName, File dir) {
         if (!dir.exists()) {
             return Collections.emptyList();
         }
-        return Arrays.stream(dir.listFiles())
-                .filter(f -> f.getName().endsWith(".class"))
-                .map(f -> fileToClass(packageName, f))
-                .filter(c -> !c.getName().endsWith("Test"))
-                .collect(Collectors.toList());
+        return Arrays
+            .stream(dir.listFiles())
+            .filter(f -> f.getName().endsWith(".class"))
+            .map(f -> fileToClass(packageName, f))
+            .filter(c -> !c.getName().endsWith("Test"))
+            .collect(Collectors.toList());
     }
 
     private static Class<?> fileToClass(String packageName, File file) {
         String className = file.getName().substring(0, file.getName().length() - 6);
         return rethrow(
-                () -> Class.forName(packageName + "." + className),
-                "Could not resolve class "
-                        + className
-                        + ", which was found in package "
-                        + packageName);
+            () -> Class.forName(packageName + "." + className),
+            "Could not resolve class " + className + ", which was found in package " + packageName
+        );
     }
 }

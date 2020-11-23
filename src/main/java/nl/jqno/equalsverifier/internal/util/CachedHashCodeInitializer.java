@@ -23,6 +23,7 @@ import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
  * return the value of <code>Object.hashCode()</code> as normal instead.
  */
 public class CachedHashCodeInitializer<T> {
+
     private final boolean passthrough;
     private final Field cachedHashCodeField;
     private final Method calculateMethod;
@@ -36,7 +37,11 @@ public class CachedHashCodeInitializer<T> {
     }
 
     public CachedHashCodeInitializer(
-            Class<?> type, String cachedHashCodeField, String calculateHashCodeMethod, T example) {
+        Class<?> type,
+        String cachedHashCodeField,
+        String calculateHashCodeMethod,
+        T example
+    ) {
         this.passthrough = false;
         this.cachedHashCodeField = findCachedHashCodeField(type, cachedHashCodeField);
         this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod);
@@ -71,36 +76,42 @@ public class CachedHashCodeInitializer<T> {
 
     private void recomputeCachedHashCode(Object object) {
         rethrow(
-                () -> {
-                    // zero the field first, in case calculateMethod checks it
-                    cachedHashCodeField.set(object, 0);
-                    Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
-                    cachedHashCodeField.set(object, recomputedHashCode);
-                });
+            () -> {
+                // zero the field first, in case calculateMethod checks it
+                cachedHashCodeField.set(object, 0);
+                Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
+                cachedHashCodeField.set(object, recomputedHashCode);
+            }
+        );
     }
 
     private Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
         for (Field candidateField : FieldIterable.of(type)) {
             if (candidateField.getName().equals(cachedHashCodeFieldName)) {
-                if (!Modifier.isPublic(candidateField.getModifiers())
-                        && candidateField.getType().equals(int.class)) {
+                if (
+                    !Modifier.isPublic(candidateField.getModifiers()) &&
+                    candidateField.getType().equals(int.class)
+                ) {
                     candidateField.setAccessible(true);
                     return candidateField;
                 }
             }
         }
         throw new IllegalArgumentException(
-                "Cached hashCode: Could not find cachedHashCodeField: must be 'private int "
-                        + cachedHashCodeFieldName
-                        + ";'");
+            "Cached hashCode: Could not find cachedHashCodeField: must be 'private int " +
+            cachedHashCodeFieldName +
+            ";'"
+        );
     }
 
     private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
         for (Class<?> currentClass : SuperclassIterable.ofIncludeSelf(type)) {
             try {
                 Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
-                if (!Modifier.isPublic(method.getModifiers())
-                        && method.getReturnType().equals(int.class)) {
+                if (
+                    !Modifier.isPublic(method.getModifiers()) &&
+                    method.getReturnType().equals(int.class)
+                ) {
                     method.setAccessible(true);
                     return method;
                 }
@@ -109,8 +120,9 @@ public class CachedHashCodeInitializer<T> {
             }
         }
         throw new IllegalArgumentException(
-                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int "
-                        + calculateHashCodeMethodName
-                        + "()'");
+            "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " +
+            calculateHashCodeMethodName +
+            "()'"
+        );
     }
 }

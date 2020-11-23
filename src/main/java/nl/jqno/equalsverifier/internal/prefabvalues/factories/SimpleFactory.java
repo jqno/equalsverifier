@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  * been created.
  */
 public class SimpleFactory<T> implements PrefabValueFactory<T> {
+
     private Tuple<T> tuple;
 
     public SimpleFactory(T red, T blue, T redCopy) {
@@ -18,7 +19,10 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
 
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return tuple;
     }
 }

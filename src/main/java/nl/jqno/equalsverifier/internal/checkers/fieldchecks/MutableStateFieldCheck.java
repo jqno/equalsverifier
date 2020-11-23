@@ -11,14 +11,16 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class MutableStateFieldCheck<T> implements FieldCheck<T> {
+
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
     private final Predicate<FieldAccessor> isCachedHashCodeField;
 
     public MutableStateFieldCheck(
-            PrefabValues prefabValues,
-            TypeTag typeTag,
-            Predicate<FieldAccessor> isCachedHashCodeField) {
+        PrefabValues prefabValues,
+        TypeTag typeTag,
+        Predicate<FieldAccessor> isCachedHashCodeField
+    ) {
         this.prefabValues = prefabValues;
         this.typeTag = typeTag;
         this.isCachedHashCodeField = isCachedHashCodeField;
@@ -26,9 +28,10 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         if (isCachedHashCodeField.test(fieldAccessor)) {
             return;
         }
@@ -43,9 +46,9 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
         if (equalBefore && !equalAfter && !fieldAccessor.fieldIsFinal()) {
             String message =
-                    "Mutability: equals depends on mutable field %%.\n"
-                            + "Make the field final, suppress Warning.NONFINAL_FIELDS or use"
-                            + " EqualsVerifier.simple()";
+                "Mutability: equals depends on mutable field %%.\n" +
+                "Make the field final, suppress Warning.NONFINAL_FIELDS or use" +
+                " EqualsVerifier.simple()";
             fail(Formatter.of(message, field.getName()));
         }
 

@@ -17,9 +17,13 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
  * PrefabValues} to fill up all the fields, recursively.
  */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
+
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         @SuppressWarnings("unchecked")
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>) typeStack.clone();
         clone.add(tag);
@@ -52,7 +56,10 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     @SuppressWarnings("unchecked")
     private Tuple<T> giveArrayInstances(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
@@ -69,7 +76,10 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     }
 
     private void traverseFields(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         Class<?> type = tag.getType();
         for (Field field : FieldIterable.of(type)) {
             int modifiers = field.getModifiers();

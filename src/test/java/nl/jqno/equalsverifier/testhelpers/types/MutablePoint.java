@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class MutablePoint {
+
     private int x;
     private int y;
 

@@ -18,6 +18,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
+
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
@@ -34,9 +35,10 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
             return;
         }
@@ -47,16 +49,19 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void checkReferenceReflexivity(
-            ObjectAccessor<T> referenceAccessor, ObjectAccessor<T> copyAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor
+    ) {
         T left = referenceAccessor.get();
         T right = copyAccessor.get();
         checkReflexivityFor(left, right);
     }
 
     private void checkValueReflexivity(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         Field field = fieldAccessor.getField();
         Class<?> fieldType = field.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
@@ -81,25 +86,27 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Object left = referenceAccessor.withFieldSetTo(field, prefabValues.giveRed(tag)).get();
         Object right = copyAccessor.withFieldSetTo(field, prefabValues.giveRedCopy(tag)).get();
 
-        Formatter f =
-                Formatter.of(
-                        "Reflexivity: == used instead of .equals() on field: %%"
-                                + "\nIf this is intentional, consider suppressing Warning.%%",
-                        field.getName(), Warning.REFERENCE_EQUALITY.toString());
+        Formatter f = Formatter.of(
+            "Reflexivity: == used instead of .equals() on field: %%" +
+            "\nIf this is intentional, consider suppressing Warning.%%",
+            field.getName(),
+            Warning.REFERENCE_EQUALITY.toString()
+        );
         assertEquals(f, left, right);
     }
 
     private void checkNullReflexivity(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         Field field = fieldAccessor.getField();
         boolean fieldIsPrimitive = fieldAccessor.fieldIsPrimitive();
         boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
         boolean ignoreNull =
-                fieldIsNonNull
-                        || warningsToSuppress.contains(Warning.NULL_FIELDS)
-                        || nonnullFields.contains(field.getName());
+            fieldIsNonNull ||
+            warningsToSuppress.contains(Warning.NULL_FIELDS) ||
+            nonnullFields.contains(field.getName());
         if (fieldIsPrimitive || !ignoreNull) {
             T left = referenceAccessor.withDefaultedField(field).get();
             T right = copyAccessor.withDefaultedField(field).get();
@@ -109,17 +116,18 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     private void checkReflexivityFor(T left, T right) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-            Formatter f =
-                    Formatter.of(
-                            "Unnecessary suppression: %%. Two identical copies are equal.",
-                            Warning.IDENTICAL_COPY.toString());
+            Formatter f = Formatter.of(
+                "Unnecessary suppression: %%. Two identical copies are equal.",
+                Warning.IDENTICAL_COPY.toString()
+            );
             assertFalse(f, left.equals(right));
         } else {
-            Formatter f =
-                    Formatter.of(
-                            "Reflexivity: object does not equal an identical copy of itself:\n  %%"
-                                    + "\nIf this is intentional, consider suppressing Warning.%%",
-                            left, Warning.IDENTICAL_COPY.toString());
+            Formatter f = Formatter.of(
+                "Reflexivity: object does not equal an identical copy of itself:\n  %%" +
+                "\nIf this is intentional, consider suppressing Warning.%%",
+                left,
+                Warning.IDENTICAL_COPY.toString()
+            );
             assertEquals(f, left, right);
         }
     }

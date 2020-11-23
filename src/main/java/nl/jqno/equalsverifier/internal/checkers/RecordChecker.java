@@ -16,6 +16,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class RecordChecker<T> implements Checker {
+
     private final Configuration<T> config;
 
     public RecordChecker(Configuration<T> config) {
@@ -31,10 +32,12 @@ public class RecordChecker<T> implements Checker {
 
         verifyRecordPrecondition(accessor.getRedAccessor(config.getTypeTag()));
         verifyRecordPrecondition(
-                accessor.getDefaultValuesAccessor(
-                        config.getTypeTag(),
-                        config.getNonnullFields(),
-                        config.getAnnotationCache()));
+            accessor.getDefaultValuesAccessor(
+                config.getTypeTag(),
+                config.getNonnullFields(),
+                config.getAnnotationCache()
+            )
+        );
     }
 
     private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {
@@ -61,18 +64,21 @@ public class RecordChecker<T> implements Checker {
         }
 
         fail(
-                Formatter.of(
-                        "Record invariant: constructor invariant failed for field%%: %%",
-                        failedFields.size() > 1 ? "s" : "",
-                        failedFields.stream().collect(Collectors.joining(","))));
+            Formatter.of(
+                "Record invariant: constructor invariant failed for field%%: %%",
+                failedFields.size() > 1 ? "s" : "",
+                failedFields.stream().collect(Collectors.joining(","))
+            )
+        );
     }
 
     private Method getAccessorMethodFor(Class<T> type, Field f) {
         return rethrow(
-                () -> {
-                    Method result = type.getDeclaredMethod(f.getName());
-                    result.setAccessible(true);
-                    return result;
-                });
+            () -> {
+                Method result = type.getDeclaredMethod(f.getName());
+                result.setAccessible(true);
+                return result;
+            }
+        );
     }
 }

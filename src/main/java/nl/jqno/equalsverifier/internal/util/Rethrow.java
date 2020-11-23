@@ -21,6 +21,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
  * this is not the purpose of this class.
  */
 public final class Rethrow {
+
     /** Do not instantiate. */
     private Rethrow() {}
 
@@ -42,11 +43,12 @@ public final class Rethrow {
 
     public static void rethrow(ThrowingRunnable block, String errorMessage) {
         rethrow(
-                () -> {
-                    block.run();
-                    return null;
-                },
-                errorMessage);
+            () -> {
+                block.run();
+                return null;
+            },
+            errorMessage
+        );
     }
 
     public static void rethrow(ThrowingRunnable block) {

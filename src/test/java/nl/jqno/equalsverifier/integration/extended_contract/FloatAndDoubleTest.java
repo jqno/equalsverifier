@@ -7,25 +7,24 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class FloatAndDoubleTest {
+
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
     private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
 
     @Test
     public void fail_whenFloatsAreComparedByReference() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(FLOAT, "f");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify())
+            .assertFailure()
+            .assertMessageContains(FLOAT, "f");
     }
 
     @Test
     public void fail_whenObjectFloatsAreComparedByReference() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
-                .assertFailure()
-                .assertMessageContains(FLOAT, "f");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
+            .assertFailure()
+            .assertMessageContains(FLOAT, "f");
     }
 
     @Test
@@ -35,22 +34,18 @@ public class FloatAndDoubleTest {
 
     @Test
     public void fail_whenDoublesAreComparedByReference() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(DOUBLE, "d");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify())
+            .assertFailure()
+            .assertMessageContains(DOUBLE, "d");
     }
 
     @Test
     public void fail_whenObjectDoublesAreComparedByReference() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(CompareObjectDoubleByReference.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(DOUBLE, "d");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify())
+            .assertFailure()
+            .assertMessageContains(DOUBLE, "d");
     }
 
     @Test
@@ -59,6 +54,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class ComparePrimitiveFloatsByReference {
+
         private final float f;
 
         public ComparePrimitiveFloatsByReference(float f) {
@@ -80,6 +76,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class CompareObjectFloatByReference {
+
         private final Float f;
 
         public CompareObjectFloatByReference(Float f) {
@@ -101,6 +98,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class CompareFloatCorrectly {
+
         private final float f;
 
         public CompareFloatCorrectly(float f) {
@@ -122,6 +120,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class ComparePrimitiveDoubleByReference {
+
         private final double d;
 
         public ComparePrimitiveDoubleByReference(double d) {
@@ -143,6 +142,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class CompareObjectDoubleByReference {
+
         private final Double d;
 
         public CompareObjectDoubleByReference(Double d) {
@@ -164,6 +164,7 @@ public class FloatAndDoubleTest {
     }
 
     static final class CompareDoubleCorrectly {
+
         private final double d;
 
         public CompareDoubleCorrectly(double d) {

@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class SignatureChecker<T> implements Checker {
+
     private final Class<T> type;
     private final ClassAccessor<T> classAccessor;
     private final Set<Warning> warningsToSuppress;
@@ -35,16 +36,19 @@ public class SignatureChecker<T> implements Checker {
     }
 
     private void checkEqualsIsDefined() {
-        boolean dontAllowDirectlyInherited =
-                !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT);
+        boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(
+            Warning.INHERITED_DIRECTLY_FROM_OBJECT
+        );
         boolean isDirectlyInherited = classAccessor.isEqualsInheritedFromObject();
         if (dontAllowDirectlyInherited && isDirectlyInherited) {
             fail(
-                    Formatter.of(
-                            "Equals is inherited directly from Object.\n"
-                                    + "Suppress Warning."
-                                    + Warning.INHERITED_DIRECTLY_FROM_OBJECT.name()
-                                    + " to skip this check."));
+                Formatter.of(
+                    "Equals is inherited directly from Object.\n" +
+                    "Suppress Warning." +
+                    Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() +
+                    " to skip this check."
+                )
+            );
         }
     }
 
@@ -79,8 +83,10 @@ public class SignatureChecker<T> implements Checker {
 
     private void failOverloaded(String message) {
         fail(
-                Formatter.of(
-                        "Overloaded: %%.\nSignature should be: public boolean equals(Object obj)",
-                        message));
+            Formatter.of(
+                "Overloaded: %%.\nSignature should be: public boolean equals(Object obj)",
+                message
+            )
+        );
     }
 }

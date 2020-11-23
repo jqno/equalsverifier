@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
 public class EnumTest {
+
     @Test
     public void succeed_whenClassIsAnEnum() {
         EqualsVerifier.forClass(Enum.class).verify();
@@ -33,9 +34,10 @@ public class EnumTest {
 
     @Test
     public void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
-        EqualsVerifier.forClass(NullThrowingSingletonUser.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(NullThrowingSingletonUser.class)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
@@ -66,6 +68,7 @@ public class EnumTest {
     enum Empty {}
 
     static final class EmptyEnumContainer {
+
         private final int i;
 
         @SuppressWarnings("unused")
@@ -92,6 +95,7 @@ public class EnumTest {
     }
 
     static final class SingletonContainer {
+
         private final int i;
 
         @SuppressWarnings("unused")
@@ -118,6 +122,7 @@ public class EnumTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class SingletonUser {
+
         private final Singleton singleton;
 
         public SingletonUser(Singleton singleton) {
@@ -136,6 +141,7 @@ public class EnumTest {
     }
 
     static final class NullThrowingSingletonUser {
+
         private final Singleton singleton;
 
         public NullThrowingSingletonUser(Singleton singleton) {
@@ -154,6 +160,7 @@ public class EnumTest {
     }
 
     static final class SingletonCollectionContainer {
+
         private final Set<Singleton> singletonSet;
 
         public SingletonCollectionContainer(Set<Singleton> singletonSet) {
@@ -172,6 +179,7 @@ public class EnumTest {
     }
 
     static final class SingletonKeyMapContainer {
+
         private final Map<Singleton, Object> singletonKeyMap;
 
         public SingletonKeyMapContainer(Map<Singleton, Object> singletonKeyMap) {
@@ -190,6 +198,7 @@ public class EnumTest {
     }
 
     static final class SingletonOptionalContainer {
+
         private final Optional<Singleton> singletonOptional;
 
         public SingletonOptionalContainer(Optional<Singleton> singletonOptional) {

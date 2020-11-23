@@ -22,6 +22,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
 // CHECKSTYLE OFF: LocalFinalVariableName
 // CHECKSTYLE OFF: NeedBraces
 public final class LombokInstanceOfPoint {
+
     private final int x;
     private final int y;
     private final Color color;
@@ -42,8 +43,9 @@ public final class LombokInstanceOfPoint {
         if (this.y != other.y) return false;
         final java.lang.Object this$color = this.color;
         final java.lang.Object other$color = other.color;
-        if (this$color == null ? other$color != null : !this$color.equals(other$color))
-            return false;
+        if (
+            this$color == null ? other$color != null : !this$color.equals(other$color)
+        ) return false;
         return true;
     }
 

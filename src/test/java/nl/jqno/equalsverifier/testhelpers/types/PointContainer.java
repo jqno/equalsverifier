@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import java.util.Objects;
 
 public class PointContainer {
+
     private final Point point;
 
     public PointContainer(Point point) {

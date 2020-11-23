@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  * <p>Settings: - Use 'instanceof' to compare types: false - Use blocks in 'if' statements: true
  */
 public final class EclipseGetClassPoint {
+
     private final int x;
     private final int y;
     private final Color color;

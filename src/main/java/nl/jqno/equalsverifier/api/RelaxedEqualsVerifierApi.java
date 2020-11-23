@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.util.Validations;
  * the list of equal examples that are supplied to the aforementioned method.
  */
 public class RelaxedEqualsVerifierApi<T> {
+
     private final Class<T> type;
     private final List<T> equalExamples;
 
@@ -53,6 +54,6 @@ public class RelaxedEqualsVerifierApi<T> {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
         Validations.validateUnequalExamples(unequalExamples, equalExamples);
         return new SingleTypeEqualsVerifierApi<>(type, equalExamples, unequalExamples)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
+        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }
 }

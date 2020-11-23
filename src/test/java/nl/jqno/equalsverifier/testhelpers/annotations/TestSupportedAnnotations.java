@@ -9,38 +9,58 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationProperti
 
 public enum TestSupportedAnnotations implements Annotation {
     TYPE_RUNTIME_RETENTION(
-            false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationRuntimeRetention"
+    ),
     TYPE_CLASS_RETENTION(
-            false, "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.TypeAnnotationClassRetention"
+    ),
     FIELD_RUNTIME_RETENTION(
-            false,
-            "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention"
+    ),
     FIELD_CLASS_RETENTION(
-            false, "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationClassRetention"
+    ),
     TYPEUSE_RUNTIME_RETENTION(
-            false,
-            "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationRuntimeRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationRuntimeRetention"
+    ),
     TYPEUSE_CLASS_RETENTION(
-            false,
-            "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationClassRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.TypeUseAnnotationClassRetention"
+    ),
     METHOD_RUNTIME_RETENTION(
-            false,
-            "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationRuntimeRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationRuntimeRetention"
+    ),
     METHOD_CLASS_RETENTION(
-            false, "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationClassRetention"),
+        false,
+        "nl.jqno.equalsverifier.testhelpers.annotations.MethodAnnotationClassRetention"
+    ),
 
     TYPE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeAnnotationRuntimeRetention"),
     TYPE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(
-            false, TypeAnnotationRuntimeRetention.class.getCanonicalName()),
+        false,
+        TypeAnnotationRuntimeRetention.class.getCanonicalName()
+    ),
     FIELD_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "FieldAnnotationRuntimeRetention"),
     FIELD_RUNTIME_RETENTION_CANONICAL_CLASSNAME(
-            false, FieldAnnotationRuntimeRetention.class.getCanonicalName()),
+        false,
+        FieldAnnotationRuntimeRetention.class.getCanonicalName()
+    ),
     TYPEUSE_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "TypeUseAnnotationRuntimeRetention"),
     TYPEUSE_RUNTIME_RETENTION_CANONICAL_CLASSNAME(
-            false, TypeUseAnnotationRuntimeRetention.class.getCanonicalName()),
+        false,
+        TypeUseAnnotationRuntimeRetention.class.getCanonicalName()
+    ),
     METHOD_RUNTIME_RETENTION_PARTIAL_CLASSNAME(false, "MethodAnnotationRuntimeRetention"),
     METHOD_RUNTIME_RETENTION_CANONICAL_CLASSNAME(
-            false, MethodAnnotationRuntimeRetention.class.getCanonicalName()),
+        false,
+        MethodAnnotationRuntimeRetention.class.getCanonicalName()
+    ),
 
     TYPE_INHERITS(true, "TypeAnnotationInherits"),
     TYPE_DOESNT_INHERIT(false, "TypeAnnotationDoesntInherit"),
@@ -53,9 +73,10 @@ public enum TestSupportedAnnotations implements Annotation {
     INAPPLICABLE(false, "Inapplicable") {
         @Override
         public boolean validate(
-                AnnotationProperties properties,
-                AnnotationCache annotationCache,
-                Set<String> ignoredAnnotations) {
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
             return false;
         }
     },

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class BlindlyEqualsPoint {
+
     private final int x;
     private final int y;
 

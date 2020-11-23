@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class GetClassPoint {
+
     private final int x;
     private final int y;
 

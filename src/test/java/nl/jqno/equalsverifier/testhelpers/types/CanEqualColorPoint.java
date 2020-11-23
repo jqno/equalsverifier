@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import java.util.Objects;
 
 public final class CanEqualColorPoint extends CanEqualPoint {
+
     private final Color color;
 
     public CanEqualColorPoint(int x, int y, Color color) {

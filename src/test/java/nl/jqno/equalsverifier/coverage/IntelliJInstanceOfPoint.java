@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
  */
 // CHECKSTYLE OFF: NeedBraces
 public final class IntelliJInstanceOfPoint {
+
     private final int x;
     private final int y;
     private final Color color;

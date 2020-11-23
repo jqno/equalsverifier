@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class NullChecker<T> implements Checker {
+
     private final Configuration<T> config;
 
     public NullChecker(Configuration<T> config) {

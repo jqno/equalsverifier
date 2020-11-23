@@ -37,28 +37,37 @@ import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
  * dynamically because of an internal infinite recursion of types, or other issues.
  */
 @SuppressFBWarnings(
-        value = "SIC_INNER_SHOULD_BE_STATIC_ANON",
-        justification = "That would be dozens of separate classes")
+    value = "SIC_INNER_SHOULD_BE_STATIC_ANON",
+    justification = "That would be dozens of separate classes"
+)
 public final class JavaApiPrefabValues {
+
     private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
-    private static final ExternalFactory<?> AWT_FACTORY =
-            new ExternalFactory<>("AwtFactoryProvider");
-    private static final ExternalFactory<?> JAVAFX_FACTORY =
-            new ExternalFactory<>("JavaFxFactoryProvider");
-    private static final ExternalFactory<?> JAVAX_FACTORY =
-            new ExternalFactory<>("JavaxFactoryProvider");
-    private static final ExternalFactory<?> GUAVA_FACTORY =
-            new ExternalFactory<>("GuavaFactoryProvider");
-    private static final ExternalFactory<?> JODA_FACTORY =
-            new ExternalFactory<>("JodaFactoryProvider");
-    private static final ExternalFactory<?> RMI_FACTORY =
-            new ExternalFactory<>("RmiFactoryProvider");
+    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>(
+        "AwtFactoryProvider"
+    );
+    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>(
+        "JavaFxFactoryProvider"
+    );
+    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>(
+        "JavaxFactoryProvider"
+    );
+    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>(
+        "GuavaFactoryProvider"
+    );
+    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>(
+        "JodaFactoryProvider"
+    );
+    private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>(
+        "RmiFactoryProvider"
+    );
 
-    private static final Comparator<Object> OBJECT_COMPARATOR =
-            Comparator.comparingInt(Object::hashCode);
+    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(
+        Object::hashCode
+    );
 
     private FactoryCache factoryCache;
 
@@ -111,8 +120,9 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressFBWarnings(
-            value = {"DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR"},
-            justification = "We really do need a separate instances with the same value")
+        value = { "DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR" },
+        justification = "We really do need a separate instances with the same value"
+    )
     private void addPrimitiveClasses() {
         addValues(boolean.class, true, false, true);
         addValues(byte.class, (byte) 1, (byte) 2, (byte) 1);
@@ -138,9 +148,9 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressFBWarnings(
-            value = {"DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD"},
-            justification =
-                    "We just need an instance of File and Thread; they're not for actual use.")
+        value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
+        justification = "We just need an instance of File and Thread; they're not for actual use."
+    )
     private void addCommonClasses() {
         addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
         addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
@@ -148,73 +158,84 @@ public final class JavaApiPrefabValues {
         addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
         addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
         addValues(
-                Pattern.class,
-                Pattern.compile("one"),
-                Pattern.compile("two"),
-                Pattern.compile("one"));
+            Pattern.class,
+            Pattern.compile("one"),
+            Pattern.compile("two"),
+            Pattern.compile("one")
+        );
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
         addValues(
-                StringBuilder.class,
-                new StringBuilder("one"),
-                new StringBuilder("two"),
-                new StringBuilder("three"));
+            StringBuilder.class,
+            new StringBuilder("one"),
+            new StringBuilder("two"),
+            new StringBuilder("three")
+        );
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
 
         rethrow(
-                () ->
-                        addValues(
-                                URL.class,
-                                new URL("http://example.com"),
-                                new URL("http://localhost"),
-                                new URL("http://example.com")),
-                "Can't add prefab values for java.net.URL");
+            () ->
+                addValues(
+                    URL.class,
+                    new URL("http://example.com"),
+                    new URL("http://localhost"),
+                    new URL("http://example.com")
+                ),
+            "Can't add prefab values for java.net.URL"
+        );
 
         addFactory(
-                CompletableFuture.class,
-                simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
+            CompletableFuture.class,
+            simple(ignored -> new CompletableFuture<>(), CompletableFuture::new)
+        );
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
         addValues(
-                OptionalDouble.class,
-                OptionalDouble.of(0.5),
-                OptionalDouble.of(1.0),
-                OptionalDouble.of(0.5));
+            OptionalDouble.class,
+            OptionalDouble.of(0.5),
+            OptionalDouble.of(1.0),
+            OptionalDouble.of(0.5)
+        );
         addValues(OptionalInt.class, OptionalInt.of(1), OptionalInt.of(2), OptionalInt.of(1));
         addValues(OptionalLong.class, OptionalLong.of(1), OptionalLong.of(2), OptionalLong.of(1));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
         addValues(
-                Currency.class,
-                Currency.getInstance("USD"),
-                Currency.getInstance("EUR"),
-                Currency.getInstance("JPY"));
+            Currency.class,
+            Currency.getInstance("USD"),
+            Currency.getInstance("EUR"),
+            Currency.getInstance("JPY")
+        );
     }
 
     private void addDateTimeClasses() {
         addValues(
-                Calendar.class,
-                new GregorianCalendar(2010, 7, 4),
-                new GregorianCalendar(2010, 7, 5),
-                new GregorianCalendar(2010, 7, 4));
+            Calendar.class,
+            new GregorianCalendar(2010, 7, 4),
+            new GregorianCalendar(2010, 7, 5),
+            new GregorianCalendar(2010, 7, 4)
+        );
         addValues(Date.class, new Date(0), new Date(1), new Date(0));
         addValues(
-                DateFormat.class,
-                DateFormat.getTimeInstance(),
-                DateFormat.getDateInstance(),
-                DateFormat.getTimeInstance());
+            DateFormat.class,
+            DateFormat.getTimeInstance(),
+            DateFormat.getDateInstance(),
+            DateFormat.getTimeInstance()
+        );
         addValues(
-                DateTimeFormatter.class,
-                DateTimeFormatter.ISO_TIME,
-                DateTimeFormatter.ISO_DATE,
-                DateTimeFormatter.ISO_TIME);
+            DateTimeFormatter.class,
+            DateTimeFormatter.ISO_TIME,
+            DateTimeFormatter.ISO_DATE,
+            DateTimeFormatter.ISO_TIME
+        );
         addValues(Duration.class, Duration.ZERO, Duration.ofDays(1L), Duration.ZERO);
         addValues(
-                GregorianCalendar.class,
-                new GregorianCalendar(2010, 7, 4),
-                new GregorianCalendar(2010, 7, 5),
-                new GregorianCalendar(2010, 7, 4));
+            GregorianCalendar.class,
+            new GregorianCalendar(2010, 7, 4),
+            new GregorianCalendar(2010, 7, 5),
+            new GregorianCalendar(2010, 7, 4)
+        );
         addValues(Instant.class, Instant.MIN, Instant.MAX, Instant.MIN);
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
@@ -224,59 +245,68 @@ public final class JavaApiPrefabValues {
         addValues(OffsetTime.class, OffsetTime.MIN, OffsetTime.MAX, OffsetTime.MIN);
         addValues(Period.class, Period.ZERO, Period.of(1, 1, 1), Period.ZERO);
         addValues(
-                SimpleDateFormat.class,
-                new SimpleDateFormat("yMd"),
-                new SimpleDateFormat("dMy"),
-                new SimpleDateFormat("yMd"));
+            SimpleDateFormat.class,
+            new SimpleDateFormat("yMd"),
+            new SimpleDateFormat("dMy"),
+            new SimpleDateFormat("yMd")
+        );
         addValues(
-                TimeZone.class,
-                TimeZone.getTimeZone("GMT+1"),
-                TimeZone.getTimeZone("GMT+2"),
-                TimeZone.getTimeZone("GMT+1"));
+            TimeZone.class,
+            TimeZone.getTimeZone("GMT+1"),
+            TimeZone.getTimeZone("GMT+2"),
+            TimeZone.getTimeZone("GMT+1")
+        );
         addValues(Year.class, Year.of(2000), Year.of(2010), Year.of(2000));
         addValues(
-                YearMonth.class,
-                YearMonth.of(2000, 1),
-                YearMonth.of(2010, 12),
-                YearMonth.of(2000, 1));
+            YearMonth.class,
+            YearMonth.of(2000, 1),
+            YearMonth.of(2010, 12),
+            YearMonth.of(2000, 1)
+        );
         addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
         addValues(
-                ZoneOffset.class,
-                ZoneOffset.ofHours(1),
-                ZoneOffset.ofHours(-1),
-                ZoneOffset.ofHours(1));
+            ZoneOffset.class,
+            ZoneOffset.ofHours(1),
+            ZoneOffset.ofHours(-1),
+            ZoneOffset.ofHours(1)
+        );
         addValues(
-                ZonedDateTime.class,
-                ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
-                ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
-                ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
+            ZonedDateTime.class,
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
+            ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00")
+        );
     }
 
     private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
 
         addValues(
-                java.sql.Date.class,
-                new java.sql.Date(1337),
-                new java.sql.Date(42),
-                new java.sql.Date(1337));
+            java.sql.Date.class,
+            new java.sql.Date(1337),
+            new java.sql.Date(42),
+            new java.sql.Date(1337)
+        );
         addValues(
-                java.sql.Time.class,
-                new java.sql.Time(1337),
-                new java.sql.Time(42),
-                new java.sql.Time(1337));
+            java.sql.Time.class,
+            new java.sql.Time(1337),
+            new java.sql.Time(42),
+            new java.sql.Time(1337)
+        );
         addValues(
-                java.sql.Timestamp.class,
-                new java.sql.Timestamp(1337),
-                new java.sql.Timestamp(42),
-                new java.sql.Timestamp(1337));
+            java.sql.Timestamp.class,
+            new java.sql.Timestamp(1337),
+            new java.sql.Timestamp(42),
+            new java.sql.Timestamp(1337)
+        );
 
         addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
         addValues(
-                InetSocketAddress.class,
-                InetSocketAddress.createUnresolved("localhost", 8080),
-                InetSocketAddress.createUnresolved("127.0.0.1", 8080),
-                InetSocketAddress.createUnresolved("localhost", 8080));
+            InetSocketAddress.class,
+            InetSocketAddress.createUnresolved("localhost", 8080),
+            InetSocketAddress.createUnresolved("127.0.0.1", 8080),
+            InetSocketAddress.createUnresolved("localhost", 8080)
+        );
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.
@@ -284,37 +314,42 @@ public final class JavaApiPrefabValues {
         ConditionalInstantiator inet4Address = new ConditionalInstantiator("java.net.Inet4Address");
         ConditionalInstantiator inet6Address = new ConditionalInstantiator("java.net.Inet6Address");
         addValues(
-                inetAddress.resolve(),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-                inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
+            inetAddress.resolve(),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1"))
+        );
         addValues(
-                inet4Address.resolve(),
-                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
-                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-                inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
+            inet4Address.resolve(),
+            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
+            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
+            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1"))
+        );
         addValues(
-                inet6Address.resolve(),
-                inet6Address.callFactory("getByName", classes(String.class), objects("::1")),
-                inet6Address.callFactory("getByName", classes(String.class), objects("::")),
-                inet6Address.callFactory("getByName", classes(String.class), objects("::1")));
+            inet6Address.resolve(),
+            inet6Address.callFactory("getByName", classes(String.class), objects("::1")),
+            inet6Address.callFactory("getByName", classes(String.class), objects("::")),
+            inet6Address.callFactory("getByName", classes(String.class), objects("::1"))
+        );
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addCollection() {
         addFactory(
-                Iterable.class,
-                simple(
-                        a -> {
-                            Collection coll = new ArrayList<>();
-                            coll.add(a);
-                            return coll;
-                        },
-                        ArrayList::new));
+            Iterable.class,
+            simple(
+                a -> {
+                    Collection coll = new ArrayList<>();
+                    coll.add(a);
+                    return coll;
+                },
+                ArrayList::new
+            )
+        );
         addFactory(Collection.class, collection(ArrayList::new));
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addLists() {
         addFactory(List.class, collection(ArrayList::new));
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
@@ -324,14 +359,15 @@ public final class JavaApiPrefabValues {
         addFactory(Stack.class, collection(Stack::new));
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addMaps() {
         addFactory(Map.class, map(HashMap::new));
         addFactory(SortedMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
         addFactory(NavigableMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
         addFactory(
-                ConcurrentNavigableMap.class,
-                map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR)));
+            ConcurrentNavigableMap.class,
+            map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR))
+        );
         addFactory(ConcurrentHashMap.class, map(ConcurrentHashMap::new));
         addFactory(HashMap.class, map(HashMap::new));
         addFactory(Hashtable.class, map(Hashtable::new));
@@ -342,7 +378,7 @@ public final class JavaApiPrefabValues {
         addFactory(EnumMap.class, new EnumMapFactory<>(EnumMap::new));
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addSets() {
         addFactory(Set.class, collection(HashSet::new));
         addFactory(SortedSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
@@ -352,13 +388,14 @@ public final class JavaApiPrefabValues {
         addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
         addFactory(EnumSet.class, new EnumSetFactory<>(EnumSet::copyOf));
         addValues(
-                BitSet.class,
-                BitSet.valueOf(new byte[] {0}),
-                BitSet.valueOf(new byte[] {1}),
-                BitSet.valueOf(new byte[] {0}));
+            BitSet.class,
+            BitSet.valueOf(new byte[] { 0 }),
+            BitSet.valueOf(new byte[] { 1 }),
+            BitSet.valueOf(new byte[] { 0 })
+        );
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addQueues() {
         addFactory(Queue.class, collection(() -> new ArrayBlockingQueue<>(1)));
         addFactory(BlockingQueue.class, collection(() -> new ArrayBlockingQueue<>(1)));
@@ -369,57 +406,71 @@ public final class JavaApiPrefabValues {
         addFactory(DelayQueue.class, collection(DelayQueue::new));
         addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
         addFactory(
-                PriorityBlockingQueue.class,
-                collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
+            PriorityBlockingQueue.class,
+            collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR))
+        );
         addValues(
-                SynchronousQueue.class,
-                new SynchronousQueue<>(),
-                new SynchronousQueue<>(),
-                new SynchronousQueue<>());
+            SynchronousQueue.class,
+            new SynchronousQueue<>(),
+            new SynchronousQueue<>(),
+            new SynchronousQueue<>()
+        );
     }
 
     private void addNioBuffers() {
         addValues(
-                Buffer.class,
-                ByteBuffer.wrap(new byte[] {0}),
-                ByteBuffer.wrap(new byte[] {1}),
-                ByteBuffer.wrap(new byte[] {0}));
+            Buffer.class,
+            ByteBuffer.wrap(new byte[] { 0 }),
+            ByteBuffer.wrap(new byte[] { 1 }),
+            ByteBuffer.wrap(new byte[] { 0 })
+        );
         addValues(
-                ByteBuffer.class,
-                ByteBuffer.wrap(new byte[] {0}),
-                ByteBuffer.wrap(new byte[] {1}),
-                ByteBuffer.wrap(new byte[] {0}));
+            ByteBuffer.class,
+            ByteBuffer.wrap(new byte[] { 0 }),
+            ByteBuffer.wrap(new byte[] { 1 }),
+            ByteBuffer.wrap(new byte[] { 0 })
+        );
         addValues(
-                CharBuffer.class, CharBuffer.wrap("a"), CharBuffer.wrap("b"), CharBuffer.wrap("a"));
+            CharBuffer.class,
+            CharBuffer.wrap("a"),
+            CharBuffer.wrap("b"),
+            CharBuffer.wrap("a")
+        );
         addValues(
-                DoubleBuffer.class,
-                DoubleBuffer.wrap(new double[] {0.0}),
-                DoubleBuffer.wrap(new double[] {1.0}),
-                DoubleBuffer.wrap(new double[] {0.0}));
+            DoubleBuffer.class,
+            DoubleBuffer.wrap(new double[] { 0.0 }),
+            DoubleBuffer.wrap(new double[] { 1.0 }),
+            DoubleBuffer.wrap(new double[] { 0.0 })
+        );
         addValues(
-                FloatBuffer.class,
-                FloatBuffer.wrap(new float[] {0.0f}),
-                FloatBuffer.wrap(new float[] {1.0f}),
-                FloatBuffer.wrap(new float[] {0.0f}));
+            FloatBuffer.class,
+            FloatBuffer.wrap(new float[] { 0.0f }),
+            FloatBuffer.wrap(new float[] { 1.0f }),
+            FloatBuffer.wrap(new float[] { 0.0f })
+        );
         addValues(
-                IntBuffer.class,
-                IntBuffer.wrap(new int[] {0}),
-                IntBuffer.wrap(new int[] {1}),
-                IntBuffer.wrap(new int[] {0}));
+            IntBuffer.class,
+            IntBuffer.wrap(new int[] { 0 }),
+            IntBuffer.wrap(new int[] { 1 }),
+            IntBuffer.wrap(new int[] { 0 })
+        );
         addValues(
-                LongBuffer.class,
-                LongBuffer.wrap(new long[] {0}),
-                LongBuffer.wrap(new long[] {1}),
-                LongBuffer.wrap(new long[] {0}));
+            LongBuffer.class,
+            LongBuffer.wrap(new long[] { 0 }),
+            LongBuffer.wrap(new long[] { 1 }),
+            LongBuffer.wrap(new long[] { 0 })
+        );
         addValues(
-                ShortBuffer.class,
-                ShortBuffer.wrap(new short[] {0}),
-                ShortBuffer.wrap(new short[] {1}),
-                ShortBuffer.wrap(new short[] {0}));
+            ShortBuffer.class,
+            ShortBuffer.wrap(new short[] { 0 }),
+            ShortBuffer.wrap(new short[] { 1 }),
+            ShortBuffer.wrap(new short[] { 0 })
+        );
     }
 
     @SuppressWarnings("unused")
     private static class JavaApiReflectionClassesContainer {
+
         Object a;
         Object b;
 
@@ -436,74 +487,85 @@ public final class JavaApiPrefabValues {
         addValues(Class.class, Class.class, Object.class, Class.class);
 
         rethrow(
-                () -> {
-                    Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
-                    Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
-                    addValues(Field.class, f1, f2, f1);
-                },
-                "Can't add prefab values for java.lang.reflect.Field");
+            () -> {
+                Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
+                Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
+                addValues(Field.class, f1, f2, f1);
+            },
+            "Can't add prefab values for java.lang.reflect.Field"
+        );
 
         rethrow(
-                () -> {
-                    Constructor<?> c1 =
-                            JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
-                    Constructor<?> c2 =
-                            JavaApiReflectionClassesContainer.class.getDeclaredConstructor(
-                                    Object.class);
-                    addValues(Constructor.class, c1, c2, c1);
-                },
-                "Can't add prefab values for java.lang.reflect.Constructor");
+            () -> {
+                Constructor<?> c1 =
+                    JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
+                Constructor<?> c2 =
+                    JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
+                addValues(Constructor.class, c1, c2, c1);
+            },
+            "Can't add prefab values for java.lang.reflect.Constructor"
+        );
 
         rethrow(
-                () -> {
-                    Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
-                    Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
-                    addValues(Method.class, m1, m2, m1);
-                },
-                "Can't add prefab values for java.lang.reflect.Method");
+            () -> {
+                Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
+                Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
+                addValues(Method.class, m1, m2, m1);
+            },
+            "Can't add prefab values for java.lang.reflect.Method"
+        );
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addAtomicClasses() {
         addValues(
-                AtomicBoolean.class,
-                new AtomicBoolean(true),
-                new AtomicBoolean(false),
-                new AtomicBoolean(true));
+            AtomicBoolean.class,
+            new AtomicBoolean(true),
+            new AtomicBoolean(false),
+            new AtomicBoolean(true)
+        );
         addValues(
-                AtomicInteger.class,
-                new AtomicInteger(1),
-                new AtomicInteger(2),
-                new AtomicInteger(1));
+            AtomicInteger.class,
+            new AtomicInteger(1),
+            new AtomicInteger(2),
+            new AtomicInteger(1)
+        );
         addValues(
-                AtomicIntegerArray.class,
-                new AtomicIntegerArray(new int[] {1}),
-                new AtomicIntegerArray(new int[] {2}),
-                new AtomicIntegerArray(new int[] {1}));
+            AtomicIntegerArray.class,
+            new AtomicIntegerArray(new int[] { 1 }),
+            new AtomicIntegerArray(new int[] { 2 }),
+            new AtomicIntegerArray(new int[] { 1 })
+        );
         addValues(AtomicLong.class, new AtomicLong(1L), new AtomicLong(2L), new AtomicLong(1L));
         addValues(
-                AtomicLongArray.class,
-                new AtomicLongArray(new long[] {1L}),
-                new AtomicLongArray(new long[] {2L}),
-                new AtomicLongArray(new long[] {1L}));
+            AtomicLongArray.class,
+            new AtomicLongArray(new long[] { 1L }),
+            new AtomicLongArray(new long[] { 2L }),
+            new AtomicLongArray(new long[] { 1L })
+        );
         addFactory(
-                AtomicMarkableReference.class,
-                simple(r -> new AtomicMarkableReference(r, true), null));
+            AtomicMarkableReference.class,
+            simple(r -> new AtomicMarkableReference(r, true), null)
+        );
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
         addFactory(
-                AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
+            AtomicStampedReference.class,
+            simple(r -> new AtomicStampedReference(r, 0), null)
+        );
         addFactory(
-                AtomicReferenceArray.class,
-                (tag, pv, stack) -> {
-                    TypeTag y = tag.getGenericTypes().get(0);
-                    Object[] red = new Object[] {pv.giveRed(y)};
-                    Object[] blue = new Object[] {pv.giveBlue(y)};
-                    Object[] redCopy = new Object[] {pv.giveRedCopy(y)};
-                    return Tuple.of(
-                            new AtomicReferenceArray(red),
-                            new AtomicReferenceArray(blue),
-                            new AtomicReferenceArray(redCopy));
-                });
+            AtomicReferenceArray.class,
+            (tag, pv, stack) -> {
+                TypeTag y = tag.getGenericTypes().get(0);
+                Object[] red = new Object[] { pv.giveRed(y) };
+                Object[] blue = new Object[] { pv.giveBlue(y) };
+                Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
+                return Tuple.of(
+                    new AtomicReferenceArray(red),
+                    new AtomicReferenceArray(blue),
+                    new AtomicReferenceArray(redCopy)
+                );
+            }
+        );
     }
 
     private void addAncientJavaApiClasses() {
@@ -514,11 +576,13 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.Font", AWT_FACTORY);
 
         addFactory(
-                PropertyChangeSupport.class,
-                values(
-                        new PropertyChangeSupport("this"),
-                        new PropertyChangeSupport("that"),
-                        new PropertyChangeSupport("this")));
+            PropertyChangeSupport.class,
+            values(
+                new PropertyChangeSupport("this"),
+                new PropertyChangeSupport("that"),
+                new PropertyChangeSupport("this")
+            )
+        );
 
         addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);
@@ -571,7 +635,7 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "ImmutableSetMultimap", GUAVA_FACTORY);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addLazyFactory(GUAVA_PACKAGE + "BiMap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);

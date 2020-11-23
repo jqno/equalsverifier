@@ -11,83 +11,94 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class ReflexivityTest {
+
     @Test
     public void fail_whenReferencesAreNotEqual() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity",
-                        "object does not equal itself",
-                        ReflexivityIntentionallyBroken.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Reflexivity",
+                "object does not equal itself",
+                ReflexivityIntentionallyBroken.class.getSimpleName()
+            );
     }
 
     @Test
     public void fail_whenTheWrongFieldsAreComparedInEquals() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity",
-                        "object does not equal an identical copy of itself",
-                        FieldsMixedUpInEquals.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Reflexivity",
+                "object does not equal an identical copy of itself",
+                FieldsMixedUpInEquals.class.getSimpleName()
+            );
     }
 
     @Test
     public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity", ReflexivityBrokenOnNullFields.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Reflexivity",
+                ReflexivityBrokenOnNullFields.class.getSimpleName()
+            );
     }
 
     @Test
     public void succeed_whenReferencesAreNotEqual_givenFieldsThatAreNullAndWarningIsSuppressed() {
-        EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(ReflexivityBrokenOnNullFields.class)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
     public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(WrongInstanceofCheck.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity",
-                        "object does not equal an identical copy of itself",
-                        WrongInstanceofCheck.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(WrongInstanceofCheck.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Reflexivity",
+                "object does not equal an identical copy of itself",
+                WrongInstanceofCheck.class.getSimpleName()
+            );
     }
 
     @Test
     public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify())
-                .assertFailure()
-                .assertMessageContains("Reflexivity", "identical copy");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify())
+            .assertFailure()
+            .assertMessageContains("Reflexivity", "identical copy");
     }
 
     @Test
-    public void
-            succeed_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
-        EqualsVerifier.forClass(SuperCallerWithUnusedField.class)
-                .suppress(Warning.IDENTICAL_COPY, Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+    public void succeed_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(SuperCallerWithUnusedField.class)
+            .suppress(Warning.IDENTICAL_COPY, Warning.ALL_FIELDS_SHOULD_BE_USED)
+            .verify();
     }
 
     @Test
     public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(FinalPoint.class)
-                                        .suppress(Warning.IDENTICAL_COPY)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Unnecessary suppression", "IDENTICAL_COPY");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(FinalPoint.class)
+                        .suppress(Warning.IDENTICAL_COPY)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Unnecessary suppression", "IDENTICAL_COPY");
     }
 
     static final class ReflexivityIntentionallyBroken extends Point {
+
         // Instantiator.scramble will flip this boolean.
         private boolean broken = false;
 
@@ -105,6 +116,7 @@ public class ReflexivityTest {
     }
 
     static final class FieldsMixedUpInEquals {
+
         private final String one;
         private final String two;
 
@@ -137,6 +149,7 @@ public class ReflexivityTest {
     }
 
     static final class ReflexivityBrokenOnNullFields {
+
         private final Object a;
 
         public ReflexivityBrokenOnNullFields(Object a) {
@@ -158,6 +171,7 @@ public class ReflexivityTest {
             } else if (!a.equals(other.a)) return false;
             return true;
         }
+
         // CHECKSTYLE ON: NeedBraces
 
         @Override
@@ -167,6 +181,7 @@ public class ReflexivityTest {
     }
 
     static final class WrongInstanceofCheck {
+
         private final int foo;
 
         public WrongInstanceofCheck(int foo) {
@@ -194,6 +209,7 @@ public class ReflexivityTest {
     static class SomethingCompletelyDifferent {}
 
     static final class SuperCallerWithUnusedField {
+
         @SuppressWarnings("unused")
         private final int unused;
 

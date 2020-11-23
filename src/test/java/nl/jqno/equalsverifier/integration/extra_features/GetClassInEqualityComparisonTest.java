@@ -4,25 +4,24 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
 public class GetClassInEqualityComparisonTest {
+
     @Test
-    public void
-            succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
+    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Identifiable.class).usingGetClass().verify();
     }
 
     @Test
-    public void
-            succeed_whenGetClassIsPartOfEqualityComparison_givenAConcreteImplementationAndUsingGetClassIsUsed() {
+    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAConcreteImplementationAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Person.class).usingGetClass().verify();
     }
 
     @Test
-    public void
-            succeed_whenGetClassIsPartOfEqualityComparison_givenAnotherConcreteImplementationAndUsingGetClassIsUsed() {
+    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnotherConcreteImplementationAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Account.class).usingGetClass().verify();
     }
 
     abstract static class Identifiable {
+
         private final int id;
 
         public Identifiable(int id) {
@@ -45,12 +44,14 @@ public class GetClassInEqualityComparisonTest {
     }
 
     static class Person extends Identifiable {
+
         public Person(int id) {
             super(id);
         }
     }
 
     static class Account extends Identifiable {
+
         public Account(int id) {
             super(id);
         }

@@ -4,17 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-
 public class RecordObjectAccessorModificationTest {
+
     private static final int INITIAL_INT = 42;
     private static final boolean INITIAL_BOOLEAN = true;
     private static final String INITIAL_STRING = "hello";
@@ -32,9 +31,12 @@ public class RecordObjectAccessorModificationTest {
         prefabValues = new PrefabValues(JavaApiPrefabValues.build());
 
         modifiable = ModifiableRecord.class;
-        Constructor<?> c =
-                modifiable.getDeclaredConstructor(
-                        int.class, boolean.class, String.class, Object.class);
+        Constructor<?> c = modifiable.getDeclaredConstructor(
+            int.class,
+            boolean.class,
+            String.class,
+            Object.class
+        );
         m = c.newInstance(INITIAL_INT, INITIAL_BOOLEAN, INITIAL_STRING, INITIAL_OBJECT);
         accessor = create(m);
         stringField = modifiable.getDeclaredField("s");
@@ -115,7 +117,7 @@ public class RecordObjectAccessorModificationTest {
     }
 
     private Object fieldValue(ObjectAccessor<?> objectAccessor, String fieldName)
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
         Field field = objectAccessor.get().getClass().getDeclaredField(fieldName);
         return objectAccessor.getField(field);
     }

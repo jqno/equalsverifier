@@ -11,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SuperclassIterableTest {
+
     private List<Class<?>> actual;
 
     @BeforeEach
@@ -48,7 +49,9 @@ public class SuperclassIterableTest {
             actual.add(type);
         }
         assertEquals(
-                asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
+            asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class),
+            actual
+        );
     }
 
     @Test

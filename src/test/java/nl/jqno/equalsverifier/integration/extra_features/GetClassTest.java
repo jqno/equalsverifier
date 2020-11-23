@@ -15,12 +15,14 @@ public class GetClassTest {
 
     @Test
     public void fail_whenEqualsUsesGetClassInsteadOfInstanceof() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(GetClassPoint.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Subclass",
-                        "object is not equal to an instance of a trivial subclass with equal fields",
-                        "Maybe you forgot to add usingGetClass()");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(GetClassPoint.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Subclass",
+                "object is not equal to an instance of a trivial subclass with equal fields",
+                "Maybe you forgot to add usingGetClass()"
+            );
     }
 
     @Test
@@ -29,42 +31,37 @@ public class GetClassTest {
     }
 
     @Test
-    public void
-            succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenWarningStrictInheritanceIsSuppressed() {
+    public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenWarningStrictInheritanceIsSuppressed() {
         EqualsVerifier.forClass(GetClassPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
     public void fail_whenEqualsUsesGetClassButForgetsToCheckNull_givenUsingGetClassIsUsed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(GetClassPointNull.class)
-                                        .usingGetClass()
-                                        .verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains("Non-nullity: NullPointerException thrown");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(GetClassPointNull.class).usingGetClass().verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains("Non-nullity: NullPointerException thrown");
     }
 
     @Test
     public void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(FinalMethodsPoint.class)
-                                        .usingGetClass()
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Subclass",
-                        "object is equal to an instance of a trivial subclass with equal fields",
-                        "This should not happen when using getClass().");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(FinalMethodsPoint.class).usingGetClass().verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Subclass",
+                "object is equal to an instance of a trivial subclass with equal fields",
+                "This should not happen when using getClass()."
+            );
     }
 
     @Test
     public void fail_whenSuperclassUsesGetClass() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(GetClassColorPoint.class).verify())
-                .assertFailure()
-                .assertMessageContains("Symmetry", "does not equal superclass instance");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(GetClassColorPoint.class).verify())
+            .assertFailure()
+            .assertMessageContains("Symmetry", "does not equal superclass instance");
     }
 
     @Test
@@ -74,28 +71,34 @@ public class GetClassTest {
 
     @Test
     public void succeed_whenSuperclassUsesGetClass_givenWarningStrictInheritanceIsSuppressed() {
-        EqualsVerifier.forClass(GetClassColorPoint.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .verify();
+        EqualsVerifier
+            .forClass(GetClassColorPoint.class)
+            .suppress(Warning.STRICT_INHERITANCE)
+            .verify();
     }
 
     @Test
     public void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class)
-                                        .usingGetClass()
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Redefined superclass",
-                        GetClassColorPointWithEqualSuper.class.getSimpleName(),
-                        "should not equal superclass instance",
-                        Point.class.getSimpleName(),
-                        "but it does");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(GetClassColorPointWithEqualSuper.class)
+                        .usingGetClass()
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains(
+                "Redefined superclass",
+                GetClassColorPointWithEqualSuper.class.getSimpleName(),
+                "should not equal superclass instance",
+                Point.class.getSimpleName(),
+                "but it does"
+            );
     }
 
     static class GetClassPointNull {
+
         private final int x;
         private final int y;
 
@@ -120,6 +123,7 @@ public class GetClassTest {
     }
 
     static class GetClassColorPoint extends GetClassPoint {
+
         private final Color color;
 
         public GetClassColorPoint(int x, int y, Color color) {
@@ -143,6 +147,7 @@ public class GetClassTest {
     }
 
     static class GetClassColorPointWithEqualSuper extends Point {
+
         private final Color color;
 
         public GetClassColorPointWithEqualSuper(int x, int y, Color color) {

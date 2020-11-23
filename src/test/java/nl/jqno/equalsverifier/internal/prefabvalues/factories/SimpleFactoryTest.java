@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import org.junit.jupiter.api.Test;
 
 public class SimpleFactoryTest {
+
     private SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));
 
     @Test

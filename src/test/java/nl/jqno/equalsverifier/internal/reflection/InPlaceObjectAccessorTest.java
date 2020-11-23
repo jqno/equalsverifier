@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorTest {
+
     @Test
     public void of() {
         Point p = new Point(1, 2);

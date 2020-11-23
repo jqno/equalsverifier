@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 
 /** Utility class that checks whether a field is marked with an Nonnull annotation of some sort. */
 public final class NonnullAnnotationVerifier {
+
     private NonnullAnnotationVerifier() {}
 
     /**
@@ -25,8 +26,10 @@ public final class NonnullAnnotationVerifier {
         if (annotationCache.hasFieldAnnotation(type, field.getName(), NULLABLE)) {
             return false;
         }
-        return annotationCache.hasClassAnnotation(type, FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL)
-                || annotationCache.hasClassAnnotation(type, JSR305_DEFAULT_ANNOTATION_NONNULL)
-                || annotationCache.hasClassAnnotation(type, ECLIPSE_DEFAULT_ANNOTATION_NONNULL);
+        return (
+            annotationCache.hasClassAnnotation(type, FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
+            annotationCache.hasClassAnnotation(type, JSR305_DEFAULT_ANNOTATION_NONNULL) ||
+            annotationCache.hasClassAnnotation(type, ECLIPSE_DEFAULT_ANNOTATION_NONNULL)
+        );
     }
 }

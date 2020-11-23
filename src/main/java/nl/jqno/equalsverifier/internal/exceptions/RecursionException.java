@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 @SuppressWarnings("serial")
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")
 public class RecursionException extends MessagingException {
+
     private final LinkedHashSet<TypeTag> typeStack;
 
     /**

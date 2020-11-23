@@ -6,19 +6,25 @@ import nl.jqno.equalsverifier.internal.reflection.Util;
 import org.junit.jupiter.api.Test;
 
 public final class TestPresenceTest {
+
     @Test
     public void javafxTestsArePresentOnJdk11() {
         assertTrue(
-                isTestAvailableOnJdk(
-                        11,
-                        "nl.jqno.equalsverifier.integration.extended_contract.JavaFxClassesTest"));
+            isTestAvailableOnJdk(
+                11,
+                "nl.jqno.equalsverifier.integration.extended_contract.JavaFxClassesTest"
+            )
+        );
     }
 
     @Test
     public void recordTestsArePresentOnJdk16() {
         assertTrue(
-                isTestAvailableOnJdk(
-                        16, "nl.jqno.equalsverifier.integration.extended_contract.RecordsTest"));
+            isTestAvailableOnJdk(
+                16,
+                "nl.jqno.equalsverifier.integration.extended_contract.RecordsTest"
+            )
+        );
     }
 
     private boolean isTestAvailableOnJdk(int jdkVersion, String className) {

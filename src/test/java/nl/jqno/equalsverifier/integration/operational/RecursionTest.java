@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class RecursionTest {
+
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
     private static final String PREFAB = "Add prefab values for one of the following types";
 
@@ -33,9 +34,10 @@ public class RecursionTest {
 
     @Test
     public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(Node.class).verify())
-                .assertFailure()
-                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(Node.class).verify())
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
     }
 
     @Test
@@ -50,64 +52,71 @@ public class RecursionTest {
 
     @Test
     public void fail_whenFieldIsARecursiveType() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(NodeContainer.class).verify())
-                .assertFailure()
-                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NodeContainer.class).verify())
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Node.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
-        EqualsVerifier.forClass(NodeContainer.class)
-                .withPrefabValues(Node.class, red, blue)
-                .verify();
+        EqualsVerifier
+            .forClass(NodeContainer.class)
+            .withPrefabValues(Node.class, red, blue)
+            .verify();
     }
 
     @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
-        EqualsVerifier.forClass(SubNodeContainer.class)
-                .withPrefabValues(Node.class, red, blue)
-                .verify();
+        EqualsVerifier
+            .forClass(SubNodeContainer.class)
+            .withPrefabValues(Node.class, red, blue)
+            .verify();
     }
 
     @Test
     public void fail_whenDatastructureIsRecursiveInGenerics() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(Tree.class).verify())
-                .assertFailure()
-                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(Tree.class).verify())
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB);
     }
 
     @Test
     public void succeed_whenDatastructureIsRecursiveInGenerics_givenPrefabValues() {
-        EqualsVerifier.forClass(Tree.class)
-                .withPrefabValues(Tree.class, redTree, blueTree)
-                .verify();
+        EqualsVerifier
+            .forClass(Tree.class)
+            .withPrefabValues(Tree.class, redTree, blueTree)
+            .verify();
     }
 
     @Test
     public void fail_whenFieldIsARecursiveTypeInGenerics() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(TreeContainer.class).verify())
-                .assertFailure()
-                .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Tree.class.getSimpleName());
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(TreeContainer.class).verify())
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE, PREFAB, Tree.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
-        EqualsVerifier.forClass(TreeContainer.class)
-                .withPrefabValues(Tree.class, redTree, blueTree)
-                .verify();
+        EqualsVerifier
+            .forClass(TreeContainer.class)
+            .withPrefabValues(Tree.class, redTree, blueTree)
+            .verify();
     }
 
     @Test
     public void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(ImmutableListTree.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        RECURSIVE_DATASTRUCTURE,
-                        ImmutableListTree.class.getSimpleName(),
-                        new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class))
-                                .toString(),
-                        new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class))
-                                .toString()); // I'd prefer not to have this last one though.
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ImmutableListTree.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                RECURSIVE_DATASTRUCTURE,
+                ImmutableListTree.class.getSimpleName(),
+                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
+                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()
+            ); // I'd prefer not to have this last one though.
     }
 
     @Test
@@ -116,6 +125,7 @@ public class RecursionTest {
     }
 
     static class Node {
+
         final Node node;
 
         public Node(Node node) {
@@ -138,12 +148,14 @@ public class RecursionTest {
     }
 
     static class SubNode extends Node {
+
         public SubNode(Node node) {
             super(node);
         }
     }
 
     static class NodeContainer {
+
         final Node node;
 
         public NodeContainer(Node node) {
@@ -166,12 +178,14 @@ public class RecursionTest {
     }
 
     static class SubNodeContainer extends NodeContainer {
+
         public SubNodeContainer(Node node) {
             super(node);
         }
     }
 
     static class Tree {
+
         final List<Tree> innerTrees;
 
         public Tree(List<Tree> innerTrees) {
@@ -194,6 +208,7 @@ public class RecursionTest {
     }
 
     static class TreeContainer {
+
         final Tree tree;
 
         public TreeContainer(Tree tree) {
@@ -216,6 +231,7 @@ public class RecursionTest {
     }
 
     static final class ImmutableListTree {
+
         final ImmutableList<ImmutableListTree> tree;
 
         public ImmutableListTree(ImmutableList<ImmutableListTree> tree) {
@@ -235,6 +251,7 @@ public class RecursionTest {
 
     @SuppressWarnings("unused")
     static final class StaticFinalNodeContainer {
+
         private static final Node NODE = new Node(null);
         private final int i;
 

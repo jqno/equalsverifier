@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import java.util.Objects;
 
 public final class BlindlyEqualsColorPoint extends BlindlyEqualsPoint {
+
     private final Color color;
 
     public BlindlyEqualsColorPoint(int x, int y, Color color) {

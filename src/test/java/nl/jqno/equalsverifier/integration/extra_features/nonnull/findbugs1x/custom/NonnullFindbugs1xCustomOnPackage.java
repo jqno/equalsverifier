@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.cus
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public final class NonnullFindbugs1xCustomOnPackage {
+
     private final Object o;
 
     public NonnullFindbugs1xCustomOnPackage(Object o) {

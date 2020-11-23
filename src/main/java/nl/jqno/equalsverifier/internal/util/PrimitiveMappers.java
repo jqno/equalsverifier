@@ -8,12 +8,13 @@ public final class PrimitiveMappers {
 
     private PrimitiveMappers() {}
 
-    public static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER =
-            createPrimitiveObjectMapper();
-    public static final Map<Class<?>, Object> DEFAULT_VALUE_MAPPER =
-            createDefaultValueMapper(false);
-    public static final Map<Class<?>, Object> DEFAULT_WRAPPED_VALUE_MAPPER =
-            createDefaultValueMapper(true);
+    public static final Map<Class<?>, Class<?>> PRIMITIVE_OBJECT_MAPPER = createPrimitiveObjectMapper();
+    public static final Map<Class<?>, Object> DEFAULT_VALUE_MAPPER = createDefaultValueMapper(
+        false
+    );
+    public static final Map<Class<?>, Object> DEFAULT_WRAPPED_VALUE_MAPPER = createDefaultValueMapper(
+        true
+    );
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
         Map<Class<?>, Class<?>> result = new HashMap<>();

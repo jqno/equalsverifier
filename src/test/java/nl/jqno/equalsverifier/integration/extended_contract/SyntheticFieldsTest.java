@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class SyntheticFieldsTest {
+
     @Test
     public void succeed_whenClassHasASyntheticClassAsAField() {
         EqualsVerifier.forClass(LambdaContainer.class).verify();
@@ -31,14 +32,13 @@ public class SyntheticFieldsTest {
     }
 
     @Test
-    public void
-            succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
+    public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
         EqualsVerifier.forClass(CoberturaContainer.class).verify();
     }
 
     static final class LambdaContainer {
-        private static final Comparator<LambdaContainer> COMPARATOR =
-                (c1, c2) -> 0; // A lambda is a synthetic class
+
+        private static final Comparator<LambdaContainer> COMPARATOR = (c1, c2) -> 0; // A lambda is a synthetic class
 
         private final String s;
 
@@ -60,10 +60,12 @@ public class SyntheticFieldsTest {
         }
     }
 
-    /* non-static */ final class Outer {
+    /* non-static */final class Outer {
+
         private final Inner inner;
 
-        private /* non-static */ final class Inner {
+        private /* non-static */final class Inner {
+
             private final int foo;
 
             public Inner(int foo) {
@@ -96,7 +98,8 @@ public class SyntheticFieldsTest {
         }
     }
 
-    /* non-static */ final class OuterContainer {
+    /* non-static */final class OuterContainer {
+
         private final Outer outer;
 
         public OuterContainer() {
@@ -119,6 +122,7 @@ public class SyntheticFieldsTest {
     }
 
     public static final class CoberturaContainer {
+
         // CHECKSTYLE OFF: StaticVariableName
         public static transient int[] __cobertura_counters;
         // CHECKSTYLE ON: StaticVariableName

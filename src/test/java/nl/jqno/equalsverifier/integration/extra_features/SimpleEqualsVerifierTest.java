@@ -16,23 +16,28 @@ public class SimpleEqualsVerifierTest {
 
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenNothingSpecial() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(IntelliJPoint.class).verify())
-                .assertFailure()
-                .assertMessageContains("or use EqualsVerifier.simple()");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(IntelliJPoint.class).verify())
+            .assertFailure()
+            .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenSuppressWarningStrictInheritance() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(IntelliJPoint.class)
-                                        .suppress(Warning.STRICT_INHERITANCE)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("or use EqualsVerifier.simple()");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(IntelliJPoint.class)
+                        .suppress(Warning.STRICT_INHERITANCE)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     public static class IntelliJPoint {
+
         private int x;
         private int y;
         private Color color;

@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /** Allows instantiation of classes that may or may not be present on the classpath. */
 public class ConditionalInstantiator {
+
     private final String fullyQualifiedClassName;
     private final boolean throwExceptions;
 
@@ -57,8 +58,9 @@ public class ConditionalInstantiator {
      * @throws ReflectionException If instantiation fails.
      */
     @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "EV is run only from within unit tests")
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "EV is run only from within unit tests"
+    )
     public <T> T instantiate(Class<?>[] paramTypes, Object[] paramValues) {
         try {
             Class<T> type = resolve();
@@ -103,14 +105,16 @@ public class ConditionalInstantiator {
      * @throws ReflectionException If the call to the factory method fails.
      */
     @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "EV is run only from within unit tests")
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "EV is run only from within unit tests"
+    )
     @SuppressWarnings("unchecked")
     public <T> T callFactory(
-            String factoryTypeName,
-            String factoryMethod,
-            Class<?>[] paramTypes,
-            Object[] paramValues) {
+        String factoryTypeName,
+        String factoryMethod,
+        Class<?>[] paramTypes,
+        Object[] paramValues
+    ) {
         try {
             Class<T> type = resolve();
             if (type == null) {
@@ -134,8 +138,9 @@ public class ConditionalInstantiator {
      * @throws ReflectionException If resolving the constant fails.
      */
     @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "EV is run only from within unit tests")
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "EV is run only from within unit tests"
+    )
     @SuppressWarnings("unchecked")
     public <T> T returnConstant(String constantName) {
         try {

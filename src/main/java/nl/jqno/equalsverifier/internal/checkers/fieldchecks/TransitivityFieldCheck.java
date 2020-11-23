@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class TransitivityFieldCheck<T> implements FieldCheck<T> {
+
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
 
@@ -21,9 +22,10 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         Field field = fieldAccessor.getField();
         T a1 = referenceAccessor.get();
         T b1 = buildB1(copyAccessor, field);
@@ -35,10 +37,14 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
 
         if (countFalses(x, y, z) == 1) {
             fail(
-                    Formatter.of(
-                            "Transitivity: two of these three instances are equal to each other,"
-                                    + " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
-                            a1, b1, b2));
+                Formatter.of(
+                    "Transitivity: two of these three instances are equal to each other," +
+                    " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
+                    a1,
+                    b1,
+                    b2
+                )
+            );
         }
     }
 

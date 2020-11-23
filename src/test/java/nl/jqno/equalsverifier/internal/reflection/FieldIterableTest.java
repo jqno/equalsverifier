@@ -10,12 +10,11 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
 public class FieldIterableTest {
+
     private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
-    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS =
-            createNonStaticFieldContainerFields();
+    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS = createNonStaticFieldContainerFields();
     private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
-    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS =
-            createFieldAndSubFieldContainerFields();
+    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
 
     @Test
     public void simpleFields() {
@@ -30,8 +29,9 @@ public class FieldIterableTest {
     @Test
     public void simpleFieldsWithoutStatics() {
         Set<Field> actual = new HashSet<>();
-        for (Field field :
-                FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
+        for (Field field : FieldIterable.ofIgnoringStatic(
+            DifferentAccessModifiersFieldContainer.class
+        )) {
             actual.add(field);
         }
 
@@ -51,8 +51,9 @@ public class FieldIterableTest {
     @Test
     public void onlySubClassFields() {
         Set<Field> actual = new HashSet<>();
-        for (Field field :
-                FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
+        for (Field field : FieldIterable.ofIgnoringSuper(
+            DifferentAccessModifiersSubFieldContainer.class
+        )) {
             actual.add(field);
         }
 
@@ -121,8 +122,9 @@ public class FieldIterableTest {
 
     @Test
     public void nextAfterLastElement() {
-        Iterator<Field> iterator =
-                FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
+        Iterator<Field> iterator = FieldIterable
+            .of(DifferentAccessModifiersFieldContainer.class)
+            .iterator();
         while (iterator.hasNext()) {
             iterator.next();
         }
@@ -156,7 +158,7 @@ public class FieldIterableTest {
     private static Set<Field> createFieldContainerFields() {
         Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersFieldContainer> type =
-                DifferentAccessModifiersFieldContainer.class;
+            DifferentAccessModifiersFieldContainer.class;
         try {
             result.add(type.getDeclaredField("i"));
             result.add(type.getDeclaredField("j"));
@@ -175,7 +177,7 @@ public class FieldIterableTest {
     private static Set<Field> createNonStaticFieldContainerFields() {
         Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersFieldContainer> type =
-                DifferentAccessModifiersFieldContainer.class;
+            DifferentAccessModifiersFieldContainer.class;
         try {
             result.add(type.getDeclaredField("i"));
             result.add(type.getDeclaredField("j"));
@@ -190,7 +192,7 @@ public class FieldIterableTest {
     private static Set<Field> createSubFieldContainerFields() {
         Set<Field> result = new HashSet<>();
         Class<DifferentAccessModifiersSubFieldContainer> type =
-                DifferentAccessModifiersSubFieldContainer.class;
+            DifferentAccessModifiersSubFieldContainer.class;
         try {
             result.add(type.getDeclaredField("a"));
             result.add(type.getDeclaredField("b"));
@@ -210,8 +212,10 @@ public class FieldIterableTest {
     }
 
     public static final class CoberturaContainer {
+
         // CHECKSTYLE OFF: StaticVariableName
         public static transient int[] __cobertura_counters;
+
         // CHECKSTYLE ON: StaticVariableName
 
         @SuppressWarnings("unused")

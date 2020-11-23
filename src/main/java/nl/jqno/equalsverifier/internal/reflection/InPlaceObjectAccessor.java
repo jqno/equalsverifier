@@ -13,7 +13,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
-    /* default */ InPlaceObjectAccessor(T object, Class<T> type) {
+    /* default */InPlaceObjectAccessor(T object, Class<T> type) {
         super(object, type);
     }
 
@@ -66,7 +66,10 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> clear(
-            Predicate<Field> canBeDefault, PrefabValues prefabValues, TypeTag enclosingType) {
+        Predicate<Field> canBeDefault,
+        PrefabValues prefabValues,
+        TypeTag enclosingType
+    ) {
         for (Field field : FieldIterable.of(type())) {
             FieldModifier modifier = fieldModifierFor(field);
             modifier.defaultField();
@@ -87,7 +90,10 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> withChangedField(
-            Field field, PrefabValues prefabValues, TypeTag enclosingType) {
+        Field field,
+        PrefabValues prefabValues,
+        TypeTag enclosingType
+    ) {
         fieldModifierFor(field).changeField(prefabValues, enclosingType);
         return this;
     }

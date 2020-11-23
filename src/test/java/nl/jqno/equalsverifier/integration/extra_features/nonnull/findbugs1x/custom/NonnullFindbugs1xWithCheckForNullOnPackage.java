@@ -3,8 +3,11 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.cus
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public final class NonnullFindbugs1xWithCheckForNullOnPackage {
+
     private final Object o;
-    @edu.umd.cs.findbugs.annotations.CheckForNull private final Object p;
+
+    @edu.umd.cs.findbugs.annotations.CheckForNull
+    private final Object p;
 
     public NonnullFindbugs1xWithCheckForNullOnPackage(Object o, Object p) {
         this.o = o;
@@ -16,8 +19,7 @@ public final class NonnullFindbugs1xWithCheckForNullOnPackage {
         if (!(obj instanceof NonnullFindbugs1xWithCheckForNullOnPackage)) {
             return false;
         }
-        NonnullFindbugs1xWithCheckForNullOnPackage other =
-                (NonnullFindbugs1xWithCheckForNullOnPackage) obj;
+        NonnullFindbugs1xWithCheckForNullOnPackage other = (NonnullFindbugs1xWithCheckForNullOnPackage) obj;
         return o.equals(other.o) && p.equals(other.p);
     }
 

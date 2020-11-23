@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 class AnnotationClassCache {
+
     private final Set<Annotation> classAnnotations = new HashSet<>();
     private final Map<String, Set<Annotation>> fieldAnnotations = new HashMap<>();
 
@@ -16,8 +17,10 @@ class AnnotationClassCache {
     }
 
     public boolean hasFieldAnnotation(String fieldName, Annotation annotation) {
-        return fieldAnnotations.containsKey(fieldName)
-                && fieldAnnotations.get(fieldName).contains(annotation);
+        return (
+            fieldAnnotations.containsKey(fieldName) &&
+            fieldAnnotations.get(fieldName).contains(annotation)
+        );
     }
 
     public void addClassAnnotation(Annotation annotation) {

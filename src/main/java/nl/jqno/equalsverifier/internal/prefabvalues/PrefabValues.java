@@ -15,6 +15,7 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  * account; i.e., {@code List<Integer>} is different from {@code List<String>}.
  */
 public class PrefabValues {
+
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
@@ -90,9 +91,11 @@ public class PrefabValues {
      */
     public <T> T giveOther(TypeTag tag, T value) {
         Class<T> type = tag.getType();
-        if (value != null
-                && !type.isAssignableFrom(value.getClass())
-                && !wraps(type, value.getClass())) {
+        if (
+            value != null &&
+            !type.isAssignableFrom(value.getClass()) &&
+            !wraps(type, value.getClass())
+        ) {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
@@ -115,7 +118,7 @@ public class PrefabValues {
 
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
         // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
-        return Arrays.deepEquals(new Object[] {x}, new Object[] {y});
+        return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
     }
 
     private LinkedHashSet<TypeTag> emptyStack() {

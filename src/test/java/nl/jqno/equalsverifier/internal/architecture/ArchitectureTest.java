@@ -10,32 +10,35 @@ import com.tngtech.archunit.lang.ArchRule;
 public final class ArchitectureTest {
 
     @ArchTest
-    public static final ArchRule APACHE_COMMONS =
-            noClasses()
-                    .that()
-                    .haveNameNotMatching(".*SuperclassTest.*")
-                    .should()
-                    .accessClassesThat()
-                    .resideInAPackage("org.apache.commons..");
+    public static final ArchRule APACHE_COMMONS = noClasses()
+        .that()
+        .haveNameNotMatching(".*SuperclassTest.*")
+        .should()
+        .accessClassesThat()
+        .resideInAPackage("org.apache.commons..");
 
     @ArchTest
-    public static final ArchRule AWT =
-            dontAllowImports_outsideFactoryProvidersAndTests_from("java.awt.common..");
+    public static final ArchRule AWT = dontAllowImports_outsideFactoryProvidersAndTests_from(
+        "java.awt.common.."
+    );
 
     @ArchTest
-    public static final ArchRule GUAVA =
-            dontAllowImports_outsideFactoryProvidersAndTests_from("com.google.common..");
+    public static final ArchRule GUAVA = dontAllowImports_outsideFactoryProvidersAndTests_from(
+        "com.google.common.."
+    );
 
     @ArchTest
-    public static final ArchRule JAVAFX =
-            dontAllowImports_outsideFactoryProvidersAndTests_from("javafx..");
+    public static final ArchRule JAVAFX = dontAllowImports_outsideFactoryProvidersAndTests_from(
+        "javafx.."
+    );
 
     @ArchTest
-    public static final ArchRule JODA =
-            dontAllowImports_outsideFactoryProvidersAndTests_from("org.joda..");
+    public static final ArchRule JODA = dontAllowImports_outsideFactoryProvidersAndTests_from(
+        "org.joda.."
+    );
 
     private static final String FACTORYPROVIDER_PATTERN =
-            "nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders..";
+        "nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders..";
     private static final String TEST_CLASS_PATTERN = ".*Test(\\$.*)?$";
 
     private ArchitectureTest() {
@@ -43,14 +46,15 @@ public final class ArchitectureTest {
     }
 
     private static ArchRule dontAllowImports_outsideFactoryProvidersAndTests_from(
-            String packageName) {
+        String packageName
+    ) {
         return noClasses()
-                .that()
-                .resideOutsideOfPackage(FACTORYPROVIDER_PATTERN)
-                .and()
-                .haveNameNotMatching(TEST_CLASS_PATTERN)
-                .should()
-                .accessClassesThat()
-                .resideInAPackage(packageName);
+            .that()
+            .resideOutsideOfPackage(FACTORYPROVIDER_PATTERN)
+            .and()
+            .haveNameNotMatching(TEST_CLASS_PATTERN)
+            .should()
+            .accessClassesThat()
+            .resideInAPackage(packageName);
     }
 }

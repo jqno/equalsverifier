@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 
 public final class Util {
+
     private Util() {}
 
     public static boolean defaultEquals(Object here, Object there) {

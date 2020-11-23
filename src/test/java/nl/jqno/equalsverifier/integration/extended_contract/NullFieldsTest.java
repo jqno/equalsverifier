@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class NullFieldsTest {
+
     private static final String NON_NULLITY = "Non-nullity";
     private static final String EQUALS = "equals throws NullPointerException";
     private static final String HASHCODE = "hashCode throws NullPointerException";
@@ -18,35 +19,38 @@ public class NullFieldsTest {
 
     @Test
     public void fail_whenEqualsThrowsNpeOnThissField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
     }
 
     @Test
     public void fail_whenEqualsThrowsNpeOnOthersField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
     }
 
     @Test
     public void fail_whenEqualsThrowsNpeOnStaticField() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
     }
 
     @Test
     public void fail_whenHashCodeThrowsNpe() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains(NON_NULLITY, HASHCODE, ON_FIELD, "color");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains(NON_NULLITY, HASHCODE, ON_FIELD, "color");
     }
 
     @Test
@@ -65,8 +69,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void
-            succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
+    public void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(DeepNullB.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
@@ -77,10 +80,11 @@ public class NullFieldsTest {
 
     @Test
     public void fail_whenClassHasNullChecksForOnlySomeFields() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(MixedNullFields.class).verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "o");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(MixedNullFields.class).verify())
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "o");
     }
 
     @Test
@@ -95,43 +99,56 @@ public class NullFieldsTest {
 
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(MixedNullFields.class)
-                                        .withNonnullFields("thisFieldDoesNotExist"))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                        "Precondition",
-                        "class MixedNullFields does not contain field thisFieldDoesNotExist.");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(MixedNullFields.class)
+                        .withNonnullFields("thisFieldDoesNotExist")
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "Precondition",
+                "class MixedNullFields does not contain field thisFieldDoesNotExist."
+            );
     }
 
     @Test
     public void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(MixedNullFields.class)
-                                        .withNonnullFields("o")
-                                        .suppress(Warning.NULL_FIELDS))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                        "Precondition",
-                        "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(MixedNullFields.class)
+                        .withNonnullFields("o")
+                        .suppress(Warning.NULL_FIELDS)
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "Precondition",
+                "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both."
+            );
     }
 
     @Test
     public void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(MixedNullFields.class)
-                                        .suppress(Warning.NULL_FIELDS)
-                                        .withNonnullFields("o"))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                        "Precondition",
-                        "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both.");
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(MixedNullFields.class)
+                        .suppress(Warning.NULL_FIELDS)
+                        .withNonnullFields("o")
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "Precondition",
+                "you can call either withNonnullFields or suppress Warning.NULL_FIELDS, but not both."
+            );
     }
 
     static final class EqualsThrowsNpeOnThis {
+
         private final Color color;
 
         public EqualsThrowsNpeOnThis(Color color) {
@@ -154,6 +171,7 @@ public class NullFieldsTest {
     }
 
     static final class EqualsThrowsNpeOnOther {
+
         private final Color color;
 
         public EqualsThrowsNpeOnOther(Color color) {
@@ -176,6 +194,7 @@ public class NullFieldsTest {
     }
 
     static final class EqualsThrowsNpeOnStatic {
+
         private static Color color = Color.INDIGO;
 
         @Override
@@ -194,6 +213,7 @@ public class NullFieldsTest {
     }
 
     static final class HashCodeThrowsNpe {
+
         private final Color color;
 
         public HashCodeThrowsNpe(Color color) {
@@ -218,6 +238,7 @@ public class NullFieldsTest {
     }
 
     static final class CheckedDeepNullA {
+
         private final DeepNullB b;
 
         public CheckedDeepNullA(DeepNullB b) {
@@ -236,6 +257,7 @@ public class NullFieldsTest {
     }
 
     static final class DeepNullA {
+
         private final DeepNullB b;
 
         public DeepNullA(DeepNullB b) {
@@ -258,6 +280,7 @@ public class NullFieldsTest {
     }
 
     static final class DeepNullB {
+
         private final Object o;
 
         public DeepNullB(Object o) {
@@ -280,6 +303,7 @@ public class NullFieldsTest {
     }
 
     static final class ConstantFieldIsNull {
+
         private static final String NULL_CONSTANT = null;
         private final Object o;
 
@@ -299,6 +323,7 @@ public class NullFieldsTest {
     }
 
     static final class MixedNullFields {
+
         private final Object o;
         private final Object p;
 
