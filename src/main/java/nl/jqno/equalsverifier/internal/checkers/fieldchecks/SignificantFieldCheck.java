@@ -108,10 +108,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             }
             Formatter formatter = Formatter.of(
                 "Significant fields: hashCode relies on %%, but equals does not.\n" +
-                "These objects are equal, but probably shouldn't be:\n" +
-                "  %%\n" +
-                "and\n" +
-                "  %%",
+                "These objects are equal, but probably shouldn't be:\n  %%\nand\n  %%",
                 fieldName,
                 reference,
                 changed

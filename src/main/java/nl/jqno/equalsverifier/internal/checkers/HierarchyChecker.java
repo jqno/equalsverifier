@@ -32,7 +32,7 @@ public class HierarchyChecker<T> implements Checker {
         if (nonStrict && hasRedefinedSubclass) {
             fail(
                 Formatter.of(
-                    "withRedefinedSubclass and weakInheritanceCheck are mutually" + " exclusive."
+                    "withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."
                 )
             );
         }
@@ -66,10 +66,7 @@ public class HierarchyChecker<T> implements Checker {
 
             Formatter formatter = Formatter.of(
                 "Redefined superclass:\n" +
-                "  %%\n" +
-                "should not equal superclass instance\n" +
-                "  %%\n" +
-                "but it does.",
+                "  %%\nshould not equal superclass instance\n  %%\nbut it does.",
                 reference,
                 equalSuper
             );
@@ -127,12 +124,7 @@ public class HierarchyChecker<T> implements Checker {
 
         Formatter transitivityFormatter = Formatter.of(
             "Transitivity:\n" +
-            "  %%\n" +
-            "and\n" +
-            "  %%\n" +
-            "both equal superclass instance\n" +
-            "  %%\n" +
-            "which implies they equal each other.",
+            "  %%\nand\n  %%\nboth equal superclass instance\n  %%\nwhich implies they equal each other.",
             reference,
             shallow,
             equalSuper
@@ -145,10 +137,7 @@ public class HierarchyChecker<T> implements Checker {
         int referenceHashCode = cachedHashCodeInitializer.getInitializedHashCode(reference);
         int equalSuperHashCode = cachedHashCodeInitializer.getInitializedHashCode(equalSuper);
         Formatter superclassFormatter = Formatter.of(
-            "Superclass: hashCode for\n" +
-            "  %% (%%)\n" +
-            "should be equal to hashCode for superclass instance\n" +
-            "  %% (%%)",
+            "Superclass: hashCode for\n  %% (%%)\nshould be equal to hashCode for superclass instance\n  %% (%%)",
             reference,
             referenceHashCode,
             equalSuper,
@@ -173,17 +162,14 @@ public class HierarchyChecker<T> implements Checker {
         if (config.isUsingGetClass()) {
             Formatter formatter = Formatter.of(
                 "Subclass: object is equal to an instance of a trivial subclass with" +
-                " equal fields:\n" +
-                "  %%\n" +
-                "This should not happen when using getClass().",
+                " equal fields:\n  %%\nThis should not happen when using getClass().",
                 reference
             );
             assertFalse(formatter, reference.equals(equalSub));
         } else {
             Formatter formatter = Formatter.of(
                 "Subclass: object is not equal to an instance of a trivial subclass" +
-                " with equal fields:\n" +
-                "  %%\n" +
+                " with equal fields:\n  %%\n" +
                 "Maybe you forgot to add usingGetClass(). Otherwise, consider" +
                 " making the class final or use EqualsVerifier.simple().",
                 reference
@@ -200,8 +186,7 @@ public class HierarchyChecker<T> implements Checker {
         if (methodIsFinal("equals", Object.class)) {
             fail(
                 Formatter.of(
-                    "Subclass: %% has a final equals method.\n" +
-                    "No need to supply a redefined subclass.",
+                    "Subclass: %% has a final equals method.\nNo need to supply a redefined subclass.",
                     type.getSimpleName()
                 )
             );
@@ -235,7 +220,7 @@ public class HierarchyChecker<T> implements Checker {
         if (config.isUsingGetClass()) {
             assertEquals(
                 Formatter.of(
-                    "Finality: equals and hashCode must both be final or both be" + " non-final."
+                    "Finality: equals and hashCode must both be final or both be non-final."
                 ),
                 equalsIsFinal,
                 hashCodeIsFinal

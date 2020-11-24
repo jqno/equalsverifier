@@ -87,7 +87,7 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     private void assertArray(String fieldName, Object reference, Object changed) {
         assertEquals(
             Formatter.of(
-                "Array: == or regular equals() used instead of Arrays.equals() for field" + " %%.",
+                "Array: == or regular equals() used instead of Arrays.equals() for field %%.",
                 fieldName
             ),
             reference,

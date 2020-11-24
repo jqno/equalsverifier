@@ -99,8 +99,7 @@ public class ExamplesChecker<T> implements Checker {
         } catch (ClassCastException e) {
             Formatter f = Formatter.of(
                 "Generics: ClassCastException was thrown. Consider using" +
-                " withGenericPrefabValues for the type that triggered the" +
-                " exception."
+                " withGenericPrefabValues for the type that triggered the exception."
             );
             fail(f, e);
         }
@@ -188,8 +187,7 @@ public class ExamplesChecker<T> implements Checker {
 
     @SuppressFBWarnings(
         value = "HE_HASHCODE_USE_OBJECT_EQUALS",
-        justification = "The hashCode must be stable, the class has no state so we don't need to" +
-        " override equals"
+        justification = "The hashCode must be stable, the class has no state so we don't need to override equals"
     )
     private static final class SomethingElse {
 
