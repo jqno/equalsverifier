@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class Util {
+
     private Util() {
         // Do not instantiate
     }
@@ -52,7 +53,7 @@ public final class Util {
      * @return An array with the given object.
      */
     public static Object[] objects(Object first) {
-        return new Object[] {first};
+        return new Object[] { first };
     }
 
     /**
@@ -63,7 +64,7 @@ public final class Util {
      * @return An array with the given objects.
      */
     public static Object[] objects(Object first, Object second) {
-        return new Object[] {first, second};
+        return new Object[] { first, second };
     }
 
     /**
@@ -75,7 +76,7 @@ public final class Util {
      * @return An array with the given objects.
      */
     public static Object[] objects(Object first, Object second, Object third) {
-        return new Object[] {first, second, third};
+        return new Object[] { first, second, third };
     }
 
     /**

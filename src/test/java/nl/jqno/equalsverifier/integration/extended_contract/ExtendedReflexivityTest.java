@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class ExtendedReflexivityTest {
+
     @Test
     public void succeed_whenEqualsUsesEqualsMethodForObjects() {
         EqualsVerifier.forClass(UsesEqualsMethod.class).verify();
@@ -17,37 +18,34 @@ public class ExtendedReflexivityTest {
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForObjects() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity", "== used instead of .equals()", "stringField");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
+            .assertFailure()
+            .assertMessageContains("Reflexivity", "== used instead of .equals()", "stringField");
     }
 
     @Test
-    public void
-            succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
-        EqualsVerifier.forClass(UsesDoubleEqualSign.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
-                .verify();
+    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(UsesDoubleEqualSign.class)
+            .suppress(Warning.REFERENCE_EQUALITY)
+            .verify();
     }
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedPrimitives() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Reflexivity", "== used instead of .equals()", "integerField");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class).verify())
+            .assertFailure()
+            .assertMessageContains("Reflexivity", "== used instead of .equals()", "integerField");
     }
 
     @Test
-    public void
-            succeed_whenEqualsUsesDoubleEqualSignForBoxedPrimitives_givenDoubleEqualWarningIsSuppressed() {
-        EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
-                .suppress(Warning.REFERENCE_EQUALITY)
-                .verify();
+    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedPrimitives_givenDoubleEqualWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(UsesDoubleEqualSignOnBoxedPrimitive.class)
+            .suppress(Warning.REFERENCE_EQUALITY)
+            .verify();
     }
 
     @Test
@@ -61,12 +59,12 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void
-            succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterfaceWithEquals() {
+    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterfaceWithEquals() {
         EqualsVerifier.forClass(FieldIsInterfaceWithEquals.class).verify();
     }
 
     static final class UsesEqualsMethod {
+
         private final String s;
 
         public UsesEqualsMethod(String s) {
@@ -89,6 +87,7 @@ public class ExtendedReflexivityTest {
     }
 
     static final class UsesDoubleEqualSign {
+
         private final String stringField;
 
         public UsesDoubleEqualSign(String s) {
@@ -111,6 +110,7 @@ public class ExtendedReflexivityTest {
     }
 
     static final class UsesDoubleEqualSignOnBoxedPrimitive {
+
         private final Integer integerField;
 
         public UsesDoubleEqualSignOnBoxedPrimitive(Integer i) {
@@ -133,6 +133,7 @@ public class ExtendedReflexivityTest {
     }
 
     static final class FieldHasNoEquals {
+
         @SuppressWarnings("unused")
         private final NoEquals field;
 
@@ -154,6 +155,7 @@ public class ExtendedReflexivityTest {
     }
 
     static final class FieldIsInterface {
+
         @SuppressWarnings("unused")
         private final Interface field;
 
@@ -175,6 +177,7 @@ public class ExtendedReflexivityTest {
     }
 
     static final class FieldIsInterfaceWithEquals {
+
         @SuppressWarnings("unused")
         private final InterfaceWithEquals field;
 

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public final class ColorBlindColorPoint extends Point {
+
     public final Color color;
 
     public ColorBlindColorPoint(int x, int y, Color color) {

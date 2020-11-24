@@ -15,6 +15,7 @@ import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
 public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
+
     private final EnumSet<Warning> warningsToSuppress;
     private final FactoryCache factoryCache;
     private boolean usingGetClass;
@@ -26,7 +27,10 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     /** Private constructor. For internal use only. */
     private ConfiguredEqualsVerifier(
-            EnumSet<Warning> warningsToSuppress, FactoryCache factoryCache, boolean usingGetClass) {
+        EnumSet<Warning> warningsToSuppress,
+        FactoryCache factoryCache,
+        boolean usingGetClass
+    ) {
         this.warningsToSuppress = warningsToSuppress;
         this.factoryCache = factoryCache;
         this.usingGetClass = usingGetClass;
@@ -39,9 +43,10 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     public ConfiguredEqualsVerifier copy() {
         return new ConfiguredEqualsVerifier(
-                EnumSet.copyOf(warningsToSuppress),
-                new FactoryCache().merge(factoryCache),
-                usingGetClass);
+            EnumSet.copyOf(warningsToSuppress),
+            new FactoryCache().merge(factoryCache),
+            usingGetClass
+        );
     }
 
     /** {@inheritDoc} */
@@ -61,7 +66,9 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
-            Class<S> otherType, Func1<?, S> factory) {
+        Class<S> otherType,
+        Func1<?, S> factory
+    ) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -69,7 +76,9 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
-            Class<S> otherType, Func2<?, ?, S> factory) {
+        Class<S> otherType,
+        Func2<?, ?, S> factory
+    ) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -90,7 +99,11 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     public <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
         return new SingleTypeEqualsVerifierApi<>(
-                type, EnumSet.copyOf(warningsToSuppress), factoryCache, usingGetClass);
+            type,
+            EnumSet.copyOf(warningsToSuppress),
+            factoryCache,
+            usingGetClass
+        );
     }
 
     /**
@@ -113,9 +126,14 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @return A fluent API for EqualsVerifier.
      */
     public MultipleTypeEqualsVerifierApi forClasses(
-            Class<?> first, Class<?> second, Class<?>... more) {
+        Class<?> first,
+        Class<?> second,
+        Class<?>... more
+    ) {
         return new MultipleTypeEqualsVerifierApi(
-                ListBuilders.buildListOfAtLeastTwo(first, second, more), this);
+            ListBuilders.buildListOfAtLeastTwo(first, second, more),
+            this
+        );
     }
 
     /**

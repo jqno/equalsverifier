@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public class Pair<T, U> {
+
     private final T left;
     private final U right;
 

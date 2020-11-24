@@ -178,7 +178,7 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean spotless:apply verify</defaultGoal>
+        <defaultGoal>clean prettier:write verify</defaultGoal>
 
         <plugins>
             <plugin>
@@ -429,19 +429,16 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <version>2.6.0</version>
+                        <groupId>com.hubspot.maven.plugins</groupId>
+                        <artifactId>prettier-maven-plugin</artifactId>
+                        <version>0.11</version>
                         <configuration>
-                            <java>
-                                <googleJavaFormat>
-                                    <version>1.9</version>
-                                    <style>AOSP</style>
-                                </googleJavaFormat>
-                            </java>
+                            <nodeVersion>12.13.0</nodeVersion>
+                            <prettierJavaVersion>0.8.3</prettierJavaVersion>
                         </configuration>
                         <executions>
                             <execution>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>

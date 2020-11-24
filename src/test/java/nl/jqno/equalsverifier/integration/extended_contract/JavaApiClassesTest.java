@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 // CHECKSTYLE OFF: ParameterNumber
 
 public class JavaApiClassesTest {
+
     @Test
     public void succeed_whenClassContainsASuperCollection() {
         EqualsVerifier.forClass(SuperCollectionContainer.class).verify();
@@ -64,10 +65,11 @@ public class JavaApiClassesTest {
 
     @Test
     public void succeed_whenClassContainsReflectionApiClass() {
-        EqualsVerifier.forClass(ReflectionClassesContainer.class)
-                // Because java.lang.reflect.Constructor's hashCode() is unhelpful
-                .suppress(Warning.STRICT_HASHCODE)
-                .verify();
+        EqualsVerifier
+            .forClass(ReflectionClassesContainer.class)
+            // Because java.lang.reflect.Constructor's hashCode() is unhelpful
+            .suppress(Warning.STRICT_HASHCODE)
+            .verify();
     }
 
     @Test
@@ -92,16 +94,18 @@ public class JavaApiClassesTest {
 
     @Test
     public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
-        EqualsVerifier.forClass(StringBuilderContainer.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(StringBuilderContainer.class)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
     public void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
-        EqualsVerifier.forClass(UnusedInEqualsButPresentInClassContainer.class)
-                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        EqualsVerifier
+            .forClass(UnusedInEqualsButPresentInClassContainer.class)
+            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
+            .verify();
     }
 
     abstract static class CollectionContainer {
@@ -131,6 +135,7 @@ public class JavaApiClassesTest {
     }
 
     static final class SuperCollectionContainer extends CollectionContainer {
+
         private final Iterable<String> iterable;
         private final Collection<String> collection;
 
@@ -157,6 +162,7 @@ public class JavaApiClassesTest {
     }
 
     static final class ListContainer extends CollectionContainer {
+
         private final List<String> list;
         private final CopyOnWriteArrayList<String> copyOnWriteArrayList;
         private final LinkedList<String> linkedList;
@@ -165,12 +171,13 @@ public class JavaApiClassesTest {
         private final Stack<String> stack;
 
         public ListContainer(
-                List<String> list,
-                CopyOnWriteArrayList<String> copyOnWriteArrayList,
-                LinkedList<String> linkedList,
-                ArrayList<String> arrayList,
-                Vector<String> vector,
-                Stack<String> stack) {
+            List<String> list,
+            CopyOnWriteArrayList<String> copyOnWriteArrayList,
+            LinkedList<String> linkedList,
+            ArrayList<String> arrayList,
+            Vector<String> vector,
+            Stack<String> stack
+        ) {
             this.list = list;
             this.copyOnWriteArrayList = copyOnWriteArrayList;
             this.linkedList = linkedList;
@@ -198,6 +205,7 @@ public class JavaApiClassesTest {
     }
 
     static final class SetContainer extends CollectionContainer {
+
         private final Set<String> set;
         private final SortedSet<String> sortedSet;
         private final NavigableSet<String> navigableSet;
@@ -207,13 +215,14 @@ public class JavaApiClassesTest {
         private final EnumSet<TypeHelper.Enum> enumSet;
 
         public SetContainer(
-                Set<String> set,
-                SortedSet<String> sortedSet,
-                NavigableSet<String> navigableSet,
-                CopyOnWriteArraySet<String> copyOnWriteArraySet,
-                HashSet<String> hashSet,
-                TreeSet<String> treeSet,
-                EnumSet<TypeHelper.Enum> enumSet) {
+            Set<String> set,
+            SortedSet<String> sortedSet,
+            NavigableSet<String> navigableSet,
+            CopyOnWriteArraySet<String> copyOnWriteArraySet,
+            HashSet<String> hashSet,
+            TreeSet<String> treeSet,
+            EnumSet<TypeHelper.Enum> enumSet
+        ) {
             this.set = set;
             this.sortedSet = sortedSet;
             this.navigableSet = navigableSet;
@@ -242,6 +251,7 @@ public class JavaApiClassesTest {
     }
 
     static final class QueueContainer extends CollectionContainer {
+
         private final Queue<String> queue;
         private final BlockingQueue<String> blockingQueue;
         private final Deque<String> deque;
@@ -254,16 +264,17 @@ public class JavaApiClassesTest {
         private final SynchronousQueue<String> synchronousQueue;
 
         public QueueContainer(
-                Queue<String> queue,
-                BlockingQueue<String> blockingQueue,
-                Deque<String> deque,
-                BlockingDeque<String> blockingDeque,
-                ArrayBlockingQueue<String> arrayBlockingQueue,
-                ConcurrentLinkedQueue<String> concurrentLinkedQueue,
-                DelayQueue<Delayed> delayQueue,
-                LinkedBlockingQueue<String> linkedBlockingQueue,
-                PriorityBlockingQueue<String> priorityBlockingQueue,
-                SynchronousQueue<String> synchronousQueue) {
+            Queue<String> queue,
+            BlockingQueue<String> blockingQueue,
+            Deque<String> deque,
+            BlockingDeque<String> blockingDeque,
+            ArrayBlockingQueue<String> arrayBlockingQueue,
+            ConcurrentLinkedQueue<String> concurrentLinkedQueue,
+            DelayQueue<Delayed> delayQueue,
+            LinkedBlockingQueue<String> linkedBlockingQueue,
+            PriorityBlockingQueue<String> priorityBlockingQueue,
+            SynchronousQueue<String> synchronousQueue
+        ) {
             this.queue = queue;
             this.blockingQueue = blockingQueue;
             this.deque = deque;
@@ -296,6 +307,7 @@ public class JavaApiClassesTest {
     }
 
     static final class MapContainer extends CollectionContainer {
+
         private final Map<String, String> map;
         private final SortedMap<String, String> sortedMap;
         private final NavigableMap<String, String> navigableMap;
@@ -310,18 +322,19 @@ public class JavaApiClassesTest {
         private final EnumMap<TypeHelper.Enum, String> enumMap;
 
         public MapContainer(
-                Map<String, String> map,
-                SortedMap<String, String> sortedMap,
-                NavigableMap<String, String> navigableMap,
-                ConcurrentNavigableMap<String, String> concurrentNavigableMap,
-                ConcurrentHashMap<String, String> concurrentHashMap,
-                HashMap<String, String> hashMap,
-                Hashtable<String, String> hashtable,
-                LinkedHashMap<String, String> linkedHashMap,
-                Properties properties,
-                TreeMap<String, String> treeMap,
-                WeakHashMap<String, String> weakHashMap,
-                EnumMap<TypeHelper.Enum, String> enumMap) {
+            Map<String, String> map,
+            SortedMap<String, String> sortedMap,
+            NavigableMap<String, String> navigableMap,
+            ConcurrentNavigableMap<String, String> concurrentNavigableMap,
+            ConcurrentHashMap<String, String> concurrentHashMap,
+            HashMap<String, String> hashMap,
+            Hashtable<String, String> hashtable,
+            LinkedHashMap<String, String> linkedHashMap,
+            Properties properties,
+            TreeMap<String, String> treeMap,
+            WeakHashMap<String, String> weakHashMap,
+            EnumMap<TypeHelper.Enum, String> enumMap
+        ) {
             this.map = map;
             this.sortedMap = sortedMap;
             this.navigableMap = navigableMap;
@@ -358,6 +371,7 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class NioBufferContainer {
+
         private final Buffer buffer;
         private final ByteBuffer byteBuffer;
         private final CharBuffer charBuffer;
@@ -368,14 +382,15 @@ public class JavaApiClassesTest {
         private final ShortBuffer shortBuffer;
 
         public NioBufferContainer(
-                Buffer buffer,
-                ByteBuffer byteBuffer,
-                CharBuffer charBuffer,
-                DoubleBuffer doubleBuffer,
-                FloatBuffer floatBuffer,
-                IntBuffer intBuffer,
-                LongBuffer longBuffer,
-                ShortBuffer shortBuffer) {
+            Buffer buffer,
+            ByteBuffer byteBuffer,
+            CharBuffer charBuffer,
+            DoubleBuffer doubleBuffer,
+            FloatBuffer floatBuffer,
+            IntBuffer intBuffer,
+            LongBuffer longBuffer,
+            ShortBuffer shortBuffer
+        ) {
             this.buffer = buffer;
             this.byteBuffer = byteBuffer;
             this.charBuffer = charBuffer;
@@ -399,6 +414,7 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class CommonClassesContainer {
+
         private final String string;
         private final Integer integer;
         private final BitSet bitset;
@@ -423,28 +439,29 @@ public class JavaApiClassesTest {
         private final EventObject eventObject;
 
         public CommonClassesContainer(
-                String string,
-                Integer integer,
-                BitSet bitset,
-                Calendar calendar,
-                Date date,
-                File file,
-                GregorianCalendar gregorianCalendar,
-                Pattern pattern,
-                SimpleDateFormat simpleDateFormat,
-                URI uri,
-                URL url,
-                UUID uuid,
-                InetAddress inetAddress,
-                Inet4Address inet4Address,
-                Inet6Address inet6Address,
-                InetSocketAddress inetSocketAddress,
-                Thread thread,
-                java.sql.Date sqlDate,
-                java.sql.Time sqlTime,
-                java.sql.Timestamp sqlTimestamp,
-                Currency currency,
-                EventObject eventObject) {
+            String string,
+            Integer integer,
+            BitSet bitset,
+            Calendar calendar,
+            Date date,
+            File file,
+            GregorianCalendar gregorianCalendar,
+            Pattern pattern,
+            SimpleDateFormat simpleDateFormat,
+            URI uri,
+            URL url,
+            UUID uuid,
+            InetAddress inetAddress,
+            Inet4Address inet4Address,
+            Inet6Address inet6Address,
+            InetSocketAddress inetSocketAddress,
+            Thread thread,
+            java.sql.Date sqlDate,
+            java.sql.Time sqlTime,
+            java.sql.Timestamp sqlTimestamp,
+            Currency currency,
+            EventObject eventObject
+        ) {
             this.string = string;
             this.integer = integer;
             this.bitset = bitset;
@@ -482,6 +499,7 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class Java8ApiClassesContainer {
+
         private final Optional<?> optional;
         private final OptionalDouble optionalDouble;
         private final OptionalInt optionalInt;
@@ -506,28 +524,29 @@ public class JavaApiClassesTest {
         private final YearMonth yearMonth;
 
         public Java8ApiClassesContainer(
-                Optional<?> optional,
-                OptionalDouble optionalDouble,
-                OptionalInt optionalInt,
-                OptionalLong optionalLong,
-                LocalDate localDate,
-                LocalTime localTime,
-                LocalDateTime localDateTime,
-                ZoneId zoneId,
-                ZoneOffset zoneOffset,
-                ZonedDateTime zonedDateTime,
-                DateTimeFormatter dateTimeFormatter,
-                CompletableFuture<?> completableFuture,
-                StampedLock stampedLock,
-                Supplier<?> supplier,
-                Duration duration,
-                Instant instant,
-                MonthDay monthDay,
-                OffsetDateTime offsetDateTime,
-                OffsetTime offsetTime,
-                Period period,
-                Year year,
-                YearMonth yearMonth) {
+            Optional<?> optional,
+            OptionalDouble optionalDouble,
+            OptionalInt optionalInt,
+            OptionalLong optionalLong,
+            LocalDate localDate,
+            LocalTime localTime,
+            LocalDateTime localDateTime,
+            ZoneId zoneId,
+            ZoneOffset zoneOffset,
+            ZonedDateTime zonedDateTime,
+            DateTimeFormatter dateTimeFormatter,
+            CompletableFuture<?> completableFuture,
+            StampedLock stampedLock,
+            Supplier<?> supplier,
+            Duration duration,
+            Instant instant,
+            MonthDay monthDay,
+            OffsetDateTime offsetDateTime,
+            OffsetTime offsetTime,
+            Period period,
+            Year year,
+            YearMonth yearMonth
+        ) {
             this.optional = optional;
             this.optionalDouble = optionalDouble;
             this.optionalInt = optionalInt;
@@ -565,13 +584,18 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class ReflectionClassesContainer {
+
         private final Class<?> type;
         private final Method method;
         private final Field field;
         private final Constructor<?> constructor;
 
         public ReflectionClassesContainer(
-                Class<?> type, Method method, Field field, Constructor<?> constructor) {
+            Class<?> type,
+            Method method,
+            Field field,
+            Constructor<?> constructor
+        ) {
             this.type = type;
             this.method = method;
             this.field = field;
@@ -591,6 +615,7 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class AtomicClassesContainer {
+
         private final AtomicBoolean atomicBoolean;
         private final AtomicInteger atomicInteger;
         private final AtomicIntegerArray atomicIntegerArray;
@@ -602,15 +627,16 @@ public class JavaApiClassesTest {
         private final AtomicStampedReference<?> atomicStampedReference;
 
         public AtomicClassesContainer(
-                AtomicBoolean atomicBoolean,
-                AtomicInteger atomicInteger,
-                AtomicIntegerArray atomicIntegerArray,
-                AtomicLong atomicLong,
-                AtomicLongArray atomicLongArray,
-                AtomicMarkableReference<?> atomicMarkableReference,
-                AtomicReference<?> atomicReference,
-                AtomicReferenceArray<?> atomicReferenceArray,
-                AtomicStampedReference<?> atomicStampedReference) {
+            AtomicBoolean atomicBoolean,
+            AtomicInteger atomicInteger,
+            AtomicIntegerArray atomicIntegerArray,
+            AtomicLong atomicLong,
+            AtomicLongArray atomicLongArray,
+            AtomicMarkableReference<?> atomicMarkableReference,
+            AtomicReference<?> atomicReference,
+            AtomicReferenceArray<?> atomicReferenceArray,
+            AtomicStampedReference<?> atomicStampedReference
+        ) {
             this.atomicBoolean = atomicBoolean;
             this.atomicInteger = atomicInteger;
             this.atomicIntegerArray = atomicIntegerArray;
@@ -635,6 +661,7 @@ public class JavaApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class AncientJavaApiClassesContainer {
+
         private final java.awt.color.ColorSpace awtColorSpace;
         private final java.awt.color.ICC_ColorSpace iccColorSpace;
         private final java.awt.color.ICC_Profile iccProfile;
@@ -643,12 +670,13 @@ public class JavaApiClassesTest {
         private final java.rmi.server.UID uid;
 
         public AncientJavaApiClassesContainer(
-                java.awt.color.ColorSpace awtColorSpace,
-                java.awt.color.ICC_ColorSpace iccColorSpace,
-                java.awt.color.ICC_Profile iccProfile,
-                java.awt.Font font,
-                java.rmi.dgc.VMID vmid,
-                java.rmi.server.UID uid) {
+            java.awt.color.ColorSpace awtColorSpace,
+            java.awt.color.ICC_ColorSpace iccColorSpace,
+            java.awt.color.ICC_Profile iccProfile,
+            java.awt.Font font,
+            java.rmi.dgc.VMID vmid,
+            java.rmi.server.UID uid
+        ) {
             this.awtColorSpace = awtColorSpace;
             this.iccColorSpace = iccColorSpace;
             this.iccProfile = iccProfile;
@@ -669,6 +697,7 @@ public class JavaApiClassesTest {
     }
 
     static final class ThreadLocalContainer {
+
         public static final ThreadLocal<Integer> RED_INSTANCE = createInstance(10);
         private final ThreadLocal<Integer> instance = RED_INSTANCE;
 
@@ -706,6 +735,7 @@ public class JavaApiClassesTest {
     }
 
     static final class StringBuilderContainer {
+
         private final StringBuilder stringBuilder;
 
         public StringBuilderContainer(StringBuilder stringBuilder) {
@@ -728,6 +758,7 @@ public class JavaApiClassesTest {
     }
 
     static final class UnusedInEqualsButPresentInClassContainer {
+
         private final PropertyChangeSupport pcs;
 
         public UnusedInEqualsButPresentInClassContainer(PropertyChangeSupport pcs) {

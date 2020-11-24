@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class AssertTest {
+
     private static final Formatter FAIL = Formatter.of("fail");
 
     @Test
@@ -23,9 +24,10 @@ public class AssertTest {
 
     @Test
     public void assertEqualsObjectFailure() {
-        ExpectedException.when(() -> Assert.assertEquals(FAIL, "one", "two"))
-                .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+        ExpectedException
+            .when(() -> Assert.assertEquals(FAIL, "one", "two"))
+            .assertThrows(AssertionException.class)
+            .assertDescriptionContains("fail");
     }
 
     @Test
@@ -35,9 +37,10 @@ public class AssertTest {
 
     @Test
     public void assertFalseFailure() {
-        ExpectedException.when(() -> Assert.assertFalse(FAIL, true))
-                .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+        ExpectedException
+            .when(() -> Assert.assertFalse(FAIL, true))
+            .assertThrows(AssertionException.class)
+            .assertDescriptionContains("fail");
     }
 
     @Test
@@ -47,15 +50,17 @@ public class AssertTest {
 
     @Test
     public void assertTrueFailure() {
-        ExpectedException.when(() -> Assert.assertTrue(FAIL, false))
-                .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+        ExpectedException
+            .when(() -> Assert.assertTrue(FAIL, false))
+            .assertThrows(AssertionException.class)
+            .assertDescriptionContains("fail");
     }
 
     @Test
     public void failFailure() {
-        ExpectedException.when(() -> Assert.fail(FAIL))
-                .assertThrows(AssertionException.class)
-                .assertDescriptionContains("fail");
+        ExpectedException
+            .when(() -> Assert.fail(FAIL))
+            .assertThrows(AssertionException.class)
+            .assertDescriptionContains("fail");
     }
 }

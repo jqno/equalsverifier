@@ -15,6 +15,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  * with generics.
  */
 public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T> {
+
     public static final TypeTag OBJECT_TYPE_TAG = new TypeTag(Object.class);
 
     protected LinkedHashSet<TypeTag> cloneWith(LinkedHashSet<TypeTag> typeStack, TypeTag tag) {
@@ -33,16 +34,21 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     protected TypeTag determineAndCacheActualTypeTag(
-            int n, TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        int n,
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return determineAndCacheActualTypeTag(n, tag, prefabValues, typeStack, null);
     }
 
     protected TypeTag determineAndCacheActualTypeTag(
-            int n,
-            TypeTag tag,
-            PrefabValues prefabValues,
-            LinkedHashSet<TypeTag> typeStack,
-            Class<?> bottomType) {
+        int n,
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack,
+        Class<?> bottomType
+    ) {
         TypeTag result = determineActualTypeTagFor(n, tag);
         if (bottomType != null && result.getType().equals(Object.class)) {
             result = new TypeTag(bottomType);
@@ -61,14 +67,16 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "EV is run only from within unit tests")
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "EV is run only from within unit tests"
+    )
     protected void invoke(
-            Class<?> type,
-            Object receiver,
-            String methodName,
-            Class<?>[] classes,
-            Object[] values) {
+        Class<?> type,
+        Object receiver,
+        String methodName,
+        Class<?>[] classes,
+        Object[] values
+    ) {
         try {
             Method method = type.getMethod(methodName, classes);
             // Not necessary in the common case, but required for

@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class NullFieldsWithExceptionsTest {
+
     private static final String EQUALS = "equals";
     private static final String HASH_CODE = "hashCode";
     private static final String THROWS = "throws";
@@ -17,51 +18,43 @@ public class NullFieldsWithExceptionsTest {
     private static final String WHEN_FOO_IS_NULL = "when field foo is null";
 
     @Test
-    public void
-            recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class).verify())
-                .assertFailure()
-                .assertCause(IllegalArgumentException.class)
-                .assertMessageContains(
-                        EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
+    public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class).verify())
+            .assertFailure()
+            .assertCause(IllegalArgumentException.class)
+            .assertMessageContains(EQUALS, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
     }
 
     @Test
-    public void
-            recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(EqualsIllegalStateThrower.class).verify())
-                .assertFailure()
-                .assertCause(IllegalStateException.class)
-                .assertMessageContains(EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
+    public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EqualsIllegalStateThrower.class).verify())
+            .assertFailure()
+            .assertCause(IllegalStateException.class)
+            .assertMessageContains(EQUALS, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
     }
 
     @Test
-    public void
-            recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class)
-                                        .verify())
-                .assertFailure()
-                .assertCause(IllegalArgumentException.class)
-                .assertMessageContains(
-                        HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
+    public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class).verify())
+            .assertFailure()
+            .assertCause(IllegalArgumentException.class)
+            .assertMessageContains(HASH_CODE, THROWS, ILLEGAL_ARGUMENT_EXCEPTION, WHEN_FOO_IS_NULL);
     }
 
     @Test
-    public void
-            recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(HashCodeIllegalStateThrower.class).verify())
-                .assertFailure()
-                .assertCause(IllegalStateException.class)
-                .assertMessageContains(
-                        HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
+    public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(HashCodeIllegalStateThrower.class).verify())
+            .assertFailure()
+            .assertCause(IllegalStateException.class)
+            .assertMessageContains(HASH_CODE, THROWS, ILLEGAL_STATE_EXCEPTION, WHEN_FOO_IS_NULL);
     }
 
     abstract static class EqualsThrower {
+
         private final String foo;
 
         public EqualsThrower(String foo) {
@@ -89,6 +82,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     static class EqualsIllegalArgumentThrower extends EqualsThrower {
+
         public EqualsIllegalArgumentThrower(String foo) {
             super(foo);
         }
@@ -100,6 +94,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     static class EqualsIllegalStateThrower extends EqualsThrower {
+
         public EqualsIllegalStateThrower(String foo) {
             super(foo);
         }
@@ -111,6 +106,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     abstract static class HashCodeThrower {
+
         private final String foo;
 
         public HashCodeThrower(String foo) {
@@ -134,6 +130,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     static class HashCodeIllegalArgumentThrower extends HashCodeThrower {
+
         public HashCodeIllegalArgumentThrower(String foo) {
             super(foo);
         }
@@ -145,6 +142,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     static class HashCodeIllegalStateThrower extends HashCodeThrower {
+
         public HashCodeIllegalStateThrower(String foo) {
             super(foo);
         }

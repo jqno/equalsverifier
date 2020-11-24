@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.coverage;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 
 public final class HandwrittenInstanceOfPoint {
+
     private final int x;
     private final int y;
     private final Color color;
@@ -19,9 +20,11 @@ public final class HandwrittenInstanceOfPoint {
             return false;
         }
         HandwrittenInstanceOfPoint other = (HandwrittenInstanceOfPoint) obj;
-        return x == other.x
-                && y == other.y
-                && (color == null ? other.color == null : color.equals(other.color));
+        return (
+            x == other.x &&
+            y == other.y &&
+            (color == null ? other.color == null : color.equals(other.color))
+        );
     }
 
     @Override

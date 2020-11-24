@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /** Provides reflective access to one field of an object. */
 public final class FieldAccessor {
+
     private final Field field;
 
     /** Private constructor. Call {@link #of(Field)} to instantiate. */
@@ -75,8 +76,9 @@ public final class FieldAccessor {
      * @throws ReflectionException If the operation fails.
      */
     @SuppressFBWarnings(
-            value = "DP_DO_INSIDE_DO_PRIVILEGED",
-            justification = "Only called in test code, not production.")
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "Only called in test code, not production."
+    )
     public Object get(Object object) {
         field.setAccessible(true);
         return rethrow(() -> field.get(object));

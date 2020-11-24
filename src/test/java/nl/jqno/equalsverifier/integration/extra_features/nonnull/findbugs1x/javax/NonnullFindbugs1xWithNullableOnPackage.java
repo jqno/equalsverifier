@@ -3,8 +3,11 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.jav
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public final class NonnullFindbugs1xWithNullableOnPackage {
+
     private final Object o;
-    @edu.umd.cs.findbugs.annotations.Nullable private final Object p;
+
+    @edu.umd.cs.findbugs.annotations.Nullable
+    private final Object p;
 
     public NonnullFindbugs1xWithNullableOnPackage(Object o, Object p) {
         this.o = o;

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AnnotationCache {
+
     private final Map<Class<?>, AnnotationClassCache> cache = new HashMap<>();
 
     public boolean hasResolved(Class<?> type) {

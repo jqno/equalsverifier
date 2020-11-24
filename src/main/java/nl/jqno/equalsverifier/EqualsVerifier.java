@@ -56,7 +56,7 @@ public final class EqualsVerifier {
      */
     public static ConfiguredEqualsVerifier simple() {
         return new ConfiguredEqualsVerifier()
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
+        .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
     }
 
     /**
@@ -79,7 +79,9 @@ public final class EqualsVerifier {
      */
     public static MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
         return new MultipleTypeEqualsVerifierApi(
-                ListBuilders.fromIterable(classes), new ConfiguredEqualsVerifier());
+            ListBuilders.fromIterable(classes),
+            new ConfiguredEqualsVerifier()
+        );
     }
 
     /**
@@ -91,10 +93,14 @@ public final class EqualsVerifier {
      * @return A fluent API for EqualsVerifier.
      */
     public static MultipleTypeEqualsVerifierApi forClasses(
-            Class<?> first, Class<?> second, Class<?>... more) {
+        Class<?> first,
+        Class<?> second,
+        Class<?>... more
+    ) {
         return new MultipleTypeEqualsVerifierApi(
-                ListBuilders.buildListOfAtLeastTwo(first, second, more),
-                new ConfiguredEqualsVerifier());
+            ListBuilders.buildListOfAtLeastTwo(first, second, more),
+            new ConfiguredEqualsVerifier()
+        );
     }
 
     /**
@@ -136,7 +142,10 @@ public final class EqualsVerifier {
      */
     @SafeVarargs
     public static <T> RelaxedEqualsVerifierApi<T> forRelaxedEqualExamples(
-            T first, T second, T... more) {
+        T first,
+        T second,
+        T... more
+    ) {
         List<T> examples = ListBuilders.buildListOfAtLeastTwo(first, second, more);
 
         @SuppressWarnings("unchecked")

@@ -18,6 +18,7 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
  * @param <T> The class under test.
  */
 public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
+
     private final Class<T> type;
     private final Set<String> actualFields;
 
@@ -26,8 +27,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
-    private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
-            CachedHashCodeInitializer.passthrough();
+    private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
     private Set<String> allExcludedFields = new HashSet<>();
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();
@@ -55,10 +55,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     equals} method, instead of an {@code instanceof} check.
      */
     public SingleTypeEqualsVerifierApi(
-            Class<T> type,
-            EnumSet<Warning> warningsToSuppress,
-            FactoryCache factoryCache,
-            boolean usingGetClass) {
+        Class<T> type,
+        EnumSet<Warning> warningsToSuppress,
+        FactoryCache factoryCache,
+        boolean usingGetClass
+    ) {
         this(type);
         this.warningsToSuppress = warningsToSuppress;
         this.factoryCache = this.factoryCache.merge(factoryCache);
@@ -69,8 +70,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object,
      * Object[])}.
      */
-    /* package protected */ SingleTypeEqualsVerifierApi(
-            Class<T> type, List<T> equalExamples, List<T> unequalExamples) {
+    /* package protected */SingleTypeEqualsVerifierApi(
+        Class<T> type,
+        List<T> equalExamples,
+        List<T> unequalExamples
+    ) {
         this(type);
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
@@ -82,7 +86,10 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Collections.addAll(warningsToSuppress, warnings);
         Validations.validateWarnings(warningsToSuppress);
         Validations.validateWarningsAndFields(
-                warningsToSuppress, allIncludedFields, allExcludedFields);
+            warningsToSuppress,
+            allIncludedFields,
+            allExcludedFields
+        );
         Validations.validateNonnullFields(nonnullFields, warningsToSuppress);
         return this;
     }
@@ -97,7 +104,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(
-            Class<S> otherType, Func1<?, S> factory) {
+        Class<S> otherType,
+        Func1<?, S> factory
+    ) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -105,7 +114,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(
-            Class<S> otherType, Func2<?, ?, S> factory) {
+        Class<S> otherType,
+        Func2<?, ?, S> factory
+    ) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -145,13 +156,18 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private SingleTypeEqualsVerifierApi<T> withFieldsAddedAndValidated(
-            Set<String> collection, List<String> specifiedFields) {
+        Set<String> collection,
+        List<String> specifiedFields
+    ) {
         collection.addAll(specifiedFields);
 
         Validations.validateFields(allIncludedFields, allExcludedFields);
         Validations.validateFieldNamesExist(type, specifiedFields, actualFields);
         Validations.validateWarningsAndFields(
-                warningsToSuppress, allIncludedFields, allExcludedFields);
+            warningsToSuppress,
+            allIncludedFields,
+            allExcludedFields
+        );
         return this;
     }
 
@@ -248,10 +264,17 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     public SingleTypeEqualsVerifierApi<T> withCachedHashCode(
-            String cachedHashCodeField, String calculateHashCodeMethod, T example) {
+        String cachedHashCodeField,
+        String calculateHashCodeMethod,
+        T example
+    ) {
         cachedHashCodeInitializer =
-                new CachedHashCodeInitializer<>(
-                        type, cachedHashCodeField, calculateHashCodeMethod, example);
+            new CachedHashCodeInitializer<>(
+                type,
+                cachedHashCodeField,
+                calculateHashCodeMethod,
+                example
+            );
         return this;
     }
 
@@ -289,20 +312,28 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             return EqualsVerifierReport.success(type);
         } catch (MessagingException e) {
             return EqualsVerifierReport.failure(
-                    type, buildErrorMessage(e.getDescription(), showUrl), e);
+                type,
+                buildErrorMessage(e.getDescription(), showUrl),
+                e
+            );
         } catch (Throwable e) {
             return EqualsVerifierReport.failure(
-                    type, buildErrorMessage(e.getMessage(), showUrl), e);
+                type,
+                buildErrorMessage(e.getMessage(), showUrl),
+                e
+            );
         }
     }
 
     private String buildErrorMessage(String description, boolean showUrl) {
         String message = description == null ? "<no message>" : description;
-        return Formatter.of(
-                        "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
-                        type.getName(),
-                        message)
-                .format();
+        return Formatter
+            .of(
+                "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
+                type.getName(),
+                message
+            )
+            .format();
     }
 
     private void performVerification() {
@@ -313,11 +344,12 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
         Configuration<T> config = buildConfig();
         Validations.validateProcessedAnnotations(
-                type,
-                config.getAnnotationCache(),
-                warningsToSuppress,
-                allIncludedFields,
-                allExcludedFields);
+            type,
+            config.getAnnotationCache(),
+            warningsToSuppress,
+            allIncludedFields,
+            allExcludedFields
+        );
 
         verifyWithoutExamples(config);
         verifyWithExamples(config);
@@ -325,20 +357,21 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     private Configuration<T> buildConfig() {
         return Configuration.build(
-                type,
-                allExcludedFields,
-                allIncludedFields,
-                nonnullFields,
-                cachedHashCodeInitializer,
-                hasRedefinedSuperclass,
-                redefinedSubclass,
-                usingGetClass,
-                warningsToSuppress,
-                factoryCache,
-                ignoredAnnotationClassNames,
-                actualFields,
-                equalExamples,
-                unequalExamples);
+            type,
+            allExcludedFields,
+            allIncludedFields,
+            nonnullFields,
+            cachedHashCodeInitializer,
+            hasRedefinedSuperclass,
+            redefinedSubclass,
+            usingGetClass,
+            warningsToSuppress,
+            factoryCache,
+            ignoredAnnotationClassNames,
+            actualFields,
+            equalExamples,
+            unequalExamples
+        );
     }
 
     private void verifyWithoutExamples(Configuration<T> config) {

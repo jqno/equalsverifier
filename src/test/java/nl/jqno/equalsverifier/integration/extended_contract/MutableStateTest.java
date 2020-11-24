@@ -10,49 +10,56 @@ import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class MutableStateTest {
+
     private static final String MUTABILITY = "Mutability: equals depends on mutable field";
     private static final String FIELD_NAME = "field";
 
     @Test
     public void fail_whenClassHasAMutablePrimitiveField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
-                .assertFailure()
-                .assertMessageContains(MUTABILITY, "second");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
+            .assertFailure()
+            .assertMessageContains(MUTABILITY, "second");
     }
 
     @Test
     public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
-        EqualsVerifier.forClass(UnusedPrimitiveMutableField.class)
-                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                .verify();
+        EqualsVerifier
+            .forClass(UnusedPrimitiveMutableField.class)
+            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+            .verify();
     }
 
     @Test
     public void succeed_whenClassHasAMutablePrimitiveField_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(PrimitiveMutableField.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(PrimitiveMutableField.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     @Test
     public void fail_whenClassHasAMutableObjectField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
-                .assertFailure()
-                .assertMessageContains(MUTABILITY, FIELD_NAME);
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
+            .assertFailure()
+            .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
     public void succeed_whenClassHasAMutableObjectField_givenWarningIsSuppressed() {
-        EqualsVerifier.forClass(ObjectMutableField.class)
-                .suppress(Warning.NONFINAL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(ObjectMutableField.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     @Test
     public void fail_whenClassHasAMutableEnumField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
-                .assertFailure()
-                .assertMessageContains(MUTABILITY, FIELD_NAME);
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
+            .assertFailure()
+            .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -62,9 +69,10 @@ public class MutableStateTest {
 
     @Test
     public void fail_whenClassHasAMutableArrayField() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
-                .assertFailure()
-                .assertMessageContains(MUTABILITY, FIELD_NAME);
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
+            .assertFailure()
+            .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -73,6 +81,7 @@ public class MutableStateTest {
     }
 
     static final class PrimitiveMutableField {
+
         private int second;
 
         PrimitiveMutableField(int second) {
@@ -94,6 +103,7 @@ public class MutableStateTest {
     }
 
     static final class UnusedPrimitiveMutableField {
+
         private final int immutable;
 
         @SuppressWarnings("unused")
@@ -119,6 +129,7 @@ public class MutableStateTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class ObjectMutableField {
+
         private Object field;
 
         public ObjectMutableField(Object value) {
@@ -138,6 +149,7 @@ public class MutableStateTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class EnumMutableField {
+
         public enum Enum {
             RED,
             BLUE
@@ -161,6 +173,7 @@ public class MutableStateTest {
     }
 
     static final class ArrayMutableField {
+
         private int[] field;
 
         ArrayMutableField(int[] value) {

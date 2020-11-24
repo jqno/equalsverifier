@@ -6,7 +6,8 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 @FunctionalInterface
 public interface FieldCheck<T> {
     void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor);
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    );
 }

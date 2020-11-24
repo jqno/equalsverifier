@@ -8,8 +8,9 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
+
     private final Function<Map, T> factory;
 
     public EnumMapFactory(Function<Map, T> factory) {
@@ -18,7 +19,10 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
 
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone, Enum.class);

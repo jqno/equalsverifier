@@ -11,4 +11,5 @@ import javax.annotation.meta.TypeQualifierDefault;
 @Nonnull
 @TypeQualifierDefault(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface DefaultNonnullInapplicable {}
+public @interface DefaultNonnullInapplicable {
+}

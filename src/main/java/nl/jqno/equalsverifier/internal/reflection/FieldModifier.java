@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public final class FieldModifier {
+
     private final Field field;
     private final Object object;
 
@@ -91,12 +92,11 @@ public final class FieldModifier {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        FieldChanger fm =
-                () -> {
-                    TypeTag tag = TypeTag.of(field, enclosingType);
-                    Object newValue = prefabValues.giveOther(tag, field.get(object));
-                    field.set(object, newValue);
-                };
+        FieldChanger fm = () -> {
+            TypeTag tag = TypeTag.of(field, enclosingType);
+            Object newValue = prefabValues.giveOther(tag, field.get(object));
+            field.set(object, newValue);
+        };
         change(fm, false);
     }
 

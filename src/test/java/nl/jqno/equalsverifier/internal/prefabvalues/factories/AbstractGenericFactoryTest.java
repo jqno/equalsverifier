@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class AbstractGenericFactoryTest {
+
     private String receiver;
     private AbstractGenericFactory<String> factory;
 
@@ -20,29 +21,31 @@ public class AbstractGenericFactoryTest {
     public void setUp() {
         receiver = "";
         factory =
-                new AbstractGenericFactory<String>() {
-                    @Override
-                    public Tuple<String> createValues(
-                            TypeTag tag,
-                            PrefabValues prefabValues,
-                            LinkedHashSet<TypeTag> typeStack) {
-                        return Tuple.of("red", "blue", new String("red"));
-                    }
-                };
+            new AbstractGenericFactory<String>() {
+                @Override
+                public Tuple<String> createValues(
+                    TypeTag tag,
+                    PrefabValues prefabValues,
+                    LinkedHashSet<TypeTag> typeStack
+                ) {
+                    return Tuple.of("red", "blue", new String("red"));
+                }
+            };
     }
 
     @Test
     public void throwTheUnthrowableException() {
         assertThrows(
-                ReflectionException.class,
-                () ->
-                        factory.invoke(
-                                String.class,
-                                receiver,
-                                "this method does not exist",
-                                classes(),
-                                objects()));
+            ReflectionException.class,
+            () ->
+                factory.invoke(
+                    String.class,
+                    receiver,
+                    "this method does not exist",
+                    classes(),
+                    objects()
+                )
+        );
     }
-
     // The rest of this class is tested indirectly through its subclasses.
 }

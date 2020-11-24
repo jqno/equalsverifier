@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class Point {
+
     public final int x;
     public final int y;
 

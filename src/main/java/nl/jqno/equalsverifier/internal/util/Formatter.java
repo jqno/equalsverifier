@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
  * contents of its fields.
  */
 public final class Formatter {
+
     private final String message;
     private Object[] objects;
 
@@ -67,12 +68,14 @@ public final class Formatter {
         try {
             return obj.toString();
         } catch (Throwable e) {
-            return stringifyByReflection(obj)
-                    + "-throws "
-                    + e.getClass().getSimpleName()
-                    + "("
-                    + e.getMessage()
-                    + ")";
+            return (
+                stringifyByReflection(obj) +
+                "-throws " +
+                e.getClass().getSimpleName() +
+                "(" +
+                e.getMessage() +
+                ")"
+            );
         }
     }
 

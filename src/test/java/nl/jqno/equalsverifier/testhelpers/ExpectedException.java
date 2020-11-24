@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import org.junit.jupiter.api.function.Executable;
 
 public final class ExpectedException {
+
     private final Throwable e;
 
     private ExpectedException(Throwable e) {
@@ -26,12 +27,13 @@ public final class ExpectedException {
     public ExpectedException assertThrows(Class<? extends Throwable> expectedException) {
         assertNotNull(e, "Expected " + expectedException.getSimpleName() + " but none was thrown.");
         assertTrue(
-                expectedException.isInstance(e),
-                "Expected "
-                        + expectedException.getCanonicalName()
-                        + " but was "
-                        + e.getClass().getCanonicalName()
-                        + ".");
+            expectedException.isInstance(e),
+            "Expected " +
+            expectedException.getCanonicalName() +
+            " but was " +
+            e.getClass().getCanonicalName() +
+            "."
+        );
         return this;
     }
 
@@ -56,9 +58,10 @@ public final class ExpectedException {
         while (cause != null) {
             if (cause.getClass().equals(expectedCause)) {
                 fail(
-                        "Expected "
-                                + expectedCause.getSimpleName()
-                                + " not to be in the cause but it was.");
+                    "Expected " +
+                    expectedCause.getSimpleName() +
+                    " not to be in the cause but it was."
+                );
             }
             cause = cause.getCause();
         }

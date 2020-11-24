@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.testhelpers.types;
 import java.util.Objects;
 
 public final class MutableCanEqualColorPoint extends ImmutableCanEqualPoint {
+
     private Color color;
 
     public MutableCanEqualColorPoint(int x, int y, Color color) {

@@ -4,14 +4,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class RecordObjectAccessorTest {
 
@@ -20,7 +18,7 @@ public class RecordObjectAccessorTest {
     @BeforeEach
     public void setUp() throws Exception {
         Constructor<?> constructor =
-                SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
+            SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
         constructor.setAccessible(true);
         recordInstance = constructor.newInstance(42, "hello");
     }
@@ -48,9 +46,10 @@ public class RecordObjectAccessorTest {
     public void fail_whenConstructorThrowsNpe() {
         Object instance = Instantiator.of(ThrowingConstructorRecord.class).instantiate();
 
-        ExpectedException.when(() -> create(instance).copy())
-                .assertThrows(ReflectionException.class)
-                .assertMessageContains("Record:", "failed to invoke constructor");
+        ExpectedException
+            .when(() -> create(instance).copy())
+            .assertThrows(ReflectionException.class)
+            .assertMessageContains("Record:", "failed to invoke constructor");
     }
 
     @SuppressWarnings("unchecked")
@@ -61,6 +60,7 @@ public class RecordObjectAccessorTest {
     record SimpleRecord(int i, String s) {}
 
     record ThrowingConstructorRecord(int i, String s) {
+
         public ThrowingConstructorRecord {
             throw new IllegalStateException();
         }

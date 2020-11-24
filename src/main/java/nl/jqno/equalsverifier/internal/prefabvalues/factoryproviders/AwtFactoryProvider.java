@@ -18,29 +18,37 @@ public final class AwtFactoryProvider implements FactoryProvider {
 
         cache.put(Color.class, values(Color.RED, Color.BLUE, Color.RED));
         cache.put(
-                ColorSpace.class,
-                values(
-                        ColorSpace.getInstance(CS_RED),
-                        ColorSpace.getInstance(CS_BLUE),
-                        ColorSpace.getInstance(CS_RED)));
+            ColorSpace.class,
+            values(
+                ColorSpace.getInstance(CS_RED),
+                ColorSpace.getInstance(CS_BLUE),
+                ColorSpace.getInstance(CS_RED)
+            )
+        );
         cache.put(
-                ICC_ColorSpace.class,
-                values(
-                        ICC_ColorSpace.getInstance(CS_RED),
-                        ICC_ColorSpace.getInstance(CS_BLUE),
-                        ICC_ColorSpace.getInstance(CS_RED)));
+            ICC_ColorSpace.class,
+            values(
+                ICC_ColorSpace.getInstance(CS_RED),
+                ICC_ColorSpace.getInstance(CS_BLUE),
+                ICC_ColorSpace.getInstance(CS_RED)
+            )
+        );
         cache.put(
-                ICC_Profile.class,
-                values(
-                        ICC_Profile.getInstance(CS_RED),
-                        ICC_Profile.getInstance(CS_BLUE),
-                        ICC_Profile.getInstance(CS_RED)));
+            ICC_Profile.class,
+            values(
+                ICC_Profile.getInstance(CS_RED),
+                ICC_Profile.getInstance(CS_BLUE),
+                ICC_Profile.getInstance(CS_RED)
+            )
+        );
         cache.put(
-                Font.class,
-                values(
-                        new Font(Font.SERIF, Font.PLAIN, 10),
-                        new Font(Font.SANS_SERIF, Font.PLAIN, 12),
-                        new Font(Font.SERIF, Font.PLAIN, 10)));
+            Font.class,
+            values(
+                new Font(Font.SERIF, Font.PLAIN, 10),
+                new Font(Font.SANS_SERIF, Font.PLAIN, 12),
+                new Font(Font.SERIF, Font.PLAIN, 10)
+            )
+        );
 
         return cache;
     }

@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom;
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public final class NonnullJsr305CustomOnPackage {
+
     private final Object o;
 
     public NonnullJsr305CustomOnPackage(Object o) {

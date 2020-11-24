@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
  * Because there's no standard Nonnull/NonNull/NotNull annotation, we define our own so that
  * EqualsVerifier can work with any non-null annotation.
  */
-@Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
+@Target({ ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.CLASS)
-public @interface NotNull {}
+public @interface NotNull {
+}

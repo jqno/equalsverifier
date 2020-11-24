@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class GenericTypesTest {
+
     @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
@@ -93,14 +94,16 @@ public class GenericTypesTest {
     }
 
     static final class JavaGenericTypeContainer {
+
         private final Optional<Point> optional;
         private final Supplier<Point> supplier;
         private final AtomicReferenceArray<Point> atomicReferenceArray;
 
         public JavaGenericTypeContainer(
-                Optional<Point> optional,
-                Supplier<Point> supplier,
-                AtomicReferenceArray<Point> atomicReferenceArray) {
+            Optional<Point> optional,
+            Supplier<Point> supplier,
+            AtomicReferenceArray<Point> atomicReferenceArray
+        ) {
             this.optional = optional;
             this.supplier = supplier;
             this.atomicReferenceArray = atomicReferenceArray;
@@ -118,12 +121,16 @@ public class GenericTypesTest {
             Point thisSupplierPoint = supplier != null ? supplier.get() : null;
             Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
             Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
-            Point thatAraPoint =
-                    other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
-            return Objects.equals(thisOptionalPoint, thatOptionalPoint)
-                    && Objects.equals(thisSupplierPoint, thatSupplierPoint)
-                    && Objects.equals(thisAraPoint, thatAraPoint);
+            Point thatAraPoint = other.atomicReferenceArray != null
+                ? other.atomicReferenceArray.get(0)
+                : null;
+            return (
+                Objects.equals(thisOptionalPoint, thatOptionalPoint) &&
+                Objects.equals(thisSupplierPoint, thatSupplierPoint) &&
+                Objects.equals(thisAraPoint, thatAraPoint)
+            );
         }
+
         // CHECKSTYLE ON: NPathComplexity
 
         @Override
@@ -138,6 +145,7 @@ public class GenericTypesTest {
     }
 
     static final class ListContainer {
+
         private final List<Point> list;
 
         public ListContainer(List<Point> list) {
@@ -178,6 +186,7 @@ public class GenericTypesTest {
     }
 
     static final class SetContainer {
+
         private final Set<Point> set;
 
         public SetContainer(Set<Point> set) {
@@ -216,6 +225,7 @@ public class GenericTypesTest {
     }
 
     static final class MapContainer {
+
         private final Map<Point, Point> map;
 
         public MapContainer(Map<Point, Point> map) {
@@ -257,6 +267,7 @@ public class GenericTypesTest {
     }
 
     static final class ListOfTContainer<T> {
+
         private final ArrayList<T> list;
 
         public ListOfTContainer(ArrayList<T> list) {
@@ -297,6 +308,7 @@ public class GenericTypesTest {
     }
 
     static final class ArrayOfTContainer<T> {
+
         private final T[] array;
 
         public ArrayOfTContainer(T[] array) {
@@ -337,6 +349,7 @@ public class GenericTypesTest {
     }
 
     static final class ImmutableCollectionContainer {
+
         private final ImmutableCollection<Point> coll;
 
         public ImmutableCollectionContainer(ImmutableCollection<Point> coll) {
@@ -375,6 +388,7 @@ public class GenericTypesTest {
     }
 
     static final class ImmutableListContainer {
+
         private final ImmutableList<Point> list;
 
         public ImmutableListContainer(ImmutableList<Point> list) {
@@ -415,6 +429,7 @@ public class GenericTypesTest {
     }
 
     static final class ImmutableMapContainer {
+
         private final ImmutableMap<Point, Point> map;
 
         public ImmutableMapContainer(ImmutableMap<Point, Point> map) {
@@ -456,6 +471,7 @@ public class GenericTypesTest {
     }
 
     static final class RangeContainer {
+
         private final Range<String> range;
 
         public RangeContainer(Range<String> coll) {
@@ -491,6 +507,7 @@ public class GenericTypesTest {
     }
 
     static final class BiMapContainer {
+
         private final BiMap<Point, Point> map;
 
         public BiMapContainer(BiMap<Point, Point> map) {
@@ -534,6 +551,7 @@ public class GenericTypesTest {
     }
 
     static final class SparseArray<T> {
+
         private final List<T> items;
 
         public SparseArray(List<T> items) {
@@ -547,11 +565,11 @@ public class GenericTypesTest {
         public T get(int i) {
             return items.get(i);
         }
-
         // There are no equals and hashCode
     }
 
     static final class SparseArrayEqualsContainer {
+
         private final SparseArray<Point> sparseArray;
 
         public SparseArrayEqualsContainer(SparseArray<Point> sparseArray) {
@@ -593,6 +611,7 @@ public class GenericTypesTest {
     }
 
     static final class SparseArrayHashCodeContainer {
+
         private final SparseArray<Point> sparseArray;
 
         public SparseArrayHashCodeContainer(SparseArray<Point> sparseArray) {
@@ -617,6 +636,7 @@ public class GenericTypesTest {
     }
 
     static final class SparseArrayToStringContainer {
+
         private final SparseArray<Point> sparseArray;
 
         public SparseArrayToStringContainer(SparseArray<Point> sparseArray) {
@@ -647,6 +667,7 @@ public class GenericTypesTest {
 
     @SuppressWarnings("unused")
     static final class TypeVariableExtendsContainer<I extends Comparable<I>> {
+
         private final I id;
 
         protected TypeVariableExtendsContainer(I id) {
@@ -666,6 +687,7 @@ public class GenericTypesTest {
 
     @SuppressWarnings("unused")
     static final class TypeVariableExtendsWithSuperContainer<I extends Comparable<? super I>> {
+
         private final I id;
 
         protected TypeVariableExtendsWithSuperContainer(I id) {

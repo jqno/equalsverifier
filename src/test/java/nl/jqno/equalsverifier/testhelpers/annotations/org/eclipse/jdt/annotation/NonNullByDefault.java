@@ -9,5 +9,6 @@ import java.lang.annotation.*;
  */
 @Documented
 @Retention(RetentionPolicy.CLASS)
-@Target({ElementType.PACKAGE, ElementType.TYPE})
-public @interface NonNullByDefault {}
+@Target({ ElementType.PACKAGE, ElementType.TYPE })
+public @interface NonNullByDefault {
+}

@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inappli
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
 public final class NonnullJsr305InapplicableOnPackage {
+
     private final Object o;
 
     public NonnullJsr305InapplicableOnPackage(Object o) {

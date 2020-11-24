@@ -17,8 +17,10 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class FieldInspectorTest {
-    private final PrefabValues prefabValues =
-            new PrefabValues(FactoryCacheFactory.withPrimitiveFactories());
+
+    private final PrefabValues prefabValues = new PrefabValues(
+        FactoryCacheFactory.withPrimitiveFactories()
+    );
     private final ClassAccessor<Point> accessor = ClassAccessor.of(Point.class, prefabValues);
 
     @Test
@@ -35,18 +37,23 @@ public class FieldInspectorTest {
         AnnotationCache annotationCache = new AnnotationCache();
 
         inspector.checkWithNull(
-                nullFields, annotationCache, new ResetObjectForEachIterationCheck<>());
+            nullFields,
+            annotationCache,
+            new ResetObjectForEachIterationCheck<>()
+        );
     }
 
     private final class ResetObjectForEachIterationCheck<T> implements FieldCheck<T> {
+
         private Object originalReference;
         private Object originalChanged;
 
         @Override
         public void execute(
-                ObjectAccessor<T> referenceAccessor,
-                ObjectAccessor<T> copyAccessor,
-                FieldAccessor fieldAccessor) {
+            ObjectAccessor<T> referenceAccessor,
+            ObjectAccessor<T> copyAccessor,
+            FieldAccessor fieldAccessor
+        ) {
             if (originalReference == null) {
                 originalReference = referenceAccessor.copy();
                 originalChanged = copyAccessor.copy();

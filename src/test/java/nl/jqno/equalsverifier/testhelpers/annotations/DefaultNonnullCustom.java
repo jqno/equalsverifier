@@ -10,4 +10,5 @@ import javax.annotation.meta.TypeQualifierDefault;
 @NotNull
 @TypeQualifierDefault(ElementType.FIELD)
 @Retention(RetentionPolicy.CLASS)
-public @interface DefaultNonnullCustom {}
+public @interface DefaultNonnullCustom {
+}

@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class TypeTagParameterizedTest<T> {
+
     @SuppressWarnings("unused")
     private final String simpleField = null;
 
@@ -26,10 +27,10 @@ public class TypeTagParameterizedTest<T> {
     private final Map<String, List<String>> fieldWithNestedTypeParameters = null;
 
     @SuppressWarnings("unused")
-    private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>>
-            fieldWithRidiculousTypeParameters = null;
+    private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters =
+        null;
 
-    @SuppressWarnings({"unused", "rawtypes"})
+    @SuppressWarnings({ "unused", "rawtypes" })
     private final Map rawMapField = null;
 
     @SuppressWarnings("unused")
@@ -58,58 +59,64 @@ public class TypeTagParameterizedTest<T> {
 
     private static Stream<Arguments> data() {
         return Stream.of(
-                Arguments.of("simpleField", new TypeTag(String.class)),
-                Arguments.of(
-                        "fieldWithSingleTypeParameter",
-                        new TypeTag(List.class, new TypeTag(String.class))),
-                Arguments.of(
-                        "fieldWithTwoTypeParameters",
-                        new TypeTag(
-                                Map.class, new TypeTag(String.class), new TypeTag(Integer.class))),
-                Arguments.of(
-                        "fieldWithNestedTypeParameters",
-                        new TypeTag(
-                                Map.class,
-                                new TypeTag(String.class),
-                                new TypeTag(List.class, new TypeTag(String.class)))),
-                Arguments.of(
-                        "fieldWithRidiculousTypeParameters",
-                        new TypeTag(
-                                Map.class,
-                                new TypeTag(List.class, new TypeTag(Integer.class)),
-                                new TypeTag(
-                                        Map.class,
-                                        new TypeTag(List.class, new TypeTag(Double.class)),
-                                        new TypeTag(
-                                                Map.class,
-                                                new TypeTag(String.class),
-                                                new TypeTag(Float.class))))),
-                Arguments.of("rawMapField", new TypeTag(Map.class)),
-                Arguments.of(
-                        "fieldWithWildcardParameter",
-                        new TypeTag(List.class, new TypeTag(Object.class))),
-                Arguments.of(
-                        "fieldWithExtendingWildcardWithTypeVariable",
-                        new TypeTag(
-                                List.class,
-                                new TypeTag(Comparable.class, new TypeTag(Object.class)))),
-                Arguments.of(
-                        "fieldWithExtendingWildcardWithWildcard",
-                        new TypeTag(
-                                List.class,
-                                new TypeTag(Comparable.class, new TypeTag(Object.class)))),
-                Arguments.of(
-                        "fieldWithSuperingWildcard",
-                        new TypeTag(List.class, new TypeTag(Point.class))),
-                Arguments.of(
-                        "fieldWithGenericArrayParameter",
-                        new TypeTag(Class[].class, new TypeTag(String.class))),
-                Arguments.of(
-                        "fieldWithTypeVariable",
-                        new TypeTag(List.class, new TypeTag(Object.class))),
-                // See TypeTagTest for fieldWithBoundedTypeVariable
-                Arguments.of("primitiveField", new TypeTag(int.class)),
-                Arguments.of("arrayField", new TypeTag(String[].class)));
+            Arguments.of("simpleField", new TypeTag(String.class)),
+            Arguments.of(
+                "fieldWithSingleTypeParameter",
+                new TypeTag(List.class, new TypeTag(String.class))
+            ),
+            Arguments.of(
+                "fieldWithTwoTypeParameters",
+                new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Integer.class))
+            ),
+            Arguments.of(
+                "fieldWithNestedTypeParameters",
+                new TypeTag(
+                    Map.class,
+                    new TypeTag(String.class),
+                    new TypeTag(List.class, new TypeTag(String.class))
+                )
+            ),
+            Arguments.of(
+                "fieldWithRidiculousTypeParameters",
+                new TypeTag(
+                    Map.class,
+                    new TypeTag(List.class, new TypeTag(Integer.class)),
+                    new TypeTag(
+                        Map.class,
+                        new TypeTag(List.class, new TypeTag(Double.class)),
+                        new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Float.class))
+                    )
+                )
+            ),
+            Arguments.of("rawMapField", new TypeTag(Map.class)),
+            Arguments.of(
+                "fieldWithWildcardParameter",
+                new TypeTag(List.class, new TypeTag(Object.class))
+            ),
+            Arguments.of(
+                "fieldWithExtendingWildcardWithTypeVariable",
+                new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class)))
+            ),
+            Arguments.of(
+                "fieldWithExtendingWildcardWithWildcard",
+                new TypeTag(List.class, new TypeTag(Comparable.class, new TypeTag(Object.class)))
+            ),
+            Arguments.of(
+                "fieldWithSuperingWildcard",
+                new TypeTag(List.class, new TypeTag(Point.class))
+            ),
+            Arguments.of(
+                "fieldWithGenericArrayParameter",
+                new TypeTag(Class[].class, new TypeTag(String.class))
+            ),
+            Arguments.of(
+                "fieldWithTypeVariable",
+                new TypeTag(List.class, new TypeTag(Object.class))
+            ),
+            // See TypeTagTest for fieldWithBoundedTypeVariable
+            Arguments.of("primitiveField", new TypeTag(int.class)),
+            Arguments.of("arrayField", new TypeTag(String[].class))
+        );
     }
 
     @ParameterizedTest

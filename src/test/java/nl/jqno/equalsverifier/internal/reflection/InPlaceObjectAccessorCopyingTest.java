@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.Test;
 
 public class InPlaceObjectAccessorCopyingTest {
+
     @Test
     public void copyHappyPath() {
         Point original = new Point(2, 3);
@@ -119,6 +120,7 @@ public class InPlaceObjectAccessorCopyingTest {
     }
 
     static class SubPointContainer extends PointContainer {
+
         public SubPointContainer(Point point) {
             super(point);
         }

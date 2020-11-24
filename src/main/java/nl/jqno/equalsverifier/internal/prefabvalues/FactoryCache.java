@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory
 
 /** Contains a cache of factories, for {@link PrefabValues}. */
 public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFactory<?>>> {
+
     /**
      * We store Strings instead of Classes, so that the cache can be lazy and initializers won't be
      * called until the class is actually needed.

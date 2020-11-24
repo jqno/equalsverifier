@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class FieldModifierTest {
+
     private static final Point RED_NEW_POINT = new Point(10, 20);
     private static final Point BLUE_NEW_POINT = new Point(20, 10);
     private static final Point REDCOPY_NEW_POINT = new Point(10, 20);
@@ -56,7 +57,7 @@ public class FieldModifierTest {
     @Test
     public void defaultFieldOnArraySetsNull() {
         AllTypesContainer foo = new AllTypesContainer();
-        foo._array = new int[] {1, 2, 3};
+        foo._array = new int[] { 1, 2, 3 };
         doNullField(foo, "_array");
         assertNull(foo._array);
     }
@@ -276,9 +277,10 @@ public class FieldModifierTest {
     public void changeTypeVariableGenericField() {
         GenericTypeVariableListContainer<String> foo = new GenericTypeVariableListContainer<>();
         doChangeField(
-                foo,
-                "tList",
-                new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)));
+            foo,
+            "tList",
+            new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class))
+        );
         assertFalse(foo.tList.isEmpty());
     }
 

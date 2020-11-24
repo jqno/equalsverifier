@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 // CHECKSTYLE OFF: ParameterNumber
 
 public class ExternalApiClassesTest {
+
     @Test
     public void succeed_whenClassUsesJavaxClasses() {
         EqualsVerifier.forClass(JavaxContainer.class).verify();
@@ -63,6 +64,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class JavaxContainer {
+
         private final Reference ref;
         private final DefaultMutableTreeNode node;
 
@@ -84,6 +86,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaMultisetContainer {
+
         private final Multiset<?> multiset;
         private final SortedMultiset<?> sortedMultiset;
         private final HashMultiset<?> hashMultiset;
@@ -95,15 +98,16 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
         public GuavaMultisetContainer(
-                Multiset<?> multiset,
-                SortedMultiset<?> sortedMultiset,
-                HashMultiset<?> hashMultiset,
-                TreeMultiset<?> treeMultiset,
-                LinkedHashMultiset<?> linkedHashMultiset,
-                ConcurrentHashMultiset<?> concurrentHashMultiset,
-                EnumMultiset<?> enumMultiset,
-                ImmutableMultiset<?> immutableMultiset,
-                ImmutableSortedMultiset<?> immutableSortedMultiset) {
+            Multiset<?> multiset,
+            SortedMultiset<?> sortedMultiset,
+            HashMultiset<?> hashMultiset,
+            TreeMultiset<?> treeMultiset,
+            LinkedHashMultiset<?> linkedHashMultiset,
+            ConcurrentHashMultiset<?> concurrentHashMultiset,
+            EnumMultiset<?> enumMultiset,
+            ImmutableMultiset<?> immutableMultiset,
+            ImmutableSortedMultiset<?> immutableSortedMultiset
+        ) {
             this.multiset = multiset;
             this.sortedMultiset = sortedMultiset;
             this.hashMultiset = hashMultiset;
@@ -128,6 +132,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaMultimapContainer {
+
         private final Multimap<?, ?> multimap;
         private final ListMultimap<?, ?> listMultimap;
         private final SetMultimap<?, ?> setMultimap;
@@ -142,18 +147,19 @@ public class ExternalApiClassesTest {
         private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
 
         public GuavaMultimapContainer(
-                Multimap<?, ?> multimap,
-                ListMultimap<?, ?> listMultimap,
-                SetMultimap<?, ?> setMultimap,
-                SortedSetMultimap<?, ?> sortedSetMultimap,
-                ArrayListMultimap<?, ?> arrayListMultimap,
-                HashMultimap<?, ?> hashMultimap,
-                LinkedListMultimap<?, ?> linkedListMultimap,
-                LinkedHashMultimap<?, ?> linkedHashMultimap,
-                TreeMultimap<?, ?> treeMultimap,
-                ImmutableMultimap<?, ?> immutableMultimap,
-                ImmutableListMultimap<?, ?> immutableListMultimap,
-                ImmutableSetMultimap<?, ?> immutableSetMultimap) {
+            Multimap<?, ?> multimap,
+            ListMultimap<?, ?> listMultimap,
+            SetMultimap<?, ?> setMultimap,
+            SortedSetMultimap<?, ?> sortedSetMultimap,
+            ArrayListMultimap<?, ?> arrayListMultimap,
+            HashMultimap<?, ?> hashMultimap,
+            LinkedListMultimap<?, ?> linkedListMultimap,
+            LinkedHashMultimap<?, ?> linkedHashMultimap,
+            TreeMultimap<?, ?> treeMultimap,
+            ImmutableMultimap<?, ?> immutableMultimap,
+            ImmutableListMultimap<?, ?> immutableListMultimap,
+            ImmutableSetMultimap<?, ?> immutableSetMultimap
+        ) {
             this.multimap = multimap;
             this.listMultimap = listMultimap;
             this.setMultimap = setMultimap;
@@ -181,6 +187,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaBiMapContainer {
+
         private final BiMap<?, ?> biMap;
         private final HashBiMap<?, ?> hashBiMap;
         private final EnumBiMap<?, ?> enumBiMap;
@@ -188,11 +195,12 @@ public class ExternalApiClassesTest {
         private final ImmutableBiMap<?, ?> immutableBiMap;
 
         public GuavaBiMapContainer(
-                BiMap<?, ?> biMap,
-                HashBiMap<?, ?> hashBiMap,
-                EnumBiMap<?, ?> enumBiMap,
-                EnumHashBiMap<?, ?> enumHashBiMap,
-                ImmutableBiMap<?, ?> immutableBiMap) {
+            BiMap<?, ?> biMap,
+            HashBiMap<?, ?> hashBiMap,
+            EnumBiMap<?, ?> enumBiMap,
+            EnumHashBiMap<?, ?> enumHashBiMap,
+            ImmutableBiMap<?, ?> immutableBiMap
+        ) {
             this.biMap = biMap;
             this.hashBiMap = hashBiMap;
             this.enumBiMap = enumBiMap;
@@ -213,6 +221,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaTableContainer {
+
         private final Table<?, ?, ?> table;
         private final HashBasedTable<?, ?, ?> hashBasedTable;
         private final TreeBasedTable<?, ?, ?> treeBasedTable;
@@ -220,11 +229,12 @@ public class ExternalApiClassesTest {
         private final ImmutableTable<?, ?, ?> immutableTable;
 
         public GuavaTableContainer(
-                Table<?, ?, ?> table,
-                HashBasedTable<?, ?, ?> hashBasedTable,
-                TreeBasedTable<?, ?, ?> treeBasedTable,
-                ArrayTable<?, ?, ?> arrayTable,
-                ImmutableTable<?, ?, ?> immutableTable) {
+            Table<?, ?, ?> table,
+            HashBasedTable<?, ?, ?> hashBasedTable,
+            TreeBasedTable<?, ?, ?> treeBasedTable,
+            ArrayTable<?, ?, ?> arrayTable,
+            ImmutableTable<?, ?, ?> immutableTable
+        ) {
             this.table = table;
             this.hashBasedTable = hashBasedTable;
             this.treeBasedTable = treeBasedTable;
@@ -245,6 +255,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaRegularCollectionsContainer {
+
         private final EvictingQueue<?> evictingQueue;
         private final MinMaxPriorityQueue<?> minMaxPriorityQueue;
         private final RangeSet<Instant> rangeSet;
@@ -252,11 +263,12 @@ public class ExternalApiClassesTest {
         private final TreeRangeSet<BigDecimal> treeRangeSet;
 
         public GuavaRegularCollectionsContainer(
-                EvictingQueue<?> evictingQueue,
-                MinMaxPriorityQueue<?> minMaxPriorityQueue,
-                RangeSet<Instant> rangeSet,
-                ImmutableRangeSet<String> immutableRangeSet,
-                TreeRangeSet<BigDecimal> treeRangeSet) {
+            EvictingQueue<?> evictingQueue,
+            MinMaxPriorityQueue<?> minMaxPriorityQueue,
+            RangeSet<Instant> rangeSet,
+            ImmutableRangeSet<String> immutableRangeSet,
+            TreeRangeSet<BigDecimal> treeRangeSet
+        ) {
             this.evictingQueue = evictingQueue;
             this.minMaxPriorityQueue = minMaxPriorityQueue;
             this.rangeSet = rangeSet;
@@ -277,6 +289,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaImmutableContainer {
+
         private final ImmutableCollection<?> iCollection;
         private final ImmutableList<?> iList;
         private final ImmutableMap<?, ?> iMap;
@@ -285,12 +298,13 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedSet<?> iSortedSet;
 
         public GuavaImmutableContainer(
-                ImmutableCollection<?> immutableCollection,
-                ImmutableList<?> immutableList,
-                ImmutableMap<?, ?> immutableMap,
-                ImmutableSet<?> immutableSet,
-                ImmutableSortedMap<?, ?> iSortedMap,
-                ImmutableSortedSet<?> iSortedSet) {
+            ImmutableCollection<?> immutableCollection,
+            ImmutableList<?> immutableList,
+            ImmutableMap<?, ?> immutableMap,
+            ImmutableSet<?> immutableSet,
+            ImmutableSortedMap<?, ?> iSortedMap,
+            ImmutableSortedSet<?> iSortedSet
+        ) {
             this.iCollection = immutableCollection;
             this.iList = immutableList;
             this.iMap = immutableMap;
@@ -312,13 +326,17 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class GuavaOtherContainer {
+
         private static final TypeToken<?> STATIC_TYPE_TOKEN = new TypeToken<Object>() {};
         private final Range<Integer> range;
         private final Optional<?> optional;
         private final TypeToken<?> typeToken;
 
         public GuavaOtherContainer(
-                Range<Integer> range, Optional<?> optional, TypeToken<?> typeToken) {
+            Range<Integer> range,
+            Optional<?> optional,
+            TypeToken<?> typeToken
+        ) {
             this.range = range;
             this.optional = optional;
             this.typeToken = typeToken;
@@ -337,6 +355,7 @@ public class ExternalApiClassesTest {
 
     @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
     static final class JodaTimeContainer {
+
         private final LocalDate localDate;
         private final LocalTime localTime;
         private final LocalDateTime localDateTime;
@@ -349,16 +368,17 @@ public class ExternalApiClassesTest {
         private final MonthDay monthDay;
 
         public JodaTimeContainer(
-                LocalDate localDate,
-                LocalTime localTime,
-                LocalDateTime localDateTime,
-                Chronology chronology,
-                DateTimeZone dateTimeZone,
-                Partial partial,
-                PeriodType periodType,
-                Period period,
-                YearMonth yearMonth,
-                MonthDay monthDay) {
+            LocalDate localDate,
+            LocalTime localTime,
+            LocalDateTime localDateTime,
+            Chronology chronology,
+            DateTimeZone dateTimeZone,
+            Partial partial,
+            PeriodType periodType,
+            Period period,
+            YearMonth yearMonth,
+            MonthDay monthDay
+        ) {
             this.localDate = localDate;
             this.localTime = localTime;
             this.localDateTime = localDateTime;

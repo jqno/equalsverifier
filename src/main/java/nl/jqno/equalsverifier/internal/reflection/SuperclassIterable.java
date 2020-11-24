@@ -6,6 +6,7 @@ import java.util.List;
 
 /** Iterable to iterate over all superclasses of a class. */
 public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
+
     private final Class<T> type;
     private final boolean includeSelf;
 

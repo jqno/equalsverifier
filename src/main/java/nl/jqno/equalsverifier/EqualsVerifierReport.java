@@ -42,7 +42,11 @@ public final class EqualsVerifierReport {
 
     /** Private constructor. Use {@link #SUCCESS} or {@link #failure(String, Throwable)} instead. */
     private EqualsVerifierReport(
-            Class<?> type, boolean successful, String message, Throwable cause) {
+        Class<?> type,
+        boolean successful,
+        String message,
+        Throwable cause
+    ) {
         this.type = type;
         this.successful = successful;
         this.message = message;

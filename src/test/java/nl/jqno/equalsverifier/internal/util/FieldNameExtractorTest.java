@@ -9,6 +9,7 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class FieldNameExtractorTest {
+
     private static final String FIELD_NOT_FOUND = "field not found: ";
 
     private static final String FIELD_STRING = "fieldString";
@@ -23,8 +24,9 @@ public class FieldNameExtractorTest {
 
     @Test
     public void should_extractFields_succesfully() throws Exception {
-        Set<String> fields =
-                FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(
+            FieldNameExtractorTestHelper.class
+        );
 
         assertTrue(fields.contains(FIELD_STRING), FIELD_NOT_FOUND + FIELD_STRING);
         assertTrue(fields.contains(FIELD_OBJECT), FIELD_NOT_FOUND + FIELD_OBJECT);
@@ -36,29 +38,37 @@ public class FieldNameExtractorTest {
 
     @Test
     public void should_disallow_adding_extra_fields() throws Exception {
-        Set<String> fields =
-                FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(
+            FieldNameExtractorTestHelper.class
+        );
 
         assertThrows(
-                UnsupportedOperationException.class, () -> fields.add("illegally added field"));
+            UnsupportedOperationException.class,
+            () -> fields.add("illegally added field")
+        );
     }
 
     @Test
     public void should_disallow_removing_fields() throws Exception {
-        Set<String> fields =
-                FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
+        Set<String> fields = FieldNameExtractor.extractFieldNames(
+            FieldNameExtractorTestHelper.class
+        );
 
         assertThrows(UnsupportedOperationException.class, () -> fields.remove(FIELD_STRING));
     }
 
     class FieldNameExtractorTestHelper {
+
         public final String fieldString;
         protected int fieldPrimitiveInt;
         final List<Integer> fieldList;
         private final Object fieldObject;
 
         public FieldNameExtractorTestHelper(
-                String fieldString, List<Integer> fieldList, Object fieldObject) {
+            String fieldString,
+            List<Integer> fieldList,
+            Object fieldObject
+        ) {
             this.fieldString = fieldString;
             this.fieldList = fieldList;
             this.fieldObject = fieldObject;

@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.signedjar.SignedJarPoint;
 import org.junit.jupiter.api.Test;
 
 public class SignedJarTest {
+
     @Test
     public void succeed_whenTestingAClassFromASignedJar() {
         EqualsVerifier.forClass(SignedJarPoint.class).verify();
@@ -16,6 +17,7 @@ public class SignedJarTest {
     }
 
     static final class SubclassOfSignedJarPoint extends SignedJarPoint {
+
         public SubclassOfSignedJarPoint(int x, int y) {
             super(x, y);
         }

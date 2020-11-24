@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ArrayFieldCheck<T> implements FieldCheck<T> {
+
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public ArrayFieldCheck(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
@@ -18,9 +19,10 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         Class<?> arrayType = fieldAccessor.getFieldType();
         if (!arrayType.isArray()) {
             return;
@@ -63,37 +65,41 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void assertDeep(String fieldName, Object reference, Object changed) {
-        Formatter eqEqFormatter =
-                Formatter.of(
-                        "Multidimensional array: ==, regular equals() or Arrays.equals() used"
-                                + " instead of Arrays.deepEquals() for field %%.",
-                        fieldName);
+        Formatter eqEqFormatter = Formatter.of(
+            "Multidimensional array: ==, regular equals() or Arrays.equals() used" +
+            " instead of Arrays.deepEquals() for field %%.",
+            fieldName
+        );
         assertEquals(eqEqFormatter, reference, changed);
 
-        Formatter regularFormatter =
-                Formatter.of(
-                        "Multidimensional array: regular hashCode() or Arrays.hashCode() used"
-                                + " instead of Arrays.deepHashCode() for field %%.",
-                        fieldName);
+        Formatter regularFormatter = Formatter.of(
+            "Multidimensional array: regular hashCode() or Arrays.hashCode() used" +
+            " instead of Arrays.deepHashCode() for field %%.",
+            fieldName
+        );
         assertEquals(
-                regularFormatter,
-                cachedHashCodeInitializer.getInitializedHashCode(reference),
-                cachedHashCodeInitializer.getInitializedHashCode(changed));
+            regularFormatter,
+            cachedHashCodeInitializer.getInitializedHashCode(reference),
+            cachedHashCodeInitializer.getInitializedHashCode(changed)
+        );
     }
 
     private void assertArray(String fieldName, Object reference, Object changed) {
         assertEquals(
-                Formatter.of(
-                        "Array: == or regular equals() used instead of Arrays.equals() for field"
-                                + " %%.",
-                        fieldName),
-                reference,
-                changed);
+            Formatter.of(
+                "Array: == or regular equals() used instead of Arrays.equals() for field %%.",
+                fieldName
+            ),
+            reference,
+            changed
+        );
         assertEquals(
-                Formatter.of(
-                        "Array: regular hashCode() used instead of Arrays.hashCode() for field %%.",
-                        fieldName),
-                cachedHashCodeInitializer.getInitializedHashCode(reference),
-                cachedHashCodeInitializer.getInitializedHashCode(changed));
+            Formatter.of(
+                "Array: regular hashCode() used instead of Arrays.hashCode() for field %%.",
+                fieldName
+            ),
+            cachedHashCodeInitializer.getInitializedHashCode(reference),
+            cachedHashCodeInitializer.getInitializedHashCode(changed)
+        );
     }
 }

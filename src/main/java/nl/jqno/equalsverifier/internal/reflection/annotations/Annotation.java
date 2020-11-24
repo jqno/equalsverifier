@@ -43,9 +43,10 @@ public interface Annotation {
      * @return True if the annotation is valid and can be used as intended.
      */
     public default boolean validate(
-            AnnotationProperties properties,
-            AnnotationCache annotationCache,
-            Set<String> ignoredAnnotations) {
+        AnnotationProperties properties,
+        AnnotationCache annotationCache,
+        Set<String> ignoredAnnotations
+    ) {
         return true;
     }
 

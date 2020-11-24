@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
 public class Multiple {
+
     private final int a;
     private final int b;
 

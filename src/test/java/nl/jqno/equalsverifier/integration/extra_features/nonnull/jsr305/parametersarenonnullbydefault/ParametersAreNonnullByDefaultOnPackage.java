@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.paramet
 import java.util.Objects;
 
 public final class ParametersAreNonnullByDefaultOnPackage {
+
     private final Object o;
 
     public ParametersAreNonnullByDefaultOnPackage(Object o) {

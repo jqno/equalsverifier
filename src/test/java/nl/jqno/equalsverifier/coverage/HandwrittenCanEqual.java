@@ -3,7 +3,9 @@ package nl.jqno.equalsverifier.coverage;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 
 public class HandwrittenCanEqual {
+
     public static class Point {
+
         private final int x;
         private final int y;
 
@@ -35,6 +37,7 @@ public class HandwrittenCanEqual {
     }
 
     public static class ColorPoint extends Point {
+
         private final Color color;
 
         public ColorPoint(int x, int y, Color color) {
@@ -53,9 +56,11 @@ public class HandwrittenCanEqual {
                 return false;
             }
             ColorPoint other = (ColorPoint) obj;
-            return other.canEqual(this)
-                    && super.equals(other)
-                    && (color == null ? other.color == null : color.equals(other.color));
+            return (
+                other.canEqual(this) &&
+                super.equals(other) &&
+                (color == null ? other.color == null : color.equals(other.color))
+            );
         }
 
         @Override
@@ -68,6 +73,7 @@ public class HandwrittenCanEqual {
     }
 
     public static final class EndPoint extends ColorPoint {
+
         public EndPoint(int x, int y, Color color) {
             super(x, y, color);
         }

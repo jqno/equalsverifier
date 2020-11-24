@@ -11,6 +11,7 @@ import java.util.List;
  * of its superclasses.
  */
 public final class FieldIterable implements Iterable<Field> {
+
     private final Class<?> type;
     private final boolean includeSuperclasses;
     private final boolean includeStatic;

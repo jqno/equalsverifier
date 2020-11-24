@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.w3c.dom.Element;
 
 public class InstantiatorTest {
+
     @Test
     public void instantiateClass() {
         Instantiator<Point> instantiator = Instantiator.of(Point.class);

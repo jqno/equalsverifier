@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class RecursionExceptionTest {
+
     @Test
     public void descriptionContainsAllTypes() {
         LinkedHashSet<TypeTag> stack = new LinkedHashSet<>();

@@ -22,10 +22,11 @@ public class CoverageWithInheritanceTest {
     @ParameterizedTest
     @MethodSource("data")
     public <T> void testSubCoverage(Classes<T> classes) {
-        EqualsVerifier.forClass(classes.subType)
-                .withRedefinedSuperclass()
-                .withRedefinedSubclass(classes.endpointType)
-                .verify();
+        EqualsVerifier
+            .forClass(classes.subType)
+            .withRedefinedSuperclass()
+            .withRedefinedSubclass(classes.endpointType)
+            .verify();
     }
 
     @ParameterizedTest
@@ -34,24 +35,26 @@ public class CoverageWithInheritanceTest {
         classes.containerType.getConstructor().newInstance();
         classes.superType.getConstructor(int.class, int.class).newInstance(0, 0);
         classes.subType
-                .getConstructor(int.class, int.class, Color.class)
-                .newInstance(0, 0, Color.INDIGO);
+            .getConstructor(int.class, int.class, Color.class)
+            .newInstance(0, 0, Color.INDIGO);
         classes.endpointType
-                .getConstructor(int.class, int.class, Color.class)
-                .newInstance(0, 0, Color.INDIGO);
+            .getConstructor(int.class, int.class, Color.class)
+            .newInstance(0, 0, Color.INDIGO);
     }
 
     private static final class Classes<T> {
+
         private final Class<?> containerType;
         private final Class<? super T> superType;
         private final Class<T> subType;
         private final Class<? extends T> endpointType;
 
         private Classes(
-                Class<?> containerType,
-                Class<? super T> superType,
-                Class<T> subType,
-                Class<? extends T> endpointType) {
+            Class<?> containerType,
+            Class<? super T> superType,
+            Class<T> subType,
+            Class<? extends T> endpointType
+        ) {
             this.containerType = containerType;
             this.superType = superType;
             this.subType = subType;

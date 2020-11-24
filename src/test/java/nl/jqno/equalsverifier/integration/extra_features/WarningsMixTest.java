@@ -8,126 +8,142 @@ import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import org.junit.jupiter.api.Test;
 
 public class WarningsMixTest {
+
     @Test
-    public void
-            fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(MutablePoint.class)
-                                        .suppress(Warning.STRICT_INHERITANCE)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Mutability:");
+    public void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(MutablePoint.class)
+                        .suppress(Warning.STRICT_INHERITANCE)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Mutability:");
     }
 
     @Test
-    public void
-            fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(MutablePoint.class)
-                                        .suppress(Warning.NONFINAL_FIELDS)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Subclass:");
+    public void fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(MutablePoint.class)
+                        .suppress(Warning.NONFINAL_FIELDS)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Subclass:");
     }
 
     @Test
-    public void
-            succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
-        EqualsVerifier.forClass(MutablePoint.class)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                .verify();
+    public void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+        EqualsVerifier
+            .forClass(MutablePoint.class)
+            .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     @Test
-    public void
-            fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NeverNullColorContainer.class)
-                                        .suppress(Warning.STRICT_INHERITANCE)
-                                        .verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains("Non-nullity:");
+    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NeverNullColorContainer.class)
+                        .suppress(Warning.STRICT_INHERITANCE)
+                        .verify()
+            )
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains("Non-nullity:");
     }
 
     @Test
-    public void
-            fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NeverNullColorContainer.class)
-                                        .suppress(Warning.NULL_FIELDS)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Subclass:");
+    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NeverNullColorContainer.class)
+                        .suppress(Warning.NULL_FIELDS)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Subclass:");
     }
 
     @Test
-    public void
-            succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
-        EqualsVerifier.forClass(NeverNullColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
-                .verify();
+    public void succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+        EqualsVerifier
+            .forClass(NeverNullColorContainer.class)
+            .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
     public void succeed_whenWarningsAreSuppressedSeparately_givenBothWarningsNeedToBeSuppressed() {
-        EqualsVerifier.forClass(NeverNullColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+        EqualsVerifier
+            .forClass(NeverNullColorContainer.class)
+            .suppress(Warning.STRICT_INHERITANCE)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
-    public void
-            fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                                        .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Mutability:");
+    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NeverNullAndMutableColorContainer.class)
+                        .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Mutability:");
     }
 
     @Test
-    public void
-            fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                                        .suppress(
-                                                Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-                                        .verify())
-                .assertFailure()
-                .assertCause(NullPointerException.class)
-                .assertMessageContains("Non-nullity:");
+    public void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NeverNullAndMutableColorContainer.class)
+                        .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
+                        .verify()
+            )
+            .assertFailure()
+            .assertCause(NullPointerException.class)
+            .assertMessageContains("Non-nullity:");
     }
 
     @Test
-    public void
-            fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                                        .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains("Subclass:");
+    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(NeverNullAndMutableColorContainer.class)
+                        .suppress(Warning.NONFINAL_FIELDS, Warning.NULL_FIELDS)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Subclass:");
     }
 
     @Test
-    public void
-            succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
-        EqualsVerifier.forClass(NeverNullAndMutableColorContainer.class)
-                .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
-                .verify();
+    public void succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
+        EqualsVerifier
+            .forClass(NeverNullAndMutableColorContainer.class)
+            .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     static class NeverNullColorContainer {
+
         private final Color color;
 
         public NeverNullColorContainer(Color color) {
@@ -149,6 +165,7 @@ public class WarningsMixTest {
     }
 
     static class NeverNullAndMutableColorContainer {
+
         private Color color;
 
         public NeverNullAndMutableColorContainer(Color color) {

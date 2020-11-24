@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class OriginalStateTest {
+
     private static final String INSTANCE_1 = "instance 1";
     private static final String INSTANCE_2 = "instance 2";
     private static final String STATIC = "static";
@@ -53,7 +54,8 @@ public class OriginalStateTest {
             assertTrue(e.getMessage().contains("Mutability"));
         } catch (Throwable ignored) {
             fail(
-                    "EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
+                "EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception."
+            );
         }
 
         assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
@@ -61,6 +63,7 @@ public class OriginalStateTest {
     }
 
     static final class CorrectEquals {
+
         private static final String STATIC_FINAL_VALUE = STATIC_FINAL;
         private static String staticValue = STATIC;
         private final String instanceValue;
@@ -81,6 +84,7 @@ public class OriginalStateTest {
     }
 
     static final class CorrectEqualsContainer {
+
         private final CorrectEquals foo;
 
         public CorrectEqualsContainer(CorrectEquals foo) {
@@ -99,6 +103,7 @@ public class OriginalStateTest {
     }
 
     static final class CorrectEqualsContainerContainer {
+
         private final CorrectEqualsContainer foo;
 
         public CorrectEqualsContainerContainer(CorrectEqualsContainer foo) {
@@ -117,6 +122,7 @@ public class OriginalStateTest {
     }
 
     abstract static class SuperContainer {
+
         private static final String STATIC_FINAL_VALUE = STATIC_FINAL;
         private static String staticValue = STATIC;
 
@@ -142,12 +148,14 @@ public class OriginalStateTest {
     }
 
     static final class SubContainer extends SuperContainer {
+
         public SubContainer(CorrectEquals foo) {
             super(foo);
         }
     }
 
     static final class FailingEqualsContainerContainer {
+
         private CorrectEqualsContainer foo;
 
         public FailingEqualsContainerContainer(CorrectEqualsContainer foo) {

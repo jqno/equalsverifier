@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.v
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 
 public final class FactoryCacheFactory {
+
     private FactoryCacheFactory() {}
 
     public static FactoryCache withPrimitiveFactories() {

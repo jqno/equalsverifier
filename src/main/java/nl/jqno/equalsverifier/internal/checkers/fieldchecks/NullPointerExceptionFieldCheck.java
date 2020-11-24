@@ -12,9 +12,11 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 @SuppressFBWarnings(
-        value = "RV_RETURN_VALUE_IGNORED",
-        justification = "We only want to see if it throws an exception.")
+    value = "RV_RETURN_VALUE_IGNORED",
+    justification = "We only want to see if it throws an exception."
+)
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
+
     private Configuration<T> config;
 
     public NullPointerExceptionFieldCheck(Configuration<T> config) {
@@ -23,9 +25,10 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(
-            ObjectAccessor<T> referenceAccessor,
-            ObjectAccessor<T> copyAccessor,
-            FieldAccessor fieldAccessor) {
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
         if (config.getNonnullFields().contains(fieldAccessor.getFieldName())) {
             return;
         }
@@ -55,9 +58,10 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         handle("equals", field, () -> reference.equals(changed));
         handle("equals", field, () -> changed.equals(reference));
         handle(
-                "hashCode",
-                field,
-                () -> config.getCachedHashCodeInitializer().getInitializedHashCode(changed));
+            "hashCode",
+            field,
+            () -> config.getCachedHashCodeInitializer().getInitializedHashCode(changed)
+        );
     }
 
     private void handle(String testedMethodName, Field field, Runnable r) {
@@ -75,35 +79,39 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void npeThrown(String method, Field field, NullPointerException e) {
-        Formatter f =
-                Formatter.of(
-                        "Non-nullity: %% throws NullPointerException on field %%.",
-                        method, field.getName());
+        Formatter f = Formatter.of(
+            "Non-nullity: %% throws NullPointerException on field %%.",
+            method,
+            field.getName()
+        );
         fail(f, e);
     }
 
     private void abstractMethodErrorThrown(String method, Field field, AbstractMethodError e) {
-        Formatter f =
-                Formatter.of(
-                        "Abstract delegation: %% throws AbstractMethodError when field %% is null.\n"
-                                + "Suppress Warning.NULL_FIELDS to disable this check.",
-                        method, field.getName());
+        Formatter f = Formatter.of(
+            "Abstract delegation: %% throws AbstractMethodError when field %% is null.\n" +
+            "Suppress Warning.NULL_FIELDS to disable this check.",
+            method,
+            field.getName()
+        );
         fail(f, e);
     }
 
     private void classCastExceptionThrown(Field field, ClassCastException e) {
-        Formatter f =
-                Formatter.of(
-                        "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for %%.",
-                        field.getType().getSimpleName());
+        Formatter f = Formatter.of(
+            "Generics: ClassCastException was thrown. Consider using withGenericPrefabValues for %%.",
+            field.getType().getSimpleName()
+        );
         fail(f, e);
     }
 
     private void exceptionThrown(String method, Field field, Exception e) {
-        Formatter f =
-                Formatter.of(
-                        "%% throws %% when field %% is null.",
-                        method, e.getClass().getSimpleName(), field.getName());
+        Formatter f = Formatter.of(
+            "%% throws %% when field %% is null.",
+            method,
+            e.getClass().getSimpleName(),
+            field.getName()
+        );
         fail(f, e);
     }
 }

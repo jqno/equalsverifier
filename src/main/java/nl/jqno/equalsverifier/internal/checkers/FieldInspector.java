@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 
 public class FieldInspector<T> {
+
     private final ClassAccessor<T> classAccessor;
     private final TypeTag typeTag;
 
@@ -30,12 +31,21 @@ public class FieldInspector<T> {
     }
 
     public void checkWithNull(
-            Set<String> nonnullFields, AnnotationCache annotationCache, FieldCheck<T> check) {
+        Set<String> nonnullFields,
+        AnnotationCache annotationCache,
+        FieldCheck<T> check
+    ) {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
-            ObjectAccessor<T> reference =
-                    classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
-            ObjectAccessor<T> changed =
-                    classAccessor.getDefaultValuesAccessor(typeTag, nonnullFields, annotationCache);
+            ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(
+                typeTag,
+                nonnullFields,
+                annotationCache
+            );
+            ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(
+                typeTag,
+                nonnullFields,
+                annotationCache
+            );
             FieldAccessor fieldAccessor = FieldAccessor.of(field);
 
             check.execute(reference, changed, fieldAccessor);

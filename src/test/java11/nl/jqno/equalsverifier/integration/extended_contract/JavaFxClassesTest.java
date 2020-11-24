@@ -4,18 +4,16 @@ import static nl.jqno.equalsverifier.testhelpers.Util.*;
 
 import java.util.Map;
 import java.util.Objects;
-
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.types.Point;
-
-import org.junit.jupiter.api.Test;
-
 import javafx.beans.property.*;
 import javafx.collections.*;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
 public class JavaFxClassesTest {
+
     @Test
     public void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
         EqualsVerifier.forClass(JavaFxApiClassesContainer.class).verify();
@@ -53,6 +51,7 @@ public class JavaFxClassesTest {
 
     @SuppressWarnings({ "rawtypes", "unused" })
     static final class JavaFxApiClassesContainer {
+
         private final ObservableList observableList;
         private final ObservableMap observableMap;
         private final ObservableSet observableSet;
@@ -67,11 +66,21 @@ public class JavaFxClassesTest {
         private final SetProperty setProperty;
         private final StringProperty stringProperty;
 
-        public JavaFxApiClassesContainer(ObservableList observableList, ObservableMap observableMap,
-                ObservableSet observableSet, BooleanProperty booleanProperty, DoubleProperty doubleProperty,
-                FloatProperty floatProperty, IntegerProperty integerProperty, ListProperty listProperty,
-                LongProperty longProperty, MapProperty mapProperty, ObjectProperty objectProperty,
-                SetProperty setProperty, StringProperty stringProperty) {
+        public JavaFxApiClassesContainer(
+            ObservableList observableList,
+            ObservableMap observableMap,
+            ObservableSet observableSet,
+            BooleanProperty booleanProperty,
+            DoubleProperty doubleProperty,
+            FloatProperty floatProperty,
+            IntegerProperty integerProperty,
+            ListProperty listProperty,
+            LongProperty longProperty,
+            MapProperty mapProperty,
+            ObjectProperty objectProperty,
+            SetProperty setProperty,
+            StringProperty stringProperty
+        ) {
             this.observableList = observableList;
             this.observableMap = observableMap;
             this.observableSet = observableSet;
@@ -99,6 +108,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxObservableListContainer {
+
         private final ObservableList<Point> list;
 
         public JavaFxObservableListContainer(ObservableList<Point> list) {
@@ -134,6 +144,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxObservableMapContainer {
+
         private final ObservableMap<Point, Point> map;
 
         public JavaFxObservableMapContainer(ObservableMap<Point, Point> map) {
@@ -170,6 +181,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxObservableSetContainer {
+
         private final ObservableSet<Point> set;
 
         public JavaFxObservableSetContainer(ObservableSet<Point> set) {
@@ -203,6 +215,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxListPropertyContainer {
+
         private final ListProperty<Point> p;
 
         public JavaFxListPropertyContainer(ListProperty<Point> p) {
@@ -232,6 +245,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxMapPropertyContainer {
+
         private final MapProperty<Point, Point> p;
 
         public JavaFxMapPropertyContainer(MapProperty<Point, Point> p) {
@@ -260,6 +274,7 @@ public class JavaFxClassesTest {
     }
 
     static final class JavaFxSetPropertyContainer {
+
         private final SetProperty<Point> p;
 
         public JavaFxSetPropertyContainer(SetProperty<Point> p) {

@@ -11,6 +11,7 @@ import java.util.Set;
  * actually used by EqualsVerifier.
  */
 public class AnnotationProperties {
+
     private final String className;
     private Map<String, Set<String>> arrayValues = new HashMap<>();
 

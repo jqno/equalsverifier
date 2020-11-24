@@ -11,9 +11,8 @@ import nl.jqno.equalsverifier.Warning;
  * @param <T> The class under test.
  */
 public interface EqualsVerifierApi<T> {
-
-    /* package private */ static final String WEBSITE_URL =
-            "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages";
+    /* package private */static final String WEBSITE_URL =
+        "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages";
 
     /**
      * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning} to see what warnings
@@ -51,7 +50,9 @@ public interface EqualsVerifierApi<T> {
      * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
      */
     public <S> EqualsVerifierApi<T> withGenericPrefabValues(
-            Class<S> otherType, Func1<?, S> factory);
+        Class<S> otherType,
+        Func1<?, S> factory
+    );
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 2 generic
@@ -65,7 +66,9 @@ public interface EqualsVerifierApi<T> {
      * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
      */
     public <S> EqualsVerifierApi<T> withGenericPrefabValues(
-            Class<S> otherType, Func2<?, ?, S> factory);
+        Class<S> otherType,
+        Func2<?, ?, S> factory
+    );
 
     /**
      * Signals that {@code getClass} is used in the implementation of the {@code equals} method,

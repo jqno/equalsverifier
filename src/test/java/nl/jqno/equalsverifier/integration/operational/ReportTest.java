@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class ReportTest {
+
     @Test
     public void isEmptyWhenClassIsCorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(FinalPoint.class).report();
@@ -29,9 +30,11 @@ public class ReportTest {
         assertEquals(Point.class, report.getType());
         assertFalse(report.isSuccessful());
         assertThat(
-                report.getMessage(),
-                startsWith(
-                        "EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"));
+            report.getMessage(),
+            startsWith(
+                "EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"
+            )
+        );
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
     }

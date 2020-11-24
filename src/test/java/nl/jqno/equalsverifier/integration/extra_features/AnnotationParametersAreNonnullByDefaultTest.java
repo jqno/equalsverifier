@@ -27,43 +27,47 @@ public class AnnotationParametersAreNonnullByDefaultTest {
     }
 
     @Test
-    public void
-            succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
-        EqualsVerifier.forClass(ParametersAreNonnullByDefaultOuter.FMiddle.FInnerInner.class)
-                .verify();
+    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
+        EqualsVerifier
+            .forClass(ParametersAreNonnullByDefaultOuter.FMiddle.FInnerInner.class)
+            .verify();
     }
 
     @Test
-    public void
-            fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        ExpectedException.when(
-                        () ->
-                                EqualsVerifier.forClass(
-                                                ParametersAreNonnullByDefaultWithNullableOnClass
-                                                        .class)
-                                        .verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "Non-nullity", "equals throws NullPointerException", "on field o");
+    public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
+                        .verify()
+            )
+            .assertFailure()
+            .assertMessageContains(
+                "Non-nullity",
+                "equals throws NullPointerException",
+                "on field o"
+            );
     }
 
     @Test
-    public void
-            succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
-        EqualsVerifier.forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
-                .suppress(Warning.NULL_FIELDS)
-                .verify();
+    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
+        EqualsVerifier
+            .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
+            .suppress(Warning.NULL_FIELDS)
+            .verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        EqualsVerifier.forClass(
-                        ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals.class)
-                .verify();
+        EqualsVerifier
+            .forClass(ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals.class)
+            .verify();
     }
 
     @ParametersAreNonnullByDefault
     static final class ParametersAreNonnullByDefaultOnClass {
+
         private final Object o;
 
         public ParametersAreNonnullByDefaultOnClass(Object o) {
@@ -87,7 +91,9 @@ public class AnnotationParametersAreNonnullByDefaultTest {
 
     @ParametersAreNonnullByDefault
     static final class ParametersAreNonnullByDefaultOuter {
+
         static final class FInner {
+
             private final Object o;
 
             public FInner(Object o) {
@@ -110,7 +116,9 @@ public class AnnotationParametersAreNonnullByDefaultTest {
         }
 
         static final class FMiddle {
+
             static final class FInnerInner {
+
                 private final Object o;
 
                 public FInnerInner(Object o) {
@@ -136,7 +144,9 @@ public class AnnotationParametersAreNonnullByDefaultTest {
 
     @ParametersAreNonnullByDefault
     static final class ParametersAreNonnullByDefaultWithNullableOnClass {
-        private final @Nullable Object o;
+
+        @Nullable
+        private final Object o;
 
         public ParametersAreNonnullByDefaultWithNullableOnClass(Object o) {
             this.o = o;
@@ -147,8 +157,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
             if (!(obj instanceof ParametersAreNonnullByDefaultWithNullableOnClass)) {
                 return false;
             }
-            ParametersAreNonnullByDefaultWithNullableOnClass other =
-                    (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
+            ParametersAreNonnullByDefaultWithNullableOnClass other = (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
             return o.equals(other.o);
         }
 
@@ -159,22 +168,21 @@ public class AnnotationParametersAreNonnullByDefaultTest {
     }
 
     @ParametersAreNonnullByDefault
-    static final class ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals {
-        private final @Nullable Object o;
+    static final class ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals {
 
-        public ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals(Object o) {
+        @Nullable
+        private final Object o;
+
+        public ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals(Object o) {
             this.o = o;
         }
 
         @Override
         public final boolean equals(Object obj) {
-            if (!(obj
-                    instanceof
-                    ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals)) {
+            if (!(obj instanceof ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals)) {
                 return false;
             }
-            ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals other =
-                    (ParametersAreNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
+            ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals other = (ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 

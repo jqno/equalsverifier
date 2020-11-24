@@ -1,9 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
@@ -12,16 +15,11 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordObjectAccessorScramblingTest.GenericContainer;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 public class RecordObjectAccessorScramblingTest {
+
     private FactoryCache factoryCache;
     private PrefabValues prefabValues;
 
@@ -43,11 +41,13 @@ public class RecordObjectAccessorScramblingTest {
     public void scramble() throws Exception {
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
         factoryCache.put(
-                Point.class,
-                values(
-                        constructor.newInstance(1, 2),
-                        constructor.newInstance(2, 3),
-                        constructor.newInstance(1, 2)));
+            Point.class,
+            values(
+                constructor.newInstance(1, 2),
+                constructor.newInstance(2, 3),
+                constructor.newInstance(1, 2)
+            )
+        );
         Object original = constructor.newInstance(1, 2);
 
         Object scrambled = doScramble(original);
@@ -57,8 +57,12 @@ public class RecordObjectAccessorScramblingTest {
     @Test
     public void scrambleAllFields() throws Exception {
         Constructor<?> constructor =
-                TypeContainerRecord.class.getDeclaredConstructor(
-                        int.class, boolean.class, String.class, Object.class);
+            TypeContainerRecord.class.getDeclaredConstructor(
+                    int.class,
+                    boolean.class,
+                    String.class,
+                    Object.class
+                );
         Object someObject = new Object();
         Object original = constructor.newInstance(42, true, "hello", someObject);
 
@@ -75,9 +79,10 @@ public class RecordObjectAccessorScramblingTest {
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
         Object original = constructor.newInstance(1, 2);
 
-        ExpectedException.when(() -> create(original).shallowScramble(prefabValues, TypeTag.NULL))
-                .assertThrows(EqualsVerifierInternalBugException.class)
-                .assertMessageContains("Record:", "can't shallow-scramble a record.");
+        ExpectedException
+            .when(() -> create(original).shallowScramble(prefabValues, TypeTag.NULL))
+            .assertThrows(EqualsVerifierInternalBugException.class)
+            .assertMessageContains("Record:", "can't shallow-scramble a record.");
     }
 
     @Test
@@ -95,12 +100,14 @@ public class RecordObjectAccessorScramblingTest {
     @Test
     public void scrambleNestedGenerics() throws Exception {
         Constructor<?> constructor =
-                GenericContainerContainer.class.getDeclaredConstructor(
-                        GenericContainer.class, GenericContainer.class);
-        Object instance =
-                constructor.newInstance(
-                        new GenericContainer<String>(new ArrayList<String>()),
-                        new GenericContainer<Point3D>(new ArrayList<Point3D>()));
+            GenericContainerContainer.class.getDeclaredConstructor(
+                    GenericContainer.class,
+                    GenericContainer.class
+                );
+        Object instance = constructor.newInstance(
+            new GenericContainer<String>(new ArrayList<String>()),
+            new GenericContainer<Point3D>(new ArrayList<Point3D>())
+        );
         ObjectAccessor<?> accessor = create(instance);
 
         assertTrue(GenericContainer.<String>cast(fieldValue(accessor, "strings")).ts.isEmpty());
@@ -122,7 +129,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     private Object fieldValue(ObjectAccessor<?> accessor, String fieldName)
-            throws NoSuchFieldException {
+        throws NoSuchFieldException {
         Field field = accessor.get().getClass().getDeclaredField(fieldName);
         return accessor.getField(field);
     }
@@ -138,11 +145,13 @@ public class RecordObjectAccessorScramblingTest {
     private static final String ORIGINAL_VALUE = "original";
 
     record StaticFieldContainer(int nonstatic) {
+
         public static final String STATIC_FINAL = ORIGINAL_VALUE;
         public static String staticNonfinal = ORIGINAL_VALUE;
     }
 
     public static final class GenericContainer<T> {
+
         private List<T> ts;
 
         public GenericContainer(List<T> ts) {
@@ -156,5 +165,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     record GenericContainerContainer(
-            GenericContainer<String> strings, GenericContainer<Point3D> points) {}
+        GenericContainer<String> strings,
+        GenericContainer<Point3D> points
+    ) {}
 }

@@ -21,7 +21,10 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         List<Object> redValues = new ArrayList<>();
@@ -42,8 +45,9 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         }
 
         Object red = factory.apply(redValues);
-        Object blue =
-                useEmpty && emptyFactory != null ? emptyFactory.get() : factory.apply(blueValues);
+        Object blue = useEmpty && emptyFactory != null
+            ? emptyFactory.get()
+            : factory.apply(blueValues);
         Object redCopy = factory.apply(redValues);
 
         return Tuple.of(red, blue, redCopy);

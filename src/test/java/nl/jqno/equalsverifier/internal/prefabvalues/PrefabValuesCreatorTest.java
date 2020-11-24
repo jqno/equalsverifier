@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PrefabValuesCreatorTest {
+
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
     private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
@@ -76,52 +77,60 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveType() {
-        ExpectedException.when(() -> prefabValues.giveRed(NODE_TAG))
-                .assertThrows(RecursionException.class);
+        ExpectedException
+            .when(() -> prefabValues.giveRed(NODE_TAG))
+            .assertThrows(RecursionException.class);
     }
 
     @Test
     public void oneStepRecursiveArrayType() {
         factoryCache.put(
-                NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
+            NodeArray.class,
+            values(new NodeArray(), new NodeArray(), new NodeArray())
+        );
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(NODE_ARRAY_TAG);
     }
 
     @Test
     public void dontAddOneStepRecursiveArrayType() {
-        ExpectedException.when(() -> prefabValues.giveRed(NODE_ARRAY_TAG))
-                .assertThrows(RecursionException.class);
+        ExpectedException
+            .when(() -> prefabValues.giveRed(NODE_ARRAY_TAG))
+            .assertThrows(RecursionException.class);
     }
 
     @Test
     public void addTwoStepRecursiveType() {
         factoryCache.put(
-                TwoStepNodeB.class,
-                values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
+            TwoStepNodeB.class,
+            values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
+        );
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
     public void dontAddTwoStepRecursiveType() {
-        ExpectedException.when(() -> prefabValues.giveRed(TWOSTEP_NODE_A_TAG))
-                .assertThrows(RecursionException.class);
+        ExpectedException
+            .when(() -> prefabValues.giveRed(TWOSTEP_NODE_A_TAG))
+            .assertThrows(RecursionException.class);
     }
 
     @Test
     public void twoStepRecursiveArrayType() {
         factoryCache.put(
-                TwoStepNodeArrayB.class,
-                values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
+            TwoStepNodeArrayB.class,
+            values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB())
+        );
         prefabValues = new PrefabValues(factoryCache);
         prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
     @Test
     public void dontAddTwoStepRecursiveArrayType() {
-        ExpectedException.when(() -> prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
-                .assertThrows(RecursionException.class);
+        ExpectedException
+            .when(() -> prefabValues.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
+            .assertThrows(RecursionException.class);
     }
 
     @Test
@@ -131,22 +140,22 @@ public class PrefabValuesCreatorTest {
 
     @Test
     public void recursiveWithAnotherFieldFirst() {
-        ExpectedException.when(
-                        () ->
-                                prefabValues.giveRed(
-                                        new TypeTag(RecursiveWithAnotherFieldFirst.class)))
-                .assertThrows(RecursionException.class)
-                .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
-                .assertDescriptionDoesNotContain(
-                        RecursiveThisIsTheOtherField.class.getSimpleName());
+        ExpectedException
+            .when(() -> prefabValues.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
+            .assertThrows(RecursionException.class)
+            .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+            .assertDescriptionDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
     }
 
     @Test
     public void exceptionMessage() {
-        ExpectedException.when(() -> prefabValues.giveRed(TWOSTEP_NODE_A_TAG))
-                .assertThrows(RecursionException.class)
-                .assertDescriptionContains(
-                        TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
+        ExpectedException
+            .when(() -> prefabValues.giveRed(TWOSTEP_NODE_A_TAG))
+            .assertThrows(RecursionException.class)
+            .assertDescriptionContains(
+                TwoStepNodeA.class.getSimpleName(),
+                TwoStepNodeB.class.getSimpleName()
+            );
     }
 
     @Test
@@ -155,6 +164,7 @@ public class PrefabValuesCreatorTest {
     }
 
     static class StaticFinalContainer {
+
         public static final StaticFinalContainer X = new StaticFinalContainer();
     }
 }

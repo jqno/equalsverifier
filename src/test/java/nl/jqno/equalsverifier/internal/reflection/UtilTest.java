@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class UtilTest {
+
     @Test
     public void coverTheConstructor() {
         coverThePrivateConstructor(Util.class);
@@ -30,14 +31,14 @@ public class UtilTest {
 
     @Test
     public void classesReturnsItsArguments() {
-        Class<?>[] expected = new Class<?>[] {String.class, Object.class};
+        Class<?>[] expected = new Class<?>[] { String.class, Object.class };
         Class<?>[] actual = Util.classes(String.class, Object.class);
         assertArrayEquals(expected, actual);
     }
 
     @Test
     public void objectsReturnsItsArguments() {
-        Object[] expected = new Object[] {"x", new Point(1, 2)};
+        Object[] expected = new Object[] { "x", new Point(1, 2) };
         Object[] actual = Util.objects("x", new Point(1, 2));
         assertArrayEquals(expected, actual);
     }

@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse;
 import java.util.Objects;
 
 public final class NonnullEclipseOnPackage {
+
     private final Object o;
 
     public NonnullEclipseOnPackage(Object o) {

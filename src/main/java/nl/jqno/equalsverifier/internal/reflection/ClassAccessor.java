@@ -19,6 +19,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationV
  * @param <T> A class.
  */
 public class ClassAccessor<T> {
+
     private final Class<T> type;
     private final PrefabValues prefabValues;
 
@@ -120,7 +121,8 @@ public class ClassAccessor<T> {
 
     private boolean isMethodAbstract(String name, Class<?>... parameterTypes) {
         return rethrow(
-                () -> Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers()));
+            () -> Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers())
+        );
     }
 
     /**
@@ -193,8 +195,8 @@ public class ClassAccessor<T> {
      */
     public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType) {
         return buildObjectAccessor()
-                .scramble(prefabValues, enclosingType)
-                .scramble(prefabValues, enclosingType);
+            .scramble(prefabValues, enclosingType)
+            .scramble(prefabValues, enclosingType);
     }
 
     /**
@@ -210,11 +212,13 @@ public class ClassAccessor<T> {
      *     to their default values.
      */
     public ObjectAccessor<T> getDefaultValuesAccessor(
-            TypeTag enclosingType, Set<String> nonnullFields, AnnotationCache annotationCache) {
-        Predicate<Field> canBeDefault =
-                f ->
-                        !NonnullAnnotationVerifier.fieldIsNonnull(f, annotationCache)
-                                && !nonnullFields.contains(f.getName());
+        TypeTag enclosingType,
+        Set<String> nonnullFields,
+        AnnotationCache annotationCache
+    ) {
+        Predicate<Field> canBeDefault = f ->
+            !NonnullAnnotationVerifier.fieldIsNonnull(f, annotationCache) &&
+            !nonnullFields.contains(f.getName());
         return buildObjectAccessor().clear(canBeDefault, prefabValues, enclosingType);
     }
 

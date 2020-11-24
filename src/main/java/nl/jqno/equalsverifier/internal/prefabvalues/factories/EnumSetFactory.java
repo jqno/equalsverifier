@@ -12,8 +12,9 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  * Implementation of {@link PrefabValueFactory} that instantiates EnumSets using reflection, while
  * taking generics into account.
  */
-@SuppressWarnings({"unchecked", "rawtypes"})
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
+
     private final Function<Collection, T> factory;
 
     public EnumSetFactory(Function<Collection, T> factory) {
@@ -22,7 +23,10 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
 
     @Override
     public Tuple<T> createValues(
-            TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack) {
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone, Enum.class);
 

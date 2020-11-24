@@ -10,10 +10,15 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 public final class PrefabValuesApi {
+
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-            FactoryCache factoryCache, Class<T> otherType, T red, T blue) {
+        FactoryCache factoryCache,
+        Class<T> otherType,
+        T red,
+        T blue
+    ) {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
@@ -30,22 +35,29 @@ public final class PrefabValuesApi {
     }
 
     public static <T> void addGenericPrefabValues(
-            FactoryCache factoryCache, Class<T> otherType, Func1<?, T> factory) {
+        FactoryCache factoryCache,
+        Class<T> otherType,
+        Func1<?, T> factory
+    ) {
         Validations.validateNotNull(factory, "factory is null.");
         addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 1);
     }
 
     public static <T> void addGenericPrefabValues(
-            FactoryCache factoryCache, Class<T> otherType, Func2<?, ?, T> factory) {
+        FactoryCache factoryCache,
+        Class<T> otherType,
+        Func2<?, ?, T> factory
+    ) {
         Validations.validateNotNull(factory, "factory is null.");
         addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 2);
     }
 
     private static <T> void addGenericPrefabValueFactory(
-            FactoryCache factoryCache,
-            Class<T> otherType,
-            PrefabValueFactory<T> factory,
-            int arity) {
+        FactoryCache factoryCache,
+        Class<T> otherType,
+        PrefabValueFactory<T> factory,
+        int arity
+    ) {
         Validations.validateGenericPrefabValues(otherType, factory, arity);
         factoryCache.put(otherType, factory);
     }

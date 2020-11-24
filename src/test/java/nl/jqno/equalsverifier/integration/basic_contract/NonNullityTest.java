@@ -6,22 +6,25 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
 public class NonNullityTest {
+
     @Test
     public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
-        ExpectedException.when(
-                        () -> EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify())
-                .assertFailure()
-                .assertMessageContains("Non-nullity: NullPointerException thrown");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify())
+            .assertFailure()
+            .assertMessageContains("Non-nullity: NullPointerException thrown");
     }
 
     @Test
     public void fail_whenEqualsReturnsTrue_givenNullInput() {
-        ExpectedException.when(() -> EqualsVerifier.forClass(NullReturnsTrue.class).verify())
-                .assertFailure()
-                .assertMessageContains("Non-nullity: true returned for null value");
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NullReturnsTrue.class).verify())
+            .assertFailure()
+            .assertMessageContains("Non-nullity: true returned for null value");
     }
 
     static final class NullPointerExceptionThrower extends Point {
+
         public NullPointerExceptionThrower(int x, int y) {
             super(x, y);
         }
@@ -36,6 +39,7 @@ public class NonNullityTest {
     }
 
     static final class NullReturnsTrue extends Point {
+
         public NullReturnsTrue(int x, int y) {
             super(x, y);
         }
