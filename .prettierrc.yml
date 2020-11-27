@@ -1,3 +1,4 @@
+# Changes here must be reflected in pom.xml
 tabWidth: 4
 printWidth: 100
 trailingComma: "none"
