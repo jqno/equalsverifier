@@ -1,0 +1,52 @@
+name: CI
+on: [ push, pull_request ]
+
+jobs:
+  supported-jdk:
+    name: ${{ matrix.title }}
+    continue-on-error: ${{ matrix.continue-on-error }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - title: "Supported JDK 8"
+            continue-on-error: false
+            java: 8
+            flags: "-DdisableStaticAnalysis"
+          - title: "Supported JDK 11"
+            continue-on-error: false
+            java: 11
+            flags: ""
+          - title: "Supported JDK 15"
+            continue-on-error: false
+            java: 15
+            flags: ""
+          - title: "Supported JDK 15 with preview features"
+            continue-on-error: false
+            java: 15
+            flags: "-Dadditional.argLine=--enable-preview"
+          - title: "Experimental JDK 16 (simplified)"
+            continue-on-error: false
+            java: 16-ea
+            flags: "-Dexperimental -DdisableStaticAnalysis"
+          - title: "Experimental JDK 16 (full)"
+            continue-on-error: true
+            java: 16-ea
+            flags: ""
+    runs-on: ubuntu-latest
+    steps:
+    - name: 'Checkout from Git'
+      uses: actions/checkout@v2
+    - name: 'Cache Maven repo'
+      uses: actions/cache@v2
+      with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+    - name: 'Set up JDK ${{ matrix.java }}'
+      uses: actions/setup-java@v1
+      with:
+          java-version: ${{ matrix.java }}
+    - name: 'Run Maven'
+      run: mvn clean verify ${{ matrix.flags }}
