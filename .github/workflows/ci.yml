@@ -48,5 +48,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
           java-version: ${{ matrix.java }}
+    - name: 'Display JDK version'
+      run: java -version
     - name: 'Run Maven'
       run: mvn clean verify ${{ matrix.flags }}
