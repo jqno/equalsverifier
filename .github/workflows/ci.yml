@@ -11,27 +11,33 @@ jobs:
         include:
           - title: "Supported JDK 8"
             continue-on-error: false
+            cache-id: "jdk8"
             java: 8
             flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 11"
             continue-on-error: false
+            cache-id: "jdk11"
             java: 11
             flags: ""
           - title: "Supported JDK 15"
             continue-on-error: false
+            cache-id: "jdk15"
             java: 15
             flags: ""
           - title: "Supported JDK 15 with preview features"
             continue-on-error: false
+            cache-id: "jdk15-preview"
             java: 15
             flags: "-Dadditional.argLine=--enable-preview"
-          - title: "Experimental JDK 16 (simplified)"
+          - title: "Experimental JDK EA (simplified)"
             continue-on-error: false
-            java: 16-ea
+            cache-id: "jdk-ea-simple"
+            java: "16-ea"
             flags: "-Dexperimental -DdisableStaticAnalysis"
-          - title: "Experimental JDK 16 (full)"
+          - title: "Experimental JDK EA (full)"
             continue-on-error: true
-            java: 16-ea
+            cache-id: "jdk-ea-full"
+            java: "16-ea"
             flags: ""
     runs-on: ubuntu-latest
     steps:
@@ -41,9 +47,9 @@ jobs:
       uses: actions/cache@v2
       with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-mvn-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-mvn-${{ matrix.cache-id }}-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-mvn-
+            ${{ runner.os }}-mvn-${{ matrix.cache-id }}
     - name: 'Set up JDK ${{ matrix.java }}'
       uses: actions/setup-java@v1
       with:
