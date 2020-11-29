@@ -437,6 +437,9 @@
                                 <format>
                                     <includes>
                                         <include>src/*/java/**/*.java</include>
+                                        <include>src/test/java11/**/*.java</include>
+                                        <!-- Wait for https://github.com/jhipster/prettier-java/issues/433 -->
+                                        <!-- <include>src/test/java16/**/*.java</include> -->
                                     </includes>
                                     <prettier>
                                         <devDependencies>
