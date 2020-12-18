@@ -57,7 +57,7 @@ jobs:
       with:
           java-version: ${{ matrix.java }}
     - name: 'Set up node' # Needed for formatting with prettier
-      uses: actions/setup-node@v2.1.3
+      uses: actions/setup-node@v2.1.4
       with:
         node-version: 12
     - name: 'Display JDK version'
