@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced [Google Fava Format](https://github.com/google/google-java-format) with [Prettier-Java](https://prettier-java.tech/), which makes the code look less jagged and messy.
 - CI is migrated from CircleCI to GitHub Actions.
 
+## Fixed
+- Added prefab values for `java.text.NumberFormat` and `java.text.DecimalFormat` ([Issue 379](https://github.com/jqno/equalsverifier/issues/379))
+
 ## [3.5] - 2020-10-20
 ### Added
 - Updated support for Java 15's records.

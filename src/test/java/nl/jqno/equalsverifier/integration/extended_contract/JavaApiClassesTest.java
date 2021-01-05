@@ -10,6 +10,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.*;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -423,6 +425,8 @@ public class JavaApiClassesTest {
         private final File file;
         private final GregorianCalendar gregorianCalendar;
         private final Pattern pattern;
+        private final DecimalFormat decimalFormat;
+        private final NumberFormat numberFormat;
         private final SimpleDateFormat simpleDateFormat;
         private final URI uri;
         private final URL url;
@@ -447,6 +451,8 @@ public class JavaApiClassesTest {
             File file,
             GregorianCalendar gregorianCalendar,
             Pattern pattern,
+            DecimalFormat decimalFormat,
+            NumberFormat numberFormat,
             SimpleDateFormat simpleDateFormat,
             URI uri,
             URL url,
@@ -470,6 +476,8 @@ public class JavaApiClassesTest {
             this.file = file;
             this.gregorianCalendar = gregorianCalendar;
             this.pattern = pattern;
+            this.decimalFormat = decimalFormat;
+            this.numberFormat = numberFormat;
             this.simpleDateFormat = simpleDateFormat;
             this.uri = uri;
             this.url = url;

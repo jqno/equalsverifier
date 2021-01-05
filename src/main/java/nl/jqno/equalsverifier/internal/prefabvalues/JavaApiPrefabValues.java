@@ -15,6 +15,8 @@ import java.net.*;
 import java.net.InetSocketAddress;
 import java.nio.*;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -244,6 +246,18 @@ public final class JavaApiPrefabValues {
         addValues(OffsetDateTime.class, OffsetDateTime.MIN, OffsetDateTime.MAX, OffsetDateTime.MIN);
         addValues(OffsetTime.class, OffsetTime.MIN, OffsetTime.MAX, OffsetTime.MIN);
         addValues(Period.class, Period.ZERO, Period.of(1, 1, 1), Period.ZERO);
+        addValues(
+            DecimalFormat.class,
+            new DecimalFormat("x0.0"),
+            new DecimalFormat("y0.0"),
+            new DecimalFormat("x0.0")
+        );
+        addValues(
+            NumberFormat.class,
+            new DecimalFormat("x0.0"),
+            new DecimalFormat("y0.0"),
+            new DecimalFormat("x0.0")
+        );
         addValues(
             SimpleDateFormat.class,
             new SimpleDateFormat("yMd"),
