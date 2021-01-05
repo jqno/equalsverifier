@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.5.1] - 2021-01-05
 ### Changed
 - Website is migrated from `gh-pages` branch to `docs` folder to make it more accessible.
 - JDK-specific unit tests, such as the `RecordsTest` which targets JDK16+, have now been migrated to `src/test/javaXX` (where `XX` is the version number of the JDK the test targets) so there is no longer a need to compile classes at run-time inside the test.
@@ -739,8 +741,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.1...HEAD
 
+[3.5.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5...equalsverifier-3.5.1
 [3.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.3...equalsverifier-3.5
 
 [3.4.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.2...equalsverifier-3.4.3
