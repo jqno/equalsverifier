@@ -218,6 +218,12 @@ public final class JavaApiPrefabValues {
             new GregorianCalendar(2010, 7, 5),
             new GregorianCalendar(2010, 7, 4)
         );
+        addValues(
+            Clock.class,
+            Clock.systemUTC(),
+            Clock.system(ZoneId.of("-10")),
+            Clock.systemUTC()
+        );
         addValues(Date.class, new Date(0), new Date(1), new Date(0));
         addValues(
             DateFormat.class,
