@@ -522,6 +522,7 @@ public class JavaApiClassesTest {
         private final CompletableFuture<?> completableFuture;
         private final StampedLock stampedLock;
         private final Supplier<?> supplier;
+        private final Clock clock;
         private final Duration duration;
         private final Instant instant;
         private final MonthDay monthDay;
@@ -546,6 +547,7 @@ public class JavaApiClassesTest {
             CompletableFuture<?> completableFuture,
             StampedLock stampedLock,
             Supplier<?> supplier,
+            Clock clock,
             Duration duration,
             Instant instant,
             MonthDay monthDay,
@@ -569,6 +571,7 @@ public class JavaApiClassesTest {
             this.completableFuture = completableFuture;
             this.stampedLock = stampedLock;
             this.supplier = supplier;
+            this.clock = clock;
             this.duration = duration;
             this.instant = instant;
             this.monthDay = monthDay;
