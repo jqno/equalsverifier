@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.5.2] - 2021-01-19
 ## Fixed
 - Added prefab values for `java.time.Clock` ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
 
@@ -743,8 +745,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.1...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.2...HEAD
 
+[3.5.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.1...equalsverifier-3.5.2
 [3.5.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5...equalsverifier-3.5.1
 [3.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.4.3...equalsverifier-3.5
 
