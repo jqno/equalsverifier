@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+## Fixed
+- Added prefab values for `java.time.Clock` ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
 
 ## [3.5.1] - 2021-01-05
 ### Changed
