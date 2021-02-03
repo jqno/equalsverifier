@@ -531,6 +531,9 @@ public class JavaApiClassesTest {
         private final Period period;
         private final Year year;
         private final YearMonth yearMonth;
+        private final DoubleSummaryStatistics doubleSummaryStatistics;
+        private final IntSummaryStatistics intSummaryStatistics;
+        private final LongSummaryStatistics longSummaryStatistics;
 
         public Java8ApiClassesContainer(
             Optional<?> optional,
@@ -555,7 +558,10 @@ public class JavaApiClassesTest {
             OffsetTime offsetTime,
             Period period,
             Year year,
-            YearMonth yearMonth
+            YearMonth yearMonth,
+            DoubleSummaryStatistics doubleSummaryStatistics,
+            IntSummaryStatistics intSummaryStatistics,
+            LongSummaryStatistics longSummaryStatistics
         ) {
             this.optional = optional;
             this.optionalDouble = optionalDouble;
@@ -580,6 +586,9 @@ public class JavaApiClassesTest {
             this.period = period;
             this.year = year;
             this.yearMonth = yearMonth;
+            this.doubleSummaryStatistics = doubleSummaryStatistics;
+            this.intSummaryStatistics = intSummaryStatistics;
+            this.longSummaryStatistics = longSummaryStatistics;
         }
 
         @Override

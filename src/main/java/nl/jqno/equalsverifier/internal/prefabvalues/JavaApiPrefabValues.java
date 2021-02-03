@@ -209,6 +209,16 @@ public final class JavaApiPrefabValues {
             Currency.getInstance("EUR"),
             Currency.getInstance("JPY")
         );
+
+        DoubleSummaryStatistics redDoubleStats = new DoubleSummaryStatistics();
+        DoubleSummaryStatistics blueDoubleStats = new DoubleSummaryStatistics();
+        addValues(DoubleSummaryStatistics.class, redDoubleStats, blueDoubleStats, redDoubleStats);
+        IntSummaryStatistics redIntStats = new IntSummaryStatistics();
+        IntSummaryStatistics blueIntStats = new IntSummaryStatistics();
+        addValues(IntSummaryStatistics.class, redIntStats, blueIntStats, redIntStats);
+        LongSummaryStatistics redLongStats = new LongSummaryStatistics();
+        LongSummaryStatistics blueLongStats = new LongSummaryStatistics();
+        addValues(LongSummaryStatistics.class, redLongStats, blueLongStats, redLongStats);
     }
 
     private void addDateTimeClasses() {

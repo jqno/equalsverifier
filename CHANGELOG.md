@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+- Added prefab values for `java.util.DoubleSummaryStatistics`, `java.util.IntSummaryStatistics` and `java.util.LongSummaryStatistics` ([Issue 385](https://github.com/jqno/equalsverifier/issues/385))
 
 ## [3.5.2] - 2021-01-19
 ## Fixed
