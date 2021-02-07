@@ -10,6 +10,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.*;
 import java.nio.*;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -441,6 +442,7 @@ public class JavaApiClassesTest {
         private final java.sql.Timestamp sqlTimestamp;
         private final Currency currency;
         private final EventObject eventObject;
+        private final Charset charset;
 
         public CommonClassesContainer(
             String string,
@@ -466,7 +468,8 @@ public class JavaApiClassesTest {
             java.sql.Time sqlTime,
             java.sql.Timestamp sqlTimestamp,
             Currency currency,
-            EventObject eventObject
+            EventObject eventObject,
+            Charset charset
         ) {
             this.string = string;
             this.integer = integer;
@@ -492,6 +495,7 @@ public class JavaApiClassesTest {
             this.sqlTimestamp = sqlTimestamp;
             this.currency = currency;
             this.eventObject = eventObject;
+            this.charset = charset;
         }
 
         @Override

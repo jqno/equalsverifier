@@ -14,6 +14,8 @@ import java.math.BigInteger;
 import java.net.*;
 import java.net.InetSocketAddress;
 import java.nio.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -156,6 +158,12 @@ public final class JavaApiPrefabValues {
     private void addCommonClasses() {
         addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
         addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
+        addValues(
+            Charset.class,
+            StandardCharsets.UTF_8,
+            StandardCharsets.US_ASCII,
+            StandardCharsets.UTF_8
+        );
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
         addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
