@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.5.4] - 2021-02-08
 ### Fixed
-- Added prefab values for `jaqva.nio.charset.Charset` ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
+- Added prefab values for `java.nio.charset.Charset` ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
 
 ## [3.5.3] - 2021-02-03
 ### Fixed
