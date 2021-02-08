@@ -151,6 +151,7 @@ public final class JavaApiPrefabValues {
         addValues(Enum.class, Dummy.RED, Dummy.BLUE, Dummy.RED);
     }
 
+    // CHECKSTYLE OFF: ExecutableStatementCount
     @SuppressFBWarnings(
         value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
         justification = "We just need an instance of File and Thread; they're not for actual use."
@@ -228,6 +229,8 @@ public final class JavaApiPrefabValues {
         LongSummaryStatistics blueLongStats = new LongSummaryStatistics();
         addValues(LongSummaryStatistics.class, redLongStats, blueLongStats, redLongStats);
     }
+
+    // CHECKSTYLE ON: ExecutableStatementCount
 
     private void addDateTimeClasses() {
         addValues(

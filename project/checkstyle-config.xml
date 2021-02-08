@@ -43,9 +43,7 @@
         <module name="EmptyCatchBlock"/>
         <module name="EmptyStatement"/>
         <module name="EqualsAvoidNull"/>
-        <module name="ExecutableStatementCount">
-            <property name="max" value="31"/>
-        </module>
+        <module name="ExecutableStatementCount"/>
         <module name="FallThrough"/>
         <module name="FinalClass"/>
         <module name="HiddenField">
