@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+## Fixed
+- Added prefab values for `jaqva.nio.charset.Charset` ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
 
 ## [3.5.3] - 2021-02-03
 ## Fixed
