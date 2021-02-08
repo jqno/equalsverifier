@@ -13,15 +13,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
-## Fixed
+
+## [3.5.4] - 2021-02-08
+### Fixed
 - Added prefab values for `jaqva.nio.charset.Charset` ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
 
 ## [3.5.3] - 2021-02-03
-## Fixed
+### Fixed
 - Added prefab values for `java.util.DoubleSummaryStatistics`, `java.util.IntSummaryStatistics` and `java.util.LongSummaryStatistics` ([Issue 385](https://github.com/jqno/equalsverifier/issues/385))
 
 ## [3.5.2] - 2021-01-19
-## Fixed
+### Fixed
 - Added prefab values for `java.time.Clock` ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
 
 ## [3.5.1] - 2021-01-05
@@ -32,7 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Replaced [Google Fava Format](https://github.com/google/google-java-format) with [Prettier-Java](https://prettier-java.tech/), which makes the code look less jagged and messy.
 - CI is migrated from CircleCI to GitHub Actions.
 
-## Fixed
+### Fixed
 - Added prefab values for `java.text.NumberFormat` and `java.text.DecimalFormat` ([Issue 379](https://github.com/jqno/equalsverifier/issues/379))
 
 ## [3.5] - 2020-10-20
@@ -751,8 +753,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.3...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.4...HEAD
 
+[3.5.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.3...equalsverifier-3.5.4
 [3.5.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.2...equalsverifier-3.5.3
 [3.5.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.1...equalsverifier-3.5.2
 [3.5.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5...equalsverifier-3.5.1
