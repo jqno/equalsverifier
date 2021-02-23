@@ -615,6 +615,7 @@ public final class JavaApiPrefabValues {
         addLazyFactory("java.awt.color.ICC_ColorSpace", AWT_FACTORY);
         addLazyFactory("java.awt.color.ICC_Profile", AWT_FACTORY);
         addLazyFactory("java.awt.Font", AWT_FACTORY);
+        addLazyFactory("java.awt.Image", AWT_FACTORY);
 
         addFactory(
             PropertyChangeSupport.class,

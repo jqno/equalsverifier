@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Fixed
+- Added prefab values for `java.awt.Image` ([Issue 399](https://github.com/jqno/equalsverifier/issues/399))
 
 ## [3.5.4] - 2021-02-08
 ### Fixed

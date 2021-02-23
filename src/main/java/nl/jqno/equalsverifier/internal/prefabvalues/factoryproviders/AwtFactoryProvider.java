@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
+import java.awt.image.BufferedImage;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 
 public final class AwtFactoryProvider implements FactoryProvider {
@@ -49,6 +50,9 @@ public final class AwtFactoryProvider implements FactoryProvider {
                 new Font(Font.SERIF, Font.PLAIN, 10)
             )
         );
+        Image red = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        Image blue = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
+        cache.put(Image.class, values(red, blue, red));
 
         return cache;
     }

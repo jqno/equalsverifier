@@ -690,6 +690,7 @@ public class JavaApiClassesTest {
         private final java.awt.color.ICC_ColorSpace iccColorSpace;
         private final java.awt.color.ICC_Profile iccProfile;
         private final java.awt.Font font;
+        private final java.awt.Image image;
         private final java.rmi.dgc.VMID vmid;
         private final java.rmi.server.UID uid;
 
@@ -698,6 +699,7 @@ public class JavaApiClassesTest {
             java.awt.color.ICC_ColorSpace iccColorSpace,
             java.awt.color.ICC_Profile iccProfile,
             java.awt.Font font,
+            java.awt.Image image,
             java.rmi.dgc.VMID vmid,
             java.rmi.server.UID uid
         ) {
@@ -705,6 +707,7 @@ public class JavaApiClassesTest {
             this.iccColorSpace = iccColorSpace;
             this.iccProfile = iccProfile;
             this.font = font;
+            this.image = image;
             this.vmid = vmid;
             this.uid = uid;
         }
