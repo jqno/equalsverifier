@@ -9,8 +9,7 @@ import java.util.List;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
+import org.objenesis.ObjenesisHelper;
 
 /**
  * Instantiates objects of a given class.
@@ -30,12 +29,10 @@ public final class Instantiator<T> {
     private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
-    private Objenesis objenesis;
 
     /** Private constructor. Call {@link #of(Class)} to instantiate. */
     private Instantiator(Class<T> type) {
         this.type = type;
-        this.objenesis = new ObjenesisStd();
     }
 
     /**
@@ -61,7 +58,7 @@ public final class Instantiator<T> {
      * @return An object of type T.
      */
     public T instantiate() {
-        return objenesis.newInstance(type);
+        return ObjenesisHelper.newInstance(type);
     }
 
     /**
@@ -71,7 +68,7 @@ public final class Instantiator<T> {
      */
     public T instantiateAnonymousSubclass() {
         Class<T> proxyClass = giveDynamicSubclass(type);
-        return objenesis.newInstance(proxyClass);
+        return ObjenesisHelper.newInstance(proxyClass);
     }
 
     @SuppressWarnings("unchecked")
