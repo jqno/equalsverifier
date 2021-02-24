@@ -13,20 +13,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- Improves performace by reusing `Objenesis` instance. ([Issue 400](https://github.com/jqno/equalsverifier/issues/400); thanks selckin!)
 ### Fixed
-- Added prefab values for `java.awt.Image` ([Issue 399](https://github.com/jqno/equalsverifier/issues/399))
+- Added prefab values for `java.awt.Image`. ([Issue 399](https://github.com/jqno/equalsverifier/issues/399))
 
 ## [3.5.4] - 2021-02-08
 ### Fixed
-- Added prefab values for `java.nio.charset.Charset` ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
+- Added prefab values for `java.nio.charset.Charset`. ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
 
 ## [3.5.3] - 2021-02-03
 ### Fixed
-- Added prefab values for `java.util.DoubleSummaryStatistics`, `java.util.IntSummaryStatistics` and `java.util.LongSummaryStatistics` ([Issue 385](https://github.com/jqno/equalsverifier/issues/385))
+- Added prefab values for `java.util.DoubleSummaryStatistics`, `java.util.IntSummaryStatistics` and `java.util.LongSummaryStatistics`. ([Issue 385](https://github.com/jqno/equalsverifier/issues/385))
 
 ## [3.5.2] - 2021-01-19
 ### Fixed
-- Added prefab values for `java.time.Clock` ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
+- Added prefab values for `java.time.Clock`. ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
 
 ## [3.5.1] - 2021-01-05
 ### Changed
@@ -37,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - CI is migrated from CircleCI to GitHub Actions.
 
 ### Fixed
-- Added prefab values for `java.text.NumberFormat` and `java.text.DecimalFormat` ([Issue 379](https://github.com/jqno/equalsverifier/issues/379))
+- Added prefab values for `java.text.NumberFormat` and `java.text.DecimalFormat`. ([Issue 379](https://github.com/jqno/equalsverifier/issues/379))
 
 ## [3.5] - 2020-10-20
 ### Added
