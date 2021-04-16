@@ -178,7 +178,7 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean prettier:write verify</defaultGoal>
+        <defaultGoal>clean spotless:apply verify</defaultGoal>
 
         <plugins>
             <plugin>
