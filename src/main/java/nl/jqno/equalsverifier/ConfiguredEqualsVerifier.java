@@ -146,7 +146,21 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @return A fluent API for EqualsVerifier.
      */
     public MultipleTypeEqualsVerifierApi forPackage(String packageName) {
-        List<Class<?>> classes = PackageScanner.getClassesIn(packageName);
+        return forPackage(packageName, false);
+    }
+
+    /**
+     * Factory method. For general use.
+     *
+     * <p>Note that this operation may be slow. If the test is too slow, use {@link
+     * #forClasses(Class, Class, Class...)} instead.
+     *
+     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @param scanRecursively true to scan all sub-packages
+     * @return A fluent API for EqualsVerifier.
+     */
+    public MultipleTypeEqualsVerifierApi forPackage(String packageName, boolean scanRecursively) {
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName, scanRecursively);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
     }

@@ -18,12 +18,13 @@ public final class PackageScanner {
      * Scans the given package for classes.
      *
      * @param packageName The package to scan.
+     * @param scanRecursively true to scan all sub-packages
      * @return the classes contained in the given package.
      */
-    public static List<Class<?>> getClassesIn(String packageName) {
+    public static List<Class<?>> getClassesIn(String packageName, boolean scanRecursively) {
         return getDirs(packageName)
             .stream()
-            .flatMap(d -> getClassesInDir(packageName, d).stream())
+            .flatMap(d -> getClassesInDir(packageName, d, scanRecursively).stream())
             .collect(Collectors.toList());
     }
 
@@ -41,14 +42,22 @@ public final class PackageScanner {
         );
     }
 
-    private static List<Class<?>> getClassesInDir(String packageName, File dir) {
+    private static List<Class<?>> getClassesInDir(String packageName, File dir, boolean scanRecursively) {
         if (!dir.exists()) {
             return Collections.emptyList();
         }
         return Arrays
             .stream(dir.listFiles())
-            .filter(f -> f.getName().endsWith(".class"))
-            .map(f -> fileToClass(packageName, f))
+            .filter(f -> (scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
+            .flatMap(f -> {
+                List<Class<?>> classes;
+                if(f.isDirectory()) {
+                    classes = getClassesInDir(packageName + "." + f.getName(), f, scanRecursively);
+                } else {
+                    classes = Collections.singletonList(fileToClass(packageName, f));
+                }
+                return classes.stream();
+            })
             .filter(c -> !c.getName().endsWith("Test"))
             .collect(Collectors.toList());
     }
