@@ -39,7 +39,7 @@ jobs:
     - name: 'Checkout from Git'
       uses: actions/checkout@v2
     - name: 'Cache Maven repo'
-      uses: actions/cache@v2.1.4
+      uses: actions/cache@v2.1.5
       with:
           path: |
             ~/.m2/repository
