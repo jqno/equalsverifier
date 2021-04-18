@@ -42,22 +42,29 @@ public final class PackageScanner {
         );
     }
 
-    private static List<Class<?>> getClassesInDir(String packageName, File dir, boolean scanRecursively) {
+    private static List<Class<?>> getClassesInDir(
+        String packageName,
+        File dir,
+        boolean scanRecursively
+    ) {
         if (!dir.exists()) {
             return Collections.emptyList();
         }
         return Arrays
             .stream(dir.listFiles())
             .filter(f -> (scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
-            .flatMap(f -> {
-                List<Class<?>> classes;
-                if(f.isDirectory()) {
-                    classes = getClassesInDir(packageName + "." + f.getName(), f, scanRecursively);
-                } else {
-                    classes = Collections.singletonList(fileToClass(packageName, f));
+            .flatMap(
+                f -> {
+                    List<Class<?>> classes;
+                    if (f.isDirectory()) {
+                        classes =
+                            getClassesInDir(packageName + "." + f.getName(), f, scanRecursively);
+                    } else {
+                        classes = Collections.singletonList(fileToClass(packageName, f));
+                    }
+                    return classes.stream();
                 }
-                return classes.stream();
-            })
+            )
             .filter(c -> !c.getName().endsWith("Test"))
             .collect(Collectors.toList());
     }

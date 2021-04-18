@@ -100,17 +100,17 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenVerifyingAPackageRecursivelyWithFourIncorrectClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "EqualsVerifier found a problem in 4 classes.",
-                        "* " + INCORRECT_M,
-                        "* " + INCORRECT_N,
-                        "* " + INCORRECT_O,
-                        "* " + INCORRECT_P,
-                        "Subclass: equals is not final.",
-                        "Reflexivity: object does not equal itself:"
-                );
+            .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "EqualsVerifier found a problem in 4 classes.",
+                "* " + INCORRECT_M,
+                "* " + INCORRECT_N,
+                "* " + INCORRECT_O,
+                "* " + INCORRECT_P,
+                "Subclass: equals is not final.",
+                "Reflexivity: object does not equal itself:"
+            );
     }
 
     @Test
@@ -130,17 +130,17 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenCallingForPackageRecursively_givenFourClassesInPackageAreIncorrect() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
-                .assertFailure()
-                .assertMessageContains(
-                        "EqualsVerifier found a problem in 4 classes.",
-                        "IncorrectM",
-                        "IncorrectN",
-                        "IncorrectO",
-                        "IncorrectP",
-                        "Subclass: equals is not final.",
-                        "Reflexivity: object does not equal itself:"
-                );
+            .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "EqualsVerifier found a problem in 4 classes.",
+                "IncorrectM",
+                "IncorrectN",
+                "IncorrectO",
+                "IncorrectP",
+                "Subclass: equals is not final.",
+                "Reflexivity: object does not equal itself:"
+            );
     }
 
     @Test
@@ -157,12 +157,12 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenCallingForPackageRecursively_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", true))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains(
-                        "nl.jqno.equalsverifier.doesnotexist",
-                        "doesn't contain any (non-Test) types"
-                );
+            .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", true))
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types"
+            );
     }
 
     @Test
@@ -176,9 +176,9 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
-                .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
-                .verify();
+            .forPackage(INCORRECT_PACKAGE, true)
+            .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
+            .verify();
     }
 
     @Test
@@ -192,9 +192,9 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, true).except(IncorrectM.class))
-                .assertThrows(IllegalStateException.class)
-                .assertMessageContains("Unknown class(es) found", "IncorrectM");
+            .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, true).except(IncorrectM.class))
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
 
     @Test
@@ -208,9 +208,9 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
-                .except(c -> c.getSimpleName().contains("Incorrect"))
-                .verify();
+            .forPackage(INCORRECT_PACKAGE, true)
+            .except(c -> c.getSimpleName().contains("Incorrect"))
+            .verify();
     }
 
     @Test
@@ -224,9 +224,11 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify())
-                .assertFailure()
-                .assertMessageContains("EqualsVerifier found a problem in 4 classes");
+            .when(
+                () -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify()
+            )
+            .assertFailure()
+            .assertMessageContains("EqualsVerifier found a problem in 4 classes");
     }
 
     @Test
