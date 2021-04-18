@@ -126,7 +126,10 @@ public final class EqualsVerifier {
      * @param scanRecursively true to scan all sub-packages
      * @return A fluent API for EqualsVerifier.
      */
-    public static MultipleTypeEqualsVerifierApi forPackage(String packageName, boolean scanRecursively) {
+    public static MultipleTypeEqualsVerifierApi forPackage(
+        String packageName,
+        boolean scanRecursively
+    ) {
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, scanRecursively);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, new ConfiguredEqualsVerifier());
