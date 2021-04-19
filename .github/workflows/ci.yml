@@ -48,8 +48,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mvn-${{ matrix.cache-id }}
     - name: 'Set up JDK ${{ matrix.java }}'
-      uses: actions/setup-java@v1
+      uses: actions/setup-java@v2
       with:
+          distribution: 'adopt'
           java-version: ${{ matrix.java }}
     - name: 'Set up node' # Needed for formatting with prettier
       uses: actions/setup-node@v2.1.5
