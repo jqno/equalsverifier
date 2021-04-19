@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
 
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
@@ -64,6 +65,11 @@ public class SignatureTest {
             .forClass(NoEqualsMethod.class)
             .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
             .verify();
+    }
+
+    @Test
+    public void succeed_whenAStaticEqualsExists() {
+        EqualsVerifier.forClass(StaticEqualsMethod.class).verify();
     }
 
     private void expectOverloadFailure(String extraMessage, Executable executable) {
@@ -186,6 +192,31 @@ public class SignatureTest {
 
         public NoEqualsMethod(int i) {
             this.i = i;
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+    }
+
+    static final class StaticEqualsMethod {
+
+        private final int i;
+
+        StaticEqualsMethod(int i) {
+            this.i = i;
+        }
+
+        public boolean equals(Object obj) {
+            if (!(obj instanceof StaticEqualsMethod)) {
+                return false;
+            }
+            return i == ((StaticEqualsMethod) obj).i;
+        }
+
+        public static boolean equals(StaticEqualsMethod theOne, StaticEqualsMethod theOther) {
+            return Objects.equals(theOne, theOther);
         }
 
         @Override

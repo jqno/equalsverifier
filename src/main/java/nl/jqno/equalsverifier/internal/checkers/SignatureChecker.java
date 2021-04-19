@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -35,33 +36,25 @@ public class SignatureChecker<T> implements Checker {
         checkEqualsIsDefined();
     }
 
-    private void checkEqualsIsDefined() {
-        boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(
-            Warning.INHERITED_DIRECTLY_FROM_OBJECT
-        );
-        boolean isDirectlyInherited = classAccessor.isEqualsInheritedFromObject();
-        if (dontAllowDirectlyInherited && isDirectlyInherited) {
-            fail(
-                Formatter.of(
-                    "Equals is inherited directly from Object.\n" +
-                    "Suppress Warning." +
-                    Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() +
-                    " to skip this check."
-                )
-            );
-        }
-    }
-
     private List<Method> getEqualsMethods() {
         List<Method> result = new ArrayList<>();
 
         for (Method method : type.getDeclaredMethods()) {
-            if (method.getName().equals("equals")) {
+            if (method.getName().equals("equals") && !Modifier.isStatic(method.getModifiers())) {
                 result.add(method);
             }
         }
 
         return result;
+    }
+
+    private void failOverloaded(String message) {
+        fail(
+            Formatter.of(
+                "Overloaded: %%.\nSignature should be: public boolean equals(Object obj)",
+                message
+            )
+        );
     }
 
     private void checkEquals(Method equals) {
@@ -81,12 +74,20 @@ public class SignatureChecker<T> implements Checker {
         }
     }
 
-    private void failOverloaded(String message) {
-        fail(
-            Formatter.of(
-                "Overloaded: %%.\nSignature should be: public boolean equals(Object obj)",
-                message
-            )
+    private void checkEqualsIsDefined() {
+        boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(
+            Warning.INHERITED_DIRECTLY_FROM_OBJECT
         );
+        boolean isDirectlyInherited = classAccessor.isEqualsInheritedFromObject();
+        if (dontAllowDirectlyInherited && isDirectlyInherited) {
+            fail(
+                Formatter.of(
+                    "Equals is inherited directly from Object.\n" +
+                    "Suppress Warning." +
+                    Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() +
+                    " to skip this check."
+                )
+            );
+        }
     }
 }
