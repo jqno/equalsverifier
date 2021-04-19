@@ -114,36 +114,6 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackage_givenTwoClassesInPackageAreIncorrect() {
-        ExpectedException
-            .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "EqualsVerifier found a problem in 2 classes.",
-                "IncorrectM",
-                "IncorrectN",
-                "Subclass: equals is not final.",
-                "Reflexivity: object does not equal itself:"
-            );
-    }
-
-    @Test
-    public void fail_whenCallingForPackageRecursively_givenFourClassesInPackageAreIncorrect() {
-        ExpectedException
-            .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "EqualsVerifier found a problem in 4 classes.",
-                "IncorrectM",
-                "IncorrectN",
-                "IncorrectO",
-                "IncorrectP",
-                "Subclass: equals is not final.",
-                "Reflexivity: object does not equal itself:"
-            );
-    }
-
-    @Test
     public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
         ExpectedException
             .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist"))
