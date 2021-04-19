@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.6] - 2021-04-19
 ### Added
 - Support for recursion into sub-packages using `#forPackage()`. ([Issue 423](https://github.com/jqno/equalsverifier/issues/423); thanks Kobee1203!)
 
@@ -788,7 +790,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.5...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.6...HEAD
+
+[3.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.5...equalsverifier-3.6
 
 [3.5.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.4...equalsverifier-3.5.5
 [3.5.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.3...equalsverifier-3.5.4
