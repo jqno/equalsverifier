@@ -16,23 +16,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Support for recursion into sub-packages using `#forPackage()`. ([Issue 423](https://github.com/jqno/equalsverifier/issues/423); thanks Kobee1203!)
 
+
 ## [3.5.5] - 2021-02-24
 ### Changed
 - Improves performace by reusing `Objenesis` instance. ([Issue 400](https://github.com/jqno/equalsverifier/issues/400); thanks selckin!)
 ### Fixed
 - Added prefab values for `java.awt.Image`. ([Issue 399](https://github.com/jqno/equalsverifier/issues/399))
 
+
 ## [3.5.4] - 2021-02-08
 ### Fixed
 - Added prefab values for `java.nio.charset.Charset`. ([Issue 391](https://github.com/jqno/equalsverifier/issues/391); thanks sullis!)
+
 
 ## [3.5.3] - 2021-02-03
 ### Fixed
 - Added prefab values for `java.util.DoubleSummaryStatistics`, `java.util.IntSummaryStatistics` and `java.util.LongSummaryStatistics`. ([Issue 385](https://github.com/jqno/equalsverifier/issues/385))
 
+
 ## [3.5.2] - 2021-01-19
 ### Fixed
 - Added prefab values for `java.time.Clock`. ([Issue 384](https://github.com/jqno/equalsverifier/issues/384); thanks sullis!)
+
 
 ## [3.5.1] - 2021-01-05
 ### Changed
@@ -45,9 +50,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Added prefab values for `java.text.NumberFormat` and `java.text.DecimalFormat`. ([Issue 379](https://github.com/jqno/equalsverifier/issues/379))
 
+
 ## [3.5] - 2020-10-20
 ### Added
 - Updated support for Java 15's records.
+
 
 ## [3.4.3] - 2020-09-08
 ### Changed
@@ -58,6 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added prefab values for `java.net.URL`. ([Issue 340](https://github.com/jqno/equalsverifier/issues/340))
 - Fixed support for records with static fields in JDK 14. ([Issue 346](https://github.com/jqno/equalsverifier/issues/346); thanks Edgar!)
 - ByteBuddy experimental support (needed for Java 16 support) can now be accessed via `-Dnet.bytebuddy.experimental=true` again instead of `-Dnl.jqno.equalsverifier.internal.lib.bytebuddy.experimental=true`. ([Issue 339](https://github.com/jqno/equalsverifier/issues/339); thanks Stefano!)
+
 
 ## [3.4.2] - 2020-08-20
 ### Changed
@@ -70,6 +78,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [3.4.1] - 2020-06-15
 ### Fixed
 - `Warning.STRICT_INHERITANCE` doesn't take away the requirement to call `#usingGetClass()` when superclass has fields. ([Issue 316](https://github.com/jqno/equalsverifier/issues/316))
+
 
 ## [3.4] - 2020-06-13
 ### Added
@@ -85,22 +94,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Testing a class with that has fields but doesn't override `equals` causes "Mutability: equals depends on mutable field" error. ([Issue 315](https://github.com/jqno/equalsverifier/issues/315))
 
+
 ## [3.3] - 2020-05-14
 ### Added
 - Overload for `#except()` when using `#forPackage()` that takes a predicate instead of a set list of elements. ([Issue 307](https://github.com/jqno/equalsverifier/issues/307); thanks Tom!)
 - `#forClasses()` overload that takes an `Iterable<Class<?>>`. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
 
+
 ## [3.2] - 2020-05-10
 ### Added
 - Support for testing multiple classes at once, through `#forClasses()` and `#forPackage()`. See the [manual entry](https://jqno.nl/equalsverifier/manual/several-classes-at-once/) for more information. ([Issue 271](https://github.com/jqno/equalsverifier/issues/271))
+
 
 ## [3.1.13] - 2020-03-14
 ### Fixed
 - Added prefab values for `java.util.OptionalDouble`, `java.util.OptionalInt`, `java.util.OptionalLong`, `java.util.EventObject`, `java.awt.Font`, `javax.swing.tree.DefaultMutableTreeNode` and `java.beans.PropertyChangeSupport`. ([Issue 286](https://github.com/jqno/equalsverifier/issues/286))
 
+
 ## [3.1.12] - 2020-01-27
 ### Fixed
 - Added prefab values for `java.util.Currency`. ([Issue 268](https://github.com/jqno/equalsverifier/issues/268); thanks sullis!)
+
 
 ## [3.1.11] - 2019-12-26
 ### Changed
@@ -109,9 +123,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Updated Byte-Buddy to support Java 14 EA.
 
+
 ## [3.1.10] - 2019-09-29
 ### Fixed
 - `java.lang.reflect.Method` and other reflection types cause illegal reflective access warnings on Java 9+: added prefab values. ([Issue 248](https://github.com/jqno/equalsverifier/issues/248))
+
 
 ## [3.1.9] - 2019-05-16
 ### Changed
@@ -120,34 +136,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Updated to Byte-Buddy to support Java 13 EA. ([Issue 239](https://github.com/jqno/equalsverifier/issues/239); thanks William!)
 
+
 ## [3.1.8] - 2019-04-04
 ### Fixed
 - Testing a class with Guava `TypeToken` causes AbstractMethodError. ([Issue 238](https://github.com/jqno/equalsverifier/issues/238))
+
 
 ## [3.1.7] - 2019-03-15
 ### Changed
 - Performance improvement. ([Issue 235](https://github.com/jqno/equalsverifier/issues/235))
 
+
 ## [3.1.6] - 2019-03-11
 ### Fixed
 - Testing a class with `StringBuilder` causes StringIndexOutOfBoundsException. ([Issue 234](https://github.com/jqno/equalsverifier/issues/234))
+
 
 ## [3.1.5] - 2019-02-18
 ### Fixed
 - Verifying interfaces directly causes NullPointerException. ([Issue 232](https://github.com/jqno/equalsverifier/issues/232))
 - Improved error messages regarding JPA's `@EmbeddedId` annotation. ([Issue 231](https://github.com/jqno/equalsverifier/issues/231))
 
+
 ## [3.1.4] - 2018-12-31
 ### Added
 - Support for JPA's `@EmbeddedId` annotation: it is now handled in the same way as `@Id`. ([Issue 228](https://github.com/jqno/equalsverifier/issues/228))
+
 
 ## [3.1.3] - 2018-12-29
 ### Fixed
 - McAfee falsely flags `EqualsVerifierBugException` as a `Exploit-ByteVerify` virus. ([Issue 229](https://github.com/jqno/equalsverifier/issues/229); thanks Matt!)
 
+
 ## [3.1.2] - 2018-12-26
 ### Fixed
 - Classes or fields with an annotation that contains a primitive array cause ClassCastException. ([Issue 227](https://github.com/jqno/equalsverifier/issues/227))
+
 
 ## [3.1.1] - 2018-12-26
 ### Fixed
