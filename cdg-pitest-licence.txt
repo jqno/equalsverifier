@@ -1,0 +1,8 @@
+#Licence file for pitest git plugin
+#See https://blog.pitest.org/oss-pitest-pr/ for details of what this is about
+#Fri Apr 23 14:12:55 BST 2021
+expires=23/10/2022
+keyVersion=1
+signature=afd2YNc5cqaupiwLo8uJ8Y9uDBb4PN+/joOxTguWvCiygIa0lIQNygyX4veDyfM+61XFqXmEKuyVq2XGkEMnMTZ8H2fwfaiCCuAZLovtxQy2nkF8QvsaYpaldMdKCmcEfBgfEIW3raiYll9//hKiF0cNSuzKWA3dueVu7P3Syyo\=
+packages=nl.jqno.equalsverifier.*
+type=OSSS

@@ -71,6 +71,8 @@
         <spotbugs.maven.version>4.2.3</spotbugs.maven.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
+
+        <cdg.pitest.version>0.0.6</cdg.pitest.version>
     </properties>
 
     <repositories>
@@ -607,20 +609,42 @@
                     </plugin>
 
                     <plugin>
+                        <!-- provides the pitest-git:aggregate goal to aggregate json files to be stored as artifact when accepting PRs from untrusted forks -->
+                        <groupId>com.groupcdg</groupId>
+                        <artifactId>pitest-git-maven-plugin</artifactId>
+                        <version>${cdg.pitest.version}</version>
+                    </plugin>
+                    <plugin>
+                        <!-- provides direct integration with github when accepting PRs from trusted branches -->
+                        <groupId>com.groupcdg</groupId>
+                        <artifactId>pitest-github-maven-plugin</artifactId>
+                        <version>${cdg.pitest.version}</version>
+                    </plugin>
+                    <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>
                         <version>1.6.5</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.pitest</groupId>
+                                <artifactId>pitest-junit5-plugin</artifactId>
+                                <version>0.12</version>
+                            </dependency>
+                            <dependency>
+                                <groupId>com.groupcdg</groupId>
+                                <artifactId>pitest-git-plugin</artifactId>
+                                <version>${cdg.pitest.version}</version>
+                            </dependency>
+                        </dependencies>
                         <configuration>
                             <jvmArgs>
                                 <jvmArg>${additional.argLine}</jvmArg>
                             </jvmArgs>
                             <threads>3</threads>
-                            <targetClasses>
-                                <param>nl.jqno.equalsverifier.*</param>
-                            </targetClasses>
-                            <targetTests>
-                                <param>nl.jqno.equalsverifier.*</param>
-                            </targetTests>
+                            <timestampedReports>false</timestampedReports>
+                            <!-- we must unset failWhenNoMutations, otherwise the build would error when
+                            a PR included no java code changes -->
+                            <failWhenNoMutations>false</failWhenNoMutations>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -678,6 +702,27 @@
                 <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
                 <surefire.argLine>--illegal-access=deny -Dnet.bytebuddy.experimental=true</surefire.argLine>
             </properties>
+        </profile>
+
+        <profile>
+            <id>pitest</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-maven</artifactId>
+                        <executions>
+                            <execution>
+                                <id>pitest</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>mutationCoverage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
