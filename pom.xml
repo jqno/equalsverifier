@@ -609,7 +609,7 @@
                     <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>
-                        <version>1.6.4</version>
+                        <version>1.6.5</version>
                         <configuration>
                             <jvmArgs>
                                 <jvmArg>${additional.argLine}</jvmArg>
