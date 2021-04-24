@@ -48,4 +48,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: pitest
-          path: target/pit-reports/
+          path: target/pit-reports-ci/
