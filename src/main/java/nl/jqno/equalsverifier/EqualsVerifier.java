@@ -45,7 +45,7 @@ public final class EqualsVerifier {
      * @return A reusable configuration object with a fluent API.
      */
     public static ConfiguredEqualsVerifier configure() {
-        System.out.println("Forgot to test this");
+        System.out.println("Forgot to test this -- fixed that for you");
         return new ConfiguredEqualsVerifier();
     }
 
