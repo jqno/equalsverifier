@@ -645,6 +645,9 @@
                             <!-- we must unset failWhenNoMutations, otherwise the build would error when
                             a PR included no java code changes -->
                             <failWhenNoMutations>false</failWhenNoMutations>
+                            <excludedTestClasses>
+                                <param>*.PrefabValuesTest</param>
+                            </excludedTestClasses>
                         </configuration>
                     </plugin>
                 </plugins>
