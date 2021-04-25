@@ -65,7 +65,7 @@
         <module name="InterfaceIsType"/>
         <module name="InterfaceTypeParameterName"/>
         <module name="JavadocMethod">
-            <property name="scope" value="public"/>
+            <property name="accessModifiers" value="public"/>
         </module>
         <module name="JavadocStyle"/>
         <module name="JavadocTagContinuationIndentation"/>
