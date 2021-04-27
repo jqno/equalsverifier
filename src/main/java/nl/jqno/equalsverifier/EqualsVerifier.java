@@ -58,6 +58,9 @@ public final class EqualsVerifier {
      * @return A reusable configuration object with a fluent API.
      */
     public static ConfiguredEqualsVerifier simple() {
+        // CHECKSTYLE OFF: Regex.
+        System.out.println("Introducing a second mutant");
+        // CHECKSTYLE ON: Regex.
         return new ConfiguredEqualsVerifier()
         .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
     }
