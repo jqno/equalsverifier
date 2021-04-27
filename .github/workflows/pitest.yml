@@ -1,24 +1,29 @@
+# Part one of two stage process to update PRs with pitest data when accepting PRs from untrusted forks.
 #
-# Run pitest and update github in a single step. This simple flow can be used for projects where all PRs come from
-# branches in the repo. For OSS projects where PRs come from forks, the more complex two stage flow must be used
+# The jobs will run the mutation analysis, but the token supplied by gtihub does not have write access.
+# The results are therefore stored as an artifact which will be used to update the PR in the second stage.
 #
-name: PITest-receive-internal-PR
+# Projects where PRs come from the same repo can use a simpler single stage process.
+#
+name: PITest
+
+# read-only repo token
+# no access to secrets
 on:
   pull_request:
 
 jobs:
-  pitest-gather-feedback:
-    name: Gather PITest feedback and add comment
-    # Only run on PRs from the repo. PRs from forks will fail due to lack of permissions and
-    # must use the two stage process
-    if: github.event.pull_request.head.repo.full_name == github.repository
+  pitest-store-feedback:
+    name: Gather PITest feedback
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout project
         uses: actions/checkout@v2
         with:
           # important to set a fetch depth of 2. By default the checkout action make no history available
           fetch-depth: 2
+
       - name: Cache Maven repository
         uses: actions/cache@v2.1.5
         with:
@@ -35,7 +40,10 @@ jobs:
         # we add config to analyse only changes made within a PR and treat surviving mutants as check errors
         # failWhenNoMutations is unset in the pom, as otherwise PRs that do not affect java code would fail
         run: mvn -e -B -Ppitest -Dfeatures="+GIT(from[HEAD~1]), +gitci" test
-      - name: update pull request
-        run: mvn -e -B -DrepoToken=${{ secrets.GITHUB_TOKEN }} pitest-github:github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      - name: aggregate files
+        run: mvn -e -B pitest-git:aggregate
+      - name: upload results
+        uses: actions/upload-artifact@v2
+        with:
+          name: pitest
+          path: target/pit-reports-ci/

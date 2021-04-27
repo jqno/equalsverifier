@@ -705,6 +705,7 @@
         </profile>
 
         <profile>
+            <!-- This profile is used by the pitest GitHub Actions workflows -->
             <id>pitest</id>
             <build>
                 <plugins>

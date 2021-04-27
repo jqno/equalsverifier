@@ -7,13 +7,13 @@
 # write access.
 #
 
-name: PITest-comment-on-PR
+name: PITest comment
 
 # read-write repo token
 # access to secrets
 on:
   workflow_run:
-    workflows: ["PITest-receive-fork-PR"]
+    workflows: ["PITest"]
     types:
       - completed
 
@@ -21,9 +21,8 @@ jobs:
   pitest-update-pr:
     name: Add PITest comment
     runs-on: ubuntu-latest
+
     steps:
-      - name: debug
-        uses: hmarr/debug-action@v2
       - name: Set up JDK 11
         uses: actions/setup-java@v1.4.3
         with:
