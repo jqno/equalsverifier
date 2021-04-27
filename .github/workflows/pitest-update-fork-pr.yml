@@ -7,18 +7,19 @@
 # write access.
 #
 
-name: Comment on the pull request
+name: PITest-comment-on-PR
 
 # read-write repo token
 # access to secrets
 on:
   workflow_run:
-    workflows: ["Receive"]
+    workflows: ["PITest-receive-fork-PR"]
     types:
       - completed
 
 jobs:
   pitest-update-pr:
+    name: Add PITest comment
     runs-on: ubuntu-latest
     steps:
       - name: debug

@@ -5,7 +5,7 @@
 #
 # Projects where PRs come from the same repo can use a simpler single stage process.
 #
-name: Receive
+name: PITest-receive-fork-PR
 
 # read-only repo token
 # no access to secrets
@@ -13,7 +13,8 @@ on:
   pull_request:
 
 jobs:
-  store-pitest-feedback:
+  pitest-store-feedback:
+    name: Store PITest feedback
     # Only run on forked repos. This example project also configures a single stage flow for
     # use when the PR comes from the same repo 
     if: github.event.pull_request.head.repo.full_name != github.repository

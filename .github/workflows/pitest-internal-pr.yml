@@ -2,12 +2,13 @@
 # Run pitest and update github in a single step. This simple flow can be used for projects where all PRs come from
 # branches in the repo. For OSS projects where PRs come from forks, the more complex two stage flow must be used
 #
-name: pull request ci
+name: PITest-receive-internal-PR
 on:
   pull_request:
 
 jobs:
-  pull-request-ci:
+  pitest-gather-feedback:
+    name: Gather PITest feedback and add comment
     # Only run on PRs from the repo. PRs from forks will fail due to lack of permissions and
     # must use the two stage process
     if: github.event.pull_request.head.repo.full_name == github.repository
