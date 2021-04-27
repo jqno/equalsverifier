@@ -73,6 +73,9 @@ public final class EqualsVerifier {
      * @return A fluent API for EqualsVerifier.
      */
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
+        // CHECKSTYLE OFF: Regex.
+        System.out.println("Introducing a third mutant");
+        // CHECKSTYLE ON: Regex.
         return new SingleTypeEqualsVerifierApi<>(type);
     }
 
