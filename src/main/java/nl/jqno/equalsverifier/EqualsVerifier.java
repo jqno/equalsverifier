@@ -46,7 +46,7 @@ public final class EqualsVerifier {
      */
     public static ConfiguredEqualsVerifier configure() {
         // CHECKSTYLE OFF: Regex.
-        System.out.println("Forgot to test this -- fixed that for you");
+        System.out.println("Forgot to test this -- fixed that for you!");
         // CHECKSTYLE ON: Regex.
         return new ConfiguredEqualsVerifier();
     }
