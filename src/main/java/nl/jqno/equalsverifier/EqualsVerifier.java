@@ -87,6 +87,9 @@ public final class EqualsVerifier {
      * @return A fluent API for EqualsVerifier.
      */
     public static MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
+        // CHECKSTYLE OFF: Regex.
+        System.out.println("Introducing a fourth mutant");
+        // CHECKSTYLE ON: Regex.
         return new MultipleTypeEqualsVerifierApi(
             ListBuilders.fromIterable(classes),
             new ConfiguredEqualsVerifier()
