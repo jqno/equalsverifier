@@ -109,6 +109,9 @@ public final class EqualsVerifier {
         Class<?> second,
         Class<?>... more
     ) {
+        // CHECKSTYLE OFF: Regex.
+        System.out.println("Introducing a fifth mutant");
+        // CHECKSTYLE ON: Regex.
         return new MultipleTypeEqualsVerifierApi(
             ListBuilders.buildListOfAtLeastTwo(first, second, more),
             new ConfiguredEqualsVerifier()
