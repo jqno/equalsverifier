@@ -220,18 +220,18 @@ public class PrefabValuesTest {
     public void addLazyFactoryIsLazy() {
         TypeTag throwingLazyTag = new TypeTag(ThrowingLazy.class);
 
-        // Doesn't throw:
+        // Shouldn't throw, because constructing PrefabValues doesn't instantiate objects:
         factoryCache.put(
             ThrowingLazy.class.getName(),
             (t, p, ts) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X)
         );
         pv = new PrefabValues(factoryCache);
 
-        // Does throw:
+        // Should throw, because `giveRed` does instantiate objects:
         try {
             pv.giveRed(throwingLazyTag);
             fail("Expected an exception");
-        } catch (ExceptionInInitializerError e) {
+        } catch (Error e) {
             // succeed
         }
     }
@@ -322,6 +322,7 @@ public class PrefabValuesTest {
     @SuppressWarnings("unused")
     public static class ThrowingLazy {
         {
+            // Throwing something that will immediately be thrown when the the class is constructed.
             if (true) {
                 throw new IllegalStateException("initializing");
             }
