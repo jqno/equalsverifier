@@ -59,7 +59,7 @@
         <coverage.threshold>0.95</coverage.threshold>
 
         <java.release>8</java.release>
-        <jacoco.version>0.8.6</jacoco.version>
+        <jacoco.version>0.8.7</jacoco.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
 
