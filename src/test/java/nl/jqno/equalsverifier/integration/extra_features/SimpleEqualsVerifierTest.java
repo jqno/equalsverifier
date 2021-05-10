@@ -15,9 +15,33 @@ public class SimpleEqualsVerifierTest {
     }
 
     @Test
+    public void succeed_whenTestingGeneratedClassesRecursively_givenASimpleEqualsVerifier() {
+        EqualsVerifier
+            .simple()
+            .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
+            .verify();
+    }
+
+    @Test
     public void mentionSimple_whenTestingGeneratedClass_givenNothingSpecial() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(IntelliJPoint.class).verify())
+            .assertFailure()
+            .assertMessageContains("or use EqualsVerifier.simple()");
+    }
+
+    @Test
+    public void mentionSimple_whenTestingGeneratedClassesRecursively_givenNothingSpecial() {
+        ExpectedException
+            .when(
+                () ->
+                    EqualsVerifier
+                        .forPackage(
+                            "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                            true
+                        )
+                        .verify()
+            )
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");
     }
