@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Fixed
+- Support for recursion into sub-packages using `#forPackage()` when combined with `#simple()`. ([Issue 437](https://github.com/jqno/equalsverifier/issues/437); thanks Kobee1203!)
+
 
 ## [3.6] - 2021-04-19
 ### Added
