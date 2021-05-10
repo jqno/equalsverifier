@@ -1,15 +1,15 @@
-package nl.jqno.equalsverifier.integration.extra_features.simple_package.subpackage;
+package nl.jqno.equalsverifier.integration.extra_features.simple_package;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 
-public class IntelliJPoint2 {
+public class SimplePoint {
 
     private int x;
     private int y;
     private Color color;
 
-    public IntelliJPoint2(int x) {
+    public SimplePoint(int x) {
         this.x = x;
     }
 
@@ -21,7 +21,7 @@ public class IntelliJPoint2 {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        IntelliJPoint2 that = (IntelliJPoint2) o;
+        SimplePoint that = (SimplePoint) o;
         return x == that.x && y == that.y && color == that.color;
     }
 

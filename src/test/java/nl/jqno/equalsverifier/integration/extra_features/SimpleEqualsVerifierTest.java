@@ -11,7 +11,7 @@ public class SimpleEqualsVerifierTest {
 
     @Test
     public void succeed_whenTestingGeneratedClass_givenASimpleEqualsVerifier() {
-        EqualsVerifier.simple().forClass(IntelliJPoint.class).verify();
+        EqualsVerifier.simple().forClass(SimplePoint.class).verify();
     }
 
     @Test
@@ -25,7 +25,7 @@ public class SimpleEqualsVerifierTest {
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenNothingSpecial() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(IntelliJPoint.class).verify())
+            .when(() -> EqualsVerifier.forClass(SimplePoint.class).verify())
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");
     }
@@ -52,7 +52,7 @@ public class SimpleEqualsVerifierTest {
             .when(
                 () ->
                     EqualsVerifier
-                        .forClass(IntelliJPoint.class)
+                        .forClass(SimplePoint.class)
                         .suppress(Warning.STRICT_INHERITANCE)
                         .verify()
             )
@@ -60,13 +60,13 @@ public class SimpleEqualsVerifierTest {
             .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
-    public static class IntelliJPoint {
+    public static class SimplePoint {
 
         private int x;
         private int y;
         private Color color;
 
-        public IntelliJPoint(int x) {
+        public SimplePoint(int x) {
             this.x = x;
         }
 
@@ -78,7 +78,7 @@ public class SimpleEqualsVerifierTest {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            IntelliJPoint that = (IntelliJPoint) o;
+            SimplePoint that = (SimplePoint) o;
             return x == that.x && y == that.y && color == that.color;
         }
 
