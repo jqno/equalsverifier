@@ -72,7 +72,7 @@
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
 
-        <cdg.pitest.version>0.0.7</cdg.pitest.version>
+        <cdg.pitest.version>0.0.8</cdg.pitest.version>
     </properties>
 
     <repositories>
