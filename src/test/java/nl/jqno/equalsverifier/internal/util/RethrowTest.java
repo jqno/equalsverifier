@@ -46,14 +46,6 @@ public class RethrowTest {
     }
 
     @Test
-    public void supplierWithNoMessageThrowsRuntimeException() {
-        ExpectedException
-            .when(() -> rethrow(supply(new RuntimeException(CAUSE_MSG))))
-            .assertThrows(RuntimeException.class)
-            .assertMessageContains(CAUSE_MSG);
-    }
-
-    @Test
     public void supplierWithNoMessageThrowsReflectiveOperationException() {
         ExpectedException
             .when(() -> rethrow(supply(new IllegalAccessException(CAUSE_MSG))))
