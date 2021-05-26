@@ -141,7 +141,7 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
     ) {
         Function<S, T> f = a ->
             new ConditionalInstantiator(JAVAFX_COLLECTIONS_PACKAGE + "FXCollections")
-            .callFactory(copyMethodName, classes(source), objects(a));
+                .callFactory(copyMethodName, classes(source), objects(a));
         return copy(source, f);
     }
 }

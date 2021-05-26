@@ -43,7 +43,7 @@ public class ClassAccessorTest {
 
         defaultValuesAnnotationCache = new AnnotationCache();
         new AnnotationCacheBuilder(SupportedAnnotations.values(), new HashSet<>())
-        .build(DefaultValues.class, defaultValuesAnnotationCache);
+            .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
     /** Tests the false case. The true case is tested in {@link ClassAccessorCompilerTest}. */

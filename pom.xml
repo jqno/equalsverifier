@@ -440,13 +440,12 @@
                                     <includes>
                                         <include>src/*/java/**/*.java</include>
                                         <include>src/test/java11/**/*.java</include>
-                                        <!-- Wait for https://github.com/jhipster/prettier-java/issues/433 -->
-                                        <!-- <include>src/test/java16/**/*.java</include> -->
+                                        <include>src/test/java16/**/*.java</include>
                                     </includes>
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>2.2.0</prettier>
-                                            <prettier-plugin-java>0.8.3</prettier-plugin-java>
+                                            <prettier>2.3.0</prettier>
+                                            <prettier-plugin-java>1.1.1</prettier-plugin-java>
                                         </devDependencies>
                                         <config>
                                             <!-- Changes here must be reflected in .prettierrc.yml -->

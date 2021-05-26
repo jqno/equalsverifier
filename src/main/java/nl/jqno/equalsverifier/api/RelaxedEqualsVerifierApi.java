@@ -54,6 +54,6 @@ public class RelaxedEqualsVerifierApi<T> {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
         Validations.validateUnequalExamples(unequalExamples, equalExamples);
         return new SingleTypeEqualsVerifierApi<>(type, equalExamples, unequalExamples)
-        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
+            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }
 }

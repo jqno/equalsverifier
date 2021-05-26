@@ -56,7 +56,7 @@ public final class EqualsVerifier {
      */
     public static ConfiguredEqualsVerifier simple() {
         return new ConfiguredEqualsVerifier()
-        .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
+            .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
     }
 
     /**

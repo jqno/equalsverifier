@@ -144,7 +144,6 @@ public class RecordObjectAccessorScramblingTest {
     private static final String ORIGINAL_VALUE = "original";
 
     record StaticFieldContainer(int nonstatic) {
-
         public static final String STATIC_FINAL = ORIGINAL_VALUE;
         public static String staticNonfinal = ORIGINAL_VALUE;
     }
@@ -164,7 +163,6 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     record GenericContainerContainer(
-        GenericContainer<String> strings,
-        GenericContainer<Point3D> points
+        GenericContainer<String> strings, GenericContainer<Point3D> points
     ) {}
 }

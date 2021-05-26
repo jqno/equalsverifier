@@ -60,7 +60,6 @@ public class RecordObjectAccessorTest {
     record SimpleRecord(int i, String s) {}
 
     record ThrowingConstructorRecord(int i, String s) {
-
         public ThrowingConstructorRecord {
             throw new IllegalStateException();
         }

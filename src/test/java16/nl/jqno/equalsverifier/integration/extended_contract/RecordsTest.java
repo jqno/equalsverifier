@@ -97,7 +97,6 @@ public class RecordsTest {
     private record PrivateSimpleRecord(int i, String s) {}
 
     record BrokenInvariantIntFieldRecord(int intField, String stringField) {
-
         public BrokenInvariantIntFieldRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField;
@@ -105,7 +104,6 @@ public class RecordsTest {
     }
 
     record BrokenInvariantStringFieldRecord(int intField, String stringField) {
-
         public BrokenInvariantStringFieldRecord(int intField, String stringField) {
             this.intField = intField;
             this.stringField = stringField + "x";
@@ -113,7 +111,6 @@ public class RecordsTest {
     }
 
     record BrokenInvariantBothRecord(int intField, String stringField) {
-
         public BrokenInvariantBothRecord(int intField, String stringField) {
             this.intField = intField + 1;
             this.stringField = stringField + "x";
@@ -121,7 +118,6 @@ public class RecordsTest {
     }
 
     record EqualsRecord(int i, String s) {
-
         @Override
         public boolean equals(Object obj) {
             return defaultEquals(this, obj);
@@ -129,7 +125,6 @@ public class RecordsTest {
     }
 
     record NotAllFieldsRecord(int i, String s) {
-        
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof NotAllFieldsRecord)) {
@@ -145,21 +140,18 @@ public class RecordsTest {
     }
 
     record ThrowingConstructorRecord(int i, String s) {
-
         public ThrowingConstructorRecord {
             throw new IllegalStateException();
         }
     }
 
     record NullFieldRecord(int i, String s) {
-
         public NullFieldRecord {
             s.length();
         }
     }
 
     record ThrowingAccessorRecord(int i, String s) {
-
         public ThrowingAccessorRecord(int i, String s) {
             this.i = i;
             this.s = s + "x";
@@ -171,7 +163,6 @@ public class RecordsTest {
     }
 
     record NullAccessorRecord(String s, String t) {
-
         public NullAccessorRecord(String s, String t) {
             this.s = s;
             this.t = t + "x";
@@ -183,7 +174,6 @@ public class RecordsTest {
     }
 
     record StaticFieldRecord(int i, String s) {
-
         private static final int X = 0;
     }
 }
