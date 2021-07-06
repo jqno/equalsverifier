@@ -279,6 +279,20 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
+     * Signals that T uses Lombok to cache its hashCode, instead of re-calculating it each time the
+     * {@code hashCode()} method is called.
+     *
+     * @param example An instance of the class under test, to verify that the hashCode has been
+     *     initialized properly.
+     * @return {@code this}, for easy method chaining.
+     * @see #withCachedHashCode(String, String, T)
+     */
+    public SingleTypeEqualsVerifierApi<T> withLombokCachedHashCode(T example) {
+        cachedHashCodeInitializer = CachedHashCodeInitializer.lombokCachedHashcode(example);
+        return this;
+    }
+
+    /**
      * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws
      * an {@link AssertionError} if there is a problem.
      *

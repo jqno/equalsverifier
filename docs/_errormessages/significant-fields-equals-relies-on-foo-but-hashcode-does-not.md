@@ -51,4 +51,21 @@ EqualsVerifier.forClass(CachedHashCode.class)
     .withCachedHashCode("cachedHashCode", "calculateHashCode", new CachedHashCode());
 {% endhighlight %}
 
+Another scenario in which you might experience this error message is when using Lombok's `@EqualsAndHashCode` with `cacheStrategy=LAZY`: 
+
+{% highlight java %}
+@RequiredArgsConstructor
+@EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)
+public class CachedHashCode {
+  private final String foo;
+}
+{% endhighlight %}
+
+Using `.withLombokCachedHashCode` allows to test those classes as well: 
+
+{% highlight java %}
+EqualsVerifier.forClass(LazyPojo.class)
+    .withLombokCachedHashCode(new CachedHashCode("bar"));
+{% endhighlight %}
+
 For more help on how to use `withCachedHashCode`, read the [manual page about it](/equalsverifier/manual/caching-hashcodes).
