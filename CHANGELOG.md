@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Added
+- Support for Lombok's `@EqualsAndHashCode(cacheStrategy = LAZY)` ([Issue 460](https://github.com/jqno/equalsverifier/issues/460); thanks janeisklar!)
 
 ## [3.6.1] - 2021-05-21
 ### Fixed
