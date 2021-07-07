@@ -30,10 +30,19 @@ public class CachedHashCodeInitializer<T> {
     private final T example;
 
     private CachedHashCodeInitializer() {
-        this.passthrough = true;
-        this.cachedHashCodeField = null;
-        this.calculateMethod = null;
-        this.example = null;
+        this(true, null, null, null);
+    }
+
+    private CachedHashCodeInitializer(
+        boolean passthrough,
+        Field cachedHashCodeField,
+        Method calculateMethod,
+        T example
+    ) {
+        this.passthrough = passthrough;
+        this.cachedHashCodeField = cachedHashCodeField;
+        this.calculateMethod = calculateMethod;
+        this.example = example;
     }
 
     public CachedHashCodeInitializer(
@@ -44,12 +53,23 @@ public class CachedHashCodeInitializer<T> {
     ) {
         this.passthrough = false;
         this.cachedHashCodeField = findCachedHashCodeField(type, cachedHashCodeField);
-        this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod);
+        this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod, false);
         this.example = example;
     }
 
     public static <T> CachedHashCodeInitializer<T> passthrough() {
         return new CachedHashCodeInitializer<>();
+    }
+
+    public static <T> CachedHashCodeInitializer<T> lombokCachedHashcode(T example) {
+        @SuppressWarnings("unchecked")
+        final Class<T> type = (Class<T>) example.getClass();
+        return new CachedHashCodeInitializer<>(
+            false,
+            findCachedHashCodeField(type, "$hashCodeCache"),
+            findCalculateHashCodeMethod(type, "hashCode", true),
+            example
+        );
     }
 
     public boolean isPassthrough() {
@@ -85,7 +105,7 @@ public class CachedHashCodeInitializer<T> {
         );
     }
 
-    private Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
+    private static Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
         for (Field candidateField : FieldIterable.of(type)) {
             if (candidateField.getName().equals(cachedHashCodeFieldName)) {
                 if (
@@ -104,12 +124,16 @@ public class CachedHashCodeInitializer<T> {
         );
     }
 
-    private Method findCalculateHashCodeMethod(Class<?> type, String calculateHashCodeMethodName) {
+    private static Method findCalculateHashCodeMethod(
+        Class<?> type,
+        String calculateHashCodeMethodName,
+        boolean acceptPublicMethod
+    ) {
         for (Class<?> currentClass : SuperclassIterable.ofIncludeSelf(type)) {
             try {
                 Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
                 if (
-                    !Modifier.isPublic(method.getModifiers()) &&
+                    (acceptPublicMethod || !Modifier.isPublic(method.getModifiers())) &&
                     method.getReturnType().equals(int.class)
                 ) {
                     method.setAccessible(true);
