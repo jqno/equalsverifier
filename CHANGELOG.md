@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.7] - 2021-07-09
 ### Added
 - Support for Lombok's `@EqualsAndHashCode(cacheStrategy = LAZY)` ([Issue 460](https://github.com/jqno/equalsverifier/issues/460); thanks janeisklar!)
 
@@ -797,7 +799,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.6.1...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.7...HEAD
+
+[3.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.6.1...equalsverifier-3.7
 
 [3.6.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.6...equalsverifier-3.6.1
 [3.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.5.5...equalsverifier-3.6
