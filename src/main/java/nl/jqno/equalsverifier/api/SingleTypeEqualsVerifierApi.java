@@ -285,7 +285,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param example An instance of the class under test, to verify that the hashCode has been
      *     initialized properly.
      * @return {@code this}, for easy method chaining.
-     * @see #withCachedHashCode(String, String, T)
+     * @see #withCachedHashCode(String, String, Object)
      */
     public SingleTypeEqualsVerifierApi<T> withLombokCachedHashCode(T example) {
         cachedHashCodeInitializer = CachedHashCodeInitializer.lombokCachedHashcode(example);
