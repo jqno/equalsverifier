@@ -53,7 +53,7 @@ jobs:
           distribution: 'adopt'
           java-version: ${{ matrix.java }}
     - name: 'Set up node' # Needed for formatting with prettier
-      uses: actions/setup-node@v2.3.0
+      uses: actions/setup-node@v2.4.0
       with:
         node-version: 12
     - name: 'Display JDK version'
