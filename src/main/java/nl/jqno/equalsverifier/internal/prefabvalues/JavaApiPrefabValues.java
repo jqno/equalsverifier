@@ -219,6 +219,9 @@ public final class JavaApiPrefabValues {
             Currency.getInstance("JPY")
         );
 
+        Semaphore redSemaphore = new Semaphore(1);
+        Semaphore blueSemaphore = new Semaphore(1);
+        addValues(Semaphore.class, redSemaphore, blueSemaphore, redSemaphore);
         DoubleSummaryStatistics redDoubleStats = new DoubleSummaryStatistics();
         DoubleSummaryStatistics blueDoubleStats = new DoubleSummaryStatistics();
         addValues(DoubleSummaryStatistics.class, redDoubleStats, blueDoubleStats, redDoubleStats);
