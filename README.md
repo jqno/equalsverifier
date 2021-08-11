@@ -46,11 +46,11 @@ EqualsVerifier uses [Prettier-Java](https://github.com/jhipster/prettier-java) t
 The `src/test` folder contains, apart from the regular `java` folder, some version-specific `javaXX` folders that target specific JDKs. For instance, the `src/test/java16` folder contains unit tests that test things related to records. A Maven profile automatically picks up these folders if the JDK that runs the tests has at least that version. `nl.jqno.equalsverifier.internal.architecture.TestPresenceTest` checks that the tests are indeed picked up when the JDK version matches.
 
 
-## Signed Jar
+## Signed JAR
 
-The `lib/` folder contains a local Maven repository containing a signed jar, used to test potential ClassLoader issues
+The `lib/` folder contains a local Maven repository containing a signed JAR, used to test potential ClassLoader issues
 <br/>
-Here's how to install a jar into it:<br>
+Here's how to install a JAR into it:<br>
 <pre>
 mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
                         -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
@@ -58,7 +58,7 @@ mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
                         -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
                         -DlocalRepositoryPath=lib
 </pre>
-The signed jar itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
+The signed JAR itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
 
 # Disclaimer
 
