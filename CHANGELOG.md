@@ -14,9 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.7.1] - 2021-08-13
+- Added prefab values for `java.util.concurrent.Semaphore`. ([Issue 476](https://github.com/jqno/equalsverifier/issues/476))
+
 ## [3.7] - 2021-07-09
 ### Added
-- Support for Lombok's `@EqualsAndHashCode(cacheStrategy = LAZY)` ([Issue 460](https://github.com/jqno/equalsverifier/issues/460); thanks janeisklar!)
+- Support for Lombok's `@EqualsAndHashCode(cacheStrategy = LAZY)`. ([Issue 460](https://github.com/jqno/equalsverifier/issues/460); thanks janeisklar!)
 
 ## [3.6.1] - 2021-05-21
 ### Fixed
