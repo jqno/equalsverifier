@@ -348,7 +348,7 @@
                 <dependency>
                     <groupId>org.openjfx</groupId>
                     <artifactId>javafx-base</artifactId>
-                    <version>17</version>
+                    <version>17.0.0.1</version>
                     <scope>provided</scope>
                 </dependency>
             </dependencies>
