@@ -67,12 +67,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenHashCodeUsesAFieldAndEqualsDoesnt_givenStrictHashCodeWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ExtraFieldInHashCode.class)
-                        .suppress(Warning.STRICT_HASHCODE)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ExtraFieldInHashCode.class)
+                    .suppress(Warning.STRICT_HASHCODE)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -123,12 +122,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenAFieldIsUnused_givenOnlyAllNonfinalFieldsWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(OneFieldUnused.class)
-                        .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(OneFieldUnused.class)
+                    .suppress(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
@@ -176,12 +174,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenNoFieldsAreUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NoFieldsUsed.class)
-                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NoFieldsUsed.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use", "color");
@@ -190,13 +187,12 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenNoFieldsAreUsed_givenUsingGetClass() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NoFieldsUsed.class)
-                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                        .usingGetClass()
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NoFieldsUsed.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .usingGetClass()
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use", "color");
@@ -236,13 +232,12 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenCombiningWithOnlyTheseFieldsAndWithIgnoredFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(OneFieldUnused.class)
-                        .withOnlyTheseFields("x", "y")
-                        .withIgnoredFields("colorNotUsed")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(OneFieldUnused.class)
+                    .withOnlyTheseFields("x", "y")
+                    .withIgnoredFields("colorNotUsed")
+                    .verify()
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -254,12 +249,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenTwoFieldsAreUnUsed_givenAllFieldsShouldBeUsedExceptOneOfThemButNotBoth() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(TwoFieldsUnusedColorPoint.class)
-                        .withIgnoredFields("colorNotUsed")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(TwoFieldsUnusedColorPoint.class)
+                    .withIgnoredFields("colorNotUsed")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use", "colorAlsoNotUsed");
@@ -281,12 +275,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenOneFieldIsUnused_givenAllFieldsShouldBeUsedExceptTwoFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(OneFieldUnused.class)
-                        .withIgnoredFields("x", "colorNotUsed")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(OneFieldUnused.class)
+                    .withIgnoredFields("x", "colorNotUsed")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -300,11 +293,8 @@ public class SignificantFieldsTest {
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsExcepted() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalPoint.class)
-                        .withIgnoredFields("thisFieldDoesNotExist")
+            .when(() ->
+                EqualsVerifier.forClass(FinalPoint.class).withIgnoredFields("thisFieldDoesNotExist")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -334,12 +324,11 @@ public class SignificantFieldsTest {
     @Test
     public void fail_whenAFieldIsUnused_givenTheUnusedFieldIsAlsoSpecified() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(OneFieldUnused.class)
-                        .withOnlyTheseFields("x", "y", "colorNotUsed")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(OneFieldUnused.class)
+                    .withOnlyTheseFields("x", "y", "colorNotUsed")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use", "colorNotUsed");
@@ -348,11 +337,10 @@ public class SignificantFieldsTest {
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsSpecified() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalPoint.class)
-                        .withOnlyTheseFields("thisFieldDoesNotExist")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FinalPoint.class)
+                    .withOnlyTheseFields("thisFieldDoesNotExist")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -364,12 +352,11 @@ public class SignificantFieldsTest {
     @Test
     public void anExceptionIsThrown_whenIgnoredFieldsOverlapWithSpecifiedFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalPoint.class)
-                        .withOnlyTheseFields("x")
-                        .withIgnoredFields("x")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FinalPoint.class)
+                    .withOnlyTheseFields("x")
+                    .withIgnoredFields("x")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -381,12 +368,11 @@ public class SignificantFieldsTest {
     @Test
     public void anExceptionIsThrown_whenSpecifiedFieldsOverlapWithIgnoredFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalPoint.class)
-                        .withIgnoredFields("x")
-                        .withOnlyTheseFields("x")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FinalPoint.class)
+                    .withIgnoredFields("x")
+                    .withOnlyTheseFields("x")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -469,12 +455,11 @@ public class SignificantFieldsTest {
     public void giveCorrectMessage_whenStaticFieldIsNotUsed_givenStaticFieldIsFirstField() {
         // See https://github.com/jqno/equalsverifier/issues/159
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(IdentityIntContainer.class)
-                        .suppress(Warning.IDENTICAL_COPY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(IdentityIntContainer.class)
+                    .suppress(Warning.IDENTICAL_COPY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use i");

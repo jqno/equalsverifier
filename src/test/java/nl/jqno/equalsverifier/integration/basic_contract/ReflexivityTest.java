@@ -86,12 +86,8 @@ public class ReflexivityTest {
     @Test
     public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalPoint.class)
-                        .suppress(Warning.IDENTICAL_COPY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY).verify()
             )
             .assertFailure()
             .assertMessageContains("Unnecessary suppression", "IDENTICAL_COPY");

@@ -36,12 +36,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdBusinessKeyPerson.class)
-                        .withIgnoredAnnotations(Id.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .withIgnoredAnnotations(Id.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use id");
@@ -63,8 +62,8 @@ public class JpaIdTest {
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -77,12 +76,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdBusinessKeyPerson.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -96,12 +94,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdBusinessKeyPersonReorderedFields.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPersonReorderedFields.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -137,12 +134,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -156,12 +152,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
-                        .withOnlyTheseFields("id")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                    .withOnlyTheseFields("id")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -183,12 +178,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NaturalIdBusinessKeyPerson.class)
-                        .withIgnoredAnnotations(NaturalId.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NaturalIdBusinessKeyPerson.class)
+                    .withIgnoredAnnotations(NaturalId.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields", "equals does not use name");
@@ -236,12 +230,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdBusinessKeyPerson.class)
-                        .withOnlyTheseFields("id")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .withOnlyTheseFields("id")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -253,12 +246,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NaturalIdBusinessKeyPerson.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NaturalIdBusinessKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -269,12 +261,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdSurrogateKeyPerson.class)
-                        .withOnlyTheseFields("socialSecurity")
-                        .suppress(Warning.SURROGATE_KEY)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .withOnlyTheseFields("socialSecurity")
+                    .suppress(Warning.SURROGATE_KEY)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -286,12 +277,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdSurrogateKeyPerson.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .withOnlyTheseFields("socialSecurity")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .withOnlyTheseFields("socialSecurity")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -303,12 +293,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdSurrogateKeyPerson.class)
-                        .withIgnoredFields("socialSecurity")
-                        .suppress(Warning.SURROGATE_KEY)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .withIgnoredFields("socialSecurity")
+                    .suppress(Warning.SURROGATE_KEY)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -319,12 +308,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdSurrogateKeyPerson.class)
-                        .suppress(Warning.SURROGATE_KEY)
-                        .withIgnoredFields("socialSecurity")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY)
+                    .withIgnoredFields("socialSecurity")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -335,12 +323,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NaturalIdBusinessKeyPerson.class)
-                        .withOnlyTheseFields("socialSecurity")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NaturalIdBusinessKeyPerson.class)
+                    .withOnlyTheseFields("socialSecurity")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -351,12 +338,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NaturalIdBusinessKeyPerson.class)
-                        .withIgnoredFields("socialSecurity")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NaturalIdBusinessKeyPerson.class)
+                    .withIgnoredFields("socialSecurity")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -367,12 +353,11 @@ public class JpaIdTest {
     @Test
     public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NaturalIdBusinessKeyPerson.class)
-                        .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NaturalIdBusinessKeyPerson.class)
+                    .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -383,14 +368,10 @@ public class JpaIdTest {
     @Test
     public void fail_whenWarningVersionedEntityIsSuppressed_givenWarningSurrogateKeyIsAlsoSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(JpaIdBusinessKeyPerson.class)
-                        .suppress(
-                            Warning.SURROGATE_KEY,
-                            Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -410,8 +391,8 @@ public class JpaIdTest {
     @Test
     public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify()
             )
             .assertFailure()
             .assertMessageContains("Significant fields");

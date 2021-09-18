@@ -100,11 +100,10 @@ public class NullFieldsTest {
     @Test
     public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(MixedNullFields.class)
-                        .withNonnullFields("thisFieldDoesNotExist")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(MixedNullFields.class)
+                    .withNonnullFields("thisFieldDoesNotExist")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -116,12 +115,11 @@ public class NullFieldsTest {
     @Test
     public void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(MixedNullFields.class)
-                        .withNonnullFields("o")
-                        .suppress(Warning.NULL_FIELDS)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(MixedNullFields.class)
+                    .withNonnullFields("o")
+                    .suppress(Warning.NULL_FIELDS)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(
@@ -133,12 +131,11 @@ public class NullFieldsTest {
     @Test
     public void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(MixedNullFields.class)
-                        .suppress(Warning.NULL_FIELDS)
-                        .withNonnullFields("o")
+            .when(() ->
+                EqualsVerifier
+                    .forClass(MixedNullFields.class)
+                    .suppress(Warning.NULL_FIELDS)
+                    .withNonnullFields("o")
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(

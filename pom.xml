@@ -444,8 +444,8 @@
                                     </includes>
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>2.3.0</prettier>
-                                            <prettier-plugin-java>1.1.1</prettier-plugin-java>
+                                            <prettier>2.4.0</prettier>
+                                            <prettier-plugin-java>1.4.0</prettier-plugin-java>
                                         </devDependencies>
                                         <config>
                                             <!-- Changes here must be reflected in .prettierrc.yml -->

@@ -67,11 +67,10 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenVerifyingTwoIncorrectClasses() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClasses(A.class, IncorrectM.class, C.class, IncorrectN.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClasses(A.class, IncorrectM.class, C.class, IncorrectN.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -194,8 +193,8 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify()
+            .when(() ->
+                EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify()
             )
             .assertFailure()
             .assertMessageContains("EqualsVerifier found a problem in 4 classes");

@@ -24,12 +24,11 @@ public class VersionedEntityTest {
     @Test
     public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(OtherwiseStatelessVersionedEntity.class)
-                        .suppress(Warning.IDENTICAL_COPY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(OtherwiseStatelessVersionedEntity.class)
+                    .suppress(Warning.IDENTICAL_COPY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
@@ -57,12 +56,11 @@ public class VersionedEntityTest {
     @Test
     public void fail_whenInstanceWithANonzeroIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(StringVersionedEntity.class)
-                        .suppress(Warning.IDENTICAL_COPY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(StringVersionedEntity.class)
+                    .suppress(Warning.IDENTICAL_COPY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
@@ -120,12 +118,11 @@ public class VersionedEntityTest {
     @Test
     public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenVersionedEntityWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NonReflexiveCanEqualVersionedEntity.class)
-                        .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NonReflexiveCanEqualVersionedEntity.class)
+                    .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("catch me if you can");

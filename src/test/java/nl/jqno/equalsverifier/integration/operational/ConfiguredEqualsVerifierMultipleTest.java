@@ -90,11 +90,8 @@ public class ConfiguredEqualsVerifierMultipleTest {
     @Test
     public void sanity_fail_whenSingleGenericTypeIsRecursive() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClasses(SingleGenericContainerContainer.class, A.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forClasses(SingleGenericContainerContainer.class, A.class).verify()
             )
             .assertFailure()
             .assertMessageContains("Recursive datastructure");
@@ -112,11 +109,8 @@ public class ConfiguredEqualsVerifierMultipleTest {
     @Test
     public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClasses(DoubleGenericContainerContainer.class, A.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forClasses(DoubleGenericContainerContainer.class, A.class).verify()
             )
             .assertFailure()
             .assertMessageContains("Recursive datastructure");

@@ -51,16 +51,15 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeIsInvalid_givenWithCachedHashCodeIsUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithInvalidCachedHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "calcHashCode",
-                            new ObjectWithInvalidCachedHashCode(SOME_NAME)
-                        )
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithInvalidCachedHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "calcHashCode",
+                        new ObjectWithInvalidCachedHashCode(SOME_NAME)
+                    )
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -74,15 +73,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeFieldDoesNotExist() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithValidCachedHashCode.class)
-                        .withCachedHashCode(
-                            "doesNotExist",
-                            "calcHashCode",
-                            new ObjectWithValidCachedHashCode(SOME_NAME)
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithValidCachedHashCode.class)
+                    .withCachedHashCode(
+                        "doesNotExist",
+                        "calcHashCode",
+                        new ObjectWithValidCachedHashCode(SOME_NAME)
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "doesNotExist");
@@ -91,15 +89,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeFieldIsPublic() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(InvalidCachedHashCodeFieldContainer.class)
-                        .withCachedHashCode(
-                            "publicField",
-                            "calculateHashCode",
-                            new InvalidCachedHashCodeFieldContainer()
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(InvalidCachedHashCodeFieldContainer.class)
+                    .withCachedHashCode(
+                        "publicField",
+                        "calculateHashCode",
+                        new InvalidCachedHashCodeFieldContainer()
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "publicField");
@@ -108,15 +105,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeFieldIsNotAnInt() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(InvalidCachedHashCodeFieldContainer.class)
-                        .withCachedHashCode(
-                            "notAnInt",
-                            "calculateHashCode",
-                            new InvalidCachedHashCodeFieldContainer()
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(InvalidCachedHashCodeFieldContainer.class)
+                    .withCachedHashCode(
+                        "notAnInt",
+                        "calculateHashCode",
+                        new InvalidCachedHashCodeFieldContainer()
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(CACHED_HASHCODE, MALFORMED_CACHEDHASHCODEFIELD, "notAnInt");
@@ -125,15 +121,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCalculateHashCodeMethodDoesNotExist() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithValidCachedHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "doesNotExist",
-                            new ObjectWithValidCachedHashCode(SOME_NAME)
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithValidCachedHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "doesNotExist",
+                        new ObjectWithValidCachedHashCode(SOME_NAME)
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(
@@ -146,15 +141,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(InvalidCalculateHashCodeMethodsContainer.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "notAnInt",
-                            new InvalidCalculateHashCodeMethodsContainer()
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(InvalidCalculateHashCodeMethodsContainer.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "notAnInt",
+                        new InvalidCalculateHashCodeMethodsContainer()
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "notAnInt");
@@ -163,15 +157,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCalculateHashCodeMethodTakesParamters() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(InvalidCalculateHashCodeMethodsContainer.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "takesParameters",
-                            new InvalidCalculateHashCodeMethodsContainer()
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(InvalidCalculateHashCodeMethodsContainer.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "takesParameters",
+                        new InvalidCalculateHashCodeMethodsContainer()
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(
@@ -184,15 +177,14 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCalculateHashCodeMethodIsPublic() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(InvalidCalculateHashCodeMethodsContainer.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "visible",
-                            new InvalidCalculateHashCodeMethodsContainer()
-                        )
+            .when(() ->
+                EqualsVerifier
+                    .forClass(InvalidCalculateHashCodeMethodsContainer.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "visible",
+                        new InvalidCalculateHashCodeMethodsContainer()
+                    )
             )
             .assertThrows(IllegalArgumentException.class)
             .assertMessageContains(CACHED_HASHCODE, MALFORMED_CALCULATEHASHCODEMETHOD, "visible");
@@ -225,12 +217,11 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenExampleIsNull() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithUninitializedCachedHashCode.class)
-                        .withCachedHashCode("cachedHashCode", "calcHashCode", null)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithUninitializedCachedHashCode.class)
+                    .withCachedHashCode("cachedHashCode", "calcHashCode", null)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(CACHED_HASHCODE, "example cannot be null.");
@@ -239,16 +230,15 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeFieldIsNotInitialized() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithUninitializedCachedHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "calcHashCode",
-                            new ObjectWithUninitializedCachedHashCode(SOME_NAME)
-                        )
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithUninitializedCachedHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "calcHashCode",
+                        new ObjectWithUninitializedCachedHashCode(SOME_NAME)
+                    )
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(CACHED_HASHCODE, "hashCode is not properly initialized.");
@@ -257,16 +247,15 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenHashCodeIsZero() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithLegitimatelyZeroHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "calcHashCode",
-                            new ObjectWithLegitimatelyZeroHashCode(1)
-                        )
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithLegitimatelyZeroHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "calcHashCode",
+                        new ObjectWithLegitimatelyZeroHashCode(1)
+                    )
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -287,17 +276,16 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenNoExampleForCachedHashCodeIsSuppressedAndExampleIsNotNull() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithValidCachedHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "calcHashCode",
-                            new ObjectWithValidCachedHashCode(SOME_NAME)
-                        )
-                        .suppress(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithValidCachedHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "calcHashCode",
+                        new ObjectWithValidCachedHashCode(SOME_NAME)
+                    )
+                    .suppress(Warning.NO_EXAMPLE_FOR_CACHED_HASHCODE)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -311,17 +299,16 @@ public class CachedHashCodeTest {
     @Test
     public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsedAndWarningNonfinalFieldsIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ObjectWithValidCachedHashCode.class)
-                        .withCachedHashCode(
-                            "cachedHashCode",
-                            "calcHashCode",
-                            new ObjectWithValidCachedHashCode(SOME_NAME)
-                        )
-                        .suppress(Warning.NONFINAL_FIELDS)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ObjectWithValidCachedHashCode.class)
+                    .withCachedHashCode(
+                        "cachedHashCode",
+                        "calcHashCode",
+                        new ObjectWithValidCachedHashCode(SOME_NAME)
+                    )
+                    .suppress(Warning.NONFINAL_FIELDS)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

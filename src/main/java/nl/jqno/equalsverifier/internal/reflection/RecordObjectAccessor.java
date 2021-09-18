@@ -58,13 +58,11 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        return makeAccessor(
-            f -> {
-                Object value = getField(f);
-                TypeTag tag = TypeTag.of(f, enclosingType);
-                return prefabValues.giveOther(tag, value);
-            }
-        );
+        return makeAccessor(f -> {
+            Object value = getField(f);
+            TypeTag tag = TypeTag.of(f, enclosingType);
+            return prefabValues.giveOther(tag, value);
+        });
     }
 
     /** {@inheritDoc} */
@@ -80,11 +78,10 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
         PrefabValues prefabValues,
         TypeTag enclosingType
     ) {
-        return makeAccessor(
-            f ->
-                canBeDefault.test(f)
-                    ? PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType())
-                    : prefabValues.giveRed(TypeTag.of(f, enclosingType))
+        return makeAccessor(f ->
+            canBeDefault.test(f)
+                ? PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType())
+                : prefabValues.giveRed(TypeTag.of(f, enclosingType))
         );
     }
 
@@ -128,17 +125,15 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     private Constructor<T> getRecordConstructor() {
-        return rethrow(
-            () -> {
-                List<Class<?>> constructorTypes = fields()
-                    .map(Field::getType)
-                    .collect(Collectors.toList());
-                Constructor<T> result = type()
-                    .getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
-                result.setAccessible(true);
-                return result;
-            }
-        );
+        return rethrow(() -> {
+            List<Class<?>> constructorTypes = fields()
+                .map(Field::getType)
+                .collect(Collectors.toList());
+            Constructor<T> result = type()
+                .getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
+            result.setAccessible(true);
+            return result;
+        });
     }
 
     private T callRecordConstructor(List<?> params) {

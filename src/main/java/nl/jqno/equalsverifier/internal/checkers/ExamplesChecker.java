@@ -171,18 +171,16 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     private boolean isIdentical(T reference, T other) {
-        return rethrow(
-            () -> {
-                for (Field field : FieldIterable.of(reference.getClass())) {
-                    field.setAccessible(true);
-                    if (!Objects.equals(field.get(reference), field.get(other))) {
-                        return false;
-                    }
+        return rethrow(() -> {
+            for (Field field : FieldIterable.of(reference.getClass())) {
+                field.setAccessible(true);
+                if (!Objects.equals(field.get(reference), field.get(other))) {
+                    return false;
                 }
-
-                return true;
             }
-        );
+
+            return true;
+        });
     }
 
     @SuppressFBWarnings(

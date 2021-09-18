@@ -54,8 +54,7 @@ public class ArrayTest {
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify()
+            .when(() -> EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify()
             )
             .assertFailure()
             .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
@@ -77,11 +76,10 @@ public class ArrayTest {
     @Test
     public void failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("second", MULTIDIMENSIONAL_HASHCODE);
@@ -95,9 +93,8 @@ public class ArrayTest {
     @Test
     public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify()
             )
             .assertThrows(AssertionError.class)
             .assertMessageContains("Recursive datastructure");

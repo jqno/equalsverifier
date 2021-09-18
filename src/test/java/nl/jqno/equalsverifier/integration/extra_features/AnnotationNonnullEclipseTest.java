@@ -68,11 +68,10 @@ public class AnnotationNonnullEclipseTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -93,11 +92,10 @@ public class AnnotationNonnullEclipseTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NonnullEclipseWithInapplicableLocationOnClass.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NonnullEclipseWithInapplicableLocationOnClass.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

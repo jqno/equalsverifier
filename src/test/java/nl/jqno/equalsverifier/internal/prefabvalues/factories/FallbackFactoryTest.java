@@ -81,8 +81,8 @@ public class FallbackFactoryTest {
     @Test
     public void dontGiveTwoStepRecursiveClass() {
         ExpectedException
-            .when(
-                () -> factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack)
+            .when(() ->
+                factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack)
             )
             .assertThrows(RecursionException.class)
             .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");

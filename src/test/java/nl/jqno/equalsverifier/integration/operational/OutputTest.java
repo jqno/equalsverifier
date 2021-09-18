@@ -52,11 +52,10 @@ public class OutputTest {
     @Test
     public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(UnsupportedOperationExceptionWithMessageThrower.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(UnsupportedOperationExceptionWithMessageThrower.class)
+                    .verify()
             )
             .assertMessageContains(
                 UnsupportedOperationExceptionWithMessageThrower.class.getSimpleName()

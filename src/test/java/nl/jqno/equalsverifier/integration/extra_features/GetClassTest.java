@@ -80,12 +80,11 @@ public class GetClassTest {
     @Test
     public void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(GetClassColorPointWithEqualSuper.class)
-                        .usingGetClass()
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(GetClassColorPointWithEqualSuper.class)
+                    .usingGetClass()
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

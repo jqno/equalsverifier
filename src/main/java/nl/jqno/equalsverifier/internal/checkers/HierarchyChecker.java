@@ -245,11 +245,9 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private boolean methodIsFinal(String methodName, Class<?>... parameterTypes) {
-        return rethrow(
-            () -> {
-                Method method = type.getMethod(methodName, parameterTypes);
-                return Modifier.isFinal(method.getModifiers());
-            }
-        );
+        return rethrow(() -> {
+            Method method = type.getMethod(methodName, parameterTypes);
+            return Modifier.isFinal(method.getModifiers());
+        });
     }
 }

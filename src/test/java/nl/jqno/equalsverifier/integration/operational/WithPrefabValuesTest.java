@@ -22,11 +22,10 @@ public class WithPrefabValuesTest {
     @Test
     public void throw_whenTypeIsNull() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(WithPrefabValuesTest.class)
-                        .withPrefabValues(null, red, blue)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(WithPrefabValuesTest.class)
+                    .withPrefabValues(null, red, blue)
             )
             .assertThrows(NullPointerException.class);
     }
@@ -34,11 +33,10 @@ public class WithPrefabValuesTest {
     @Test
     public void throw_whenFirstPrefabValueIsNull() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(WithPrefabValuesTest.class)
-                        .withPrefabValues(FinalPoint.class, null, blue)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(WithPrefabValuesTest.class)
+                    .withPrefabValues(FinalPoint.class, null, blue)
             )
             .assertThrows(NullPointerException.class);
     }
@@ -46,11 +44,10 @@ public class WithPrefabValuesTest {
     @Test
     public void throw_whenSecondPrefabValueIsNull() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(WithPrefabValuesTest.class)
-                        .withPrefabValues(FinalPoint.class, red, null)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(WithPrefabValuesTest.class)
+                    .withPrefabValues(FinalPoint.class, red, null)
             )
             .assertThrows(NullPointerException.class);
     }
@@ -58,11 +55,10 @@ public class WithPrefabValuesTest {
     @Test
     public void throw_whenThePrefabValuesAreTheSame() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(WithPrefabValuesTest.class)
-                        .withPrefabValues(FinalPoint.class, red, red)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(WithPrefabValuesTest.class)
+                    .withPrefabValues(FinalPoint.class, red, red)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains("Precondition", "both values are equal");
@@ -74,11 +70,10 @@ public class WithPrefabValuesTest {
         FinalPoint red2 = new FinalPoint(4, 4);
 
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(WithPrefabValuesTest.class)
-                        .withPrefabValues(FinalPoint.class, red1, red2)
+            .when(() ->
+                EqualsVerifier
+                    .forClass(WithPrefabValuesTest.class)
+                    .withPrefabValues(FinalPoint.class, red1, red2)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains("Precondition", "both values are equal");

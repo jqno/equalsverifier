@@ -81,11 +81,10 @@ public class RelaxedEqualsPreconditionTest {
     public void fail_whenAnUnequalVarargParameterIsNull() {
         Multiple another = new Multiple(3, 3);
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(red, blue)
-                        .andUnequalExamples(green, another, null)
+            .when(() ->
+                EqualsVerifier
+                    .forRelaxedEqualExamples(red, blue)
+                    .andUnequalExamples(green, another, null)
             )
             .assertThrows(IllegalArgumentException.class);
     }
@@ -94,12 +93,8 @@ public class RelaxedEqualsPreconditionTest {
     public void fail_whenEqualExamplesAreOfDifferentRuntimeTypes() {
         SubMultiple sm = new SubMultiple(1, 2);
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(sm, red)
-                        .andUnequalExample(green)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(sm, red).andUnequalExample(green).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -113,12 +108,8 @@ public class RelaxedEqualsPreconditionTest {
     @Test
     public void fail_whenTheSameExampleIsGivenTwice() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(red, red)
-                        .andUnequalExample(green)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(red, red).andUnequalExample(green).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -132,12 +123,8 @@ public class RelaxedEqualsPreconditionTest {
     public void fail_whenTwoExamplesAreIdentical() {
         Multiple aa = new Multiple(1, 2);
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(red, aa)
-                        .andUnequalExample(green)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -151,12 +138,8 @@ public class RelaxedEqualsPreconditionTest {
     public void fail_whenTwoExamplesAreNotEqualAtAll() {
         Multiple aa = new Multiple(42, 42);
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(red, aa)
-                        .andUnequalExample(green)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -177,11 +160,8 @@ public class RelaxedEqualsPreconditionTest {
     @Test
     public void fail_whenTheSameUnequalExampleIsGivenTwice() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(red, blue)
-                        .andUnequalExamples(green, green)
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, green)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(PRECONDITION, TWO_OBJECTS_ARE_EQUAL);
@@ -191,9 +171,8 @@ public class RelaxedEqualsPreconditionTest {
     public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
         Multiple xx = new Multiple(2, 2);
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, xx)
+            .when(() ->
+                EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, xx)
             )
             .assertThrows(IllegalStateException.class)
             .assertMessageContains(PRECONDITION, TWO_OBJECTS_ARE_EQUAL);

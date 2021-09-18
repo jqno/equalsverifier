@@ -36,11 +36,10 @@ public class AnnotationParametersAreNonnullByDefaultTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

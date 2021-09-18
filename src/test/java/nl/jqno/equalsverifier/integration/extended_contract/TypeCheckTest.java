@@ -26,9 +26,8 @@ public class TypeCheckTest {
     @Test
     public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify()
             )
             .assertFailure()
             .assertCause(IllegalStateException.class)

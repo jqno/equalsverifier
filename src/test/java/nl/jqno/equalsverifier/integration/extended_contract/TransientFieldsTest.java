@@ -36,9 +36,8 @@ public class TransientFieldsTest {
     @Test
     public void fail_whenFieldsWithTransientModifierAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -74,11 +73,8 @@ public class TransientFieldsTest {
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(SubclassUsingFieldsWithTransientAnnotation.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forClass(SubclassUsingFieldsWithTransientAnnotation.class).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -90,11 +86,8 @@ public class TransientFieldsTest {
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreNotUsedInEquals_givenAnnotationIsNotAJpaAnnotation() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier.forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class).verify()
             )
             .assertFailure()
             .assertMessageContains(

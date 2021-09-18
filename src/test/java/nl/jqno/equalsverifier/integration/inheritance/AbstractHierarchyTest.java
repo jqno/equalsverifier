@@ -43,13 +43,12 @@ public class AbstractHierarchyTest {
     @Test
     public void fail_whenAbstractImplementationThrowsNpe() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(NullThrowingLazyObjectContainer.class)
-                        .suppress(Warning.NONFINAL_FIELDS)
-                        .withIgnoredFields("objectFactory")
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NullThrowingLazyObjectContainer.class)
+                    .suppress(Warning.NONFINAL_FIELDS)
+                    .withIgnoredFields("objectFactory")
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

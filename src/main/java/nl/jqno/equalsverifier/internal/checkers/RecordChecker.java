@@ -73,12 +73,10 @@ public class RecordChecker<T> implements Checker {
     }
 
     private Method getAccessorMethodFor(Class<T> type, Field f) {
-        return rethrow(
-            () -> {
-                Method result = type.getDeclaredMethod(f.getName());
-                result.setAccessible(true);
-                return result;
-            }
-        );
+        return rethrow(() -> {
+            Method result = type.getDeclaredMethod(f.getName());
+            result.setAccessible(true);
+            return result;
+        });
     }
 }

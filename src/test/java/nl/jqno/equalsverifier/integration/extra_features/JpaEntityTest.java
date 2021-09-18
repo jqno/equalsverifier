@@ -59,9 +59,8 @@ public class JpaEntityTest {
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify()
             )
             .assertFailure()
             .assertMessageContains("Subclass");

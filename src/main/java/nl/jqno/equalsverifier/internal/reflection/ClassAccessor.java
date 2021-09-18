@@ -120,8 +120,8 @@ public class ClassAccessor<T> {
     }
 
     private boolean isMethodAbstract(String name, Class<?>... parameterTypes) {
-        return rethrow(
-            () -> Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers())
+        return rethrow(() ->
+            Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers())
         );
     }
 

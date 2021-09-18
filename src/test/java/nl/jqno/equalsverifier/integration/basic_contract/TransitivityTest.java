@@ -19,12 +19,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(TwoFieldsUsingOr.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(TwoFieldsUsingOr.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -43,12 +42,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ThreeFieldsUsingOr.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ThreeFieldsUsingOr.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -62,13 +60,12 @@ public class TransitivityTest {
         ThreeFieldsUsingOr other = new ThreeFieldsUsingOr("d", "4", "delta");
 
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forRelaxedEqualExamples(one, two, three)
-                        .andUnequalExample(other)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forRelaxedEqualExamples(one, two, three)
+                    .andUnequalExample(other)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -77,12 +74,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ThreeFieldsUsingAndOr.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ThreeFieldsUsingAndOr.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -91,12 +87,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ThreeFieldsUsingOrAnd.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ThreeFieldsUsingOrAnd.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -105,12 +100,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FiveFieldsUsingOr.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FiveFieldsUsingOr.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -119,12 +113,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FiveFieldsUsingAndsAndOrs.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FiveFieldsUsingAndsAndOrs.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");
@@ -134,12 +127,11 @@ public class TransitivityTest {
     @Test
     public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(AtLeast2FieldsAreEqual.class)
-                        .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(AtLeast2FieldsAreEqual.class)
+                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Transitivity");

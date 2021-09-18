@@ -39,12 +39,11 @@ public class SubclassTest {
     @Test
     public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(BlindlyEqualsPoint.class)
-                        .withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(BlindlyEqualsPoint.class)
+                    .withRedefinedSubclass(EqualSubclassForBlindlyEqualsPoint.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -71,12 +70,11 @@ public class SubclassTest {
     @Test
     public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(CanEqualPoint.class)
-                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(CanEqualPoint.class)
+                    .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -103,12 +101,11 @@ public class SubclassTest {
     @Test
     public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(FinalEqualsAndHashCode.class)
-                        .withRedefinedSubclass(RedeFinalSubPoint.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(FinalEqualsAndHashCode.class)
+                    .withRedefinedSubclass(RedeFinalSubPoint.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -130,13 +127,12 @@ public class SubclassTest {
     @Test
     public void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(CanEqualPoint.class)
-                        .suppress(Warning.STRICT_INHERITANCE)
-                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(CanEqualPoint.class)
+                    .suppress(Warning.STRICT_INHERITANCE)
+                    .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -149,13 +145,12 @@ public class SubclassTest {
     @Test
     public void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(CanEqualPoint.class)
-                        .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
-                        .suppress(Warning.STRICT_INHERITANCE)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(CanEqualPoint.class)
+                    .withRedefinedSubclass(EqualSubclassForCanEqualPoint.class)
+                    .suppress(Warning.STRICT_INHERITANCE)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

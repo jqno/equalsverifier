@@ -28,12 +28,11 @@ public class AnnotationImmutableTest {
     @Test
     public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(MutableCanEqualColorPoint.class)
-                        .withRedefinedSuperclass()
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(MutableCanEqualColorPoint.class)
+                    .withRedefinedSuperclass()
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Mutability", "equals depends on mutable field", "color");

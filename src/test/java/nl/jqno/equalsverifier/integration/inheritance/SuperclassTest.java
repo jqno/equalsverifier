@@ -77,8 +77,8 @@ public class SuperclassTest {
     @Test
     public void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -90,12 +90,11 @@ public class SuperclassTest {
     @Test
     public void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(ColorBlindColorPoint.class)
-                        .withRedefinedSuperclass()
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(ColorBlindColorPoint.class)
+                    .withRedefinedSuperclass()
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -120,11 +119,10 @@ public class SuperclassTest {
     @Test
     public void fail_whenSuperclassIsVersionedEntityAndIncorrectlyImplementsCanEqual_givenASubclassThatExploitsTheIncorrectness() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSub.class)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSub.class)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("Symmetry", "does not equal superclass instance");

@@ -95,14 +95,12 @@ public class CachedHashCodeInitializer<T> {
     }
 
     private void recomputeCachedHashCode(Object object) {
-        rethrow(
-            () -> {
-                // zero the field first, in case calculateMethod checks it
-                cachedHashCodeField.set(object, 0);
-                Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
-                cachedHashCodeField.set(object, recomputedHashCode);
-            }
-        );
+        rethrow(() -> {
+            // zero the field first, in case calculateMethod checks it
+            cachedHashCodeField.set(object, 0);
+            Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
+            cachedHashCodeField.set(object, recomputedHashCode);
+        });
     }
 
     private static Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {

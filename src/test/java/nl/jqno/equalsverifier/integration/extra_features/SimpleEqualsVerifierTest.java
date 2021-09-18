@@ -33,14 +33,13 @@ public class SimpleEqualsVerifierTest {
     @Test
     public void mentionSimple_whenTestingGeneratedClassesRecursively_givenNothingSpecial() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forPackage(
-                            "nl.jqno.equalsverifier.integration.extra_features.simple_package",
-                            true
-                        )
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forPackage(
+                        "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                        true
+                    )
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");
@@ -49,12 +48,11 @@ public class SimpleEqualsVerifierTest {
     @Test
     public void mentionSimple_whenTestingGeneratedClass_givenSuppressWarningStrictInheritance() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(SimplePoint.class)
-                        .suppress(Warning.STRICT_INHERITANCE)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(SimplePoint.class)
+                    .suppress(Warning.STRICT_INHERITANCE)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");

@@ -23,12 +23,11 @@ public class BalancedAbstractnessTest {
     @Test
     public void fail_whenBothEqualsAndHashCodeAreAbstract() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(AbstractBoth.class)
-                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(AbstractBoth.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
@@ -37,12 +36,11 @@ public class BalancedAbstractnessTest {
     @Test
     public void fail_whenEqualsIsAbstract() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier
-                        .forClass(AbstractEquals.class)
-                        .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                        .verify()
+            .when(() ->
+                EqualsVerifier
+                    .forClass(AbstractEquals.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
             )
             .assertFailure()
             .assertMessageContains(

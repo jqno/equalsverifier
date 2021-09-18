@@ -56,8 +56,8 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenEqualsCallsAnAbstractFieldsAbstractMethod() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class).verify()
             )
             .assertFailure()
             .assertCause(AbstractMethodError.class)
@@ -83,9 +83,8 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenHashCodeCallsAnAbstractFieldsAbstactMethod() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class).verify()
             )
             .assertFailure()
             .assertCause(AbstractMethodError.class)
@@ -116,8 +115,8 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenAFieldsEqualsMethodCallsAnAbstractField() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class).verify()
             )
             .assertFailure()
             .assertCause(AbstractMethodError.class)
@@ -144,9 +143,8 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenAFieldsHashCodeMethodCallsAnAbstractField() {
         ExpectedException
-            .when(
-                () ->
-                    EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class).verify()
+            .when(() ->
+                EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class).verify()
             )
             .assertFailure()
             .assertCause(AbstractMethodError.class)
@@ -201,8 +199,7 @@ public class AbstractDelegationTest {
     @Test
     public void originalMessageIsIncludedInErrorMessage_whenEqualsVerifierSignalsAnAbstractDelegationIssue() {
         ExpectedException
-            .when(
-                () -> EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class).verify()
+            .when(() -> EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class).verify()
             )
             .assertFailure()
             .assertMessageContains("This is AbstractMethodError's original message");
