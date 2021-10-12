@@ -62,6 +62,8 @@ public final class PackageScanner {
                 }
                 return classes.stream();
             })
+            .filter(c -> !c.isAnonymousClass())
+            .filter(c -> !c.isLocalClass())
             .filter(c -> !c.getName().endsWith("Test"))
             .collect(Collectors.toList());
     }

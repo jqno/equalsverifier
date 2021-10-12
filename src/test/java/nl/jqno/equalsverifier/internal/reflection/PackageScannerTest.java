@@ -96,4 +96,19 @@ public class PackageScannerTest {
         );
         assertEquals(Collections.emptyList(), classes);
     }
+
+    @Test
+    public void anonymousAndLocalClassesAreSkipped() {
+        List<Class<?>> classes = PackageScanner.getClassesIn(
+            "nl.jqno.equalsverifier.testhelpers.packages.anonymous",
+            false
+        );
+
+        assertEquals(
+            Collections.singletonList(
+                nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class
+            ),
+            classes
+        );
+    }
 }
