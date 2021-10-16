@@ -13,19 +13,19 @@ jobs:
             continue-on-error: false
             cache-id: "jdk8"
             java: 8
-            dist: adopt
+            dist: temurin
             flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 11"
             continue-on-error: false
             cache-id: "jdk11"
             java: 11
-            dist: adopt
+            dist: temurin
             flags: ""
           - title: "Supported JDK 17"
             continue-on-error: false
             cache-id: "jdk17"
             java: 17
-            dist: adopt
+            dist: temurin
             flags: ""
           - title: "Experimental JDK EA (simplified)"
             continue-on-error: false
