@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
@@ -195,7 +196,7 @@ public enum SupportedAnnotations implements Annotation {
 
     @Override
     public Set<String> partialClassNames() {
-        return partialClassNames;
+        return Collections.unmodifiableSet(partialClassNames);
     }
 
     @Override

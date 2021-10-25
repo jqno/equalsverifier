@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.prefabvalues;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
@@ -25,6 +26,7 @@ public class PrefabValues {
      *
      * @param factoryCache The factories that can be used to create values.
      */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public PrefabValues(FactoryCache factoryCache) {
         this.factoryCache = factoryCache;
     }

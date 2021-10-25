@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 
 /**
@@ -81,6 +82,10 @@ public final class EqualsVerifierReport {
      *     SingleTypeEqualsVerifierApi#report()} does not conform to the {@link
      *     Object#equals(Object)} and {@link Object#hashCode()} contracts; or null if it does.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "Can't defensively copy a Throwable."
+    )
     public Throwable getCause() {
         return cause;
     }

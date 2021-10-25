@@ -28,6 +28,7 @@ public final class FieldAccessor {
     }
 
     /** @return The field itself. */
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Can't defensively copy a Field.")
     public Field getField() {
         return field;
     }

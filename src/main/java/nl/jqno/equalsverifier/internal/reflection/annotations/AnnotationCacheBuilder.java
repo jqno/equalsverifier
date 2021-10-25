@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,7 +26,7 @@ public class AnnotationCacheBuilder {
         Set<String> ignoredAnnotations
     ) {
         this.supportedAnnotations = Arrays.asList(supportedAnnotations);
-        this.ignoredAnnotations = ignoredAnnotations;
+        this.ignoredAnnotations = Collections.unmodifiableSet(ignoredAnnotations);
     }
 
     public void build(Class<?> type, AnnotationCache cache) {

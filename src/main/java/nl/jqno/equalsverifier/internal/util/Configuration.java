@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -240,6 +241,10 @@ public final class Configuration<T> {
         return typeTag;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "PrefabValues is inherently mutable."
+    )
     public PrefabValues getPrefabValues() {
         return prefabValues;
     }
@@ -248,6 +253,7 @@ public final class Configuration<T> {
         return classAccessor;
     }
 
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable.")
     public AnnotationCache getAnnotationCache() {
         return annotationCache;
     }

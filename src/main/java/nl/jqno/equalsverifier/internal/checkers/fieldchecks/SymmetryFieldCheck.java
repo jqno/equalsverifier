@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -14,6 +15,10 @@ public class SymmetryFieldCheck<T> implements FieldCheck<T> {
     private final PrefabValues prefabValues;
     private final TypeTag typeTag;
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "PrefabValues is inherently mutable."
+    )
     public SymmetryFieldCheck(PrefabValues prefabValues, TypeTag typeTag) {
         this.prefabValues = prefabValues;
         this.typeTag = typeTag;

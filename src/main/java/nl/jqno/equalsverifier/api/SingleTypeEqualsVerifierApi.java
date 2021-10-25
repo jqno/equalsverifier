@@ -61,7 +61,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         boolean usingGetClass
     ) {
         this(type);
-        this.warningsToSuppress = warningsToSuppress;
+        this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
     }

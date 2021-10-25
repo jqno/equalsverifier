@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -16,6 +17,10 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
     private final TypeTag typeTag;
     private final Predicate<FieldAccessor> isCachedHashCodeField;
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "PrefabValues is inherently mutable."
+    )
     public MutableStateFieldCheck(
         PrefabValues prefabValues,
         TypeTag typeTag,

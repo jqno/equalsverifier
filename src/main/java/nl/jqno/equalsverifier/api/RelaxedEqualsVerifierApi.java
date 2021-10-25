@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.api;
 
 import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLeastOne;
 
+import java.util.Collections;
 import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -25,7 +26,7 @@ public class RelaxedEqualsVerifierApi<T> {
      */
     public RelaxedEqualsVerifierApi(Class<T> type, List<T> examples) {
         this.type = type;
-        this.equalExamples = examples;
+        this.equalExamples = Collections.unmodifiableList(examples);
     }
 
     /**
