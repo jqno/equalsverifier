@@ -41,6 +41,7 @@ Add it to your build like this (please adjust for your build system of choice):
 * If you want to get started quickly, read the [getting started](/equalsverifier/manual/getting-started) page.
 * If you want to learn more, read the [manual](/equalsverifier/manual), or watch the video:
   <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/pNJ_O10XaoM?rel=0" frameborder="0" allowfullscreen></iframe>
+* If you want some background, listen to the BarCoding podcast interview on [anchor](https://anchor.fm/barcoding/episodes/Episode-20---The-tales-of-the-EqualsVerifier-project-e1993ev), [spotify](https://open.spotify.com/episode/1d0aieZzRB9Ts85XWuquBe?si=WWYvYBiASECteA1flOgpDQ&nd=1) or [apple](https://podcasts.apple.com/us/podcast/episode-20-the-tales-of-the-equalsverifier-project/id1477504970?i=1000539604102).
 
 If you're interested, there's more to read:
 
