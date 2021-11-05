@@ -92,6 +92,14 @@ public class RecordsTest {
         EqualsVerifier.forClass(StaticFieldRecord.class).verify();
     }
 
+    @Test
+    public void succeed_whenRecordValidatesInput_givenValidPrefabValues() {
+        EqualsVerifier
+            .forClass(ValidatingConstructorRecord.class)
+            .withPrefabValues(String.class, "valid-1", "valid-2")
+            .verify();
+    }
+
     record SimpleRecord(int i, String s) {}
 
     private record PrivateSimpleRecord(int i, String s) {}
@@ -175,5 +183,13 @@ public class RecordsTest {
 
     record StaticFieldRecord(int i, String s) {
         private static final int X = 0;
+    }
+
+    record ValidatingConstructorRecord(String s) {
+        public ValidatingConstructorRecord {
+            if (s != null && !s.startsWith("valid-")) {
+                throw new IllegalStateException("rejected");
+            }
+        }
     }
 }
