@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
@@ -92,6 +93,10 @@ public class HierarchyChecker<T> implements Checker {
         }
     }
 
+    @SuppressFBWarnings(
+        value = "DCN_NULLPOINTER_EXCEPTION",
+        justification = "The equals method in a superclasses can throw an NPE, but it's a specific non-goal to do something with that here."
+    )
     private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
         if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
             return;

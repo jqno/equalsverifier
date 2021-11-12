@@ -106,7 +106,7 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     @SuppressFBWarnings(
-        value = "EC_NULL_ARG",
+        value = { "EC_NULL_ARG", "DCN_NULLPOINTER_EXCEPTION" },
         justification = "Check what happens when null is passed into equals."
     )
     private void checkNonNullity(T reference) {

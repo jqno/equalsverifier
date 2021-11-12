@@ -64,6 +64,10 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         );
     }
 
+    @SuppressFBWarnings(
+        value = "DCN_NULLPOINTER_EXCEPTION",
+        justification = "We're catching and wrapping it to provide better output to the user."
+    )
     private void handle(String testedMethodName, Field field, Runnable r) {
         try {
             r.run();
