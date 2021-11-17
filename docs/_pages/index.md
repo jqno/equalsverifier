@@ -1,6 +1,7 @@
 ---
 title: EqualsVerifier
 permalink: /
+description: Makes testing equals() and hashCode() in Java a one-liner!
 ---
 Have you ever written an `equals` method, along with five screens of unit tests to test it? Or worse: not bothered to test it at all, because "the IDE generates it anyway"?
 
