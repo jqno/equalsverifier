@@ -34,6 +34,9 @@ author:
   uri_author: https://jqno.nl
   twitter_author: jqno
 
+twitter:
+  username: jqno
+
 footer:
   links:
     - label: "Privacy policy"
@@ -47,6 +50,8 @@ defaults:
       author_profile: true
       sidebar:
         nav: "side"
+      header:
+        og_image: "images/banner.png"
       share: false
       related: false
 
