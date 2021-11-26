@@ -23,6 +23,7 @@ public class FieldsChecker<T> implements Checker {
     private final SymmetryFieldCheck<T> symmetryFieldCheck;
     private final TransientFieldsCheck<T> transientFieldsCheck;
     private final TransitivityFieldCheck<T> transitivityFieldCheck;
+    private final BigDecimalFieldCheck<T> bigDecimalFieldCheck;
 
     public FieldsChecker(Configuration<T> config) {
         this.config = config;
@@ -48,6 +49,8 @@ public class FieldsChecker<T> implements Checker {
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(prefabValues, typeTag);
         this.transientFieldsCheck = new TransientFieldsCheck<>(config);
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(prefabValues, typeTag);
+        this.bigDecimalFieldCheck =
+            new BigDecimalFieldCheck<>(config.getCachedHashCodeInitializer());
     }
 
     @Override
@@ -79,6 +82,10 @@ public class FieldsChecker<T> implements Checker {
                 config.getAnnotationCache(),
                 skippingSignificantFieldCheck
             );
+        }
+
+        if (!config.getWarningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
+            inspector.check(bigDecimalFieldCheck);
         }
     }
 

@@ -17,6 +17,7 @@ For these situations, there are several types of warnings that you can suppress:
 * `Warning.STRICT_HASHCODE`: disables the check that all fields used in `equals` must also be used in `hashCode`.
 * `Warning.STRICT_INHERITANCE`: disables the check that classes or their `equals` methods be final, or that inheritance is properly accounted for. Read more about this topic on the [page about inheritance](/equalsverifier/manual/inheritance).
 * `Warning.TRANSIENT_FIELDS`: disables the check that transient fields do not participate in `equals`. This applies both to Java's `transient` keyword, which applies to serialization, and to JPA's `@Transient` annotation, which applies to, well, JPA.
+* `Warning.BIGDECIMAL_EQUALITY`: disables the check that equality of `BigDecimal` fields is implemented using `compareTo` rather than `equals`. Read more about this topic on the [page about BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality).
 
 Of course, once you have sufficient test coverage, you _will_ come back and fix these issues, right? 😉
 
