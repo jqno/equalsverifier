@@ -19,13 +19,14 @@ Before you continue, please check your class's `toString` method. Since EqualsVe
 This is not a complete list. I'll add to it as needed, so if you need help with an error message, please [file an issue](https://github.com/jqno/equalsverifier/issues) or let me know on the [discussion group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), and I'll add an explanation as soon as possible.
 
 * [Abstract delegation](/equalsverifier/errormessages/abstract-delegation)
+* [BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality)
 * [ClassCastException: java.lang.Object cannot be cast to …](/equalsverifier/errormessages/classcastexception)
 * [Coverage is not 100%](/equalsverifier/errormessages/coverage-is-not-100-percent)
 * [Double: equals doesn't use Double.compare for field foo](/equalsverifier/errormessages/double-equals-doesnt-use-doublecompare-for-field-foo)
 * [Float: equals doesn't use Float.compare for field foo](/equalsverifier/errormessages/float-equals-doesnt-use-floatcompare-for-field-foo)
 * [Mutability: equals depends on mutable field](/equalsverifier/errormessages/mutability-equals-depends-on-mutable-field)
 * [NoClassDefFoundError](/equalsverifier/errormessages/noclassdeffounderror)
-* [Non-nullity: equals/hashCode/toString throws NullPointerExcpetion](/equalsverifier/errormessages/non-nullity-equals-hashcode-tostring-throws-nullpointerexception)
+* [Non-nullity: equals/hashCode/toString throws NullPointerException](/equalsverifier/errormessages/non-nullity-equals-hashcode-tostring-throws-nullpointerexception)
 * [Precondition: two objects are equal to each other](/equalsverifier/errormessages/precondition-two-objects-are-equal-to-each-other)
 * [Recursive datastructure](/equalsverifier/errormessages/recursive-datastructure)
 * [Redefined superclass: object should not equal superclass instance](/equalsverifier/errormessages/redefined-superclass-object-should-not-equal-superclass-instance)

@@ -166,5 +166,20 @@ public enum Warning {
      * <p>If measures are taken that this will never happen, this warning can be suppressed to
      * disable {@link EqualsVerifier}'s transience test.
      */
-    TRANSIENT_FIELDS
+    TRANSIENT_FIELDS,
+
+    /**
+     * Disables the check that equality of {@code BigDecimal} fields is implemented using
+     * {@code compareTo} rather than {@code equals}.
+     *
+     * <p>{@code BigDecimal} objects that are equal using {@code compareTo} are not necessarily
+     * equal using {@code equals}, for example the values of {@literal 1} and {@literal 1.0}.
+     * For variants of the same value to be considered equal, classes with {@code BigDecimal}
+     * fields should use {@code compareTo} to check equality of non-null {@code BigDecimal}
+     * references and produce the same hashcode for all equal variants.
+     *
+     * <p>{@code EqualsVerifier} checks for this by default but it can be disabled by suppressing
+     * this warning.
+     */
+    BIGDECIMAL_EQUALITY
 }
