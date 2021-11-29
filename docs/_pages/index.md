@@ -2,7 +2,25 @@
 title: EqualsVerifier
 permalink: /
 description: Makes testing equals() and hashCode() in Java a one-liner!
+layout: splash
+header:
+  overlay_color: "#263238"
+imagebutton_row:
+  - image_path: "images/getting-started.jpg"
+    title: "Getting Started"
+    url: "manual/getting-started/"
+  - image_path: "images/manual.jpg"
+    title: "Manual"
+    url: "manual/"
+  - image_path: "images/error-messages.jpg"
+    title: "Error messages explained"
+    url: "errormessages/"
+  - image_path: "images/resources.jpg"
+    title: "Additional resources"
+    url: "resources/"
 ---
+{% include imagebutton_row %}
+
 Have you ever written an `equals` method, along with five screens of unit tests to test it? Or worse: not bothered to test it at all, because "the IDE generates it anyway"?
 
 EqualsVerifier helps you. Testing `equals` can be as simple as:
@@ -25,38 +43,6 @@ public void simpleEqualsContract() {
 
 And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` methods.
 
+Don't forget to add it to your build!
 
-Sounds great, how do I use it?
----
-Add it to your build like this (please adjust for your build system of choice):
-
-{% highlight xml %}
-<dependency>
-    <groupId>nl.jqno.equalsverifier</groupId>
-    <artifactId>equalsverifier</artifactId>
-    <version>3.7.2</version>
-    <scope>test</scope>
-</dependency>
-{% endhighlight %}
-
-* If you want to get started quickly, read the [getting started](/equalsverifier/manual/getting-started) page.
-* If you want to learn more, read the [manual](/equalsverifier/manual), or watch the video:
-  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/pNJ_O10XaoM?rel=0" frameborder="0" allowfullscreen></iframe>
-* If you want some background, listen to the BarCoding podcast interview on [anchor](https://anchor.fm/barcoding/episodes/Episode-20---The-tales-of-the-EqualsVerifier-project-e1993ev), [spotify](https://open.spotify.com/episode/1d0aieZzRB9Ts85XWuquBe?si=WWYvYBiASECteA1flOgpDQ&nd=1) or [apple](https://podcasts.apple.com/us/podcast/episode-20-the-tales-of-the-equalsverifier-project/id1477504970?i=1000539604102).
-
-If you're interested, there's more to read:
-
-* The [FAQ](/equalsverifier/faq).
-* The [changelog](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md).
-* The migration guides:
-    * [2.x to 3.x](/equalsverifier/migration2to3)
-    * [1.x to 2.x](/equalsverifier/migration1to2)
-* The [inspiration](/equalsverifier/inspiration) for EqualsVerifier.
-
-
-Fork me on GitHub!
----
-The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier).
-
-Pull Requests are welcome! But please also [open an issue](https://github.com/jqno/equalsverifier/issues) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier) so we can discuss it.
-
+{% include maven %}

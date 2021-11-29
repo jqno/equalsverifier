@@ -7,14 +7,4 @@ main:
   - title: "Talks"
     url: http://jqno.nl/talks
   - title: "EqualsVerifier"
-    url: /equalsverifier
-
-side:
-  - title: "Documentation"
-    children:
-    - title: "Getting started"
-      url: /manual/getting-started
-    - title: "Manual"
-      url: /manual
-    - title: "Error messages explained"
-      url: /errormessages
+    url: /

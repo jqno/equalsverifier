@@ -1,0 +1,45 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+
+@charset "utf-8";
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
+.feature__item {
+  position: relative;
+  margin-bottom: 2em;
+  font-size: 1.125em;
+
+  @include breakpoint($small) {
+    float: left;
+    margin-bottom: 0;
+    width: span(3 of 12);
+
+    &:nth-child(4n + 1) {
+      clear: both;
+      margin-left: 0;
+    }
+
+    &:nth-child(4n + 2) {
+      clear: none;
+      margin-left: gutter(of 12);
+    }
+
+    &:nth-child(4n + 3) {
+      clear: none;
+      margin-left: gutter(of 12);
+    }
+
+    &:nth-child(4n + 4) {
+      clear: none;
+      margin-left: gutter(of 12);
+    }
+
+    .feature__item-teaser {
+      max-height: 200px;
+      overflow: hidden;
+    }
+  }
+}

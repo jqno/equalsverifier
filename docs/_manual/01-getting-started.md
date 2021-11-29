@@ -3,12 +3,26 @@ title: Getting Started
 permalink: /manual/getting-started/
 ---
 ## Get EqualsVerifier
+
 Requirements:
+
 * EqualsVerifier 3.x → Java 8 or higher
 * EqualsVerifier 2.x → Java 7 or higher
 * EqualsVerifier 1.x → Java 6 or higher
 
-First, add the EqualsVerifier dependency to your build script. You can find the coordinates on [the homepage](/equalsverifier) and in [the README](https://github.com/jqno/equalsverifier/blob/main/README.md).
+## Prefer video?
+
+Check out this recording from my talk at Devoxx 2017:
+
+<iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/pNJ_O10XaoM?rel=0" frameborder="0" allowfullscreen></iframe>
+
+## Prefer text?
+
+First, add the EqualsVerifier dependency to your build script:
+
+{% include maven %}
+
+(please adjust for your build system of choice)
 
 If you need to download the jar file directly, you can download it from [maven.org](http://search.maven.org/#search&#124;gav&#124;1&#124;g%3A%22nl.jqno.equalsverifier%22%20AND%20a%3A%22equalsverifier%22). EqualsVerifier doesn't have any transitive dependencies, so this jar is all you need.
 
@@ -49,3 +63,4 @@ public void equalsContract() {
 
 This way, `Warning.STRICT_INHERITANCE` and `Warning.NONFINAL_FIELDS` are automatically suppressed.
 
+Want to learn more? Check out [the manual](/equalsverifier/manual)!

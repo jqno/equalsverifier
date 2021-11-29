@@ -48,8 +48,6 @@ defaults:
     values:
       layout: single
       author_profile: true
-      sidebar:
-        nav: "side"
       header:
         og_image: "images/banner.png"
       share: false
