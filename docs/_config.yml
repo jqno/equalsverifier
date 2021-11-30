@@ -41,6 +41,12 @@ footer:
   links:
     - label: "Privacy policy"
       url: "https://jqno.nl/privacy"
+    - label: "Twitter"
+      icon: "fab fa-fw fa-twitter-square"
+      url: "https://twitter.com/jqno"
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/jqno"
 
 defaults:
   - scope:
