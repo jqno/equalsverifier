@@ -110,7 +110,22 @@ public final class FieldModifier {
         }
 
         field.setAccessible(true);
-        rethrow(() -> changer.change());
+        rethrow(() -> wrappedChange(changer));
+    }
+
+    private void wrappedChange(FieldChanger changer) throws IllegalAccessException {
+        try {
+            changer.change();
+        } catch (IllegalArgumentException e) {
+            if (e.getMessage().startsWith("Can not set")) {
+                throw new ReflectionException(
+                    "Reflection error: perhaps a ClassLoader problem?\nTry re-running with #withResetCaches()",
+                    e
+                );
+            } else {
+                throw e;
+            }
+        }
     }
 
     @FunctionalInterface

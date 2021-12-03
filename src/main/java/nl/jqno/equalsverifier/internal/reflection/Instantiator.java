@@ -9,7 +9,7 @@ import java.util.List;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import org.objenesis.ObjenesisHelper;
+import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
 
 /**
  * Instantiates objects of a given class.
@@ -58,7 +58,7 @@ public final class Instantiator<T> {
      * @return An object of type T.
      */
     public T instantiate() {
-        return ObjenesisHelper.newInstance(type);
+        return ObjenesisWrapper.getObjenesis().newInstance(type);
     }
 
     /**
@@ -68,7 +68,7 @@ public final class Instantiator<T> {
      */
     public T instantiateAnonymousSubclass() {
         Class<T> proxyClass = giveDynamicSubclass(type);
-        return ObjenesisHelper.newInstance(proxyClass);
+        return ObjenesisWrapper.getObjenesis().newInstance(proxyClass);
     }
 
     @SuppressWarnings("unchecked")

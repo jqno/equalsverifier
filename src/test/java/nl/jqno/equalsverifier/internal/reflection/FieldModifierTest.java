@@ -1,17 +1,38 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractAndInterfaceArrayContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllArrayTypesContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllTypesContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.GenericListContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.GenericTypeVariableListContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Outer.Inner;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PointArrayContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrivateObjectContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -310,6 +331,20 @@ public class FieldModifierTest {
 
         doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);
+    }
+
+    @Test
+    public void shouldDetectClassloaderIssue() throws Exception {
+        // We're faking the problem by using two entirely different classes.
+        // In reality, this problem comes up with the same types, but loaded by different class loaders,
+        // which makes them effectively different types as well. This was hard to fake in a test.
+        Object foo = new ObjectContainer();
+        Field field = PrimitiveContainer.class.getField("field");
+        FieldModifier fm = FieldModifier.of(field, foo);
+
+        ReflectionException e = assertThrows(ReflectionException.class, () -> fm.set(new Object()));
+
+        assertTrue(e.getMessage().contains("perhaps a ClassLoader problem?"));
     }
 
     private void setField(Object object, String fieldName, Object value) {

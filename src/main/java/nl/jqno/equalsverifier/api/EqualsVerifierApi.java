@@ -78,4 +78,13 @@ public interface EqualsVerifierApi<T> {
      * @see Warning#STRICT_INHERITANCE
      */
     public EqualsVerifierApi<T> usingGetClass();
+
+    /**
+     * Signals that all internal caches need to be reset. This is useful when the test framework
+     * uses multiple ClassLoaders to run tests, causing {@link java.lang.reflect.Class} instances
+     * that would normally be equal, to be unequal, because their ClassLoaders don't match.
+     *
+     * @return {@code this}, for easy method chaining.
+     */
+    public EqualsVerifierApi<T> withResetCaches();
 }

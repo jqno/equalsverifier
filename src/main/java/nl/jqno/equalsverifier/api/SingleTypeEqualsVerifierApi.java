@@ -292,6 +292,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return this;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public SingleTypeEqualsVerifierApi<T> withResetCaches() {
+        ObjenesisWrapper.reset();
+        return this;
+    }
+
     /**
      * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws
      * an {@link AssertionError} if there is a problem.
