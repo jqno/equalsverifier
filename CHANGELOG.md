@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Added
+- `withResetCaches()` to reset the Objenesis caches. This can be useful if the test framework uses multiple class loaders; see for instance [this question on StackOverflow](https://stackoverflow.com/q/70123578/127863).
+
 ### Changed
 - Verifies equality for `BigDecimal` using `compareTo()`. ([Issue 540](https://github.com/jqno/equalsverifier/issues/540); thanks ac183!)
 

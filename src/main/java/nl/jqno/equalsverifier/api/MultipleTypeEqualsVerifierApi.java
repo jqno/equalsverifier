@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
+import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
@@ -65,6 +66,13 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @Override
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public MultipleTypeEqualsVerifierApi withResetCaches() {
+        ObjenesisWrapper.reset();
         return this;
     }
 
