@@ -13,16 +13,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- Verifies equality for `BigDecimal` using `compareTo()`. ([Issue 540](https://github.com/jqno/equalsverifier/issues/540); thanks ac183!)
+
 
 ## [3.7.2] - 2021-10-15
+### Fixed
 - `#forPackage()` no longer fails in presence of anonymous or local inner classes. ([Issue 517](https://github.com/jqno/equalsverifier/issues/517); thanks kilink!)
 
+
 ## [3.7.1] - 2021-08-13
+### Fixed
 - Added prefab values for `java.util.concurrent.Semaphore`. ([Issue 476](https://github.com/jqno/equalsverifier/issues/476))
+
 
 ## [3.7] - 2021-07-09
 ### Added
 - Support for Lombok's `@EqualsAndHashCode(cacheStrategy = LAZY)`. ([Issue 460](https://github.com/jqno/equalsverifier/issues/460); thanks janeisklar!)
+
 
 ## [3.6.1] - 2021-05-21
 ### Fixed
