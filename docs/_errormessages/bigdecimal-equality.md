@@ -6,7 +6,7 @@ Be aware that `BigDecimal` fields with values such as `1`, `1.0`, `1.00`, ... ar
 The `Comparable` interface strongly recommends but does not require that implementations consider two objects equal using
 `compareTo` whenever they are equal using `equals` and vice versa. `BigDecimal` is a class where this is not applied.
 
-{% highlight java %}
+```java
 BigDecimal one = new BigDecimal("1");
 BigDecimal alsoOne = new BigDecimal("1.0");
 
@@ -14,20 +14,20 @@ BigDecimal alsoOne = new BigDecimal("1.0");
 System.out.println(one.compareTo(alsoOne) == 0);
 // prints false - 1 is not the same as 1.0
 System.out.println(one.equals(alsoOne));
-{% endhighlight %}
+```
 
 Ways to resolve this error
 ---
-If values like `1` and `1.0` need not be considered equal then this check can be disabled by suppressing `Warning.BIGDECIMAL_EQUALITY`.
+If values like `1` and `1.0` need not be equal then this check can be disabled by suppressing `Warning.BIGDECIMAL_EQUALITY`.
 
-{% highlight java %}
+```java
 EqualsVerifier.forClass(Foo.class)
     .suppress(Warning.BIGDECIMAL_EQUALITY)
     .verify();
-{% endhighlight %}
+```
 
-If values like `1` and `1.0` *should* be considered equal then some options are:
-1. **Do not use `BigDecimal` as fields.** But unfortunately I cannot recommend well-known generally accepted drop-in alternative.
+If values like `1` and `1.0` *should* be equal then some options are:
+1. **Do not use `BigDecimal` as fields.** But unfortunately I cannot recommend a well-known generally accepted drop-in alternative.
 
     The argument for this: it is not great having to complicate classes with the options below. A valid `equals`and
     `hashCode` is already easy enough to get wrong (option 2) and it is easy to forget and hard to validate `BigDecimal`
@@ -46,20 +46,20 @@ If values like `1` and `1.0` *should* be considered equal then some options are:
     It wouldn't be unwise to use utility methods as this is not as simple as a call to Java's `Objects.equals` and `Objects.hashcode`.
     The logic for correct equality is:
 
-    {% highlight java %}
+    ```java
     // true if bdField and other.bdField are
     // either both null or are equal using compareTo
     boolean comparablyEqual = (bdField == null && other.bdField == null)
         || (bdField != null && other.bdField != null && bdField.compareTo(other.bdField) == 0);
-    {% endhighlight %}
+    ```
 
     A consistent hashcode needs a way to normalise the value that it represents. A simple normalisation is:
 
-    {% highlight java %}
+    ```java
     // Remove trailing zeros from the unscaled value of the
     // BigDecimal to yield a consistently scaled instance
     int consistentHashcode = Objects.hashCode(bdField.stripTrailingZeros());
-    {% endhighlight %}
+    ```
 
 3. **Normalise the `BigDecimal` fields** during your class's construction (and setters if it is mutable) such that there
     is only one way it represents the same value for these fields. This means standard `equals` and `hashCode` can be used.
@@ -67,7 +67,7 @@ If values like `1` and `1.0` *should* be considered equal then some options are:
 
     A simple normalisation is:
 
-    {% highlight java %}
+    ```java
     class Foo {
         ...
         Foo(BigDecimal bdField) {
@@ -77,12 +77,12 @@ If values like `1` and `1.0` *should* be considered equal then some options are:
             this.bdField = bdField.stripTrailingZeros();
         }
     }
-    {% endhighlight %}
+    ```
 
     Unfortunately it is difficult to confirm this has been done. This check will then want disabling by suppressing `Warning.BIGDECIMAL_EQUALITY`
     and will not catch regressions.
 
-If performance is important then you will need to consider the costs of using `BigDecimal` and of where and how normalisation
+If performance is important then you will want to consider the costs of using `BigDecimal` and of where and how normalisation
 is achieved. Option 2 performs the work when objects are stored in a `HashSet` or used as keys in a `HashMap`. Option 3
 performs work on creation of each object but is then cheaper to hash. There may be better normalisations than `stripTrailingZeros`.
 `BigDecimal` already has a cost traded in return for its accuracy.
