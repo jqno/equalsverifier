@@ -140,6 +140,13 @@ public class PrefabValuesTest {
     }
 
     @Test
+    public void giveOtherWhenValueIsNullAndTypeWouldThrowNpe() {
+        TypeTag tag = new TypeTag(NpeThrowing.class);
+        NpeThrowing expected = pv.giveRed(tag);
+        assertEquals(expected, pv.giveOther(tag, null));
+    }
+
+    @Test
     public void giveOtherWhenValueIsKnownArray() {
         String[] red = pv.giveRed(STRING_ARRAY_TAG);
         String[] blue = pv.giveBlue(STRING_ARRAY_TAG);
@@ -233,6 +240,29 @@ public class PrefabValuesTest {
             fail("Expected an exception");
         } catch (Error e) {
             // succeed
+        }
+    }
+
+    public static class NpeThrowing {
+
+        private final int i;
+
+        public NpeThrowing(int i) {
+            this.i = i;
+        }
+
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                throw new NullPointerException();
+            }
+            if (!(obj instanceof NpeThrowing)) {
+                return false;
+            }
+            return i == ((NpeThrowing) obj).i;
+        }
+
+        public int hashCode() {
+            return i;
         }
     }
 

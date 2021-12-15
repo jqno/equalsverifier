@@ -108,7 +108,7 @@ public class PrefabValues {
         if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
             return tuple.getBlue();
         }
-        if (!type.isArray() && tuple.getRed().equals(value)) {
+        if (!type.isArray() && value != null && tuple.getRed().equals(value)) {
             return tuple.getBlue();
         }
         return tuple.getRed();
