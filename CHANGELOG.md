@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Fixed
+- Uncaught NullPointerException in certain cases when a used field throws it. ([Issue 552](https://github.com/jqno/equalsverifier/issues/552))
 
 ## [3.8] - 2021-12-03
 ### Added
