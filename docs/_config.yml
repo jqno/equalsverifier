@@ -20,9 +20,9 @@
 
 locale: "ie"
 title: "EqualsVerifier"
-subtitle: "jqno.nl"
+subtitle: "by Jan Ouwens"
 name: "Jan Ouwens"
-description: "EqualsVerifier"
+description: "EqualsVerifier ▷ makes testing equals() and hashCode() in Java a one-liner! ▷ by Jan Ouwens"
 baseurl: "/equalsverifier"
 search: true
 

@@ -1,7 +1,6 @@
 ---
 title: EqualsVerifier
 permalink: /
-description: "Makes testing equals() and hashCode() in Java a one-liner!"
 tagline: "Makes testing equals() and hashCode() in Java a one-liner!"
 layout: splash
 header:
