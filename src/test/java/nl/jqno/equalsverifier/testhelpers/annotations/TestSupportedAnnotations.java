@@ -90,7 +90,7 @@ public enum TestSupportedAnnotations implements Annotation {
     private final boolean inherits;
     private final Set<String> partialClassNames;
 
-    private TestSupportedAnnotations(boolean inherits, String... partialClassNames) {
+    TestSupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
         this.partialClassNames = new HashSet<>();
         this.partialClassNames.addAll(Arrays.asList(partialClassNames));

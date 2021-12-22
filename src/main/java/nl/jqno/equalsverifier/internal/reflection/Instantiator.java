@@ -105,7 +105,6 @@ public final class Instantiator<T> {
         return (dot != -1) ? cn.substring(0, dot).intern() : "";
     }
 
-    @SuppressWarnings("unchecked")
     public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(
         Class<S> context
     ) {

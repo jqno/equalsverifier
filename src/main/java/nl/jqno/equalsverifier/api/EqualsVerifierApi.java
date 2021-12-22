@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.Warning;
  * @param <T> The class under test.
  */
 public interface EqualsVerifierApi<T> {
-    /* package private */static final String WEBSITE_URL =
+    /* package private */String WEBSITE_URL =
         "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages";
 
     /**
@@ -21,7 +21,7 @@ public interface EqualsVerifierApi<T> {
      * @param warnings A list of warnings to suppress in {@code EqualsVerifier}.
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> suppress(Warning... warnings);
+    EqualsVerifierApi<T> suppress(Warning... warnings);
 
     /**
      * Adds prefabricated values for instance fields of classes that EqualsVerifier cannot
@@ -36,7 +36,7 @@ public interface EqualsVerifierApi<T> {
      *     null.
      * @throws IllegalArgumentException If {@code red} equals {@code blue}.
      */
-    public <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
+    <S> EqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 1 generic
@@ -49,10 +49,7 @@ public interface EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
      */
-    public <S> EqualsVerifierApi<T> withGenericPrefabValues(
-        Class<S> otherType,
-        Func1<?, S> factory
-    );
+    <S> EqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory);
 
     /**
      * Adds a factory to generate prefabricated values for instance fields of classes with 2 generic
@@ -65,10 +62,7 @@ public interface EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @throws NullPointerException if either {@code otherType} or {@code factory} is null.
      */
-    public <S> EqualsVerifierApi<T> withGenericPrefabValues(
-        Class<S> otherType,
-        Func2<?, ?, S> factory
-    );
+    <S> EqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory);
 
     /**
      * Signals that {@code getClass} is used in the implementation of the {@code equals} method,
@@ -77,7 +71,7 @@ public interface EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @see Warning#STRICT_INHERITANCE
      */
-    public EqualsVerifierApi<T> usingGetClass();
+    EqualsVerifierApi<T> usingGetClass();
 
     /**
      * Signals that all internal caches need to be reset. This is useful when the test framework
@@ -86,5 +80,5 @@ public interface EqualsVerifierApi<T> {
      *
      * @return {@code this}, for easy method chaining.
      */
-    public EqualsVerifierApi<T> withResetCaches();
+    EqualsVerifierApi<T> withResetCaches();
 }

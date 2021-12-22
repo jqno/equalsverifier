@@ -21,9 +21,5 @@ public interface PrefabValueFactory<T> {
      *     for recursion detection.
      * @return A "red" instance of {@code T}.
      */
-    public Tuple<T> createValues(
-        TypeTag tag,
-        PrefabValues prefabValues,
-        LinkedHashSet<TypeTag> typeStack
-    );
+    Tuple<T> createValues(TypeTag tag, PrefabValues prefabValues, LinkedHashSet<TypeTag> typeStack);
 }

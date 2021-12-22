@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
  */
 public class SimpleFactory<T> implements PrefabValueFactory<T> {
 
-    private Tuple<T> tuple;
+    private final Tuple<T> tuple;
 
     public SimpleFactory(T red, T blue, T redCopy) {
         this.tuple = new Tuple<>(red, blue, redCopy);

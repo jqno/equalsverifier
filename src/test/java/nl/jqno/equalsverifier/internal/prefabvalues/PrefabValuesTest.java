@@ -352,7 +352,7 @@ public class PrefabValuesTest {
     @SuppressWarnings("unused")
     public static class ThrowingLazy {
         {
-            // Throwing something that will immediately be thrown when the the class is constructed.
+            // Throwing something that will immediately be thrown when the class is constructed.
             if (true) {
                 throw new IllegalStateException("initializing");
             }

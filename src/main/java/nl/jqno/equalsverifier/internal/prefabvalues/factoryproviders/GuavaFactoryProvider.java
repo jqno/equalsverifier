@@ -116,7 +116,6 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         cache.put(ImmutableSortedSet.class, copy(Set.class, ImmutableSortedSet::copyOf));
     }
 
-    @SuppressWarnings("unchecked")
     private void putNewTypes(FactoryCache cache) {
         cache.put(
             Range.class,

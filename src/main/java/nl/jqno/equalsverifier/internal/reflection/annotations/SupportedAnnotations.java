@@ -188,7 +188,7 @@ public enum SupportedAnnotations implements Annotation {
     private final boolean inherits;
     private final Set<String> partialClassNames;
 
-    private SupportedAnnotations(boolean inherits, String... partialClassNames) {
+    SupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
         this.partialClassNames = new HashSet<>();
         this.partialClassNames.addAll(Arrays.asList(partialClassNames));

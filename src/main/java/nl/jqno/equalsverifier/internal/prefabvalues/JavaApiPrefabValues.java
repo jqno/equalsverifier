@@ -12,7 +12,6 @@ import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.*;
-import java.net.InetSocketAddress;
 import java.nio.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -73,7 +72,7 @@ public final class JavaApiPrefabValues {
         Object::hashCode
     );
 
-    private FactoryCache factoryCache;
+    private final FactoryCache factoryCache;
 
     private enum Dummy {
         RED,
@@ -238,9 +237,9 @@ public final class JavaApiPrefabValues {
     private void addDateTimeClasses() {
         addValues(
             Calendar.class,
-            new GregorianCalendar(2010, 7, 4),
-            new GregorianCalendar(2010, 7, 5),
-            new GregorianCalendar(2010, 7, 4)
+            new GregorianCalendar(2010, Calendar.AUGUST, 4),
+            new GregorianCalendar(2010, Calendar.AUGUST, 5),
+            new GregorianCalendar(2010, Calendar.AUGUST, 4)
         );
         addValues(
             Clock.class,
@@ -264,9 +263,9 @@ public final class JavaApiPrefabValues {
         addValues(Duration.class, Duration.ZERO, Duration.ofDays(1L), Duration.ZERO);
         addValues(
             GregorianCalendar.class,
-            new GregorianCalendar(2010, 7, 4),
-            new GregorianCalendar(2010, 7, 5),
-            new GregorianCalendar(2010, 7, 4)
+            new GregorianCalendar(2010, Calendar.AUGUST, 4),
+            new GregorianCalendar(2010, Calendar.AUGUST, 5),
+            new GregorianCalendar(2010, Calendar.AUGUST, 4)
         );
         addValues(Instant.class, Instant.MIN, Instant.MAX, Instant.MIN);
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
@@ -393,7 +392,7 @@ public final class JavaApiPrefabValues {
         addFactory(Collection.class, collection(ArrayList::new));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings({ "unchecked" })
     private void addLists() {
         addFactory(List.class, collection(ArrayList::new));
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
@@ -680,7 +679,6 @@ public final class JavaApiPrefabValues {
         addLazyFactory(GUAVA_PACKAGE + "ImmutableSetMultimap", GUAVA_FACTORY);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addGoogleGuavaBiMapCollectionsClasses() {
         addLazyFactory(GUAVA_PACKAGE + "BiMap", GUAVA_FACTORY);
         addLazyFactory(GUAVA_PACKAGE + "HashBiMap", GUAVA_FACTORY);

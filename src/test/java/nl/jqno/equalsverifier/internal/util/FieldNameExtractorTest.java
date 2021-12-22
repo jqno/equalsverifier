@@ -23,7 +23,7 @@ public class FieldNameExtractorTest {
     }
 
     @Test
-    public void should_extractFields_succesfully() throws Exception {
+    public void should_extractFields_succesfully() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(
             FieldNameExtractorTestHelper.class
         );
@@ -37,7 +37,7 @@ public class FieldNameExtractorTest {
     }
 
     @Test
-    public void should_disallow_adding_extra_fields() throws Exception {
+    public void should_disallow_adding_extra_fields() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(
             FieldNameExtractorTestHelper.class
         );
@@ -49,7 +49,7 @@ public class FieldNameExtractorTest {
     }
 
     @Test
-    public void should_disallow_removing_fields() throws Exception {
+    public void should_disallow_removing_fields() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(
             FieldNameExtractorTestHelper.class
         );

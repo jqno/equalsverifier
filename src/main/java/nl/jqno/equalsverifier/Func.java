@@ -25,7 +25,7 @@ public interface Func<T> {
      */
     @SuppressWarnings("unchecked")
     @FunctionalInterface
-    public interface Func1<A, T> extends Func<T> {
+    interface Func1<A, T> extends Func<T> {
         @Override
         default T apply(List<?> values) {
             return supply((A) values.get(0));
@@ -47,7 +47,7 @@ public interface Func<T> {
      */
     @SuppressWarnings("unchecked")
     @FunctionalInterface
-    public interface Func2<A, B, T> extends Func<T> {
+    interface Func2<A, B, T> extends Func<T> {
         @Override
         default T apply(List<?> values) {
             return supply((A) values.get(0), (B) values.get(1));
