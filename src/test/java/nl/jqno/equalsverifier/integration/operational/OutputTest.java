@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 public class OutputTest {
 
     private static final String SEE_ALSO = "For more information, go to";
-    private static final String WEBSITE_URL = "http://www.jqno.nl/equalsverifier/errormessages";
+    private static final String WEBSITE_URL = "https://www.jqno.nl/equalsverifier/errormessages";
     private static final String MESSAGE = "a message for an exception";
 
     @Test

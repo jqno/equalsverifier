@@ -12,7 +12,7 @@ import nl.jqno.equalsverifier.Warning;
  */
 public interface EqualsVerifierApi<T> {
     /* package private */static final String WEBSITE_URL =
-        "For more information, go to: http://www.jqno.nl/equalsverifier/errormessages";
+        "For more information, go to: https://www.jqno.nl/equalsverifier/errormessages";
 
     /**
      * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning} to see what warnings
