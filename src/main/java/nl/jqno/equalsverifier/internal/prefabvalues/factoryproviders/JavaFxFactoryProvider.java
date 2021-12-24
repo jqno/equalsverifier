@@ -134,7 +134,6 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private static <T, S> PrefabValueFactory<T> fxCollection(
         Class<S> source,
         String copyMethodName

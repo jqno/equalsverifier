@@ -21,7 +21,7 @@ public class FactoryCacheTest {
         42
     );
 
-    private FactoryCache cache = new FactoryCache();
+    private final FactoryCache cache = new FactoryCache();
 
     @Test
     public void putAndGetTuple() {

@@ -20,7 +20,7 @@ public interface Annotation {
      *
      * @return A Set of potentially partial annotation class names.
      */
-    public Set<String> partialClassNames();
+    Set<String> partialClassNames();
 
     /**
      * Whether the annotation applies to the class in which is appears only, or whether it applies
@@ -32,7 +32,7 @@ public interface Annotation {
      * @return True if the annotation is inherited by subclasses of the class in which the
      *     annotation appears.
      */
-    public boolean inherits();
+    boolean inherits();
 
     /**
      * Validates the annotation based on its properties.
@@ -42,7 +42,7 @@ public interface Annotation {
      * @param ignoredAnnotations A collection of type partialClassNames for annotations to ignore.
      * @return True if the annotation is valid and can be used as intended.
      */
-    public default boolean validate(
+    default boolean validate(
         AnnotationProperties properties,
         AnnotationCache annotationCache,
         Set<String> ignoredAnnotations
@@ -56,5 +56,5 @@ public interface Annotation {
      * @param types The types that the annotation applies to.
      * @param annotationCache A cache containing all annotations for known types.
      */
-    public default void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {}
+    default void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {}
 }
