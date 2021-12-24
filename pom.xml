@@ -68,7 +68,7 @@
         <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
 
         <spotbugs.version>4.5.2</spotbugs.version>
-        <spotbugs.maven.version>4.5.0.0</spotbugs.maven.version>
+        <spotbugs.maven.version>4.5.2.0</spotbugs.maven.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
 
