@@ -5,7 +5,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
 public class EqualsVerifierInternalBugException extends RuntimeException {
 
     private static final String BUG =
-        "This is a bug in EqualsVerifier. Please report this in the issue tracker at http://www.jqno.nl/equalsverifier";
+        "This is a bug in EqualsVerifier. Please report this in the issue tracker at https://www.jqno.nl/equalsverifier";
 
     public EqualsVerifierInternalBugException() {
         super(BUG);

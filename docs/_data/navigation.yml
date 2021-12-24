@@ -1,10 +1,10 @@
 # main links
 main:
   - title: "/"
-    url: http://jqno.nl
+    url: https://jqno.nl
   - title: "Blog"
-    url: http://jqno.nl/blog
+    url: https://jqno.nl/blog
   - title: "Talks"
-    url: http://jqno.nl/talks
+    url: https://jqno.nl/talks
   - title: "EqualsVerifier"
     url: /
