@@ -430,6 +430,50 @@
         </profile>
 
         <profile>
+            <id>enables-sealed-class-tests-for-jdk17-and-up</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+
+            <properties>
+                <coverage.threshold>0.97</coverage.threshold>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
+                        <configuration>
+                            <testRelease>17</testRelease>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <version>${build-helper-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test/java11</source>
+                                        <source>src/test/java16</source>
+                                        <source>src/test/java17</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
             <id>static-analysis</id>
             <activation>
                 <property>
