@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Exception when testing sealed classes that redefine equals. ([Issue 564](https://github.com/jqno/equalsverifier/issues/564))
 - References to the EqualsVerifier wesbite are now switched to https. ([Issue 559](https://github.com/jqno/equalsverifier/issues/559); thanks dfa1!)
 
 ## [3.8.1] - 2021-12-15
