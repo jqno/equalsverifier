@@ -66,7 +66,8 @@ public class ClassAccessor<T> {
      * @return true if T is a sealed class
      */
     public boolean isSealed() {
-        if ("17".equals(System.getProperty("java.version"))) {
+        int version = Integer.parseInt(System.getProperty("java.version").replaceAll("[.-].*", ""));
+        if (version >= 17) {
             try {
                 Class<?> clazz = Util.classForName("java.lang.Class");
                 Method isSealed = clazz.getDeclaredMethod("isSealed");
