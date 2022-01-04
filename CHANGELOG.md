@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.8.2] - 2022-01-04
 ### Fixed
 - Exception when testing sealed classes that redefine equals. ([Issue 564](https://github.com/jqno/equalsverifier/issues/564))
 - References to the EqualsVerifier wesbite are now switched to https. ([Issue 559](https://github.com/jqno/equalsverifier/issues/559); thanks dfa1!)
@@ -825,8 +827,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8.1...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8.2...HEAD
 
+[3.8.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8.1...equalsverifier-3.8.2
 [3.8.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8...equalsverifier-3.8.1
 [3.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.7.2...equalsverifier-3.8
 
