@@ -163,6 +163,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     record GenericContainerContainer(
-        GenericContainer<String> strings, GenericContainer<Point3D> points
+        GenericContainer<String> strings,
+        GenericContainer<Point3D> points
     ) {}
 }
