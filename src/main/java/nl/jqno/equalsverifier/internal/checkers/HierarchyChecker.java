@@ -57,7 +57,7 @@ public class HierarchyChecker<T> implements Checker {
 
     private void checkSuperclass() {
         ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-        if (superAccessor.isEqualsInheritedFromObject()) {
+        if (superAccessor.isEqualsInheritedFromObject() || superAccessor.isSealed()) {
             return;
         }
 
