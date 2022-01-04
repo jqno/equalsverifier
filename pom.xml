@@ -494,11 +494,12 @@
                                         <include>src/*/java/**/*.java</include>
                                         <include>src/test/java11/**/*.java</include>
                                         <include>src/test/java16/**/*.java</include>
+                                        <!-- <include>src/test/java17/**/*.java</include> wait for https://github.com/jhipster/prettier-java/issues/522 -->
                                     </includes>
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>2.4.0</prettier>
-                                            <prettier-plugin-java>1.4.0</prettier-plugin-java>
+                                            <prettier>2.5.1</prettier>
+                                            <prettier-plugin-java>1.6.0</prettier-plugin-java>
                                         </devDependencies>
                                         <config>
                                             <!-- Changes here must be reflected in .prettierrc.yml -->
