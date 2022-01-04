@@ -340,6 +340,7 @@
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
                             <argLine>@{surefire.argLine}</argLine>
+                            <trimStackTrace>false</trimStackTrace>
                             <useSystemClassLoader>false</useSystemClassLoader>
                         </configuration>
                     </plugin>
