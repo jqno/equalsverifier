@@ -46,10 +46,16 @@ public class ClassAccessorTest {
             .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
-    /** Tests the false case. The true case is tested in {@link ClassAccessorCompilerTest}. */
+    /* Tests the false case. The true case is tested in {@link ClassAccessorCompilerTest}. */
     @Test
     public void isRecord() {
         assertFalse(pointContainerAccessor.isRecord());
+    }
+
+    /* Tests the false case. The true case is tested in {@link ClassAccessorSealedTest}. */
+    @Test
+    public void isSealed() {
+        assertFalse(pointContainerAccessor.isSealed());
     }
 
     @Test
