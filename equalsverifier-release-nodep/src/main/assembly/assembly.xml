@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly
+    xmlns="http://maven.apache.org/ASSEMBLY/2.1.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://maven.apache.org/ASSEMBLY/2.1.0 https://maven.apache.org/xsd/assembly-2.1.0.xsd">
+
+    <id>shaded-jar</id>
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <componentDescriptors>
+        <componentDescriptor>assemblies/assembly.xml</componentDescriptor>
+    </componentDescriptors>
+    <moduleSets>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>nl.jqno.equalsverifier:equalsverifier-core</include>
+            </includes>
+            <binaries>
+                <unpack>true</unpack>
+                <includeDependencies>false</includeDependencies>
+                <attachmentClassifier>shaded</attachmentClassifier>
+            </binaries>
+        </moduleSet>
+    </moduleSets>
+</assembly>
+

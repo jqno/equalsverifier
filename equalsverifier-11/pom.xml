@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.jqno.equalsverifier</groupId>
+        <artifactId>equalsverifier-parent</artifactId>
+        <version>3.8.4-SNAPSHOT</version>
+    </parent>
+    <packaging>jar</packaging>
+
+    <artifactId>equalsverifier-11</artifactId>
+    <name>EqualsVerifier | JDK 11</name>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-test-plumbing</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.8.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>17.0.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+

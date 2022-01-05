@@ -1,13 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.jqno.equalsverifier</groupId>
-    <artifactId>equalsverifier</artifactId>
-    <packaging>jar</packaging>
-
-    <name>EqualsVerifier</name>
     <version>3.8.4-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <artifactId>equalsverifier-parent</artifactId>
+    <name>EqualsVerifier | parent</name>
     <description>EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
     <url>https://www.jqno.nl/equalsverifier</url>
+    <inceptionYear>2009</inceptionYear>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -39,8 +45,8 @@
     </developers>
 
     <ciManagement>
-        <system>Circle CI</system>
-        <url>https://circleci.com/gh/jqno/equalsverifier</url>
+        <system>GitHub Actions</system>
+        <url>https://github.com/jqno/equalsverifier/actions</url>
     </ciManagement>
 
     <mailingLists>
@@ -55,23 +61,24 @@
     </issueManagement>
 
     <properties>
+        <maven.install.skip>true</maven.install.skip>
         <encoding>UTF-8</encoding>
-        <coverage.threshold>0.95</coverage.threshold>
+        <version.java.base>8</version.java.base>
 
-        <java.release>8</java.release>
-        <jacoco.version>0.8.7</jacoco.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <build-helper-maven-plugin.version>3.2.0</build-helper-maven-plugin.version>
+        <argline.module></argline.module>
+        <argline.preview></argline.preview>
+        <argline.experimental></argline.experimental>
+        <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
+
+        <analysis.jacoco.threshold>0.94</analysis.jacoco.threshold>
 
         <checkstyle.version>9.2.1</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <checkstyle.maven.version>3.1.2</checkstyle.maven.version>
-        <checkstyle.config>project/checkstyle-config.xml</checkstyle.config>
-
+        <checkstyle.config>checkstyle-config.xml</checkstyle.config>
         <spotbugs.version>4.5.2</spotbugs.version>
         <spotbugs.maven.version>4.5.2.0</spotbugs.maven.version>
         <spotbugs.effort>Max</spotbugs.effort>
         <spotbugs.threshold>Low</spotbugs.threshold>
-
         <cdg.pitest.version>0.1.0</cdg.pitest.version>
     </properties>
 
@@ -186,8 +193,6 @@
     </dependencies>
 
     <build>
-        <defaultGoal>clean spotless:apply verify</defaultGoal>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -213,116 +218,34 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin.version}</version>
-                <configuration>
-                    <source>${java.release}</source>
-                    <target>${java.release}</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-                    <source>${java.release}</source>
-                    <doclint>all,-missing</doclint>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>javadoc</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <version>3.8.1</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
                 <configuration>
-                    <archive>
-                        <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                        </manifest>
-                        <manifestEntries>
-                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
-                            <Website>${project.url}</Website>
-                        </manifestEntries>
-                    </archive>
+                    <argLine>@{argline.full}</argLine>
+                    <trimStackTrace>false</trimStackTrace>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <minimizeJar>true</minimizeJar>
-                            <artifactSet>
-                                <includes>
-                                    <artifact>net.bytebuddy:byte-buddy</artifact>
-                                    <artifact>org.objenesis:objenesis</artifact>
-                                </includes>
-                            </artifactSet>
-                            <relocations>
-                                <relocation>
-                                    <pattern>net.bytebuddy</pattern>
-                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.bytebuddy</shadedPattern>
-                                    <excludes>
-                                        <exclude>net/bytebuddy/experimental</exclude>
-                                    </excludes>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.objenesis</pattern>
-                                    <shadedPattern>nl.jqno.equalsverifier.internal.lib.objenesis</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <filters>
-                                <filter>
-                                    <artifact>net.bytebuddy:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                    </excludes>
-                                </filter>
-                                <filter>
-                                    <artifact>org.objenesis:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/**</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
-            <id>adds-module-checks-and-linting-for-java9-and-up</id>
+            <id>static-analysis</id>
             <activation>
-                <jdk>[9,)</jdk>
+                <jdk>[17,)</jdk>
+                <property>
+                    <name>!disableStaticAnalysis</name>
+                </property>
             </activation>
 
             <properties>
-                <additional.argLine /> <!-- Can be set from the command-line to enable JVM preview features -->
-                <surefire.argLine>--illegal-access=deny ${additional.argLine}</surefire.argLine>
+                <argline.module>--illegal-access=deny</argline.module>
             </properties>
 
             <build>
@@ -330,9 +253,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
                         <configuration>
-                            <release>${java.release}</release>
                             <showWarnings>true</showWarnings>
                             <compilerArgs>
                                 <arg>-Werror</arg>
@@ -343,185 +264,17 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.3.1</version>
                         <configuration>
-                            <argLine>@{surefire.argLine}</argLine>
-                            <trimStackTrace>false</trimStackTrace>
-                            <useSystemClassLoader>false</useSystemClassLoader>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>enables-javafx-tests-for-jdk11-and-up</id>
-            <activation>
-                <jdk>[11,)</jdk>
-            </activation>
-
-            <dependencies>
-                <dependency>
-                    <groupId>org.openjfx</groupId>
-                    <artifactId>javafx-base</artifactId>
-                    <version>17.0.1</version>
-                    <scope>provided</scope>
-                </dependency>
-            </dependencies>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>${build-helper-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/java11</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>enables-records-tests-for-jdk16-and-up</id>
-            <activation>
-                <jdk>[16,)</jdk>
-            </activation>
-
-            <properties>
-                <coverage.threshold>0.97</coverage.threshold>
-            </properties>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
-                        <configuration>
-                            <testRelease>16</testRelease>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>${build-helper-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/java11</source>
-                                        <source>src/test/java16</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>enables-sealed-class-tests-for-jdk17-and-up</id>
-            <activation>
-                <jdk>[17,)</jdk>
-            </activation>
-
-            <properties>
-                <coverage.threshold>0.97</coverage.threshold>
-            </properties>
-
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
-                        <configuration>
-                            <testRelease>17</testRelease>
-                        </configuration>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>${build-helper-maven-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <phase>generate-sources</phase>
-                                <goals>
-                                    <goal>add-test-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources>
-                                        <source>src/test/java11</source>
-                                        <source>src/test/java16</source>
-                                        <source>src/test/java17</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>static-analysis</id>
-            <activation>
-                <property>
-                    <name>!disableStaticAnalysis</name>
-                </property>
-            </activation>
-            
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <version>2.18.0</version>
-                        <configuration>
-                            <formats>
-                                <format>
-                                    <includes>
-                                        <include>src/*/java/**/*.java</include>
-                                        <include>src/test/java11/**/*.java</include>
-                                        <include>src/test/java16/**/*.java</include>
-                                        <!-- <include>src/test/java17/**/*.java</include> wait for https://github.com/jhipster/prettier-java/issues/522 -->
-                                    </includes>
-                                    <prettier>
-                                        <devDependencies>
-                                            <prettier>2.5.1</prettier>
-                                            <prettier-plugin-java>1.6.0</prettier-plugin-java>
-                                        </devDependencies>
-                                        <config>
-                                            <!-- Changes here must be reflected in .prettierrc.yml -->
-                                            <tabWidth>4</tabWidth>
-                                            <printWidth>100</printWidth>
-                                            <trailingComma>none</trailingComma>
-                                        </config>
-                                    </prettier>
-                                </format>
-                            </formats>
+                            <source>${version.java.base}</source>
+                            <doclint>all,-missing</doclint>
                         </configuration>
                         <executions>
                             <execution>
+                                <phase>verify</phase>
                                 <goals>
-                                    <goal>check</goal>
+                                    <goal>javadoc</goal>
                                 </goals>
                             </execution>
                         </executions>
@@ -530,80 +283,15 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
+                        <version>0.8.7</version>
                         <executions>
                             <execution>
-                                <id>default-prepare-agent</id>
+                                <id>jacoco-prepare-agent</id>
                                 <goals>
                                     <goal>prepare-agent</goal>
                                 </goals>
                                 <configuration>
-                                    <propertyName>surefire.argLine</propertyName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.0.0</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.jacoco</groupId>
-                                <artifactId>org.jacoco.ant</artifactId>
-                                <version>${jacoco.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>run-jacoco</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target>
-                                        <taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
-                                        <report>
-                                            <executiondata>
-                                                <file file="${project.build.directory}/jacoco.exec" />
-                                            </executiondata>
-                                            <structure name="EqualsVerifier: external coverage">
-                                                <classfiles>
-                                                    <fileset dir="${project.build.testOutputDirectory}/nl/jqno/equalsverifier/coverage" />
-                                                </classfiles>
-                                                <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.build.testSourceDirectory}" />
-                                                </sourcefiles>
-                                            </structure>
-                                            <check failonviolation="true" violationsproperty="violation">
-                                                <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
-                                                </rule>
-                                            </check>
-                                            <html destdir="${project.build.directory}/jacoco-external" />
-                                        </report>
-                                        <report>
-                                            <executiondata>
-                                                <file file="${project.build.directory}/jacoco.exec" />
-                                            </executiondata>
-                                            <structure name="EqualsVerifier: internal coverage">
-                                                <classfiles>
-                                                    <fileset dir="${project.build.outputDirectory}" />
-                                                </classfiles>
-                                                <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.build.sourceDirectory}" />
-                                                </sourcefiles>
-                                            </structure>
-                                            <check failonviolation="true" violationsproperty="violation">
-                                                <rule element="BUNDLE">
-                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="${coverage.threshold}" />
-                                                </rule>
-                                            </check>
-                                            <html destdir="${project.build.directory}/jacoco-internal" />
-                                        </report>
-                                    </target>
+                                    <propertyName>argline.full</propertyName>
                                 </configuration>
                             </execution>
                         </executions>
@@ -669,6 +357,39 @@
                     </plugin>
 
                     <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>2.18.0</version>
+                        <configuration>
+                            <formats>
+                                <format>
+                                    <includes>
+                                        <include>src/*/java/**/*.java</include>
+                                    </includes>
+                                    <prettier>
+                                        <devDependencies>
+                                            <prettier>2.5.1</prettier>
+                                            <prettier-plugin-java>1.6.1</prettier-plugin-java>
+                                        </devDependencies>
+                                        <config>
+                                            <!-- Changes here must be reflected in .prettierrc.yml -->
+                                            <tabWidth>4</tabWidth>
+                                            <printWidth>100</printWidth>
+                                            <trailingComma>none</trailingComma>
+                                        </config>
+                                    </prettier>
+                                </format>
+                            </formats>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
                         <!-- provides the pitest-git:aggregate goal to aggregate json files to be stored as artifact when accepting PRs from untrusted forks -->
                         <groupId>com.groupcdg</groupId>
                         <artifactId>pitest-git-maven-plugin</artifactId>
@@ -698,7 +419,7 @@
                         </dependencies>
                         <configuration>
                             <jvmArgs>
-                                <jvmArg>${additional.argLine}</jvmArg>
+                                <jvmArg>${argline.preview}</jvmArg>
                             </jvmArgs>
                             <threads>3</threads>
                             <timestampedReports>false</timestampedReports>
@@ -712,12 +433,6 @@
 
             <reporting>
                 <plugins>
-                    <plugin>
-                        <groupId>org.jacoco</groupId>
-                        <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>${jacoco.version}</version>
-                    </plugin>
-
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -751,7 +466,21 @@
         </profile>
 
         <profile>
-            <id>EXPERIMENTAL-for-EA-versions</id>
+            <id>argline-preview</id>
+            <activation>
+                <property>
+                    <name>preview</name>
+                </property>
+            </activation>
+
+            <properties>
+                <argline.preview>--enable-preview</argline.preview>
+            </properties>
+        </profile>
+
+        <profile>
+            <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
+            <id>argline-experimental</id>
             <activation>
                 <property>
                     <name>experimental</name>
@@ -759,8 +488,7 @@
             </activation>
 
             <properties>
-                <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
-                <surefire.argLine>--illegal-access=deny -Dnet.bytebuddy.experimental=true</surefire.argLine>
+                <argline.experimental>-Dnet.bytebuddy.experimental=true</argline.experimental>
             </properties>
         </profile>
 
@@ -784,6 +512,67 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+
+        <profile>
+            <id>modules-jdk8</id>
+            <activation>
+                <jdk>[1.8,11)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-core</module>
+                <module>equalsverifier-test-plumbing</module>
+                <module>equalsverifier-test-core</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk11</id>
+            <activation>
+                <jdk>[11,16)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-core</module>
+                <module>equalsverifier-test-plumbing</module>
+                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-11</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk16</id>
+            <activation>
+                <jdk>[16,17)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-core</module>
+                <module>equalsverifier-test-plumbing</module>
+                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-11</module>
+                <module>equalsverifier-16</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk17</id>
+            <activation>
+                <jdk>[17,)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-core</module>
+                <module>equalsverifier-test-plumbing</module>
+                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-11</module>
+                <module>equalsverifier-16</module>
+                <module>equalsverifier-17</module>
+                <module>equalsverifier-aggregator</module>
+                <module>equalsverifier-release-main</module>
+                <module>equalsverifier-release-nodep</module>
+            </modules>
         </profile>
     </profiles>
 </project>
