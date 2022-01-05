@@ -7,7 +7,7 @@
     <name>EqualsVerifier</name>
     <version>3.8.3-SNAPSHOT</version>
     <description>EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
-    <url>https:///www.jqno.nl/equalsverifier</url>
+    <url>https://www.jqno.nl/equalsverifier</url>
 
     <parent>
         <groupId>org.sonatype.oss</groupId>
@@ -16,7 +16,7 @@
     </parent>
 
     <scm>
-        <url>https:///github.com/jqno/equalsverifier</url>
+        <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
         <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
     </scm>
@@ -24,7 +24,7 @@
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
-            <url>https:///www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
         </license>
     </licenses>
 
@@ -33,7 +33,7 @@
             <id>Jan</id>
             <name>Jan Ouwens</name>
             <email>jan.ouwens@gmail.com</email>
-            <url>https:///www.jqno.nl</url>
+            <url>https://www.jqno.nl</url>
             <timezone>Central European Time</timezone>
         </developer>
     </developers>
@@ -46,7 +46,7 @@
     <mailingLists>
         <mailingList>
             <name>General Discussion</name>
-            <archive>https:///groups.google.com/group/equalsverifier</archive>
+            <archive>https://groups.google.com/group/equalsverifier</archive>
         </mailingList>
     </mailingLists>
 
