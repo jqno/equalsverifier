@@ -59,8 +59,8 @@
                                             </executiondata>
                                             <structure name="EqualsVerifier: internal coverage">
                                                 <classfiles>
-                                                    <fileset dir="${project.basedir}/..">
-                                                        <include name="*/target/classes/**/*.class"/>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/target/classes">
+                                                        <include name="**/*.class"/>
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
@@ -82,8 +82,8 @@
                                             </executiondata>
                                             <structure name="EqualsVerifier: external coverage">
                                                 <classfiles>
-                                                    <fileset dir="${project.basedir}/..">
-                                                        <include name="*/target/test-classes/nl/jqno/equalsverifier/coverage/*.class"/>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/target/test-classes/nl/jqno/equalsverifier/coverage">
+                                                        <include name="*.class"/>
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">

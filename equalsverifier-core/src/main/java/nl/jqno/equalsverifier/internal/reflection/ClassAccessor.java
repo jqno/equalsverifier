@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -53,11 +52,7 @@ public class ClassAccessor<T> {
      * @return true if T is a Java Record.
      */
     public boolean isRecord() {
-        Class<?> record = Util.classForName("java.lang.Record");
-        if (record == null) {
-            return false;
-        }
-        return record.isAssignableFrom(type);
+        return RecordsHelper.isRecord(type);
     }
 
     /**
@@ -66,22 +61,7 @@ public class ClassAccessor<T> {
      * @return true if T is a sealed class
      */
     public boolean isSealed() {
-        return ClassAccessor.isSealed(type);
-    }
-
-    public static boolean isSealed(Class<?> type) {
-        int version = Integer.parseInt(System.getProperty("java.version").replaceAll("[.-].*", ""));
-        if (version >= 17) {
-            try {
-                Class<?> clazz = Util.classForName("java.lang.Class");
-                Method isSealed = clazz.getDeclaredMethod("isSealed");
-                Object result = isSealed.invoke(type);
-                return result == null ? false : (Boolean) result;
-            } catch (ReflectiveOperationException | SecurityException e) {
-                return false;
-            }
-        }
-        return false;
+        return SealedClassesHelper.isSealed(type);
     }
 
     /**
