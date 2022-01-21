@@ -31,7 +31,7 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <version>${version.maven-assembly-plugin}</version>
                 <dependencies>
                     <dependency>
                         <groupId>nl.jqno.equalsverifier</groupId>
@@ -70,7 +70,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>flatten-maven-plugin</artifactId>
-                <version>1.2.7</version>
+                <version>${version.flatten-maven-plugin}</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
                     <outputDirectory>${project.basedir}/target</outputDirectory>
@@ -122,12 +122,12 @@
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>3.2</version>
+            <version>${version.objenesis}</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.12.6</version>
+            <version>${version.bytebuddy}</version>
         </dependency>
     </dependencies>
 </project>

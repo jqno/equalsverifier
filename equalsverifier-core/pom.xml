@@ -20,7 +20,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>${version.maven-shade-plugin}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -65,36 +65,35 @@
     </build>
 
     <dependencies>
+        <!-- Main dependencies -->
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>3.2</version>
+            <version>${version.objenesis}</version>
         </dependency>
         <dependency>
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
-            <version>1.12.6</version>
+            <version>${version.bytebuddy}</version>
         </dependency>
 
         <!-- Provided dependencies -->
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
+            <version>${version.spotbugs}</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- provided prefabvalue dependencies -->
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
-            <version>2.10.13</version>
+            <version>${version.joda-time}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
+            <version>${version.guava}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

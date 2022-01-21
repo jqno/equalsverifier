@@ -71,133 +71,56 @@
         <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.97</analysis.jacoco.threshold>
+        <analysis.checkstyle.config>checkstyle-config.xml</analysis.checkstyle.config>
+        <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
+        <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
 
-        <checkstyle.version>9.2.1</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
-        <checkstyle.maven.version>3.1.2</checkstyle.maven.version>
-        <checkstyle.config>checkstyle-config.xml</checkstyle.config>
-        <spotbugs.version>4.5.2</spotbugs.version>
-        <spotbugs.maven.version>4.5.2.0</spotbugs.maven.version>
-        <spotbugs.effort>Max</spotbugs.effort>
-        <spotbugs.threshold>Low</spotbugs.threshold>
-        <cdg.pitest.version>0.1.0</cdg.pitest.version>
+        <version.bytebuddy>1.12.6</version.bytebuddy>
+        <version.objenesis>3.2</version.objenesis>
+
+        <version.archunit>0.22.0</version.archunit>
+        <version.commons-lang3>3.12.0</version.commons-lang3>
+        <version.eclipse-annotation>2.2.600</version.eclipse-annotation>
+        <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
+        <version.guava>31.0.1-jre</version.guava>
+        <version.hamcrest>2.2</version.hamcrest>
+        <version.jakarta-persistence-api>3.0.0</version.jakarta-persistence-api>
+        <version.javax-annotation-api>1.3.2</version.javax-annotation-api>
+        <version.jcip-annotations>1.0</version.jcip-annotations>
+        <version.joda-time>2.10.13</version.joda-time>
+        <version.junit-jupiter>5.8.2</version.junit-jupiter>
+        <version.openjfx>17.0.1</version.openjfx>
+        <version.slf4j>1.7.32</version.slf4j>
+
+        <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
+        <version.checkstyle>9.2.1</version.checkstyle>
+        <version.flatten-maven-plugin>1.2.7</version.flatten-maven-plugin>
+        <version.jacoco>0.8.7</version.jacoco>
+        <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
+        <version.maven-assembly-plugin>3.1.0</version.maven-assembly-plugin>
+        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
+        <version.maven-enforcer-plugin>3.0.0</version.maven-enforcer-plugin>
+        <version.maven-javadoc-plugin>3.3.1</version.maven-javadoc-plugin>
+        <version.maven-shade-plugin>3.2.4</version.maven-shade-plugin>
+        <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
+        <version.pitest.github>0.1.0</version.pitest.github>
+        <version.pitest.junit5>0.15</version.pitest.junit5>
+        <version.pitest.maven>1.7.3</version.pitest.maven>
+        <version.spotbugs.maven>4.5.2.0</version.spotbugs.maven>
+        <version.spotbugs>4.5.2</version.spotbugs>
+        <version.spotless.maven>2.18.0</version.spotless.maven>
+        <version.spotless.prettier-java>1.6.1</version.spotless.prettier-java>
+        <version.spotless.prettier>2.5.1</version.spotless.prettier>
+
+        <checkstyle.version>${version.checkstyle}</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
     </properties>
-
-    <repositories>
-        <repository>
-            <id>repo-for-signedjar-dependency</id>
-            <url>file://${basedir}/lib</url>
-        </repository>
-    </repositories>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.objenesis</groupId>
-            <artifactId>objenesis</artifactId>
-            <version>3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>net.bytebuddy</groupId>
-            <artifactId>byte-buddy</artifactId>
-            <version>1.12.6</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- test dependencies -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.8.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>javax.annotation</groupId>
-            <artifactId>javax.annotation-api</artifactId>
-            <version>1.3.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-signedjar-test</artifactId>
-            <version>0.2</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>2.2.600</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.persistence</groupId>
-            <artifactId>jakarta.persistence-api</artifactId>
-            <version>3.0.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- ArchUnit dependencies -->
-        <dependency>
-            <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit-junit5</artifactId>
-            <version>0.22.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.32</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- provided prefabvalue dependencies -->
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>2.10.13</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>31.0.1-jre</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>${version.maven-enforcer-plugin}</version>
                 <executions>
                     <execution>
                         <id>enforce-maven</id>
@@ -218,13 +141,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>${version.maven-compiler-plugin}</version>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>${version.maven-surefire-plugin}</version>
                 <configuration>
                     <argLine>@{argline.full}</argLine>
                     <trimStackTrace>false</trimStackTrace>
@@ -265,7 +188,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>${version.maven-javadoc-plugin}</version>
                         <configuration>
                             <source>${version.java.base}</source>
                             <doclint>all,-missing</doclint>
@@ -283,7 +206,7 @@
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
-                        <version>0.8.7</version>
+                        <version>${version.jacoco}</version>
                         <executions>
                             <execution>
                                 <id>jacoco-prepare-agent</id>
@@ -300,16 +223,16 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>${checkstyle.maven.version}</version>
+                        <version>${version.checkstyle.maven}</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.puppycrawl.tools</groupId>
                                 <artifactId>checkstyle</artifactId>
-                                <version>${checkstyle.version}</version>
+                                <version>${version.checkstyle}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <configLocation>${checkstyle.config}</configLocation>
+                            <configLocation>${analysis.checkstyle.config}</configLocation>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
                             <encoding>UTF-8</encoding>
                             <linkXRef>false</linkXRef>
@@ -332,17 +255,17 @@
                     <plugin>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-maven-plugin</artifactId>
-                        <version>${spotbugs.maven.version}</version>
+                        <version>${version.spotbugs.maven}</version>
                         <dependencies>
                             <dependency>
                                 <groupId>com.github.spotbugs</groupId>
                                 <artifactId>spotbugs</artifactId>
-                                <version>${spotbugs.version}</version>
+                                <version>${version.spotbugs}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <effort>${spotbugs.effort}</effort>
-                            <threshold>${spotbugs.threshold}</threshold>
+                            <effort>${analysis.spotbugs.effort}</effort>
+                            <threshold>${analysis.spotbugs.threshold}</threshold>
                             <xmlOutput>true</xmlOutput>
                         </configuration>
                         <executions>
@@ -359,7 +282,7 @@
                     <plugin>
                         <groupId>com.diffplug.spotless</groupId>
                         <artifactId>spotless-maven-plugin</artifactId>
-                        <version>2.18.0</version>
+                        <version>${version.spotless.maven}</version>
                         <configuration>
                             <formats>
                                 <format>
@@ -368,8 +291,8 @@
                                     </includes>
                                     <prettier>
                                         <devDependencies>
-                                            <prettier>2.5.1</prettier>
-                                            <prettier-plugin-java>1.6.1</prettier-plugin-java>
+                                            <prettier>${version.spotless.prettier}</prettier>
+                                            <prettier-plugin-java>${version.spotless.prettier-java}</prettier-plugin-java>
                                         </devDependencies>
                                         <config>
                                             <!-- Changes here must be reflected in .prettierrc.yml -->
@@ -393,28 +316,28 @@
                         <!-- provides the pitest-git:aggregate goal to aggregate json files to be stored as artifact when accepting PRs from untrusted forks -->
                         <groupId>com.groupcdg</groupId>
                         <artifactId>pitest-git-maven-plugin</artifactId>
-                        <version>${cdg.pitest.version}</version>
+                        <version>${version.pitest.github}</version>
                     </plugin>
                     <plugin>
                         <!-- provides direct integration with github when accepting PRs from trusted branches -->
                         <groupId>com.groupcdg</groupId>
                         <artifactId>pitest-github-maven-plugin</artifactId>
-                        <version>${cdg.pitest.version}</version>
+                        <version>${version.pitest.github}</version>
                     </plugin>
                     <plugin>
                         <groupId>org.pitest</groupId>
                         <artifactId>pitest-maven</artifactId>
-                        <version>1.7.3</version>
+                        <version>${version.pitest.maven}</version>
                         <dependencies>
                             <dependency>
                                 <groupId>org.pitest</groupId>
                                 <artifactId>pitest-junit5-plugin</artifactId>
-                                <version>0.15</version>
+                                <version>${version.pitest.junit5}</version>
                             </dependency>
                             <dependency>
                                 <groupId>com.groupcdg</groupId>
                                 <artifactId>pitest-git-plugin</artifactId>
-                                <version>${cdg.pitest.version}</version>
+                                <version>${version.pitest.github}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
@@ -423,8 +346,10 @@
                             </jvmArgs>
                             <threads>3</threads>
                             <timestampedReports>false</timestampedReports>
-                            <!-- we must unset failWhenNoMutations, otherwise the build would error when
-                            a PR included no java code changes -->
+                            <!--
+                                we must unset failWhenNoMutations, otherwise the build
+                                would error when a PR included no java code changes
+                            -->
                             <failWhenNoMutations>false</failWhenNoMutations>
                         </configuration>
                     </plugin>
@@ -436,7 +361,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>${checkstyle.maven.version}</version>
+                        <version>${version.checkstyle.maven}</version>
                         <configuration>
                             <configLocation>${checkstyle.config}</configLocation>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>

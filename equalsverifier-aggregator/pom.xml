@@ -33,12 +33,12 @@
                         --> 
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
-                        <version>3.0.0</version>
+                        <version>${version.maven-antrun-plugin}</version>
                         <dependencies>
                             <dependency>
                                 <groupId>org.jacoco</groupId>
                                 <artifactId>org.jacoco.ant</artifactId>
-                                <version>0.8.7</version>
+                                <version>${version.jacoco}</version>
                             </dependency>
                         </dependencies>
                         <executions>

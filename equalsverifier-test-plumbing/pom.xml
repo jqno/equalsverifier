@@ -24,18 +24,18 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.8.2</version>
+            <version>${version.junit-jupiter}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-annotations</artifactId>
-            <version>${spotbugs.version}</version>
+            <version>${version.spotbugs}</version>
         </dependency>
         <dependency>
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
-            <version>2.2.600</version>
+            <version>${version.eclipse-annotation}</version>
         </dependency>
     </dependencies>
 
@@ -68,7 +68,7 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${spotbugs.maven.version}</version>
+                <version>${version.spotbugs.maven}</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
