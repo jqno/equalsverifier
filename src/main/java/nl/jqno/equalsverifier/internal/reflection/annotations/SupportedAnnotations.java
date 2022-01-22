@@ -150,7 +150,10 @@ public enum SupportedAnnotations implements Annotation {
         false,
         "javax.persistence.Entity",
         "javax.persistence.Embeddable",
-        "javax.persistence.MappedSuperclass"
+        "javax.persistence.MappedSuperclass",
+        "jakarta.persistence.Entity",
+        "jakarta.persistence.Embeddable",
+        "jakarta.persistence.MappedSuperclass"
     ),
 
     /**
@@ -158,14 +161,20 @@ public enum SupportedAnnotations implements Annotation {
      * equals/hashCode contract, like fields that have the Java transient modifier. EqualsVerifier
      * will treat these the same.
      */
-    TRANSIENT(true, "javax.persistence.Transient"),
+    TRANSIENT(true, "javax.persistence.Transient", "jakarta.persistence.Transient"),
 
     /**
      * Fields in JPA Entities that are marked @Id or @EmbeddedId are usually part of the entity's
      * surrogate key. EqualsVerifier will therefore assume that it must not be used in the
      * equals/hashCode contract, unless {@link Warning#SURROGATE_KEY} is suppressed.
      */
-    ID(false, "javax.persistence.Id", "javax.persistence.EmbeddedId") {
+    ID(
+        false,
+        "javax.persistence.Id",
+        "javax.persistence.EmbeddedId",
+        "jakarta.persistence.Id",
+        "jakarta.persistence.EmbeddedId"
+    ) {
         @Override
         public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
             types.forEach(t -> annotationCache.addClassAnnotation(t, ID));
