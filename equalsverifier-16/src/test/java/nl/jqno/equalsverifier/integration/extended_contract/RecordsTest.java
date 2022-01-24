@@ -1,12 +1,21 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class RecordsTest {
+
+    @Test
+    public void sanityCheckForRecordsHelper() {
+        assertTrue(RecordsHelper.isRecord(SimpleRecord.class));
+        assertFalse(RecordsHelper.isRecord(String.class));
+    }
 
     @Test
     public void succeed_whenClassIsARecord() {
