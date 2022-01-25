@@ -14,18 +14,18 @@ public class JakartaIdTest {
 
     @Test
     public void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
-        EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class).verify();
-        EqualsVerifier.forClass(JpaIdBusinessKeyPersonReorderedFields.class).verify();
+        EqualsVerifier.forClass(JakartaIdBusinessKeyPerson.class).verify();
+        EqualsVerifier.forClass(JakartaIdBusinessKeyPersonReorderedFields.class).verify();
     }
 
     @Test
     public void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(JpaIdSurrogateKeyPerson.class)
+            .forClass(JakartaIdSurrogateKeyPerson.class)
             .suppress(Warning.SURROGATE_KEY)
             .verify();
         EqualsVerifier
-            .forClass(JpaIdSurrogateKeyPersonReorderedFields.class)
+            .forClass(JakartaIdSurrogateKeyPersonReorderedFields.class)
             .suppress(Warning.SURROGATE_KEY)
             .verify();
     }
@@ -35,7 +35,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .forClass(JakartaIdBusinessKeyPerson.class)
                     .withIgnoredAnnotations(jakarta.persistence.Id.class)
                     .verify()
             )
@@ -46,7 +46,7 @@ public class JakartaIdTest {
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class).verify())
+            .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).verify())
             .assertFailure()
             .assertMessageContains(
                 "Significant fields",
@@ -60,7 +60,7 @@ public class JakartaIdTest {
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
         ExpectedException
             .when(() ->
-                EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).verify()
+                EqualsVerifier.forClass(JakartaIdSurrogateKeyPersonReorderedFields.class).verify()
             )
             .assertFailure()
             .assertMessageContains(
@@ -75,7 +75,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .forClass(JakartaIdBusinessKeyPerson.class)
                     .suppress(Warning.SURROGATE_KEY)
                     .verify()
             )
@@ -93,7 +93,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdBusinessKeyPersonReorderedFields.class)
+                    .forClass(JakartaIdBusinessKeyPersonReorderedFields.class)
                     .suppress(Warning.SURROGATE_KEY)
                     .verify()
             )
@@ -108,9 +108,9 @@ public class JakartaIdTest {
 
     @Test
     public void succeed_whenEmbeddedIdIsUsedCorrectly() {
-        EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class).verify();
+        EqualsVerifier.forClass(JakartaEmbeddedIdBusinessKeyPerson.class).verify();
         EqualsVerifier
-            .forClass(JpaEmbeddedIdSurrogateKeyPerson.class)
+            .forClass(JakartaEmbeddedIdSurrogateKeyPerson.class)
             .suppress(Warning.SURROGATE_KEY)
             .verify();
     }
@@ -118,7 +118,7 @@ public class JakartaIdTest {
     @Test
     public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class).verify())
+            .when(() -> EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).verify())
             .assertFailure()
             .assertMessageContains(
                 "Significant fields",
@@ -133,7 +133,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                    .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
                     .suppress(Warning.SURROGATE_KEY)
                     .verify()
             )
@@ -151,7 +151,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaEmbeddedIdBusinessKeyPerson.class)
+                    .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
                     .withOnlyTheseFields("id")
                     .verify()
             )
@@ -165,11 +165,6 @@ public class JakartaIdTest {
     @Test
     public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class).verify();
-    }
-
-    @Test
-    public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdAndNothingIsAnnotatedWithJpaId() {
-        EqualsVerifier.forClass(NaturalIdWithoutJpaIdBusinessKeyPerson.class).verify();
     }
 
     @Test
@@ -188,7 +183,7 @@ public class JakartaIdTest {
     @Test
     public void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
         EqualsVerifier
-            .forClass(JpaIdBusinessKeyPersonDoesntUseName.class)
+            .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
             .withIgnoredFields("name")
             .verify();
     }
@@ -196,25 +191,25 @@ public class JakartaIdTest {
     @Test
     public void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
         EqualsVerifier
-            .forClass(JpaIdBusinessKeyPersonDoesntUseName.class)
+            .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
             .withOnlyTheseFields("socialSecurity", "birthdate")
             .verify();
     }
 
     @Test
-    public void succeed_whenIdIsPartOfAProperJpaEntity() {
-        EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class).verify();
+    public void succeed_whenIdIsPartOfAProperJakartaEntity() {
+        EqualsVerifier.forClass(JakartaIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
-    public void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
+    public void succeed_whenNaturalIdIsPartOfAProperJakartaEntity() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
     public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
         EqualsVerifier
-            .forClass(JpaIdVersionedEntity.class)
+            .forClass(JakartaIdVersionedEntity.class)
             .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
             .verify();
     }
@@ -229,7 +224,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .forClass(JakartaIdBusinessKeyPerson.class)
                     .withOnlyTheseFields("id")
                     .verify()
             )
@@ -260,7 +255,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .forClass(JakartaIdSurrogateKeyPerson.class)
                     .withOnlyTheseFields("socialSecurity")
                     .suppress(Warning.SURROGATE_KEY)
             )
@@ -276,7 +271,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .forClass(JakartaIdSurrogateKeyPerson.class)
                     .suppress(Warning.SURROGATE_KEY)
                     .withOnlyTheseFields("socialSecurity")
             )
@@ -292,7 +287,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .forClass(JakartaIdSurrogateKeyPerson.class)
                     .withIgnoredFields("socialSecurity")
                     .suppress(Warning.SURROGATE_KEY)
             )
@@ -307,7 +302,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdSurrogateKeyPerson.class)
+                    .forClass(JakartaIdSurrogateKeyPerson.class)
                     .suppress(Warning.SURROGATE_KEY)
                     .withIgnoredFields("socialSecurity")
             )
@@ -367,7 +362,7 @@ public class JakartaIdTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .forClass(JakartaIdBusinessKeyPerson.class)
                     .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
             )
             .assertThrows(IllegalStateException.class)
@@ -375,14 +370,6 @@ public class JakartaIdTest {
                 "Precondition",
                 "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed."
             );
-    }
-
-    @Test
-    public void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
-        ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class).verify())
-            .assertFailure()
-            .assertMessageContains("Significant fields");
     }
 
     @Test
@@ -395,7 +382,7 @@ public class JakartaIdTest {
             .assertMessageContains("Significant fields");
     }
 
-    static final class JpaIdBusinessKeyPerson {
+    static final class JakartaIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -404,7 +391,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JpaIdBusinessKeyPerson(
+        public JakartaIdBusinessKeyPerson(
             UUID id,
             String socialSecurity,
             String name,
@@ -418,10 +405,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdBusinessKeyPerson)) {
+            if (!(obj instanceof JakartaIdBusinessKeyPerson)) {
                 return false;
             }
-            JpaIdBusinessKeyPerson other = (JpaIdBusinessKeyPerson) obj;
+            JakartaIdBusinessKeyPerson other = (JakartaIdBusinessKeyPerson) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -435,7 +422,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class JpaIdBusinessKeyPersonReorderedFields {
+    static final class JakartaIdBusinessKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -444,7 +431,7 @@ public class JakartaIdTest {
         @jakarta.persistence.Id
         private final UUID id;
 
-        public JpaIdBusinessKeyPersonReorderedFields(
+        public JakartaIdBusinessKeyPersonReorderedFields(
             UUID id,
             String socialSecurity,
             String name,
@@ -458,10 +445,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdBusinessKeyPersonReorderedFields)) {
+            if (!(obj instanceof JakartaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
-            JpaIdBusinessKeyPersonReorderedFields other = (JpaIdBusinessKeyPersonReorderedFields) obj;
+            JakartaIdBusinessKeyPersonReorderedFields other = (JakartaIdBusinessKeyPersonReorderedFields) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -475,7 +462,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class JpaIdSurrogateKeyPerson {
+    static final class JakartaIdSurrogateKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -484,7 +471,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JpaIdSurrogateKeyPerson(
+        public JakartaIdSurrogateKeyPerson(
             UUID id,
             String socialSecurity,
             String name,
@@ -498,10 +485,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdSurrogateKeyPerson)) {
+            if (!(obj instanceof JakartaIdSurrogateKeyPerson)) {
                 return false;
             }
-            JpaIdSurrogateKeyPerson other = (JpaIdSurrogateKeyPerson) obj;
+            JakartaIdSurrogateKeyPerson other = (JakartaIdSurrogateKeyPerson) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -511,7 +498,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class JpaIdSurrogateKeyPersonReorderedFields {
+    static final class JakartaIdSurrogateKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -520,7 +507,7 @@ public class JakartaIdTest {
         @jakarta.persistence.Id
         private final UUID id;
 
-        public JpaIdSurrogateKeyPersonReorderedFields(
+        public JakartaIdSurrogateKeyPersonReorderedFields(
             UUID id,
             String socialSecurity,
             String name,
@@ -534,10 +521,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdSurrogateKeyPersonReorderedFields)) {
+            if (!(obj instanceof JakartaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
-            JpaIdSurrogateKeyPersonReorderedFields other = (JpaIdSurrogateKeyPersonReorderedFields) obj;
+            JakartaIdSurrogateKeyPersonReorderedFields other = (JakartaIdSurrogateKeyPersonReorderedFields) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -547,7 +534,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class JpaEmbeddedIdBusinessKeyPerson {
+    static final class JakartaEmbeddedIdBusinessKeyPerson {
 
         @jakarta.persistence.EmbeddedId
         private final UUID id;
@@ -556,7 +543,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JpaEmbeddedIdBusinessKeyPerson(
+        public JakartaEmbeddedIdBusinessKeyPerson(
             UUID id,
             String socialSecurity,
             String name,
@@ -570,10 +557,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaEmbeddedIdBusinessKeyPerson)) {
+            if (!(obj instanceof JakartaEmbeddedIdBusinessKeyPerson)) {
                 return false;
             }
-            JpaEmbeddedIdBusinessKeyPerson other = (JpaEmbeddedIdBusinessKeyPerson) obj;
+            JakartaEmbeddedIdBusinessKeyPerson other = (JakartaEmbeddedIdBusinessKeyPerson) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -587,7 +574,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class JpaEmbeddedIdSurrogateKeyPerson {
+    static final class JakartaEmbeddedIdSurrogateKeyPerson {
 
         @jakarta.persistence.EmbeddedId
         private final UUID id;
@@ -596,7 +583,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JpaEmbeddedIdSurrogateKeyPerson(
+        public JakartaEmbeddedIdSurrogateKeyPerson(
             UUID id,
             String socialSecurity,
             String name,
@@ -610,10 +597,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaEmbeddedIdSurrogateKeyPerson)) {
+            if (!(obj instanceof JakartaEmbeddedIdSurrogateKeyPerson)) {
                 return false;
             }
-            JpaEmbeddedIdSurrogateKeyPerson other = (JpaEmbeddedIdSurrogateKeyPerson) obj;
+            JakartaEmbeddedIdSurrogateKeyPerson other = (JakartaEmbeddedIdSurrogateKeyPerson) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -661,44 +648,7 @@ public class JakartaIdTest {
         }
     }
 
-    static final class NaturalIdWithoutJpaIdBusinessKeyPerson {
-
-        private final UUID id;
-
-        @NaturalId
-        private final String socialSecurity;
-
-        private final String name;
-        private final LocalDate birthdate;
-
-        public NaturalIdWithoutJpaIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
-            this.id = id;
-            this.socialSecurity = socialSecurity;
-            this.name = name;
-            this.birthdate = birthdate;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof NaturalIdWithoutJpaIdBusinessKeyPerson)) {
-                return false;
-            }
-            NaturalIdWithoutJpaIdBusinessKeyPerson other = (NaturalIdWithoutJpaIdBusinessKeyPerson) obj;
-            return Objects.equals(socialSecurity, other.socialSecurity);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(socialSecurity);
-        }
-    }
-
-    static final class JpaIdBusinessKeyPersonDoesntUseName {
+    static final class JakartaIdBusinessKeyPersonDoesntUseName {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -707,7 +657,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JpaIdBusinessKeyPersonDoesntUseName(
+        public JakartaIdBusinessKeyPersonDoesntUseName(
             UUID id,
             String socialSecurity,
             String name,
@@ -721,10 +671,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdBusinessKeyPersonDoesntUseName)) {
+            if (!(obj instanceof JakartaIdBusinessKeyPersonDoesntUseName)) {
                 return false;
             }
-            JpaIdBusinessKeyPersonDoesntUseName other = (JpaIdBusinessKeyPersonDoesntUseName) obj;
+            JakartaIdBusinessKeyPersonDoesntUseName other = (JakartaIdBusinessKeyPersonDoesntUseName) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(birthdate, other.birthdate)
@@ -738,7 +688,7 @@ public class JakartaIdTest {
     }
 
     @jakarta.persistence.Entity
-    static final class JpaIdBusinessKeyPersonEntity {
+    static final class JakartaIdBusinessKeyPersonEntity {
 
         @jakarta.persistence.Id
         private UUID id;
@@ -749,10 +699,10 @@ public class JakartaIdTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdBusinessKeyPersonEntity)) {
+            if (!(obj instanceof JakartaIdBusinessKeyPersonEntity)) {
                 return false;
             }
-            JpaIdBusinessKeyPersonEntity other = (JpaIdBusinessKeyPersonEntity) obj;
+            JakartaIdBusinessKeyPersonEntity other = (JakartaIdBusinessKeyPersonEntity) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -790,46 +740,6 @@ public class JakartaIdTest {
         @Override
         public int hashCode() {
             return Objects.hash(socialSecurity);
-        }
-    }
-
-    static final class NonJpaIdBusinessKeyPerson {
-
-        @nl.jqno.equalsverifier.testhelpers.annotations.Id
-        private final UUID id;
-
-        private final String socialSecurity;
-        private final String name;
-        private final LocalDate birthdate;
-
-        public NonJpaIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
-            this.id = id;
-            this.socialSecurity = socialSecurity;
-            this.name = name;
-            this.birthdate = birthdate;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof NonJpaIdBusinessKeyPerson)) {
-                return false;
-            }
-            NonJpaIdBusinessKeyPerson other = (NonJpaIdBusinessKeyPerson) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
@@ -871,24 +781,24 @@ public class JakartaIdTest {
         }
     }
 
-    public static final class JpaIdVersionedEntity {
+    public static final class JakartaIdVersionedEntity {
 
         @jakarta.persistence.Id
         private final long id;
 
         private final String s;
 
-        public JpaIdVersionedEntity(long id, String s) {
+        public JakartaIdVersionedEntity(long id, String s) {
             this.id = id;
             this.s = s;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof JpaIdVersionedEntity)) {
+            if (!(obj instanceof JakartaIdVersionedEntity)) {
                 return false;
             }
-            JpaIdVersionedEntity other = (JpaIdVersionedEntity) obj;
+            JakartaIdVersionedEntity other = (JakartaIdVersionedEntity) obj;
             if (id == 0L && other.id == 0L) {
                 return Objects.equals(s, other.s);
             }
