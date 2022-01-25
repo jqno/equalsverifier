@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Added
+- Support for Jakarta persistence annotations. ([Issue 576](https://github.com/jqno/equalsverifier/issues/576); thanks Ahli!)
+
+### Fixed
+- Exception when testing sealed classes that redefine equals. ([Issue 564](https://github.com/jqno/equalsverifier/issues/564#issuecomment-1016495005))
 
 ## [3.8.2] - 2022-01-04
 ### Fixed
