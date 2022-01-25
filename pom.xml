@@ -5,7 +5,7 @@
     <packaging>jar</packaging>
 
     <name>EqualsVerifier</name>
-    <version>3.8.3-SNAPSHOT</version>
+    <version>3.8.4-SNAPSHOT</version>
     <description>EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
     <url>https://www.jqno.nl/equalsverifier</url>
 
@@ -166,7 +166,7 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.32</version>
+            <version>1.7.34</version>
             <scope>test</scope>
         </dependency>
 
