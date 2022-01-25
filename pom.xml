@@ -143,6 +143,12 @@
             <version>2.2.600</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.0.0</version>
+            <scope>test</scope>
+        </dependency>
 
         <!-- ArchUnit dependencies -->
         <dependency>
