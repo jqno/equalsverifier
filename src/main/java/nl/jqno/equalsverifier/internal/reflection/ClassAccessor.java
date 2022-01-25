@@ -66,6 +66,10 @@ public class ClassAccessor<T> {
      * @return true if T is a sealed class
      */
     public boolean isSealed() {
+        return ClassAccessor.isSealed(type);
+    }
+
+    public static boolean isSealed(Class<?> type) {
         int version = Integer.parseInt(System.getProperty("java.version").replaceAll("[.-].*", ""));
         if (version >= 17) {
             try {

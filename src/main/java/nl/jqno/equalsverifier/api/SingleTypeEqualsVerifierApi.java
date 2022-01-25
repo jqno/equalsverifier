@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -358,7 +359,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
-        if (type.isEnum() || type.isInterface()) {
+        if (type.isEnum() || type.isInterface() || ClassAccessor.isSealed(type)) {
             return;
         }
         Validations.validateClassCanBeVerified(type);
