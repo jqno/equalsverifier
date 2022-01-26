@@ -15,6 +15,10 @@
     <artifactId>equalsverifier-core</artifactId>
     <name>EqualsVerifier | core</name>
 
+    <properties>
+        <maven.javadoc.skip>false</maven.javadoc.skip>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

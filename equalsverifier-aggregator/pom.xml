@@ -104,34 +104,6 @@
                     </plugin>
                 </plugins>
             </build>
-
-            <dependencies>
-                <dependency>
-                    <groupId>nl.jqno.equalsverifier</groupId>
-                    <artifactId>equalsverifier-core</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>nl.jqno.equalsverifier</groupId>
-                    <artifactId>equalsverifier-test-core</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>nl.jqno.equalsverifier</groupId>
-                    <artifactId>equalsverifier-11</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>nl.jqno.equalsverifier</groupId>
-                    <artifactId>equalsverifier-16</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-                <dependency>
-                    <groupId>nl.jqno.equalsverifier</groupId>
-                    <artifactId>equalsverifier-17</artifactId>
-                    <version>${project.version}</version>
-                </dependency>
-            </dependencies>
         </profile>
     </profiles>
 </project>
