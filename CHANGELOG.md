@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- EqualsVerifier is now released as a multi-release JAR file, in two variants: `equalsverifier` and `equalsverifier-nodep`. `equalsverifier-nodep` has all its dependencies shaded into a fat jar file; `equalsverifier` has dependencies. Note that until now, `equalsverifier` was the only artifact, and it was a shaded fat jar. ([Issue 575](https://github.com/jqno/equalsverifier/issues/575))
 
 ## [3.8.3] - 2022-01-25
 ### Added
