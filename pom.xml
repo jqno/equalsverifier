@@ -99,7 +99,7 @@
         <version.jacoco>0.8.7</version.jacoco>
         <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
         <version.maven-assembly-plugin>3.3.0</version.maven-assembly-plugin>
-        <version.maven-compiler-plugin>3.8.1</version.maven-compiler-plugin>
+        <version.maven-compiler-plugin>3.9.0</version.maven-compiler-plugin>
         <version.maven-enforcer-plugin>3.0.0</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.2.2</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.3.1</version.maven-javadoc-plugin>
