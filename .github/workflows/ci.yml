@@ -14,7 +14,7 @@ jobs:
             cache-id: "jdk8"
             java: 8
             dist: temurin
-            flags: "-DdisableStaticAnalysis"
+            flags: ""
           - title: "Supported JDK 11"
             continue-on-error: false
             cache-id: "jdk11"

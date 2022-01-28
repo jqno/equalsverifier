@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.jqno.equalsverifier</groupId>
+        <artifactId>equalsverifier-parent</artifactId>
+        <version>3.8.4-SNAPSHOT</version>
+    </parent>
+    <packaging>pom</packaging>
+
+    <artifactId>equalsverifier</artifactId>
+    <name>EqualsVerifier | release normal jar</name>
+    <url>https://www.jqno.nl/equalsverifier</url>
+
+    <scm>
+        <!-- Need to repeat this block, otherwise Maven helpfully appends the submodule name to each url -->
+        <url>https://github.com/jqno/equalsverifier</url>
+        <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
+        <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
+    </scm>
+
+    <properties>
+        <maven.install.skip>false</maven.install.skip>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>${version.maven-assembly-plugin}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>nl.jqno.equalsverifier</groupId>
+                        <artifactId>equalsverifier-aggregator</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/main/assembly/assembly.xml</descriptor>
+                    </descriptors>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                        <manifestEntries>
+                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
+                            <Multi-Release>true</Multi-Release>
+                            <Implementation-Title>EqualsVerifier</Implementation-Title>
+                            <Website>${project.url}</Website>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>${version.flatten-maven-plugin}</version>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <outputDirectory>${project.basedir}/target</outputDirectory>
+                    <flattenMode>clean</flattenMode>
+                    <pomElements>
+                        <name/>
+                        <description/>
+                        <url/>
+                        <inceptionYear/>
+                        <scm/>
+                        <developers/>
+                        <ciManagement/>
+                        <mailingLists/>
+                        <issueManagement/>
+                    </pomElements>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-core</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-16</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-17</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+            <version>${version.objenesis}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${version.bytebuddy}</version>
+        </dependency>
+    </dependencies>
+</project>
+

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.jqno.equalsverifier</groupId>
+        <artifactId>equalsverifier-parent</artifactId>
+        <version>3.8.4-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>equalsverifier-aggregator</artifactId>
+    <name>EqualsVerifier | aggregator</name>
+
+    <profiles>
+        <profile>
+            <id>static-analysis</id>
+            <activation>
+                <property>
+                    <name>!disableStaticAnalysis</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- 
+                            Unfortunately AntRun plugin is still needed because Maven plugin doesn't support
+                            `check` goal over multiple modules. See also:
+                            https://groups.google.com/g/jacoco/c/V58UApeNA0s
+                        --> 
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>${version.maven-antrun-plugin}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.jacoco</groupId>
+                                <artifactId>org.jacoco.ant</artifactId>
+                                <version>${version.jacoco}</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>jacoco-check-and-report</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <taskdef name="report" classname="org.jacoco.ant.ReportTask" classpathref="maven.plugin.classpath" />
+                                        <report>
+                                            <executiondata>
+                                                <fileset dir="${project.basedir}/..">
+                                                    <include name="*/target/jacoco.exec"/>
+                                                </fileset>
+                                            </executiondata>
+                                            <structure name="EqualsVerifier: internal coverage">
+                                                <classfiles>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/target/classes">
+                                                        <include name="**/*.class"/>
+                                                    </fileset>
+                                                </classfiles>
+                                                <sourcefiles encoding="UTF-8">
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/src/main/java"/>
+                                                </sourcefiles>
+                                            </structure>
+                                            <check failonviolation="true" violationsproperty="violation">
+                                                <rule element="BUNDLE">
+                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="${analysis.jacoco.threshold}" />
+                                                </rule>
+                                            </check>
+                                            <html destdir="${project.build.directory}/jacoco-internal" />
+                                        </report>
+                                        <report>
+                                            <executiondata>
+                                                <fileset dir="${project.basedir}/..">
+                                                    <include name="*/target/jacoco.exec"/>
+                                                </fileset>
+                                            </executiondata>
+                                            <structure name="EqualsVerifier: external coverage">
+                                                <classfiles>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/target/test-classes/nl/jqno/equalsverifier/coverage">
+                                                        <include name="*.class"/>
+                                                    </fileset>
+                                                </classfiles>
+                                                <sourcefiles encoding="UTF-8">
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/src/test/java"/>
+                                                </sourcefiles>
+                                            </structure>
+                                            <check failonviolation="true" violationsproperty="violation">
+                                                <rule element="BUNDLE">
+                                                    <limit counter="INSTRUCTION" value="COVEREDRATIO" minimum="1.00" />
+                                                </rule>
+                                            </check>
+                                            <html destdir="${project.build.directory}/jacoco-external" />
+                                        </report>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
