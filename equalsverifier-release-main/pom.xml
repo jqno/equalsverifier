@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier-parent</artifactId>
-        <version>3.8.4-SNAPSHOT</version>
+        <version>3.9.1-SNAPSHOT</version>
     </parent>
     <packaging>pom</packaging>
 
@@ -21,7 +18,8 @@
         <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
         <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 
     <properties>
         <maven.install.skip>false</maven.install.skip>
@@ -78,15 +76,15 @@
                     <outputDirectory>${project.basedir}/target</outputDirectory>
                     <flattenMode>clean</flattenMode>
                     <pomElements>
-                        <name/>
-                        <description/>
-                        <url/>
-                        <inceptionYear/>
-                        <scm/>
-                        <developers/>
-                        <ciManagement/>
-                        <mailingLists/>
-                        <issueManagement/>
+                        <name />
+                        <description />
+                        <url />
+                        <inceptionYear />
+                        <scm />
+                        <developers />
+                        <ciManagement />
+                        <mailingLists />
+                        <issueManagement />
                     </pomElements>
                 </configuration>
                 <executions>

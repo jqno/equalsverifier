@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier-parent</artifactId>
-        <version>3.8.4-SNAPSHOT</version>
+        <version>3.9.1-SNAPSHOT</version>
     </parent>
 
     <artifactId>equalsverifier-aggregator</artifactId>
@@ -54,17 +51,17 @@
                                         <report>
                                             <executiondata>
                                                 <fileset dir="${project.basedir}/..">
-                                                    <include name="*/target/jacoco.exec"/>
+                                                    <include name="*/target/jacoco.exec" />
                                                 </fileset>
                                             </executiondata>
                                             <structure name="EqualsVerifier: internal coverage">
                                                 <classfiles>
                                                     <fileset dir="${project.basedir}/../equalsverifier-core/target/classes">
-                                                        <include name="**/*.class"/>
+                                                        <include name="**/*.class" />
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.basedir}/../equalsverifier-core/src/main/java"/>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/src/main/java" />
                                                 </sourcefiles>
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">
@@ -77,17 +74,17 @@
                                         <report>
                                             <executiondata>
                                                 <fileset dir="${project.basedir}/..">
-                                                    <include name="*/target/jacoco.exec"/>
+                                                    <include name="*/target/jacoco.exec" />
                                                 </fileset>
                                             </executiondata>
                                             <structure name="EqualsVerifier: external coverage">
                                                 <classfiles>
                                                     <fileset dir="${project.basedir}/../equalsverifier-test-core/target/test-classes/nl/jqno/equalsverifier/coverage">
-                                                        <include name="*.class"/>
+                                                        <include name="*.class" />
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/src/test/java"/>
+                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/src/test/java" />
                                                 </sourcefiles>
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">
