@@ -94,7 +94,7 @@
         <version.slf4j>1.7.35</version.slf4j>
 
         <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
-        <version.checkstyle>9.2.1</version.checkstyle>
+        <version.checkstyle>9.2.1</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issue 216 -->
         <version.flatten-maven-plugin>1.2.7</version.flatten-maven-plugin>
         <version.jacoco>0.8.7</version.jacoco>
         <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
@@ -113,8 +113,6 @@
         <version.spotless.maven>2.20.0</version.spotless.maven>
         <version.spotless.prettier-java>1.6.1</version.spotless.prettier-java>
         <version.spotless.prettier>2.5.1</version.spotless.prettier>
-
-        <checkstyle.version>${version.checkstyle}</checkstyle.version> <!-- Property for Checkstyle's regression CI - see issue 216 -->
     </properties>
 
     <build>
@@ -239,7 +237,7 @@
                             <dependency>
                                 <groupId>com.puppycrawl.tools</groupId>
                                 <artifactId>checkstyle</artifactId>
-                                <version>${checkstyle.version}</version>
+                                <version>${version.checkstyle}</version>
                             </dependency>
                         </dependencies>
                         <configuration>
