@@ -63,8 +63,10 @@
     <properties>
         <encoding>UTF-8</encoding>
         <version.java.base>8</version.java.base>
-        <maven.install.skip>true</maven.install.skip>
         <maven.javadoc.skip>true</maven.javadoc.skip>
+        <maven.install.skip>true</maven.install.skip>
+        <maven.deploy.skip>true</maven.deploy.skip>
+        <gpg.skip>true</gpg.skip>
 
         <argline.module></argline.module>
         <argline.preview></argline.preview>
@@ -103,6 +105,7 @@
         <version.maven-enforcer-plugin>3.0.0</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.2.2</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.3.1</version.maven-javadoc-plugin>
+        <version.maven-release-plugin>2.5.3</version.maven-release-plugin>
         <version.maven-shade-plugin>3.2.4</version.maven-shade-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
         <version.pitest.github>0.1.0</version.pitest.github>
@@ -161,6 +164,18 @@
                 <version>${version.maven-jar-plugin}</version>
                 <configuration>
                     <skipIfEmpty>true</skipIfEmpty>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${version.maven-release-plugin}</version>
+                <configuration>
+                    <tagNameFormat>equalsverifier-@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <pushChanges>false</pushChanges>
+                    <localCheckout>true</localCheckout>
                 </configuration>
             </plugin>
         </plugins>
