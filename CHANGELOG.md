@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- Made submodule dependencies in published `pom.xml` optional, so the Maven Enforcer Plugin won't complain. ([Issue 587](https://github.com/jqno/equalsverifier/discussions/587))
 
 ## [3.9] - 2022-01-31
 ### Changed
