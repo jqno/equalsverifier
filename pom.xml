@@ -94,7 +94,7 @@
         <version.slf4j>1.7.35</version.slf4j>
 
         <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
-        <version.checkstyle>9.2.1</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issue 216 -->
+        <version.checkstyle>9.2.1</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.flatten-maven-plugin>1.2.7</version.flatten-maven-plugin>
         <version.jacoco>0.8.7</version.jacoco>
         <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
@@ -243,38 +243,6 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-checkstyle-plugin</artifactId>
-                        <version>${version.checkstyle.maven}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>com.puppycrawl.tools</groupId>
-                                <artifactId>checkstyle</artifactId>
-                                <version>${version.checkstyle}</version>
-                            </dependency>
-                        </dependencies>
-                        <configuration>
-                            <configLocation>${analysis.checkstyle.config}</configLocation>
-                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <encoding>UTF-8</encoding>
-                            <linkXRef>false</linkXRef>
-                            <consoleOutput>true</consoleOutput>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>run-checkstyle</id>
-                                <phase>verify</phase>
-                                <configuration>
-                                    <failsOnError>true</failsOnError>
-                                </configuration>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
                         <groupId>com.github.spotbugs</groupId>
                         <artifactId>spotbugs-maven-plugin</artifactId>
                         <version>${version.spotbugs.maven}</version>
@@ -381,6 +349,67 @@
             <reporting>
                 <plugins>
                     <plugin>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs-maven-plugin</artifactId>
+                        <version>${spotbugs.maven.version}</version>
+                        <configuration>
+                            <effort>${spotbugs.effort}</effort>
+                            <threshold>${spotbugs.threshold}</threshold>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+
+        <profile>
+            <!-- This profile exists for Checkstyle's regression CI: see issues 216 and 586 -->
+            <id>static-analysis-checkstyle</id>
+            <activation>
+                <jdk>[17,)</jdk>
+                <property>
+                    <name>!disableStaticAnalysis</name>
+                </property>
+            </activation>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${version.checkstyle.maven}</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>${version.checkstyle}</version>
+                            </dependency>
+                        </dependencies>
+                        <configuration>
+                            <configLocation>${analysis.checkstyle.config}</configLocation>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <encoding>UTF-8</encoding>
+                            <linkXRef>false</linkXRef>
+                            <consoleOutput>true</consoleOutput>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>run-checkstyle</id>
+                                <phase>verify</phase>
+                                <configuration>
+                                    <failsOnError>true</failsOnError>
+                                </configuration>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <reporting>
+                <plugins>
+                    <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
                         <version>${version.checkstyle.maven}</version>
@@ -397,16 +426,6 @@
                                 </reports>
                             </reportSet>
                         </reportSets>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.github.spotbugs</groupId>
-                        <artifactId>spotbugs-maven-plugin</artifactId>
-                        <version>${spotbugs.maven.version}</version>
-                        <configuration>
-                            <effort>${spotbugs.effort}</effort>
-                            <threshold>${spotbugs.threshold}</threshold>
-                        </configuration>
                     </plugin>
                 </plugins>
             </reporting>
