@@ -94,7 +94,7 @@
         <version.slf4j>1.7.35</version.slf4j>
 
         <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
-        <version.checkstyle>9.2.1</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
+        <version.checkstyle>9.3</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.flatten-maven-plugin>1.2.7</version.flatten-maven-plugin>
         <version.jacoco>0.8.7</version.jacoco>
         <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
