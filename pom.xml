@@ -91,7 +91,7 @@
         <version.joda-time>2.10.13</version.joda-time>
         <version.junit-jupiter>5.8.2</version.junit-jupiter>
         <version.openjfx>17.0.2</version.openjfx>
-        <version.slf4j>1.7.35</version.slf4j>
+        <version.slf4j>1.7.36</version.slf4j>
 
         <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
         <version.checkstyle>9.3</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
