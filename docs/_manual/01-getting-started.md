@@ -24,9 +24,10 @@ First, add the EqualsVerifier dependency to your build script:
 
 (please adjust for your build system of choice)
 
-If you need to download the jar file directly, you can download it from [maven.org](http://search.maven.org/#search&#124;gav&#124;1&#124;g%3A%22nl.jqno.equalsverifier%22%20AND%20a%3A%22equalsverifier%22). EqualsVerifier doesn't have any transitive dependencies, so this jar is all you need.
+If you need to download the jar files directly, you can download them from [maven.org](https://search.maven.org/search?q=g:nl.jqno.equalsverifier).
 
 ## Use it in a test
+
 This is what EqualsVerfier can look like in your test:
 
 {% highlight java %}

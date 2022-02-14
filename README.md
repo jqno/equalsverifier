@@ -20,6 +20,8 @@ The Maven coordinates are:
 </dependency>
 ```
 
+Note that there's also a 'fat' jar with no transitive dependencies with artifactId `equalsverifier-nodep`.
+
 # Documentation
 
 Please see the [project's website](https://www.jqno.nl/equalsverifier).
