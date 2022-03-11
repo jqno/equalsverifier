@@ -1,5 +1,6 @@
 pom.xml.versionsBackup
 dependency-reduced-pom.xml
+equalsverifier-release-verify/src/test/resources
 
 .project
 .classpath

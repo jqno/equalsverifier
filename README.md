@@ -71,18 +71,20 @@ Here's a description of the modules:
 | equalsverifier-aggregator | generic release assembly description, and shared jacoco configuration |
 | equalsverifier-release-main | release assembly for jar with dependencies |
 | equalsverifier-release-nodep | release assembly for fat jar (with dependencies shaded in) |
+| equalsverifier-release-verify | validation tests for the releases |
 
 ## Signed JAR
 
 The `lib/` folder in the `equalsverifier-test-core` module contains a local Maven repository containing a signed JAR, used to test potential ClassLoader issues. Here's how to install a JAR into it:
 
-```
+```sh
 mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
                         -Dfile=&lt;path-to-file> -DgroupId=&lt;myGroup> \
                         -DartifactId=&lt;myArtifactId> -Dversion=&lt;myVersion> \
                         -Dpackaging=&lt;myPackaging> -DcreateChecksum=true \
                         -DlocalRepositoryPath=equalsverifier-test-core/lib
 ```
+
 The signed JAR itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
 
 # Disclaimer
