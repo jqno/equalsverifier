@@ -97,6 +97,7 @@
         <version.build-helper-maven-plugin>3.3.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.1.2</version.checkstyle.maven>
         <version.checkstyle>10.0</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
+        <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.flatten-maven-plugin>1.2.7</version.flatten-maven-plugin>
         <version.jacoco>0.8.7</version.jacoco>
         <version.maven-antrun-plugin>3.0.0</version.maven-antrun-plugin>
@@ -170,6 +171,39 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${version.maven-javadoc-plugin}</version>
+                <configuration>
+                    <source>${version.java.base}</source>
+                    <doclint>all,-missing</doclint>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${version.maven-source-plugin}</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${version.maven-release-plugin}</version>
                 <configuration>
@@ -208,46 +242,6 @@
                                 <arg>-Xlint:deprecation,removal,rawtypes,unchecked</arg>
                             </compilerArgs>
                         </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${version.maven-javadoc-plugin}</version>
-                        <configuration>
-                            <source>${version.java.base}</source>
-                            <doclint>all,-missing</doclint>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>verify-javadoc</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>javadoc</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>attach-javadoc</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${version.maven-source-plugin}</version>
-                        <executions>
-                            <execution>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
 
                     <plugin>

@@ -25,6 +25,9 @@
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
         <gpg.skip>false</gpg.skip>
+
+        <artifact.javadoc>${project.build.directory}/${project.artifactId}-${project.version}-javadoc.jar</artifact.javadoc>
+        <artifact.sources>${project.build.directory}/${project.artifactId}-${project.version}-sources.jar</artifact.sources>
     </properties>
 
     <build>
@@ -100,6 +103,33 @@
             </plugin>
 
             <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>${version.copy-rename-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>copy-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <sourceFile>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-javadoc.jar</sourceFile>
+                                    <destinationFile>${artifact.javadoc}</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-sources.jar</sourceFile>
+                                    <destinationFile>${artifact.sources}</destinationFile>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <version>${version.build-helper-maven-plugin}</version>
@@ -113,12 +143,12 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-javadoc.jar</file>
+                                    <file>${artifact.javadoc}</file>
                                     <type>jar</type>
                                     <classifier>javadoc</classifier>
                                 </artifact>
                                 <artifact>
-                                    <file>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-sources.jar</file>
+                                    <file>${artifact.sources}</file>
                                     <type>jar</type>
                                     <classifier>sources</classifier>
                                 </artifact>
