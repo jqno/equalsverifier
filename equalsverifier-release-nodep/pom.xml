@@ -98,6 +98,35 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>${version.build-helper-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadoc-and-sources</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attach-artifact</goal>
+                        </goals>
+                        <configuration>
+                            <artifacts>
+                                <artifact>
+                                    <file>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-javadoc.jar</file>
+                                    <type>jar</type>
+                                    <classifier>javadoc</classifier>
+                                </artifact>
+                                <artifact>
+                                    <file>${project.basedir}/../equalsverifier-core/target/equalsverifier-core-${project.version}-sources.jar</file>
+                                    <type>jar</type>
+                                    <classifier>sources</classifier>
+                                </artifact>
+                            </artifacts>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
