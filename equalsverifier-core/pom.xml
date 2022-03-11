@@ -14,6 +14,7 @@
 
     <properties>
         <maven.javadoc.skip>false</maven.javadoc.skip>
+        <maven.source.skip>false</maven.source.skip>
     </properties>
 
     <build>
