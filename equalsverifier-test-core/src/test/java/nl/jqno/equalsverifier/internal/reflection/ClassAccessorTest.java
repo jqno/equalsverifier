@@ -212,11 +212,12 @@ public class ClassAccessorTest {
     public void getDefaultValuesAccessor_withNoNonnullValues() {
         ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
             TypeTag.NULL,
+            false,
             new HashSet<>(),
             defaultValuesAnnotationCache
         );
         DefaultValues foo = objectAccessor.get();
-        assertEquals(null, foo.s);
+        assertNull(foo.s);
         // The rest is tested in getDefaultValuesObject
     }
 
@@ -226,11 +227,25 @@ public class ClassAccessorTest {
         nonnullFields.add("s");
         ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
             TypeTag.NULL,
+            false,
             nonnullFields,
             defaultValuesAnnotationCache
         );
         DefaultValues foo = objectAccessor.get();
-        assertFalse(foo.s == null);
+        assertNotNull(foo.s);
+        // The rest is tested in getDefaultValuesObject
+    }
+
+    @Test
+    public void getDefaultValuesAccessor_whenNullWarningIsSuppressed() {
+        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
+            TypeTag.NULL,
+            true,
+            new HashSet<>(),
+            defaultValuesAnnotationCache
+        );
+        DefaultValues foo = objectAccessor.get();
+        assertNotNull(foo.s);
         // The rest is tested in getDefaultValuesObject
     }
 
@@ -238,11 +253,16 @@ public class ClassAccessorTest {
     public void getDefaultValuesAccessor_objectContent() {
         ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues);
         DefaultValues foo = accessor
-            .getDefaultValuesAccessor(TypeTag.NULL, new HashSet<>(), defaultValuesAnnotationCache)
+            .getDefaultValuesAccessor(
+                TypeTag.NULL,
+                false,
+                new HashSet<>(),
+                defaultValuesAnnotationCache
+            )
             .get();
         assertEquals(0, foo.i);
-        assertEquals(null, foo.s);
-        assertFalse(foo.t == null);
+        assertNull(foo.s);
+        assertNotNull(foo.t);
     }
 
     @Test

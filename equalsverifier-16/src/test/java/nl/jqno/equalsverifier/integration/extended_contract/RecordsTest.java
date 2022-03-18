@@ -4,7 +4,9 @@ import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -25,6 +27,11 @@ public class RecordsTest {
     @Test
     public void succeed_whenClassIsAPrivateRecord() {
         EqualsVerifier.forClass(PrivateSimpleRecord.class).verify();
+    }
+
+    @Test
+    public void succeed_whenConstructorChecksNull() {
+        EqualsVerifier.forClass(NullCheckingRecord.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
@@ -112,6 +119,12 @@ public class RecordsTest {
     record SimpleRecord(int i, String s) {}
 
     private record PrivateSimpleRecord(int i, String s) {}
+
+    record NullCheckingRecord(String s) {
+        public NullCheckingRecord {
+            Objects.requireNonNull(s);
+        }
+    }
 
     record BrokenInvariantIntFieldRecord(int intField, String stringField) {
         public BrokenInvariantIntFieldRecord(int intField, String stringField) {

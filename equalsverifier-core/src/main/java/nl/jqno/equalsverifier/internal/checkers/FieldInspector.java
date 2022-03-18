@@ -38,11 +38,13 @@ public class FieldInspector<T> {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
             ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(
                 typeTag,
+                false,
                 nonnullFields,
                 annotationCache
             );
             ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(
                 typeTag,
+                false,
                 nonnullFields,
                 annotationCache
             );

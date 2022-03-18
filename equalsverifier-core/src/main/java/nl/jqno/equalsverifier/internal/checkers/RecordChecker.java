@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -34,6 +35,7 @@ public class RecordChecker<T> implements Checker {
         verifyRecordPrecondition(
             accessor.getDefaultValuesAccessor(
                 config.getTypeTag(),
+                config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
                 config.getNonnullFields(),
                 config.getAnnotationCache()
             )
