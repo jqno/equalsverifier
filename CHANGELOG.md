@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Support null checks in record constructors with Warning.NULL_FIELDS. ([Issue 610](https://github.com/jqno/equalsverifier/issues/610))
 - Restores javadoc and sources jar files on Maven Central. ([Issue 598](https://github.com/jqno/equalsverifier/issues/598))
 
 ### Changed
