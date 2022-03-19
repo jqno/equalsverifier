@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.9.1] - 2022-03-19
 ### Fixed
 - Support null checks in record constructors with Warning.NULL_FIELDS. ([Issue 610](https://github.com/jqno/equalsverifier/issues/610))
 - Restores javadoc and sources jar files on Maven Central. ([Issue 598](https://github.com/jqno/equalsverifier/issues/598))
@@ -844,8 +846,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 You can now use EqualsVerifier!
 
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.9...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.9.1...HEAD
 
+[3.9.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.9...equalsverifier-3.9.1
 [3.9]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8.3...equalsverifier-3.9
 
 [3.8.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.8.2...equalsverifier-3.8.3
