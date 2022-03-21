@@ -100,18 +100,21 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         ObjectAccessor<T> copyAccessor,
         FieldAccessor fieldAccessor
     ) {
-        Field field = fieldAccessor.getField();
-        boolean fieldIsPrimitive = fieldAccessor.fieldIsPrimitive();
-        boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
-        boolean ignoreNull =
-            fieldIsNonNull ||
-            warningsToSuppress.contains(Warning.NULL_FIELDS) ||
-            nonnullFields.contains(field.getName());
-        if (fieldIsPrimitive || !ignoreNull) {
-            T left = referenceAccessor.withDefaultedField(field).get();
-            T right = copyAccessor.withDefaultedField(field).get();
-            checkReflexivityFor(left, right);
+        if (fieldAccessor.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
+            return;
         }
+
+        Field field = fieldAccessor.getField();
+        boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
+        boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
+        boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());
+        if (nullWarningIsSuppressed || fieldIsNonNull || fieldIsMentionedExplicitly) {
+            return;
+        }
+
+        T left = referenceAccessor.withDefaultedField(field).get();
+        T right = copyAccessor.withDefaultedField(field).get();
+        checkReflexivityFor(left, right);
     }
 
     private void checkReflexivityFor(T left, T right) {

@@ -213,6 +213,7 @@ public class ClassAccessorTest {
         ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
             TypeTag.NULL,
             false,
+            false,
             new HashSet<>(),
             defaultValuesAnnotationCache
         );
@@ -228,6 +229,7 @@ public class ClassAccessorTest {
         ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
             TypeTag.NULL,
             false,
+            false,
             nonnullFields,
             defaultValuesAnnotationCache
         );
@@ -241,6 +243,7 @@ public class ClassAccessorTest {
         ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
             TypeTag.NULL,
             true,
+            false,
             new HashSet<>(),
             defaultValuesAnnotationCache
         );
@@ -250,11 +253,26 @@ public class ClassAccessorTest {
     }
 
     @Test
+    public void getDefaultValuesAccessor_whenZeroWarningIsSuppressed() {
+        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
+            TypeTag.NULL,
+            false,
+            true,
+            new HashSet<>(),
+            defaultValuesAnnotationCache
+        );
+        DefaultValues foo = objectAccessor.get();
+        assertNotEquals(0, foo.i);
+        // The rest is tested in getDefaultValuesObject
+    }
+
+    @Test
     public void getDefaultValuesAccessor_objectContent() {
         ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues);
         DefaultValues foo = accessor
             .getDefaultValuesAccessor(
                 TypeTag.NULL,
+                false,
                 false,
                 new HashSet<>(),
                 defaultValuesAnnotationCache

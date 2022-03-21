@@ -37,6 +37,8 @@ public class FieldInspectorTest {
         AnnotationCache annotationCache = new AnnotationCache();
 
         inspector.checkWithNull(
+            false,
+            false,
             nullFields,
             annotationCache,
             new ResetObjectForEachIterationCheck<>()

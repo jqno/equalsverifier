@@ -31,6 +31,8 @@ public class FieldInspector<T> {
     }
 
     public void checkWithNull(
+        boolean isNullWarningSuppressed,
+        boolean isZeroWarningSuppressed,
         Set<String> nonnullFields,
         AnnotationCache annotationCache,
         FieldCheck<T> check
@@ -38,13 +40,15 @@ public class FieldInspector<T> {
         for (Field field : FieldIterable.of(classAccessor.getType())) {
             ObjectAccessor<T> reference = classAccessor.getDefaultValuesAccessor(
                 typeTag,
-                false,
+                isNullWarningSuppressed,
+                isZeroWarningSuppressed,
                 nonnullFields,
                 annotationCache
             );
             ObjectAccessor<T> changed = classAccessor.getDefaultValuesAccessor(
                 typeTag,
-                false,
+                isNullWarningSuppressed,
+                isZeroWarningSuppressed,
                 nonnullFields,
                 annotationCache
             );

@@ -211,8 +211,10 @@ public class ClassAccessor<T> {
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param isSuppressed Whether reference fields are allowed to be null (a.k.a., whether
+     * @param isWarningNullSuppressed Whether reference fields must be non-null (a.k.a., whether
      *     Warnings.NULL_FIELDS is suppressed).
+     * @param isWarningZeroSuppressed Whether primitive fields must be non-0 (a.k.a., whether
+     *     Warnings.ZERO_FIELDS is suppressed).
      * @param nonnullFields Fields which are not allowed to be set to null.
      * @param annotationCache To check for any NonNull annotations.
      * @return An {@link ObjectAccessor} for an instance of T where all the fields are initialized
@@ -220,29 +222,39 @@ public class ClassAccessor<T> {
      */
     public ObjectAccessor<T> getDefaultValuesAccessor(
         TypeTag enclosingType,
-        boolean isSuppressed,
+        boolean isWarningNullSuppressed,
+        boolean isWarningZeroSuppressed,
         Set<String> nonnullFields,
         AnnotationCache annotationCache
     ) {
         Predicate<Field> canBeDefault = f ->
-            canBeDefault(f, enclosingType, isSuppressed, nonnullFields, annotationCache);
+            canBeDefault(
+                f,
+                enclosingType,
+                isWarningNullSuppressed,
+                isWarningZeroSuppressed,
+                nonnullFields,
+                annotationCache
+            );
         return buildObjectAccessor().clear(canBeDefault, prefabValues, enclosingType);
     }
 
     private boolean canBeDefault(
         Field f,
         TypeTag enclosingType,
-        boolean isSuppressed,
+        boolean isWarningNullSuppressed,
+        boolean isWarningZeroSuppressed,
         Set<String> nonnullFields,
         AnnotationCache annotationCache
     ) {
         FieldAccessor accessor = FieldAccessor.of(f);
         if (accessor.fieldIsPrimitive()) {
-            return true;
+            return !isWarningZeroSuppressed;
         }
+
         boolean isAnnotated = NonnullAnnotationVerifier.fieldIsNonnull(f, annotationCache);
         boolean isMentionedExplicitly = nonnullFields.contains(f.getName());
-        return !isSuppressed && !isAnnotated && !isMentionedExplicitly;
+        return !isWarningNullSuppressed && !isAnnotated && !isMentionedExplicitly;
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {
