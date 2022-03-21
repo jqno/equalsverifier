@@ -36,7 +36,14 @@ public class RecordsTest {
 
     @Test
     public void fail_whenConstructorChecksValue() {
-        EqualsVerifier.forClass(ValueCheckingRecord.class).verify();
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Record:",
+                "failed to invoke constructor",
+                "Warning.ZERO_FIELDS"
+            );
     }
 
     @Test
