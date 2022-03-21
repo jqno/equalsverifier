@@ -181,5 +181,15 @@ public enum Warning {
      * <p>{@code EqualsVerifier} checks for this by default but it can be disabled by suppressing
      * this warning.
      */
-    BIGDECIMAL_EQUALITY
+    BIGDECIMAL_EQUALITY,
+
+    /**
+     * Disables checks with fields with value 0 within {@code equals}, {@code hashCode} and
+     * {@code toString} methods.
+     *
+     * <p>Sometimes the constructor of a class makes sure no field can be 0. If this is the case,
+     * and if the fields cannot be made 0 later in the lifecycle of the class by setters or other
+     * methods, suppress this warning to disable the checks with fields that have value 0.
+     */
+    ZERO_FIELDS
 }

@@ -36,6 +36,7 @@ public class RecordChecker<T> implements Checker {
             accessor.getDefaultValuesAccessor(
                 config.getTypeTag(),
                 config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
+                config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
                 config.getNonnullFields(),
                 config.getAnnotationCache()
             )

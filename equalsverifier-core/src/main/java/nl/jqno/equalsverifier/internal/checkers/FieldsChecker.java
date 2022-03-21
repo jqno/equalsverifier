@@ -76,13 +76,13 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(symmetryFieldCheck);
         inspector.check(transitivityFieldCheck);
 
-        if (!config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
-            inspector.checkWithNull(
-                config.getNonnullFields(),
-                config.getAnnotationCache(),
-                skippingSignificantFieldCheck
-            );
-        }
+        inspector.checkWithNull(
+            config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
+            config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
+            config.getNonnullFields(),
+            config.getAnnotationCache(),
+            skippingSignificantFieldCheck
+        );
 
         if (!config.getWarningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
             inspector.check(bigDecimalFieldCheck);

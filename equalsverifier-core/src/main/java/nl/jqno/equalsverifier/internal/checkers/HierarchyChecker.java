@@ -87,6 +87,7 @@ public class HierarchyChecker<T> implements Checker {
                 classAccessor.getDefaultValuesAccessor(
                     typeTag,
                     config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
+                    config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
                     config.getNonnullFields(),
                     config.getAnnotationCache()
                 )

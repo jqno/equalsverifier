@@ -51,6 +51,7 @@ public class RecordsTest {
         EqualsVerifier
             .forClass(ValueCheckingRecord.class)
             .withPrefabValues(int.class, 10, 11)
+            .suppress(Warning.ZERO_FIELDS)
             .verify();
     }
 
