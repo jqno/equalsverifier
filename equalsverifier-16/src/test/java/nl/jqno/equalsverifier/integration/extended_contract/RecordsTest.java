@@ -35,6 +35,19 @@ public class RecordsTest {
     }
 
     @Test
+    public void fail_whenConstructorChecksValue() {
+        EqualsVerifier.forClass(ValueCheckingRecord.class).verify();
+    }
+
+    @Test
+    public void succeed_whenConstructorChecksValue_givenPrefabValues() {
+        EqualsVerifier
+            .forClass(ValueCheckingRecord.class)
+            .withPrefabValues(int.class, 10, 11)
+            .verify();
+    }
+
+    @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
@@ -123,6 +136,14 @@ public class RecordsTest {
     record NullCheckingRecord(String s) {
         public NullCheckingRecord {
             Objects.requireNonNull(s);
+        }
+    }
+
+    record ValueCheckingRecord(int i) {
+        public ValueCheckingRecord {
+            if (i <= 3) {
+                throw new IllegalStateException("Error: expected " + i + " > 3");
+            }
         }
     }
 
