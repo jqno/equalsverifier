@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Fixed
+- Support records that don't allow 0 values in their fields, with Warning.ZERO_FIELDS. ([Issue 613](https://github.com/jqno/equalsverifier/issues/613))
 
 ## [3.9.1] - 2022-03-19
 ### Fixed
