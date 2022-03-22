@@ -29,7 +29,7 @@
                 <executions>
                     <execution>
                         <id>copy-artifacts</id>
-                        <phase>test-compile</phase>
+                        <phase>compile</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
