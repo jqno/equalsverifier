@@ -1,8 +1,10 @@
 ---
-title: Record: failed to invoke constructor
+title: "Record: failed to invoke constructor"
 ---
     Record: failed to invoke constructor
-    If the record does not accept 0 as a value for its fields, consider providing valid prefab values for those fields and suppressing Warning.ZERO_FIELDS.
+    If the record does not accept 0 as a value for its fields,
+    consider providing valid prefab values for those fields and
+    suppressing Warning.ZERO_FIELDS.
 
 Sometimes, a constructor needs to validate its input, throwing an exception on certain values. This can lead to problems when the value `0` is not allowed, and the constructor is part of a record instead of a regular class, like this:
 
