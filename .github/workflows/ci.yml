@@ -27,16 +27,22 @@ jobs:
             java: 17
             dist: temurin
             flags: ""
+          - title: "Supported JDK 18"
+            continue-on-error: false
+            cache-id: "jdk18"
+            java: 18
+            dist: temurin
+            flags: ""
           - title: "Experimental JDK EA (simplified)"
             continue-on-error: false
             cache-id: "jdk-ea-simple"
-            java: "18-ea"
+            java: "19-ea"
             dist: zulu
             flags: "-Dexperimental -DdisableStaticAnalysis"
           - title: "Experimental JDK EA (full)"
             continue-on-error: true
             cache-id: "jdk-ea-full"
-            java: "18-ea"
+            java: "19-ea"
             dist: zulu
             flags: ""
     runs-on: ubuntu-latest
