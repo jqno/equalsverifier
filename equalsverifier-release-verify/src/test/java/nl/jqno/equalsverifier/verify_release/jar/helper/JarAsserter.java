@@ -11,7 +11,7 @@ import org.junit.jupiter.api.function.Executable;
 
 public class JarAsserter {
 
-    private static final String EV = "nl/jqno/equalsverifier";
+    private static final String EV = "/nl/jqno/equalsverifier";
 
     private final JarReader reader;
 
@@ -19,10 +19,32 @@ public class JarAsserter {
         this.reader = reader;
     }
 
+    public void assertPresenceOfCoreClasses() {
+        assertPresenceOf(
+            EV + "/EqualsVerifier.class",
+            EV + "/internal/reflection/ClassAccessor.class",
+            EV + "/internal/prefabvalues/PrefabValues.class"
+        );
+    }
+
     public void assertPresenceOfMultiReleaseClasses() {
         assertPresenceOf(
-            "/META-INF/versions/16/" + EV + "/internal/reflection/RecordsHelper.class",
-            "/META-INF/versions/17/" + EV + "/internal/reflection/SealedClassesHelper.class"
+            "/META-INF/versions/16" + EV + "/internal/reflection/RecordsHelper.class",
+            "/META-INF/versions/17" + EV + "/internal/reflection/SealedClassesHelper.class"
+        );
+    }
+
+    public void assertPresenceOfEmbeddedDepedencies() {
+        assertPresenceOf(
+            EV + "/internal/lib/bytebuddy/ByteBuddy.class",
+            EV + "/internal/lib/objenesis/Objenesis.class"
+        );
+    }
+
+    public void assertAbsenceOfEmbeddedDepedencies() {
+        assertAbsenceOf(
+            EV + "/internal/lib/bytebuddy/ByteBuddy.class",
+            EV + "/internal/lib/objenesis/Objenesis.class"
         );
     }
 

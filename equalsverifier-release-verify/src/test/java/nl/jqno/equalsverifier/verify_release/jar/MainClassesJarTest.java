@@ -17,7 +17,17 @@ public class MainClassesJarTest {
     }
 
     @Test
+    public void presenceOfCoreClasses() {
+        jar.assertPresenceOfCoreClasses();
+    }
+
+    @Test
     public void presenceOfMultiReleaseClasses() {
         jar.assertPresenceOfMultiReleaseClasses();
+    }
+
+    @Test
+    public void assertAbsenceOfEmbeddedDependencies() {
+        jar.assertAbsenceOfEmbeddedDepedencies();
     }
 }
