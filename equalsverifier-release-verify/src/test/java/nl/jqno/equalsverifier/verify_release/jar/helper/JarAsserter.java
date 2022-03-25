@@ -11,7 +11,7 @@ import org.junit.jupiter.api.function.Executable;
 
 public class JarAsserter {
 
-    private static final String EV = "/nl/jqno/equalsverifier";
+    public static final String EV = "/nl/jqno/equalsverifier";
 
     private final JarReader reader;
 
