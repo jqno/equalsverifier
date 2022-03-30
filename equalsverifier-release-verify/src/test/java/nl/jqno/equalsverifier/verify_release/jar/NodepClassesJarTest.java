@@ -37,4 +37,19 @@ public class NodepClassesJarTest {
     public void assertPresenceOfEmbeddedDependencies() {
         jar.assertPresenceOfEmbeddedDepedencies();
     }
+
+    @Test
+    public void contentOfManifest() {
+        jar.assertContentOfManifest("EqualsVerifier (no dependencies)");
+    }
+
+    @Test
+    public void versionsOfClassFiles() {
+        jar.assertVersionsOfClassFiles();
+    }
+
+    @Test
+    public void versionsOfEmbeddedDependencies() {
+        jar.assertVersionsOfEmbeddedClassFiles();
+    }
 }

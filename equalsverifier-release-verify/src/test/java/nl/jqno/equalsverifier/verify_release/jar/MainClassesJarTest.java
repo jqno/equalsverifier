@@ -37,4 +37,14 @@ public class MainClassesJarTest {
     public void assertAbsenceOfEmbeddedDependencies() {
         jar.assertAbsenceOfEmbeddedDepedencies();
     }
+
+    @Test
+    public void contentOfManifest() {
+        jar.assertContentOfManifest("EqualsVerifier");
+    }
+
+    @Test
+    public void versionsOfClassFiles() {
+        jar.assertVersionsOfClassFiles();
+    }
 }

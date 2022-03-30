@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.verify_release.jar.helper;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,6 +37,16 @@ public class JarReader implements AutoCloseable {
 
     public Set<String> getEntries() {
         return Collections.unmodifiableSet(entries);
+    }
+
+    public byte[] getContentOf(String innerFilename) {
+        var path = fs.getPath(innerFilename);
+        try (var out = new ByteArrayOutputStream()) {
+            Files.copy(path, out);
+            return out.toByteArray();
+        } catch (IOException e) {
+            throw new AssertionError("Failed to read " + innerFilename + " from " + filename, e);
+        }
     }
 
     private FileSystem getFileSystem() {
