@@ -13,7 +13,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class JarReader {
+public class JarReader implements AutoCloseable {
 
     private final String filename;
     private final FileSystem fs;
@@ -23,6 +23,11 @@ public class JarReader {
         this.filename = filename;
         this.fs = getFileSystem();
         this.entries = buildEntryList();
+    }
+
+    @Override
+    public void close() throws Exception {
+        fs.close();
     }
 
     public String getFilename() {
