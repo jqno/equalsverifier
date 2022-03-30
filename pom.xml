@@ -557,6 +557,7 @@
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
                 <module>equalsverifier-release-nodep</module>
+                <module>equalsverifier-release-verify</module>
             </modules>
         </profile>
     </profiles>

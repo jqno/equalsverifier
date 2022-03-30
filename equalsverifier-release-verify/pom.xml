@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>nl.jqno.equalsverifier</groupId>
+        <artifactId>equalsverifier-parent</artifactId>
+        <version>3.10.1-SNAPSHOT</version>
+    </parent>
+    <packaging>jar</packaging>
+
+    <artifactId>equalsverifier-release-verify</artifactId>
+    <name>EqualsVerifier | release verify</name>
+
+    <properties>
+        <maven.compiler.release>17</maven.compiler.release>
+
+        <artifact.src.main>${project.basedir}/../equalsverifier-release-main/target</artifact.src.main>
+        <artifact.src.nodep>${project.basedir}/../equalsverifier-release-nodep/target</artifact.src.nodep>
+        <artifact.dst>${project.basedir}/src/test/resources</artifact.dst>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>${version.copy-rename-maven-plugin}</version>
+                <executions>
+                    <execution>
+                        <id>copy-artifacts</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <fileSets>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.main}/.flattened-pom.xml</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-main.pom</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.main}/equalsverifier-${project.version}.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-main.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.main}/equalsverifier-${project.version}-javadoc.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-main-javadoc.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.main}/equalsverifier-${project.version}-sources.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-main-sources.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.nodep}/.flattened-pom.xml</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-nodep.pom</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.nodep}/equalsverifier-nodep-${project.version}.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-nodep.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.nodep}/equalsverifier-nodep-${project.version}-javadoc.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-nodep-javadoc.jar</destinationFile>
+                                </fileSet>
+                                <fileSet>
+                                    <sourceFile>${artifact.src.nodep}/equalsverifier-nodep-${project.version}-sources.jar</sourceFile>
+                                    <destinationFile>${artifact.dst}/equalsverifier-nodep-sources.jar</destinationFile>
+                                </fileSet>
+                            </fileSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier</artifactId><!-- NOTE: this is the artifactId of the equalsverifier-release-main submodule! -->
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-nodep</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${version.junit-jupiter}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
+
