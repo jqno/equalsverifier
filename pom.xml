@@ -480,6 +480,12 @@
         <profile>
             <!-- This profile is used by the pitest GitHub Actions workflows -->
             <id>pitest</id>
+            <activation>
+                <property>
+                    <name>pitest</name>
+                </property>
+            </activation>
+
             <build>
                 <plugins>
                     <plugin>
@@ -557,6 +563,19 @@
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
                 <module>equalsverifier-release-nodep</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk17-without-pitest</id>
+            <activation>
+                <jdk>[17,)</jdk>
+                <property>
+                    <name>!pitest</name>
+                </property>
+            </activation>
+
+            <modules>
                 <module>equalsverifier-release-verify</module>
             </modules>
         </profile>
