@@ -45,6 +45,7 @@ There are several Maven profiles that can be enabled or disabled:
 | `modules-jdk16` | JDK 16 | Build only the modules that are compatible with Java 16 and up. |
 | `modules-jdk17` | JDK 17 and up | Build all modules and build releaseable artifacts. |
 | `static-analysis` | JDK 17 and up, _and_ `disableStaticAnalysis` property must be off | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis` |
+| `release-verification` | JDK 17 and up, _and_ `disableReleaseVerification` property must be off | Run release verification checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableReleaseVerification` |
 | `argline-preview` | `preview` property must be on | Enable Java preview features. Can be activated by running `mvn verify -Dpreview` |
 | `argline-experimental` | `experimental` property must be on | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
 | `pitest` | `pitest` property must be on | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest` |
