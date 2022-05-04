@@ -26,6 +26,11 @@ Note that there's also a 'fat' jar with no transitive dependencies with artifact
 
 Please see the [project's website](https://www.jqno.nl/equalsverifier).
 
+To generate the website:
+
+* Using Nix: open a `nix-shell` in the `docs/` folder
+* Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
+
 # Contribution
 
 Pull requests are welcome! If you plan to open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it first. It would be a shame to put in a lot of work on something that isn't a good fit for the project. Also, I can help you by giving pointers on where to find certain things.
