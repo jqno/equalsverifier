@@ -28,7 +28,7 @@ Please see the [project's website](https://www.jqno.nl/equalsverifier).
 
 To generate the website:
 
-* Using Nix: open a `nix-shell` in the `docs/` folder
+* Using Docker: start the server by running `docker-compose up`.
 * Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
 # Contribution
