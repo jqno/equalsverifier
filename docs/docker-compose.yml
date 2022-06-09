@@ -1,9 +1,10 @@
 version: '3'
 services:
-  jekyll-serve:
-    image: jekyll/jekyll:4.0
+  jekyll:
+    build:
+      context: .
     volumes:
-      - ".:/srv/jekyll"
+      - ".:/workdir"
     ports:
       - 4000:4000
-    command: 'jekyll serve'
+    command: 'serve'

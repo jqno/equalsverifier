@@ -28,8 +28,8 @@ Please see the [project's website](https://www.jqno.nl/equalsverifier).
 
 To generate the website:
 
-* Using Docker: start the server by running `docker-compose up`.
-* Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
+-   Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
+-   Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
 # Contribution
 
@@ -43,17 +43,17 @@ To build EqualsVerifier, you need [Maven](https://maven.apache.org/). Just call 
 
 There are several Maven profiles that can be enabled or disabled:
 
-| profile | activation | purpose |
-|-|-|-|
-| `modules-jdk8` | JDK 8 up to but not including 11 | Build only the modules that are compatible with Java 8 and up. |
-| `modules-jdk11` | JDK 11 up to but not including 16 | Build only the modules that are compatible with Java 11 and up. |
-| `modules-jdk16` | JDK 16 | Build only the modules that are compatible with Java 16 and up. |
-| `modules-jdk17` | JDK 17 and up | Build all modules and build releaseable artifacts. |
-| `static-analysis` | JDK 17 and up, _and_ `disableStaticAnalysis` property must be off | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis` |
-| `release-verification` | JDK 17 and up, _and_ `disableReleaseVerification` property must be off | Run release verification checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableReleaseVerification` |
-| `argline-preview` | `preview` property must be on | Enable Java preview features. Can be activated by running `mvn verify -Dpreview` |
-| `argline-experimental` | `experimental` property must be on | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
-| `pitest` | `pitest` property must be on | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest` |
+| profile                | activation                                                             | purpose                                                                                                                                                        |
+| ---------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modules-jdk8`         | JDK 8 up to but not including 11                                       | Build only the modules that are compatible with Java 8 and up.                                                                                                 |
+| `modules-jdk11`        | JDK 11 up to but not including 16                                      | Build only the modules that are compatible with Java 11 and up.                                                                                                |
+| `modules-jdk16`        | JDK 16                                                                 | Build only the modules that are compatible with Java 16 and up.                                                                                                |
+| `modules-jdk17`        | JDK 17 and up                                                          | Build all modules and build releaseable artifacts.                                                                                                             |
+| `static-analysis`      | JDK 17 and up, _and_ `disableStaticAnalysis` property must be off      | Run static analysis checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableStaticAnalysis`                                 |
+| `release-verification` | JDK 17 and up, _and_ `disableReleaseVerification` property must be off | Run release verification checks. This only happens on a recent JDK. Can be disabled by running `mvn verify -DdisableReleaseVerification`                       |
+| `argline-preview`      | `preview` property must be on                                          | Enable Java preview features. Can be activated by running `mvn verify -Dpreview`                                                                               |
+| `argline-experimental` | `experimental` property must be on                                     | Enables ByteBuddy experimental features; useful for testing EqualsVerifier on Early Access JDK builds. Can be activated by running `mvn verify -Dexperimental` |
+| `pitest`               | `pitest` property must be on                                           | Used by PITest integration on GitHub. Can be activated by running `mvn verify -Dpitest`                                                                        |
 
 ## Formatting
 
@@ -65,19 +65,19 @@ This project is a multi-module project to make it easier to deal with shading an
 
 Here's a description of the modules:
 
-| module | purpose |
-|-|-|
-| docs | project's Jekyll website |
-| equalsverifier-core | the actual EqualsVerifier code |
-| equalsverifier-11 | tests for Java 11 and up |
-| equalsverifier-16 | logic for records, and corresponding tests |
-| equalsverifier-17 | logic for sealed classes, and corresponding tests |
-| equalsverifier-test-core | tests for the core code |
-| equalsverifier-test-plumbing | helpers for tests that are used by multiple projects |
-| equalsverifier-aggregator | generic release assembly description, and shared jacoco configuration |
-| equalsverifier-release-main | release assembly for jar with dependencies |
-| equalsverifier-release-nodep | release assembly for fat jar (with dependencies shaded in) |
-| equalsverifier-release-verify | validation tests for the releases |
+| module                        | purpose                                                               |
+| ----------------------------- | --------------------------------------------------------------------- |
+| docs                          | project's Jekyll website                                              |
+| equalsverifier-core           | the actual EqualsVerifier code                                        |
+| equalsverifier-11             | tests for Java 11 and up                                              |
+| equalsverifier-16             | logic for records, and corresponding tests                            |
+| equalsverifier-17             | logic for sealed classes, and corresponding tests                     |
+| equalsverifier-test-core      | tests for the core code                                               |
+| equalsverifier-test-plumbing  | helpers for tests that are used by multiple projects                  |
+| equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration |
+| equalsverifier-release-main   | release assembly for jar with dependencies                            |
+| equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)            |
+| equalsverifier-release-verify | validation tests for the releases                                     |
 
 ## Signed JAR
 

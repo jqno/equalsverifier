@@ -68,7 +68,7 @@ collections:
     permalink: /:collection/:path/
 
 # Build settings
-remote_theme: mmistakes/minimal-mistakes@4.20.2
+theme: minimal-mistakes-jekyll
 plugins:
   - jekyll-feed
   - jekyll-include-cache
@@ -84,16 +84,19 @@ include:
 # Excluded items can be processed by explicitly listing the directories or
 # their entries' file path in the `include:` list.
 #
-# exclude:
-#   - .sass-cache/
-#   - .jekyll-cache/
-#   - gemfiles/
-#   - Gemfile
-#   - Gemfile.lock
-#   - node_modules/
-#   - vendor/bundle/
-#   - vendor/cache/
-#   - vendor/gems/
-#   - vendor/ruby/
+exclude:
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - README.md
+  - docker-compose.yml
+  - Dockerfile
 
 github: [metadata]
