@@ -46,3 +46,11 @@ And EqualsVerifier even gives you 100% coverage on `equals` and `hashCode` metho
 Don't forget to add it to your build!
 
 {% include maven %}
+
+## A note on equality
+
+EqualsVerifier cares about bug-free equality, in Java and in real life. The place where a person happens to be born, the colour of their skin, their gender, or the person they happen to love, must not affect the way they are treated in life. If it does, that's a bug and it should throw an error.
+
+Don't allow bugs in your equality.
+
+🌈🧑🏻‍🤝‍🧑🏾🌍

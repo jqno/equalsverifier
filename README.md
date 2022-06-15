@@ -36,6 +36,14 @@ public void equalsContract() {
 
 For more information, please see the [project's website](https://www.jqno.nl/equalsverifier).
 
+# A note on equality
+
+EqualsVerifier cares about bug-free equality, in Java and in real life. The place where a person happens to be born, the colour of their skin, their gender, or the person they happen to love, must not affect the way they are treated in life. If it does, that's a bug and it should throw an error.
+
+Don't allow bugs in your equality.
+
+🌈🧑🏻‍🤝‍🧑🏾🌍
+
 # Contribution
 
 Pull requests are welcome! If you plan to open one, please also [register an issue](https://code.google.com/p/equalsverifier/issues/list) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), so we can discuss it first. It would be a shame to put in a lot of work on something that isn't a good fit for the project. Also, I can help you by giving pointers on where to find certain things.
