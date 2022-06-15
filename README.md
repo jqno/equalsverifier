@@ -9,7 +9,10 @@
 [![Issue resolution](https://isitmaintained.com/badge/resolution/jqno/equalsverifier.svg)](https://isitmaintained.com/project/jqno/equalsverifier "Average time to resolve an issue")
 
 **EqualsVerifier** can be used in Java unit tests to verify whether the contract for the equals and hashCode methods in a class is met.
-The Maven coordinates are:
+
+# Getting Started
+
+EqualsVerifier's Maven coordinates are:
 
 ```xml
 <dependency>
@@ -20,16 +23,18 @@ The Maven coordinates are:
 </dependency>
 ```
 
-Note that there's also a 'fat' jar with no transitive dependencies with artifactId `equalsverifier-nodep`.
+(Note that there's also a 'fat' jar with no transitive dependencies with artifactId `equalsverifier-nodep`.)
 
-# Documentation
+Now you can write a test:
 
-Please see the [project's website](https://www.jqno.nl/equalsverifier).
+```java
+@Test
+public void equalsContract() {
+    EqualsVerifier.forClass(Foo.class).verify();
+}
+```
 
-To generate the website:
-
--   Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
--   Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
+For more information, please see the [project's website](https://www.jqno.nl/equalsverifier).
 
 # Contribution
 
@@ -92,6 +97,13 @@ mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
 ```
 
 The signed JAR itself can be found in [this repo](https://github.com/jqno/equalsverifier-signedjar-test).
+
+## Website
+
+To generate the website
+
+-   Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
+-   Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
 # Disclaimer
 
