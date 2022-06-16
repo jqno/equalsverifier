@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class SimpleEqualsVerifierTest {
@@ -56,6 +57,13 @@ public class SimpleEqualsVerifierTest {
             )
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");
+    }
+
+    @Test
+    public void testValidatePackageContainsClassesAndValidate() throws Exception {
+        Assertions.assertThrows(IllegalStateException.class, () -> {
+                    EqualsVerifier.simple().forPackage("some name", true).verify();
+                });
     }
 
     public static class SimplePoint {
