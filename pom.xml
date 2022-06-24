@@ -77,7 +77,7 @@
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
 
-        <version.bytebuddy>1.12.10</version.bytebuddy>
+        <version.bytebuddy>1.12.11</version.bytebuddy>
         <version.objenesis>3.2</version.objenesis>
 
         <version.archunit>0.23.1</version.archunit>
