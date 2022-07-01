@@ -4,7 +4,7 @@ services:
     build:
       context: .
     volumes:
-      - ".:/workdir"
+      - ".:/workdir:Z"
     ports:
       - 4000:4000
     command: 'serve'
