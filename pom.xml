@@ -113,7 +113,7 @@
         <version.pitest.github>0.1.0</version.pitest.github>
         <version.pitest.junit5>1.0.0</version.pitest.junit5>
         <version.pitest.maven>1.9.2</version.pitest.maven>
-        <version.spotbugs.maven>4.7.0.0</version.spotbugs.maven>
+        <version.spotbugs.maven>4.7.1.0</version.spotbugs.maven>
         <version.spotbugs>4.7.1</version.spotbugs>
         <version.spotless.maven>2.22.8</version.spotless.maven>
         <version.spotless.prettier-java>1.6.1</version.spotless.prettier-java>
