@@ -46,4 +46,12 @@ class Cache {
     public boolean contains(TypeTag tag) {
         return cache.containsKey(tag);
     }
+
+    public String doNothingButTriggerAPitestWarning() {
+        if (1 == Integer.valueOf(1)) {
+            return "true";
+        } else {
+            return "false";
+        }
+    }
 }
