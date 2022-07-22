@@ -38,7 +38,7 @@ public final class PackageScanner {
                     .stream()
                     .map(r -> new File(r.getFile()))
                     .collect(Collectors.toList()),
-            "Could not scan package " + packageName
+            e -> "Could not scan package " + packageName
         );
     }
 
@@ -72,7 +72,11 @@ public final class PackageScanner {
         String className = file.getName().substring(0, file.getName().length() - 6);
         return rethrow(
             () -> Class.forName(packageName + "." + className),
-            "Could not resolve class " + className + ", which was found in package " + packageName
+            e ->
+                "Could not resolve class " +
+                className +
+                ", which was found in package " +
+                packageName
         );
     }
 }

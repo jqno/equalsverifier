@@ -194,7 +194,7 @@ public final class JavaApiPrefabValues {
                     new URL("http://localhost"),
                     new URL("http://example.com")
                 ),
-            "Can't add prefab values for java.net.URL"
+            e -> "Can't add prefab values for java.net.URL"
         );
 
         addFactory(
@@ -535,7 +535,7 @@ public final class JavaApiPrefabValues {
                 Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
                 addValues(Field.class, f1, f2, f1);
             },
-            "Can't add prefab values for java.lang.reflect.Field"
+            e -> "Can't add prefab values for java.lang.reflect.Field"
         );
 
         rethrow(
@@ -546,7 +546,7 @@ public final class JavaApiPrefabValues {
                     JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
                 addValues(Constructor.class, c1, c2, c1);
             },
-            "Can't add prefab values for java.lang.reflect.Constructor"
+            e -> "Can't add prefab values for java.lang.reflect.Constructor"
         );
 
         rethrow(
@@ -555,7 +555,7 @@ public final class JavaApiPrefabValues {
                 Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
                 addValues(Method.class, m1, m2, m1);
             },
-            "Can't add prefab values for java.lang.reflect.Method"
+            e -> "Can't add prefab values for java.lang.reflect.Method"
         );
     }
 
