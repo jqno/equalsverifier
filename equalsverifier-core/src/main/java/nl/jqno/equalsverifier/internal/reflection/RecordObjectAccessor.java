@@ -139,10 +139,22 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     private T callRecordConstructor(List<?> params) {
         return rethrow(
             () -> constructor.newInstance(params.toArray(new Object[0])),
-            e ->
-                "Record: failed to invoke constructor.\n" +
-                "  If the record does not accept 0 as a value for its fields," +
-                " consider providing valid prefab values for those fields and suppressing Warning.ZERO_FIELDS."
+            this::buildMessage
+        );
+    }
+
+    private String buildMessage(Throwable e) {
+        if (e.getCause() instanceof NullPointerException) {
+            return (
+                "Record: failed to run constructor.\n" +
+                "  If the record does not accept null values for its constructor parameters," +
+                " consider suppressing Warning.NULL_FIELDS."
+            );
+        }
+        return (
+            "Record: failed to run constructor.\n" +
+            "  If the record does not accept 0 as a value for its constructor parameters," +
+            " consider providing valid prefab values for those fields and suppressing Warning.ZERO_FIELDS."
         );
     }
 }

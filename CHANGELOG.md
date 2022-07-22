@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- Improve message when record constructor throws NPE. ([Issue 613](https://github.com/jqno/equalsverifier/issues/613#issuecomment-1168433464) and [Issue 668](https://github.com/jqno/equalsverifier/issues/668))
 
 ## [3.10] - 2022-03-22
 ### Fixed

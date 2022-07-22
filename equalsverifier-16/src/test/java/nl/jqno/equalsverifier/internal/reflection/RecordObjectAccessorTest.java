@@ -49,7 +49,7 @@ public class RecordObjectAccessorTest {
         ExpectedException
             .when(() -> create(instance).copy())
             .assertThrows(ReflectionException.class)
-            .assertMessageContains("Record:", "failed to invoke constructor");
+            .assertMessageContains("Record:", "failed to run constructor");
     }
 
     @SuppressWarnings("unchecked")
