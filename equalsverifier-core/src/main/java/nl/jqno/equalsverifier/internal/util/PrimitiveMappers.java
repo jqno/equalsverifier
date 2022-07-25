@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +16,7 @@ public final class PrimitiveMappers {
     public static final Map<Class<?>, Object> DEFAULT_WRAPPED_VALUE_MAPPER = createDefaultValueMapper(
         true
     );
+    public static final Collection<Object> ZEROS = DEFAULT_WRAPPED_VALUE_MAPPER.values();
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
         Map<Class<?>, Class<?>> result = new HashMap<>();

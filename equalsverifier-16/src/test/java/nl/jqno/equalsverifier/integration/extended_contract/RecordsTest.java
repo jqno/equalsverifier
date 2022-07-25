@@ -47,7 +47,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
             .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "Warning.ZERO_FIELDS");
+            .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }
 
     @Test
