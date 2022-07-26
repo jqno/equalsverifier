@@ -13,12 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.10.1] - 2022-07-26
 ### Changed
 - Improve message when record constructor throws NPE. ([Issue 613](https://github.com/jqno/equalsverifier/issues/613#issuecomment-1168433464) and [Issue 668](https://github.com/jqno/equalsverifier/issues/668))
+
 
 ## [3.10] - 2022-03-22
 ### Fixed
 - Support records that don't allow 0 values in their fields, with Warning.ZERO_FIELDS. ([Issue 613](https://github.com/jqno/equalsverifier/issues/613))
+
 
 ## [3.9.1] - 2022-03-19
 ### Fixed
@@ -28,9 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Made submodule dependencies in published `pom.xml` optional, so the Maven Enforcer Plugin won't complain. ([Issue 587](https://github.com/jqno/equalsverifier/discussions/587))
 
+
 ## [3.9] - 2022-01-31
 ### Changed
 - EqualsVerifier is now released as a multi-release JAR file, in two variants: `equalsverifier` and `equalsverifier-nodep`. `equalsverifier-nodep` has all its dependencies shaded into a fat jar file; `equalsverifier` has dependencies. Note that until now, `equalsverifier` was the only artifact, and it was a shaded fat jar. ([Issue 575](https://github.com/jqno/equalsverifier/issues/575))
+
 
 ## [3.8.3] - 2022-01-25
 ### Added
@@ -39,14 +45,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Exception when testing sealed classes that redefine equals. ([Issue 564](https://github.com/jqno/equalsverifier/issues/564#issuecomment-1016495005))
 
+
 ## [3.8.2] - 2022-01-04
 ### Fixed
 - Exception when testing sealed classes that redefine equals. ([Issue 564](https://github.com/jqno/equalsverifier/issues/564))
 - References to the EqualsVerifier wesbite are now switched to https. ([Issue 559](https://github.com/jqno/equalsverifier/issues/559); thanks dfa1!)
 
+
 ## [3.8.1] - 2021-12-15
 ### Fixed
 - Uncaught NullPointerException in certain cases when a used field throws it. ([Issue 552](https://github.com/jqno/equalsverifier/issues/552))
+- 
 
 ## [3.8] - 2021-12-03
 ### Added
@@ -851,9 +860,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 ## [0.1] - 2009-06-01
 You can now use EqualsVerifier!
 
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10.1...HEAD
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10...HEAD
-
+[3.10.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10...equalsverifier-3.10.1
 [3.10]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.9.1...equalsverifier-3.10
 
 [3.9.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.9...equalsverifier-3.9.1
@@ -986,8 +995,7 @@ You can now use EqualsVerifier!
 [0.6]: https://github.com/jqno/equalsverifier/compare/version_0_5...version_0_6
 
 [0.5]: https://github.com/jqno/equalsverifier/commits/version_0_5
-[0.4]: https://github.com/jqno/equalsverifier/compare/8b2b6f8...a30ff4b 
+[0.4]: https://github.com/jqno/equalsverifier/compare/8b2b6f8...a30ff4b
 [0.3]: https://github.com/jqno/equalsverifier/compare/version_0_2...version_0_3
 [0.2]: https://github.com/jqno/equalsverifier/compare/version_0_1...version_0_2
 [0.1]: https://github.com/jqno/equalsverifier/commits/version_0_1
-
