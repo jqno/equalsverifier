@@ -24,7 +24,7 @@ public class RethrowTest {
     @Test
     public void supplierWithIgnoredMessageThrowsRuntimeException() {
         ExpectedException
-            .when(() -> rethrow(supply(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(supply(new RuntimeException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(RuntimeException.class)
             .assertMessageContains(CAUSE_MSG);
     }
@@ -32,7 +32,7 @@ public class RethrowTest {
     @Test
     public void supplierWithMessageThrowsReflectiveOperationException() {
         ExpectedException
-            .when(() -> rethrow(supply(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(supply(new IllegalAccessException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(ReflectionException.class)
             .assertMessageContains(PROVIDED_MSG);
     }
@@ -40,7 +40,7 @@ public class RethrowTest {
     @Test
     public void supplierWithMessageThrowsException() {
         ExpectedException
-            .when(() -> rethrow(supply(new IOException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(supply(new IOException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(EqualsVerifierInternalBugException.class)
             .assertMessageContains(PROVIDED_MSG);
     }
@@ -72,7 +72,7 @@ public class RethrowTest {
     @Test
     public void runnableWithIgnoredMessageThrowsRuntimeException() {
         ExpectedException
-            .when(() -> rethrow(run(new RuntimeException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(run(new RuntimeException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(RuntimeException.class)
             .assertMessageContains(CAUSE_MSG);
     }
@@ -80,7 +80,7 @@ public class RethrowTest {
     @Test
     public void runnableWithMessageThrowsReflectiveOperationException() {
         ExpectedException
-            .when(() -> rethrow(run(new IllegalAccessException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(run(new IllegalAccessException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(ReflectionException.class)
             .assertMessageContains(PROVIDED_MSG);
     }
@@ -88,7 +88,7 @@ public class RethrowTest {
     @Test
     public void runnableWithMessageThrowsException() {
         ExpectedException
-            .when(() -> rethrow(run(new IOException(CAUSE_MSG)), PROVIDED_MSG))
+            .when(() -> rethrow(run(new IOException(CAUSE_MSG)), e -> PROVIDED_MSG))
             .assertThrows(EqualsVerifierInternalBugException.class)
             .assertMessageContains(PROVIDED_MSG);
     }

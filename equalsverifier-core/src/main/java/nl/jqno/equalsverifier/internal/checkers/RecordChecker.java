@@ -62,7 +62,7 @@ public class RecordChecker<T> implements Checker {
                     failedFields.add(f.getName());
                 }
             } catch (IllegalAccessException | InvocationTargetException e) {
-                fail(Formatter.of("Record: failed to invoke accessor method: " + accessorMethod));
+                fail(Formatter.of("Record: failed to run accessor method: " + accessorMethod));
             }
         }
 

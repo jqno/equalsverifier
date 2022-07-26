@@ -30,7 +30,15 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenConstructorChecksNull() {
+    public void fail_whenConstructorChecksNull() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(NullCheckingRecord.class).verify())
+            .assertFailure()
+            .assertMessageContains("Record:", "failed to run constructor", "Warning.NULL_FIELDS");
+    }
+
+    @Test
+    public void succeed_whenConstructorChecksNull_givenSuppressedWarning() {
         EqualsVerifier.forClass(NullCheckingRecord.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
@@ -39,11 +47,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
             .assertFailure()
-            .assertMessageContains(
-                "Record:",
-                "failed to invoke constructor",
-                "Warning.ZERO_FIELDS"
-            );
+            .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }
 
     @Test
@@ -97,7 +101,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify())
             .assertFailure()
-            .assertMessageContains("Record", "failed to invoke constructor");
+            .assertMessageContains("Record", "failed to run constructor");
     }
 
     @Test
@@ -105,7 +109,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(NullFieldRecord.class).verify())
             .assertFailure()
-            .assertMessageContains("Record", "failed to invoke constructor");
+            .assertMessageContains("Record", "failed to run constructor");
     }
 
     @Test
@@ -113,7 +117,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
             .assertFailure()
-            .assertMessageContains("Record", "failed to invoke accessor method");
+            .assertMessageContains("Record", "failed to run accessor method");
     }
 
     @Test
@@ -121,7 +125,7 @@ public class RecordsTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
             .assertFailure()
-            .assertMessageContains("Record", "failed to invoke accessor method", "s()");
+            .assertMessageContains("Record", "failed to run accessor method", "s()");
     }
 
     @Test

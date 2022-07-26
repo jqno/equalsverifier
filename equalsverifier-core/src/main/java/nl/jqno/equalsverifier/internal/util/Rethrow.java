@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
@@ -25,23 +26,26 @@ public final class Rethrow {
     /** Do not instantiate. */
     private Rethrow() {}
 
-    public static <T> T rethrow(ThrowingSupplier<T> supplier, String errorMessage) {
+    public static <T> T rethrow(
+        ThrowingSupplier<T> supplier,
+        Function<Throwable, String> errorMessage
+    ) {
         try {
             return supplier.get();
         } catch (RuntimeException e) {
             throw e;
         } catch (ReflectiveOperationException e) {
-            throw new ReflectionException(msg(errorMessage, e), e);
+            throw new ReflectionException(errorMessage.apply(e), e);
         } catch (Exception e) {
-            throw new EqualsVerifierInternalBugException(msg(errorMessage, e), e);
+            throw new EqualsVerifierInternalBugException(errorMessage.apply(e), e);
         }
     }
 
     public static <T> T rethrow(ThrowingSupplier<T> supplier) {
-        return rethrow(supplier, null);
+        return rethrow(supplier, e -> e.getMessage());
     }
 
-    public static void rethrow(ThrowingRunnable block, String errorMessage) {
+    public static void rethrow(ThrowingRunnable block, Function<Throwable, String> errorMessage) {
         rethrow(
             () -> {
                 block.run();
@@ -52,11 +56,7 @@ public final class Rethrow {
     }
 
     public static void rethrow(ThrowingRunnable block) {
-        rethrow(block, null);
-    }
-
-    private static String msg(String errorMessage, Throwable e) {
-        return errorMessage != null ? errorMessage : e.getMessage();
+        rethrow(block, e -> e.getMessage());
     }
 
     @FunctionalInterface
