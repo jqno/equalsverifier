@@ -6,6 +6,11 @@ EqualsVerifier should get 100% code coverage on your `equals` and `hashCode` met
 If you have an example of a class where EqualsVerifier doesn't give you 100% coverage, and it's not in the list below, please [let me know](/equalsverifier/help).
 
 
+Mutation coverage
+---
+You can measure mutation coverage using a tool like [PITest](http://pitest.org/). However, EqualsVerifier will not get 100% mutation coverage on `hashCode`. Mutation testing will change operators like `*` and `+` in the `hashCode` implementation into other operators and check if the tests then fail, which they often don't. The only way to get 100% mutation coverage, is to "pin down" the hashCode to a specific value, which is a form of [overfitting](https://en.wikipedia.org/wiki/Overfitting). Therefore, it's not desitable to have 100% mutation coverage on `hashCode`.
+
+
 Using Lombok
 ---
 Lombok always generates null checks in its `equals` methods, even if there is an `@Nonnull` annotation. For example:
