@@ -34,6 +34,17 @@ public void equalsContract() {
 }
 ```
 
+EqualsVerifier is an opinionated library, which means that it can be quite strict. If you feel it's too much, you can make it more lenient:
+
+```java
+@Test
+public void equalsContract() {
+    EqualsVerifier.simple().forClass(Foo.class).verify();
+}
+```
+
+This way, EqualsVerifier will throw less errors at you. However, it's usually better to just fix the errors: EqualsVerifier throws them for a reason!
+
 For more information, please see the [project's website](https://www.jqno.nl/equalsverifier).
 
 # A note on equality

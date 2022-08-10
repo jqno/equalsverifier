@@ -32,7 +32,7 @@ public void equalsContract() {
 }
 {% endhighlight %}
 
-If you feel EqualsVerifier is too strict, you can make it more lenient:
+EqualsVerifier is an opinionated library, which means that it can be quite strict. If you feel it's too much, you can make it more lenient:
 
 {% highlight java %}
 @Test
