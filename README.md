@@ -47,6 +47,12 @@ This way, EqualsVerifier will throw less errors at you. However, it's usually be
 
 For more information, please see the [project's website](https://www.jqno.nl/equalsverifier).
 
+## Prefer to watch a short video?
+
+[![EqualsVerifier getting started video by Tom Cools](video.png)](http://www.youtube.com/watch?v=ivRjf8yvVMk "Video Title")
+
+<small>Video by [Tom Cools](https://twitter.com/TCoolsIT)</small>
+
 # A note on equality
 
 EqualsVerifier cares about bug-free equality, in Java and in real life. The place where a person happens to be born, the colour of their skin, their gender, or the person they happen to love, must not affect the way they are treated in life. If it does, that's a bug and it should throw an error.
