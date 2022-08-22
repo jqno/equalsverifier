@@ -28,7 +28,7 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [NoClassDefFoundError](/equalsverifier/errormessages/noclassdeffounderror)
 * [Non-nullity: equals/hashCode/toString throws NullPointerException](/equalsverifier/errormessages/non-nullity-equals-hashcode-tostring-throws-nullpointerexception)
 * [Precondition: two objects are equal to each other](/equalsverifier/errormessages/precondition-two-objects-are-equal-to-each-other)
-* [Record: failed to invoke constructor](/equalsverifier/errormessages/record-failed-to-invoke-constructor)
+* [Record: failed to run constructor](/equalsverifier/errormessages/record-failed-to-run-constructor)
 * [Recursive datastructure](/equalsverifier/errormessages/recursive-datastructure)
 * [Redefined superclass: object should not equal superclass instance](/equalsverifier/errormessages/redefined-superclass-object-should-not-equal-superclass-instance)
 * [Significant fields: equals does not use foo, or it is stateless](/equalsverifier/errormessages/significant-fields-equals-does-not-use-foo-or-it-is-stateless)
