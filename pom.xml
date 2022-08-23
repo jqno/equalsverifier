@@ -22,8 +22,8 @@
         <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
         <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -512,9 +512,8 @@
             </activation>
 
             <modules>
-                <module>equalsverifier-core</module>
                 <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-core</module>
             </modules>
         </profile>
 
@@ -525,9 +524,8 @@
             </activation>
 
             <modules>
-                <module>equalsverifier-core</module>
                 <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-core</module>
                 <module>equalsverifier-11</module>
             </modules>
         </profile>
@@ -539,9 +537,8 @@
             </activation>
 
             <modules>
-                <module>equalsverifier-core</module>
                 <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-core</module>
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
             </modules>
@@ -554,9 +551,8 @@
             </activation>
 
             <modules>
-                <module>equalsverifier-core</module>
                 <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
+                <module>equalsverifier-core</module>
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
