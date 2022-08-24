@@ -7,7 +7,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 
 public class SignatureTest {
 
@@ -72,9 +71,9 @@ public class SignatureTest {
         EqualsVerifier.forClass(StaticEqualsMethod.class).verify();
     }
 
-    private void expectOverloadFailure(String extraMessage, Executable executable) {
+    private void expectOverloadFailure(String extraMessage, Runnable runnable) {
         ExpectedException
-            .when(executable)
+            .when(runnable)
             .assertFailure()
             .assertMessageContains(OVERLOADED, SIGNATURE_SHOULD_BE, SIGNATURE, extraMessage);
     }

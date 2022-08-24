@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -12,6 +11,10 @@ public final class Util {
 
     private Util() {}
 
+    @SuppressFBWarnings(
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "Only called in test code, not production."
+    )
     public static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
@@ -28,11 +31,15 @@ public final class Util {
                 }
             }
         } catch (IllegalAccessException e) {
-            fail(e.toString());
+            throw new AssertionError(e.toString(), e);
         }
         return equals;
     }
 
+    @SuppressFBWarnings(
+        value = "DP_DO_INSIDE_DO_PRIVILEGED",
+        justification = "Only called in test code, not production."
+    )
     public static int defaultHashCode(Object x) {
         int hash = 59;
         try {
@@ -44,7 +51,7 @@ public final class Util {
                 }
             }
         } catch (IllegalAccessException e) {
-            fail(e.toString());
+            throw new AssertionError(e.toString(), e);
         }
         return hash;
     }
@@ -59,7 +66,7 @@ public final class Util {
             constructor.setAccessible(true);
             constructor.newInstance();
         } catch (Exception e) {
-            fail("Could not call constructor of " + type.getName());
+            throw new AssertionError("Could not call constructor of " + type.getName(), e);
         }
     }
 }

@@ -72,7 +72,7 @@
         <argline.experimental />
         <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
 
-        <analysis.jacoco.threshold>0.97</analysis.jacoco.threshold>
+        <analysis.jacoco.threshold>0.96</analysis.jacoco.threshold>
         <analysis.checkstyle.config>checkstyle-config.xml</analysis.checkstyle.config>
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>

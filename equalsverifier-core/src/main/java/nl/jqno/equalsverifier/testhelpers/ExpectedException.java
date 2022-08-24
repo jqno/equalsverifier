@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.testhelpers;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import org.junit.jupiter.api.function.Executable;
 
+@SuppressFBWarnings(
+    value = "NM_CLASS_NOT_EXCEPTION",
+    justification = "Only called in test code, not production."
+)
 public final class ExpectedException {
 
     private final Throwable e;
@@ -15,9 +15,9 @@ public final class ExpectedException {
         this.e = e;
     }
 
-    public static ExpectedException when(Executable executable) {
+    public static ExpectedException when(Runnable runnable) {
         try {
-            executable.execute();
+            runnable.run();
             return new ExpectedException(null);
         } catch (Throwable e) {
             return new ExpectedException(e);
@@ -25,15 +25,18 @@ public final class ExpectedException {
     }
 
     public ExpectedException assertThrows(Class<? extends Throwable> expectedException) {
-        assertNotNull(e, "Expected " + expectedException.getSimpleName() + " but none was thrown.");
-        assertTrue(
-            expectedException.isInstance(e),
-            "Expected " +
-            expectedException.getCanonicalName() +
-            " but was " +
-            e.getClass().getCanonicalName() +
-            "."
-        );
+        if (e == null) {
+            fail("Expected " + expectedException.getSimpleName() + " but none was thrown.");
+        }
+        if (!expectedException.isInstance(e)) {
+            fail(
+                "Expected " +
+                expectedException.getCanonicalName() +
+                " but was " +
+                e.getClass().getCanonicalName() +
+                "."
+            );
+        }
         return this;
     }
 
@@ -137,5 +140,9 @@ public final class ExpectedException {
             }
         }
         return this;
+    }
+
+    private void fail(String msg) {
+        throw new AssertionError(msg);
     }
 }
