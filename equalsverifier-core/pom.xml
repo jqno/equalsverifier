@@ -125,12 +125,6 @@
             <version>${version.commons-lang3}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>nl.jqno.equalsverifier</groupId>
-            <artifactId>equalsverifier-test-plumbing</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Third party dependencies that should be supported -->
         <dependency>
