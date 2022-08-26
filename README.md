@@ -102,8 +102,6 @@ Here's a description of the modules:
 | equalsverifier-11             | tests for Java 11 and up                                              |
 | equalsverifier-16             | logic for records, and corresponding tests                            |
 | equalsverifier-17             | logic for sealed classes, and corresponding tests                     |
-| equalsverifier-test-core      | tests for the core code                                               |
-| equalsverifier-test-plumbing  | helpers for tests that are used by multiple projects                  |
 | equalsverifier-aggregator     | generic release assembly description, and shared jacoco configuration |
 | equalsverifier-release-main   | release assembly for jar with dependencies                            |
 | equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)            |
