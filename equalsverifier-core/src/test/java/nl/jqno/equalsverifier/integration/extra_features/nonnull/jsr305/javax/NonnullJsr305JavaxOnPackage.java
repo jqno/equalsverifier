@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 public final class NonnullJsr305JavaxOnPackage {
 

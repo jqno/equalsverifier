@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class VersionedEntityTest {

@@ -1,7 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -12,8 +16,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.types.Point3D;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -105,21 +108,21 @@ public class RecordObjectAccessorScramblingTest {
                 );
         Object instance = constructor.newInstance(
             new GenericContainer<String>(new ArrayList<String>()),
-            new GenericContainer<Point3D>(new ArrayList<Point3D>())
+            new GenericContainer<Point>(new ArrayList<Point>())
         );
         ObjectAccessor<?> accessor = create(instance);
 
         assertTrue(GenericContainer.<String>cast(fieldValue(accessor, "strings")).ts.isEmpty());
-        assertTrue(GenericContainer.<Point3D>cast(fieldValue(accessor, "points")).ts.isEmpty());
+        assertTrue(GenericContainer.<Point>cast(fieldValue(accessor, "points")).ts.isEmpty());
 
         ObjectAccessor<?> scrambled = doScramble(instance);
 
         List<String> strings = GenericContainer.<String>cast(fieldValue(scrambled, "strings")).ts;
         assertFalse(strings.isEmpty());
         assertEquals(String.class, strings.get(0).getClass());
-        List<Point3D> points = GenericContainer.<Point3D>cast(fieldValue(scrambled, "points")).ts;
+        List<Point> points = GenericContainer.<Point>cast(fieldValue(scrambled, "points")).ts;
         assertFalse(points.isEmpty());
-        assertEquals(Point3D.class, points.get(0).getClass());
+        assertEquals(Point.class, points.get(0).getClass());
     }
 
     @SuppressWarnings("unchecked")
@@ -164,6 +167,6 @@ public class RecordObjectAccessorScramblingTest {
 
     record GenericContainerContainer(
         GenericContainer<String> strings,
-        GenericContainer<Point3D> points
+        GenericContainer<Point> points
     ) {}
 }

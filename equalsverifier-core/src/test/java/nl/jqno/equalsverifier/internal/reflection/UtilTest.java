@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
-import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.GregorianCalendar;

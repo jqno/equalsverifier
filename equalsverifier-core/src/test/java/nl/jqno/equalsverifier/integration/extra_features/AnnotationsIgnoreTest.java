@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import edu.umd.cs.findbugs.annotations.DefaultAnnotation;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.DefaultNonnullJavax;
 import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;

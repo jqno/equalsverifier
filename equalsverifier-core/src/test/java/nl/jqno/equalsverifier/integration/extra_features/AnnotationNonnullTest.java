@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
@@ -16,7 +16,7 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.custom.N
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.inapplicable.NonnullJsr305InapplicableOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305JavaxOnPackage;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.javax.NonnullJsr305WithCheckForNullOnPackage;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 import org.junit.jupiter.api.Test;
 

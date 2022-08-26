@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
 import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;

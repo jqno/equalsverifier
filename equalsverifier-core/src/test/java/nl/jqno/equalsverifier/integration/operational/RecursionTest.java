@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import com.google.common.collect.ImmutableList;
 import java.util.Collection;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

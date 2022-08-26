@@ -1,11 +1,23 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.*;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Map;
 import java.util.Objects;
-import javafx.beans.property.*;
-import javafx.collections.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.MapProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
+import javafx.collections.ObservableSet;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;

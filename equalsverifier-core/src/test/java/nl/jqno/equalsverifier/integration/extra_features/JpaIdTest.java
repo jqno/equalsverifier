@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.EmbeddedId;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;

@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.ArrayList;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class JavaCollectionSubclassTest {

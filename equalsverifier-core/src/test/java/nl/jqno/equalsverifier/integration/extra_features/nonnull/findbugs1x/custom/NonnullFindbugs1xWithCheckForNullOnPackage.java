@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 public final class NonnullFindbugs1xWithCheckForNullOnPackage {
 

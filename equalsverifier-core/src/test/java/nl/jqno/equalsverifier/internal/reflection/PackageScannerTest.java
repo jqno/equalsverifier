@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

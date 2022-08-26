@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import nl.jqno.equalsverifier.testhelpers.Util;
+import nl.jqno.equalsverifier.internal.testhelpers.Util;
 import org.junit.jupiter.api.Test;
 
 public class InstanceofPatternMatchTest {

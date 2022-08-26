@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.coverThePrivateConstructor;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class AssertTest {

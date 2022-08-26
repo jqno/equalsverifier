@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;

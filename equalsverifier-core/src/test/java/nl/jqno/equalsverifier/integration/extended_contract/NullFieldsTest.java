@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 

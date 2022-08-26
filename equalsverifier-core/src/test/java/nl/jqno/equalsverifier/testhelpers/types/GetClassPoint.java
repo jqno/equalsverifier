@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.testhelpers.types;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 public class GetClassPoint {
 

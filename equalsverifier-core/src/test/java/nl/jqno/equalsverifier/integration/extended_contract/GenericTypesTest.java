@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultHashCode;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import com.google.common.collect.*;
 import java.util.*;
