@@ -22,8 +22,8 @@
         <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
         <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <licenses>
         <license>
@@ -72,7 +72,7 @@
         <argline.experimental />
         <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
 
-        <analysis.jacoco.threshold>0.97</analysis.jacoco.threshold>
+        <analysis.jacoco.threshold>0.96</analysis.jacoco.threshold>
         <analysis.checkstyle.config>checkstyle-config.xml</analysis.checkstyle.config>
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
@@ -513,8 +513,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
             </modules>
         </profile>
 
@@ -526,8 +524,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
                 <module>equalsverifier-11</module>
             </modules>
         </profile>
@@ -540,8 +536,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
             </modules>
@@ -555,8 +549,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-test-plumbing</module>
-                <module>equalsverifier-test-core</module>
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>

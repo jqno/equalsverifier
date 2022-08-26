@@ -1,14 +1,17 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import nl.jqno.equalsverifier.testhelpers.Util;
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.testhelpers.Util;
 import org.junit.jupiter.api.Test;
 
 public class InstanceofPatternMatchTest {
 
     @Test
-    void succeed_whenEqualsUsesInstanceofPatternMatch() {}
+    void succeed_whenEqualsUsesInstanceofPatternMatch() {
+        EqualsVerifier.forClass(Point.class).verify();
+    }
 
-    class Point {
+    final class Point {
 
         private final int x;
         private final int y;

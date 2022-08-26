@@ -27,7 +27,7 @@
                             Unfortunately AntRun plugin is still needed because Maven plugin doesn't support
                             `check` goal over multiple modules. See also:
                             https://groups.google.com/g/jacoco/c/V58UApeNA0s
-                        --> 
+                        -->
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-antrun-plugin</artifactId>
                         <version>${version.maven-antrun-plugin}</version>
@@ -79,12 +79,12 @@
                                             </executiondata>
                                             <structure name="EqualsVerifier: external coverage">
                                                 <classfiles>
-                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/target/test-classes/nl/jqno/equalsverifier/coverage">
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/target/test-classes/nl/jqno/equalsverifier/coverage">
                                                         <include name="*.class" />
                                                     </fileset>
                                                 </classfiles>
                                                 <sourcefiles encoding="UTF-8">
-                                                    <fileset dir="${project.basedir}/../equalsverifier-test-core/src/test/java" />
+                                                    <fileset dir="${project.basedir}/../equalsverifier-core/src/test/java" />
                                                 </sourcefiles>
                                             </structure>
                                             <check failonviolation="true" violationsproperty="violation">

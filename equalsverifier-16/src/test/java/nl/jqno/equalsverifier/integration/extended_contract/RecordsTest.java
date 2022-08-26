@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
-import static nl.jqno.equalsverifier.testhelpers.Util.defaultEquals;
+import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -8,7 +8,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
-import nl.jqno.equalsverifier.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class RecordsTest {
