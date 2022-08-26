@@ -115,7 +115,7 @@
         <version.pitest.maven>1.9.4</version.pitest.maven>
         <version.spotbugs.maven>4.7.1.1</version.spotbugs.maven>
         <version.spotbugs>4.7.1</version.spotbugs>
-        <version.spotless.maven>2.24.1</version.spotless.maven>
+        <version.spotless.maven>2.25.0</version.spotless.maven>
         <version.spotless.prettier-java>1.6.1</version.spotless.prettier-java>
         <version.spotless.prettier>2.5.1</version.spotless.prettier>
     </properties>
