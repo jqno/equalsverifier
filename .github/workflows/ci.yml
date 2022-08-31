@@ -1,5 +1,9 @@
 name: CI
-on: [ push ]
+on:
+  push:
+    paths:
+      - '**.java'
+      - '**.xml'
 
 jobs:
   supported-jdk:
