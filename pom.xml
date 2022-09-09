@@ -77,7 +77,7 @@
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
 
-        <version.bytebuddy>1.12.14</version.bytebuddy>
+        <version.bytebuddy>1.12.16</version.bytebuddy>
         <version.objenesis>3.3</version.objenesis>
 
         <version.archunit>0.23.1</version.archunit>
@@ -114,7 +114,7 @@
         <version.pitest.junit5>1.0.0</version.pitest.junit5>
         <version.pitest.maven>1.9.5</version.pitest.maven>
         <version.spotbugs.maven>4.7.2.0</version.spotbugs.maven>
-        <version.spotbugs>4.7.1</version.spotbugs>
+        <version.spotbugs>4.7.2</version.spotbugs>
         <version.spotless.maven>2.25.0</version.spotless.maven>
         <version.spotless.prettier-java>1.6.1</version.spotless.prettier-java>
         <version.spotless.prettier>2.5.1</version.spotless.prettier>
