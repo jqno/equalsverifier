@@ -92,7 +92,7 @@
         <version.joda-time>2.11.1</version.joda-time>
         <version.junit-jupiter>5.9.0</version.junit-jupiter>
         <version.openjfx>19</version.openjfx>
-        <version.slf4j>2.0.1</version.slf4j>
+        <version.slf4j>2.0.2</version.slf4j>
 
         <version.build-helper-maven-plugin>3.3.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.2.0</version.checkstyle.maven>
