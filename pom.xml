@@ -80,7 +80,7 @@
         <version.bytebuddy>1.12.17</version.bytebuddy>
         <version.objenesis>3.3</version.objenesis>
 
-        <version.archunit>0.23.1</version.archunit>
+        <version.archunit>1.0.0</version.archunit>
         <version.commons-lang3>3.12.0</version.commons-lang3>
         <version.eclipse-annotation>2.2.700</version.eclipse-annotation>
         <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
