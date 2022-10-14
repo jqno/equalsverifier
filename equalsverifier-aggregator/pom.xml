@@ -11,6 +11,37 @@
     <artifactId>equalsverifier-aggregator</artifactId>
     <name>EqualsVerifier | aggregator</name>
 
+    <dependencies>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-core</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-11</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-16</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.jqno.equalsverifier</groupId>
+            <artifactId>equalsverifier-17</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
     <profiles>
         <profile>
             <id>static-analysis</id>
@@ -23,7 +54,7 @@
             <build>
                 <plugins>
                     <plugin>
-                        <!-- 
+                        <!--
                             Unfortunately AntRun plugin is still needed because Maven plugin doesn't support
                             `check` goal over multiple modules. See also:
                             https://groups.google.com/g/jacoco/c/V58UApeNA0s
