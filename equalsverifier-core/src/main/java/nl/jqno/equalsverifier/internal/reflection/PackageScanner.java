@@ -44,7 +44,10 @@ public final class PackageScanner {
     }
 
     private static String getResourcePath(URL r) {
-        return rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
+        return rethrow(
+            () -> r.toURI().getPath(),
+            e -> "Could not resolve resource path: " + e.getMessage()
+        );
     }
 
     private static List<Class<?>> getClassesInDir(

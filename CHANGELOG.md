@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Fixed
+- Fix issue when the project path contains whitespaces. ([Issue 723](https://github.com/jqno/equalsverifier/issues/723); thanks Kobee1203!)
 
 ## [3.10.1] - 2022-07-26
 ### Changed
