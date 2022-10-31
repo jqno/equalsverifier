@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.io.File;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -36,10 +37,14 @@ public final class PackageScanner {
                 Collections
                     .list(cl.getResources(path))
                     .stream()
-                    .map(r -> new File(r.getFile()))
+                    .map(r -> new File(getResourcePath(r)))
                     .collect(Collectors.toList()),
             e -> "Could not scan package " + packageName
         );
+    }
+
+    private static String getResourcePath(URL r) {
+        return rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
     }
 
     private static List<Class<?>> getClassesInDir(
