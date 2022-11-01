@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Added
+- Allow filtering `forPackage()` based on a superclass: it only tests only subclasses of the given class. Note: it is recursive, and the superclass itself is NOT included! ([Issue 706](https://github.com/jqno/equalsverifier/issues/706))
+
 ### Fixed
 - Fix issue when the project path contains whitespaces. ([Issue 723](https://github.com/jqno/equalsverifier/issues/723); thanks Kobee1203!)
 

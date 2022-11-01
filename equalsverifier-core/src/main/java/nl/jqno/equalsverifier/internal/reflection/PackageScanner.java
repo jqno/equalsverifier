@@ -18,14 +18,22 @@ public final class PackageScanner {
     /**
      * Scans the given package for classes.
      *
+     * Note that if {@code mustExtend} is given, and it exists within {@code packageName},
+     * it will NOT be included.
+     *
      * @param packageName The package to scan.
+     * @param mustExtend if not null, returns only classes that extend or implement this class.
      * @param scanRecursively true to scan all sub-packages
      * @return the classes contained in the given package.
      */
-    public static List<Class<?>> getClassesIn(String packageName, boolean scanRecursively) {
+    public static List<Class<?>> getClassesIn(
+        String packageName,
+        Class<?> mustExtend,
+        boolean scanRecursively
+    ) {
         return getDirs(packageName)
             .stream()
-            .flatMap(d -> getClassesInDir(packageName, d, scanRecursively).stream())
+            .flatMap(d -> getClassesInDir(packageName, d, mustExtend, scanRecursively).stream())
             .collect(Collectors.toList());
     }
 
@@ -53,6 +61,7 @@ public final class PackageScanner {
     private static List<Class<?>> getClassesInDir(
         String packageName,
         File dir,
+        Class<?> mustExtend,
         boolean scanRecursively
     ) {
         if (!dir.exists()) {
@@ -64,7 +73,13 @@ public final class PackageScanner {
             .flatMap(f -> {
                 List<Class<?>> classes;
                 if (f.isDirectory()) {
-                    classes = getClassesInDir(packageName + "." + f.getName(), f, scanRecursively);
+                    classes =
+                        getClassesInDir(
+                            packageName + "." + f.getName(),
+                            f,
+                            mustExtend,
+                            scanRecursively
+                        );
                 } else {
                     classes = Collections.singletonList(fileToClass(packageName, f));
                 }
@@ -73,6 +88,9 @@ public final class PackageScanner {
             .filter(c -> !c.isAnonymousClass())
             .filter(c -> !c.isLocalClass())
             .filter(c -> !c.getName().endsWith("Test"))
+            .filter(c ->
+                mustExtend == null || (mustExtend.isAssignableFrom(c) && !mustExtend.equals(c))
+            )
             .collect(Collectors.toList());
     }
 
