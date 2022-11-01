@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 public class SimpleEqualsVerifierTest {
 
     @Test
-    public void succeed_whenTestingGeneratedClass_givenASimpleEqualsVerifier() {
+    public void succeed_whenTestingClass_givenASimpleEqualsVerifier() {
         EqualsVerifier.simple().forClass(SimplePoint.class).verify();
     }
 
     @Test
-    public void succeed_whenTestingGeneratedClassesRecursively_givenASimpleEqualsVerifier() {
+    public void succeed_whenTestingClassesRecursively_givenASimpleEqualsVerifier() {
         EqualsVerifier
             .simple()
             .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
@@ -23,7 +23,18 @@ public class SimpleEqualsVerifierTest {
     }
 
     @Test
-    public void mentionSimple_whenTestingGeneratedClass_givenNothingSpecial() {
+    public void succeed_whenTestingClassesThatMustExtendSomething_givenASimpleEqualsVerifier() {
+        EqualsVerifier
+            .simple()
+            .forPackage(
+                "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                Object.class
+            )
+            .verify();
+    }
+
+    @Test
+    public void mentionSimple_whenTestingClass_givenNothingSpecial() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(SimplePoint.class).verify())
             .assertFailure()
@@ -31,7 +42,7 @@ public class SimpleEqualsVerifierTest {
     }
 
     @Test
-    public void mentionSimple_whenTestingGeneratedClassesRecursively_givenNothingSpecial() {
+    public void mentionSimple_whenTestingClassesRecursively_givenNothingSpecial() {
         ExpectedException
             .when(() ->
                 EqualsVerifier
@@ -46,7 +57,22 @@ public class SimpleEqualsVerifierTest {
     }
 
     @Test
-    public void mentionSimple_whenTestingGeneratedClass_givenSuppressWarningStrictInheritance() {
+    public void mentionSimple_whenTestingClassesThatMustExtendSomething_givenNothingSpecial() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forPackage(
+                        "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                        Object.class
+                    )
+                    .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("or use EqualsVerifier.simple()");
+    }
+
+    @Test
+    public void mentionSimple_whenTestingClass_givenSuppressWarningStrictInheritance() {
         ExpectedException
             .when(() ->
                 EqualsVerifier
@@ -56,6 +82,38 @@ public class SimpleEqualsVerifierTest {
             )
             .assertFailure()
             .assertMessageContains("or use EqualsVerifier.simple()");
+    }
+
+    @Test
+    public void fail_whenTestingClassesRecursively_whenPackageHasNoClasses() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .simple()
+                    .forPackage("nl.jqno.equalsverifier.doesnotexist", true)
+                    .verify()
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types"
+            );
+    }
+
+    @Test
+    public void fail_whenTestingClassesThatMustExtendSomething_whenPackageHasNoClasses() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .simple()
+                    .forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class)
+                    .verify()
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "nl.jqno.equalsverifier.doesnotexist",
+                "doesn't contain any (non-Test) types"
+            );
     }
 
     public static class SimplePoint {
