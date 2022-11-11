@@ -37,3 +37,11 @@
     </a>
   </li>
 {% endif %}
+
+{% if author.mastodon_author %}
+  <li>
+    <a href="{{ author.mastodon_author }}" itemprop="sameAs" rel="nofollow noopener noreferrer">
+      <i class="fab fa-fw fa-mastodon" aria-hidden="true"></i><span class="label">Mastodon</span>
+    </a>
+  </li>
+{% endif %}

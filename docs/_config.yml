@@ -33,6 +33,7 @@ author:
   stackoverflow_tag: equalsverifier
   uri_author: https://jqno.nl
   twitter_author: jqno
+  mastodon_author: "https://mastodon.online/@jqno"
 
 twitter:
   username: jqno
@@ -44,6 +45,9 @@ footer:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/jqno"
+    - label: "Mastodon"
+      icon: "fab fa-fw fa-mastodon"
+      url: "https://mastodon.online/@jqno"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/jqno"
