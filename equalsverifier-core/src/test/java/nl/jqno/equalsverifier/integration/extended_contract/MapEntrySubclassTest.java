@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Map;
 import java.util.Objects;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -12,9 +11,9 @@ class MapEntrySubclassTest {
     @Test
     void fails_whenMapEntryHashCodeContractIsNotHonored() {
         ExpectedException
-                .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
-                .assertFailure()
-                .assertMessageContains("hashCode: value does not follow Map.Entry specification");
+            .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
+            .assertFailure()
+            .assertMessageContains("hashCode: value does not follow Map.Entry specification");
     }
 
     @Test
@@ -28,7 +27,7 @@ class MapEntrySubclassTest {
         private final V value;
 
         HashCodeContractNotHonored(K key, V value) {
-            this.key   = key;
+            this.key = key;
             this.value = value;
         }
 
@@ -37,7 +36,7 @@ class MapEntrySubclassTest {
             if (!(obj instanceof Map.Entry)) {
                 return false;
             }
-            Map.Entry<?,?> other = (Map.Entry<?,?>)obj;
+            Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
             return Objects.equals(key, other.getKey()) && Objects.equals(value, other.getValue());
         }
 
@@ -60,7 +59,6 @@ class MapEntrySubclassTest {
         public V setValue(V value) {
             throw new UnsupportedOperationException();
         }
-
     }
 
     static final class HashCodeContractHonored<K, V> implements Map.Entry<K, V> {
@@ -69,7 +67,7 @@ class MapEntrySubclassTest {
         private final V value;
 
         HashCodeContractHonored(K key, V value) {
-            this.key   = key;
+            this.key = key;
             this.value = value;
         }
 
@@ -78,7 +76,7 @@ class MapEntrySubclassTest {
             if (!(obj instanceof Map.Entry)) {
                 return false;
             }
-            Map.Entry<?,?> other = (Map.Entry<?,?>)obj;
+            Map.Entry<?, ?> other = (Map.Entry<?, ?>) obj;
             return Objects.equals(key, other.getKey()) && Objects.equals(value, other.getValue());
         }
 
@@ -101,7 +99,5 @@ class MapEntrySubclassTest {
         public V setValue(V value) {
             throw new UnsupportedOperationException();
         }
-
     }
-
 }
