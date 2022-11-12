@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
+import java.util.Map;
+import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
-
-import java.util.Map;
-import java.util.Objects;
 
 class MapEntrySubclassTest {
 
@@ -14,7 +14,7 @@ class MapEntrySubclassTest {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
                 .assertFailure()
-                .assertMessageContains("FIXME"); // FIXME
+                .assertMessageContains("hashCode: value does not follow Map.Entry specification");
     }
 
     @Test
