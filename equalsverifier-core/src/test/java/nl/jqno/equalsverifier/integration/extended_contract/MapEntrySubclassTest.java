@@ -55,10 +55,12 @@ class MapEntrySubclassTest {
             return value;
         }
 
+        // CHECKSTYLE OFF: HiddenField
         @Override
         public V setValue(V value) {
             throw new UnsupportedOperationException();
         }
+        // CHECKSTYLE ON: HiddenField
     }
 
     static final class HashCodeContractHonored<K, V> implements Map.Entry<K, V> {
@@ -95,9 +97,11 @@ class MapEntrySubclassTest {
             return value;
         }
 
+        // CHECKSTYLE OFF: HiddenField
         @Override
         public V setValue(V value) {
             throw new UnsupportedOperationException();
         }
+        // CHECKSTYLE ON: HiddenField
     }
 }
