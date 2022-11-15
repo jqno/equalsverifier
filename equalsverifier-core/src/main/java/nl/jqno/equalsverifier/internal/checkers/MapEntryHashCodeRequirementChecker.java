@@ -23,18 +23,22 @@ public class MapEntryHashCodeRequirementChecker<T> implements Checker {
 
     @Override
     public void check() {
-        if (config.getWarningsToSuppress().contains(null)) { // FIXME dedicated warning?
-            return;
-        }
-
         if (Map.Entry.class.isAssignableFrom(classAccessor.getType())) {
             Map.Entry<?, ?> e = (Map.Entry<?, ?>) classAccessor.getRedObject(config.getTypeTag());
 
             int expectedHashCode = Objects.hashCode(e.getKey()) ^ Objects.hashCode(e.getValue());
             int actualHashCode = cachedHashCodeInitializer.getInitializedHashCode(e);
 
-            // FIXME better message
-            Formatter f = Formatter.of("hashCode: value does not follow Map.Entry specification");
+            Formatter f = Formatter.of(
+                "Map.Entry: hashCode for\n  %%\nshould be %% but was %%.\n" +
+                "The hash code of a map entry e is defined as:\n" +
+                "    (e.getKey()==null ? 0 : e.getKey().hashCode()) ^ (e.getValue()==null ? 0 : e.getValue().hashCode())\n" +
+                "or, using Java 8 API:\n" +
+                "    java.util.Objects.hashCode(e.getKey()) ^ java.util.Objects.hashCode(e.getValue())",
+                e,
+                expectedHashCode,
+                actualHashCode
+            );
             assertEquals(f, expectedHashCode, actualHashCode);
         }
     }

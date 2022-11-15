@@ -13,7 +13,15 @@ class MapEntrySubclassTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
             .assertFailure()
-            .assertMessageContains("hashCode: value does not follow Map.Entry specification");
+            .assertMessageContains(
+                "Map.Entry: hashCode for",
+                "should be",
+                "but was",
+                "The hash code of a map entry e is defined as:\n" +
+                "    (e.getKey()==null ? 0 : e.getKey().hashCode()) ^ (e.getValue()==null ? 0 : e.getValue().hashCode())\n" +
+                "or, using Java 8 API:\n" +
+                "    java.util.Objects.hashCode(e.getKey()) ^ java.util.Objects.hashCode(e.getValue())"
+            );
     }
 
     @Test
