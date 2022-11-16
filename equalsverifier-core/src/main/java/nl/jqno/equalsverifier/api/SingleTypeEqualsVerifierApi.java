@@ -414,7 +414,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Checker[] checkers = {
             new ExamplesChecker<>(config),
             new HierarchyChecker<>(config),
-            new FieldsChecker<>(config)
+            new FieldsChecker<>(config),
+            new MapEntryHashCodeRequirementChecker<>(config)
         };
 
         for (Checker checker : checkers) {
