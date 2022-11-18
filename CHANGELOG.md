@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.11.1] - 2022-11-18
+### Added
+- Verifies `Map.Entry`'s extended `hashCode` contract. ([Issue 603](https://github.com/jqno/equalsverifier/issues/603); thanks scordio!)
+
 ## [3.11] - 2022-11-02
 ### Added
 - Allow filtering `forPackage()` based on a superclass: it only tests only subclasses of the given class. Note: it is recursive, and the superclass itself is NOT included! ([Issue 706](https://github.com/jqno/equalsverifier/issues/706))
@@ -867,8 +871,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 ## [0.1] - 2009-06-01
 You can now use EqualsVerifier!
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11.1...HEAD
 
+[3.11.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11...equalsverifier-3.11.1
 [3.11]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10.1...equalsverifier-3.11
 
 [3.10.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10...equalsverifier-3.10.1
