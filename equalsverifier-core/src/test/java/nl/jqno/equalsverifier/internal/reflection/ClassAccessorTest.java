@@ -101,6 +101,18 @@ public class ClassAccessorTest {
     }
 
     @Test
+    public void declaresMethod() {
+        ClassAccessor<?> accessor = ClassAccessor.of(String.class, prefabValues);
+        assertTrue(accessor.declaresMethod("charAt", int.class));
+    }
+
+    @Test
+    public void doesNotDeclareMethod() {
+        ClassAccessor<?> accessor = ClassAccessor.of(String.class, prefabValues);
+        assertFalse(accessor.declaresMethod("doesNotExist", int.class));
+    }
+
+    @Test
     public void equalsIsNotAbstract() {
         assertFalse(pointContainerAccessor.isEqualsAbstract());
     }

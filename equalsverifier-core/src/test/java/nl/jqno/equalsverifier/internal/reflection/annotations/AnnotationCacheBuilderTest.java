@@ -7,9 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
@@ -402,13 +400,11 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void generatedClassWithGeneratedFieldDoesNotThrow() {
         class Super {}
-        Class<?> sub = new ByteBuddy()
-            .with(TypeValidation.DISABLED)
-            .subclass(Super.class)
-            .defineField("dynamicField", int.class, Visibility.PRIVATE)
-            .make()
-            .load(Super.class.getClassLoader(), Instantiator.getClassLoadingStrategy(Super.class))
-            .getLoaded();
+        Class<?> sub = Instantiator.giveDynamicSubclass(
+            Super.class,
+            "dynamicField",
+            b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE)
+        );
         build(sub);
     }
 

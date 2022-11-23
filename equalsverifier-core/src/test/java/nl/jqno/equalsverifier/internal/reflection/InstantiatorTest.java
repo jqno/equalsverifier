@@ -1,8 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import net.bytebuddy.description.modifier.Visibility;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -86,5 +91,17 @@ public class InstantiatorTest {
         Class<?> expected = instantiator.instantiateAnonymousSubclass().getClass();
         Class<?> actual = instantiator.instantiateAnonymousSubclass().getClass();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void giveDynamicSubclass() throws Exception {
+        class Super {}
+        Class<?> sub = Instantiator.giveDynamicSubclass(
+            Super.class,
+            "dynamicField",
+            b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE)
+        );
+        Field f = sub.getDeclaredField("dynamicField");
+        assertNotNull(f);
     }
 }

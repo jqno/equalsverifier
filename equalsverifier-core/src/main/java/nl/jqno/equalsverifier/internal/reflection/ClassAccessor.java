@@ -97,7 +97,7 @@ public class ClassAccessor<T> {
         return declaresMethod("hashCode");
     }
 
-    private boolean declaresMethod(String name, Class<?>... parameterTypes) {
+    public boolean declaresMethod(String name, Class<?>... parameterTypes) {
         try {
             type.getDeclaredMethod(name, parameterTypes);
             return true;
