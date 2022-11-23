@@ -24,6 +24,7 @@ public class FieldsChecker<T> implements Checker {
     private final TransientFieldsCheck<T> transientFieldsCheck;
     private final TransitivityFieldCheck<T> transitivityFieldCheck;
     private final BigDecimalFieldCheck<T> bigDecimalFieldCheck;
+    private final JpaLazyGetterFieldCheck<T> jpaLazyGetterFieldCheck;
 
     public FieldsChecker(Configuration<T> config) {
         this.config = config;
@@ -51,6 +52,7 @@ public class FieldsChecker<T> implements Checker {
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(prefabValues, typeTag);
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(config.getCachedHashCodeInitializer());
+        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
     }
 
     @Override
@@ -86,6 +88,11 @@ public class FieldsChecker<T> implements Checker {
 
         if (!config.getWarningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
             inspector.check(bigDecimalFieldCheck);
+        }
+
+        AnnotationCache cache = config.getAnnotationCache();
+        if (cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY)) {
+            inspector.check(jpaLazyGetterFieldCheck);
         }
     }
 
