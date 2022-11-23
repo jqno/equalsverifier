@@ -382,7 +382,7 @@ public class JakartaIdTest {
             .assertMessageContains("Significant fields");
     }
 
-    static final class JakartaIdBusinessKeyPerson {
+    static class JakartaIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -404,7 +404,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdBusinessKeyPerson)) {
                 return false;
             }
@@ -417,12 +417,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JakartaIdBusinessKeyPersonReorderedFields {
+    static class JakartaIdBusinessKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -444,7 +444,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
@@ -457,12 +457,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JakartaIdSurrogateKeyPerson {
+    static class JakartaIdSurrogateKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -484,7 +484,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdSurrogateKeyPerson)) {
                 return false;
             }
@@ -493,12 +493,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class JakartaIdSurrogateKeyPersonReorderedFields {
+    static class JakartaIdSurrogateKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -520,7 +520,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
@@ -529,12 +529,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class JakartaEmbeddedIdBusinessKeyPerson {
+    static class JakartaEmbeddedIdBusinessKeyPerson {
 
         @jakarta.persistence.EmbeddedId
         private final UUID id;
@@ -556,7 +556,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaEmbeddedIdBusinessKeyPerson)) {
                 return false;
             }
@@ -569,12 +569,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JakartaEmbeddedIdSurrogateKeyPerson {
+    static class JakartaEmbeddedIdSurrogateKeyPerson {
 
         @jakarta.persistence.EmbeddedId
         private final UUID id;
@@ -596,7 +596,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaEmbeddedIdSurrogateKeyPerson)) {
                 return false;
             }
@@ -605,12 +605,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class NaturalIdBusinessKeyPerson {
+    static class NaturalIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -634,7 +634,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NaturalIdBusinessKeyPerson)) {
                 return false;
             }
@@ -643,12 +643,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    static final class JakartaIdBusinessKeyPersonDoesntUseName {
+    static class JakartaIdBusinessKeyPersonDoesntUseName {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -670,7 +670,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdBusinessKeyPersonDoesntUseName)) {
                 return false;
             }
@@ -682,13 +682,13 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, birthdate);
         }
     }
 
     @jakarta.persistence.Entity
-    static final class JakartaIdBusinessKeyPersonEntity {
+    static class JakartaIdBusinessKeyPersonEntity {
 
         @jakarta.persistence.Id
         private UUID id;
@@ -698,7 +698,7 @@ public class JakartaIdTest {
         private LocalDate birthdate;
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdBusinessKeyPersonEntity)) {
                 return false;
             }
@@ -711,13 +711,13 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
     @jakarta.persistence.Entity
-    static final class NaturalIdBusinessKeyPersonEntity {
+    static class NaturalIdBusinessKeyPersonEntity {
 
         @jakarta.persistence.Id
         private UUID id;
@@ -729,7 +729,7 @@ public class JakartaIdTest {
         private LocalDate birthdate;
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NaturalIdBusinessKeyPersonEntity)) {
                 return false;
             }
@@ -738,12 +738,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    static final class NonHibernateNaturalIdBusinessKeyPerson {
+    static class NonHibernateNaturalIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
         private final UUID id;
@@ -767,7 +767,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
                 return false;
             }
@@ -776,12 +776,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    public static final class JakartaIdVersionedEntity {
+    public static class JakartaIdVersionedEntity {
 
         @jakarta.persistence.Id
         private final long id;
@@ -794,7 +794,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JakartaIdVersionedEntity)) {
                 return false;
             }
@@ -806,12 +806,12 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Float.floatToIntBits(id);
         }
     }
 
-    static final class MethodAnnotatedBusinessKeyPerson {
+    static class MethodAnnotatedBusinessKeyPerson {
 
         private final UUID id;
         private final String socialSecurity;
@@ -849,7 +849,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof MethodAnnotatedBusinessKeyPerson)) {
                 return false;
             }
@@ -858,7 +858,7 @@ public class JakartaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
