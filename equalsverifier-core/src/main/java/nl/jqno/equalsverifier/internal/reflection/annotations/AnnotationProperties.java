@@ -13,6 +13,7 @@ import java.util.Set;
 public class AnnotationProperties {
 
     private final String className;
+    private Map<String, String> enumValues = new HashMap<>();
     private Map<String, Set<String>> arrayValues = new HashMap<>();
 
     /**
@@ -27,6 +28,26 @@ public class AnnotationProperties {
     /** @return the annotation's className string. */
     public String getClassName() {
         return className;
+    }
+
+    /**
+     * Adds the content of an enum value property.
+     *
+     * @param name The name of the enum value property.
+     * @param value The content of the enum value property.
+     */
+    public void putEnumValue(String name, String value) {
+        enumValues.put(name, value);
+    }
+
+    /**
+     * Retrieves the content of an enum value property.
+     *
+     * @param name The name of the enum value property.
+     * @return The content of the enum value property.
+     */
+    public String getEnumValue(String name) {
+        return enumValues.get(name);
     }
 
     /**
