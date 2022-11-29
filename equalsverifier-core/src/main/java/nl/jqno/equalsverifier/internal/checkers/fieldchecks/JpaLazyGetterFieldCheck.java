@@ -46,20 +46,27 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        assertEntity(fieldName, getterName, accessor.declaresMethod(getterName));
+        assertEntity(fieldName, "equals", getterName, accessor.declaresMethod(getterName));
         ClassAccessor<T> subAccessor = throwingGetterAccessor(getterName);
 
         T red1 = subAccessor.getRedObject(TypeTag.NULL);
         T red2 = subAccessor.getRedObject(TypeTag.NULL);
 
-        boolean exceptionCaught = false;
+        boolean equalsExceptionCaught = false;
         try {
             red1.equals(red2);
         } catch (EqualsVerifierInternalBugException e) {
-            exceptionCaught = true;
+            equalsExceptionCaught = true;
         }
+        assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
 
-        assertEntity(fieldName, getterName, exceptionCaught);
+        boolean hashCodeExceptionCaught = false;
+        try {
+            red1.hashCode();
+        } catch (EqualsVerifierInternalBugException e) {
+            hashCodeExceptionCaught = true;
+        }
+        assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught);
     }
 
     private boolean fieldIsLazy(FieldAccessor fieldAccessor) {
@@ -82,11 +89,17 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         return ClassAccessor.of(sub, prefabValues);
     }
 
-    private void assertEntity(String fieldName, String getterName, boolean assertion) {
+    private void assertEntity(
+        String fieldName,
+        String method,
+        String getterName,
+        boolean assertion
+    ) {
         assertTrue(
             Formatter.of(
-                "JPA Entity: direct reference to field %% used in equals instead of getter %%.",
+                "JPA Entity: direct reference to field %% used in %% instead of getter %%.",
                 fieldName,
+                method,
                 getterName
             ),
             assertion

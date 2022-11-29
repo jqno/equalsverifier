@@ -4,7 +4,6 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.testhelpers.Util;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Basic;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.ElementCollection;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
@@ -36,40 +35,45 @@ public class JpaLazyEntityTest {
     }
 
     @Test
+    public void basicGetterNotUsedInHashCode() {
+        getterNotUsed(IncorrectBasicJpaLazyFieldContainerHashCode.class, "hashCode");
+    }
+
+    @Test
     public void basicGetterNotUsed() {
-        getterNotUsed(IncorrectBasicJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectBasicJpaLazyFieldContainer.class, "equals");
     }
 
     @Test
     public void oneToOneGetterNotUsed() {
-        getterNotUsed(IncorrectOneToOneJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectOneToOneJpaLazyFieldContainer.class, "equals");
     }
 
     @Test
     public void oneToManyGetterNotUsed() {
-        getterNotUsed(IncorrectOneToManyJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectOneToManyJpaLazyFieldContainer.class, "equals");
     }
 
     @Test
     public void manyToOneGetterNotUsed() {
-        getterNotUsed(IncorrectManyToOneJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectManyToOneJpaLazyFieldContainer.class, "equals");
     }
 
     @Test
     public void manyToManyGetterNotUsed() {
-        getterNotUsed(IncorrectManyToManyJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectManyToManyJpaLazyFieldContainer.class, "equals");
     }
 
     @Test
     public void elementCollectionGetterNotUsed() {
-        getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class);
+        getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class, "equals");
     }
 
-    private void getterNotUsed(Class<?> type) {
+    private void getterNotUsed(Class<?> type, String method) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
             .assertFailure()
-            .assertMessageContains("JPA Entity", "direct reference");
+            .assertMessageContains("JPA Entity", method, "direct reference");
     }
 
     @Entity
@@ -135,7 +139,14 @@ public class JpaLazyEntityTest {
 
         @Override
         public int hashCode() {
-            return Util.defaultHashCode(this);
+            return Objects.hash(
+                getBasic(),
+                getOneToOne(),
+                getOneToMany(),
+                getManyToOne(),
+                getManyToMany(),
+                getElementCollection()
+            );
         }
     }
 
@@ -161,6 +172,31 @@ public class JpaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getBasic());
+        }
+    }
+
+    @Entity
+    static class IncorrectBasicJpaLazyFieldContainerHashCode {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String basic;
+
+        public String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof IncorrectBasicJpaLazyFieldContainerHashCode)) {
+                return false;
+            }
+            IncorrectBasicJpaLazyFieldContainerHashCode other = (IncorrectBasicJpaLazyFieldContainerHashCode) obj;
+            return Objects.equals(getBasic(), other.getBasic());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(basic);
         }
     }
 
