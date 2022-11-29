@@ -355,7 +355,7 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
-    void annotationsPrimitiveParametersAreFoundOnClass() {
+    public void annotationsEnumParametersAreFoundOnClass() {
         AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
         Annotation[] supportedAnnotations = { annotation };
         AnnotationCacheBuilder acb = new AnnotationCacheBuilder(

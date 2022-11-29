@@ -13,6 +13,8 @@ import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -21,11 +23,13 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final Class<T> type;
     private final ClassAccessor<T> accessor;
     private final PrefabValues prefabValues;
+    private final AnnotationCache annotationCache;
 
     public JpaLazyGetterFieldCheck(Configuration<T> config) {
         this.type = config.getType();
         this.accessor = config.getClassAccessor();
         this.prefabValues = config.getPrefabValues();
+        this.annotationCache = config.getAnnotationCache();
     }
 
     @Override
@@ -38,7 +42,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         String getterName =
             "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
 
-        if (!fieldIsLazy()) {
+        if (!fieldIsLazy(fieldAccessor)) {
             return;
         }
 
@@ -58,8 +62,12 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, getterName, exceptionCaught);
     }
 
-    private boolean fieldIsLazy() {
-        return false;
+    private boolean fieldIsLazy(FieldAccessor fieldAccessor) {
+        return annotationCache.hasFieldAnnotation(
+            type,
+            fieldAccessor.getFieldName(),
+            SupportedAnnotations.LAZY_FIELD
+        );
     }
 
     private ClassAccessor<T> throwingGetterAccessor(String getterName) {
