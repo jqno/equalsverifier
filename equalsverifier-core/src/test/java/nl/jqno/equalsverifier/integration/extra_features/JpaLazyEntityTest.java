@@ -35,6 +35,11 @@ public class JpaLazyEntityTest {
     }
 
     @Test
+    public void basicGetterUsed_givenAnnotationIsOnGetter() {
+        getterNotUsed(CorrectBasicJpaLazyGetterContainer.class, "equals");
+    }
+
+    @Test
     public void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainerHashCode.class, "hashCode");
     }
@@ -166,6 +171,31 @@ public class JpaLazyEntityTest {
                 return false;
             }
             IncorrectBasicJpaEagerFieldContainer other = (IncorrectBasicJpaEagerFieldContainer) obj;
+            return Objects.equals(basic, other.basic);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getBasic());
+        }
+    }
+
+    @Entity
+    static class CorrectBasicJpaLazyGetterContainer {
+
+        private String basic;
+
+        @Basic(fetch = FetchType.LAZY)
+        public String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof CorrectBasicJpaLazyGetterContainer)) {
+                return false;
+            }
+            CorrectBasicJpaLazyGetterContainer other = (CorrectBasicJpaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 

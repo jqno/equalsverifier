@@ -124,6 +124,7 @@ public class AnnotationCacheBuilder {
             }
         }
 
+        // Getter method annotations
         MethodList<MethodDescription.InDefinedShape> methods = typeDescription
             .getDeclaredMethods()
             .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3);
