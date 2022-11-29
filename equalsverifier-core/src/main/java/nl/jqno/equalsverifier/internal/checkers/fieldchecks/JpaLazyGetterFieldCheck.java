@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
-// import static net.bytebuddy.implementation.ExceptionMethod.throwing;
-// import static net.bytebuddy.matcher.ElementMatchers.named;
 import static net.bytebuddy.implementation.ExceptionMethod.throwing;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
+
+import java.util.Set;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -22,12 +22,14 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     private final Class<T> type;
     private final ClassAccessor<T> accessor;
+    private final Set<String> ignoredFields;
     private final PrefabValues prefabValues;
     private final AnnotationCache annotationCache;
 
     public JpaLazyGetterFieldCheck(Configuration<T> config) {
         this.type = config.getType();
         this.accessor = config.getClassAccessor();
+        this.ignoredFields = config.getIgnoredFields();
         this.prefabValues = config.getPrefabValues();
         this.annotationCache = config.getAnnotationCache();
     }
@@ -42,7 +44,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         String getterName =
             "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
 
-        if (!fieldIsLazy(fieldAccessor)) {
+        if (ignoredFields.contains(fieldName) || !fieldIsLazy(fieldAccessor)) {
             return;
         }
 
