@@ -49,12 +49,12 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, getterName, accessor.declaresMethod(getterName));
         ClassAccessor<T> subAccessor = throwingGetterAccessor(getterName);
 
-        T red = subAccessor.getRedObject(TypeTag.NULL);
-        T blue = subAccessor.getBlueObject(TypeTag.NULL);
+        T red1 = subAccessor.getRedObject(TypeTag.NULL);
+        T red2 = subAccessor.getRedObject(TypeTag.NULL);
 
         boolean exceptionCaught = false;
         try {
-            red.equals(blue);
+            red1.equals(red2);
         } catch (EqualsVerifierInternalBugException e) {
             exceptionCaught = true;
         }
