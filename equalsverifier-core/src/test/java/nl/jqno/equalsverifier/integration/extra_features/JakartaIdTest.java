@@ -52,7 +52,7 @@ public class JakartaIdTest {
                 "Significant fields",
                 "id is marked @Id",
                 "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 
@@ -66,7 +66,7 @@ public class JakartaIdTest {
             .assertMessageContains(
                 "Significant fields",
                 "equals does not use socialSecurity",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 
@@ -124,7 +124,7 @@ public class JakartaIdTest {
                 "Significant fields",
                 "id is marked @Id or @EmbeddedId",
                 "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 
@@ -158,7 +158,7 @@ public class JakartaIdTest {
             .assertFailure()
             .assertMessageContains(
                 "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 
@@ -231,7 +231,7 @@ public class JakartaIdTest {
             .assertFailure()
             .assertMessageContains(
                 "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 

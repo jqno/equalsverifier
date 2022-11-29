@@ -161,7 +161,7 @@ public class JpaIdTest {
             .assertFailure()
             .assertMessageContains(
                 "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 
@@ -239,7 +239,7 @@ public class JpaIdTest {
             .assertFailure()
             .assertMessageContains(
                 "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY if"
+                "Suppress Warning.SURROGATE_KEY"
             );
     }
 

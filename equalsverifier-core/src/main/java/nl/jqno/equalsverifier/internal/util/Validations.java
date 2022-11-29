@@ -115,11 +115,13 @@ public final class Validations {
 
         validate(
             hasSurrogateKey && usesWithOnlyTheseFields,
-            "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed."
+            "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.\n" +
+            "You can remove withOnlyTheseFields."
         );
         validate(
             hasSurrogateKey && usesWithIgnoredFields,
-            "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed."
+            "you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.\n" +
+            "You can remove withIgnoredFields."
         );
     }
 
@@ -199,7 +201,8 @@ public final class Validations {
             includedFields.contains(f.getName()) &&
             cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID),
             "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n" +
-            "Suppress Warning.SURROGATE_KEY if you want to use only the @Id or @EmbeddedId fields in equals."
+            "Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields " +
+            "if you want to use only the @Id or @EmbeddedId fields in equals."
         );
     }
 
