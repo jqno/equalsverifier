@@ -398,7 +398,7 @@ public class JpaIdTest {
             .assertMessageContains("Significant fields");
     }
 
-    static final class JpaIdBusinessKeyPerson {
+    static class JpaIdBusinessKeyPerson {
 
         @Id
         private final UUID id;
@@ -420,7 +420,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdBusinessKeyPerson)) {
                 return false;
             }
@@ -433,12 +433,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JpaIdBusinessKeyPersonReorderedFields {
+    static class JpaIdBusinessKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -460,7 +460,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
@@ -473,12 +473,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JpaIdSurrogateKeyPerson {
+    static class JpaIdSurrogateKeyPerson {
 
         @Id
         private final UUID id;
@@ -500,7 +500,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdSurrogateKeyPerson)) {
                 return false;
             }
@@ -509,12 +509,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class JpaIdSurrogateKeyPersonReorderedFields {
+    static class JpaIdSurrogateKeyPersonReorderedFields {
 
         private final String socialSecurity;
         private final String name;
@@ -536,7 +536,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
@@ -545,12 +545,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class JpaEmbeddedIdBusinessKeyPerson {
+    static class JpaEmbeddedIdBusinessKeyPerson {
 
         @EmbeddedId
         private final UUID id;
@@ -572,7 +572,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaEmbeddedIdBusinessKeyPerson)) {
                 return false;
             }
@@ -585,12 +585,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class JpaEmbeddedIdSurrogateKeyPerson {
+    static class JpaEmbeddedIdSurrogateKeyPerson {
 
         @EmbeddedId
         private final UUID id;
@@ -612,7 +612,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaEmbeddedIdSurrogateKeyPerson)) {
                 return false;
             }
@@ -621,12 +621,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(id);
         }
     }
 
-    static final class NaturalIdBusinessKeyPerson {
+    static class NaturalIdBusinessKeyPerson {
 
         @Id
         private final UUID id;
@@ -650,7 +650,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NaturalIdBusinessKeyPerson)) {
                 return false;
             }
@@ -659,12 +659,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    static final class NaturalIdWithoutJpaIdBusinessKeyPerson {
+    static class NaturalIdWithoutJpaIdBusinessKeyPerson {
 
         private final UUID id;
 
@@ -687,7 +687,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NaturalIdWithoutJpaIdBusinessKeyPerson)) {
                 return false;
             }
@@ -696,12 +696,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    static final class JpaIdBusinessKeyPersonDoesntUseName {
+    static class JpaIdBusinessKeyPersonDoesntUseName {
 
         @Id
         private final UUID id;
@@ -723,7 +723,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdBusinessKeyPersonDoesntUseName)) {
                 return false;
             }
@@ -735,13 +735,13 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, birthdate);
         }
     }
 
     @Entity
-    static final class JpaIdBusinessKeyPersonEntity {
+    static class JpaIdBusinessKeyPersonEntity {
 
         @Id
         private UUID id;
@@ -751,7 +751,7 @@ public class JpaIdTest {
         private LocalDate birthdate;
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdBusinessKeyPersonEntity)) {
                 return false;
             }
@@ -764,13 +764,13 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
     @Entity
-    static final class NaturalIdBusinessKeyPersonEntity {
+    static class NaturalIdBusinessKeyPersonEntity {
 
         @Id
         private UUID id;
@@ -782,7 +782,7 @@ public class JpaIdTest {
         private LocalDate birthdate;
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NaturalIdBusinessKeyPersonEntity)) {
                 return false;
             }
@@ -791,12 +791,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    static final class NonJpaIdBusinessKeyPerson {
+    static class NonJpaIdBusinessKeyPerson {
 
         @nl.jqno.equalsverifier.testhelpers.annotations.Id
         private final UUID id;
@@ -818,7 +818,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NonJpaIdBusinessKeyPerson)) {
                 return false;
             }
@@ -831,12 +831,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity, name, birthdate);
         }
     }
 
-    static final class NonHibernateNaturalIdBusinessKeyPerson {
+    static class NonHibernateNaturalIdBusinessKeyPerson {
 
         @Id
         private final UUID id;
@@ -860,7 +860,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
                 return false;
             }
@@ -869,12 +869,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }
 
-    public static final class JpaIdVersionedEntity {
+    public final class JpaIdVersionedEntity {
 
         @Id
         private final long id;
@@ -887,7 +887,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof JpaIdVersionedEntity)) {
                 return false;
             }
@@ -899,12 +899,12 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Float.floatToIntBits(id);
         }
     }
 
-    static final class MethodAnnotatedBusinessKeyPerson {
+    static class MethodAnnotatedBusinessKeyPerson {
 
         private final UUID id;
         private final String socialSecurity;
@@ -942,7 +942,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             if (!(obj instanceof MethodAnnotatedBusinessKeyPerson)) {
                 return false;
             }
@@ -951,7 +951,7 @@ public class JpaIdTest {
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(socialSecurity);
         }
     }

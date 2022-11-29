@@ -1,12 +1,16 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.*;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.UnaryOperator;
 import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
@@ -44,7 +48,7 @@ public final class Instantiator<T> {
      */
     public static <T> Instantiator<T> of(Class<T> type) {
         if (Modifier.isAbstract(type.getModifiers())) {
-            return new Instantiator<>(giveDynamicSubclass(type));
+            return new Instantiator<>(giveDynamicSubclass(type, "", b -> b));
         }
         return new Instantiator<>(type);
     }
@@ -67,12 +71,16 @@ public final class Instantiator<T> {
      * @return An instance of an anonymous subclass of T.
      */
     public T instantiateAnonymousSubclass() {
-        Class<T> proxyClass = giveDynamicSubclass(type);
+        Class<T> proxyClass = giveDynamicSubclass(type, "", b -> b);
         return ObjenesisWrapper.getObjenesis().newInstance(proxyClass);
     }
 
     @SuppressWarnings("unchecked")
-    private static synchronized <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
+    public static synchronized <S> Class<S> giveDynamicSubclass(
+        Class<S> superclass,
+        String nameSuffix,
+        UnaryOperator<DynamicType.Builder<S>> modify
+    ) {
         boolean isSystemClass = isSystemClass(superclass.getName());
 
         String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
@@ -81,7 +89,9 @@ public final class Instantiator<T> {
             "." +
             superclass.getSimpleName() +
             "$$DynamicSubclass$" +
-            superclass.hashCode();
+            Integer.toHexString(superclass.hashCode()) +
+            "$" +
+            nameSuffix;
 
         Class<S> existsAlready = (Class<S>) classForName(name);
         if (existsAlready != null) {
@@ -89,14 +99,15 @@ public final class Instantiator<T> {
         }
 
         Class<?> context = isSystemClass ? Instantiator.class : superclass;
-        ClassLoadingStrategy<? super ClassLoader> cs = getClassLoadingStrategy(context);
-        return (Class<S>) new ByteBuddy()
+        ClassLoadingStrategy<ClassLoader> cs = getClassLoadingStrategy(context);
+        DynamicType.Builder<S> builder = new ByteBuddy()
             .with(TypeValidation.DISABLED)
             .subclass(superclass)
-            .name(name)
-            .make()
-            .load(context.getClassLoader(), cs)
-            .getLoaded();
+            .name(name);
+
+        builder = modify.apply(builder);
+
+        return (Class<S>) builder.make().load(context.getClassLoader(), cs).getLoaded();
     }
 
     private static String getPackageName(Class<?> type) {
@@ -105,9 +116,7 @@ public final class Instantiator<T> {
         return (dot != -1) ? cn.substring(0, dot).intern() : "";
     }
 
-    public static <S> ClassLoadingStrategy<? super ClassLoader> getClassLoadingStrategy(
-        Class<S> context
-    ) {
+    private static <S> ClassLoadingStrategy<ClassLoader> getClassLoadingStrategy(Class<S> context) {
         if (System.getProperty("java.version").startsWith("1.")) {
             return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
         } else {

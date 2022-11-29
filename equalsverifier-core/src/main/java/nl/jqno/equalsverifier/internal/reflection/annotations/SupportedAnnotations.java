@@ -192,6 +192,31 @@ public enum SupportedAnnotations implements Annotation {
         public void postProcess(Set<Class<?>> types, AnnotationCache annotationCache) {
             types.forEach(t -> annotationCache.addClassAnnotation(t, NATURALID));
         }
+    },
+
+    LAZY_FIELD(
+        true,
+        "javax.persistence.Basic",
+        "javax.persistence.OneToOne",
+        "javax.persistence.OneToMany",
+        "javax.persistence.ManyToOne",
+        "javax.persistence.ManyToMany",
+        "javax.persistence.ElementCollection",
+        "jakarta.persistence.Basic",
+        "jakarta.persistence.OneToOne",
+        "jakarta.persistence.OneToMany",
+        "jakarta.persistence.ManyToOne",
+        "jakarta.persistence.ManyToMany",
+        "jakarta.persistence.ElementCollection"
+    ) {
+        @Override
+        public boolean validate(
+            AnnotationProperties properties,
+            AnnotationCache annotationCache,
+            Set<String> ignoredAnnotations
+        ) {
+            return "LAZY".equals(properties.getEnumValue("fetch"));
+        }
     };
 
     private final boolean inherits;

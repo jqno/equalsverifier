@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import net.bytebuddy.description.annotation.AnnotationDescription;
+import net.bytebuddy.description.enumeration.EnumerationDescription;
 import net.bytebuddy.description.field.FieldDescription;
 import net.bytebuddy.description.method.MethodDescription;
 import net.bytebuddy.description.method.MethodList;
@@ -123,6 +124,7 @@ public class AnnotationCacheBuilder {
             }
         }
 
+        // Getter method annotations
         MethodList<MethodDescription.InDefinedShape> methods = typeDescription
             .getDeclaredMethods()
             .filter(m -> m.getName().startsWith("get") && m.getName().length() > 3);
@@ -161,6 +163,14 @@ public class AnnotationCacheBuilder {
             .forEach(addToCache.andThen(postProcess));
     }
 
+    private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
+        String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
+        if (canonicalName == null) {
+            return false;
+        }
+        return supportedAnnotation.partialClassNames().stream().anyMatch(canonicalName::endsWith);
+    }
+
     private AnnotationProperties buildAnnotationProperties(AnnotationDescription annotation) {
         AnnotationProperties props = new AnnotationProperties(
             annotation.getAnnotationType().getCanonicalName()
@@ -169,27 +179,33 @@ public class AnnotationCacheBuilder {
             .getAnnotationType()
             .getDeclaredMethods()) {
             Object val = annotation.getValue(m).resolve();
-            if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
-                Object[] array = (Object[]) val;
-                Set<String> values = new HashSet<>();
-                for (Object obj : array) {
-                    if (obj instanceof TypeDescription) {
-                        values.add(((TypeDescription) obj).getName());
-                    } else {
-                        values.add(obj.toString());
-                    }
-                }
-                props.putArrayValues(m.getName(), values);
-            }
+            String name = m.getName();
+
+            addEnumProperties(val, name, props);
+            addArrayProperties(val, name, props);
         }
         return props;
     }
 
-    private boolean matches(AnnotationDescription foundAnnotation, Annotation supportedAnnotation) {
-        String canonicalName = foundAnnotation.getAnnotationType().getCanonicalName();
-        if (canonicalName == null) {
-            return false;
+    private void addEnumProperties(Object val, String name, AnnotationProperties props) {
+        if (val instanceof EnumerationDescription) {
+            EnumerationDescription e = (EnumerationDescription) val;
+            props.putEnumValue(name, e.getValue());
         }
-        return supportedAnnotation.partialClassNames().stream().anyMatch(canonicalName::endsWith);
+    }
+
+    private void addArrayProperties(Object val, String name, AnnotationProperties props) {
+        if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
+            Object[] array = (Object[]) val;
+            Set<String> values = new HashSet<>();
+            for (Object obj : array) {
+                if (obj instanceof TypeDescription) {
+                    values.add(((TypeDescription) obj).getName());
+                } else {
+                    values.add(obj.toString());
+                }
+            }
+            props.putArrayValues(name, values);
+        }
     }
 }

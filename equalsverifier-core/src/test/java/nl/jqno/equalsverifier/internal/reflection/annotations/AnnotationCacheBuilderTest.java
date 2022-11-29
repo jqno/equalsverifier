@@ -1,18 +1,18 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import static nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.lang.annotation.ElementType;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
-import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.Util;
-import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithClassValues;
+import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithValues;
 import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
 import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
 import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
@@ -355,6 +355,22 @@ public class AnnotationCacheBuilderTest {
     }
 
     @Test
+    public void annotationsEnumParametersAreFoundOnClass() {
+        AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
+        Annotation[] supportedAnnotations = { annotation };
+        AnnotationCacheBuilder acb = new AnnotationCacheBuilder(
+            supportedAnnotations,
+            NO_INGORED_ANNOTATIONS
+        );
+        acb.build(AnnotationWithValuesContainer.class, cache);
+
+        assertTypeHasAnnotation(AnnotationWithValuesContainer.class, annotation);
+
+        String value = annotation.properties.getEnumValue("elementType");
+        assertEquals("FIELD", value);
+    }
+
+    @Test
     public void annotationsArrayParametersAreFoundOnClass() {
         AnnotationWithClassValuesAnnotation annotation = new AnnotationWithClassValuesAnnotation();
         Annotation[] supportedAnnotations = { annotation };
@@ -362,9 +378,9 @@ public class AnnotationCacheBuilderTest {
             supportedAnnotations,
             NO_INGORED_ANNOTATIONS
         );
-        acb.build(AnnotationWithClassValuesContainer.class, cache);
+        acb.build(AnnotationWithValuesContainer.class, cache);
 
-        assertTypeHasAnnotation(AnnotationWithClassValuesContainer.class, annotation);
+        assertTypeHasAnnotation(AnnotationWithValuesContainer.class, annotation);
 
         Set<String> annotations = new HashSet<>(
             annotation.properties.getArrayValues("annotations")
@@ -402,13 +418,11 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void generatedClassWithGeneratedFieldDoesNotThrow() {
         class Super {}
-        Class<?> sub = new ByteBuddy()
-            .with(TypeValidation.DISABLED)
-            .subclass(Super.class)
-            .defineField("dynamicField", int.class, Visibility.PRIVATE)
-            .make()
-            .load(Super.class.getClassLoader(), Instantiator.getClassLoadingStrategy(Super.class))
-            .getLoaded();
+        Class<?> sub = Instantiator.giveDynamicSubclass(
+            Super.class,
+            "dynamicField",
+            b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE)
+        );
         build(sub);
     }
 
@@ -445,7 +459,7 @@ public class AnnotationCacheBuilderTest {
         @Override
         public Set<String> partialClassNames() {
             Set<String> result = new HashSet<>();
-            result.add(AnnotationWithClassValues.class.getSimpleName());
+            result.add(AnnotationWithValues.class.getSimpleName());
             return result;
         }
 
@@ -465,6 +479,9 @@ public class AnnotationCacheBuilderTest {
         }
     }
 
-    @AnnotationWithClassValues(annotations = { Nonnull.class, NotNull.class })
-    private static class AnnotationWithClassValuesContainer {}
+    @AnnotationWithValues(
+        annotations = { Nonnull.class, NotNull.class },
+        elementType = ElementType.FIELD
+    )
+    private static class AnnotationWithValuesContainer {}
 }

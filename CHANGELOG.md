@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Changed
+- Check that getters are used for lazily fetched fields in JPA entities. ([Issue 650](https://github.com/jqno/equalsverifier/issues/650))
 
 ## [3.11.1] - 2022-11-18
 ### Added
