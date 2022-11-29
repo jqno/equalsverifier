@@ -5,7 +5,6 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 import java.util.Set;
-
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
