@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+
+## [3.12] - 2022-11-30
 ### Added
 - Diagnostic output in all error messages.
 
@@ -877,7 +879,9 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 ## [0.1] - 2009-06-01
 You can now use EqualsVerifier!
 
-[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11.1...HEAD
+[Unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12...HEAD
+
+[3.12]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11.1...equalsverifier-3.12
 
 [3.11.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11...equalsverifier-3.11.1
 [3.11]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.10.1...equalsverifier-3.11
