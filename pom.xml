@@ -12,6 +12,12 @@
     <url>https://www.jqno.nl/equalsverifier</url>
     <inceptionYear>2009</inceptionYear>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>9</version>
+    </parent>
+
     <scm>
         <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
@@ -51,17 +57,6 @@
     <issueManagement>
         <url>https://github.com/jqno/equalsverifier/issues</url>
     </issueManagement>
-
-    <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <properties>
         <encoding>UTF-8</encoding>
@@ -109,14 +104,12 @@
         <version.maven-assembly-plugin>3.4.2</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.10.1</version.maven-compiler-plugin>
         <version.maven-enforcer-plugin>3.1.0</version.maven-enforcer-plugin>
-        <version.maven-gpg-plugin>3.0.1</version.maven-gpg-plugin>
         <version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
         <version.maven-javadoc-plugin>3.4.1</version.maven-javadoc-plugin>
         <version.maven-release-plugin>2.5.3</version.maven-release-plugin>
         <version.maven-shade-plugin>3.4.1</version.maven-shade-plugin>
         <version.maven-source-plugin>3.2.1</version.maven-source-plugin>
         <version.maven-surefire-plugin>2.22.2</version.maven-surefire-plugin>
-        <version.nexus-staging-maven-plugin>1.6.13</version.nexus-staging-maven-plugin>
         <version.pitest.github>0.1.0</version.pitest.github>
         <version.pitest.junit5>1.1.0</version.pitest.junit5>
         <version.pitest.maven>1.10.0</version.pitest.maven>
@@ -128,22 +121,6 @@
     </properties>
 
     <build>
-
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${version.maven-compiler-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <version>${version.maven-gpg-plugin}</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -164,6 +141,12 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${version.maven-compiler-plugin}</version>
             </plugin>
 
             <plugin>
@@ -211,7 +194,7 @@
                 <version>${version.maven-source-plugin}</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar-no-fork</goal>
                         </goals>
@@ -224,22 +207,8 @@
                 <artifactId>maven-release-plugin</artifactId>
                 <version>${version.maven-release-plugin}</version>
                 <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>release</releaseProfiles>
                     <tagNameFormat>equalsverifier-@{project.version}</tagNameFormat>
-                    <useReleaseProfile>false</useReleaseProfile>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${version.nexus-staging-maven-plugin}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
         </plugins>
@@ -614,33 +583,6 @@
             <modules>
                 <module>equalsverifier-release-verify</module>
             </modules>
-        </profile>
-
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                                <configuration>
-                                    <gpgArguments>
-                                        <arg>--pinentry-mode</arg>
-                                        <arg>loopback</arg>
-                                    </gpgArguments>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>
