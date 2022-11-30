@@ -5,7 +5,7 @@
     <parent>
         <groupId>nl.jqno.equalsverifier</groupId>
         <artifactId>equalsverifier-parent</artifactId>
-        <version>3.12-SNAPSHOT</version>
+        <version>3.12</version>
     </parent>
     <packaging>pom</packaging>
 
@@ -18,7 +18,7 @@
         <url>https://github.com/jqno/equalsverifier</url>
         <connection>scm:git:https://github.com/jqno/equalsverifier</connection>
         <developerConnection>scm:git:https://github.com/jqno/equalsverifier</developerConnection>
-      <tag>HEAD</tag>
+      <tag>equalsverifier-3.12</tag>
   </scm>
 
     <properties>
