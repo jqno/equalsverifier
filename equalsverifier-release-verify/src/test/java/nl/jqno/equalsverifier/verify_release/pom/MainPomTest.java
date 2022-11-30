@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.verify_release;
+package nl.jqno.equalsverifier.verify_release.pom;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 

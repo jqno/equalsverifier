@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.verify_release;
+package nl.jqno.equalsverifier.verify_release.pom;
 
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomAsserter;
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomReader;
