@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <a name="3.x"/>
 
 ## [Unreleased]
+### Added
+- Diagnostic output in all error messages.
+
 ### Changed
 - Check that getters are used for lazily fetched fields in JPA entities. ([Issue 650](https://github.com/jqno/equalsverifier/issues/650))
 - Improves error messages around `Warning.SURROGATE_KEY`. ([Issue 698](https://github.com/jqno/equalsverifier/issues/698))

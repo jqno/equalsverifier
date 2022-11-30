@@ -13,6 +13,7 @@ public class OutputTest {
 
     private static final String SEE_ALSO = "For more information, go to";
     private static final String WEBSITE_URL = "https://www.jqno.nl/equalsverifier/errormessages";
+    private static final String SUFFIX = "(EqualsVerifier null, JDK";
     private static final String MESSAGE = "a message for an exception";
 
     @Test
@@ -20,14 +21,20 @@ public class OutputTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(Point.class).verify())
             .assertCause(AssertionException.class)
-            .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL);
+            .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, SUFFIX);
     }
 
     @Test
     public void messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         ExpectedException
             .when(() -> EqualsVerifier.forClasses(A.class, Point.class).verify())
-            .assertMessageContains(Point.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, "---");
+            .assertMessageContains(
+                Point.class.getSimpleName(),
+                SEE_ALSO,
+                WEBSITE_URL,
+                SUFFIX,
+                "---"
+            );
     }
 
     @Test
@@ -43,7 +50,7 @@ public class OutputTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify())
             .assertMessageContains(AssertionExceptionWithCauseThrower.class.getSimpleName())
-            .assertMessageContains(SEE_ALSO, WEBSITE_URL, MESSAGE)
+            .assertMessageContains(SEE_ALSO, WEBSITE_URL, SUFFIX, MESSAGE)
             .assertMessageDoesNotContain(NullPointerException.class.getSimpleName())
             .assertCause(AssertionException.class)
             .assertCause(NullPointerException.class);
@@ -61,8 +68,8 @@ public class OutputTest {
                 UnsupportedOperationExceptionWithMessageThrower.class.getSimpleName()
             )
             .assertMessageContains(UnsupportedOperationException.class.getSimpleName())
-            .assertMessageContains(SEE_ALSO, WEBSITE_URL, MESSAGE)
-            .assertMessageDoesNotContain("null")
+            .assertMessageContains(SEE_ALSO, WEBSITE_URL, SUFFIX, MESSAGE)
+            .assertMessageDoesNotContainAfterRemove("EqualsVerifier null", "null")
             .assertCause(UnsupportedOperationException.class)
             .assertCauseMessageContains(MESSAGE);
     }
@@ -72,8 +79,8 @@ public class OutputTest {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(IllegalStateExceptionThrower.class).verify())
             .assertMessageContains(IllegalStateExceptionThrower.class.getSimpleName())
-            .assertMessageContains(SEE_ALSO, WEBSITE_URL, "<no message>")
-            .assertMessageDoesNotContain("null")
+            .assertMessageContains(SEE_ALSO, WEBSITE_URL, SUFFIX, "<no message>")
+            .assertMessageDoesNotContainAfterRemove("EqualsVerifier null", "null")
             .assertCause(IllegalStateException.class);
     }
 
@@ -81,7 +88,7 @@ public class OutputTest {
     public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(Node.class).verify())
-            .assertMessageContains(Node.class.getSimpleName(), SEE_ALSO, WEBSITE_URL)
+            .assertMessageContains(Node.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, SUFFIX)
             .assertNotCause(StackOverflowError.class);
     }
 

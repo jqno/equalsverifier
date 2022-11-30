@@ -94,6 +94,7 @@ public class JarAsserter {
                 assertContains("Automatic-Module-Name: nl.jqno.equalsverifier", manifest, filename),
             () ->
                 assertContains("Implementation-Title: " + implementationTitle, manifest, filename),
+            () -> assertContains("Implementation-Version: ", manifest, filename),
             () -> assertContains("Multi-Release: true", manifest, filename),
             () -> assertContains("Website: https://www.jqno.nl/equalsverifier", manifest, filename)
         );

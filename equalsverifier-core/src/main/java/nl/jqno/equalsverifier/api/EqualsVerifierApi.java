@@ -11,9 +11,6 @@ import nl.jqno.equalsverifier.Warning;
  * @param <T> The class under test.
  */
 public interface EqualsVerifierApi<T> {
-    /* package private */String WEBSITE_URL =
-        "For more information, go to: https://www.jqno.nl/equalsverifier/errormessages";
-
     /**
      * Suppresses warnings given by {@code EqualsVerifier}. See {@link Warning} to see what warnings
      * can be suppressed.

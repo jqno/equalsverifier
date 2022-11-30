@@ -114,6 +114,19 @@ public final class ExpectedException {
         return this;
     }
 
+    public ExpectedException assertMessageDoesNotContainAfterRemove(
+        String toRemove,
+        String... fragments
+    ) {
+        String message = e.getMessage().replaceAll(toRemove, "");
+        for (String fragment : fragments) {
+            if (message.contains(fragment)) {
+                fail("Message [" + message + "] contains [" + fragment + "]");
+            }
+        }
+        return this;
+    }
+
     public ExpectedException assertDescriptionContains(String... fragments) {
         if (!(e instanceof MessagingException)) {
             fail("Exception " + e.getClass().getSimpleName() + " is not a MessagingException.");

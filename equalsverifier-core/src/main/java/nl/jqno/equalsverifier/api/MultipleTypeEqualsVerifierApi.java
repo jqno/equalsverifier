@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.util.ErrorMessage;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
@@ -127,14 +128,15 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         }
         String messages = Formatter
             .of(
-                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%" + WEBSITE_URL,
+                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%\n%%",
                 failures.size(),
                 failures.size() == 1 ? "class" : "classes",
                 failures
                     .stream()
                     .map(r -> "* " + r.getType().getName())
                     .collect(Collectors.joining("\n")),
-                failures.stream().map(r -> r.getMessage()).collect(Collectors.joining("\n---\n"))
+                failures.stream().map(r -> r.getMessage()).collect(Collectors.joining("\n---\n")),
+                ErrorMessage.suffix()
             )
             .format();
         throw new AssertionError(messages);

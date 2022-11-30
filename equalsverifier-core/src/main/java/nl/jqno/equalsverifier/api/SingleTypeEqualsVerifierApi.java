@@ -351,9 +351,10 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         String message = description == null ? "<no message>" : description;
         return Formatter
             .of(
-                "EqualsVerifier found a problem in class %%.\n-> %%\n\n" + WEBSITE_URL,
+                "EqualsVerifier found a problem in class %%.\n-> %%\n\n%%",
                 type.getName(),
-                message
+                message,
+                ErrorMessage.suffix()
             )
             .format();
     }
