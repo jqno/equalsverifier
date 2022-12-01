@@ -1,8 +1,7 @@
-#Licence file for pitest git plugin
-#See https://blog.pitest.org/oss-pitest-pr/ for details of what this is about
-#Fri Apr 23 14:12:55 BST 2021
-expires=23/10/2022
+#Licence file for pitest extensions
+#Wed Nov 30 14:44:36 GMT 2022
+expires=30/11/2027
 keyVersion=1
-signature=afd2YNc5cqaupiwLo8uJ8Y9uDBb4PN+/joOxTguWvCiygIa0lIQNygyX4veDyfM+61XFqXmEKuyVq2XGkEMnMTZ8H2fwfaiCCuAZLovtxQy2nkF8QvsaYpaldMdKCmcEfBgfEIW3raiYll9//hKiF0cNSuzKWA3dueVu7P3Syyo\=
+signature=PUSWQ1MN3Fn+N4tCxnK+3jHSj1Mlrvve3VTIrmjF1hkGS+y1v05GX3YbHhwuIL6WUMMhOuV/+cyIbcnGZb4AeowyM7VbwZhrfmrxQ+KWokGO9ZcFyWXJ8zl/cLzHDibmFx+WDEUToBHP/NgED7X36HjE1UqBlqeAaW2zwJx117I\=
 packages=nl.jqno.equalsverifier.*
 type=OSSS
