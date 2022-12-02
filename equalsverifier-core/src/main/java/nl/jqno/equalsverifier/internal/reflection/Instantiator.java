@@ -86,7 +86,7 @@ public final class Instantiator<T> {
         String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
         String name =
             namePrefix +
-            "." +
+            (namePrefix.isEmpty() ? "" : ".") +
             superclass.getSimpleName() +
             "$$DynamicSubclass$" +
             Integer.toHexString(superclass.hashCode()) +

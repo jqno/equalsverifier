@@ -7,7 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.util.List;
+import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
+import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import nl.jqno.equalsverifier.testhelpers.types.ColorBlindColorPoint;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -103,5 +105,17 @@ public class InstantiatorTest {
         );
         Field f = sub.getDeclaredField("dynamicField");
         assertNotNull(f);
+    }
+
+    @Test
+    public void giveDynamicSubclassForClassWithNoPackage() {
+        Class<?> type = new ByteBuddy()
+            .with(TypeValidation.DISABLED)
+            .subclass(Object.class)
+            .name("NoPackage")
+            .make()
+            .load(getClass().getClassLoader())
+            .getLoaded();
+        Instantiator.giveDynamicSubclass(type, "X", b -> b);
     }
 }
