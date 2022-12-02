@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Improved error message output for objects that throw exceptions in their `toString()` methods. ([Issue 716](https://github.com/jqno/equalsverifier/issues/716))
+
 ## [3.12] - 2022-11-30
 
 ### Added

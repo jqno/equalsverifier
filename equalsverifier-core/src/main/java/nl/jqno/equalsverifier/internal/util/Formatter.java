@@ -67,6 +67,8 @@ public final class Formatter {
         }
         try {
             return obj.toString();
+        } catch (AbstractMethodError e) {
+            return stringifyByReflection(obj);
         } catch (Throwable e) {
             return (
                 stringifyByReflection(obj) +
@@ -89,13 +91,19 @@ public final class Formatter {
         String typeName = type.getSimpleName().replaceAll("\\$\\$DynamicSubclass.*", "");
         result.append(typeName);
 
+        boolean foundFields = false;
         for (Field field : FieldIterable.of(type)) {
+            foundFields = true;
             String fieldName = field.getName();
             result.append(" ");
             result.append(fieldName);
             result.append("=");
             Object value = accessor.getField(field);
             result.append(stringify(value));
+        }
+
+        if (!foundFields) {
+            result.append(" (no fields)");
         }
 
         result.append("]");
