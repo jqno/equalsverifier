@@ -44,18 +44,10 @@ public abstract class ObjectAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
-        if (isRecord(type)) {
+        if (RecordsHelper.isRecord(type)) {
             return new RecordObjectAccessor<T>(object, type);
         }
         return new InPlaceObjectAccessor<>(object, type);
-    }
-
-    private static boolean isRecord(Class<?> type) {
-        Class<?> record = Util.classForName("java.lang.Record");
-        if (record == null) {
-            return false;
-        }
-        return record.isAssignableFrom(type);
     }
 
     /**
