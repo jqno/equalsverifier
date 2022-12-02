@@ -93,12 +93,16 @@ public final class Instantiator<T> {
             "$" +
             nameSuffix;
 
-        Class<S> existsAlready = (Class<S>) classForName(name);
+        Class<?> context = isSystemClass ? Instantiator.class : superclass;
+        ClassLoader classLoader = context.getClassLoader();
+
+        // `mvn quarkus:dev` does strange classloader stuff. We need to make sure that we
+        // check existence with the correct classloader. I don't know how to unit test this.
+        Class<S> existsAlready = (Class<S>) classForName(classLoader, name);
         if (existsAlready != null) {
             return existsAlready;
         }
 
-        Class<?> context = isSystemClass ? Instantiator.class : superclass;
         ClassLoadingStrategy<ClassLoader> cs = getClassLoadingStrategy(context);
         DynamicType.Builder<S> builder = new ByteBuddy()
             .with(TypeValidation.DISABLED)
@@ -107,7 +111,7 @@ public final class Instantiator<T> {
 
         builder = modify.apply(builder);
 
-        return (Class<S>) builder.make().load(context.getClassLoader(), cs).getLoaded();
+        return (Class<S>) builder.make().load(classLoader, cs).getLoaded();
     }
 
     private static String getPackageName(Class<?> type) {

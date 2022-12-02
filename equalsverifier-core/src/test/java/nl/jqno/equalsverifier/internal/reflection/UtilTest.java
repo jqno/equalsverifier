@@ -30,6 +30,20 @@ public class UtilTest {
     }
 
     @Test
+    public void forNameWithClassLoaderReturnsClass_whenTypeExists() {
+        ClassLoader cl = getClass().getClassLoader();
+        Class<?> actual = Util.classForName(cl, "java.util.GregorianCalendar");
+        assertEquals(actual, GregorianCalendar.class);
+    }
+
+    @Test
+    public void forNameWithClassLoaderReturnsNull_whenTypeDoesntExist() {
+        ClassLoader cl = getClass().getClassLoader();
+        Class<?> actual = Util.classForName(cl, "this.type.does.not.exist");
+        assertNull(actual);
+    }
+
+    @Test
     public void classesReturnsItsArguments() {
         Class<?>[] expected = new Class<?>[] { String.class, Object.class };
         Class<?>[] actual = Util.classes(String.class, Object.class);
