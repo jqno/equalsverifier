@@ -18,7 +18,7 @@ EqualsVerifier's Maven coordinates are:
 <dependency>
     <groupId>nl.jqno.equalsverifier</groupId>
     <artifactId>equalsverifier</artifactId>
-    <version>3.12</version>
+    <version>3.12.1</version>
     <scope>test</scope>
 </dependency>
 ```
