@@ -148,7 +148,11 @@ public final class Configuration<T> {
                 .filter(f -> !fieldHas.apply(f, SupportedAnnotations.NATURALID))
                 .collect(Collectors.toSet());
         }
-        if (annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID)) {
+
+        if (
+            annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID) &&
+            !warningsToSuppress.contains(Warning.SURROGATE_OR_BUSINESS_KEY)
+        ) {
             if (warningsToSuppress.contains(Warning.SURROGATE_KEY)) {
                 return actualFields
                     .stream()

@@ -157,6 +157,15 @@ public enum Warning {
     SURROGATE_KEY,
 
     /**
+     * Disables the check that fields marked with the @Id or @EmbeddedId annotations in JPA entities
+     * may not be used in the {@code equals} contract.
+     *
+     * <p>When this warning is suppressed, all fields will become part of the entity's key, and
+     * EqualsVerifier will operate as if the entity were a normal class.
+     */
+    SURROGATE_OR_BUSINESS_KEY,
+
+    /**
      * Disables the check that transient fields not be part of the {@code equals} contract.
      *
      * <p>{@link EqualsVerifier}'s standard behaviour is to disallow transient fields being used in

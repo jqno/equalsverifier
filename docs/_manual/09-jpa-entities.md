@@ -10,7 +10,7 @@ JPA entities are mutable by design. Since adding `.suppress(Warning.NONFINAL_FIE
 JPA entities are also not allowed to be final, and even a final `equals` or `hashCode` method [is problematic](https://stackoverflow.com/questions/6608222/does-a-final-method-prevent-hibernate-from-creating-a-proxy-for-such-an-entity). Therefore, EqualsVerifier will not enforce these for JPA entities, like it normally would. Note that this means that your class will be vulnerable to subclasses [breaking `equals`](/equalsverifier/manual/final).
 
 
-### Id's
+### Ids
 By default, EqualsVerifier assumes that your entities have a [business or natural key](https://en.wikipedia.org/wiki/Natural_key). Consequently, all fields that are marked with the `@Id` annotation are assumed not to participate in the class's `equals` and `hashCode` methods. For all other fields, EqualsVerifier behaves as usual.
 
 EqualsVerifier also supports Hibernate's `@NaturalId` annotation. If it detects the presence of this annotation in a class, it will assume that _only_ the fields marked with `@NaturalId` participate in `equals` and `hashCode`, and that all other fields (including the ones marked with `@Id`) do not.
@@ -21,10 +21,12 @@ When `@NaturalId` is present or when `Warning.SURROGATE_KEY` is suppressed, ther
 
 EqualsVerifier will not only detect these annotations when they are placed on a field, but also when they are placed on the field's corresponding accessor method.
 
+If your class has a business key, but no separate field to serve as `@Id`, you can tell EqualsVerifier by suppressing `Warning.SURROGATE_OR_BUSINESS_KEY`. For instance, if your entity models a person, and the field `socialSecurityNumber` is marked with `@Id`, you can use `Warning.SURROGATE_OR_BUSINESS_KEY` to include `socialSecurityNumber` and other fields like `name` and `birthDate` in `equals` and `hashCode`.
+
 In order to meet the consistency requirements when implementing a class with a surrogate key, some argue that it [is necessary to make the `hashCode` constant](https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/). EqualsVerifier still requires a 'normal' `hashCode` implementation. If you want a constant `hashCode`, you can suppress `Warning.STRICT_HASHCODE`.
 
 
-### Id's and new objects
+### Ids and new objects
 A common pattern in JPA when deciding whether two objects are equal, is to look at their fields only if the object hasn't been persisted yet. If it has been persisted, the field has an id, and then the fields are ignored and only the id is used to decide. Such an `equals` method might look like this:
 
 {% highlight java %}
@@ -124,5 +126,5 @@ EqualsVerifier.forClass(Foo.class)
         .verify();
 {% endhighlight %}
 
-Of course, you only need to include the annotations that you actually use. If any of the classes you specify isn't an annotation. EqualsVerifier throws an exception.
+Of course, you only need to include the annotations that you actually use. If any of the classes you specify isn't an annotation, EqualsVerifier throws an exception.
 
