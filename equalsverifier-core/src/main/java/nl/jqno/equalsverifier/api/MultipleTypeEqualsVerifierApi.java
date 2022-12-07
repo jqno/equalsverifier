@@ -128,7 +128,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         }
         String messages = Formatter
             .of(
-                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%\n%%",
+                "EqualsVerifier found a problem in %% %%.\n---\n%%\n---\n%%\n---\n%%",
                 failures.size(),
                 failures.size() == 1 ? "class" : "classes",
                 failures

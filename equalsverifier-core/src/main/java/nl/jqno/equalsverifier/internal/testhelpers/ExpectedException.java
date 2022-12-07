@@ -104,6 +104,27 @@ public final class ExpectedException {
         return this;
     }
 
+    public ExpectedException assertMessageContainsOnce(String fragment) {
+        int occurrences = 0;
+        String message = e.getMessage();
+        while (message.indexOf(fragment) > -1) {
+            occurrences += 1;
+            message = message.substring(message.indexOf(fragment) + fragment.length());
+        }
+        if (occurrences != 1) {
+            fail(
+                "Message [" +
+                e.getMessage() +
+                "] contains [" +
+                fragment +
+                "] " +
+                occurrences +
+                " times; should be 1."
+            );
+        }
+        return this;
+    }
+
     public ExpectedException assertMessageDoesNotContain(String... fragments) {
         String message = e.getMessage();
         for (String fragment : fragments) {

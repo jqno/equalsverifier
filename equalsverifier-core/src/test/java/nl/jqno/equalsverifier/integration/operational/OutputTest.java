@@ -4,7 +4,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
+import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.jupiter.api.Test;
@@ -27,14 +27,12 @@ public class OutputTest {
     @Test
     public void messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClasses(A.class, Point.class).verify())
-            .assertMessageContains(
-                Point.class.getSimpleName(),
-                SEE_ALSO,
-                WEBSITE_URL,
-                SUFFIX,
-                "---"
-            );
+            .when(() -> EqualsVerifier.forClasses(Point.class, MutablePoint.class).verify())
+            .assertMessageContains(Point.class.getSimpleName())
+            .assertMessageContains("---")
+            .assertMessageContainsOnce(SEE_ALSO)
+            .assertMessageContainsOnce(WEBSITE_URL)
+            .assertMessageContainsOnce(SUFFIX);
     }
 
     @Test

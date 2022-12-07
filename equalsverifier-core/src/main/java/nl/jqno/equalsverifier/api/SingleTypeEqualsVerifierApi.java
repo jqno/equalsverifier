@@ -328,6 +328,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return report(true);
     }
 
+    /**
+     * Performs the verification of the contracts for {@code equals} and {@code hashCode} and
+     * returns an {@link EqualsVerifierReport} with the results of the verification.
+     *
+     * @param showUrl Whether or not to show the url at the end of the error message.
+     * @return An {@link EqualsVerifierReport} that indicates whether the contract is met and
+     *     whether {@link EqualsVerifier}'s preconditions hold.
+     */
     public EqualsVerifierReport report(boolean showUrl) {
         try {
             performVerification();
@@ -349,14 +357,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     private String buildErrorMessage(String description, boolean showUrl) {
         String message = description == null ? "<no message>" : description;
-        return Formatter
-            .of(
-                "EqualsVerifier found a problem in class %%.\n-> %%\n\n%%",
-                type.getName(),
-                message,
-                ErrorMessage.suffix()
-            )
+        String result = Formatter
+            .of("EqualsVerifier found a problem in class %%.\n-> %%", type.getName(), message)
             .format();
+        if (showUrl) {
+            result += "\n\n" + ErrorMessage.suffix();
+        }
+        return result;
     }
 
     private void performVerification() {

@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Removed duplicated website urls and diagnostic output when using `forPackage()` or `forClasses()` and multiple classes have issues.
+
 ## [3.12.1] - 2022-12-02
 
 ### Changed
