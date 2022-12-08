@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `Warning.SURROGATE_OR_BUSINESS_KEY` for JPA entities that insist on using all fields in `equals()` and `hashCode()`, whether they are `@Id` or not.
+
 ### Changed
 
 - Removed duplicated website urls and diagnostic output when using `forPackage()` or `forClasses()` and multiple classes have issues.

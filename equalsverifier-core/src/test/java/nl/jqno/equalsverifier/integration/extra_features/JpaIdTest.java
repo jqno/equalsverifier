@@ -34,6 +34,18 @@ public class JpaIdTest {
     }
 
     @Test
+    public void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(JpaIdValueKeyPerson.class)
+            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+            .verify();
+        EqualsVerifier
+            .forClass(JpaIdValueKeyPersonReorderedFields.class)
+            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+            .verify();
+    }
+
+    @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
         ExpectedException
             .when(() ->
@@ -381,6 +393,21 @@ public class JpaIdTest {
     }
 
     @Test
+    public void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(JpaIdBusinessKeyPerson.class)
+                    .suppress(Warning.SURROGATE_KEY, Warning.SURROGATE_OR_BUSINESS_KEY)
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "Precondition",
+                "you can't suppress Warning.SURROGATE_KEY when Warning.SURROGATE_OR_BUSINESS_KEY is also suppressed."
+            );
+    }
+
+    @Test
     public void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class).verify())
@@ -547,6 +574,88 @@ public class JpaIdTest {
         @Override
         public final int hashCode() {
             return Objects.hash(id);
+        }
+    }
+
+    static class JpaIdValueKeyPerson {
+
+        @Id
+        private final UUID id;
+
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        public JpaIdValueKeyPerson(
+            UUID id,
+            String socialSecurity,
+            String name,
+            LocalDate birthdate
+        ) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdValueKeyPerson)) {
+                return false;
+            }
+            JpaIdValueKeyPerson other = (JpaIdValueKeyPerson) obj;
+            return (
+                Objects.equals(id, other.id) &&
+                Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(birthdate, other.birthdate)
+            );
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(id, socialSecurity, name, birthdate);
+        }
+    }
+
+    static class JpaIdValueKeyPersonReorderedFields {
+
+        private final String socialSecurity;
+        private final String name;
+        private final LocalDate birthdate;
+
+        @Id
+        private final UUID id;
+
+        public JpaIdValueKeyPersonReorderedFields(
+            UUID id,
+            String socialSecurity,
+            String name,
+            LocalDate birthdate
+        ) {
+            this.id = id;
+            this.socialSecurity = socialSecurity;
+            this.name = name;
+            this.birthdate = birthdate;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdValueKeyPersonReorderedFields)) {
+                return false;
+            }
+            JpaIdValueKeyPersonReorderedFields other = (JpaIdValueKeyPersonReorderedFields) obj;
+            return (
+                Objects.equals(socialSecurity, other.socialSecurity) &&
+                Objects.equals(name, other.name) &&
+                Objects.equals(birthdate, other.birthdate) &&
+                Objects.equals(id, other.id)
+            );
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(socialSecurity, name, birthdate, id);
         }
     }
 
