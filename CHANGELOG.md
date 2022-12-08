@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.12.2] - 2022-12-08
+
 ### Added
 
 - `Warning.SURROGATE_OR_BUSINESS_KEY` for JPA entities that insist on using all fields in `equals()` and `hashCode()`, whether they are `@Id` or not.
@@ -1077,7 +1079,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.2...HEAD
+[3.12.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.1...equalsverifier-3.12.2
 [3.12.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12...equalsverifier-3.12.1
 [3.12]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11.1...equalsverifier-3.12
 [3.11.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.11...equalsverifier-3.11.1
