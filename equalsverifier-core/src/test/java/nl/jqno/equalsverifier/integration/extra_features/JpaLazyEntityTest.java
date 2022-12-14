@@ -83,6 +83,12 @@ public class JpaLazyEntityTest {
         getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class, "equals");
     }
 
+    @Test
+    public void lazyGettersPickedUpInSuper() {
+        EqualsVerifier.forClass(LazyGetterContainer.class).usingGetClass().verify();
+        EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
@@ -413,6 +419,48 @@ public class JpaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getElementCollection());
+        }
+    }
+
+    @Entity
+    static class LazyGetterContainer {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String s;
+
+        public String getS() {
+            return s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            return Objects.equals(getS(), ((LazyGetterContainer) obj).getS());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getS());
+        }
+    }
+
+    @Entity
+    static class ChildOfLazyGetterContainer extends LazyGetterContainer {
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            return super.equals(obj);
         }
     }
 }

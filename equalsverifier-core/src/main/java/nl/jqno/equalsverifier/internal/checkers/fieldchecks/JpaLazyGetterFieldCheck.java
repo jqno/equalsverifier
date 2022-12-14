@@ -47,7 +47,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        assertEntity(fieldName, "equals", getterName, accessor.declaresMethod(getterName));
+        assertEntity(fieldName, "equals", getterName, accessor.hasMethod(getterName));
         ClassAccessor<T> subAccessor = throwingGetterAccessor(getterName);
 
         T red1 = subAccessor.getRedObject(TypeTag.NULL);

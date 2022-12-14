@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Getters for lazy fields in entities could not be found in a superclass. ([Issue 744](https://github.com/jqno/equalsverifier/issues/744))
+
 ## [3.12.2] - 2022-12-08
 
 ### Added

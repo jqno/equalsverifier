@@ -101,15 +101,21 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void declaresMethod() {
-        ClassAccessor<?> accessor = ClassAccessor.of(String.class, prefabValues);
-        assertTrue(accessor.declaresMethod("charAt", int.class));
+    public void hasMethod() {
+        ClassAccessor<?> accessor = ClassAccessor.of(MethodContainer.class, prefabValues);
+        assertTrue(accessor.hasMethod("m"));
     }
 
     @Test
-    public void doesNotDeclareMethod() {
-        ClassAccessor<?> accessor = ClassAccessor.of(String.class, prefabValues);
-        assertFalse(accessor.declaresMethod("doesNotExist", int.class));
+    public void hasMethodInSuper() {
+        ClassAccessor<?> accessor = ClassAccessor.of(ChildOfMethodContainer.class, prefabValues);
+        assertTrue(accessor.hasMethod("m"));
+    }
+
+    @Test
+    public void doesNotHaveMethod() {
+        ClassAccessor<?> accessor = ClassAccessor.of(MethodContainer.class, prefabValues);
+        assertFalse(accessor.hasMethod("doesNotExist", int.class));
     }
 
     @Test
@@ -343,4 +349,11 @@ public class ClassAccessorTest {
         @NonNull
         String t;
     }
+
+    static class MethodContainer {
+
+        public void m() {}
+    }
+
+    static class ChildOfMethodContainer extends MethodContainer {}
 }
