@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Added prefab values for `java.io.PrintStream`. ([Issue 753](https://github.com/jqno/equalsverifier/issues/753))
+
 ## [3.12.3] - 2022-12-14
 
 ### Fixed

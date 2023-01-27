@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -530,6 +531,7 @@ public class JavaApiClassesTest {
         private final EventObject eventObject;
         private final Charset charset;
         private final Semaphore semaphore;
+        private final PrintStream printStream;
 
         public CommonClassesContainer(
             String string,
@@ -557,7 +559,8 @@ public class JavaApiClassesTest {
             Currency currency,
             EventObject eventObject,
             Charset charset,
-            Semaphore semaphore
+            Semaphore semaphore,
+            PrintStream printStream
         ) {
             this.string = string;
             this.integer = integer;
@@ -585,6 +588,7 @@ public class JavaApiClassesTest {
             this.eventObject = eventObject;
             this.charset = charset;
             this.semaphore = semaphore;
+            this.printStream = printStream;
         }
 
         @Override

@@ -8,6 +8,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
+import java.io.PrintStream;
 import java.lang.reflect.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -185,6 +186,7 @@ public final class JavaApiPrefabValues {
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
         addValues(UUID.class, new UUID(0, -1), new UUID(1, 0), new UUID(0, -1));
+        addValues(PrintStream.class, System.out, System.err, System.out);
 
         rethrow(
             () ->
