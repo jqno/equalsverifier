@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.12.4] - 2023-01-28
+
 ### Fixed
 
 - Added prefab values for `java.io.PrintStream`. ([Issue 753](https://github.com/jqno/equalsverifier/issues/753))
@@ -1089,7 +1091,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.3...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...HEAD
+[3.12.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.3...equalsverifier-3.12.4
 [3.12.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.2...equalsverifier-3.12.3
 [3.12.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.1...equalsverifier-3.12.2
 [3.12.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12...equalsverifier-3.12.1
