@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.12.4] - 2023-01-28
 
+### Changed
+
+- Automates release procedure using JReleaser and GitHub Actions.
+
 ### Fixed
 
 - Added prefab values for `java.io.PrintStream`. ([Issue 753](https://github.com/jqno/equalsverifier/issues/753))
