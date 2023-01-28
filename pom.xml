@@ -9,7 +9,7 @@
     <artifactId>equalsverifier-parent</artifactId>
     <name>EqualsVerifier | parent</name>
     <description>EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
-    <url>https://www.jqno.nl/equalsverifier</url>
+    <url>https://jqno.nl/equalsverifier</url>
     <inceptionYear>2009</inceptionYear>
 
     <parent>
@@ -37,7 +37,7 @@
             <id>Jan</id>
             <name>Jan Ouwens</name>
             <email>jan.ouwens@gmail.com</email>
-            <url>https://www.jqno.nl</url>
+            <url>https://jqno.nl</url>
             <timezone>Central European Time</timezone>
         </developer>
     </developers>
@@ -200,6 +200,12 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>3.0.0</version>
             </plugin>
 
             <plugin>

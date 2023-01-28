@@ -1,0 +1,34 @@
+# Generated with JReleaser 1.4.0 at 2023-01-28T20:40:45.870433537+01:00
+project:
+  name: EqualsVerifier
+  description: Makes testing equals and hashCode a one-liner
+  longDescription: EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.
+  authors:
+    - Jan Ouwens
+  license: Apache-2.0
+  links:
+    homepage: https://jqno.nl/equalsverifier
+  java:
+    groupId: nl.jqno.equalsverifier
+    version: 8
+  inceptionYear: 2009
+
+release:
+  github:
+    owner: jqno
+    tagName: equalsverifier-{{projectVersion}}
+
+signing:
+  active: ALWAYS
+  armored: true
+
+deploy:
+  maven:
+    nexus2:
+      maven-central:
+        active: ALWAYS
+        url: https://oss.sonatype.org/service/local
+        closeRepository: true
+        releaseRepository: false
+        stagingRepositories:
+          - target/staging-deploy
