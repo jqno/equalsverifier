@@ -1,8 +1,6 @@
 pom.xml.versionsBackup
 dependency-reduced-pom.xml
 equalsverifier-release-verify/src/test/resources
-trace.log
-out/
 
 .project
 .classpath
@@ -14,3 +12,8 @@ target
 # IntelliJ files
 .idea
 *.iml
+
+# JReleaser
+trace.log
+out/
+jreleaser-cli.jar
