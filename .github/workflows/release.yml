@@ -14,26 +14,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: 'Checkout from Git'
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - name: Set up JDK 17
+      - name: 'Set up JDK 17'
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: temurin
           cache: maven
-      - name: Set release version
+      - name: 'Set release version'
         run: mvn --no-transfer-progress --batch-mode versions:set -DnewVersion=${{ github.event.inputs.version }}
-      - name: Commit & Push changes
+      - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: Releasing version ${{ github.event.inputs.version }}
-      - name: Stage release
+          message: Releases version ${{ github.event.inputs.version }}
+      - name: 'Stage release'
         run: mvn --no-transfer-progress --batch-mode clean deploy -DaltDeploymentRepository=local::default::file://`pwd`/target/staging-deploy
-      - name: Run JReleaser
+      - name: 'Run JReleaser'
         uses: jreleaser/release-action@v2
         with:
           setup-java: false
@@ -46,11 +46,11 @@ jobs:
           JRELEASER_GPG_SECRET_KEY: ${{ secrets.JRELEASER_GPG_SECRET_KEY }}
           JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME }}
           JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD }}
-      - name: Set release version
+      - name: 'Set release version'
         run: mvn --no-transfer-progress --batch-mode versions:set -DnewVersion=${{ github.event.inputs.nextVersion }}-SNAPSHOT
-      - name: Commit & Push changes
+      - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: Setting SNAPSHOT version ${{ github.event.inputs.nextVersion }}-SNAPSHOT
-          tags: true
+          message: "Prepares for next iteration: ${{ github.event.inputs.nextVersion }}-SNAPSHOT"
+          tags: false
