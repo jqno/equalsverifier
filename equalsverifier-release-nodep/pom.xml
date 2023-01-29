@@ -24,7 +24,6 @@
     <properties>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
-        <gpg.skip>false</gpg.skip>
 
         <artifact.javadoc>${project.build.directory}/${project.artifactId}-${project.version}-javadoc.jar</artifact.javadoc>
         <artifact.sources>${project.build.directory}/${project.artifactId}-${project.version}-sources.jar</artifact.sources>
