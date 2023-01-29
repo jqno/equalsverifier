@@ -26,11 +26,15 @@ jobs:
           cache: maven
       - name: 'Set release version'
         run: mvn --no-transfer-progress --batch-mode versions:set -DnewVersion=${{ github.event.inputs.version }}
+      - name: 'Update version in documentation'
+        run: |
+          sed -i "s/<version>.*<\/version>/<version>${{ github.event.inputs.version }}<\/version>/g" README.md
+          sed -i "s/<version>.*<\/version>/<version>${{ github.event.inputs.version }}<\/version>/g" docs/_includes/maven
       - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: Releases version ${{ github.event.inputs.version }}
+          message: Bumps version to ${{ github.event.inputs.version }}
       - name: 'Stage release'
         run: mvn --no-transfer-progress --batch-mode clean deploy -DaltDeploymentRepository=local::default::file://`pwd`/target/staging-deploy
       - name: 'Run JReleaser'
@@ -52,5 +56,5 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: "Prepares for next iteration: ${{ github.event.inputs.nextVersion }}-SNAPSHOT"
+          message: "Prepares for next development iteration: ${{ github.event.inputs.nextVersion }}-SNAPSHOT"
           tags: false
