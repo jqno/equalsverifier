@@ -6,6 +6,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import org.junit.jupiter.api.Test;
 
 public class VersionedEntityTest {
@@ -38,7 +39,7 @@ public class VersionedEntityTest {
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
             .forClass(OtherwiseStatelessVersionedEntity.class)
-            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
 
@@ -71,7 +72,7 @@ public class VersionedEntityTest {
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
             .forClass(StringVersionedEntity.class)
-            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
 
@@ -90,7 +91,7 @@ public class VersionedEntityTest {
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
             .forClass(WeakStringVersionedEntity.class)
-            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
 
@@ -135,6 +136,7 @@ public class VersionedEntityTest {
 
     public static final class OtherwiseStatelessVersionedEntity {
 
+        @Id
         private final long id;
 
         public OtherwiseStatelessVersionedEntity(long id) {
@@ -161,6 +163,7 @@ public class VersionedEntityTest {
 
     public static final class StringVersionedEntity {
 
+        @Id
         private final long id;
 
         @SuppressWarnings("unused")
@@ -191,7 +194,9 @@ public class VersionedEntityTest {
 
     public static final class WeakStringVersionedEntity {
 
+        @Id
         private final long id;
+
         private final String s;
 
         public WeakStringVersionedEntity(long id, String s) {

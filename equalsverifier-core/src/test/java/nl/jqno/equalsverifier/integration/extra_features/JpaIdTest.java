@@ -230,7 +230,7 @@ public class JpaIdTest {
     public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
         EqualsVerifier
             .forClass(JpaIdVersionedEntity.class)
-            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
 

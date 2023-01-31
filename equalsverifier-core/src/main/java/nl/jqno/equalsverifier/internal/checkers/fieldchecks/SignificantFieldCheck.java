@@ -17,10 +17,11 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
-    private final Class<?> type;
+    private final Class<T> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
@@ -78,7 +79,13 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             changed,
             fieldName
         );
-        assertFieldShouldBeIgnored(equalToItself, equalsChanged, fieldAccessor, fieldName);
+        assertFieldShouldBeIgnored(
+            equalToItself,
+            equalsChanged,
+            referenceAccessor.get(),
+            fieldAccessor,
+            fieldName
+        );
 
         referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
@@ -120,24 +127,31 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private void assertFieldShouldBeIgnored(
         boolean equalToItself,
         boolean equalsChanged,
+        T object,
         FieldAccessor fieldAccessor,
         String fieldName
     ) {
-        if (shouldAllFieldsBeUsed(fieldAccessor) && isFieldEligible(fieldAccessor)) {
-            boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
-            boolean thisFieldIsMarkedAsId = annotationCache.hasFieldAnnotation(
-                type,
-                fieldName,
-                SupportedAnnotations.ID
-            );
-            boolean anotherFieldIsMarkedAsId =
-                !thisFieldIsMarkedAsId &&
-                annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID);
+        if (!shouldAllFieldsBeUsed(fieldAccessor) || !isFieldEligible(fieldAccessor)) {
+            return;
+        }
 
-            assertTrue(
-                Formatter.of("Significant fields: equals does not use %%.", fieldName),
-                equalToItself
-            );
+        boolean fieldShouldBeIgnored = ignoredFields.contains(fieldName);
+        boolean thisFieldIsMarkedAsId = annotationCache.hasFieldAnnotation(
+            type,
+            fieldName,
+            SupportedAnnotations.ID
+        );
+        boolean anotherFieldIsMarkedAsId =
+            !thisFieldIsMarkedAsId &&
+            annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID);
+
+        if (!fieldIsEmptyAndItsOk(thisFieldIsMarkedAsId, fieldAccessor, object)) {
+            if (!fieldShouldBeIgnored) {
+                assertTrue(
+                    Formatter.of("Significant fields: equals does not use %%.", fieldName),
+                    equalToItself
+                );
+            }
             assertFieldShouldHaveBeenUsed(
                 fieldName,
                 equalsChanged,
@@ -145,20 +159,19 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                 thisFieldIsMarkedAsId,
                 anotherFieldIsMarkedAsId
             );
-            assertFieldShouldNotBeUsed(
-                fieldName,
-                equalsChanged,
-                fieldShouldBeIgnored,
-                thisFieldIsMarkedAsId,
-                anotherFieldIsMarkedAsId
-            );
         }
+        assertFieldShouldNotBeUsed(
+            fieldName,
+            equalsChanged,
+            fieldShouldBeIgnored,
+            thisFieldIsMarkedAsId,
+            anotherFieldIsMarkedAsId
+        );
     }
 
     private boolean shouldAllFieldsBeUsed(FieldAccessor fieldAccessor) {
         return (
             !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
-            !warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY) &&
             !(
                 warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) &&
                 !fieldAccessor.fieldIsFinal()
@@ -176,6 +189,23 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
                 fieldAccessor.getField().getName(),
                 SupportedAnnotations.TRANSIENT
             )
+        );
+    }
+
+    private boolean fieldIsEmptyAndItsOk(
+        boolean thisFieldIsMarkedAsId,
+        FieldAccessor fieldAccessor,
+        T object
+    ) {
+        Object value = fieldAccessor.get(object);
+        Class<?> fieldType = fieldAccessor.getFieldType();
+        Object zero = PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.get(fieldType);
+        boolean fieldIsEmpty = value == null || (value.equals(zero));
+
+        return (
+            thisFieldIsMarkedAsId &&
+            warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY) &&
+            fieldIsEmpty
         );
     }
 
