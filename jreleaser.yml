@@ -17,6 +17,11 @@ release:
   github:
     owner: jqno
     tagName: equalsverifier-{{projectVersion}}
+    changelog:
+      enabled: true
+      formatted: ALWAYS
+      content: |
+        For a list of changes in this version, see [CHANGELOG.md](https://github.com/jqno/equalsverifier/blob/main/CHANGELOG.md).
 
 signing:
   active: ALWAYS
