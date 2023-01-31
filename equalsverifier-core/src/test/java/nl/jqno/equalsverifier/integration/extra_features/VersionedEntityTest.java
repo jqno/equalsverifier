@@ -9,6 +9,8 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import org.junit.jupiter.api.Test;
 
+// CHECKSTYLE OFF: LineLength
+
 public class VersionedEntityTest {
 
     @Test
@@ -68,15 +70,12 @@ public class VersionedEntityTest {
     }
 
     @Test
-    // CHECKSTYLE OFF: LineLength.
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
             .forClass(StringVersionedEntity.class)
             .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
-
-    // CHECKSTYLE ON: LineLength.
 
     @Test
     public void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
@@ -87,7 +86,6 @@ public class VersionedEntityTest {
     }
 
     @Test
-    // CHECKSTYLE OFF: LineLength.
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
             .forClass(WeakStringVersionedEntity.class)
@@ -95,10 +93,7 @@ public class VersionedEntityTest {
             .verify();
     }
 
-    // CHECKSTYLE ON: LineLength.
-
     @Test
-    // CHECKSTYLE OFF: LineLength
     public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier
             .forClass(WeakStringVersionedEntity.class)
@@ -106,7 +101,26 @@ public class VersionedEntityTest {
             .verify();
     }
 
-    // CHECKSTYLE ON: LineLength.
+    @Test
+    public void succeed_whenInstanceWithANullableIdDoesNullCheck_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(NullCheckStringVersionedEntity.class)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
+            .verify();
+    }
+
+    @Test
+    public void succeed_whenEntityWithABusinessKey_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(BusinessKeyStringVersionedEntity.class)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+            .verify();
+    }
+
+    @Test
+    public void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
+        EqualsVerifier.forClass(CanEqualVersionedEntity.class).verify();
+    }
 
     @Test
     public void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
@@ -127,11 +141,6 @@ public class VersionedEntityTest {
             )
             .assertFailure()
             .assertMessageContains("catch me if you can");
-    }
-
-    @Test
-    public void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
-        EqualsVerifier.forClass(CanEqualVersionedEntity.class).verify();
     }
 
     public static final class OtherwiseStatelessVersionedEntity {
@@ -219,6 +228,61 @@ public class VersionedEntityTest {
         @Override
         public int hashCode() {
             return Float.floatToIntBits(id);
+        }
+    }
+
+    public static final class NullCheckStringVersionedEntity {
+
+        @Id
+        private final Long id;
+
+        @SuppressWarnings("unused")
+        private final String s;
+
+        public NullCheckStringVersionedEntity(long id, String s) {
+            this.id = id;
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof NullCheckStringVersionedEntity)) {
+                return false;
+            }
+            NullCheckStringVersionedEntity other = (NullCheckStringVersionedEntity) obj;
+            return id != null && id.equals(other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return id == null ? 0 : Float.floatToIntBits(id);
+        }
+    }
+
+    public static final class BusinessKeyStringVersionedEntity {
+
+        @Id
+        private final Long id;
+
+        private final String s;
+
+        public BusinessKeyStringVersionedEntity(long id, String s) {
+            this.id = id;
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof BusinessKeyStringVersionedEntity)) {
+                return false;
+            }
+            BusinessKeyStringVersionedEntity other = (BusinessKeyStringVersionedEntity) obj;
+            return Objects.equals(s, other.s);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(s);
         }
     }
 
