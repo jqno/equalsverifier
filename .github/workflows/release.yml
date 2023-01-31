@@ -58,3 +58,10 @@ jobs:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
           message: "Prepares for next development iteration: ${{ github.event.inputs.nextVersion }}-SNAPSHOT"
           tags: false
+      - name: 'Print diagnostic information'
+        run: |
+          echo ">>> output.properties"
+          cat out/jreleaser/output.properties
+          echo ""
+          echo ">>> trace.log"
+          cat out/jreleaser/trace.log
