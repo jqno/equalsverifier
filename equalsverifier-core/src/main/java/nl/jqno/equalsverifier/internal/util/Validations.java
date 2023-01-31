@@ -47,11 +47,6 @@ public final class Validations {
     public static void validateWarnings(Set<Warning> warnings) {
         validate(
             warnings.contains(Warning.SURROGATE_KEY) &&
-            warnings.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY),
-            "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed."
-        );
-        validate(
-            warnings.contains(Warning.SURROGATE_KEY) &&
             warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
             "you can't suppress Warning.SURROGATE_KEY when Warning.SURROGATE_OR_BUSINESS_KEY is also suppressed."
         );

@@ -370,21 +370,6 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWarningVersionedEntityIsSuppressed_givenWarningSurrogateKeyIsAlsoSuppressed() {
-        ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when Warning.SURROGATE_KEY is also suppressed."
-            );
-    }
-
-    @Test
     public void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
         ExpectedException
             .when(() ->
