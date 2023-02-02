@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+## [3.13] - 2023-02-02
+
 - Made it possible to suppress both `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` and `Warning.SURROGATE_KEY`. Note that in some cases when suppressing `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` on a class with a surrogate key, it is now necessary to also explicitly suppress `Warning.SURROGATE_KEY` ([Issue 755](https://github.com/jqno/equalsverifier/issues/755))
 
 ## [3.12.4] - 2023-01-28
@@ -1099,7 +1101,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...HEAD
+[3.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...equalsverifier-3.13
 [3.12.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.3...equalsverifier-3.12.4
 [3.12.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.2...equalsverifier-3.12.3
 [3.12.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.1...equalsverifier-3.12.2
