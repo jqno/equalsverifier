@@ -16,7 +16,7 @@ Before you continue, please check your class's `toString` method. Since EqualsVe
 {% endhighlight %}
 
 ## The error messages
-This is not a complete list. I'll add to it as needed, so if you need help with an error message, please [file an issue](https://github.com/jqno/equalsverifier/issues) or let me know on the [discussion group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier), and I'll add an explanation as soon as possible.
+This is not a complete list. I'll add to it as needed, so if you need help with an error message, please [file an issue](https://github.com/jqno/equalsverifier/issues) or let me know on the [discussion group](https://github.com/jqno/equalsverifier/discussions), and I'll add an explanation as soon as possible.
 
 * [Abstract delegation](/equalsverifier/errormessages/abstract-delegation)
 * [BigDecimal equality](/equalsverifier/errormessages/bigdecimal-equality)
@@ -37,3 +37,4 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Subclass: … equals subclass instance …](/equalsverifier/errormessages/subclass-equals-subclass-instance)
 * [Subclass: object is not equal to an instance of a trivial subclass with equal fields](/equalsverifier/errormessages/subclass-object-is-not-equal-to-an-instance-of-a-trivial-subclass-with-equal-fields)
 * [Symmetry: … does not equal superclass instance …](/equalsverifier/errormessages/symmetry-does-not-equal-superclass-instance)
+* [Unsupported class file major version _x_](/equalsverifier/errormessages/unsupported-class-file-major-version)
