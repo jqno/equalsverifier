@@ -394,6 +394,11 @@ public class JakartaIdTest {
             .assertMessageContains("Significant fields");
     }
 
+    @Test
+    public void succeed_whenEqualsIsImplementedInSuperclass_givenWarningSurrogateKeyIsSuppressed() {
+        EqualsVerifier.forClass(SubclassEntity.class).suppress(Warning.SURROGATE_KEY).verify();
+    }
+
     static class JakartaIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
@@ -954,6 +959,40 @@ public class JakartaIdTest {
         @Override
         public final int hashCode() {
             return Objects.hash(socialSecurity);
+        }
+    }
+
+    static class AbstractEntity {
+
+        @jakarta.persistence.Id
+        private final UUID id;
+
+        public AbstractEntity(UUID id) {
+            this.id = id;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof AbstractEntity)) {
+                return false;
+            }
+            AbstractEntity other = (AbstractEntity) obj;
+            return Objects.equals(id, other.id);
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(id);
+        }
+    }
+
+    static class SubclassEntity extends AbstractEntity {
+
+        private final String name;
+
+        public SubclassEntity(UUID id, String name) {
+            super(id);
+            this.name = name;
         }
     }
 }

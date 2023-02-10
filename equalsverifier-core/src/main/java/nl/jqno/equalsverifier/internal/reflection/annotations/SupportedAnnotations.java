@@ -169,7 +169,7 @@ public enum SupportedAnnotations implements Annotation {
      * equals/hashCode contract, unless {@link Warning#SURROGATE_KEY} is suppressed.
      */
     ID(
-        false,
+        true,
         "javax.persistence.Id",
         "javax.persistence.EmbeddedId",
         "jakarta.persistence.Id",

@@ -200,7 +200,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         Object value = fieldAccessor.get(object);
         Class<?> fieldType = fieldAccessor.getFieldType();
         Object zero = PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.get(fieldType);
-        boolean fieldIsEmpty = value == null || (value.equals(zero));
+        boolean fieldIsEmpty = value == null || value.equals(zero);
 
         return (
             thisFieldIsMarkedAsId &&

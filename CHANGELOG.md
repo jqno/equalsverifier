@@ -13,9 +13,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+## Fixed
+
+- `Warning.SURROGATE_KEY` was ignored when `@Id` annotation is in entity's superclass. ([Issue 763](https://github.com/jqno/equalsverifier/issues/763))
 
 ## [3.13] - 2023-02-02
+
+### Changed
 
 - Made it possible to suppress both `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` and `Warning.SURROGATE_KEY`. Note that in some cases when suppressing `Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY` on a class with a surrogate key, it is now necessary to also explicitly suppress `Warning.SURROGATE_KEY` ([Issue 755](https://github.com/jqno/equalsverifier/issues/755))
 
