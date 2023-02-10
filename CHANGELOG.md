@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.13.1] - 2023-02-10
+
 ## Fixed
 
 - `Warning.SURROGATE_KEY` was ignored when `@Id` annotation is in entity's superclass. ([Issue 763](https://github.com/jqno/equalsverifier/issues/763))
@@ -1105,7 +1107,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.1...HEAD
+[3.13.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...equalsverifier-3.13.1
 [3.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...equalsverifier-3.13
 [3.12.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.3...equalsverifier-3.12.4
 [3.12.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.2...equalsverifier-3.12.3
