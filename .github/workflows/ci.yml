@@ -4,6 +4,7 @@ on:
     paths:
       - '**.java'
       - '**.xml'
+  pull_request:
 
 jobs:
   supported-jdk:
