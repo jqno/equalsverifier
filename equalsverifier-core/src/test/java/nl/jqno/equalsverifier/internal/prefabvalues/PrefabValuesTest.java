@@ -289,7 +289,7 @@ public class PrefabValuesTest {
     }
 
     @SuppressWarnings("rawtypes")
-    private static class ListTestFactory implements PrefabValueFactory<List> {
+    private static final class ListTestFactory implements PrefabValueFactory<List> {
 
         @Override
         @SuppressWarnings("unchecked")
@@ -313,7 +313,7 @@ public class PrefabValuesTest {
         }
     }
 
-    private static class StaticContainer {
+    private static final class StaticContainer {
 
         static int staticInt = 2;
 

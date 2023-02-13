@@ -90,7 +90,7 @@ public class OutputTest {
             .assertNotCause(StackOverflowError.class);
     }
 
-    private static class AssertionExceptionWithCauseThrower {
+    private static final class AssertionExceptionWithCauseThrower {
 
         @Override
         public boolean equals(Object obj) {
@@ -99,7 +99,7 @@ public class OutputTest {
         }
     }
 
-    private static class UnsupportedOperationExceptionWithMessageThrower {
+    private static final class UnsupportedOperationExceptionWithMessageThrower {
 
         @Override
         public boolean equals(Object obj) {
@@ -107,7 +107,7 @@ public class OutputTest {
         }
     }
 
-    private static class IllegalStateExceptionThrower {
+    private static final class IllegalStateExceptionThrower {
 
         @Override
         public boolean equals(Object obj) {
