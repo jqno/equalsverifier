@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## Added
+
+- Verifies `hashCode` consistency when `String.equalsIgnoreCase` is used. ([Issue 748](https://github.com/jqno/equalsverifier/issues/748))
+
 ## [3.13.1] - 2023-02-10
 
 ## Fixed
