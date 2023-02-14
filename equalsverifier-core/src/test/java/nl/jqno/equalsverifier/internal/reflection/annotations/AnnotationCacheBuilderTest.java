@@ -452,7 +452,7 @@ public class AnnotationCacheBuilderTest {
         assertFalse(cache.hasFieldAnnotation(type, fieldName, annotation));
     }
 
-    private static class AnnotationWithClassValuesAnnotation implements Annotation {
+    private static final class AnnotationWithClassValuesAnnotation implements Annotation {
 
         private AnnotationProperties properties;
 
@@ -483,5 +483,5 @@ public class AnnotationCacheBuilderTest {
         annotations = { Nonnull.class, NotNull.class },
         elementType = ElementType.FIELD
     )
-    private static class AnnotationWithValuesContainer {}
+    private static final class AnnotationWithValuesContainer {}
 }
