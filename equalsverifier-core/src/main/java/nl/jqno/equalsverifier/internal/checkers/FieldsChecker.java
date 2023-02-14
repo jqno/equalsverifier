@@ -23,19 +23,20 @@ public class FieldsChecker<T> implements Checker {
     private final SymmetryFieldCheck<T> symmetryFieldCheck;
     private final TransientFieldsCheck<T> transientFieldsCheck;
     private final TransitivityFieldCheck<T> transitivityFieldCheck;
+    private final StringFieldCheck<T> stringFieldCheck;
     private final BigDecimalFieldCheck<T> bigDecimalFieldCheck;
     private final JpaLazyGetterFieldCheck<T> jpaLazyGetterFieldCheck;
 
     public FieldsChecker(Configuration<T> config) {
         this.config = config;
 
-        PrefabValues prefabValues = config.getPrefabValues();
-        TypeTag typeTag = config.getTypeTag();
+        final PrefabValues prefabValues = config.getPrefabValues();
+        final TypeTag typeTag = config.getTypeTag();
 
-        String cachedHashCodeFieldName = config
+        final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
             .getCachedHashCodeFieldName();
-        Predicate<FieldAccessor> isCachedHashCodeField = a ->
+        final Predicate<FieldAccessor> isCachedHashCodeField = a ->
             a.getFieldName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
@@ -50,6 +51,8 @@ public class FieldsChecker<T> implements Checker {
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(prefabValues, typeTag);
         this.transientFieldsCheck = new TransientFieldsCheck<>(config);
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(prefabValues, typeTag);
+        this.stringFieldCheck =
+            new StringFieldCheck<>(config.getPrefabValues(), config.getCachedHashCodeInitializer());
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(config.getCachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
@@ -77,6 +80,7 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(significantFieldCheck);
         inspector.check(symmetryFieldCheck);
         inspector.check(transitivityFieldCheck);
+        inspector.check(stringFieldCheck);
 
         inspector.checkWithNull(
             config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
