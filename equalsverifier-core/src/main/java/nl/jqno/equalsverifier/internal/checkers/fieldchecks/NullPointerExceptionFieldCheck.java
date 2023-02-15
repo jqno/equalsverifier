@@ -55,10 +55,11 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void performTests(Field field, final Object reference, final Object changed) {
-        handle("equals", field, () -> reference.equals(changed));
-        handle("equals", field, () -> changed.equals(reference));
+        handle("equals", "the parameter's field", field, () -> reference.equals(changed));
+        handle("equals", "the 'this' object's field", field, () -> changed.equals(reference));
         handle(
             "hashCode",
+            "field",
             field,
             () -> config.getCachedHashCodeInitializer().getInitializedHashCode(changed)
         );
@@ -68,11 +69,11 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         value = "DCN_NULLPOINTER_EXCEPTION",
         justification = "We're catching and wrapping it to provide better output to the user."
     )
-    private void handle(String testedMethodName, Field field, Runnable r) {
+    private void handle(String testedMethodName, String whichOne, Field field, Runnable r) {
         try {
             r.run();
         } catch (NullPointerException e) {
-            npeThrown(testedMethodName, field, e);
+            npeThrown(testedMethodName, whichOne, field, e);
         } catch (AbstractMethodError e) {
             abstractMethodErrorThrown(testedMethodName, field, e);
         } catch (ClassCastException e) {
@@ -82,10 +83,11 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private void npeThrown(String method, Field field, NullPointerException e) {
+    private void npeThrown(String method, String whichOne, Field field, NullPointerException e) {
         Formatter f = Formatter.of(
-            "Non-nullity: %% throws NullPointerException on field %%.",
+            "Non-nullity: %% throws NullPointerException on %% %%.",
             method,
+            whichOne,
             field.getName()
         );
         fail(f, e);
