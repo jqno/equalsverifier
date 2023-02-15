@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## Added
 
 - Verifies `hashCode` consistency when `String.equalsIgnoreCase` is used. ([Issue 748](https://github.com/jqno/equalsverifier/issues/748))
+- Improves error messages for detected NullPointerExceptions: if a field causes one, EqualsVerifier will indicate whether it's the field on the 'this' object or the one on the parameter object.
 
 ## [3.13.1] - 2023-02-10
 

@@ -36,7 +36,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field noAnnotation"
+                "'this' object's field noAnnotation"
             );
     }
 
@@ -94,7 +94,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
@@ -117,7 +117,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -131,7 +131,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -145,7 +145,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -159,7 +159,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -196,7 +196,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
@@ -218,7 +218,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
@@ -230,7 +230,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -253,7 +253,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -265,7 +265,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 
@@ -279,7 +279,7 @@ public class AnnotationNonnullTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field p"
+                "'this' object's field p"
             );
     }
 

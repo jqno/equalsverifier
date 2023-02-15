@@ -45,7 +45,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 

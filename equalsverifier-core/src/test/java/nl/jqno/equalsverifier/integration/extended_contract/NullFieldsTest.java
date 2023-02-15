@@ -15,7 +15,8 @@ public class NullFieldsTest {
     private static final String NON_NULLITY = "Non-nullity";
     private static final String EQUALS = "equals throws NullPointerException";
     private static final String HASHCODE = "hashCode throws NullPointerException";
-    private static final String ON_FIELD = "on field";
+    private static final String ON_THIS_FIELD = "on the 'this' object's";
+    private static final String ON_THE_OTHER_FIELD = "on the parameter's";
 
     @Test
     public void fail_whenEqualsThrowsNpeOnThissField() {
@@ -23,7 +24,7 @@ public class NullFieldsTest {
             .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify())
             .assertFailure()
             .assertCause(NullPointerException.class)
-            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_THIS_FIELD, "color");
     }
 
     @Test
@@ -32,7 +33,7 @@ public class NullFieldsTest {
             .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify())
             .assertFailure()
             .assertCause(NullPointerException.class)
-            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_THE_OTHER_FIELD, "color");
     }
 
     @Test
@@ -41,7 +42,7 @@ public class NullFieldsTest {
             .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class).verify())
             .assertFailure()
             .assertCause(NullPointerException.class)
-            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "color");
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_THE_OTHER_FIELD, "color");
     }
 
     @Test
@@ -50,7 +51,7 @@ public class NullFieldsTest {
             .when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
             .assertFailure()
             .assertCause(NullPointerException.class)
-            .assertMessageContains(NON_NULLITY, HASHCODE, ON_FIELD, "color");
+            .assertMessageContains(NON_NULLITY, HASHCODE, "color");
     }
 
     @Test
@@ -84,7 +85,7 @@ public class NullFieldsTest {
             .when(() -> EqualsVerifier.forClass(MixedNullFields.class).verify())
             .assertFailure()
             .assertCause(NullPointerException.class)
-            .assertMessageContains(NON_NULLITY, EQUALS, ON_FIELD, "o");
+            .assertMessageContains(NON_NULLITY, EQUALS, ON_THIS_FIELD, "o");
     }
 
     @Test

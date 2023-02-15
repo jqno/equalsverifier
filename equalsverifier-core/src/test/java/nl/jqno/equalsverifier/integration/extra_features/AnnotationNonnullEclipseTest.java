@@ -46,7 +46,7 @@ public class AnnotationNonnullEclipseTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
@@ -77,7 +77,7 @@ public class AnnotationNonnullEclipseTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
@@ -101,7 +101,7 @@ public class AnnotationNonnullEclipseTest {
             .assertMessageContains(
                 "Non-nullity",
                 "equals throws NullPointerException",
-                "on field o"
+                "'this' object's field o"
             );
     }
 
