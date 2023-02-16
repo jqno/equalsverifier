@@ -13,14 +13,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## Added
+## [3.13.2] - 2023-02-16
+
+### Added
 
 - Verifies `hashCode` consistency when `String.equalsIgnoreCase` is used. ([Issue 748](https://github.com/jqno/equalsverifier/issues/748))
 - Improves error messages for detected NullPointerExceptions: if a field causes one, EqualsVerifier will indicate whether it's the field on the 'this' object or the one on the parameter object.
 
 ## [3.13.1] - 2023-02-10
 
-## Fixed
+### Fixed
 
 - `Warning.SURROGATE_KEY` was ignored when `@Id` annotation is in entity's superclass. ([Issue 763](https://github.com/jqno/equalsverifier/issues/763))
 
@@ -1112,7 +1114,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.2...HEAD
+[3.13.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.1...equalsverifier-3.13.2
 [3.13.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...equalsverifier-3.13.1
 [3.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...equalsverifier-3.13
 [3.12.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.3...equalsverifier-3.12.4
