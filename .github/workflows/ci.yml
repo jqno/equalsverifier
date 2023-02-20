@@ -15,36 +15,42 @@ jobs:
       matrix:
         include:
           - title: "Supported JDK 8"
+            skip: false
             continue-on-error: false
             cache-id: "jdk8"
             java: 8
             dist: temurin
             flags: ""
           - title: "Supported JDK 11"
+            skip: false
             continue-on-error: false
             cache-id: "jdk11"
             java: 11
             dist: temurin
             flags: ""
           - title: "Supported JDK 17"
+            skip: false
             continue-on-error: false
             cache-id: "jdk17"
             java: 17
             dist: temurin
             flags: ""
           - title: "Supported JDK 19"
+            skip: false
             continue-on-error: false
             cache-id: "jdk19"
             java: 19
             dist: temurin
             flags: ""
           - title: "Experimental JDK EA (simplified)"
+            skip: false
             continue-on-error: false
             cache-id: "jdk-ea-simple"
             java: "21-ea"
             dist: zulu
             flags: "-Dexperimental -DdisableStaticAnalysis"
           - title: "Experimental JDK EA (full)"
+            skip: github.event_name == 'pull_request'
             continue-on-error: true
             cache-id: "jdk-ea-full"
             java: "21-ea"
@@ -53,8 +59,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout from Git'
+      if: ${{ matrix.skip }} == false
       uses: actions/checkout@v3
     - name: 'Cache Maven repo'
+      if: ${{ matrix.skip }} == false
       uses: actions/cache@v3
       with:
           path: |
@@ -64,16 +72,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mvn-${{ matrix.cache-id }}
     - name: 'Set up JDK ${{ matrix.java }}'
+      if: ${{ matrix.skip }} == false
       uses: actions/setup-java@v3
       with:
           distribution: ${{ matrix.dist }}
           java-version: ${{ matrix.java }}
     - name: 'Set up node' # Needed for formatting with prettier
+      if: ${{ matrix.skip }} == false
       uses: actions/setup-node@v3
       with:
         node-version: 12
     - name: 'Display JDK version'
+      if: ${{ matrix.skip }} == false
       run: java -version
     - name: 'Run Maven'
+      if: ${{ matrix.skip }} == false
       # Don't clean, or whatever was cached in target/spotless-node-modules-prettier-format is lost
       run: mvn verify ${{ matrix.flags }}
