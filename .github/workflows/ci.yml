@@ -9,43 +9,43 @@ on:
 jobs:
   supported-jdk:
     name: ${{ matrix.title }}
-    continue-on-error: ${{ matrix.continue-on-error }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
         include:
           - title: "Supported JDK 8"
-            continue-on-error: false
+            experimental: false
             cache-id: "jdk8"
             java: 8
             dist: temurin
             flags: ""
           - title: "Supported JDK 11"
-            continue-on-error: false
+            experimental: false
             cache-id: "jdk11"
             java: 11
             dist: temurin
             flags: ""
           - title: "Supported JDK 17"
-            continue-on-error: false
+            experimental: false
             cache-id: "jdk17"
             java: 17
             dist: temurin
             flags: ""
           - title: "Supported JDK 19"
-            continue-on-error: false
+            experimental: false
             cache-id: "jdk19"
             java: 19
             dist: temurin
             flags: ""
           - title: "Experimental JDK EA (simplified)"
-            continue-on-error: false
+            experimental: false
             cache-id: "jdk-ea-simple"
             java: "21-ea"
             dist: zulu
             flags: "-Dexperimental -DdisableStaticAnalysis"
           - title: "Experimental JDK EA (full)"
-            continue-on-error: true
+            experimental: true
             cache-id: "jdk-ea-full"
             java: "21-ea"
             dist: zulu
@@ -53,8 +53,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 'Checkout from Git'
+      # Can't refer to matrix in job if conditional, so we have to repeat it every step: https://github.com/actions/runner/issues/1985
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/checkout@v3
     - name: 'Cache Maven repo'
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/cache@v3
       with:
           path: |
@@ -64,16 +67,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-mvn-${{ matrix.cache-id }}
     - name: 'Set up JDK ${{ matrix.java }}'
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/setup-java@v3
       with:
           distribution: ${{ matrix.dist }}
           java-version: ${{ matrix.java }}
     - name: 'Set up node' # Needed for formatting with prettier
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/setup-node@v3
       with:
         node-version: 12
     - name: 'Display JDK version'
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       run: java -version
     - name: 'Run Maven'
+      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       # Don't clean, or whatever was cached in target/spotless-node-modules-prettier-format is lost
       run: mvn verify ${{ matrix.flags }}
