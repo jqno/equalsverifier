@@ -58,6 +58,8 @@ jobs:
             flags: ""
     runs-on: ubuntu-latest
     steps:
+    - name: 'test'
+      run: echo "> ${{ matrix.skip }}"
     - name: 'Checkout from Git'
       if: ${{ matrix.skip }} == false
       uses: actions/checkout@v3
