@@ -10,7 +10,7 @@
     <name>EqualsVerifier | parent</name>
     <description>EqualsVerifier can be used in JUnit unit tests to verify whether the contract for the equals and hashCode methods is met.</description>
     <url>https://jqno.nl/equalsverifier</url>
-    <inceptionYear>2009</inceptionYear>
+    <inceptionYear>2010</inceptionYear>
 
     <scm>
         <url>https://github.com/jqno/equalsverifier</url>
