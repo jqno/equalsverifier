@@ -4,6 +4,29 @@ import java.util.Objects;
 
 public class SealedTypes {
 
+    public final class SealedTypeContainer {
+
+        private final SealedParent sealed;
+
+        public SealedTypeContainer(SealedParent sealed) {
+            this.sealed = sealed;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof SealedTypeContainer)) {
+                return false;
+            }
+            SealedTypeContainer other = (SealedTypeContainer) obj;
+            return Objects.equals(sealed, other.sealed);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sealed);
+        }
+    }
+
     public abstract static sealed class SealedParent permits SealedChild {
 
         private final int i;

@@ -14,7 +14,7 @@ public final class SealedTypesHelper {
         return false;
     }
 
-    public static Optional<Class<?>> findConcreteImplementation(Class<?> type) {
+    public static Optional<Class<?>> findInstantiableSubclass(Class<?> type) {
         return Optional.empty();
     }
 }

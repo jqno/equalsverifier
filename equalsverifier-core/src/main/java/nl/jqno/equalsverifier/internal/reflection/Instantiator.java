@@ -46,7 +46,13 @@ public final class Instantiator<T> {
      * @param type The class on which {@link Instantiator} operates. Should be the same as T.
      * @return An {@link Instantiator} for {@link #type}.
      */
+    // CHECKSTYLE OFF: Regexp
+    @SuppressWarnings("unchecked")
     public static <T> Instantiator<T> of(Class<T> type) {
+        if (SealedTypesHelper.isSealed(type)) {
+            Class<T> concrete = (Class<T>) SealedTypesHelper.findInstantiableSubclass(type).get();
+            return Instantiator.of(concrete);
+        }
         if (Modifier.isAbstract(type.getModifiers())) {
             return new Instantiator<>(giveDynamicSubclass(type, "", b -> b));
         }
