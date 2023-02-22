@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-public final class SealedClassesHelper {
+public final class SealedTypesHelper {
 
-    private SealedClassesHelper() {}
+    private SealedTypesHelper() {}
 
     public static boolean isSealed(Class<?> type) {
         return type.isSealed();

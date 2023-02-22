@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import nl.jqno.equalsverifier.integration.extended_contract.SealedClasses.SealedChild;
-import nl.jqno.equalsverifier.integration.extended_contract.SealedClasses.SealedParent;
+import nl.jqno.equalsverifier.integration.extended_contract.SealedTypes.SealedChild;
+import nl.jqno.equalsverifier.integration.extended_contract.SealedTypes.SealedParent;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;

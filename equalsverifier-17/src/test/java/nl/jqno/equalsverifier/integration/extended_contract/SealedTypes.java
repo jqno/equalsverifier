@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
 
-public class SealedClasses {
+public class SealedTypes {
 
     public abstract static sealed class SealedParent permits SealedChild {
 

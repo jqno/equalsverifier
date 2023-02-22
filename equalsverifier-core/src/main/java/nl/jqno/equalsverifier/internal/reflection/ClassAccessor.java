@@ -61,7 +61,7 @@ public class ClassAccessor<T> {
      * @return true if T is a sealed class
      */
     public boolean isSealed() {
-        return SealedClassesHelper.isSealed(type);
+        return SealedTypesHelper.isSealed(type);
     }
 
     /**
