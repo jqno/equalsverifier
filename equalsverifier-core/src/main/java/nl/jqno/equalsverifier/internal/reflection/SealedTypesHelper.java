@@ -14,7 +14,7 @@ public final class SealedTypesHelper {
         return false;
     }
 
-    public static Optional<Class<?>> findInstantiableSubclass(Class<?> type) {
+    public static <T, U extends T> Optional<Class<U>> findInstantiableSubclass(Class<T> type) {
         return Optional.empty();
     }
 }

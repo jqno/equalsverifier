@@ -12,22 +12,27 @@ public final class SealedTypesHelper {
         return type.isSealed();
     }
 
-    public static Optional<Class<?>> findInstantiableSubclass(Class<?> type) {
+    public static <T, U extends T> Optional<Class<U>> findInstantiableSubclass(Class<T> type) {
         return findInstantiablePermittedClass(type, false);
     }
 
-    private static Optional<Class<?>> findInstantiablePermittedClass(
-        Class<?> type,
+    private static <T, U extends T> Optional<Class<U>> findInstantiablePermittedClass(
+        Class<T> type,
         boolean checkCurrent
     ) {
         if (checkCurrent && (!isAbstract(type) || !type.isSealed())) {
-            return Optional.of(type);
+            @SuppressWarnings("unchecked")
+            var result = (Class<U>) type;
+            return Optional.of(result);
         }
         var permittedSubclasses = type.getPermittedSubclasses();
         if (permittedSubclasses == null) {
             return Optional.empty();
         }
-        for (Class<?> subType : permittedSubclasses) {
+        for (Class<?> permitted : permittedSubclasses) {
+            @SuppressWarnings("unchecked")
+            Class<U> subType = (Class<U>) permitted;
+
             var c = findInstantiablePermittedClass(subType, true);
             if (c.isPresent()) {
                 return c;
