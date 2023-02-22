@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class SealedTypesTest {
@@ -12,6 +13,13 @@ public class SealedTypesTest {
             .forClass(SealedParentWithFinalChild.class)
             .withRedefinedSubclass(FinalSealedChild.class)
             .verify();
+    }
+
+    @Test
+    public void fail_whenSealedParentHasAFinalChild_givenEqualsVerifierIsCalledIncorrectly() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SealedParentWithFinalChild.class).verify())
+            .assertFailure();
     }
 
     @Test
@@ -28,6 +36,13 @@ public class SealedTypesTest {
     }
 
     @Test
+    public void fail_whenSealedParentHasANonsealedChild_givenEqualsVerifierIsCalledIncorrectly() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SealedParentWithNonsealedChild.class).verify())
+            .assertFailure();
+    }
+
+    @Test
     public void succeed_whenNonsealedChildHasCorrectEqualsAndHashCode() {
         EqualsVerifier.forClass(NonsealedSealedChild.class).withRedefinedSuperclass().verify();
     }
@@ -35,6 +50,18 @@ public class SealedTypesTest {
     @Test
     public void succeed_whenClassContainsASealedType() {
         EqualsVerifier.forClass(SealedTypeContainer.class).verify();
+    }
+
+    @Test
+    public void fail_whenSealeadParentHasAnIncorrectImplementationOfEquals() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(IncorrectSealedParent.class)
+                    .withRedefinedSubclass(IncorrectSealedChild.class)
+                    .verify()
+            )
+            .assertFailure();
     }
 
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {
@@ -141,6 +168,32 @@ public class SealedTypesTest {
         @Override
         public int hashCode() {
             return Objects.hash(sealedWithFinalChild, sealedWithNonsealedChild);
+        }
+    }
+
+    public abstract static sealed class IncorrectSealedParent permits IncorrectSealedChild {
+
+        private final int i;
+
+        public IncorrectSealedParent(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(i);
+        }
+    }
+
+    public static final class IncorrectSealedChild extends IncorrectSealedParent {
+
+        public IncorrectSealedChild(int i) {
+            super(i);
         }
     }
 }
