@@ -47,6 +47,10 @@ public final class Instantiator<T> {
      * @return An {@link Instantiator} for {@link #type}.
      */
     public static <T> Instantiator<T> of(Class<T> type) {
+        if (SealedTypesHelper.isSealed(type)) {
+            Class<T> concrete = SealedTypesHelper.findInstantiableSubclass(type).get();
+            return Instantiator.of(concrete);
+        }
         if (Modifier.isAbstract(type.getModifiers())) {
             return new Instantiator<>(giveDynamicSubclass(type, "", b -> b));
         }

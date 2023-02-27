@@ -3,8 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import nl.jqno.equalsverifier.integration.extended_contract.SealedClasses.SealedChild;
-import nl.jqno.equalsverifier.integration.extended_contract.SealedClasses.SealedParent;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -32,4 +30,8 @@ public class ClassAccessorSealedTest {
         var accessor = ClassAccessor.of(SealedParent.class, prefabValues);
         assertTrue(accessor.isSealed());
     }
+
+    public abstract static sealed class SealedParent {}
+
+    public static non-sealed class SealedChild extends SealedParent {}
 }

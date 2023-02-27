@@ -22,15 +22,19 @@ public class HierarchyChecker<T> implements Checker {
     private final TypeTag typeTag;
     private final ClassAccessor<T> classAccessor;
     private final Class<? extends T> redefinedSubclass;
+    private final boolean strictnessSuppressed;
+    private final boolean hasRedefinedSubclass;
     private final boolean typeIsFinal;
+    private final boolean typeIsSealed;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public HierarchyChecker(Configuration<T> config) {
         this.config = config;
 
-        boolean nonStrict = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
-        boolean hasRedefinedSubclass = config.getRedefinedSubclass() != null;
-        if (nonStrict && hasRedefinedSubclass) {
+        this.strictnessSuppressed =
+            config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
+        this.hasRedefinedSubclass = config.getRedefinedSubclass() != null;
+        if (strictnessSuppressed && hasRedefinedSubclass) {
             fail(
                 Formatter.of(
                     "withRedefinedSubclass and weakInheritanceCheck are mutually exclusive."
@@ -43,6 +47,7 @@ public class HierarchyChecker<T> implements Checker {
         this.classAccessor = config.getClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
+        this.typeIsSealed = classAccessor.isSealed();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -57,7 +62,7 @@ public class HierarchyChecker<T> implements Checker {
 
     private void checkSuperclass() {
         ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-        if (superAccessor.isEqualsInheritedFromObject() || superAccessor.isSealed()) {
+        if (superAccessor.isEqualsInheritedFromObject()) {
             return;
         }
 
@@ -100,7 +105,7 @@ public class HierarchyChecker<T> implements Checker {
         justification = "The equals method in a superclasses can throw an NPE, but it's a specific non-goal to do something with that here."
     )
     private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
-        if (config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
+        if (strictnessSuppressed) {
             return;
         }
 
@@ -158,7 +163,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkSubclass() {
-        if (typeIsFinal || config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE)) {
+        if (typeIsFinal || typeIsSealed || strictnessSuppressed) {
             return;
         }
 
@@ -186,7 +191,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkRedefinedSubclass() {
-        if (typeIsFinal || redefinedSubclass == null) {
+        if (typeIsFinal || typeIsSealed || !hasRedefinedSubclass) {
             return;
         }
 
@@ -213,11 +218,10 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkFinalEqualsMethod() {
-        boolean nonStrict = config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
         boolean isEntity = config
             .getAnnotationCache()
             .hasClassAnnotation(type, SupportedAnnotations.ENTITY);
-        if (nonStrict || isEntity || typeIsFinal || redefinedSubclass != null) {
+        if (strictnessSuppressed || isEntity || typeIsFinal || hasRedefinedSubclass) {
             return;
         }
 
