@@ -13,6 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14] - 2023-02-27
+
+### Added
+
+- Proper support for sealed types. ([Issue 643](https://github.com/jqno/equalsverifier/issues/643) and [Issue 564](https://github.com/jqno/equalsverifier/issues/564))
+
 ## [3.13.2] - 2023-02-16
 
 ### Added
