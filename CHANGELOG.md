@@ -1120,7 +1120,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.2...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14...HEAD
+[3.14]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.2...equalsverifier-3.14
 [3.13.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.1...equalsverifier-3.13.2
 [3.13.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...equalsverifier-3.13.1
 [3.13]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.12.4...equalsverifier-3.13
