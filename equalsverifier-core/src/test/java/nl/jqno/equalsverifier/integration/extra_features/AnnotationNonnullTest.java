@@ -614,7 +614,8 @@ public class AnnotationNonnullTest {
             if (!(obj instanceof NonnullFindbugs1xWithCheckForNullOnClass)) {
                 return false;
             }
-            NonnullFindbugs1xWithCheckForNullOnClass other = (NonnullFindbugs1xWithCheckForNullOnClass) obj;
+            NonnullFindbugs1xWithCheckForNullOnClass other =
+                (NonnullFindbugs1xWithCheckForNullOnClass) obj;
             return o.equals(other.o) && p.equals(other.p);
         }
 
@@ -642,7 +643,8 @@ public class AnnotationNonnullTest {
             if (!(obj instanceof NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals)) {
                 return false;
             }
-            NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals other = (NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals) obj;
+            NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals other =
+                (NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals) obj;
             return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
         }
 
@@ -851,7 +853,8 @@ public class AnnotationNonnullTest {
             if (!(obj instanceof NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals)) {
                 return false;
             }
-            NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals other = (NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals) obj;
+            NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals other =
+                (NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals) obj;
             return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
         }
 

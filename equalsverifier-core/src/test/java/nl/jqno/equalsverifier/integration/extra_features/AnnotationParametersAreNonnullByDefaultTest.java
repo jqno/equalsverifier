@@ -156,7 +156,8 @@ public class AnnotationParametersAreNonnullByDefaultTest {
             if (!(obj instanceof ParametersAreNonnullByDefaultWithNullableOnClass)) {
                 return false;
             }
-            ParametersAreNonnullByDefaultWithNullableOnClass other = (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
+            ParametersAreNonnullByDefaultWithNullableOnClass other =
+                (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
             return o.equals(other.o);
         }
 
@@ -181,7 +182,8 @@ public class AnnotationParametersAreNonnullByDefaultTest {
             if (!(obj instanceof ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals)) {
                 return false;
             }
-            ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals other = (ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
+            ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals other =
+                (ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 

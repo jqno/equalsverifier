@@ -170,7 +170,8 @@ public class TransientFieldsTest {
             if (!(obj instanceof NotUsingFieldsWithTransientAnnotation)) {
                 return false;
             }
-            NotUsingFieldsWithTransientAnnotation other = (NotUsingFieldsWithTransientAnnotation) obj;
+            NotUsingFieldsWithTransientAnnotation other =
+                (NotUsingFieldsWithTransientAnnotation) obj;
             return i == other.i;
         }
 
@@ -232,7 +233,8 @@ public class TransientFieldsTest {
             if (!(obj instanceof NotUsingFieldsWithNonJpaTransientAnnotation)) {
                 return false;
             }
-            NotUsingFieldsWithNonJpaTransientAnnotation other = (NotUsingFieldsWithNonJpaTransientAnnotation) obj;
+            NotUsingFieldsWithNonJpaTransientAnnotation other =
+                (NotUsingFieldsWithNonJpaTransientAnnotation) obj;
             return i == other.i;
         }
 

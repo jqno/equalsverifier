@@ -465,7 +465,8 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdBusinessKeyPersonReorderedFields other = (JakartaIdBusinessKeyPersonReorderedFields) obj;
+            JakartaIdBusinessKeyPersonReorderedFields other =
+                (JakartaIdBusinessKeyPersonReorderedFields) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -541,7 +542,8 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdSurrogateKeyPersonReorderedFields other = (JakartaIdSurrogateKeyPersonReorderedFields) obj;
+            JakartaIdSurrogateKeyPersonReorderedFields other =
+                (JakartaIdSurrogateKeyPersonReorderedFields) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -618,7 +620,8 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdValueKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdValueKeyPersonReorderedFields other = (JakartaIdValueKeyPersonReorderedFields) obj;
+            JakartaIdValueKeyPersonReorderedFields other =
+                (JakartaIdValueKeyPersonReorderedFields) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -773,7 +776,8 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdBusinessKeyPersonDoesntUseName)) {
                 return false;
             }
-            JakartaIdBusinessKeyPersonDoesntUseName other = (JakartaIdBusinessKeyPersonDoesntUseName) obj;
+            JakartaIdBusinessKeyPersonDoesntUseName other =
+                (JakartaIdBusinessKeyPersonDoesntUseName) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(birthdate, other.birthdate)
@@ -870,7 +874,8 @@ public class JakartaIdTest {
             if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
                 return false;
             }
-            NonHibernateNaturalIdBusinessKeyPerson other = (NonHibernateNaturalIdBusinessKeyPerson) obj;
+            NonHibernateNaturalIdBusinessKeyPerson other =
+                (NonHibernateNaturalIdBusinessKeyPerson) obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 

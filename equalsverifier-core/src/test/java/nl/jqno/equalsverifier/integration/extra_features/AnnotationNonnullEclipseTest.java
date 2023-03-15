@@ -251,7 +251,8 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithNullableOnClassAndNullCheckInEquals)) {
                 return false;
             }
-            NonnullEclipseWithNullableOnClassAndNullCheckInEquals other = (NonnullEclipseWithNullableOnClassAndNullCheckInEquals) obj;
+            NonnullEclipseWithNullableOnClassAndNullCheckInEquals other =
+                (NonnullEclipseWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 
@@ -275,7 +276,8 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithNullableOnPackageAndNullCheckInEquals)) {
                 return false;
             }
-            NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other = (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals) obj;
+            NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other =
+                (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals) obj;
             return o.equals(other.o);
         }
 
@@ -299,7 +301,8 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithInapplicableLocationOnClass)) {
                 return false;
             }
-            NonnullEclipseWithInapplicableLocationOnClass other = (NonnullEclipseWithInapplicableLocationOnClass) obj;
+            NonnullEclipseWithInapplicableLocationOnClass other =
+                (NonnullEclipseWithInapplicableLocationOnClass) obj;
             return o.equals(other.o);
         }
 
@@ -323,7 +326,8 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithApplicableLocationOnClass)) {
                 return false;
             }
-            NonnullEclipseWithApplicableLocationOnClass other = (NonnullEclipseWithApplicableLocationOnClass) obj;
+            NonnullEclipseWithApplicableLocationOnClass other =
+                (NonnullEclipseWithApplicableLocationOnClass) obj;
             return o.equals(other.o);
         }
 

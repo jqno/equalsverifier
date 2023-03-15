@@ -114,7 +114,8 @@ public class StringTest {
             if (!(obj instanceof IncorrectCachedIgnoreCaseStringEquals)) {
                 return false;
             }
-            IncorrectCachedIgnoreCaseStringEquals other = (IncorrectCachedIgnoreCaseStringEquals) obj;
+            IncorrectCachedIgnoreCaseStringEquals other =
+                (IncorrectCachedIgnoreCaseStringEquals) obj;
             return caseInsensitiveString == null
                 ? other.caseInsensitiveString == null
                 : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);

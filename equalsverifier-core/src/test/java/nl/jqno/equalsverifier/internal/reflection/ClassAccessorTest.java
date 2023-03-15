@@ -154,7 +154,8 @@ public class ClassAccessorTest {
 
     @Test
     public void getSuperAccessorForPojo() {
-        ClassAccessor<? super PointContainer> superAccessor = pointContainerAccessor.getSuperAccessor();
+        ClassAccessor<? super PointContainer> superAccessor =
+            pointContainerAccessor.getSuperAccessor();
         assertEquals(Object.class, superAccessor.getType());
     }
 
@@ -228,13 +229,14 @@ public class ClassAccessorTest {
 
     @Test
     public void getDefaultValuesAccessor_withNoNonnullValues() {
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
-            TypeTag.NULL,
-            false,
-            false,
-            new HashSet<>(),
-            defaultValuesAnnotationCache
-        );
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(
+                TypeTag.NULL,
+                false,
+                false,
+                new HashSet<>(),
+                defaultValuesAnnotationCache
+            );
         DefaultValues foo = objectAccessor.get();
         assertNull(foo.s);
         // The rest is tested in getDefaultValuesObject
@@ -244,13 +246,14 @@ public class ClassAccessorTest {
     public void getDefaultValuesAccessor_withOneNonnullValue() {
         Set<String> nonnullFields = new HashSet<>();
         nonnullFields.add("s");
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
-            TypeTag.NULL,
-            false,
-            false,
-            nonnullFields,
-            defaultValuesAnnotationCache
-        );
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(
+                TypeTag.NULL,
+                false,
+                false,
+                nonnullFields,
+                defaultValuesAnnotationCache
+            );
         DefaultValues foo = objectAccessor.get();
         assertNotNull(foo.s);
         // The rest is tested in getDefaultValuesObject
@@ -258,13 +261,14 @@ public class ClassAccessorTest {
 
     @Test
     public void getDefaultValuesAccessor_whenNullWarningIsSuppressed() {
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
-            TypeTag.NULL,
-            true,
-            false,
-            new HashSet<>(),
-            defaultValuesAnnotationCache
-        );
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(
+                TypeTag.NULL,
+                true,
+                false,
+                new HashSet<>(),
+                defaultValuesAnnotationCache
+            );
         DefaultValues foo = objectAccessor.get();
         assertNotNull(foo.s);
         // The rest is tested in getDefaultValuesObject
@@ -272,13 +276,14 @@ public class ClassAccessorTest {
 
     @Test
     public void getDefaultValuesAccessor_whenZeroWarningIsSuppressed() {
-        ObjectAccessor<DefaultValues> objectAccessor = defaultValuesClassAccessor.getDefaultValuesAccessor(
-            TypeTag.NULL,
-            false,
-            true,
-            new HashSet<>(),
-            defaultValuesAnnotationCache
-        );
+        ObjectAccessor<DefaultValues> objectAccessor =
+            defaultValuesClassAccessor.getDefaultValuesAccessor(
+                TypeTag.NULL,
+                false,
+                true,
+                new HashSet<>(),
+                defaultValuesAnnotationCache
+            );
         DefaultValues foo = objectAccessor.get();
         assertNotEquals(0, foo.i);
         // The rest is tested in getDefaultValuesObject

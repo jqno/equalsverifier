@@ -27,7 +27,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
-    private CachedHashCodeInitializer<T> cachedHashCodeInitializer = CachedHashCodeInitializer.passthrough();
+    private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
+        CachedHashCodeInitializer.passthrough();
     private Set<String> allExcludedFields = new HashSet<>();
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();

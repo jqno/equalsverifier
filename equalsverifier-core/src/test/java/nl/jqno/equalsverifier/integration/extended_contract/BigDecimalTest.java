@@ -134,7 +134,8 @@ public class BigDecimalTest {
             if (!(obj instanceof BigDecimalEqualsWithComparablyConsistentHashCode)) {
                 return false;
             }
-            BigDecimalEqualsWithComparablyConsistentHashCode other = (BigDecimalEqualsWithComparablyConsistentHashCode) obj;
+            BigDecimalEqualsWithComparablyConsistentHashCode other =
+                (BigDecimalEqualsWithComparablyConsistentHashCode) obj;
             return Objects.equals(bd, other.bd);
         }
 

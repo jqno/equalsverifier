@@ -468,7 +468,8 @@ public class CachedHashCodeTest {
             if (!(obj instanceof ObjectWithProtectedCalculateHashCodeMembers)) {
                 return false;
             }
-            ObjectWithProtectedCalculateHashCodeMembers that = (ObjectWithProtectedCalculateHashCodeMembers) obj;
+            ObjectWithProtectedCalculateHashCodeMembers that =
+                (ObjectWithProtectedCalculateHashCodeMembers) obj;
             return name.equals(that.name);
         }
 
@@ -499,7 +500,8 @@ public class CachedHashCodeTest {
             if (!(obj instanceof ObjectWithDefaultVisibilityCalculateHashCodeMembers)) {
                 return false;
             }
-            ObjectWithDefaultVisibilityCalculateHashCodeMembers that = (ObjectWithDefaultVisibilityCalculateHashCodeMembers) obj;
+            ObjectWithDefaultVisibilityCalculateHashCodeMembers that =
+                (ObjectWithDefaultVisibilityCalculateHashCodeMembers) obj;
             return name.equals(that.name);
         }
 
@@ -530,7 +532,8 @@ public class CachedHashCodeTest {
             if (!(obj instanceof ObjectWithUninitializedCachedHashCode)) {
                 return false;
             }
-            ObjectWithUninitializedCachedHashCode that = (ObjectWithUninitializedCachedHashCode) obj;
+            ObjectWithUninitializedCachedHashCode that =
+                (ObjectWithUninitializedCachedHashCode) obj;
             return name.equals(that.name);
         }
 
@@ -592,7 +595,8 @@ public class CachedHashCodeTest {
             if (!(obj instanceof ObjectWithLazilyInitializedCachedHashCode)) {
                 return false;
             }
-            ObjectWithLazilyInitializedCachedHashCode that = (ObjectWithLazilyInitializedCachedHashCode) obj;
+            ObjectWithLazilyInitializedCachedHashCode that =
+                (ObjectWithLazilyInitializedCachedHashCode) obj;
             return name.equals(that.name);
         }
 
@@ -625,7 +629,8 @@ public class CachedHashCodeTest {
             if (!(obj instanceof ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals)) {
                 return false;
             }
-            ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals that = (ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals) obj;
+            ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals that =
+                (ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals) obj;
             if (cachedHashCode != that.cachedHashCode) {
                 return false;
             }
@@ -664,7 +669,8 @@ public class CachedHashCodeTest {
             if (hashCode() != obj.hashCode()) {
                 return false;
             }
-            ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals that = (ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals) obj;
+            ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals that =
+                (ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals) obj;
             return name.equals(that.name);
         }
 

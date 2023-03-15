@@ -12,9 +12,11 @@ import org.junit.jupiter.api.Test;
 public class FieldIterableTest {
 
     private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
-    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS = createNonStaticFieldContainerFields();
+    private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS =
+        createNonStaticFieldContainerFields();
     private static final Set<Field> SUB_FIELD_CONTAINER_FIELDS = createSubFieldContainerFields();
-    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
+    private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS =
+        createFieldAndSubFieldContainerFields();
 
     @Test
     public void simpleFields() {

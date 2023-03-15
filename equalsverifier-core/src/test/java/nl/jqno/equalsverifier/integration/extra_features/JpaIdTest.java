@@ -481,7 +481,8 @@ public class JpaIdTest {
             if (!(obj instanceof JpaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
-            JpaIdBusinessKeyPersonReorderedFields other = (JpaIdBusinessKeyPersonReorderedFields) obj;
+            JpaIdBusinessKeyPersonReorderedFields other =
+                (JpaIdBusinessKeyPersonReorderedFields) obj;
             return (
                 Objects.equals(socialSecurity, other.socialSecurity) &&
                 Objects.equals(name, other.name) &&
@@ -557,7 +558,8 @@ public class JpaIdTest {
             if (!(obj instanceof JpaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
-            JpaIdSurrogateKeyPersonReorderedFields other = (JpaIdSurrogateKeyPersonReorderedFields) obj;
+            JpaIdSurrogateKeyPersonReorderedFields other =
+                (JpaIdSurrogateKeyPersonReorderedFields) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -790,7 +792,8 @@ public class JpaIdTest {
             if (!(obj instanceof NaturalIdWithoutJpaIdBusinessKeyPerson)) {
                 return false;
             }
-            NaturalIdWithoutJpaIdBusinessKeyPerson other = (NaturalIdWithoutJpaIdBusinessKeyPerson) obj;
+            NaturalIdWithoutJpaIdBusinessKeyPerson other =
+                (NaturalIdWithoutJpaIdBusinessKeyPerson) obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 
@@ -963,7 +966,8 @@ public class JpaIdTest {
             if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
                 return false;
             }
-            NonHibernateNaturalIdBusinessKeyPerson other = (NonHibernateNaturalIdBusinessKeyPerson) obj;
+            NonHibernateNaturalIdBusinessKeyPerson other =
+                (NonHibernateNaturalIdBusinessKeyPerson) obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 

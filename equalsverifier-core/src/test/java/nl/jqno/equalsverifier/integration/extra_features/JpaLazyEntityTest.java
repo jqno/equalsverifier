@@ -212,7 +212,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJpaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJpaIgnoredLazyFieldContainer other = (IncorrectBasicJpaIgnoredLazyFieldContainer) obj;
+            IncorrectBasicJpaIgnoredLazyFieldContainer other =
+                (IncorrectBasicJpaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -262,7 +263,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJpaLazyFieldContainerHashCode)) {
                 return false;
             }
-            IncorrectBasicJpaLazyFieldContainerHashCode other = (IncorrectBasicJpaLazyFieldContainerHashCode) obj;
+            IncorrectBasicJpaLazyFieldContainerHashCode other =
+                (IncorrectBasicJpaLazyFieldContainerHashCode) obj;
             return Objects.equals(getBasic(), other.getBasic());
         }
 
@@ -312,7 +314,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToOneJpaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToOneJpaLazyFieldContainer other = (IncorrectOneToOneJpaLazyFieldContainer) obj;
+            IncorrectOneToOneJpaLazyFieldContainer other =
+                (IncorrectOneToOneJpaLazyFieldContainer) obj;
             return Objects.equals(oneToOne, other.oneToOne);
         }
 
@@ -337,7 +340,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToManyJpaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToManyJpaLazyFieldContainer other = (IncorrectOneToManyJpaLazyFieldContainer) obj;
+            IncorrectOneToManyJpaLazyFieldContainer other =
+                (IncorrectOneToManyJpaLazyFieldContainer) obj;
             return Objects.equals(oneToMany, other.oneToMany);
         }
 
@@ -362,7 +366,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToOneJpaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToOneJpaLazyFieldContainer other = (IncorrectManyToOneJpaLazyFieldContainer) obj;
+            IncorrectManyToOneJpaLazyFieldContainer other =
+                (IncorrectManyToOneJpaLazyFieldContainer) obj;
             return Objects.equals(manyToOne, other.manyToOne);
         }
 
@@ -387,7 +392,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToManyJpaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToManyJpaLazyFieldContainer other = (IncorrectManyToManyJpaLazyFieldContainer) obj;
+            IncorrectManyToManyJpaLazyFieldContainer other =
+                (IncorrectManyToManyJpaLazyFieldContainer) obj;
             return Objects.equals(manyToMany, other.manyToMany);
         }
 
@@ -412,7 +418,8 @@ public class JpaLazyEntityTest {
             if (!(obj instanceof IncorrectElementCollectionJpaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectElementCollectionJpaLazyFieldContainer other = (IncorrectElementCollectionJpaLazyFieldContainer) obj;
+            IncorrectElementCollectionJpaLazyFieldContainer other =
+                (IncorrectElementCollectionJpaLazyFieldContainer) obj;
             return Objects.equals(elementCollection, other.elementCollection);
         }
 

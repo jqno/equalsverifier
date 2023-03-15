@@ -179,7 +179,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaEagerFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaEagerFieldContainer other = (IncorrectBasicJakartaEagerFieldContainer) obj;
+            IncorrectBasicJakartaEagerFieldContainer other =
+                (IncorrectBasicJakartaEagerFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -206,7 +207,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaIgnoredLazyFieldContainer other = (IncorrectBasicJakartaIgnoredLazyFieldContainer) obj;
+            IncorrectBasicJakartaIgnoredLazyFieldContainer other =
+                (IncorrectBasicJakartaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -231,7 +233,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof CorrectBasicJakartaLazyGetterContainer)) {
                 return false;
             }
-            CorrectBasicJakartaLazyGetterContainer other = (CorrectBasicJakartaLazyGetterContainer) obj;
+            CorrectBasicJakartaLazyGetterContainer other =
+                (CorrectBasicJakartaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -256,7 +259,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaLazyFieldContainerHashCode)) {
                 return false;
             }
-            IncorrectBasicJakartaLazyFieldContainerHashCode other = (IncorrectBasicJakartaLazyFieldContainerHashCode) obj;
+            IncorrectBasicJakartaLazyFieldContainerHashCode other =
+                (IncorrectBasicJakartaLazyFieldContainerHashCode) obj;
             return Objects.equals(getBasic(), other.getBasic());
         }
 
@@ -281,7 +285,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaLazyFieldContainer other = (IncorrectBasicJakartaLazyFieldContainer) obj;
+            IncorrectBasicJakartaLazyFieldContainer other =
+                (IncorrectBasicJakartaLazyFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -306,7 +311,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToOneJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToOneJakartaLazyFieldContainer other = (IncorrectOneToOneJakartaLazyFieldContainer) obj;
+            IncorrectOneToOneJakartaLazyFieldContainer other =
+                (IncorrectOneToOneJakartaLazyFieldContainer) obj;
             return Objects.equals(oneToOne, other.oneToOne);
         }
 
@@ -331,7 +337,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToManyJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToManyJakartaLazyFieldContainer other = (IncorrectOneToManyJakartaLazyFieldContainer) obj;
+            IncorrectOneToManyJakartaLazyFieldContainer other =
+                (IncorrectOneToManyJakartaLazyFieldContainer) obj;
             return Objects.equals(oneToMany, other.oneToMany);
         }
 
@@ -356,7 +363,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToOneJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToOneJakartaLazyFieldContainer other = (IncorrectManyToOneJakartaLazyFieldContainer) obj;
+            IncorrectManyToOneJakartaLazyFieldContainer other =
+                (IncorrectManyToOneJakartaLazyFieldContainer) obj;
             return Objects.equals(manyToOne, other.manyToOne);
         }
 
@@ -381,7 +389,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToManyJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToManyJakartaLazyFieldContainer other = (IncorrectManyToManyJakartaLazyFieldContainer) obj;
+            IncorrectManyToManyJakartaLazyFieldContainer other =
+                (IncorrectManyToManyJakartaLazyFieldContainer) obj;
             return Objects.equals(manyToMany, other.manyToMany);
         }
 
@@ -406,7 +415,8 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectElementCollectionJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectElementCollectionJakartaLazyFieldContainer other = (IncorrectElementCollectionJakartaLazyFieldContainer) obj;
+            IncorrectElementCollectionJakartaLazyFieldContainer other =
+                (IncorrectElementCollectionJakartaLazyFieldContainer) obj;
             return Objects.equals(elementCollection, other.elementCollection);
         }
 

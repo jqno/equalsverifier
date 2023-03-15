@@ -463,7 +463,8 @@ public class AbstractDelegationTest {
             if (delegator != null) {
                 delegator.abstractDelegation();
             }
-            EqualsDelegatesToAbstractMethodInField other = (EqualsDelegatesToAbstractMethodInField) obj;
+            EqualsDelegatesToAbstractMethodInField other =
+                (EqualsDelegatesToAbstractMethodInField) obj;
             return i == other.i && Objects.equals(delegator, other.delegator);
         }
 
@@ -539,7 +540,8 @@ public class AbstractDelegationTest {
             if (!(obj instanceof EqualsInFieldDelegatesToAbstractMethod)) {
                 return false;
             }
-            EqualsInFieldDelegatesToAbstractMethod other = (EqualsInFieldDelegatesToAbstractMethod) obj;
+            EqualsInFieldDelegatesToAbstractMethod other =
+                (EqualsInFieldDelegatesToAbstractMethod) obj;
             return Objects.equals(delegator, other.delegator);
         }
 
