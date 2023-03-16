@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.1] - 2023-03-16
+
 - Fixes incorrect error message when a sealed type has multiple permitted subtypes. ([Issue 786](https://github.com/jqno/equalsverifier/issues/786))
 
 ## [3.14] - 2023-02-27
@@ -1122,7 +1124,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.1...HEAD
+[3.14.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14...equalsverifier-3.14.1
 [3.14]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.2...equalsverifier-3.14
 [3.13.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13.1...equalsverifier-3.13.2
 [3.13.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.13...equalsverifier-3.13.1
