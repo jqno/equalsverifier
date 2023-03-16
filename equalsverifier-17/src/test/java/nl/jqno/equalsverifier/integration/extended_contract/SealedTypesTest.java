@@ -64,6 +64,16 @@ public class SealedTypesTest {
             .assertFailure();
     }
 
+    @Test
+    void succeed_whenSealedParentHasTwoChildren_a() {
+        EqualsVerifier.forClass(SealedChildA.class).verify();
+    }
+
+    @Test
+    void succeed_whenSealedParentHasTwoChildren_b() {
+        EqualsVerifier.forClass(SealedChildB.class).verify();
+    }
+
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {
 
         private final int i;
@@ -194,6 +204,48 @@ public class SealedTypesTest {
 
         public IncorrectSealedChild(int i) {
             super(i);
+        }
+    }
+
+    public abstract static sealed class SealedParentWithTwoChildren {
+
+        final String value;
+
+        protected SealedParentWithTwoChildren(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            return (
+                other != null &&
+                (this.getClass() == other.getClass()) &&
+                Objects.equals(this.value, ((SealedParentWithTwoChildren) other).value)
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(this.value);
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + " '" + value + "'";
+        }
+    }
+
+    public static final class SealedChildA extends SealedParentWithTwoChildren {
+
+        SealedChildA(String value) {
+            super(value);
+        }
+    }
+
+    public static final class SealedChildB extends SealedParentWithTwoChildren {
+
+        SealedChildB(String value) {
+            super(value);
         }
     }
 }
