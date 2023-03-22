@@ -33,11 +33,11 @@ jobs:
             java: 17
             dist: temurin
             flags: ""
-          - title: "Supported JDK 19"
+          - title: "Supported JDK 20"
             experimental: false
-            cache-id: "jdk19"
-            java: 19
-            dist: temurin
+            cache-id: "jdk20"
+            java: 20
+            dist: zulu
             flags: ""
           - title: "Experimental JDK EA (simplified)"
             experimental: false
