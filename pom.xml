@@ -240,7 +240,7 @@
                             <showWarnings>true</showWarnings>
                             <compilerArgs>
                                 <arg>-Werror</arg>
-                                <arg>-Xlint:deprecation,removal,rawtypes,unchecked</arg>
+                                <arg>-Xlint:deprecation,removal,rawtypes,unchecked,-options</arg>
                             </compilerArgs>
                         </configuration>
                     </plugin>
