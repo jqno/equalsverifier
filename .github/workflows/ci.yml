@@ -4,6 +4,7 @@ on:
     paths:
       - '**.java'
       - '**.xml'
+      - '.github/workflows/*.yml'
   pull_request:
 
 jobs:
