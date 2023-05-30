@@ -611,6 +611,29 @@ public final class JavaApiPrefabValues {
                 );
             }
         );
+
+        DoubleAdder redDoubleAdder = new DoubleAdder();
+        DoubleAdder blueDoubleAdder = new DoubleAdder();
+        addValues(DoubleAdder.class, redDoubleAdder, blueDoubleAdder, redDoubleAdder);
+        DoubleAccumulator redDoubleAccumulator = new DoubleAccumulator((a, b) -> a + b, 0.0);
+        DoubleAccumulator blueDoubleAccumulator = new DoubleAccumulator((a, b) -> a * b, 1.0);
+        addValues(
+            DoubleAccumulator.class,
+            redDoubleAccumulator,
+            blueDoubleAccumulator,
+            redDoubleAccumulator
+        );
+        LongAdder redLongAdder = new LongAdder();
+        LongAdder blueLongAdder = new LongAdder();
+        addValues(LongAdder.class, redLongAdder, blueLongAdder, redLongAdder);
+        LongAccumulator redLongAccumulator = new LongAccumulator((a, b) -> a + b, 0);
+        LongAccumulator blueLongAccumulator = new LongAccumulator((a, b) -> a * b, 1);
+        addValues(
+            LongAccumulator.class,
+            redLongAccumulator,
+            blueLongAccumulator,
+            redLongAccumulator
+        );
     }
 
     private void addAncientJavaApiClasses() {

@@ -106,6 +106,10 @@ import java.util.concurrent.atomic.AtomicMarkableReference;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.atomic.AtomicStampedReference;
+import java.util.concurrent.atomic.DoubleAccumulator;
+import java.util.concurrent.atomic.DoubleAdder;
+import java.util.concurrent.atomic.LongAccumulator;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -742,6 +746,10 @@ public class JavaApiClassesTest {
         private final AtomicReference<?> atomicReference;
         private final AtomicReferenceArray<?> atomicReferenceArray;
         private final AtomicStampedReference<?> atomicStampedReference;
+        private final DoubleAdder doubleAdder;
+        private final DoubleAccumulator doubleAccumulator;
+        private final LongAdder longAdder;
+        private final LongAccumulator longAccumulator;
 
         public AtomicClassesContainer(
             AtomicBoolean atomicBoolean,
@@ -752,7 +760,11 @@ public class JavaApiClassesTest {
             AtomicMarkableReference<?> atomicMarkableReference,
             AtomicReference<?> atomicReference,
             AtomicReferenceArray<?> atomicReferenceArray,
-            AtomicStampedReference<?> atomicStampedReference
+            AtomicStampedReference<?> atomicStampedReference,
+            DoubleAdder doubleAdder,
+            DoubleAccumulator doubleAccumulator,
+            LongAdder longAdder,
+            LongAccumulator longAccumulator
         ) {
             this.atomicBoolean = atomicBoolean;
             this.atomicInteger = atomicInteger;
@@ -763,6 +775,10 @@ public class JavaApiClassesTest {
             this.atomicReference = atomicReference;
             this.atomicReferenceArray = atomicReferenceArray;
             this.atomicStampedReference = atomicStampedReference;
+            this.doubleAdder = doubleAdder;
+            this.doubleAccumulator = doubleAccumulator;
+            this.longAdder = longAdder;
+            this.longAccumulator = longAccumulator;
         }
 
         @Override
