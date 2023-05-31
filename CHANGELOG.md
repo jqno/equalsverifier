@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.14.2] - 2023-05-31
+
+- Adds prefab values for `DoubleAdder`, `DoubleAccumulator`, `LongAdder` and `LongAccumulator`.
+
 ## [3.14.1] - 2023-03-16
 
 - Fixes incorrect error message when a sealed type has multiple permitted subtypes. ([Issue 786](https://github.com/jqno/equalsverifier/issues/786))
