@@ -103,7 +103,7 @@
         <version.maven-source-plugin>3.3.0</version.maven-source-plugin>
         <version.maven-surefire-plugin>3.0.0</version.maven-surefire-plugin>
         <version.pitest.github>0.1.0</version.pitest.github>
-        <version.pitest.junit5>1.1.2</version.pitest.junit5>
+        <version.pitest.junit5>1.2.0</version.pitest.junit5>
         <version.pitest.maven>1.14.1</version.pitest.maven>
         <version.spotbugs.maven>4.7.3.4</version.spotbugs.maven>
         <version.spotbugs>4.7.3</version.spotbugs>
