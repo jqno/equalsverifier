@@ -13,9 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Adds prefab values for `Throwable`, `Exception` and `RuntimeException`. ([Issue 831](https://github.com/jqno/equalsverifier/issues/831))
+
 ## [3.14.2] - 2023-05-31
 
-- Adds prefab values for `DoubleAdder`, `DoubleAccumulator`, `LongAdder` and `LongAccumulator`.
+- Adds prefab values for `DoubleAdder`, `DoubleAccumulator`, `LongAdder` and `LongAccumulator`. ([Issue 817](https://github.com/jqno/equalsverifier/issues/817))
 
 ## [3.14.1] - 2023-03-16
 

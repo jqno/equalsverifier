@@ -108,6 +108,7 @@ public final class JavaApiPrefabValues {
         addSets();
         addQueues();
         addNioBuffers();
+        addExceptions();
         addReflectionClasses();
         addAtomicClasses();
         addAncientJavaApiClasses();
@@ -510,6 +511,25 @@ public final class JavaApiPrefabValues {
             ShortBuffer.wrap(new short[] { 0 }),
             ShortBuffer.wrap(new short[] { 1 }),
             ShortBuffer.wrap(new short[] { 0 })
+        );
+    }
+
+    private void addExceptions() {
+        Throwable redThrowable = new Throwable();
+        Throwable blueThrowable = new Throwable();
+        addValues(Throwable.class, redThrowable, blueThrowable, redThrowable);
+
+        Exception redException = new Exception();
+        Exception blueException = new Exception();
+        addValues(Exception.class, redException, blueException, redException);
+
+        RuntimeException redRuntimeException = new RuntimeException();
+        RuntimeException blueRuntimeException = new RuntimeException();
+        addValues(
+            RuntimeException.class,
+            redRuntimeException,
+            blueRuntimeException,
+            redRuntimeException
         );
     }
 

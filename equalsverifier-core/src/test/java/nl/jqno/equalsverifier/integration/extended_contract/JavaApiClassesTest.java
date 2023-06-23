@@ -158,6 +158,11 @@ public class JavaApiClassesTest {
     }
 
     @Test
+    public void succeed_whenClassContainsExceptions() {
+        EqualsVerifier.forClass(ExceptionsContainer.class).verify();
+    }
+
+    @Test
     public void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier
             .forClass(ReflectionClassesContainer.class)
@@ -690,6 +695,34 @@ public class JavaApiClassesTest {
             this.doubleSummaryStatistics = doubleSummaryStatistics;
             this.intSummaryStatistics = intSummaryStatistics;
             this.longSummaryStatistics = longSummaryStatistics;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return defaultEquals(this, obj);
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+    }
+
+    @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
+    static final class ExceptionsContainer {
+
+        private final Throwable throwable;
+        private final Exception exception;
+        private final RuntimeException runtimeException;
+
+        public ExceptionsContainer(
+            Throwable throwable,
+            Exception exception,
+            RuntimeException runtimeException
+        ) {
+            this.throwable = throwable;
+            this.exception = exception;
+            this.runtimeException = runtimeException;
         }
 
         @Override
