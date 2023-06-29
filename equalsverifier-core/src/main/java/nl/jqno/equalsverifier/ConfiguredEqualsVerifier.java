@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.function.Function;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.api.EqualsVerifierApi;
@@ -20,21 +21,24 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     private final EnumSet<Warning> warningsToSuppress;
     private final FactoryCache factoryCache;
     private boolean usingGetClass;
+    private Function<String, String> fieldnameToGetter;
 
     /** Constructor. */
     public ConfiguredEqualsVerifier() {
-        this(EnumSet.noneOf(Warning.class), new FactoryCache(), false);
+        this(EnumSet.noneOf(Warning.class), new FactoryCache(), false, null);
     }
 
     /** Private constructor. For internal use only. */
     private ConfiguredEqualsVerifier(
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        boolean usingGetClass
+        boolean usingGetClass,
+        Function<String, String> fieldnameToGetter
     ) {
         this.warningsToSuppress = warningsToSuppress;
         this.factoryCache = factoryCache;
         this.usingGetClass = usingGetClass;
+        this.fieldnameToGetter = fieldnameToGetter;
     }
 
     /**
@@ -46,7 +50,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         return new ConfiguredEqualsVerifier(
             EnumSet.copyOf(warningsToSuppress),
             new FactoryCache().merge(factoryCache),
-            usingGetClass
+            usingGetClass,
+            fieldnameToGetter
         );
     }
 
@@ -88,6 +93,14 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     @Override
     public ConfiguredEqualsVerifier usingGetClass() {
         usingGetClass = true;
+        return this;
+    }
+
+    @Override
+    public ConfiguredEqualsVerifier withFieldnameToGetterConverter(
+        Function<String, String> converter
+    ) {
+        this.fieldnameToGetter = converter;
         return this;
     }
 

@@ -89,6 +89,17 @@ public class JpaLazyEntityTest {
         EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
     }
 
+    @Test
+    public void differentCodingStyle() {
+        EqualsVerifier
+            .forClass(DifferentCodingStyleContainer.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
@@ -468,6 +479,44 @@ public class JpaLazyEntityTest {
                 return false;
             }
             return super.equals(obj);
+        }
+    }
+
+    @Entity
+    static class DifferentCodingStyleContainer {
+
+        // CHECKSTYLE OFF: MemberName
+        @OneToMany(fetch = FetchType.LAZY)
+        private String m_oneToMany;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        private String m_manyToOne;
+
+        // CHECKSTYLE ON: MemberName
+
+        public String getOneToMany() {
+            return m_oneToMany;
+        }
+
+        public String getManyToOne() {
+            return m_manyToOne;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DifferentCodingStyleContainer)) {
+                return false;
+            }
+            DifferentCodingStyleContainer other = (DifferentCodingStyleContainer) obj;
+            return (
+                Objects.equals(getOneToMany(), other.getOneToMany()) &&
+                Objects.equals(getManyToOne(), other.getManyToOne())
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getOneToMany(), getManyToOne());
         }
     }
 }

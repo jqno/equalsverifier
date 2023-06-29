@@ -1,8 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
@@ -17,6 +22,9 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotatio
 
 public final class Configuration<T> {
 
+    private static final Function<String, String> DEFAULT_FIELDNAME_TO_GETTER_CONVERTER = fn ->
+        "get" + Character.toUpperCase(fn.charAt(0)) + fn.substring(1);
+
     private final Class<T> type;
     private final Set<String> nonnullFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
@@ -24,6 +32,7 @@ public final class Configuration<T> {
     private final Class<? extends T> redefinedSubclass;
     private final boolean usingGetClass;
     private final EnumSet<Warning> warningsToSuppress;
+    private final Function<String, String> fieldnameToGetter;
 
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
@@ -48,6 +57,7 @@ public final class Configuration<T> {
         Class<? extends T> redefinedSubclass,
         boolean usingGetClass,
         EnumSet<Warning> warningsToSuppress,
+        Function<String, String> fieldnameToGetter,
         List<T> equalExamples,
         List<T> unequalExamples
     ) {
@@ -63,6 +73,7 @@ public final class Configuration<T> {
         this.redefinedSubclass = redefinedSubclass;
         this.usingGetClass = usingGetClass;
         this.warningsToSuppress = warningsToSuppress;
+        this.fieldnameToGetter = fieldnameToGetter;
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
     }
@@ -77,6 +88,7 @@ public final class Configuration<T> {
         Class<? extends T> redefinedSubclass,
         boolean usingGetClass,
         EnumSet<Warning> warningsToSuppress,
+        Function<String, String> fieldnameToGetter,
         FactoryCache factoryCache,
         Set<String> ignoredAnnotationClassNames,
         Set<String> actualFields,
@@ -96,6 +108,9 @@ public final class Configuration<T> {
             includedFields,
             actualFields
         );
+        Function<String, String> converter = fieldnameToGetter != null
+            ? fieldnameToGetter
+            : DEFAULT_FIELDNAME_TO_GETTER_CONVERTER;
         List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
         return new Configuration<>(
@@ -111,6 +126,7 @@ public final class Configuration<T> {
             redefinedSubclass,
             usingGetClass,
             warningsToSuppress,
+            converter,
             equalExamples,
             unequals
         );
@@ -231,6 +247,10 @@ public final class Configuration<T> {
 
     public EnumSet<Warning> getWarningsToSuppress() {
         return EnumSet.copyOf(warningsToSuppress);
+    }
+
+    public Function<String, String> getFieldnameToGetter() {
+        return fieldnameToGetter;
     }
 
     public List<T> getEqualExamples() {
