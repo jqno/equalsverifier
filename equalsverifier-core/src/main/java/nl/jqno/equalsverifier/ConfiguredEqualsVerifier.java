@@ -123,7 +123,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
             type,
             EnumSet.copyOf(warningsToSuppress),
             factoryCache,
-            usingGetClass
+            usingGetClass,
+            fieldnameToGetter
         );
     }
 

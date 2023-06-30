@@ -77,17 +77,20 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param factoryCache Factories that can be used to create values.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
+     * @param converter A function that converts from field name to getter name.
      */
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        boolean usingGetClass
+        boolean usingGetClass,
+        Function<String, String> converter
     ) {
         this(type);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
+        this.fieldnameToGetter = converter;
     }
 
     /**

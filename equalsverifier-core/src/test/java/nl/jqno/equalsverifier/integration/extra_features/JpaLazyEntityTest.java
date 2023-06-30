@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
+import java.util.Arrays;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -90,9 +91,32 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void differentCodingStyle() {
+    public void differentCodingStyle_single() {
         EqualsVerifier
             .forClass(DifferentCodingStyleContainer.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_configured() {
+        EqualsVerifier
+            .configure()
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .forClass(DifferentCodingStyleContainer.class)
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_multiple() {
+        EqualsVerifier
+            .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
             .suppress(Warning.NONFINAL_FIELDS)
             .withFieldnameToGetterConverter(fn ->
                 "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
