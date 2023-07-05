@@ -21,10 +21,7 @@ You get 100% coverage and the confidence that all the requirements of the `equal
 
 There is one downside to this. EqualsVerifier is an opinionated tool. It has to be. Unfortunately, that means it can feel restrictive to some people:
 
-<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">All right. Goodbye. EqualsVerifier. I cannot handle your needless constraints.</p>&mdash; ☕ J. B. Rainsberger (@jbrains) <a href="https://twitter.com/jbrains/status/661556171166392320">November 3, 2015</a></blockquote>
-<script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-<br>
+[![Tweet by JB Rainsberger saying: "All right. Goodbye. EqualsVerifier. I cannot handle your needless constraints."]({{ site.baseurl }}/images/needless-constraints.png)](https://twitter.com/jbrains/status/661556171166392320)
 
 This manual is an attempt to explain these constraints are necessary. It also explains how you can remove the constraints if you don't agree with them. If you still feel EqualsVerifier is too restrictive, then that's fine; you don't have to use it if you don't want. But if you do, the quality of your `equals` methods will improve, and so will your test coverage.
 
