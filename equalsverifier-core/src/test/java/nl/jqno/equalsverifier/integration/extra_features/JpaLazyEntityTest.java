@@ -30,7 +30,7 @@ public class JpaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier
-            .forClass(IncorrectBasicJpaEagerFieldContainer.class)
+            .forClass(CorrectBasicJpaEagerFieldContainer.class)
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
     }
@@ -38,7 +38,7 @@ public class JpaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier
-            .forClass(IncorrectBasicJpaIgnoredLazyFieldContainer.class)
+            .forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class)
             .withIgnoredFields("basic")
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
@@ -46,7 +46,7 @@ public class JpaLazyEntityTest {
 
     @Test
     public void basicGetterUsed_givenAnnotationIsOnGetter() {
-        getterNotUsed(CorrectBasicJpaLazyGetterContainer.class, "equals");
+        getterNotUsed(IncorrectBasicJpaLazyGetterContainer.class, "equals");
     }
 
     @Test
@@ -137,16 +137,16 @@ public class JpaLazyEntityTest {
         @Basic(fetch = FetchType.LAZY)
         private String basic;
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @OneToOne
         private String oneToOne;
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @OneToMany
         private String oneToMany;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         private String manyToOne;
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @ManyToMany
         private String manyToMany;
 
         @ElementCollection(fetch = FetchType.LAZY)
@@ -206,7 +206,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJpaEagerFieldContainer {
+    static class CorrectBasicJpaEagerFieldContainer {
 
         @Basic
         private String basic;
@@ -217,10 +217,10 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJpaEagerFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJpaEagerFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJpaEagerFieldContainer other = (IncorrectBasicJpaEagerFieldContainer) obj;
+            CorrectBasicJpaEagerFieldContainer other = (CorrectBasicJpaEagerFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -231,7 +231,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJpaIgnoredLazyFieldContainer {
+    static class CorrectBasicJpaIgnoredLazyFieldContainer {
 
         private String somethingElse;
 
@@ -244,11 +244,11 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJpaIgnoredLazyFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJpaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJpaIgnoredLazyFieldContainer other =
-                (IncorrectBasicJpaIgnoredLazyFieldContainer) obj;
+            CorrectBasicJpaIgnoredLazyFieldContainer other =
+                (CorrectBasicJpaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -259,7 +259,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class CorrectBasicJpaLazyGetterContainer {
+    static class IncorrectBasicJpaLazyGetterContainer {
 
         private String basic;
 
@@ -270,10 +270,10 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof CorrectBasicJpaLazyGetterContainer)) {
+            if (!(obj instanceof IncorrectBasicJpaLazyGetterContainer)) {
                 return false;
             }
-            CorrectBasicJpaLazyGetterContainer other = (CorrectBasicJpaLazyGetterContainer) obj;
+            IncorrectBasicJpaLazyGetterContainer other = (IncorrectBasicJpaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -337,7 +337,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectOneToOneJpaLazyFieldContainer {
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @OneToOne
         private String oneToOne;
 
         public String getOneToOne() {
@@ -363,7 +363,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectOneToManyJpaLazyFieldContainer {
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @OneToMany
         private String oneToMany;
 
         public String getOneToMany() {
@@ -389,7 +389,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectManyToOneJpaLazyFieldContainer {
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         private String manyToOne;
 
         public String getManyToOne() {
@@ -415,7 +415,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectManyToManyJpaLazyFieldContainer {
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @ManyToMany
         private String manyToMany;
 
         public String getManyToMany() {
@@ -441,7 +441,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectElementCollectionJpaLazyFieldContainer {
 
-        @ElementCollection(fetch = FetchType.LAZY)
+        @ElementCollection
         private String elementCollection;
 
         public String getElementCollection() {

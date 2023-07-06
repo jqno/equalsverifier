@@ -73,10 +73,17 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     }
 
     private boolean fieldIsLazy(FieldAccessor fieldAccessor) {
-        return annotationCache.hasFieldAnnotation(
-            type,
-            fieldAccessor.getFieldName(),
-            SupportedAnnotations.LAZY_FIELD
+        return (
+            annotationCache.hasFieldAnnotation(
+                type,
+                fieldAccessor.getFieldName(),
+                SupportedAnnotations.JPA_COLLECTION_FIELD
+            ) ||
+            annotationCache.hasFieldAnnotation(
+                type,
+                fieldAccessor.getFieldName(),
+                SupportedAnnotations.JPA_LAZY_FIELD
+            )
         );
     }
 
