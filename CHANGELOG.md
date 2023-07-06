@@ -15,13 +15,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.14.3] - 2023-06-23
 
+### Fixed
+
 - Adds prefab values for `Throwable`, `Exception` and `RuntimeException`. ([Issue 831](https://github.com/jqno/equalsverifier/issues/831))
 
 ## [3.14.2] - 2023-05-31
 
+### Fixed
+
 - Adds prefab values for `DoubleAdder`, `DoubleAccumulator`, `LongAdder` and `LongAccumulator`. ([Issue 817](https://github.com/jqno/equalsverifier/issues/817))
 
 ## [3.14.1] - 2023-03-16
+
+### Fixed
 
 - Fixes incorrect error message when a sealed type has multiple permitted subtypes. ([Issue 786](https://github.com/jqno/equalsverifier/issues/786))
 
