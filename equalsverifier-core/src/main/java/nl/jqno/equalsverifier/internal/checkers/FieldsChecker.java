@@ -95,7 +95,10 @@ public class FieldsChecker<T> implements Checker {
         }
 
         AnnotationCache cache = config.getAnnotationCache();
-        if (cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY)) {
+        if (
+            cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY) &&
+            !config.getWarningsToSuppress().contains(Warning.JPA_GETTER)
+        ) {
             inspector.check(jpaLazyGetterFieldCheck);
         }
     }

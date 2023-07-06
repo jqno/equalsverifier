@@ -166,6 +166,19 @@ public enum Warning {
     SURROGATE_OR_BUSINESS_KEY,
 
     /**
+     * Disables the check that collection fields in JPA, or @Basic fields marked with
+     * FetchType.LAZY, should be accessed through their getter methods in {@code equals} and
+     * {@code hashCode} methods.
+     *
+     * <p>Normally, it is necessary to go through the getter for these fields, because their
+     * content may not be materialized in some instances. Calling the getter will materialize them,
+     * but referencing the field directly will not. This can lead to situations where the
+     * {@code equals} method of objects that should be equal to each other returns false, because
+     * one instance has the content materialized and the other does not.
+     */
+    JPA_GETTER,
+
+    /**
      * Disables the check that transient fields not be part of the {@code equals} contract.
      *
      * <p>{@link EqualsVerifier}'s standard behaviour is to disallow transient fields being used in

@@ -47,41 +47,49 @@ public class JpaLazyEntityTest {
     @Test
     public void basicGetterUsed_givenAnnotationIsOnGetter() {
         getterNotUsed(IncorrectBasicJpaLazyGetterContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyGetterContainer.class);
     }
 
     @Test
     public void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainerHashCode.class, "hashCode");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainerHashCode.class);
     }
 
     @Test
     public void basicGetterNotUsed() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToOneGetterNotUsed() {
         getterNotUsed(IncorrectOneToOneJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToOneJpaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToManyGetterNotUsed() {
         getterNotUsed(IncorrectOneToManyJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToManyJpaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToOneGetterNotUsed() {
         getterNotUsed(IncorrectManyToOneJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToOneJpaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToManyGetterNotUsed() {
         getterNotUsed(IncorrectManyToManyJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToManyJpaLazyFieldContainer.class);
     }
 
     @Test
     public void elementCollectionGetterNotUsed() {
         getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectElementCollectionJpaLazyFieldContainer.class);
     }
 
     @Test
@@ -129,6 +137,13 @@ public class JpaLazyEntityTest {
             .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
             .assertFailure()
             .assertMessageContains("JPA Entity", method, "direct reference");
+    }
+
+    private void getterNotUsed_warningSuppressed(Class<?> type) {
+        EqualsVerifier
+            .forClass(type)
+            .suppress(Warning.JPA_GETTER, Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     @Entity
