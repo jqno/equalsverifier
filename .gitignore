@@ -17,3 +17,4 @@ target
 trace.log
 out/
 jreleaser-cli.jar
+JRELEASER_VERSION
