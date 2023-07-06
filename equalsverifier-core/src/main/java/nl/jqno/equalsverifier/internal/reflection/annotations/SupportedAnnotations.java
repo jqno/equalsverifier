@@ -194,7 +194,7 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
-    JPA_COLLECTION_FIELD(
+    JPA_LINKED_FIELD(
         true,
         "javax.persistence.OneToOne",
         "javax.persistence.OneToMany",

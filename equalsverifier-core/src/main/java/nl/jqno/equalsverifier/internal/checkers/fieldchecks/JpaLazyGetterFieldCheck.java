@@ -77,7 +77,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             annotationCache.hasFieldAnnotation(
                 type,
                 fieldAccessor.getFieldName(),
-                SupportedAnnotations.JPA_COLLECTION_FIELD
+                SupportedAnnotations.JPA_LINKED_FIELD
             ) ||
             annotationCache.hasFieldAnnotation(
                 type,

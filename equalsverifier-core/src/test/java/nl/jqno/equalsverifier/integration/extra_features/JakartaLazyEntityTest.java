@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import java.util.Arrays;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -29,7 +30,7 @@ public class JakartaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier
-            .forClass(IncorrectBasicJakartaEagerFieldContainer.class)
+            .forClass(CorrectBasicJakartaEagerFieldContainer.class)
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
     }
@@ -37,7 +38,7 @@ public class JakartaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier
-            .forClass(IncorrectBasicJakartaIgnoredLazyFieldContainer.class)
+            .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
             .withIgnoredFields("basic")
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
@@ -45,42 +46,90 @@ public class JakartaLazyEntityTest {
 
     @Test
     public void basicGetterUsed_givenAnnotationIsOnGetter() {
-        getterNotUsed(CorrectBasicJakartaLazyGetterContainer.class, "equals");
+        getterNotUsed(IncorrectBasicJakartaLazyGetterContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyGetterContainer.class);
     }
 
     @Test
     public void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJakartaLazyFieldContainerHashCode.class, "hashCode");
+        getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyFieldContainerHashCode.class);
     }
 
     @Test
     public void basicGetterNotUsed() {
         getterNotUsed(IncorrectBasicJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToOneGetterNotUsed() {
         getterNotUsed(IncorrectOneToOneJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToOneJakartaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToManyGetterNotUsed() {
         getterNotUsed(IncorrectOneToManyJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToManyJakartaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToOneGetterNotUsed() {
         getterNotUsed(IncorrectManyToOneJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToOneJakartaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToManyGetterNotUsed() {
         getterNotUsed(IncorrectManyToManyJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToManyJakartaLazyFieldContainer.class);
     }
 
     @Test
     public void elementCollectionGetterNotUsed() {
         getterNotUsed(IncorrectElementCollectionJakartaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectElementCollectionJakartaLazyFieldContainer.class);
+    }
+
+    @Test
+    public void lazyGettersPickedUpInSuper() {
+        EqualsVerifier.forClass(LazyGetterContainer.class).usingGetClass().verify();
+        EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
+    }
+
+    @Test
+    public void differentCodingStyle_single() {
+        EqualsVerifier
+            .forClass(DifferentCodingStyleContainer.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_configured() {
+        EqualsVerifier
+            .configure()
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .forClass(DifferentCodingStyleContainer.class)
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_multiple() {
+        EqualsVerifier
+            .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
     }
 
     private void getterNotUsed(Class<?> type, String method) {
@@ -88,6 +137,13 @@ public class JakartaLazyEntityTest {
             .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
             .assertFailure()
             .assertMessageContains("JPA Entity", method, "direct reference");
+    }
+
+    private void getterNotUsed_warningSuppressed(Class<?> type) {
+        EqualsVerifier
+            .forClass(type)
+            .suppress(Warning.JPA_GETTER, Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     @Entity
@@ -165,7 +221,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJakartaEagerFieldContainer {
+    static class CorrectBasicJakartaEagerFieldContainer {
 
         @Basic
         private String basic;
@@ -176,11 +232,11 @@ public class JakartaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJakartaEagerFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJakartaEagerFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaEagerFieldContainer other =
-                (IncorrectBasicJakartaEagerFieldContainer) obj;
+            CorrectBasicJakartaEagerFieldContainer other =
+                (CorrectBasicJakartaEagerFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -191,7 +247,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJakartaIgnoredLazyFieldContainer {
+    static class CorrectBasicJakartaIgnoredLazyFieldContainer {
 
         private String somethingElse;
 
@@ -204,11 +260,11 @@ public class JakartaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJakartaIgnoredLazyFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJakartaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaIgnoredLazyFieldContainer other =
-                (IncorrectBasicJakartaIgnoredLazyFieldContainer) obj;
+            CorrectBasicJakartaIgnoredLazyFieldContainer other =
+                (CorrectBasicJakartaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -219,7 +275,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Entity
-    static class CorrectBasicJakartaLazyGetterContainer {
+    static class IncorrectBasicJakartaLazyGetterContainer {
 
         private String basic;
 
@@ -230,11 +286,11 @@ public class JakartaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof CorrectBasicJakartaLazyGetterContainer)) {
+            if (!(obj instanceof IncorrectBasicJakartaLazyGetterContainer)) {
                 return false;
             }
-            CorrectBasicJakartaLazyGetterContainer other =
-                (CorrectBasicJakartaLazyGetterContainer) obj;
+            IncorrectBasicJakartaLazyGetterContainer other =
+                (IncorrectBasicJakartaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -423,6 +479,86 @@ public class JakartaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getElementCollection());
+        }
+    }
+
+    @Entity
+    static class LazyGetterContainer {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String s;
+
+        public String getS() {
+            return s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            return Objects.equals(getS(), ((LazyGetterContainer) obj).getS());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getS());
+        }
+    }
+
+    @Entity
+    static class ChildOfLazyGetterContainer extends LazyGetterContainer {
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            return super.equals(obj);
+        }
+    }
+
+    @Entity
+    static class DifferentCodingStyleContainer {
+
+        // CHECKSTYLE OFF: MemberName
+        @OneToMany(fetch = FetchType.LAZY)
+        private String m_oneToMany;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        private String m_manyToOne;
+
+        // CHECKSTYLE ON: MemberName
+
+        public String getOneToMany() {
+            return m_oneToMany;
+        }
+
+        public String getManyToOne() {
+            return m_manyToOne;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DifferentCodingStyleContainer)) {
+                return false;
+            }
+            DifferentCodingStyleContainer other = (DifferentCodingStyleContainer) obj;
+            return (
+                Objects.equals(getOneToMany(), other.getOneToMany()) &&
+                Objects.equals(getManyToOne(), other.getManyToOne())
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getOneToMany(), getManyToOne());
         }
     }
 }
