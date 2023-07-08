@@ -1,16 +1,38 @@
 package nl.jqno.equalsverifier.api;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.checkers.*;
+import nl.jqno.equalsverifier.internal.checkers.AbstractDelegationChecker;
+import nl.jqno.equalsverifier.internal.checkers.CachedHashCodeChecker;
+import nl.jqno.equalsverifier.internal.checkers.Checker;
+import nl.jqno.equalsverifier.internal.checkers.ExamplesChecker;
+import nl.jqno.equalsverifier.internal.checkers.FieldsChecker;
+import nl.jqno.equalsverifier.internal.checkers.HierarchyChecker;
+import nl.jqno.equalsverifier.internal.checkers.MapEntryHashCodeRequirementChecker;
+import nl.jqno.equalsverifier.internal.checkers.NullChecker;
+import nl.jqno.equalsverifier.internal.checkers.RecordChecker;
+import nl.jqno.equalsverifier.internal.checkers.SignatureChecker;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
+import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.ErrorMessage;
+import nl.jqno.equalsverifier.internal.util.FieldNameExtractor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
+import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -29,6 +51,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private FactoryCache factoryCache = new FactoryCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
+    private Function<String, String> fieldnameToGetter = null;
     private Set<String> allExcludedFields = new HashSet<>();
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();
@@ -54,17 +77,20 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param factoryCache Factories that can be used to create values.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
+     * @param converter A function that converts from field name to getter name.
      */
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        boolean usingGetClass
+        boolean usingGetClass,
+        Function<String, String> converter
     ) {
         this(type);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
+        this.fieldnameToGetter = converter;
     }
 
     /**
@@ -126,6 +152,15 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     public SingleTypeEqualsVerifierApi<T> usingGetClass() {
         this.usingGetClass = true;
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SingleTypeEqualsVerifierApi<T> withFieldnameToGetterConverter(
+        Function<String, String> converter
+    ) {
+        this.fieldnameToGetter = converter;
         return this;
     }
 
@@ -396,6 +431,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             redefinedSubclass,
             usingGetClass,
             warningsToSuppress,
+            fieldnameToGetter,
             factoryCache,
             ignoredAnnotationClassNames,
             actualFields,

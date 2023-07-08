@@ -54,6 +54,29 @@ In that case, you can call `suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY
 (`Warning.IDENTICAL_COPY`, which the error message suggests, is not appropriate in this case because that is meant for classes which have no state at all.)
 
 
+### Materialized fields
+Some fields have a mapping annotation that links them with data from a different database table or entity. These annotations include `@OneToMany`, `@ManyToOne` and `@ManyToMany`. In certain situations, you can have an instance where these fields are not materialized yet. In other words, they're not fetched from the database, and their content is undefined. Most often, this happens when they have `fetchType = FetchType.LAZY`, but even with `FetchType.EAGER`, it can happen that they are not yet materialized. This also applies to fields with `@Basic(fetchType = FetchType.LAZY)`. JPA will materialize this data on demand. For example, when the getter for such a field is called, JPA is triggered and queries the data. However, this trigger does not happen when the field is referenced directly.
+
+Therefore, when these fields are used in `equals` and `hashCode`, it's important to call their getter method instead of referencing the field directly. Otherwise, the data may not be materialized, and it's possible that calling `equals` on two equal objects returns `false`, because one instance doesn't have the content yet while the other does.
+
+EqualsVerifier checks for these fields that their getter is used. If they're referenced directly, EqualsVerifier will fail. Note that this can be disabled by suppressing `Warning.JPA_GETTER`.
+
+By default, EqualsVerifier assumes that the JavaBeans conventions are used to determine the name of the getter. For example, if a field is called `employee`, it assumes that the getter is called `getEmployee()`. If your project uses a different convention, you can use `#withFieldnameToGetterConverter()` to override that behavior.
+
+For example, if in your project, a field must have a prefix, like so: `m_employee`, but the getter is still `getEmployee()`, you might call EqualsVerifier like this:
+
+{% highlight java %}
+EqualsVerifier
+    .forClass(Foo.class)
+    .withFieldnameToGetterConverter(
+        fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+    )
+    .verify();
+{% endhighlight %}
+
+This will chop off the `m_` prefix, uppercase the first letter, and prepend the word `get`.
+
+
 ### Transient fields
 Since fields marked with the `@Transient` annotation are not persisted, they should generally not participate in `equals` and `hashCode` either. Therefore, EqualsVerifier will implicitly call [`withIgnoredFields`](/equalsverifier/manual/ignoring-fields) for these fields.
 

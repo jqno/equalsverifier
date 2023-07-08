@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
+import java.util.Arrays;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -29,7 +30,7 @@ public class JpaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier
-            .forClass(IncorrectBasicJpaEagerFieldContainer.class)
+            .forClass(CorrectBasicJpaEagerFieldContainer.class)
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
     }
@@ -37,7 +38,7 @@ public class JpaLazyEntityTest {
     @Test
     public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier
-            .forClass(IncorrectBasicJpaIgnoredLazyFieldContainer.class)
+            .forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class)
             .withIgnoredFields("basic")
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
@@ -45,48 +46,90 @@ public class JpaLazyEntityTest {
 
     @Test
     public void basicGetterUsed_givenAnnotationIsOnGetter() {
-        getterNotUsed(CorrectBasicJpaLazyGetterContainer.class, "equals");
+        getterNotUsed(IncorrectBasicJpaLazyGetterContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyGetterContainer.class);
     }
 
     @Test
     public void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainerHashCode.class, "hashCode");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainerHashCode.class);
     }
 
     @Test
     public void basicGetterNotUsed() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToOneGetterNotUsed() {
         getterNotUsed(IncorrectOneToOneJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToOneJpaLazyFieldContainer.class);
     }
 
     @Test
     public void oneToManyGetterNotUsed() {
         getterNotUsed(IncorrectOneToManyJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectOneToManyJpaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToOneGetterNotUsed() {
         getterNotUsed(IncorrectManyToOneJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToOneJpaLazyFieldContainer.class);
     }
 
     @Test
     public void manyToManyGetterNotUsed() {
         getterNotUsed(IncorrectManyToManyJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectManyToManyJpaLazyFieldContainer.class);
     }
 
     @Test
     public void elementCollectionGetterNotUsed() {
         getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class, "equals");
+        getterNotUsed_warningSuppressed(IncorrectElementCollectionJpaLazyFieldContainer.class);
     }
 
     @Test
     public void lazyGettersPickedUpInSuper() {
         EqualsVerifier.forClass(LazyGetterContainer.class).usingGetClass().verify();
         EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
+    }
+
+    @Test
+    public void differentCodingStyle_single() {
+        EqualsVerifier
+            .forClass(DifferentCodingStyleContainer.class)
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_configured() {
+        EqualsVerifier
+            .configure()
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .forClass(DifferentCodingStyleContainer.class)
+            .verify();
+    }
+
+    @Test
+    public void differentCodingStyle_multiple() {
+        EqualsVerifier
+            .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
+            .suppress(Warning.NONFINAL_FIELDS)
+            .withFieldnameToGetterConverter(fn ->
+                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
+            )
+            .verify();
     }
 
     private void getterNotUsed(Class<?> type, String method) {
@@ -96,22 +139,29 @@ public class JpaLazyEntityTest {
             .assertMessageContains("JPA Entity", method, "direct reference");
     }
 
+    private void getterNotUsed_warningSuppressed(Class<?> type) {
+        EqualsVerifier
+            .forClass(type)
+            .suppress(Warning.JPA_GETTER, Warning.NONFINAL_FIELDS)
+            .verify();
+    }
+
     @Entity
     static class CorrectJpaLazyFieldContainer {
 
         @Basic(fetch = FetchType.LAZY)
         private String basic;
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @OneToOne
         private String oneToOne;
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @OneToMany
         private String oneToMany;
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         private String manyToOne;
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @ManyToMany
         private String manyToMany;
 
         @ElementCollection(fetch = FetchType.LAZY)
@@ -171,7 +221,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJpaEagerFieldContainer {
+    static class CorrectBasicJpaEagerFieldContainer {
 
         @Basic
         private String basic;
@@ -182,10 +232,10 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJpaEagerFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJpaEagerFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJpaEagerFieldContainer other = (IncorrectBasicJpaEagerFieldContainer) obj;
+            CorrectBasicJpaEagerFieldContainer other = (CorrectBasicJpaEagerFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -196,7 +246,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectBasicJpaIgnoredLazyFieldContainer {
+    static class CorrectBasicJpaIgnoredLazyFieldContainer {
 
         private String somethingElse;
 
@@ -209,11 +259,11 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectBasicJpaIgnoredLazyFieldContainer)) {
+            if (!(obj instanceof CorrectBasicJpaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJpaIgnoredLazyFieldContainer other =
-                (IncorrectBasicJpaIgnoredLazyFieldContainer) obj;
+            CorrectBasicJpaIgnoredLazyFieldContainer other =
+                (CorrectBasicJpaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -224,7 +274,7 @@ public class JpaLazyEntityTest {
     }
 
     @Entity
-    static class CorrectBasicJpaLazyGetterContainer {
+    static class IncorrectBasicJpaLazyGetterContainer {
 
         private String basic;
 
@@ -235,10 +285,10 @@ public class JpaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof CorrectBasicJpaLazyGetterContainer)) {
+            if (!(obj instanceof IncorrectBasicJpaLazyGetterContainer)) {
                 return false;
             }
-            CorrectBasicJpaLazyGetterContainer other = (CorrectBasicJpaLazyGetterContainer) obj;
+            IncorrectBasicJpaLazyGetterContainer other = (IncorrectBasicJpaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -302,7 +352,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectOneToOneJpaLazyFieldContainer {
 
-        @OneToOne(fetch = FetchType.LAZY)
+        @OneToOne
         private String oneToOne;
 
         public String getOneToOne() {
@@ -328,7 +378,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectOneToManyJpaLazyFieldContainer {
 
-        @OneToMany(fetch = FetchType.LAZY)
+        @OneToMany
         private String oneToMany;
 
         public String getOneToMany() {
@@ -354,7 +404,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectManyToOneJpaLazyFieldContainer {
 
-        @ManyToOne(fetch = FetchType.LAZY)
+        @ManyToOne
         private String manyToOne;
 
         public String getManyToOne() {
@@ -380,7 +430,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectManyToManyJpaLazyFieldContainer {
 
-        @ManyToMany(fetch = FetchType.LAZY)
+        @ManyToMany
         private String manyToMany;
 
         public String getManyToMany() {
@@ -406,7 +456,7 @@ public class JpaLazyEntityTest {
     @Entity
     static class IncorrectElementCollectionJpaLazyFieldContainer {
 
-        @ElementCollection(fetch = FetchType.LAZY)
+        @ElementCollection
         private String elementCollection;
 
         public String getElementCollection() {
@@ -468,6 +518,44 @@ public class JpaLazyEntityTest {
                 return false;
             }
             return super.equals(obj);
+        }
+    }
+
+    @Entity
+    static class DifferentCodingStyleContainer {
+
+        // CHECKSTYLE OFF: MemberName
+        @OneToMany(fetch = FetchType.LAZY)
+        private String m_oneToMany;
+
+        @ManyToOne(fetch = FetchType.LAZY)
+        private String m_manyToOne;
+
+        // CHECKSTYLE ON: MemberName
+
+        public String getOneToMany() {
+            return m_oneToMany;
+        }
+
+        public String getManyToOne() {
+            return m_manyToOne;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DifferentCodingStyleContainer)) {
+                return false;
+            }
+            DifferentCodingStyleContainer other = (DifferentCodingStyleContainer) obj;
+            return (
+                Objects.equals(getOneToMany(), other.getOneToMany()) &&
+                Objects.equals(getManyToOne(), other.getManyToOne())
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getOneToMany(), getManyToOne());
         }
     }
 }

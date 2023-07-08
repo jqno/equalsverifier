@@ -194,21 +194,21 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
-    LAZY_FIELD(
+    JPA_LINKED_FIELD(
         true,
-        "javax.persistence.Basic",
         "javax.persistence.OneToOne",
         "javax.persistence.OneToMany",
         "javax.persistence.ManyToOne",
         "javax.persistence.ManyToMany",
         "javax.persistence.ElementCollection",
-        "jakarta.persistence.Basic",
         "jakarta.persistence.OneToOne",
         "jakarta.persistence.OneToMany",
         "jakarta.persistence.ManyToOne",
         "jakarta.persistence.ManyToMany",
         "jakarta.persistence.ElementCollection"
-    ) {
+    ),
+
+    JPA_LAZY_FIELD(true, "javax.persistence.Basic", "jakarta.persistence.Basic") {
         @Override
         public boolean validate(
             AnnotationProperties properties,

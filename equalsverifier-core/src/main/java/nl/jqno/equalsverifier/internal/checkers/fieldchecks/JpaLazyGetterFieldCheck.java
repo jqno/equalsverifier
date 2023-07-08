@@ -5,6 +5,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 import java.util.Set;
+import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -24,6 +25,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> ignoredFields;
     private final PrefabValues prefabValues;
     private final AnnotationCache annotationCache;
+    private final Function<String, String> fieldnameToGetter;
 
     public JpaLazyGetterFieldCheck(Configuration<T> config) {
         this.type = config.getType();
@@ -31,6 +33,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         this.ignoredFields = config.getIgnoredFields();
         this.prefabValues = config.getPrefabValues();
         this.annotationCache = config.getAnnotationCache();
+        this.fieldnameToGetter = config.getFieldnameToGetter();
     }
 
     @Override
@@ -40,8 +43,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         FieldAccessor fieldAccessor
     ) {
         String fieldName = fieldAccessor.getFieldName();
-        String getterName =
-            "get" + Character.toUpperCase(fieldName.charAt(0)) + fieldName.substring(1);
+        String getterName = fieldnameToGetter.apply(fieldName);
 
         if (ignoredFields.contains(fieldName) || !fieldIsLazy(fieldAccessor)) {
             return;
@@ -71,10 +73,17 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     }
 
     private boolean fieldIsLazy(FieldAccessor fieldAccessor) {
-        return annotationCache.hasFieldAnnotation(
-            type,
-            fieldAccessor.getFieldName(),
-            SupportedAnnotations.LAZY_FIELD
+        return (
+            annotationCache.hasFieldAnnotation(
+                type,
+                fieldAccessor.getFieldName(),
+                SupportedAnnotations.JPA_LINKED_FIELD
+            ) ||
+            annotationCache.hasFieldAnnotation(
+                type,
+                fieldAccessor.getFieldName(),
+                SupportedAnnotations.JPA_LAZY_FIELD
+            )
         );
     }
 

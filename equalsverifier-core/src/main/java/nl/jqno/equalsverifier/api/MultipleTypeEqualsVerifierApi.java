@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
@@ -67,6 +68,15 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     @Override
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
+        return this;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public MultipleTypeEqualsVerifierApi withFieldnameToGetterConverter(
+        Function<String, String> converter
+    ) {
+        ev.withFieldnameToGetterConverter(converter);
         return this;
     }
 

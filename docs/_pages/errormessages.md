@@ -24,6 +24,7 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Coverage is not 100%](/equalsverifier/errormessages/coverage-is-not-100-percent)
 * [Double: equals doesn't use Double.compare for field foo](/equalsverifier/errormessages/double-equals-doesnt-use-doublecompare-for-field-foo)
 * [Float: equals doesn't use Float.compare for field foo](/equalsverifier/errormessages/float-equals-doesnt-use-floatcompare-for-field-foo)
+* [JPA Entity: direct reference to field ... used instead of getter](/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter)
 * [Mutability: equals depends on mutable field](/equalsverifier/errormessages/mutability-equals-depends-on-mutable-field)
 * [NoClassDefFoundError](/equalsverifier/errormessages/noclassdeffounderror)
 * [Non-nullity: equals/hashCode/toString throws NullPointerException](/equalsverifier/errormessages/non-nullity-equals-hashcode-tostring-throws-nullpointerexception)

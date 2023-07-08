@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.api;
 
+import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
@@ -69,6 +70,19 @@ public interface EqualsVerifierApi<T> {
      * @see Warning#STRICT_INHERITANCE
      */
     EqualsVerifierApi<T> usingGetClass();
+
+    /**
+     * Determines how a getter name can be derived from a field name.
+     *
+     * The default behavior is to uppercase the field's first letter and prepend 'get'. For
+     * instance, a field name 'employee' would correspond to getter name 'getEmployee'.
+     *
+     * This method can be used if your project has a different naming convention.
+     *
+     * @param converter A function that converts from field name to getter name.
+     * @return {@code this}, for easy method chaining.
+     */
+    EqualsVerifierApi<T> withFieldnameToGetterConverter(Function<String, String> converter);
 
     /**
      * Signals that all internal caches need to be reset. This is useful when the test framework
