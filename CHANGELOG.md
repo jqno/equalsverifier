@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15] - 2023-07-08
+
 ### Changed
 
 - Check that getters are used for all mapped fields in JPA entities, not just the ones with `FetchType.LAZY`. ([Issue 830](https://github.com/jqno/equalsverifier/issues/830))<br/>Note that this is a **breaking change** for JPA entity tests. This can be disabled by suppressing `Warning.JPA_GETTER`. See the [manual page about JPA entities](/equalsverifier/manual/jpa-entities), specifically the section on Materialized fields, for more details.
@@ -1148,7 +1150,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.3...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15...HEAD
+[3.15]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.3...equalsverifier-3.15
 [3.14.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.2...equalsverifier-3.14.3
 [3.14.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.1...equalsverifier-3.14.2
 [3.14.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14...equalsverifier-3.14.1
