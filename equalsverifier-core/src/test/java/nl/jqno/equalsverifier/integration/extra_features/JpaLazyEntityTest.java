@@ -21,18 +21,12 @@ public class JpaLazyEntityTest {
 
     @Test
     public void gettersAreUsed() {
-        EqualsVerifier
-            .forClass(CorrectJpaLazyFieldContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(CorrectJpaLazyFieldContainer.class).verify();
     }
 
     @Test
     public void basicGetterNotUsed_givenEagerLoading() {
-        EqualsVerifier
-            .forClass(CorrectBasicJpaEagerFieldContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(CorrectBasicJpaEagerFieldContainer.class).verify();
     }
 
     @Test
@@ -40,7 +34,14 @@ public class JpaLazyEntityTest {
         EqualsVerifier
             .forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class)
             .withIgnoredFields("basic")
-            .suppress(Warning.NONFINAL_FIELDS)
+            .verify();
+    }
+
+    @Test
+    public void basicGetterNotUsed_givenWarningSuppressed() {
+        EqualsVerifier
+            .forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class)
+            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
             .verify();
     }
 
@@ -102,7 +103,6 @@ public class JpaLazyEntityTest {
     public void differentCodingStyle_single() {
         EqualsVerifier
             .forClass(DifferentCodingStyleContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
             .withFieldnameToGetterConverter(fn ->
                 "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
             )
@@ -113,7 +113,6 @@ public class JpaLazyEntityTest {
     public void differentCodingStyle_configured() {
         EqualsVerifier
             .configure()
-            .suppress(Warning.NONFINAL_FIELDS)
             .withFieldnameToGetterConverter(fn ->
                 "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
             )
@@ -125,7 +124,6 @@ public class JpaLazyEntityTest {
     public void differentCodingStyle_multiple() {
         EqualsVerifier
             .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
-            .suppress(Warning.NONFINAL_FIELDS)
             .withFieldnameToGetterConverter(fn ->
                 "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
             )
@@ -134,16 +132,13 @@ public class JpaLazyEntityTest {
 
     private void getterNotUsed(Class<?> type, String method) {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(type).suppress(Warning.NONFINAL_FIELDS).verify())
+            .when(() -> EqualsVerifier.forClass(type).verify())
             .assertFailure()
             .assertMessageContains("JPA Entity", method, "direct reference");
     }
 
     private void getterNotUsed_warningSuppressed(Class<?> type) {
-        EqualsVerifier
-            .forClass(type)
-            .suppress(Warning.JPA_GETTER, Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(type).suppress(Warning.JPA_GETTER).verify();
     }
 
     @Entity

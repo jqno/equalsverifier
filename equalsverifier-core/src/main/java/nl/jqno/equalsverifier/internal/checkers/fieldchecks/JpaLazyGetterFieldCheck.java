@@ -4,7 +4,6 @@ import static net.bytebuddy.implementation.ExceptionMethod.throwing;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
-import java.util.Set;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -22,18 +21,18 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     private final Class<T> type;
     private final ClassAccessor<T> accessor;
-    private final Set<String> ignoredFields;
     private final PrefabValues prefabValues;
     private final AnnotationCache annotationCache;
     private final Function<String, String> fieldnameToGetter;
+    private final TypeTag typeTag;
 
     public JpaLazyGetterFieldCheck(Configuration<T> config) {
         this.type = config.getType();
         this.accessor = config.getClassAccessor();
-        this.ignoredFields = config.getIgnoredFields();
         this.prefabValues = config.getPrefabValues();
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
+        this.typeTag = config.getTypeTag();
     }
 
     @Override
@@ -45,7 +44,10 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         String fieldName = fieldAccessor.getFieldName();
         String getterName = fieldnameToGetter.apply(fieldName);
 
-        if (ignoredFields.contains(fieldName) || !fieldIsLazy(fieldAccessor)) {
+        if (
+            !fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor) ||
+            !fieldIsLazy(fieldAccessor)
+        ) {
             return;
         }
 
@@ -70,6 +72,19 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             hashCodeExceptionCaught = true;
         }
         assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught);
+    }
+
+    private boolean fieldIsUsed(
+        ObjectAccessor<T> referenceAccessor,
+        ObjectAccessor<T> copyAccessor,
+        FieldAccessor fieldAccessor
+    ) {
+        T red = referenceAccessor.get();
+        T blue = copyAccessor
+            .withChangedField(fieldAccessor.getField(), prefabValues, typeTag)
+            .get();
+
+        return !red.equals(blue);
     }
 
     private boolean fieldIsLazy(FieldAccessor fieldAccessor) {

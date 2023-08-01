@@ -45,6 +45,14 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
+    public void basicGetterNotUsed_givenWarningSuppressed() {
+        EqualsVerifier
+            .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
+            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+            .verify();
+    }
+
+    @Test
     public void basicGetterUsed_givenAnnotationIsOnGetter() {
         getterNotUsed(IncorrectBasicJakartaLazyGetterContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyGetterContainer.class);
