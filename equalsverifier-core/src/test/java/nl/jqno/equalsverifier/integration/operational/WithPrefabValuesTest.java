@@ -61,7 +61,10 @@ public class WithPrefabValuesTest {
                     .withPrefabValues(FinalPoint.class, red, red)
             )
             .assertThrows(IllegalStateException.class)
-            .assertMessageContains("Precondition", "both values are equal");
+            .assertMessageContains(
+                "Precondition",
+                "both prefab values of type FinalPoint are equal"
+            );
     }
 
     @Test
@@ -76,7 +79,10 @@ public class WithPrefabValuesTest {
                     .withPrefabValues(FinalPoint.class, red1, red2)
             )
             .assertThrows(IllegalStateException.class)
-            .assertMessageContains("Precondition", "both values are equal");
+            .assertMessageContains(
+                "Precondition",
+                "both prefab values of type FinalPoint are equal"
+            );
     }
 
     @Test

@@ -80,10 +80,13 @@ public final class Validations {
     }
 
     public static <T> void validateRedAndBluePrefabValues(Class<T> type, T red, T blue) {
-        validateNotNull(type, "type is null.");
-        validateNotNull(red, "red value is null.");
-        validateNotNull(blue, "blue value is null.");
-        validate(red.equals(blue), "both values are equal.");
+        validateNotNull(type, "prefab value type is null.");
+        validateNotNull(red, "red prefab value of type " + type.getSimpleName() + " is null.");
+        validateNotNull(blue, "blue prefab value of type " + type.getSimpleName() + " is null.");
+        validate(
+            red.equals(blue),
+            "both prefab values of type " + type.getSimpleName() + " are equal."
+        );
     }
 
     public static <T> void validateGenericPrefabValues(
