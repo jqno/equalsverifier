@@ -128,6 +128,8 @@ To generate the website
 -   Using Docker: start the server by running `docker-compose up` or `docker compose run jekyll serve`.
 -   Using Jekyll: install the Ruby 3.x toolchain and run `bundle exec jekyll serve --watch`
 
+Note that thepage uses the [TilburgsAns](https://www.tilburgsans.nl/) font but references it from the main site at [jqno.nl](https://jqno.nl). In development, it will fall back to a `sans-serif` font. See the font license [here](assets/tilburgsans/Ans%20Font%20License-AFL.pdf).
+
 # Disclaimer
 
 Copyright 2009-2022 Jan Ouwens
