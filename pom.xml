@@ -73,7 +73,7 @@
         <version.bytebuddy>1.14.5</version.bytebuddy>
         <version.objenesis>3.3</version.objenesis>
 
-        <version.archunit>1.0.1</version.archunit>
+        <version.archunit>1.1.0</version.archunit>
         <version.commons-lang3>3.13.0</version.commons-lang3>
         <version.eclipse-annotation>2.2.700</version.eclipse-annotation>
         <version.equalsverifier-signedjar-test>0.2</version.equalsverifier-signedjar-test>
