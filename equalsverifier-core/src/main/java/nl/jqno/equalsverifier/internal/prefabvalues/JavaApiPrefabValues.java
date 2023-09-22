@@ -138,14 +138,14 @@ public final class JavaApiPrefabValues {
         addValues(long.class, 1L, 2L, 1L);
         addValues(short.class, (short) 1, (short) 2, (short) 1);
 
-        addValues(Boolean.class, true, false, new Boolean(true));
-        addValues(Byte.class, (byte) 1, (byte) 2, new Byte((byte) 1));
-        addValues(Character.class, 'a', 'b', new Character('a'));
-        addValues(Double.class, 0.5D, 1.0D, new Double(0.5D));
-        addValues(Float.class, 0.5F, 1.0F, new Float(0.5F));
-        addValues(Integer.class, 1, 2, new Integer(1));
-        addValues(Long.class, 1L, 2L, new Long(1L));
-        addValues(Short.class, (short) 1, (short) 2, new Short((short) 1));
+        addValues(Boolean.class, true, false, true);
+        addValues(Byte.class, (byte) 1, (byte) 2, (byte) 1);
+        addValues(Character.class, 'α', 'ω', Character.valueOf('α'));
+        addValues(Double.class, 0.5D, 1.0D, Double.valueOf(0.5D));
+        addValues(Float.class, 0.5F, 1.0F, Float.valueOf(0.5F));
+        addValues(Integer.class, 1000, 2000, Integer.valueOf(1000));
+        addValues(Long.class, 1000L, 2000L, Long.valueOf(1000L));
+        addValues(Short.class, (short) 1000, (short) 2000, Short.valueOf((short) 1000));
 
         addValues(Object.class, new Object(), new Object(), new Object());
         addValues(String.class, "one", "two", new String("one"));
