@@ -5,6 +5,7 @@ import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 import java.util.function.Function;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -25,6 +26,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final AnnotationCache annotationCache;
     private final Function<String, String> fieldnameToGetter;
     private final TypeTag typeTag;
+    private final boolean strictHashcode;
 
     public JpaLazyGetterFieldCheck(Configuration<T> config) {
         this.type = config.getType();
@@ -33,6 +35,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
         this.typeTag = config.getTypeTag();
+        this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         String getterName = fieldnameToGetter.apply(fieldName);
 
         if (
-            !fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor) ||
+            !fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor, true) ||
             !fieldIsLazy(fieldAccessor)
         ) {
             return;
@@ -65,26 +68,33 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         }
         assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
 
+        boolean usedInHashcode =
+            !strictHashcode || fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor, false);
         boolean hashCodeExceptionCaught = false;
         try {
             red1.hashCode();
         } catch (EqualsVerifierInternalBugException e) {
             hashCodeExceptionCaught = true;
         }
-        assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught);
+        assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
     }
 
     private boolean fieldIsUsed(
         ObjectAccessor<T> referenceAccessor,
         ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
+        FieldAccessor fieldAccessor,
+        boolean forEquals
     ) {
         T red = referenceAccessor.get();
         T blue = copyAccessor
             .withChangedField(fieldAccessor.getField(), prefabValues, typeTag)
             .get();
 
-        return !red.equals(blue);
+        if (forEquals) {
+            return !red.equals(blue);
+        } else {
+            return red.hashCode() != blue.hashCode();
+        }
     }
 
     private boolean fieldIsLazy(FieldAccessor fieldAccessor) {

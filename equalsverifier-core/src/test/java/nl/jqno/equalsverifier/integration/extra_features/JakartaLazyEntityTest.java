@@ -107,6 +107,14 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
+    public void constantHashCode_givenStrictHashCodeSuppressed() {
+        EqualsVerifier
+            .forClass(ConstantHashCodeContainer.class)
+            .suppress(Warning.STRICT_HASHCODE)
+            .verify();
+    }
+
+    @Test
     public void differentCodingStyle_single() {
         EqualsVerifier
             .forClass(DifferentCodingStyleContainer.class)
@@ -529,6 +537,41 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             return super.equals(obj);
+        }
+    }
+
+    @Entity
+    static class ConstantHashCodeContainer {
+
+        @OneToMany
+        private String oneToMany;
+
+        @ManyToOne
+        private String manyToOne;
+
+        public String getOneToMany() {
+            return oneToMany;
+        }
+
+        public String getManyToOne() {
+            return manyToOne;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ConstantHashCodeContainer)) {
+                return false;
+            }
+            ConstantHashCodeContainer other = (ConstantHashCodeContainer) obj;
+            return (
+                Objects.equals(getOneToMany(), other.getOneToMany()) &&
+                Objects.equals(getManyToOne(), other.getManyToOne())
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return 42;
         }
     }
 
