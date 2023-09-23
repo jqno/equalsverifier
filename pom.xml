@@ -84,7 +84,7 @@
         <version.jcip-annotations>1.0</version.jcip-annotations>
         <version.joda-time>2.12.5</version.joda-time>
         <version.junit-jupiter>5.10.0</version.junit-jupiter>
-        <version.openjfx>19.0.2.1</version.openjfx>
+        <version.openjfx>21</version.openjfx>
         <version.slf4j>2.0.9</version.slf4j>
 
         <version.build-helper-maven-plugin>3.4.0</version.build-helper-maven-plugin>
