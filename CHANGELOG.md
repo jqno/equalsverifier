@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.2] - 2023-09-23
+
 ### Fixed
 
 -   For JPA entities with a hashCode that doesn't use all fields, and with `Warning.STRICT_HASHCODE` suppressed, an error was thrown. ([Issue 853](https://github.com/jqno/equalsverifier/issues/853))
@@ -1163,7 +1165,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.1...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.2...HEAD
+[3.15.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.1...equalsverifier-3.15.2
 [3.15.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15...equalsverifier-3.15.1
 [3.15]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.3...equalsverifier-3.15
 [3.14.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.14.2...equalsverifier-3.14.3
