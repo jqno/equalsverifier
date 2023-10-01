@@ -44,7 +44,7 @@ jobs:
     - name: 'Checkout from Git'
       # Can't refer to matrix in job if conditional, so we have to repeat it every step: https://github.com/actions/runner/issues/1985
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: 'Cache Maven repo'
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       uses: actions/cache@v3
