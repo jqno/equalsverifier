@@ -61,15 +61,9 @@ jobs:
       with:
           distribution: ${{ matrix.dist }}
           java-version: ${{ matrix.java }}
-    - name: 'Set up node' # Needed for formatting with prettier
-      if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: 12
     - name: 'Display JDK version'
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
       run: java -version
     - name: 'Run Maven'
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
-      # Don't clean, or whatever was cached in target/spotless-node-modules-prettier-format is lost
-      run: mvn verify ${{ matrix.flags }}
+      run: mvn clean verify ${{ matrix.flags }}

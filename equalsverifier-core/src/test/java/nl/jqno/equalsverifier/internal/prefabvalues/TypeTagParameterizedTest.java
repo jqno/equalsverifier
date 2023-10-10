@@ -27,8 +27,10 @@ public class TypeTagParameterizedTest<T> {
     private final Map<String, List<String>> fieldWithNestedTypeParameters = null;
 
     @SuppressWarnings("unused")
-    private final Map<List<Integer>, Map<List<Double>, Map<String, Float>>> fieldWithRidiculousTypeParameters =
-        null;
+    private final Map<
+        List<Integer>,
+        Map<List<Double>, Map<String, Float>>
+    > fieldWithRidiculousTypeParameters = null;
 
     @SuppressWarnings({ "unused", "rawtypes" })
     private final Map rawMapField = null;

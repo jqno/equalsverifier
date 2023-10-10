@@ -87,7 +87,7 @@ There are several Maven profiles that can be enabled or disabled:
 
 ## Formatting
 
-EqualsVerifier uses [Prettier-Java](https://github.com/jhipster/prettier-java) through [Spotless](https://github.com/diffplug/spotless) to format Java files. You can call it using `mvn` (without any parameters), which will also run the tests and all the other static analysis. Or run `mvn spotless:apply` to only run the formatter.
+EqualsVerifier uses [Prettier-Java](https://github.com/jhipster/prettier-java) through [prettier-maven-plugin](https://github.com/HubSpot/prettier-maven-plugin) to format Java files. You can call it using `mvn clean verify`, or run `mvn prettier:write` to only run the formatter.
 
 ## Modules
 

@@ -172,10 +172,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private boolean shouldAllFieldsBeUsed(FieldAccessor fieldAccessor) {
         return (
             !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
-            !(
-                warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) &&
-                !fieldAccessor.fieldIsFinal()
-            )
+            !(warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) &&
+                !fieldAccessor.fieldIsFinal())
         );
     }
 
