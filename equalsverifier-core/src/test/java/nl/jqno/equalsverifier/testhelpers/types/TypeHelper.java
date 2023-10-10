@@ -66,11 +66,9 @@ public class TypeHelper {
             result &= Objects.equals(_Byte, other._Byte);
             result &= _Char == other._Char;
             result &=
-                _Double == null
-                    ? other._Double == null
-                    : Double.compare(_Double, other._Double) == 0;
+            _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
             result &=
-                _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
+            _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
             result &= Objects.equals(_Int, other._Int);
             result &= Objects.equals(_Long, other._Long);
             result &= Objects.equals(_Short, other._Short);

@@ -268,8 +268,7 @@ public class TransitivityTest {
             }
             ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr) obj;
             return (
-                Objects.equals(f, other.f) &&
-                Objects.equals(g, other.g) ||
+                (Objects.equals(f, other.f) && Objects.equals(g, other.g)) ||
                 Objects.equals(h, other.h)
             );
         }
@@ -300,8 +299,7 @@ public class TransitivityTest {
             ThreeFieldsUsingOrAnd other = (ThreeFieldsUsingOrAnd) obj;
             return (
                 Objects.equals(f, other.f) ||
-                Objects.equals(g, other.g) &&
-                Objects.equals(h, other.h)
+                (Objects.equals(g, other.g) && Objects.equals(h, other.h))
             );
         }
 
@@ -372,10 +370,8 @@ public class TransitivityTest {
             FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs) obj;
             return (
                 Objects.equals(f, other.f) ||
-                Objects.equals(g, other.g) &&
-                Objects.equals(h, other.h) ||
-                Objects.equals(i, other.i) &&
-                Objects.equals(j, other.j)
+                (Objects.equals(g, other.g) && Objects.equals(h, other.h)) ||
+                (Objects.equals(i, other.i) && Objects.equals(j, other.j))
             );
         }
 
