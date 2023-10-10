@@ -107,9 +107,8 @@
         <version.pitest.maven>1.15.0</version.pitest.maven>
         <version.spotbugs.maven>4.7.3.6</version.spotbugs.maven>
         <version.spotbugs>4.7.3</version.spotbugs>
-        <version.spotless.maven>2.40.0</version.spotless.maven>
-        <version.spotless.prettier-java>2.2.0</version.spotless.prettier-java>
-        <version.spotless.prettier>2.8.8</version.spotless.prettier>
+        <version.prettier.maven>0.21</version.prettier.maven>
+        <version.prettier-java.maven>2.3.1</version.prettier-java.maven>
     </properties>
 
     <build>
@@ -290,38 +289,22 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <version>${version.spotless.maven}</version>
+                        <groupId>com.hubspot.maven.plugins</groupId>
+                        <artifactId>prettier-maven-plugin</artifactId>
+                        <version>${version.prettier.maven}</version>
                         <configuration>
-                            <formats>
-                                <format>
-                                    <includes>
-                                        <include>src/*/java/**/*.java</include>
-                                    </includes>
-                                    <prettier>
-                                        <devDependencies>
-                                            <prettier>${version.spotless.prettier}</prettier>
-                                            <prettier-plugin-java>${version.spotless.prettier-java}</prettier-plugin-java>
-                                        </devDependencies>
-                                        <config>
-                                            <!-- Changes here must be reflected in .prettierrc.yml -->
-                                            <tabWidth>4</tabWidth>
-                                            <printWidth>100</printWidth>
-                                            <trailingComma>none</trailingComma>
-                                        </config>
-                                    </prettier>
-                                </format>
-                            </formats>
+                            <prettierJavaVersion>${version.prettier-java.maven}</prettierJavaVersion>
                         </configuration>
                         <executions>
                             <execution>
+                                <phase>validate</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
                             </execution>
                         </executions>
                     </plugin>
+
                     <plugin>
                         <!-- provides the pitest-git:aggregate goal to aggregate json files to be stored as artifact when accepting PRs from untrusted forks -->
                         <groupId>com.groupcdg</groupId>
