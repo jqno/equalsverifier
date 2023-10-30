@@ -3,12 +3,15 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.List;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
@@ -125,6 +128,26 @@ public class InPlaceObjectAccessorScramblingTest {
         assertEquals(Point.class, foo.points.ts.get(0).getClass());
     }
 
+    @Test
+    public void scrambleSutInaccessible() {
+        AttributedString as = new AttributedString("x");
+
+        ExpectedException
+            .when(() -> doScramble(as))
+            .assertThrows(ModuleException.class)
+            .assertDescriptionContains("The class", "Consider opening");
+    }
+
+    @Test
+    public void scrambleFieldInaccessible() {
+        InaccessibleContainer ic = new InaccessibleContainer(new AttributedString("x"));
+
+        ExpectedException
+            .when(() -> doScramble(ic))
+            .assertThrows(ModuleException.class)
+            .assertDescriptionContains("Field as", "Consider opening");
+    }
+
     @SuppressWarnings("unchecked")
     private <T> InPlaceObjectAccessor<T> create(T object) {
         return new InPlaceObjectAccessor<T>(object, (Class<T>) object.getClass());
@@ -169,6 +192,16 @@ public class InPlaceObjectAccessorScramblingTest {
 
         public GenericContainer(List<T> ts) {
             this.ts = ts;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    static final class InaccessibleContainer {
+
+        private AttributedString as;
+
+        public InaccessibleContainer(AttributedString as) {
+            this.as = as;
         }
     }
 }

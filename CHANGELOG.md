@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+-   Improves error message when packages are not "open" to EqualsVerifier. ([Issue 868](https://github.com/jqno/equalsverifier/issues/868))
+
 ## [3.15.2] - 2023-09-23
 
 ### Fixed

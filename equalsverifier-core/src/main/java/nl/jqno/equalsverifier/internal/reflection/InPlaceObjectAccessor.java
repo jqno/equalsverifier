@@ -1,7 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -48,19 +50,55 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        for (Field field : FieldIterable.of(type())) {
-            fieldModifierFor(field).changeField(prefabValues, enclosingType);
-        }
-        return this;
+        return scrambleInternal(prefabValues, enclosingType, FieldIterable::of);
     }
 
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        for (Field field : FieldIterable.ofIgnoringSuper(type())) {
-            fieldModifierFor(field).changeField(prefabValues, enclosingType);
+        return scrambleInternal(prefabValues, enclosingType, FieldIterable::ofIgnoringSuper);
+    }
+
+    private ObjectAccessor<T> scrambleInternal(
+        PrefabValues prefabValues,
+        TypeTag enclosingType,
+        Function<Class<?>, FieldIterable> it
+    ) {
+        for (Field field : it.apply(type())) {
+            try {
+                fieldModifierFor(field).changeField(prefabValues, enclosingType);
+            } catch (ModuleException e) {
+                handleInaccessibleObjectException(e.getCause(), field);
+            } catch (RuntimeException e) {
+                // InaccessibleObjectException is not yet available in Java 8
+                if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
+                    handleInaccessibleObjectException(e, field);
+                } else {
+                    throw e;
+                }
+            }
         }
         return this;
+    }
+
+    private void handleInaccessibleObjectException(Throwable e, Field field) {
+        if (e.getMessage() != null && e.getMessage().contains(type().getCanonicalName())) {
+            throw new ModuleException(
+                "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
+                e
+            );
+        } else {
+            throw new ModuleException(
+                "Field " +
+                field.getName() +
+                " of type " +
+                field.getType().getName() +
+                " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
+                field.getType().getName() +
+                ".",
+                e
+            );
+        }
     }
 
     /** {@inheritDoc} */
