@@ -5,6 +5,8 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 /*
  * Let's hope nobody needs prefab values for `java.text.AttributedString`,
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.Test;
 public class ModulesTest {
 
     @Test
+    @DisabledForJreRange(max = JRE.JAVA_11)
     public void giveProperErrorMessage_whenClassUnderTestIsInaccessible() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(AttributedString.class).verify())
@@ -22,6 +25,7 @@ public class ModulesTest {
     }
 
     @Test
+    @DisabledForJreRange(max = JRE.JAVA_11)
     public void giveProperErrorMessage_whenFieldIsInaccessible() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(InaccessibleContainer.class).verify())

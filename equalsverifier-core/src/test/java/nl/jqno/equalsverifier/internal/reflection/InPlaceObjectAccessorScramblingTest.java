@@ -1,7 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.AttributedString;
 import java.util.ArrayList;
@@ -17,6 +20,8 @@ import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledForJreRange;
+import org.junit.jupiter.api.condition.JRE;
 
 public class InPlaceObjectAccessorScramblingTest {
 
@@ -129,6 +134,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     @Test
+    @DisabledForJreRange(max = JRE.JAVA_11)
     public void scrambleSutInaccessible() {
         AttributedString as = new AttributedString("x");
 
@@ -139,6 +145,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     @Test
+    @DisabledForJreRange(max = JRE.JAVA_11)
     public void scrambleFieldInaccessible() {
         InaccessibleContainer ic = new InaccessibleContainer(new AttributedString("x"));
 
