@@ -37,6 +37,8 @@ open module my.module {
 }
 {% endhighlight %}
 
+Note that the line `requires net.bytebuddy` is not necessary if you use the uberjar dependency `equalsverifier-nodep`.
+
 Note that if you do this, and you have model classes or dependencies for model classes in other packages, you will have to open these packages as well, or provide prefab values for these dependencies:
 
 {% highlight java %}
