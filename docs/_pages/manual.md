@@ -17,4 +17,5 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 * [Cached hashCodes](/equalsverifier/manual/caching-hashcodes)
 * [Relaxed equality](/equalsverifier/manual/relaxed-equality)
 * [Dealing with legacy systems](/equalsverifier/manual/legacy-systems)
+* [The Java Platform Module System](/equalsverifier/manual/jpms)
 * [Additional resources](/equalsverifier/resources)
