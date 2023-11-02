@@ -15,13 +15,18 @@ Pull Requests are welcome! But please also [open an issue](https://github.com/jq
 
 ## EqualsVerifier in the media
 
-* Talk at Devoxx 2017:
-  [[slides](https://github.com/jqno/talks/tree/main/_slides/equalsverifier/2017-11-06-devoxx)]
-  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/pNJ_O10XaoM?rel=0" frameborder="0" allowfullscreen></iframe>
-* Short getting started video by [Tom Cools](https://twitter.com/TCoolsIT):
-  <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/ivRjf8yvVMk" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+* Feature on InfoQ by Johan Janssen<br/>
+  _2 November 2023_<br/>
+  [[link](https://www.infoq.com/news/2023/11/equalsverifier-jpa-entities/)] [[johan janssen](https://twitter.com/johanjanssen42)]
+* Short getting started video by Tom Cools<br/>
+  _7 February 2022_<br/>
+  [[video](https://www.youtube.com/watch?v=ivRjf8yvVMk)] [[tom cools](https://twitter.com/TCoolsIT)]
 * Interview on the BarCoding podcast<br/>
+  _25 October 2021_<br/>
   [[anchor](https://anchor.fm/barcoding/episodes/Episode-20---The-tales-of-the-EqualsVerifier-project-e1993ev)] [[spotify](https://open.spotify.com/episode/1d0aieZzRB9Ts85XWuquBe?si=WWYvYBiASECteA1flOgpDQ&nd=1)] [[apple](https://podcasts.apple.com/us/podcast/episode-20-the-tales-of-the-equalsverifier-project/id1477504970?i=1000539604102)]
+* Talk at Devoxx Belgium<br/>
+  _6 November 2017_<br/>
+  [[slides](https://github.com/jqno/talks/tree/main/_slides/equalsverifier/2017-11-06-devoxx) | [code](https://github.com/jqno/talks/tree/main/_slides/equalsverifier/2017-11-06-devoxx)] [[video](https://www.youtube.com/watch?v=pNJ_O10XaoM)]
 
 ## Image credits
 
