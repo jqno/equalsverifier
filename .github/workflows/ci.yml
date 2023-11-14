@@ -82,4 +82,4 @@ jobs:
       run: java -version
     - name: 'Run Maven'
       if: ${{ !(matrix.experimental && github.event_name == 'pull_request') }}
-      run: mvn clean verify ${{ matrix.flags }}
+      run: mvn clean verify --no-transfer-progress ${{ matrix.flags }}

@@ -25,7 +25,7 @@ jobs:
           distribution: temurin
           cache: maven
       - name: 'Set release version'
-        run: mvn --no-transfer-progress --batch-mode versions:set -DnewVersion=${{ github.event.inputs.version }}
+        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.version }}
       - name: 'Update version in documentation'
         run: |
           sed -i "s/<version>.*<\/version>/<version>${{ github.event.inputs.version }}<\/version>/g" README.md
@@ -36,7 +36,7 @@ jobs:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
           message: Bumps version to ${{ github.event.inputs.version }}
       - name: 'Stage release'
-        run: mvn --no-transfer-progress --batch-mode clean deploy -DaltDeploymentRepository=local::default::file://`pwd`/target/staging-deploy
+        run: mvn clean deploy --no-transfer-progress --batch-mode -DaltDeploymentRepository=local::default::file://`pwd`/target/staging-deploy
       - name: 'Run JReleaser'
         uses: jreleaser/release-action@v2
         with:
@@ -51,7 +51,7 @@ jobs:
           JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME }}
           JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD }}
       - name: 'Set release version'
-        run: mvn --no-transfer-progress --batch-mode versions:set -DnewVersion=${{ github.event.inputs.nextVersion }}-SNAPSHOT
+        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.nextVersion }}-SNAPSHOT
       - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
