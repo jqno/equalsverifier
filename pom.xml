@@ -108,7 +108,7 @@
         <version.spotbugs.maven>4.7.3.6</version.spotbugs.maven>
         <version.spotbugs>4.7.3</version.spotbugs>
         <version.prettier.maven>0.21</version.prettier.maven>
-        <version.prettier-java.maven>2.3.1</version.prettier-java.maven>
+        <version.prettier-java.maven>2.4.0</version.prettier-java.maven>
     </properties>
 
     <build>

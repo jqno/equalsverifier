@@ -169,8 +169,7 @@ public class SealedTypesTest {
         @Override
         public boolean equals(Object obj) {
             return (
-                obj instanceof
-                SealedTypeContainer other &&
+                obj instanceof SealedTypeContainer other &&
                 Objects.equals(sealedWithFinalChild, other.sealedWithFinalChild) &&
                 Objects.equals(sealedWithNonsealedChild, other.sealedWithNonsealedChild)
             );

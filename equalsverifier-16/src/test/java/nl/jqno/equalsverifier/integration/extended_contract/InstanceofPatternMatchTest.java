@@ -23,7 +23,7 @@ public class InstanceofPatternMatchTest {
 
         @Override
         public boolean equals(Object obj) {
-            return this == obj || obj instanceof Point p && p.x == x && p.y == y;
+            return this == obj || (obj instanceof Point p && p.x == x && p.y == y);
         }
 
         @Override
