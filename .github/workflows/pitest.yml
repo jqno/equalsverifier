@@ -30,11 +30,11 @@ jobs:
           path: ~/.m2/repository
           key: ${{ runner.os }}-mvn-pitest-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-mvn-pitest
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: 17
+          distribution: temurin
+          java-version: 21
       - name: run pitest
         # pitest has been bound to a profile called pitest for normal running
         # we add config to analyse only changes made within a PR and treat surviving mutants as check errors
