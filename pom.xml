@@ -536,6 +536,20 @@
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>modules-jdk21</id>
+            <activation>
+                <jdk>[21,)</jdk>
+            </activation>
+
+            <modules>
+                <module>equalsverifier-core</module>
+                <module>equalsverifier-11</module>
+                <module>equalsverifier-16</module>
+                <module>equalsverifier-17</module>
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
                 <module>equalsverifier-release-nodep</module>
@@ -543,9 +557,9 @@
         </profile>
 
         <profile>
-            <id>modules-jdk17-without-pitest</id>
+            <id>modules-jdk21-without-pitest</id>
             <activation>
-                <jdk>[17,)</jdk>
+                <jdk>[21,)</jdk>
                 <property>
                     <name>!pitest</name>
                 </property>

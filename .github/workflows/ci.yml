@@ -37,7 +37,7 @@ jobs:
             experimental: false
             cache-id: "jdk21"
             java: 21
-            dist: zulu
+            dist: temurin
             flags: ""
           - title: "Experimental JDK EA (simplified)"
             experimental: true
