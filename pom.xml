@@ -550,6 +550,7 @@
                 <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
+                <module>equalsverifier-21</module>
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
                 <module>equalsverifier-release-nodep</module>
