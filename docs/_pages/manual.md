@@ -6,6 +6,7 @@ These pages will quickly get you up and running with EqualsVerifier, and help yo
 
 * [Why, what, how?](/equalsverifier/manual/why-what-how)
 * [Getting started](/equalsverifier/manual/getting-started)
+* [What does a good equals method look like?](/equalsverifier/manual/good-equals)
 * [Making things final](/equalsverifier/manual/final)
 * [Immutability](/equalsverifier/manual/immutability)
 * [instanceof or getClass()](/equalsverifier/manual/instanceof-or-getclass)

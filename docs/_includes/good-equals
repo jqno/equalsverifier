@@ -1,0 +1,16 @@
+* **Effective Java**, Third Edition, items 10 (_Obey the general contract when overriding `equals`_) and 11 (_Always override `hashCode` when you override `equals`_)<br/>
+  _Addison-Wesley, 2018_<br/>
+  by Joshua Bloch<br/>
+  [[book](https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997/ref=sr_1_1?crid=1716V3KOOYIFP&keywords=effective+java&qid=1700062938&sprefix=effective+%2Caps%2C368&sr=8-1)]
+* **How to Write an Equality Method in Java**<br/>
+  _1 June 2009_<br/>
+  by Martin Odersky, Lex Spoon, and Bill Venners<br/>
+  [[link](https://www.artima.com/articles/how-to-write-an-equality-method-in-java)]
+* **Not all equals methods are created equal**<br/>
+  _7 November 2017_<br/>
+  by Jan Ouwens<br/>
+  [[video](https://www.youtube.com/watch?v=pNJ_O10XaoM)]
+* **Optimizing your equals() methods with Pattern Matching** - JEP Cafe #21<br/>
+  _9 November 2023_<br/>
+  by José Paumard<br/>
+  [[video](https://www.youtube.com/watch?v=kuzjX_efuDs)]
