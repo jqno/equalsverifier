@@ -4,11 +4,14 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ExperimentalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates types "by force".
@@ -90,11 +93,34 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
-        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
-        T red = accessor.getRedObject(tag);
-        T blue = accessor.getBlueObject(tag);
-        T redCopy = accessor.getRedObject(tag);
-        return new Tuple<>(red, blue, redCopy);
+        // ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
+        // T red = accessor.getRedObject(tag);
+        // T blue = accessor.getBlueObject(tag);
+        // T redCopy = accessor.getRedObject(tag);
+
+        try {
+            ExperimentalInstantiator b = new ExperimentalInstantiator(getClass().getClassLoader());
+            Objenesis o = new ObjenesisStd();
+            Class<T> t = (Class<T>) b.lobotomize(tag.getType());
+            Field f = t.getDeclaredField(ExperimentalInstantiator.SYNTHETIC_FIELD_NAME);
+            f.setAccessible(true);
+
+            T red = o.newInstance(t);
+            f.set(red, 42);
+            T blue = o.newInstance(t);
+            f.set(blue, 1337);
+            T redCopy = o.newInstance(t);
+            f.set(redCopy, 42);
+            return new Tuple<>(red, blue, redCopy);
+        } catch (
+            NoSuchFieldException
+            | SecurityException
+            | IllegalArgumentException
+            | IllegalAccessException e
+        ) {
+            throw new ReflectionException("Het lukte niet om " + tag + " te herdefiniëren");
+        }
     }
 }
