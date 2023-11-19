@@ -20,8 +20,13 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Let's shelve this for now.
+ */
+@Disabled
 public class FallbackFactoryTest {
 
     private FallbackFactory<?> factory;

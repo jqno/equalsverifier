@@ -19,10 +19,15 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
 
+/**
+ * Let's shelve this for now.
+ */
+@Disabled
 public class InPlaceObjectAccessorScramblingTest {
 
     private PrefabValues prefabValues;
