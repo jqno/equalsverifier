@@ -1,24 +1,15 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.lang.reflect.Field;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 public final class Configuration<T> {
 
@@ -79,7 +70,7 @@ public final class Configuration<T> {
     }
 
     public static <T> Configuration<T> build(
-        Class<T> type,
+        Class<T> tp,
         Set<String> excludedFields,
         Set<String> includedFields,
         Set<String> nonnullFields,
@@ -95,6 +86,16 @@ public final class Configuration<T> {
         List<T> equalExamples,
         List<T> unequalExamples
     ) {
+        ExperimentalInstantiator instantiator = new ExperimentalInstantiator(
+            Configuration.class.getClassLoader()
+        );
+        for (Field f : FieldIterable.of(tp)) {
+            FieldAccessor fa = FieldAccessor.of(f);
+            if (!fa.fieldIsPrimitive()) {
+                instantiator.lobotomize(f.getType());
+            }
+        }
+        Class<T> type = instantiator.reloadClass(tp);
         TypeTag typeTag = new TypeTag(type);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         PrefabValues prefabValues = new PrefabValues(cache);

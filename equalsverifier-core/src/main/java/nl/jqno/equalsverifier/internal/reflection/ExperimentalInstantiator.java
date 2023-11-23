@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.asm.Advice;
 import net.bytebuddy.dynamic.ClassFileLocator;
@@ -11,16 +13,22 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 public class ExperimentalInstantiator {
 
+    public static final Map<String, Class<?>> cache = new HashMap<>();
+
     public static final String SYNTHETIC_FIELD_NAME = "$$EqualsVerifier$id";
     private final ByteBuddyClassLoader bytebuddyCL;
 
     public ExperimentalInstantiator(ClassLoader parentClassLoader) {
+        cache.clear();
         this.bytebuddyCL = new ByteBuddyClassLoader(parentClassLoader);
     }
 
     public Class<?> lobotomize(Class<?> originalClass) {
         boolean isFinal = Modifier.isFinal(originalClass.getModifiers());
         boolean isSystem = isSystemClass(originalClass);
+        if (originalClass.isEnum()) {
+            return reload(originalClass);
+        }
         if (!isSystem) {
             return redefineClass(originalClass);
         } else {
@@ -29,6 +37,12 @@ public class ExperimentalInstantiator {
             }
             return subclassClass(originalClass);
         }
+    }
+
+    public <T> Class<T> reloadClass(Class<T> type) {
+        reloadOuterClassOf(type);
+        reloadSuperClassOf(type);
+        return reload(type);
     }
 
     private Class<?> redefineClass(Class<?> type) {
@@ -43,20 +57,14 @@ public class ExperimentalInstantiator {
 
     private boolean isSystemClass(Class<?> type) {
         // Kijk of de classloader de bootstrap classloader is, of zo
-        return type.getCanonicalName().startsWith("java");
+        return type.getName().startsWith("java");
     }
 
     private void reloadOuterClassOf(Class<?> type) {
         Class<?> outer = type.getDeclaringClass();
         if (outer != null) {
             reloadOuterClassOf(outer);
-
-            // Kan dit op een andere manier, bijvoorbeeld direct op de classloader?
-            new ByteBuddy()
-                .redefine(outer)
-                .make()
-                .load(bytebuddyCL, ClassLoadingStrategy.Default.INJECTION)
-                .getLoaded();
+            reload(outer);
         }
     }
 
@@ -64,18 +72,27 @@ public class ExperimentalInstantiator {
         Class<?> upper = type.getSuperclass();
         if (upper != null && upper != Object.class) {
             reloadSuperClassOf(upper);
-
-            // Kan dit op een andere manier, bijvoorbeeld direct op de classloader?
-            new ByteBuddy()
-                .redefine(upper)
-                .make()
-                .load(bytebuddyCL, ClassLoadingStrategy.Default.INJECTION)
-                .getLoaded();
+            reload(upper);
         }
     }
 
+    @SuppressWarnings("unchecked")
+    private <T> Class<T> reload(Class<T> type) {
+        if (cache.containsKey(type.getName())) {
+            return (Class<T>) cache.get(type.getName());
+        }
+        // Kan dit op een andere manier, bijvoorbeeld direct op de classloader?
+        Class<T> reloaded = (Class<T>) new ByteBuddy()
+            .redefine(type)
+            .make()
+            .load(bytebuddyCL, ClassLoadingStrategy.Default.INJECTION)
+            .getLoaded();
+        cache.put(type.getName(), reloaded);
+        return reloaded;
+    }
+
     private Class<?> addInterceptions(DynamicType.Builder<?> builder) {
-        return builder
+        Class<?> type = builder
             .defineField(SYNTHETIC_FIELD_NAME, int.class, Modifier.PRIVATE)
             .method(ElementMatchers.named("equals"))
             .intercept(Advice.to(EqualsAdvice.class))
@@ -86,6 +103,8 @@ public class ExperimentalInstantiator {
             .make()
             .load(bytebuddyCL, ClassLoadingStrategy.Default.INJECTION)
             .getLoaded();
+        cache.put(type.getName(), type);
+        return type;
     }
 
     private static class EqualsAdvice {
@@ -140,7 +159,7 @@ public class ExperimentalInstantiator {
             @Advice.Return(readOnly = false) String returnValue,
             @Advice.FieldValue(SYNTHETIC_FIELD_NAME) int hashCode
         ) {
-            returnValue = "woei!" + me.getClass().getCanonicalName() + "[" + hashCode + "]";
+            returnValue = "woei!" + me.getClass().getName() + "[" + hashCode + "]";
         }
     }
 
@@ -153,6 +172,9 @@ public class ExperimentalInstantiator {
 
         @Override
         protected Class<?> findClass(String name) throws ClassNotFoundException {
+            if (cache.containsKey(name)) {
+                return cache.get(name);
+            }
             ClassFileLocator locator = ClassFileLocator.ForClassLoader.of(getParent());
             try {
                 ClassFileLocator.Resolution resolution = locator.locate(name);
@@ -160,13 +182,15 @@ public class ExperimentalInstantiator {
                     byte[] classBytes = resolution.resolve();
                     // Use the super.defineClass to bypass security checks
                     // ProtectionDomain could be customized for additional security
-                    return super.defineClass(
+                    Class<?> type = super.defineClass(
                         name,
                         classBytes,
                         0,
                         classBytes.length,
                         this.getClass().getProtectionDomain()
                     );
+                    cache.put(name, type);
+                    return type;
                 }
             } catch (Exception e) {
                 // If something goes wrong, let the parent class loader attempt to load

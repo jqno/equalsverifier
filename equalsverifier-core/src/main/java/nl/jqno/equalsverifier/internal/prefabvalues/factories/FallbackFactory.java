@@ -3,11 +3,13 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ExperimentalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import org.objenesis.Objenesis;
@@ -20,6 +22,8 @@ import org.objenesis.ObjenesisStd;
  * PrefabValues} to fill up all the fields, recursively.
  */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
+
+    private static final Objenesis OBJENESIS = new ObjenesisStd();
 
     @Override
     public Tuple<T> createValues(
@@ -95,32 +99,27 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     @SuppressWarnings("unchecked")
     private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
-        // ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
-        // T red = accessor.getRedObject(tag);
-        // T blue = accessor.getBlueObject(tag);
-        // T redCopy = accessor.getRedObject(tag);
-
         try {
-            ExperimentalInstantiator b = new ExperimentalInstantiator(getClass().getClassLoader());
-            Objenesis o = new ObjenesisStd();
-            Class<T> t = (Class<T>) b.lobotomize(tag.getType());
+            Class<T> t = (Class<T>) ExperimentalInstantiator.cache.get(tag.getType().getName());
             Field f = t.getDeclaredField(ExperimentalInstantiator.SYNTHETIC_FIELD_NAME);
             f.setAccessible(true);
 
-            T red = o.newInstance(t);
+            T red = OBJENESIS.newInstance(t);
             f.set(red, 42);
-            T blue = o.newInstance(t);
+            T blue = OBJENESIS.newInstance(t);
             f.set(blue, 1337);
-            T redCopy = o.newInstance(t);
+            T redCopy = OBJENESIS.newInstance(t);
             f.set(redCopy, 42);
             return new Tuple<>(red, blue, redCopy);
-        } catch (
-            NoSuchFieldException
-            | SecurityException
-            | IllegalArgumentException
-            | IllegalAccessException e
-        ) {
-            throw new ReflectionException("Het lukte niet om " + tag + " te herdefiniëren");
+        } catch (NoSuchFieldException e) {
+            // hack: if it doesn't have the synthetic field, it's probably the sut, and we can instantiate it using legacy
+            ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
+            T red = accessor.getRedObject(tag);
+            T blue = accessor.getBlueObject(tag);
+            T redCopy = accessor.getRedObject(tag);
+            return new Tuple<>(red, blue, redCopy);
+        } catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+            throw new ReflectionException("Het lukte niet om " + tag + " te herdefiniëren", e);
         }
     }
 }
