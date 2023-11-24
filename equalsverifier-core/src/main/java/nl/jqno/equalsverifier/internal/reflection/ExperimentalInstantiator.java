@@ -13,14 +13,13 @@ import net.bytebuddy.matcher.ElementMatchers;
 
 public class ExperimentalInstantiator {
 
-    public static final Map<String, Class<?>> cache = new HashMap<>();
+    public final Map<String, Class<?>> cache = new HashMap<>();
 
     public static final String SYNTHETIC_FIELD_NAME = "$$EqualsVerifier$id";
     private final ByteBuddyClassLoader bytebuddyCL;
 
     public ExperimentalInstantiator(ClassLoader parentClassLoader) {
-        cache.clear();
-        this.bytebuddyCL = new ByteBuddyClassLoader(parentClassLoader);
+        this.bytebuddyCL = new ByteBuddyClassLoader(parentClassLoader, cache);
     }
 
     public Class<?> lobotomize(Class<?> originalClass) {
@@ -166,8 +165,11 @@ public class ExperimentalInstantiator {
     // Custom ClassLoader that defines classes using ByteBuddy's ClassInjector
     private static class ByteBuddyClassLoader extends ClassLoader {
 
-        public ByteBuddyClassLoader(ClassLoader parent) {
+        public final Map<String, Class<?>> cache;
+
+        public ByteBuddyClassLoader(ClassLoader parent, Map<String, Class<?>> cache) {
             super(parent);
+            this.cache = cache;
         }
 
         @Override

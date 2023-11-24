@@ -402,6 +402,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
+        ObjenesisWrapper.reset();
         if (type.isEnum() || type.isInterface()) {
             return;
         }

@@ -7,6 +7,7 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.reflection.ExperimentalInstantiator;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /**
@@ -19,7 +20,7 @@ public class PrefabValues {
 
     private final Cache cache = new Cache();
     private final FactoryCache factoryCache;
-    private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
+    private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
@@ -27,8 +28,13 @@ public class PrefabValues {
      * @param factoryCache The factories that can be used to create values.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public PrefabValues(FactoryCache factoryCache) {
+    public PrefabValues(FactoryCache factoryCache, ExperimentalInstantiator instantiator) {
         this.factoryCache = factoryCache;
+        fallbackFactory = new FallbackFactory<>(instantiator);
+    }
+
+    public PrefabValues(FactoryCache factoryCache) {
+        this(factoryCache, new ExperimentalInstantiator(PrefabValues.class.getClassLoader()));
     }
 
     /**

@@ -98,7 +98,7 @@ public final class Configuration<T> {
         Class<T> type = instantiator.reloadClass(tp);
         TypeTag typeTag = new TypeTag(type);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        PrefabValues prefabValues = new PrefabValues(cache);
+        PrefabValues prefabValues = new PrefabValues(cache, instantiator);
         ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
         AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
         Set<String> ignoredFields = determineIgnoredFields(

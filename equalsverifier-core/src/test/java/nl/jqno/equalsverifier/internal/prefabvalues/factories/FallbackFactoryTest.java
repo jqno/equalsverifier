@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ExperimentalInstantiator;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
@@ -35,7 +36,10 @@ public class FallbackFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        factory = new FallbackFactory<>();
+        factory =
+            new FallbackFactory<>(
+                new ExperimentalInstantiator(FallbackFactoryTest.class.getClassLoader())
+            );
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
         prefabValues = new PrefabValues(factoryCache);

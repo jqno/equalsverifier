@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -12,8 +11,8 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ExperimentalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
 import org.objenesis.Objenesis;
-import org.objenesis.ObjenesisStd;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates types "by force".
@@ -23,7 +22,11 @@ import org.objenesis.ObjenesisStd;
  */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
-    private static final Objenesis OBJENESIS = new ObjenesisStd();
+    private final ExperimentalInstantiator instantiator;
+
+    public FallbackFactory(ExperimentalInstantiator instantiator) {
+        this.instantiator = instantiator;
+    }
 
     @Override
     public Tuple<T> createValues(
@@ -99,17 +102,19 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     @SuppressWarnings("unchecked")
     private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
+        Objenesis o = ObjenesisWrapper.getObjenesis();
+
         try {
-            Class<T> t = (Class<T>) ExperimentalInstantiator.cache.get(tag.getType().getName());
+            Class<T> t = (Class<T>) instantiator.cache.get(tag.getType().getName());
             Field f = t.getDeclaredField(ExperimentalInstantiator.SYNTHETIC_FIELD_NAME);
             f.setAccessible(true);
 
-            T red = OBJENESIS.newInstance(t);
-            f.set(red, 42);
-            T blue = OBJENESIS.newInstance(t);
-            f.set(blue, 1337);
-            T redCopy = OBJENESIS.newInstance(t);
-            f.set(redCopy, 42);
+            T red = o.newInstance(t);
+            f.setInt(red, 42);
+            T blue = o.newInstance(t);
+            f.setInt(blue, 1337);
+            T redCopy = o.newInstance(t);
+            f.setInt(redCopy, 42);
             return new Tuple<>(red, blue, redCopy);
         } catch (NoSuchFieldException e) {
             // hack: if it doesn't have the synthetic field, it's probably the sut, and we can instantiate it using legacy
