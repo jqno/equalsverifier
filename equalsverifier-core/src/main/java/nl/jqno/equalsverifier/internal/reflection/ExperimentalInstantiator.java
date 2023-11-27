@@ -32,7 +32,8 @@ public class ExperimentalInstantiator {
             return redefineClass(originalClass);
         } else {
             if (isFinal) {
-                throw new IllegalStateException("Can't do it");
+                System.out.println("Can't do it: " + originalClass.getName());
+                return null;
             }
             return subclassClass(originalClass);
         }
