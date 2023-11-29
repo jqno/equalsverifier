@@ -536,7 +536,16 @@ public final class JavaApiPrefabValues {
     @SuppressWarnings("unused")
     private static class JavaApiReflectionClassesContainer {
 
+        @SuppressFBWarnings(
+            value = "UUF_UNUSED_FIELD",
+            justification = "These fields are accessed through reflection"
+        )
         Object a;
+
+        @SuppressFBWarnings(
+            value = "UUF_UNUSED_FIELD",
+            justification = "These fields are accessed through reflection"
+        )
         Object b;
 
         public JavaApiReflectionClassesContainer() {}
