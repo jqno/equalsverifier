@@ -220,7 +220,7 @@
         <profile>
             <id>static-analysis</id>
             <activation>
-                <jdk>[17,)</jdk>
+                <jdk>[21,)</jdk>
                 <property>
                     <name>!disableStaticAnalysis</name>
                 </property>
@@ -528,7 +528,7 @@
         <profile>
             <id>modules-jdk17</id>
             <activation>
-                <jdk>[17,)</jdk>
+                <jdk>[17,21)</jdk>
             </activation>
 
             <modules>
