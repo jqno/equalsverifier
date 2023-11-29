@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+-   A check for Scala with its `-Xcheckinit` flag switched on. This flag generates a field that should have been marked as synthetic, but isn't, so EqualsVerifier has to check for this field explicitly.
+
 ## [3.15.3] - 2023-11-01
 
 ### Changed
