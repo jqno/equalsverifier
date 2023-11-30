@@ -91,7 +91,7 @@ public final class Configuration<T> {
         );
         for (Field f : FieldIterable.of(tp)) {
             FieldAccessor fa = FieldAccessor.of(f);
-            if (!fa.fieldIsPrimitive()) {
+            if (!fa.fieldIsPrimitive() && !f.getType().isArray()) {
                 instantiator.lobotomize(f.getType());
             }
         }
