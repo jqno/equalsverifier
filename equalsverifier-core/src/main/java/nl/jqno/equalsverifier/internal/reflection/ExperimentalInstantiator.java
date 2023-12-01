@@ -16,6 +16,7 @@ public class ExperimentalInstantiator {
     public final Map<String, Class<?>> cache = new HashMap<>();
 
     public static final String SYNTHETIC_FIELD_NAME = "$$EqualsVerifier$id";
+    private final ByteBuddy bytebuddy = new ByteBuddy();
     private final ByteBuddyClassLoader bytebuddyCL;
 
     public ExperimentalInstantiator(ClassLoader parentClassLoader) {
@@ -48,11 +49,11 @@ public class ExperimentalInstantiator {
     private Class<?> redefineClass(Class<?> type) {
         reloadOuterClassOf(type);
         reloadSuperClassOf(type);
-        return addInterceptions(new ByteBuddy().redefine(type));
+        return addInterceptions(bytebuddy.redefine(type));
     }
 
     private Class<?> subclassClass(Class<?> type) {
-        return addInterceptions(new ByteBuddy().subclass(type));
+        return addInterceptions(bytebuddy.subclass(type));
     }
 
     private boolean isSystemClass(Class<?> type) {
