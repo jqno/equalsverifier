@@ -29,6 +29,9 @@ public class ExperimentalInstantiator {
         if (originalClass.isEnum()) {
             return reload(originalClass);
         }
+        if (originalClass.isInterface()) {
+            return subclassClass(originalClass);
+        }
         if (!isSystem) {
             return redefineClass(originalClass);
         } else {
@@ -81,6 +84,9 @@ public class ExperimentalInstantiator {
     private <T> Class<T> reload(Class<T> type) {
         if (cache.containsKey(type.getName())) {
             return (Class<T>) cache.get(type.getName());
+        }
+        if (isSystemClass(type)) {
+            return type;
         }
         // Kan dit op een andere manier, bijvoorbeeld direct op de classloader?
         Class<T> reloaded = (Class<T>) new ByteBuddy()
