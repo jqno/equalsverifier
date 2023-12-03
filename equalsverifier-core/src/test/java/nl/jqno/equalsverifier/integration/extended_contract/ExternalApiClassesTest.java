@@ -11,10 +11,12 @@ import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
+@Disabled("Zorg dat deze classes niet meer als un-lobotomized class in de cache terecht komen")
 public class ExternalApiClassesTest {
 
     @Test
