@@ -6,8 +6,12 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled(
+    "It's no longer a problem if fields are abstract classes that call an abstract method when calling equals/hashCode/toString, because we're lobotomizing those"
+)
 @SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
 public class AbstractDelegationTest {
 
