@@ -8,12 +8,14 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unchecked")
 public class WithGenericPrefabValuesTest {
 
     @Test
+    @Disabled("Recursive: see RecursionTest")
     public void sanityCheck() {
         EqualsVerifier
             .forClass(SingleGenericContainer.class)

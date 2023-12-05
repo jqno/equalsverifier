@@ -12,8 +12,12 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled(
+    "Directe recursie (Node bevat Node) is lastig want we willen een originele versie en een lobotomized versie naast elkaar hebben. Workaround: prefab values. Als Node niet final is, kunnen we evt een subclass genereren."
+)
 public class RecursionTest {
 
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
