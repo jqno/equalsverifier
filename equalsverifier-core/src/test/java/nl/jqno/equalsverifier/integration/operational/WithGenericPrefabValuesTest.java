@@ -11,6 +11,9 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled(
+    "The same class twice as a field, just make the process cleaner and it will sort itself out"
+)
 @SuppressWarnings("unchecked")
 public class WithGenericPrefabValuesTest {
 
