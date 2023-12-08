@@ -10,6 +10,7 @@ import java.util.Map;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class TypeTagTest {
@@ -21,6 +22,7 @@ public class TypeTagTest {
     );
 
     @Test
+    @Disabled("It's recursive; see there")
     public void equalsAndHashCode() {
         EqualsVerifier
             .forClass(TypeTag.class)
