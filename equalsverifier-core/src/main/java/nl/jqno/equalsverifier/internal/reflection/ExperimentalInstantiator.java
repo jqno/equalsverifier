@@ -56,6 +56,7 @@ public class ExperimentalInstantiator {
     }
 
     private Class<?> subclassClass(Class<?> type) {
+        reload(type);
         return addInterceptions(bytebuddy.subclass(type));
     }
 
