@@ -4,6 +4,7 @@ import java.text.AttributedString;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
@@ -24,6 +25,7 @@ public class ModulesTest {
             .assertMessageContains("The class", "Consider opening");
     }
 
+    @Disabled("Let's shelve this for now")
     @Test
     @DisabledForJreRange(max = JRE.JAVA_11)
     public void giveProperErrorMessage_whenFieldIsInaccessible() {

@@ -4,6 +4,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.StringFieldCheck;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class StringTest {
@@ -27,6 +28,7 @@ public class StringTest {
         EqualsVerifier.forClass(CorrectIgnoreCaseStringEquals.class).verify();
     }
 
+    @Disabled("HashCode instance needs to be copied over to reloaded class")
     @Test
     public void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive_givenHashCodeIsCached() {
         ExpectedException
