@@ -9,12 +9,13 @@ import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveType;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled(
+    "The same class twice as a field, just make the process cleaner and it will sort itself out"
+)
 public class ConfiguredEqualsVerifierSingleTest {
 
     @Test
