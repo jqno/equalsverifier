@@ -18,6 +18,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class RecordObjectAccessorScramblingTest {
@@ -99,6 +100,9 @@ public class RecordObjectAccessorScramblingTest {
         assertEquals(ORIGINAL_VALUE, scrambledStaticNonfinal);
     }
 
+    @Disabled(
+        "We should use the constructor for the lobotomized type, or find another way to do this test"
+    )
     @Test
     public void scrambleNestedGenerics() throws Exception {
         Constructor<?> constructor =

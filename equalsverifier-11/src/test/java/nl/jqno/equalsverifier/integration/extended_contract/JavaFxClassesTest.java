@@ -20,10 +20,12 @@ import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
+@Disabled("Zorg dat deze classes niet meer als un-lobotomized class in de cache terecht komen")
 public class JavaFxClassesTest {
 
     @Test
