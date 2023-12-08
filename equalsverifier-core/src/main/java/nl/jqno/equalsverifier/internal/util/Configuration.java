@@ -96,6 +96,9 @@ public final class Configuration<T> {
             }
         }
         Class<T> type = instantiator.reloadClass(tp);
+        if (redefinedSubclass != null) {
+            redefinedSubclass = instantiator.reloadClass(redefinedSubclass);
+        }
         TypeTag typeTag = new TypeTag(type);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         PrefabValues prefabValues = new PrefabValues(cache, instantiator);
