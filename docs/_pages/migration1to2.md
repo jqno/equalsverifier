@@ -10,5 +10,5 @@ When migrating from EqualsVerifier 1 to 2, there are a few things you should be 
 * EqualsVerifier now fails if you don't actually override `equals` in your class, because this might signal that you intend to override `equals`, but forgot. If this is not the case (for instance, if you 'sweep' a whole package where most classes override `equals` but one doesn't), you can revert to the old behaviour by suppressing `Warning.INHERITED_DIRECTLY_FROM_OBJECT`.
 * EqualsVerifier is now smarter when it comes to type erasure. In many cases where you had to call `withPrefabValues` for a generic type to work around a `ClassCastException` in EqualsVerifier, this is no longer necessary. An example of this is Android's `SparseArray` class.
 
-If you encounter any other problems, please let me know on the [mailing list](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier).
+If you encounter any other problems, please let me know in the [issue tracker](https://github.com/jqno/equalsverifier/issues).
 

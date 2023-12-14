@@ -11,7 +11,7 @@ permalink: /resources/
 
 The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier). You can file bug reports or feature requests there.
 
-Pull Requests are welcome! But please also [open an issue](https://github.com/jqno/equalsverifier/issues) or [send a message to the Google Group](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier) so we can discuss it.
+Pull Requests are welcome! But please also [open an issue](https://github.com/jqno/equalsverifier/issues) so we can discuss it first. I'm happy to help you on your way!
 
 ## Resources on how to write a great `equals` method
 

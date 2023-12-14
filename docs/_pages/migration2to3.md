@@ -9,5 +9,4 @@ When migrating from EqualsVerifier 2 to 3, there are a few things you should be 
 * The content and layout of error messages is slightly different. If you have tools that depend on this, make sure these still work. You could also consider using `EqualsVerifier#report()` instead of `EqualsVerifier#verify()`.
 * EqualsVerifier is now smarter when it comes to type erasure. In rare cases, a `ClassCastException` would be thrown by EqualsVerifier when it couldn't figure out the correct generic types. You can now fix those with `#withGenericPrefabValues()`. See [this page](/equalsverifier/errormessages/recursive-datastructure#generics) for more information.
 
-If you encounter any other problems, please let me know on the [mailing list](https://groups.google.com/forum/?fromgroups#!forum/equalsverifier).
-
+If you encounter any other problems, please let me know in the [issue tracker](https://github.com/jqno/equalsverifier/issues).
