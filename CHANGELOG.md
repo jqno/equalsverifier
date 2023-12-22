@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.5] - 2023-12-22
+
 ### Changed
 
 - Check that getters are used for all generated JPA id fields. ([Issue 892](https://github.com/jqno/equalsverifier/issues/892))
@@ -1181,7 +1183,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.4...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.5...HEAD
+[3.15.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.4...equalsverifier-3.15.5
 [3.15.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.3...equalsverifier-3.15.4
 [3.15.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.2...equalsverifier-3.15.3
 [3.15.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.1...equalsverifier-3.15.2
