@@ -207,11 +207,13 @@ public enum SupportedAnnotations implements Annotation {
         "javax.persistence.ManyToOne",
         "javax.persistence.ManyToMany",
         "javax.persistence.ElementCollection",
+        "javax.persistence.GeneratedValue",
         "jakarta.persistence.OneToOne",
         "jakarta.persistence.OneToMany",
         "jakarta.persistence.ManyToOne",
         "jakarta.persistence.ManyToMany",
-        "jakarta.persistence.ElementCollection"
+        "jakarta.persistence.ElementCollection",
+        "jakarta.persistence.GeneratedValue"
     ),
 
     /**

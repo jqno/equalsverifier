@@ -132,7 +132,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     ) {
         assertTrue(
             Formatter.of(
-                "JPA Entity: direct reference to field %% used in %% instead of getter %%.",
+                "JPA Entity: direct reference to field %% used in %% instead of getter %%().",
                 fieldName,
                 method,
                 getterName

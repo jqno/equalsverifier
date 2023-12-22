@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Check that getters are used for all generated JPA id fields. ([Issue 892](https://github.com/jqno/equalsverifier/issues/892))
+
 ## [3.15.4] - 2023-11-29
 
 ### Added
