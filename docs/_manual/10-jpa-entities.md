@@ -17,6 +17,8 @@ EqualsVerifier also supports Hibernate's `@NaturalId` annotation. If it detects 
 
 If your class has a [surrogate key](https://en.wikipedia.org/wiki/Surrogate_key), you can tell EqualsVerifier by suppressing `Warning.SURROGATE_KEY`. When this warning is suppressed, EqualsVerifier assumes that _only_ the field or fields marked with `@Id` participate in `equals` and `hashCode`, and that none of the other fields do.
 
+If your class has a surrogate key marked with `@GeneratedValue`, EqualsVerifier enforces that you call the id's getter in `equals` and `hashCode`, instead of referencing the field directly. This is because when JPA generates an id, it may only reflect this in the object when the getter is called. The underlying field may still be null, even though an id was generated. To avoid this, `equals` and `hashCode` should always call the getter in this situation.
+
 When `@NaturalId` is present or when `Warning.SURROGATE_KEY` is suppressed, there is no need to call `#withOnlyTheseFields` or `#withIgnoredFields`.
 
 EqualsVerifier will not only detect these annotations when they are placed on a field, but also when they are placed on the field's corresponding accessor method.
