@@ -194,6 +194,12 @@ public enum SupportedAnnotations implements Annotation {
         }
     },
 
+    /**
+     * Fields in JPA entities that link to another entity, usually do so lazily. This means that
+     * these fields only get initialized when the getter is called; otherwise they remain null even
+     * if they have an underlying value. Therefore, equals and hashCode should access these fields
+     * through their getters, and not directly.
+     */
     JPA_LINKED_FIELD(
         true,
         "javax.persistence.OneToOne",
@@ -208,6 +214,12 @@ public enum SupportedAnnotations implements Annotation {
         "jakarta.persistence.ElementCollection"
     ),
 
+    /**
+     * Fields in JPA entities that are marked @Basic(fetch = FetchType.LAZY) are initialized lazily.
+     * This means that these fields only get initialized when the getter is called; otherwise they
+     * remain null even if they have an underlying value. Therefore, equals and hashCode should
+     * access these fields through their getters, and not directly.
+     */
     JPA_LAZY_FIELD(true, "javax.persistence.Basic", "jakarta.persistence.Basic") {
         @Override
         public boolean validate(
