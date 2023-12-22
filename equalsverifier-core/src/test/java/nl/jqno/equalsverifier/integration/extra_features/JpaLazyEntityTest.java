@@ -5,14 +5,7 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Basic;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.ElementCollection;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.FetchType;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.ManyToMany;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.ManyToOne;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.OneToMany;
-import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.OneToOne;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.*;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: HiddenField
@@ -46,7 +39,7 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterUsed_givenAnnotationIsOnGetter() {
+    public void basicGetterNotUsed_givenAnnotationIsOnGetter() {
         getterNotUsed(IncorrectBasicJpaLazyGetterContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyGetterContainer.class);
     }
@@ -138,15 +131,49 @@ public class JpaLazyEntityTest {
             .verify();
     }
 
-    private void getterNotUsed(Class<?> type, String method) {
+    @Test
+    public void getterUsedForGeneratedId() {
+        EqualsVerifier
+            .forClass(CorrectGeneratedJpaIdContainer.class)
+            .suppress(Warning.SURROGATE_KEY)
+            .verify();
+        EqualsVerifier
+            .forClass(CorrectGeneratedJpaIdContainer.class)
+            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+            .verify();
+    }
+
+    @Test
+    public void getterNotUsedForGeneratedId() {
+        getterNotUsed(IncorrectGeneratedJpaIdContainer.class, "equals", Warning.SURROGATE_KEY);
+        getterNotUsed_warningSuppressed(
+            IncorrectGeneratedJpaIdContainer.class,
+            Warning.SURROGATE_KEY
+        );
+        getterNotUsed(
+            IncorrectGeneratedJpaIdContainer.class,
+            "equals",
+            Warning.SURROGATE_OR_BUSINESS_KEY
+        );
+        getterNotUsed_warningSuppressed(
+            IncorrectGeneratedJpaIdContainer.class,
+            Warning.SURROGATE_OR_BUSINESS_KEY
+        );
+    }
+
+    private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(type).verify())
+            .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
             .assertFailure()
             .assertMessageContains("JPA Entity", method, "direct reference");
     }
 
-    private void getterNotUsed_warningSuppressed(Class<?> type) {
-        EqualsVerifier.forClass(type).suppress(Warning.JPA_GETTER).verify();
+    private void getterNotUsed_warningSuppressed(Class<?> type, Warning... additionalWarnings) {
+        EqualsVerifier
+            .forClass(type)
+            .suppress(Warning.JPA_GETTER)
+            .suppress(additionalWarnings)
+            .verify();
     }
 
     @Entity
@@ -594,6 +621,58 @@ public class JpaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getOneToMany(), getManyToOne());
+        }
+    }
+
+    @Entity
+    static class CorrectGeneratedJpaIdContainer {
+
+        @Id
+        @GeneratedValue
+        private String id;
+
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof CorrectGeneratedJpaIdContainer)) {
+                return false;
+            }
+            CorrectGeneratedJpaIdContainer other = (CorrectGeneratedJpaIdContainer) obj;
+            return Objects.equals(getId(), other.getId());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId());
+        }
+    }
+
+    @Entity
+    static class IncorrectGeneratedJpaIdContainer {
+
+        @Id
+        @GeneratedValue
+        private String id;
+
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof IncorrectGeneratedJpaIdContainer)) {
+                return false;
+            }
+            IncorrectGeneratedJpaIdContainer other = (IncorrectGeneratedJpaIdContainer) obj;
+            return Objects.equals(id, other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId());
         }
     }
 }
