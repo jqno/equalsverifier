@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -45,6 +46,7 @@ public class CachedHashCodeInitializer<T> {
         this.example = example;
     }
 
+    @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Will evaluate this later")
     public CachedHashCodeInitializer(
         Class<?> type,
         String cachedHashCodeField,
