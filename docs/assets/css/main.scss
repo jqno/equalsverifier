@@ -8,6 +8,27 @@
 @import "minimal-mistakes"; // main partials
 
 @font-face {
+  font-family: 'FiraGO';
+  src: url('{{ site.url }}/assets/firago/FiraGO-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FiraGO';
+  src: url('{{ site.url }}/assets/firago/FiraGO-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FiraGO';
+  src: url('{{ site.url }}/assets/firago/FiraGO-Italic.woff2') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
   font-family: 'TilburgsAns';
   src: url('{{ site.url }}/assets/tilburgsans/TilburgsAns-Regular.woff') format('woff');
   font-weight: normal;
@@ -19,6 +40,16 @@
   src: url('{{ site.url }}/assets/tilburgsans/TilburgsAns-Bold.woff') format('woff');
   font-weight: bold;
   font-style: normal;
+}
+
+body,
+.sidebar li,
+.masthead__inner-wrap,
+.page__footer-follow li,
+.page__footer-copyright,
+.page__meta,
+.pagination--pager {
+  font-family: 'FiraGO', $sans-serif;
 }
 
 h1 {
