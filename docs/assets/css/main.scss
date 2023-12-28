@@ -42,6 +42,38 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'CommitMono';
+  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
+}
+
+@font-face {
+  font-family: 'CommitMono';
+  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
+}
+
+@font-face {
+  font-family: 'CommitMono';
+  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
+}
+
+@font-face {
+  font-family: 'CommitMono';
+  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
+}
+
 body,
 .sidebar li,
 .masthead__inner-wrap,
@@ -75,6 +107,10 @@ h3 {
 
 .btn {
   font-family: 'TilburgsAns', $sans-serif;
+}
+
+code {
+  font-family: 'CommitMono', $monospace;
 }
 
 .feature__item {
