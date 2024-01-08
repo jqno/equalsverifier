@@ -144,29 +144,29 @@ public class JakartaLazyEntityTest {
     @Test
     public void getterUsedForGeneratedId() {
         EqualsVerifier
-            .forClass(CorrectGeneratedJpaIdContainer.class)
+            .forClass(CorrectGeneratedJakartaIdContainer.class)
             .suppress(Warning.SURROGATE_KEY)
             .verify();
         EqualsVerifier
-            .forClass(CorrectGeneratedJpaIdContainer.class)
+            .forClass(CorrectGeneratedJakartaIdContainer.class)
             .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
             .verify();
     }
 
     @Test
     public void getterNotUsedForGeneratedId() {
-        getterNotUsed(IncorrectGeneratedJpaIdContainer.class, "equals", Warning.SURROGATE_KEY);
+        getterNotUsed(IncorrectGeneratedJakartaIdContainer.class, "equals", Warning.SURROGATE_KEY);
         getterNotUsed_warningSuppressed(
-            IncorrectGeneratedJpaIdContainer.class,
+            IncorrectGeneratedJakartaIdContainer.class,
             Warning.SURROGATE_KEY
         );
         getterNotUsed(
-            IncorrectGeneratedJpaIdContainer.class,
+            IncorrectGeneratedJakartaIdContainer.class,
             "equals",
             Warning.SURROGATE_OR_BUSINESS_KEY
         );
         getterNotUsed_warningSuppressed(
-            IncorrectGeneratedJpaIdContainer.class,
+            IncorrectGeneratedJakartaIdContainer.class,
             Warning.SURROGATE_OR_BUSINESS_KEY
         );
     }
@@ -638,7 +638,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Entity
-    static class CorrectGeneratedJpaIdContainer {
+    static class CorrectGeneratedJakartaIdContainer {
 
         @Id
         @GeneratedValue
@@ -650,10 +650,10 @@ public class JakartaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof CorrectGeneratedJpaIdContainer)) {
+            if (!(obj instanceof CorrectGeneratedJakartaIdContainer)) {
                 return false;
             }
-            CorrectGeneratedJpaIdContainer other = (CorrectGeneratedJpaIdContainer) obj;
+            CorrectGeneratedJakartaIdContainer other = (CorrectGeneratedJakartaIdContainer) obj;
             return Objects.equals(getId(), other.getId());
         }
 
@@ -664,7 +664,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Entity
-    static class IncorrectGeneratedJpaIdContainer {
+    static class IncorrectGeneratedJakartaIdContainer {
 
         @Id
         @GeneratedValue
@@ -676,10 +676,10 @@ public class JakartaLazyEntityTest {
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof IncorrectGeneratedJpaIdContainer)) {
+            if (!(obj instanceof IncorrectGeneratedJakartaIdContainer)) {
                 return false;
             }
-            IncorrectGeneratedJpaIdContainer other = (IncorrectGeneratedJpaIdContainer) obj;
+            IncorrectGeneratedJakartaIdContainer other = (IncorrectGeneratedJakartaIdContainer) obj;
             return Objects.equals(id, other.id);
         }
 
