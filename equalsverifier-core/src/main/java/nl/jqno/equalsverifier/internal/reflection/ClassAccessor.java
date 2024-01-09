@@ -85,7 +85,7 @@ public class ClassAccessor<T> {
      * @return True if T has an {@code equals} method.
      */
     public boolean declaresEquals() {
-        return declaresMethod("equals", Object.class);
+        return declaresMethod(type, "equals", Object.class);
     }
 
     /**
@@ -94,21 +94,29 @@ public class ClassAccessor<T> {
      * @return True if T has an {@code hashCode} method.
      */
     public boolean declaresHashCode() {
-        return declaresMethod("hashCode");
+        return declaresMethod(type, "hashCode");
     }
 
-    private boolean declaresMethod(String name, Class<?>... parameterTypes) {
+    /**
+     * Determines whether T has a method with the given name and parameters.
+     *
+     * @param name The name of the method we're looking for.
+     * @return True if T has a method with the given name and parameters.
+     */
+    public boolean hasMethod(String name) {
+        Class<?> t = type;
+        while (t != null) {
+            if (declaresMethod(t, name)) {
+                return true;
+            }
+            t = t.getSuperclass();
+        }
+        return false;
+    }
+
+    private static boolean declaresMethod(Class<?> type, String name, Class<?>... parameterTypes) {
         try {
             type.getDeclaredMethod(name, parameterTypes);
-            return true;
-        } catch (NoSuchMethodException e) {
-            return false;
-        }
-    }
-
-    public boolean hasMethod(String name, Class<?>... parameterTypes) {
-        try {
-            type.getMethod(name, parameterTypes);
             return true;
         } catch (NoSuchMethodException e) {
             return false;

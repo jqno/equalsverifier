@@ -161,6 +161,11 @@ public class JpaLazyEntityTest {
         );
     }
 
+    @Test
+    public void gettersAreUsedAndProtected() {
+        EqualsVerifier.forClass(ProtectedJpaLazyFieldContainer.class).verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -673,6 +678,31 @@ public class JpaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getId());
+        }
+    }
+
+    @Entity
+    static class ProtectedJpaLazyFieldContainer {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String basic;
+
+        protected String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ProtectedJpaLazyFieldContainer)) {
+                return false;
+            }
+            ProtectedJpaLazyFieldContainer other = (ProtectedJpaLazyFieldContainer) obj;
+            return Objects.equals(getBasic(), other.getBasic());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getBasic());
         }
     }
 }

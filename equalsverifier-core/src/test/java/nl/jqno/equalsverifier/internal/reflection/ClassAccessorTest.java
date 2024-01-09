@@ -107,15 +107,27 @@ public class ClassAccessorTest {
     }
 
     @Test
+    public void hasProtectedMethod() {
+        ClassAccessor<?> accessor = ClassAccessor.of(MethodContainer.class, prefabValues);
+        assertTrue(accessor.hasMethod("m_protected"));
+    }
+
+    @Test
     public void hasMethodInSuper() {
         ClassAccessor<?> accessor = ClassAccessor.of(ChildOfMethodContainer.class, prefabValues);
         assertTrue(accessor.hasMethod("m"));
     }
 
     @Test
+    public void hasProtectedMethodInSuper() {
+        ClassAccessor<?> accessor = ClassAccessor.of(ChildOfMethodContainer.class, prefabValues);
+        assertTrue(accessor.hasMethod("m_protected"));
+    }
+
+    @Test
     public void doesNotHaveMethod() {
         ClassAccessor<?> accessor = ClassAccessor.of(MethodContainer.class, prefabValues);
-        assertFalse(accessor.hasMethod("doesNotExist", int.class));
+        assertFalse(accessor.hasMethod("doesNotExist"));
     }
 
     @Test
@@ -358,6 +370,8 @@ public class ClassAccessorTest {
     static class MethodContainer {
 
         public void m() {}
+
+        protected void m_protected() {}
     }
 
     static class ChildOfMethodContainer extends MethodContainer {}

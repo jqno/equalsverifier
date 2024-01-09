@@ -171,6 +171,11 @@ public class JakartaLazyEntityTest {
         );
     }
 
+    @Test
+    public void gettersAreUsedAndProtected() {
+        EqualsVerifier.forClass(ProtectedJakartaLazyFieldContainer.class).verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -686,6 +691,31 @@ public class JakartaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getId());
+        }
+    }
+
+    @Entity
+    static class ProtectedJakartaLazyFieldContainer {
+
+        @Basic(fetch = FetchType.LAZY)
+        private String basic;
+
+        protected String getBasic() {
+            return basic;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ProtectedJakartaLazyFieldContainer)) {
+                return false;
+            }
+            ProtectedJakartaLazyFieldContainer other = (ProtectedJakartaLazyFieldContainer) obj;
+            return Objects.equals(getBasic(), other.getBasic());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getBasic());
         }
     }
 }

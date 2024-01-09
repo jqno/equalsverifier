@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Protected JPA entity getters were ignored. ([Issue 909](https://github.com/jqno/equalsverifier/issues/909))
+
 ## [3.15.5] - 2023-12-22
 
 ### Changed
