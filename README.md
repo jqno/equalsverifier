@@ -133,4 +133,4 @@ Note that thepage uses the [TilburgsAns](https://www.tilburgsans.nl/) font but r
 
 # Disclaimer
 
-Copyright 2009-2022 Jan Ouwens
+Copyright 2009-2024 Jan Ouwens
