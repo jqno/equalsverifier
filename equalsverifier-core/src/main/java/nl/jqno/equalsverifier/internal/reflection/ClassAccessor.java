@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -185,6 +186,10 @@ public class ClassAccessor<T> {
         return getRedAccessor(enclosingType).get();
     }
 
+    public T getRedObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
+        return getRedAccessor(enclosingType, typeStack).get();
+    }
+
     /**
      * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      *
@@ -193,7 +198,14 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      */
     public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType) {
-        return buildObjectAccessor().scramble(prefabValues, enclosingType);
+        return getRedAccessor(enclosingType, new LinkedHashSet<>());
+    }
+
+    public ObjectAccessor<T> getRedAccessor(
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        return buildObjectAccessor().scramble(prefabValues, enclosingType, typeStack);
     }
 
     /**

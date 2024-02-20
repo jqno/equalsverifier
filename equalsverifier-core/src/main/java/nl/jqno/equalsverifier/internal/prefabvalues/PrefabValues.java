@@ -78,7 +78,11 @@ public class PrefabValues {
      * @return A tuple of two different values of the given type.
      */
     public <T> Tuple<T> giveTuple(TypeTag tag) {
-        realizeCacheFor(tag, emptyStack());
+        return giveTuple(tag, new LinkedHashSet<>());
+    }
+
+    public <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
         return cache.getTuple(tag);
     }
 
@@ -92,6 +96,10 @@ public class PrefabValues {
      * @return A value that is different from {@code value}.
      */
     public <T> T giveOther(TypeTag tag, T value) {
+        return giveOther(tag, value, new LinkedHashSet<>());
+    }
+
+    public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         if (
             value != null &&
@@ -101,7 +109,7 @@ public class PrefabValues {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag);
+        Tuple<T> tuple = giveTuple(tag, typeStack);
         if (tuple.getRed() == null) {
             return null;
         }

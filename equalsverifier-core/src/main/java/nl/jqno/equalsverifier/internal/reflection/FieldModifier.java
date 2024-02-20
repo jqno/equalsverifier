@@ -3,6 +3,8 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -92,9 +94,13 @@ public final class FieldModifier {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
+        changeField(prefabValues, enclosingType, new LinkedHashSet<>());
+    }
+
+    public void changeField(PrefabValues prefabValues, TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
         FieldChanger fm = () -> {
             TypeTag tag = TypeTag.of(field, enclosingType);
-            Object newValue = prefabValues.giveOther(tag, field.get(object));
+            Object newValue = prefabValues.giveOther(tag, field.get(object), typeStack);
             field.set(object, newValue);
         };
         change(fm, false);
