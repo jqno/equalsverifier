@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 class SealedTypesRecursionTest {
 
     @Test
-    public void testEV() {
+    public void dontThrowStackOverflowError_whenOnlyPermittedSubclassInSealedInterfaceRefersBackToContainer() {
         // A container with a field of a sealed interface.
         // The sealed interface permits only 1 type, which refers back to the container.
         ExpectedException
@@ -19,6 +19,21 @@ class SealedTypesRecursionTest {
                 "Add prefab values for one of the following types",
                 "SealedContainer",
                 "SealedInterface"
+            );
+    }
+
+    @Test
+    public void dontThrowStackOverflowError_whenOnlyPermittedRecordInSealedInterfaceRefersBackToContainer() {
+        // A container with a field of a sealed interface.
+        // The sealed interface permits only 1 type, which is a record that refers back to the container.
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SealedRecordContainer.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Recursive datastructure",
+                "Add prefab values for one of the following types",
+                "SealedRecordContainer",
+                "SealedRecordInterface"
             );
     }
 
@@ -75,4 +90,35 @@ class SealedTypesRecursionTest {
             return Objects.equals(container, other.container);
         }
     }
+
+    static final class SealedRecordContainer {
+
+        public final SealedRecordInterface sealed;
+
+        public SealedRecordContainer(SealedRecordInterface sealed) {
+            this.sealed = sealed;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(sealed);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof SealedRecordContainer)) {
+                return false;
+            }
+            SealedRecordContainer other = (SealedRecordContainer) obj;
+            return Objects.equals(sealed, other.sealed);
+        }
+    }
+
+    sealed interface SealedRecordInterface permits OnlyPermittedRecordImplementation {}
+
+    static final record OnlyPermittedRecordImplementation(SealedRecordContainer container)
+        implements SealedRecordInterface {}
 }
