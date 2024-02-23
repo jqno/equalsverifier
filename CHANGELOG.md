@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- StackOverflowError when a class has a field of a sealed type whose only permitted subtype has a reference to the original class. ([Issue 920](https://github.com/jqno/equalsverifier/issues/920))
+
 ## [3.15.6] - 2024-01-09
 
 ### Fixed
