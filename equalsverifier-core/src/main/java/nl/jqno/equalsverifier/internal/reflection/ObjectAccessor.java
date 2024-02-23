@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -126,9 +127,14 @@ public abstract class ObjectAccessor<T> {
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
      * @return An accessor to the scrambled object.
      */
-    public abstract ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType);
+    public abstract ObjectAccessor<T> scramble(
+        PrefabValues prefabValues,
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    );
 
     /**
      * Modifies all fields of the wrapped object that are declared in T, but not those inherited

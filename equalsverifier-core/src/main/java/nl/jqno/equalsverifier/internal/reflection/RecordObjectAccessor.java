@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -57,11 +58,15 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
+    public ObjectAccessor<T> scramble(
+        PrefabValues prefabValues,
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return makeAccessor(f -> {
             Object value = getField(f);
             TypeTag tag = TypeTag.of(f, enclosingType);
-            return prefabValues.giveOther(tag, value);
+            return prefabValues.giveOther(tag, value, typeStack);
         });
     }
 

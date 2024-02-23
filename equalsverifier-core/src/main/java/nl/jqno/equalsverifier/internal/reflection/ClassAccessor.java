@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -186,6 +187,19 @@ public class ClassAccessor<T> {
     }
 
     /**
+     * Returns an instance of T that is not equal to the instance of T returned by {@link
+     * #getBlueObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An instance of T.
+     */
+    public T getRedObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
+        return getRedAccessor(enclosingType, typeStack).get();
+    }
+
+    /**
      * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
@@ -193,7 +207,22 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
      */
     public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType) {
-        return buildObjectAccessor().scramble(prefabValues, enclosingType);
+        return getRedAccessor(enclosingType, new LinkedHashSet<>());
+    }
+
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
+     */
+    public ObjectAccessor<T> getRedAccessor(
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        return buildObjectAccessor().scramble(prefabValues, enclosingType, typeStack);
     }
 
     /**
@@ -209,6 +238,19 @@ public class ClassAccessor<T> {
     }
 
     /**
+     * Returns an instance of T that is not equal to the instance of T returned by {@link
+     * #getRedObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An instance of T.
+     */
+    public T getBlueObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
+        return getBlueAccessor(enclosingType, typeStack).get();
+    }
+
+    /**
      * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
@@ -216,9 +258,24 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      */
     public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType) {
+        return getBlueAccessor(enclosingType, new LinkedHashSet<>());
+    }
+
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
+     */
+    public ObjectAccessor<T> getBlueAccessor(
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return buildObjectAccessor()
-            .scramble(prefabValues, enclosingType)
-            .scramble(prefabValues, enclosingType);
+            .scramble(prefabValues, enclosingType, typeStack)
+            .scramble(prefabValues, enclosingType, typeStack);
     }
 
     /**

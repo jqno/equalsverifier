@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 public class RecordObjectAccessorTest {
 
+    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private Object recordInstance;
 
     @BeforeEach
@@ -72,7 +74,7 @@ public class RecordObjectAccessorTest {
 
         PrefabValues pv = new PrefabValues(JavaApiPrefabValues.build());
         ExpectedException
-            .when(() -> accessorFor(instance).scramble(pv, TypeTag.NULL))
+            .when(() -> accessorFor(instance).scramble(pv, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)
             .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }

@@ -37,7 +37,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         }
 
         traverseFields(tag, prefabValues, clone);
-        return giveInstances(tag, prefabValues);
+        return giveInstances(tag, prefabValues, clone);
     }
 
     private Tuple<T> giveEnumInstances(TypeTag tag) {
@@ -90,11 +90,15 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         }
     }
 
-    private Tuple<T> giveInstances(TypeTag tag, PrefabValues prefabValues) {
+    private Tuple<T> giveInstances(
+        TypeTag tag,
+        PrefabValues prefabValues,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
-        T red = accessor.getRedObject(tag);
-        T blue = accessor.getBlueObject(tag);
-        T redCopy = accessor.getRedObject(tag);
+        T red = accessor.getRedObject(tag, typeStack);
+        T blue = accessor.getBlueObject(tag, typeStack);
+        T redCopy = accessor.getRedObject(tag, typeStack);
         return new Tuple<>(red, blue, redCopy);
     }
 }

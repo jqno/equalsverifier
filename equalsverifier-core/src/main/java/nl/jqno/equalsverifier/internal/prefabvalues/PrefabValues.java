@@ -78,7 +78,19 @@ public class PrefabValues {
      * @return A tuple of two different values of the given type.
      */
     public <T> Tuple<T> giveTuple(TypeTag tag) {
-        realizeCacheFor(tag, emptyStack());
+        return giveTuple(tag, new LinkedHashSet<>());
+    }
+
+    /**
+     * Returns a tuple of two different prefabricated values of the specified type.
+     *
+     * @param <T> The returned tuple will have this generic type.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return A tuple of two different values of the given type.
+     */
+    public <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
         return cache.getTuple(tag);
     }
 
@@ -92,6 +104,20 @@ public class PrefabValues {
      * @return A value that is different from {@code value}.
      */
     public <T> T giveOther(TypeTag tag, T value) {
+        return giveOther(tag, value, new LinkedHashSet<>());
+    }
+
+    /**
+     * Returns a prefabricated value of the specified type, that is different from the specified
+     * value.
+     *
+     * @param <T> The type of the value.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param value A value that is different from the value that will be returned.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return A value that is different from {@code value}.
+     */
+    public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         if (
             value != null &&
@@ -101,7 +127,7 @@ public class PrefabValues {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag);
+        Tuple<T> tuple = giveTuple(tag, typeStack);
         if (tuple.getRed() == null) {
             return null;
         }
@@ -121,10 +147,6 @@ public class PrefabValues {
     private boolean arraysAreDeeplyEqual(Object x, Object y) {
         // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
         return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
-    }
-
-    private LinkedHashSet<TypeTag> emptyStack() {
-        return new LinkedHashSet<>();
     }
 
     /**

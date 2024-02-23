@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
@@ -49,24 +50,34 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        return scrambleInternal(prefabValues, enclosingType, FieldIterable::of);
+    public ObjectAccessor<T> scramble(
+        PrefabValues prefabValues,
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        return scrambleInternal(prefabValues, enclosingType, typeStack, FieldIterable::of);
     }
 
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> shallowScramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        return scrambleInternal(prefabValues, enclosingType, FieldIterable::ofIgnoringSuper);
+        return scrambleInternal(
+            prefabValues,
+            enclosingType,
+            new LinkedHashSet<>(),
+            FieldIterable::ofIgnoringSuper
+        );
     }
 
     private ObjectAccessor<T> scrambleInternal(
         PrefabValues prefabValues,
         TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack,
         Function<Class<?>, FieldIterable> it
     ) {
         for (Field field : it.apply(type())) {
             try {
-                fieldModifierFor(field).changeField(prefabValues, enclosingType);
+                fieldModifierFor(field).changeField(prefabValues, enclosingType, typeStack);
             } catch (ModuleException e) {
                 handleInaccessibleObjectException(e.getCause(), field);
             } catch (RuntimeException e) {
