@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
-
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -97,7 +96,24 @@ public final class FieldModifier {
         changeField(prefabValues, enclosingType, new LinkedHashSet<>());
     }
 
-    public void changeField(PrefabValues prefabValues, TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
+    /**
+     * Changes the field's value to something else. The new value will never be null. Other than
+     * that, the precise value is undefined.
+     *
+     * <p>Ignores static fields and fields that can't be modified reflectively.
+     *
+     * @param prefabValues If the field is of a type contained within prefabValues, the new value
+     *     will be taken from it.
+     * @param enclosingType A tag for the type that contains the field. Needed to determine a
+     *     generic type, if it has one..
+     * @param typeStack Keeps track of recursion in the type.
+     * @throws ReflectionException If the operation fails.
+     */
+    public void changeField(
+        PrefabValues prefabValues,
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         FieldChanger fm = () -> {
             TypeTag tag = TypeTag.of(field, enclosingType);
             Object newValue = prefabValues.giveOther(tag, field.get(object), typeStack);

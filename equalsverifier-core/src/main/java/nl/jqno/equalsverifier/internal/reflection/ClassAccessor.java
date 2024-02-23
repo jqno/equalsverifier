@@ -186,6 +186,15 @@ public class ClassAccessor<T> {
         return getRedAccessor(enclosingType).get();
     }
 
+    /**
+     * Returns an instance of T that is not equal to the instance of T returned by {@link
+     * #getBlueObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An instance of T.
+     */
     public T getRedObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
         return getRedAccessor(enclosingType, typeStack).get();
     }
@@ -201,6 +210,14 @@ public class ClassAccessor<T> {
         return getRedAccessor(enclosingType, new LinkedHashSet<>());
     }
 
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An {@link ObjectAccessor} for {@link #getRedObject(TypeTag)}.
+     */
     public ObjectAccessor<T> getRedAccessor(
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
@@ -221,6 +238,19 @@ public class ClassAccessor<T> {
     }
 
     /**
+     * Returns an instance of T that is not equal to the instance of T returned by {@link
+     * #getRedObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An instance of T.
+     */
+    public T getBlueObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
+        return getBlueAccessor(enclosingType, typeStack).get();
+    }
+
+    /**
      * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
@@ -228,9 +258,24 @@ public class ClassAccessor<T> {
      * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
      */
     public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType) {
+        return getBlueAccessor(enclosingType, new LinkedHashSet<>());
+    }
+
+    /**
+     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
+     *
+     * @param enclosingType Describes the type that contains this object as a field, to determine
+     *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
+     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag)}.
+     */
+    public ObjectAccessor<T> getBlueAccessor(
+        TypeTag enclosingType,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return buildObjectAccessor()
-            .scramble(prefabValues, enclosingType)
-            .scramble(prefabValues, enclosingType);
+            .scramble(prefabValues, enclosingType, typeStack)
+            .scramble(prefabValues, enclosingType, typeStack);
     }
 
     /**

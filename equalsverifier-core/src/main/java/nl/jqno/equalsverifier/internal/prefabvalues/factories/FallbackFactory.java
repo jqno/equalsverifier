@@ -97,8 +97,8 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     ) {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
         T red = accessor.getRedObject(tag, typeStack);
-        T blue = accessor.getBlueObject(tag);
-        T redCopy = accessor.getRedObject(tag);
+        T blue = accessor.getBlueObject(tag, typeStack);
+        T redCopy = accessor.getRedObject(tag, typeStack);
         return new Tuple<>(red, blue, redCopy);
     }
 }

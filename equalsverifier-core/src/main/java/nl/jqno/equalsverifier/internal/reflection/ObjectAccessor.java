@@ -127,10 +127,9 @@ public abstract class ObjectAccessor<T> {
      * @param prefabValues Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
+     * @param typeStack Keeps track of recursion in the type.
      * @return An accessor to the scrambled object.
      */
-    public abstract ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType);
-
     public abstract ObjectAccessor<T> scramble(
         PrefabValues prefabValues,
         TypeTag enclosingType,

@@ -2,26 +2,37 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 class SealedTypesRecursionTest {
 
     @Test
     public void testEV() {
-        EqualsVerifier
-            .forClass(A.class)
-            .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
-            .verify();
+        // A container with a field of a sealed interface.
+        // The sealed interface permits only 1 type, which refers back to the container.
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SealedContainer.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Recursive datastructure",
+                "Add prefab values for one of the following types",
+                "SealedContainer",
+                "SealedInterface"
+            );
     }
 
-    class A {
+    static final class SealedContainer {
 
-        public I sealedClassField;
+        public final SealedInterface sealed;
+
+        public SealedContainer(SealedInterface sealed) {
+            this.sealed = sealed;
+        }
 
         @Override
         public int hashCode() {
-            return Objects.hash(sealedClassField);
+            return Objects.hash(sealed);
         }
 
         @Override
@@ -29,23 +40,27 @@ class SealedTypesRecursionTest {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof A)) {
+            if (!(obj instanceof SealedContainer)) {
                 return false;
             }
-            A other = (A) obj;
-            return Objects.equals(sealedClassField, other.sealedClassField);
+            SealedContainer other = (SealedContainer) obj;
+            return Objects.equals(sealed, other.sealed);
         }
     }
 
-    public sealed interface I permits E {}
+    sealed interface SealedInterface permits OnlyPermittedImplementation {}
 
-    public final class E implements I {
+    static final class OnlyPermittedImplementation implements SealedInterface {
 
-        public A referenceToA;
+        public final SealedContainer container;
+
+        public OnlyPermittedImplementation(SealedContainer container) {
+            this.container = container;
+        }
 
         @Override
         public int hashCode() {
-            return Objects.hash(referenceToA);
+            return Objects.hash(container);
         }
 
         @Override
@@ -53,11 +68,11 @@ class SealedTypesRecursionTest {
             if (this == obj) {
                 return true;
             }
-            if (!(obj instanceof E)) {
+            if (!(obj instanceof OnlyPermittedImplementation)) {
                 return false;
             }
-            E other = (E) obj;
-            return Objects.equals(referenceToA, other.referenceToA);
+            OnlyPermittedImplementation other = (OnlyPermittedImplementation) obj;
+            return Objects.equals(container, other.container);
         }
     }
 }

@@ -50,12 +50,6 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public ObjectAccessor<T> scramble(PrefabValues prefabValues, TypeTag enclosingType) {
-        return scramble(prefabValues, enclosingType, new LinkedHashSet<>());
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public ObjectAccessor<T> scramble(
         PrefabValues prefabValues,
         TypeTag enclosingType,
