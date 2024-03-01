@@ -43,35 +43,11 @@
 }
 
 @font-face {
-  font-family: 'CommitMono';
-  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
+  font-family: 'FiraCode';
+  src: url('{{ site.url }}/assets/firacode/FiraCode-VF.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
-  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
-}
-
-@font-face {
-  font-family: 'CommitMono';
-  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
-}
-
-@font-face {
-  font-family: 'CommitMono';
-  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
-}
-
-@font-face {
-  font-family: 'CommitMono';
-  src: url('{{ site.url }}/assets/commitmono/CommitMono VariableFont.woff2') format('woff2');
-  font-weight: 700;
-  font-style: italic;
-  font-feature-settings: 'cv07' 1, 'cv08' 1, 'ss05' 1;
+  font-feature-settings: 'ss04' 1, 'cv14' 1;
 }
 
 body,
@@ -110,7 +86,8 @@ h3 {
 }
 
 code {
-  font-family: 'CommitMono', $monospace;
+  font-family: 'FiraCode', $monospace;
+  font-variant-ligatures: none;
 }
 
 .feature__item {
