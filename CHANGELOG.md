@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.15.8] - 2024-03-01
+
 ### Fixed
 
 - Final entities with @GeneratedValue could not be verified. ([Issue 929](https://github.com/jqno/equalsverifier/issues/929))
@@ -1199,7 +1201,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.7...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.8...HEAD
+[3.15.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.7...equalsverifier-3.15.8
 [3.15.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.6...equalsverifier-3.15.7
 [3.15.6]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.5...equalsverifier-3.15.6
 [3.15.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.4...equalsverifier-3.15.5
