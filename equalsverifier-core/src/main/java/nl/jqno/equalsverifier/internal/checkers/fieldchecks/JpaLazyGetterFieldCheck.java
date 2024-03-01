@@ -4,6 +4,7 @@ import static net.bytebuddy.implementation.ExceptionMethod.throwing;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
+import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
@@ -49,7 +50,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
         if (
             !fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor, true) ||
-            !fieldIsLazy(fieldAccessor)
+            !fieldIsLazy(fieldAccessor) ||
+            Modifier.isFinal(type.getModifiers())
         ) {
             return;
         }

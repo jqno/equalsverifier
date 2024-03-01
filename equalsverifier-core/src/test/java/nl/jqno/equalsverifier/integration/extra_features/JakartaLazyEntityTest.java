@@ -176,6 +176,11 @@ public class JakartaLazyEntityTest {
         EqualsVerifier.forClass(ProtectedJakartaLazyFieldContainer.class).verify();
     }
 
+    @Test
+    public void finalEntitiesArentLazy() {
+        EqualsVerifier.forClass(FinalEntity.class).verify();
+    }
+
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
@@ -716,6 +721,31 @@ public class JakartaLazyEntityTest {
         @Override
         public int hashCode() {
             return Objects.hash(getBasic());
+        }
+    }
+
+    @Entity
+    static final class FinalEntity {
+
+        @GeneratedValue // which is considered lazy
+        private int id;
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof FinalEntity)) {
+                return false;
+            }
+            FinalEntity other = (FinalEntity) obj;
+            return Objects.equals(getId(), other.getId());
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getId());
         }
     }
 }

@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Final entities with @GeneratedValue could not be verified. ([Issue 929](https://github.com/jqno/equalsverifier/issues/929))
+
 ## [3.15.7] - 2024-02-23
 
 ### Fixed
