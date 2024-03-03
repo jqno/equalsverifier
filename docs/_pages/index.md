@@ -6,16 +6,16 @@ layout: splash
 header:
   overlay_color: "#263238"
 imagebutton_row:
-  - image_path: "images/getting-started.jpg"
+  - image_path: "images/getting-started.webp"
     title: "Getting Started"
     url: "manual/getting-started/"
-  - image_path: "images/manual.jpg"
+  - image_path: "images/manual.webp"
     title: "Manual"
     url: "manual/"
-  - image_path: "images/error-messages.jpg"
+  - image_path: "images/error-messages.webp"
     title: "Error messages explained"
     url: "errormessages/"
-  - image_path: "images/resources.jpg"
+  - image_path: "images/resources.webp"
     title: "Additional resources"
     url: "resources/"
 ---

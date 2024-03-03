@@ -59,8 +59,6 @@ defaults:
     values:
       layout: single
       author_profile: true
-      header:
-        og_image: "images/banner.png"
       share: false
       related: false
 
