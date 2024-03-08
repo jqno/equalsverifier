@@ -53,7 +53,7 @@ public class FieldsChecker<T> implements Checker {
             new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(prefabValues, typeTag);
         this.transientFieldsCheck = new TransientFieldsCheck<>(config);
-        this.transitivityFieldCheck = new TransitivityFieldCheck<>(prefabValues, typeTag);
+        this.transitivityFieldCheck = new TransitivityFieldCheck<>(subjectCreator);
         this.stringFieldCheck =
             new StringFieldCheck<>(config.getPrefabValues(), config.getCachedHashCodeInitializer());
         this.bigDecimalFieldCheck =

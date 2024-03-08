@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 public class SubjectCreator<T> {
@@ -31,6 +32,14 @@ public class SubjectCreator<T> {
 
     public T withFieldChanged(Field field) {
         return createSubject().withChangedField(field, prefabValues, typeTag).get();
+    }
+
+    public T withAllFieldsChanged() {
+        ObjectAccessor<T> accessor = createSubject();
+        for (Field f : FieldIterable.of(typeTag.getType())) {
+            accessor = accessor.withChangedField(f, prefabValues, typeTag);
+        }
+        return accessor.get();
     }
 
     private ObjectAccessor<T> createSubject() {
