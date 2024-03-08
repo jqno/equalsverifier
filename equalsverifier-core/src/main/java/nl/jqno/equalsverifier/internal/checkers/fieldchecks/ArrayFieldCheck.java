@@ -12,8 +12,8 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ArrayFieldCheck<T> implements FieldCheck<T> {
 
-    private SubjectCreator<T> subjectCreator;
-    private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final SubjectCreator<T> subjectCreator;
+    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public ArrayFieldCheck(
         SubjectCreator<T> subjectCreator,
