@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
@@ -32,6 +33,7 @@ public class FieldsChecker<T> implements Checker {
 
         final PrefabValues prefabValues = config.getPrefabValues();
         final TypeTag typeTag = config.getTypeTag();
+        final SubjectCreator<T> subjectCreator = new SubjectCreator<>(typeTag, prefabValues);
 
         final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
@@ -40,7 +42,7 @@ public class FieldsChecker<T> implements Checker {
             a.getFieldName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
-        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>();
+        this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck =
             new MutableStateFieldCheck<>(prefabValues, typeTag, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
@@ -54,7 +56,7 @@ public class FieldsChecker<T> implements Checker {
         this.stringFieldCheck =
             new StringFieldCheck<>(config.getPrefabValues(), config.getCachedHashCodeInitializer());
         this.bigDecimalFieldCheck =
-            new BigDecimalFieldCheck<>(config.getCachedHashCodeInitializer());
+            new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
     }
 

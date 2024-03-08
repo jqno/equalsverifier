@@ -1,0 +1,36 @@
+package nl.jqno.equalsverifier.internal.instantiation;
+
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+
+public class SubjectCreator<T> {
+
+    private final TypeTag typeTag;
+    private final PrefabValues prefabValues;
+
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "PrefabValues is inherently mutable."
+    )
+    public SubjectCreator(TypeTag typeTag, PrefabValues prefabValues) {
+        this.typeTag = typeTag;
+        this.prefabValues = prefabValues;
+    }
+
+    public T plain() {
+        return createSubject().get();
+    }
+
+    public T withFieldSetTo(Field field, Object value) {
+        return createSubject().withFieldSetTo(field, value).get();
+    }
+
+    private ObjectAccessor<T> createSubject() {
+        ClassAccessor<T> accessor = ClassAccessor.of(typeTag.getType(), prefabValues);
+        return accessor.getRedAccessor(TypeTag.NULL);
+    }
+}
