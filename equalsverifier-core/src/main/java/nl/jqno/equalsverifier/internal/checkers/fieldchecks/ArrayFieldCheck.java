@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -11,29 +12,31 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ArrayFieldCheck<T> implements FieldCheck<T> {
 
+    private SubjectCreator<T> subjectCreator;
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ArrayFieldCheck(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+    public ArrayFieldCheck(
+        SubjectCreator<T> subjectCreator,
+        CachedHashCodeInitializer<T> cachedHashCodeInitializer
+    ) {
+        this.subjectCreator = subjectCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Class<?> arrayType = fieldAccessor.getFieldType();
+    public void execute(Field changedField) {
+        Class<?> arrayType = changedField.getType();
         if (!arrayType.isArray()) {
             return;
         }
+        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
         if (!fieldAccessor.canBeModifiedReflectively()) {
             return;
         }
 
-        String fieldName = fieldAccessor.getFieldName();
-        T reference = referenceAccessor.get();
-        T changed = replaceInnermostArrayValue(copyAccessor, fieldAccessor.getField()).get();
+        String fieldName = changedField.getName();
+        T reference = subjectCreator.plain();
+        T changed = replaceInnermostArrayValue(reference, changedField);
 
         if (arrayType.getComponentType().isArray()) {
             assertDeep(fieldName, reference, changed);
@@ -42,9 +45,12 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private ObjectAccessor<T> replaceInnermostArrayValue(ObjectAccessor<T> accessor, Field field) {
-        Object newArray = arrayCopy(accessor.getField(field));
-        return accessor.withFieldSetTo(field, newArray);
+    private T replaceInnermostArrayValue(T reference, Field field) {
+        // Object newArray = arrayCopy(accessor.getField(field));
+        // return accessor.withFieldSetTo(field, newArray);
+        ObjectAccessor<T> objectAccessor = ObjectAccessor.of(reference);
+        Object newArray = arrayCopy(objectAccessor.getField(field));
+        return subjectCreator.withFieldSetTo(field, newArray);
     }
 
     private Object arrayCopy(Object array) {
