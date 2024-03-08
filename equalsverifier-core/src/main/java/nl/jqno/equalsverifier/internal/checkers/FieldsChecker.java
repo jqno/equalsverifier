@@ -41,10 +41,11 @@ public class FieldsChecker<T> implements Checker {
         final Predicate<FieldAccessor> isCachedHashCodeField = a ->
             a.getFieldName().equals(cachedHashCodeFieldName);
 
-        this.arrayFieldCheck = new ArrayFieldCheck<>(config.getCachedHashCodeInitializer());
+        this.arrayFieldCheck =
+            new ArrayFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck =
-            new MutableStateFieldCheck<>(prefabValues, typeTag, isCachedHashCodeField);
+            new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
         this.significantFieldCheck =
             new SignificantFieldCheck<>(config, isCachedHashCodeField, false);

@@ -29,6 +29,10 @@ public class SubjectCreator<T> {
         return createSubject().withFieldSetTo(field, value).get();
     }
 
+    public T withFieldChanged(Field field) {
+        return createSubject().withChangedField(field, prefabValues, typeTag).get();
+    }
+
     private ObjectAccessor<T> createSubject() {
         ClassAccessor<T> accessor = ClassAccessor.of(typeTag.getType(), prefabValues);
         return accessor.getRedAccessor(TypeTag.NULL);
