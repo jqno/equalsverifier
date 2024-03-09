@@ -26,6 +26,10 @@ public class SubjectCreator<T> {
         return createSubject().get();
     }
 
+    public T withFieldDefaulted(Field field) {
+        return createSubject().withDefaultedField(field).get();
+    }
+
     public T withFieldSetTo(Field field, Object value) {
         return createSubject().withFieldSetTo(field, value).get();
     }

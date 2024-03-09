@@ -7,11 +7,11 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -20,13 +20,15 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
+    private final SubjectCreator<T> subjectCreator;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
-    public ReflexivityFieldCheck(Configuration<T> config) {
+    public ReflexivityFieldCheck(SubjectCreator<T> subjectCreator, Configuration<T> config) {
+        this.subjectCreator = subjectCreator;
         this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
@@ -35,43 +37,31 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
+    public void execute(Field changedField) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
             return;
         }
 
-        checkReferenceReflexivity(referenceAccessor, copyAccessor);
-        checkValueReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
-        checkNullReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
+        checkReferenceReflexivity();
+        checkValueReflexivity(changedField);
+        checkNullReflexivity(changedField);
     }
 
-    private void checkReferenceReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor
-    ) {
-        T left = referenceAccessor.get();
-        T right = copyAccessor.get();
+    private void checkReferenceReflexivity() {
+        T left = subjectCreator.plain();
+        T right = subjectCreator.plain();
         checkReflexivityFor(left, right);
     }
 
-    private void checkValueReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Field field = fieldAccessor.getField();
-        Class<?> fieldType = field.getType();
+    private void checkValueReflexivity(Field changedField) {
+        Class<?> fieldType = changedField.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
         }
         if (fieldType.equals(Object.class) || fieldType.isInterface()) {
             return;
         }
-        if (fieldAccessor.fieldIsStatic()) {
+        if (FieldAccessor.of(changedField).fieldIsStatic()) {
             return;
         }
         ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
@@ -83,24 +73,21 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        TypeTag tag = TypeTag.of(field, typeTag);
-        Object left = referenceAccessor.withFieldSetTo(field, prefabValues.giveRed(tag)).get();
-        Object right = copyAccessor.withFieldSetTo(field, prefabValues.giveRedCopy(tag)).get();
+        TypeTag tag = TypeTag.of(changedField, typeTag);
+        Object left = subjectCreator.withFieldSetTo(changedField, prefabValues.giveRed(tag));
+        Object right = subjectCreator.withFieldSetTo(changedField, prefabValues.giveRedCopy(tag));
 
         Formatter f = Formatter.of(
             "Reflexivity: == used instead of .equals() on field: %%" +
             "\nIf this is intentional, consider suppressing Warning.%%",
-            field.getName(),
+            changedField.getName(),
             Warning.REFERENCE_EQUALITY.toString()
         );
         assertEquals(f, left, right);
     }
 
-    private void checkNullReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
+    private void checkNullReflexivity(Field changedField) {
+        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
         if (fieldAccessor.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
             return;
         }
@@ -113,8 +100,8 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        T left = referenceAccessor.withDefaultedField(field).get();
-        T right = copyAccessor.withDefaultedField(field).get();
+        T left = subjectCreator.withFieldDefaulted(field);
+        T right = subjectCreator.withFieldDefaulted(field);
         checkReflexivityFor(left, right);
     }
 
