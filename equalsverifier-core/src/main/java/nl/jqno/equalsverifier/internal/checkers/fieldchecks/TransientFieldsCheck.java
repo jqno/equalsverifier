@@ -2,54 +2,52 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class TransientFieldsCheck<T> implements FieldCheck<T> {
 
-    private final PrefabValues prefabValues;
+    private final SubjectCreator<T> subjectCreator;
     private final TypeTag typeTag;
     private final AnnotationCache annotationCache;
 
-    public TransientFieldsCheck(Configuration<T> config) {
-        this.prefabValues = config.getPrefabValues();
-        this.typeTag = config.getTypeTag();
-        this.annotationCache = config.getAnnotationCache();
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
+    public TransientFieldsCheck(
+        SubjectCreator<T> subjectCreator,
+        TypeTag typeTag,
+        AnnotationCache annotationCache
+    ) {
+        this.subjectCreator = subjectCreator;
+        this.typeTag = typeTag;
+        this.annotationCache = annotationCache;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Field field = fieldAccessor.getField();
-        T reference = referenceAccessor.get();
-        T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
+    public void execute(Field changedField) {
+        T reference = subjectCreator.plain();
+        T changed = subjectCreator.withFieldChanged(changedField);
 
         boolean equalsChanged = !reference.equals(changed);
         boolean hasAnnotation = annotationCache.hasFieldAnnotation(
             typeTag.getType(),
-            field.getName(),
+            changedField.getName(),
             SupportedAnnotations.TRANSIENT
         );
-        boolean fieldIsTransient = fieldAccessor.fieldIsTransient() || hasAnnotation;
+        boolean fieldIsTransient =
+            FieldAccessor.of(changedField).fieldIsTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                 Formatter.of(
                     "Transient field %% should not be included in equals/hashCode contract.",
-                    field.getName()
+                    changedField.getName()
                 )
             );
         }
-
-        referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
 }

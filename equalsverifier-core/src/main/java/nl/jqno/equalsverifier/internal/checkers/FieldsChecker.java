@@ -46,16 +46,21 @@ public class FieldsChecker<T> implements Checker {
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck =
             new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
-        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
+        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(subjectCreator, config);
         this.significantFieldCheck =
             new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
         this.skippingSignificantFieldCheck =
             new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
-        this.symmetryFieldCheck = new SymmetryFieldCheck<>(prefabValues, typeTag);
-        this.transientFieldsCheck = new TransientFieldsCheck<>(config);
+        this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
+        this.transientFieldsCheck =
+            new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(subjectCreator);
         this.stringFieldCheck =
-            new StringFieldCheck<>(config.getPrefabValues(), config.getCachedHashCodeInitializer());
+            new StringFieldCheck<>(
+                subjectCreator,
+                config.getPrefabValues(),
+                config.getCachedHashCodeInitializer()
+            );
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);

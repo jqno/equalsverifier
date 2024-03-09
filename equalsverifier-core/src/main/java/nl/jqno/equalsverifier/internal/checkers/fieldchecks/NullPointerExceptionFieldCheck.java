@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -17,40 +18,40 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 )
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
-    private Configuration<T> config;
+    private final SubjectCreator<T> subjectCreator;
+    private final Configuration<T> config;
 
-    public NullPointerExceptionFieldCheck(Configuration<T> config) {
+    public NullPointerExceptionFieldCheck(
+        SubjectCreator<T> subjectCreator,
+        Configuration<T> config
+    ) {
+        this.subjectCreator = subjectCreator;
         this.config = config;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        if (config.getNonnullFields().contains(fieldAccessor.getFieldName())) {
+    public void execute(Field changedField) {
+        if (config.getNonnullFields().contains(changedField.getName())) {
             return;
         }
-        if (fieldAccessor.getFieldType().isPrimitive()) {
+        if (changedField.getType().isPrimitive()) {
             return;
         }
-        Field field = fieldAccessor.getField();
-        if (NonnullAnnotationVerifier.fieldIsNonnull(field, config.getAnnotationCache())) {
+        if (NonnullAnnotationVerifier.fieldIsNonnull(changedField, config.getAnnotationCache())) {
             return;
         }
 
-        if (fieldAccessor.fieldIsStatic()) {
-            FieldModifier fieldModifier = FieldModifier.of(field, referenceAccessor.get());
-            Object saved = referenceAccessor.getField(field);
+        if (FieldAccessor.of(changedField).fieldIsStatic()) {
+            T reference = subjectCreator.plain();
+            FieldModifier fieldModifier = FieldModifier.of(changedField, reference);
+            Object saved = ObjectAccessor.of(reference).getField(changedField);
 
             fieldModifier.defaultStaticField();
-            performTests(field, referenceAccessor.get(), copyAccessor.get());
+            performTests(changedField, subjectCreator.plain(), subjectCreator.plain());
             fieldModifier.set(saved);
         } else {
-            ObjectAccessor<?> changed = copyAccessor.withDefaultedField(field);
-            performTests(field, referenceAccessor.get(), changed.get());
-            referenceAccessor.withDefaultedField(field);
+            T changed = subjectCreator.withFieldDefaulted(changedField);
+            performTests(changedField, subjectCreator.plain(), changed);
         }
     }
 
