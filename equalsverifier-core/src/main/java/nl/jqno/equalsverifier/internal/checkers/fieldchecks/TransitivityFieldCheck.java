@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -20,9 +20,9 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
+    public void execute(FieldProbe fieldProbe) {
         T a1 = subjectCreator.plain();
-        T b1 = subjectCreator.withFieldChanged(changedField);
+        T b1 = subjectCreator.withFieldChanged(fieldProbe.getField());
         T b2 = subjectCreator.withAllFieldsChanged();
 
         boolean x = a1.equals(b1);

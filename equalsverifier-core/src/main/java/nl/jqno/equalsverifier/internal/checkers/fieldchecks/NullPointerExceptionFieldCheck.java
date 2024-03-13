@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
@@ -30,28 +31,33 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
-        if (config.getNonnullFields().contains(changedField.getName())) {
+    public void execute(FieldProbe fieldProbe) {
+        if (config.getNonnullFields().contains(fieldProbe.getName())) {
             return;
         }
-        if (changedField.getType().isPrimitive()) {
+        if (fieldProbe.fieldIsPrimitive()) {
             return;
         }
-        if (NonnullAnnotationVerifier.fieldIsNonnull(changedField, config.getAnnotationCache())) {
+        if (
+            NonnullAnnotationVerifier.fieldIsNonnull(
+                fieldProbe.getField(),
+                config.getAnnotationCache()
+            )
+        ) {
             return;
         }
 
-        if (FieldAccessor.of(changedField).fieldIsStatic()) {
+        if (FieldAccessor.of(fieldProbe.getField()).fieldIsStatic()) {
             T reference = subjectCreator.plain();
-            FieldModifier fieldModifier = FieldModifier.of(changedField, reference);
-            Object saved = ObjectAccessor.of(reference).getField(changedField);
+            FieldModifier fieldModifier = FieldModifier.of(fieldProbe.getField(), reference);
+            Object saved = ObjectAccessor.of(reference).getField(fieldProbe.getField());
 
             fieldModifier.defaultStaticField();
-            performTests(changedField, subjectCreator.plain(), subjectCreator.plain());
+            performTests(fieldProbe.getField(), subjectCreator.plain(), subjectCreator.plain());
             fieldModifier.set(saved);
         } else {
-            T changed = subjectCreator.withFieldDefaulted(changedField);
-            performTests(changedField, subjectCreator.plain(), changed);
+            T changed = subjectCreator.withFieldDefaulted(fieldProbe.getField());
+            performTests(fieldProbe.getField(), subjectCreator.plain(), changed);
         }
     }
 

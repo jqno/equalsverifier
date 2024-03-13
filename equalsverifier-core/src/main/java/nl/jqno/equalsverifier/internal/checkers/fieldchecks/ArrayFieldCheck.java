@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -24,30 +25,27 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
-        Class<?> arrayType = changedField.getType();
+    public void execute(FieldProbe fieldProbe) {
+        Class<?> arrayType = fieldProbe.getType();
         if (!arrayType.isArray()) {
             return;
         }
-        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
+        FieldAccessor fieldAccessor = FieldAccessor.of(fieldProbe.getField());
         if (!fieldAccessor.canBeModifiedReflectively()) {
             return;
         }
 
-        String fieldName = changedField.getName();
         T reference = subjectCreator.plain();
-        T changed = replaceInnermostArrayValue(reference, changedField);
+        T changed = replaceInnermostArrayValue(reference, fieldProbe.getField());
 
         if (arrayType.getComponentType().isArray()) {
-            assertDeep(fieldName, reference, changed);
+            assertDeep(fieldProbe.getName(), reference, changed);
         } else {
-            assertArray(fieldName, reference, changed);
+            assertArray(fieldProbe.getName(), reference, changed);
         }
     }
 
     private T replaceInnermostArrayValue(T reference, Field field) {
-        // Object newArray = arrayCopy(accessor.getField(field));
-        // return accessor.withFieldSetTo(field, newArray);
         ObjectAccessor<T> objectAccessor = ObjectAccessor.of(reference);
         Object newArray = arrayCopy(objectAccessor.getField(field));
         return subjectCreator.withFieldSetTo(field, newArray);

@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.checkers;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.NullPointerExceptionFieldCheck;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class NullChecker<T> implements Checker {
@@ -20,13 +19,7 @@ public class NullChecker<T> implements Checker {
             return;
         }
 
-        ClassAccessor<T> classAccessor = config.getClassAccessor();
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
-        inspector.check(
-            new NullPointerExceptionFieldCheck<>(
-                new SubjectCreator<>(config.getTypeTag(), config.getPrefabValues()),
-                config
-            )
-        );
+        FieldInspector<T> inspector = new FieldInspector<>(config.getType(), config);
+        inspector.check(new NullPointerExceptionFieldCheck<>(new SubjectCreator<>(config), config));
     }
 }

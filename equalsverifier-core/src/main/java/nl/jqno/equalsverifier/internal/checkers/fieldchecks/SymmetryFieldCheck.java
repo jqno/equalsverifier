@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -20,11 +20,11 @@ public class SymmetryFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
+    public void execute(FieldProbe fieldProbe) {
         T left = subjectCreator.plain();
         T right = subjectCreator.plain();
-        T changedLeft = subjectCreator.withFieldChanged(changedField);
-        T changedRight = subjectCreator.withFieldChanged(changedField);
+        T changedLeft = subjectCreator.withFieldChanged(fieldProbe.getField());
+        T changedRight = subjectCreator.withFieldChanged(fieldProbe.getField());
 
         checkSymmetry(left, right);
         checkSymmetry(left, changedRight);
