@@ -63,7 +63,7 @@ public class FieldsChecker<T> implements Checker {
             );
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
-        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
+        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(subjectCreator, config);
     }
 
     @Override
