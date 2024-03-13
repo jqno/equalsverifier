@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
-import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -15,27 +15,27 @@ public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
-        Class<?> type = changedField.getType();
+    public void execute(FieldProbe fieldProbe) {
+        Class<?> type = fieldProbe.getType();
         if (isFloat(type)) {
-            T reference = subjectCreator.withFieldSetTo(changedField, Float.NaN);
-            T copy = subjectCreator.withFieldSetTo(changedField, Float.NaN);
+            T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
+            T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
             assertEquals(
                 Formatter.of(
                     "Float: equals doesn't use Float.compare for field %%.",
-                    changedField.getName()
+                    fieldProbe.getName()
                 ),
                 reference,
                 copy
             );
         }
         if (isDouble(type)) {
-            T reference = subjectCreator.withFieldSetTo(changedField, Double.NaN);
-            T copy = subjectCreator.withFieldSetTo(changedField, Double.NaN);
+            T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
+            T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
             assertEquals(
                 Formatter.of(
                     "Double: equals doesn't use Double.compare for field %%.",
-                    changedField.getName()
+                    fieldProbe.getName()
                 ),
                 reference,
                 copy

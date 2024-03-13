@@ -4,7 +4,6 @@ import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
@@ -20,7 +19,6 @@ public class FieldsChecker<T> implements Checker {
     private final MutableStateFieldCheck<T> mutableStateFieldCheck;
     private final ReflexivityFieldCheck<T> reflexivityFieldCheck;
     private final SignificantFieldCheck<T> significantFieldCheck;
-    private final SignificantFieldCheck<T> skippingSignificantFieldCheck;
     private final SymmetryFieldCheck<T> symmetryFieldCheck;
     private final TransientFieldsCheck<T> transientFieldsCheck;
     private final TransitivityFieldCheck<T> transitivityFieldCheck;
@@ -31,9 +29,8 @@ public class FieldsChecker<T> implements Checker {
     public FieldsChecker(Configuration<T> config) {
         this.config = config;
 
-        final PrefabValues prefabValues = config.getPrefabValues();
         final TypeTag typeTag = config.getTypeTag();
-        final SubjectCreator<T> subjectCreator = new SubjectCreator<>(typeTag, prefabValues);
+        final SubjectCreator<T> subjectCreator = new SubjectCreator<>(config);
 
         final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
@@ -48,9 +45,7 @@ public class FieldsChecker<T> implements Checker {
             new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(subjectCreator, config);
         this.significantFieldCheck =
-            new SignificantFieldCheck<>(config, isCachedHashCodeField, false);
-        this.skippingSignificantFieldCheck =
-            new SignificantFieldCheck<>(config, isCachedHashCodeField, true);
+            new SignificantFieldCheck<>(subjectCreator, config, isCachedHashCodeField);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
         this.transientFieldsCheck =
             new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
@@ -69,7 +64,7 @@ public class FieldsChecker<T> implements Checker {
     @Override
     public void check() {
         ClassAccessor<T> classAccessor = config.getClassAccessor();
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
+        FieldInspector<T> inspector = new FieldInspector<>(classAccessor.getType(), config);
 
         if (!classAccessor.isEqualsInheritedFromObject()) {
             inspector.check(arrayFieldCheck);
@@ -89,14 +84,6 @@ public class FieldsChecker<T> implements Checker {
         inspector.check(symmetryFieldCheck);
         inspector.check(transitivityFieldCheck);
         inspector.check(stringFieldCheck);
-
-        inspector.checkWithNull(
-            config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
-            config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
-            config.getNonnullFields(),
-            config.getAnnotationCache(),
-            skippingSignificantFieldCheck
-        );
 
         if (!config.getWarningsToSuppress().contains(Warning.BIGDECIMAL_EQUALITY)) {
             inspector.check(bigDecimalFieldCheck);

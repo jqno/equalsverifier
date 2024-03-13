@@ -6,8 +6,8 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -27,21 +27,20 @@ public class BigDecimalFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
-        if (BigDecimal.class.equals(changedField.getType())) {
+    public void execute(FieldProbe fieldProbe) {
+        if (BigDecimal.class.equals(fieldProbe.getType())) {
             T left = subjectCreator.plain();
-            ObjectAccessor<T> acc = ObjectAccessor.of(left);
 
-            BigDecimal referenceValue = (BigDecimal) acc.getField(changedField);
+            BigDecimal referenceValue = (BigDecimal) fieldProbe.getValue(left);
             BigDecimal changedValue = referenceValue.setScale(
                 referenceValue.scale() + 1,
                 RoundingMode.UNNECESSARY
             );
 
-            T right = subjectCreator.withFieldSetTo(changedField, changedValue);
+            T right = subjectCreator.withFieldSetTo(fieldProbe.getField(), changedValue);
 
-            checkEquals(changedField, referenceValue, changedValue, left, right);
-            checkHashCode(changedField, referenceValue, changedValue, left, right);
+            checkEquals(fieldProbe.getField(), referenceValue, changedValue, left, right);
+            checkHashCode(fieldProbe.getField(), referenceValue, changedValue, left, right);
         }
     }
 

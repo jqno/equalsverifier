@@ -8,65 +8,73 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
+    private final SubjectCreator<T> subjectCreator;
     private final Class<T> type;
-    private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> ignoredFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final AnnotationCache annotationCache;
     private final Predicate<FieldAccessor> isCachedHashCodeField;
-    private final boolean skipCertainTestsThatDontMatterWhenValuesAreNull;
 
     public SignificantFieldCheck(
+        SubjectCreator<T> subjectCreator,
         Configuration<T> config,
-        Predicate<FieldAccessor> isCachedHashCodeField,
-        boolean skipCertainTestsThatDontMatterWhenValuesAreNull
+        Predicate<FieldAccessor> isCachedHashCodeField
     ) {
+        this.subjectCreator = subjectCreator;
         this.type = config.getType();
-        this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
         this.annotationCache = config.getAnnotationCache();
         this.isCachedHashCodeField = isCachedHashCodeField;
-        this.skipCertainTestsThatDontMatterWhenValuesAreNull =
-            skipCertainTestsThatDontMatterWhenValuesAreNull;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
+    public void execute(FieldProbe fieldProbe) {
+        Field changedField = fieldProbe.getField();
+        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
         if (isCachedHashCodeField.test(fieldAccessor)) {
             return;
         }
 
-        Field field = fieldAccessor.getField();
-        T reference = referenceAccessor.get();
-        T copy = copyAccessor.get();
-        String fieldName = field.getName();
+        checkValues(
+            subjectCreator.plain(),
+            subjectCreator.plain(),
+            subjectCreator.withFieldChanged(fieldProbe.getField()),
+            fieldProbe,
+            false
+        );
+        if (fieldProbe.canBeDefault()) {
+            checkValues(
+                subjectCreator.withAllFieldsDefaulted(),
+                subjectCreator.withAllFieldsDefaulted(),
+                subjectCreator.withAllFieldsDefaultedExcept(fieldProbe.getField()),
+                fieldProbe,
+                true
+            );
+        }
+    }
+
+    private void checkValues(
+        T reference,
+        T copy,
+        T changed,
+        FieldProbe probe,
+        boolean testWithNull
+    ) {
+        String fieldName = probe.getField().getName();
 
         boolean equalToItself = reference.equals(copy);
-
-        T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
-
         boolean equalsChanged = !reference.equals(changed);
         boolean hashCodeChanged =
             cachedHashCodeInitializer.getInitializedHashCode(reference) !=
@@ -77,17 +85,17 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             hashCodeChanged,
             reference,
             changed,
-            fieldName
+            fieldName,
+            testWithNull
         );
         assertFieldShouldBeIgnored(
             equalToItself,
             equalsChanged,
-            referenceAccessor.get(),
-            fieldAccessor,
-            fieldName
+            reference,
+            FieldAccessor.of(probe.getField()),
+            fieldName,
+            testWithNull
         );
-
-        referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
 
     private void assertEqualsAndHashCodeRelyOnSameFields(
@@ -95,12 +103,12 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         boolean hashCodeChanged,
         T reference,
         T changed,
-        String fieldName
+        String fieldName,
+        boolean testWithNull
     ) {
         if (equalsChanged != hashCodeChanged) {
             boolean skipEqualsHasMoreThanHashCodeTest =
-                warningsToSuppress.contains(Warning.STRICT_HASHCODE) ||
-                skipCertainTestsThatDontMatterWhenValuesAreNull;
+                warningsToSuppress.contains(Warning.STRICT_HASHCODE) || testWithNull;
             if (!skipEqualsHasMoreThanHashCodeTest) {
                 Formatter formatter = Formatter.of(
                     "Significant fields: equals relies on %%, but hashCode does not." +
@@ -129,7 +137,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         boolean equalsChanged,
         T object,
         FieldAccessor fieldAccessor,
-        String fieldName
+        String fieldName,
+        boolean testWithNull
     ) {
         if (!shouldAllFieldsBeUsed(fieldAccessor) || !isFieldEligible(fieldAccessor)) {
             return;
@@ -165,7 +174,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             equalsChanged,
             fieldShouldBeIgnored,
             thisFieldIsMarkedAsId,
-            anotherFieldIsMarkedAsId
+            anotherFieldIsMarkedAsId,
+            testWithNull
         );
     }
 
@@ -236,7 +246,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         boolean equalsChanged,
         boolean fieldShouldBeIgnored,
         boolean thisFieldIsMarkedAsId,
-        boolean anotherFieldIsMarkedAsId
+        boolean anotherFieldIsMarkedAsId,
+        boolean testWithNull
     ) {
         final String message;
         if (thisFieldIsMarkedAsId) {
@@ -255,9 +266,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
         assertTrue(
             Formatter.of(message, fieldName),
-            !fieldShouldBeIgnored ||
-            !equalsChanged ||
-            skipCertainTestsThatDontMatterWhenValuesAreNull
+            !fieldShouldBeIgnored || !equalsChanged || testWithNull
         );
     }
 }

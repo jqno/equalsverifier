@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
@@ -29,23 +29,23 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
+    public void execute(FieldProbe fieldProbe) {
         T reference = subjectCreator.plain();
-        T changed = subjectCreator.withFieldChanged(changedField);
+        T changed = subjectCreator.withFieldChanged(fieldProbe.getField());
 
         boolean equalsChanged = !reference.equals(changed);
         boolean hasAnnotation = annotationCache.hasFieldAnnotation(
             typeTag.getType(),
-            changedField.getName(),
+            fieldProbe.getName(),
             SupportedAnnotations.TRANSIENT
         );
         boolean fieldIsTransient =
-            FieldAccessor.of(changedField).fieldIsTransient() || hasAnnotation;
+            FieldAccessor.of(fieldProbe.getField()).fieldIsTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                 Formatter.of(
                     "Transient field %% should not be included in equals/hashCode contract.",
-                    changedField.getName()
+                    fieldProbe.getName()
                 )
             );
         }

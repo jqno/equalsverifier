@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -37,14 +38,14 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
+    public void execute(FieldProbe fieldProbe) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
             return;
         }
 
         checkReferenceReflexivity();
-        checkValueReflexivity(changedField);
-        checkNullReflexivity(changedField);
+        checkValueReflexivity(fieldProbe.getField());
+        checkNullReflexivity(fieldProbe);
     }
 
     private void checkReferenceReflexivity() {
@@ -53,15 +54,15 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         checkReflexivityFor(left, right);
     }
 
-    private void checkValueReflexivity(Field changedField) {
-        Class<?> fieldType = changedField.getType();
+    private void checkValueReflexivity(Field field) {
+        Class<?> fieldType = field.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
         }
         if (fieldType.equals(Object.class) || fieldType.isInterface()) {
             return;
         }
-        if (FieldAccessor.of(changedField).fieldIsStatic()) {
+        if (FieldAccessor.of(field).fieldIsStatic()) {
             return;
         }
         ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
@@ -73,26 +74,25 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        TypeTag tag = TypeTag.of(changedField, typeTag);
-        Object left = subjectCreator.withFieldSetTo(changedField, prefabValues.giveRed(tag));
-        Object right = subjectCreator.withFieldSetTo(changedField, prefabValues.giveRedCopy(tag));
+        TypeTag tag = TypeTag.of(field, typeTag);
+        Object left = subjectCreator.withFieldSetTo(field, prefabValues.giveRed(tag));
+        Object right = subjectCreator.withFieldSetTo(field, prefabValues.giveRedCopy(tag));
 
         Formatter f = Formatter.of(
             "Reflexivity: == used instead of .equals() on field: %%" +
             "\nIf this is intentional, consider suppressing Warning.%%",
-            changedField.getName(),
+            field.getName(),
             Warning.REFERENCE_EQUALITY.toString()
         );
         assertEquals(f, left, right);
     }
 
-    private void checkNullReflexivity(Field changedField) {
-        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
-        if (fieldAccessor.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
+    private void checkNullReflexivity(FieldProbe fieldProbe) {
+        Field field = fieldProbe.getField();
+        if (fieldProbe.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
             return;
         }
 
-        Field field = fieldAccessor.getField();
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
         boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
         boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());

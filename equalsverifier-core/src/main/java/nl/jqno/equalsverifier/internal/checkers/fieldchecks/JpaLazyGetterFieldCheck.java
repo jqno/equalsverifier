@@ -9,10 +9,12 @@ import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -39,12 +41,12 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     }
 
     @Override
-    public void execute(Field changedField) {
-        String fieldName = changedField.getName();
+    public void execute(FieldProbe fieldProbe) {
+        String fieldName = fieldProbe.getName();
         String getterName = fieldnameToGetter.apply(fieldName);
 
         if (
-            !fieldIsUsed(changedField, true) ||
+            !fieldIsUsed(fieldProbe.getField(), true) ||
             !fieldIsLazy(fieldName) ||
             Modifier.isFinal(type.getModifiers())
         ) {
@@ -65,7 +67,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         }
         assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
 
-        boolean usedInHashcode = !strictHashcode || fieldIsUsed(changedField, false);
+        boolean usedInHashcode = !strictHashcode || fieldIsUsed(fieldProbe.getField(), false);
         boolean hashCodeExceptionCaught = false;
         try {
             red1.hashCode();
@@ -75,9 +77,9 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
     }
 
-    private boolean fieldIsUsed(Field changedField, boolean forEquals) {
+    private boolean fieldIsUsed(Field field, boolean forEquals) {
         T red = subjectCreator.plain();
-        T blue = subjectCreator.withFieldChanged(changedField);
+        T blue = subjectCreator.withFieldChanged(field);
 
         if (forEquals) {
             return !red.equals(blue);
