@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📜 Error messages explained
+    url: https://jqno.nl/equalsverifier/errormessages/
+    about: You can check here if your problem already has a solution.
+  - name: 📚 Manual
+    url: https://jqno.nl/equalsverifier/manual/
+    about: You can check here how certain features are supposed to work.

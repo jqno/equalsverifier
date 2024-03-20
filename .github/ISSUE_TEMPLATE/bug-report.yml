@@ -1,0 +1,42 @@
+name: 🐛 Bug report
+description: Create a report to help fix a problem in EqualsVerifier.
+title: '[Bug] '
+body:
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Describe the bug
+      description: A clear and concise description of what the bug is.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Explain what you did to run into this issue.
+
+  - type: textarea
+    id: error-message
+    attributes:
+      label: Error message and version number
+      description: The error message that EqualsVerifier produces. Include the version number, and if possible the stack trace too.
+
+  - type: textarea
+    id: code-equalsverifier
+    attributes:
+      label: "Code: EqualsVerifier invocation"
+      description: The code that you used to call EqualsVerifier.
+
+  - type: textarea
+    id: code-class-under-test
+    attributes:
+      label: "Code: class under test"
+      description: The class that you're testing. If you can't share the code due to confidentiality, please anonymize the code.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Any other information you would like to share.
