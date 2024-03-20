@@ -147,7 +147,7 @@ public final class Validations {
         Set<String> excludedFields
     ) {
         validateClassAnnotations(type, cache, warnings, includedFields, excludedFields);
-        validateFieldAnnotations(type, cache, includedFields);
+        validateFieldAnnotations(type, cache, warnings, includedFields);
     }
 
     // CHECKSTYLE OFF: VariableDeclarationUsageDistance
@@ -187,22 +187,25 @@ public final class Validations {
     private static void validateFieldAnnotations(
         Class<?> type,
         AnnotationCache cache,
+        Set<Warning> warnings,
         Set<String> includedFields
     ) {
         FieldIterable
             .of(type)
-            .forEach(f -> validateFieldAnnotation(type, f, cache, includedFields));
+            .forEach(f -> validateFieldAnnotation(type, f, cache, warnings, includedFields));
     }
 
     private static void validateFieldAnnotation(
         Class<?> type,
         Field f,
         AnnotationCache cache,
+        Set<Warning> warnings,
         Set<String> includedFields
     ) {
         validate(
             includedFields.contains(f.getName()) &&
-            cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID),
+            cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID) &&
+            !warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
             "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n" +
             "Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields " +
             "if you want to use only the @Id or @EmbeddedId fields in equals."

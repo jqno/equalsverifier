@@ -415,6 +415,15 @@ public class JpaIdTest {
         EqualsVerifier.forClass(SubclassEntity.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
+    @Test
+    public void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
+        EqualsVerifier
+            .forClass(JpaIdDirtyTrackingPerson.class)
+            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+            .withOnlyTheseFields("id", "version", "isDirty")
+            .verify();
+    }
+
     static class JpaIdBusinessKeyPerson {
 
         @Id
@@ -1090,6 +1099,38 @@ public class JpaIdTest {
         public SubclassEntity(UUID id, String name) {
             super(id);
             this.name = name;
+        }
+    }
+
+    @Entity
+    static class JpaIdDirtyTrackingPerson {
+
+        @Id
+        private UUID id;
+
+        private int version;
+        private boolean isDirty;
+
+        private String socialSecurity;
+        private String name;
+        private LocalDate birthdate;
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof JpaIdDirtyTrackingPerson)) {
+                return false;
+            }
+            JpaIdDirtyTrackingPerson other = (JpaIdDirtyTrackingPerson) obj;
+            return (
+                Objects.equals(id, other.id) &&
+                Objects.equals(version, other.version) &&
+                Objects.equals(isDirty, other.isDirty)
+            );
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(id, version, isDirty);
         }
     }
 }

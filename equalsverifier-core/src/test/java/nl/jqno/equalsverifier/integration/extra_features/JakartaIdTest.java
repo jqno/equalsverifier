@@ -399,6 +399,15 @@ public class JakartaIdTest {
         EqualsVerifier.forClass(SubclassEntity.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
+    @Test
+    public void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
+        EqualsVerifier
+            .forClass(JakartaIdDirtyTrackingPerson.class)
+            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+            .withOnlyTheseFields("id", "version", "isDirty")
+            .verify();
+    }
+
     static class JakartaIdBusinessKeyPerson {
 
         @jakarta.persistence.Id
@@ -998,6 +1007,38 @@ public class JakartaIdTest {
         public SubclassEntity(UUID id, String name) {
             super(id);
             this.name = name;
+        }
+    }
+
+    @jakarta.persistence.Entity
+    static class JakartaIdDirtyTrackingPerson {
+
+        @jakarta.persistence.Id
+        private UUID id;
+
+        private int version;
+        private boolean isDirty;
+
+        private String socialSecurity;
+        private String name;
+        private LocalDate birthdate;
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof JakartaIdDirtyTrackingPerson)) {
+                return false;
+            }
+            JakartaIdDirtyTrackingPerson other = (JakartaIdDirtyTrackingPerson) obj;
+            return (
+                Objects.equals(id, other.id) &&
+                Objects.equals(version, other.version) &&
+                Objects.equals(isDirty, other.isDirty)
+            );
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(id, version, isDirty);
         }
     }
 }
