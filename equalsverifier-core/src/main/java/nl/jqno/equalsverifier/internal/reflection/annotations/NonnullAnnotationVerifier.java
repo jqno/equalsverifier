@@ -29,7 +29,7 @@ public final class NonnullAnnotationVerifier {
         return (
             annotationCache.hasClassAnnotation(type, FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL) ||
             annotationCache.hasClassAnnotation(type, JSR305_DEFAULT_ANNOTATION_NONNULL) ||
-            annotationCache.hasClassAnnotation(type, ECLIPSE_DEFAULT_ANNOTATION_NONNULL)
+            annotationCache.hasClassAnnotation(type, DEFAULT_ANNOTATION_NONNULL)
         );
     }
 }

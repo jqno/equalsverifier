@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Support for [Spring Framework](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/lang/NonNullFields.html)'s `@NonNullFields` annotation and [JSpecify](https://jspecify.dev/)'s `@NullMarked` annotation. ([Issue 936](https://github.com/jqno/equalsverifier/issues/936))
+
 ### Changed
 
 - When `Warning.SURROGATE_OR_BUSINESS_KEY` is suppressed, it is now possible to use `#withOnlyTheseFields`, and the fields may include both `@Id` fields and regular fields. ([Issue 934](https://github.com/jqno/equalsverifier/issues/934))

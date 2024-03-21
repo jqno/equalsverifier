@@ -118,17 +118,25 @@ public enum SupportedAnnotations implements Annotation {
     },
 
     /**
-     * If a class or package is marked with @NonNullByDefault, EqualsVerifier will not complain
-     * about potential {@link NullPointerException}s being thrown if any of the fields in that class
-     * or package are null.
+     * If a class or package is marked with @NonNullByDefault or @NullMarked, EqualsVerifier will
+     * not complain about potential {@link NullPointerException}s being thrown if any of the fields
+     * in that class or package are null.
      */
-    ECLIPSE_DEFAULT_ANNOTATION_NONNULL(false, "org.eclipse.jdt.annotation.NonNullByDefault") {
+    DEFAULT_ANNOTATION_NONNULL(
+        false,
+        "org.eclipse.jdt.annotation.NonNullByDefault",
+        "org.jspecify.annotations.NullMarked",
+        "org.springframework.lang.NonNullFields"
+    ) {
         @Override
         public boolean validate(
             AnnotationProperties properties,
             AnnotationCache annotationCache,
             Set<String> ignoredAnnotations
         ) {
+            if (properties.getClassName().endsWith("NullMarked")) {
+                return true;
+            }
             Set<String> values = properties.getArrayValues("value");
             if (values == null) {
                 return true;
