@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - When `Warning.SURROGATE_OR_BUSINESS_KEY` is suppressed, it is now possible to use `#withOnlyTheseFields`, and the fields may include both `@Id` fields and regular fields. ([Issue 934](https://github.com/jqno/equalsverifier/issues/934))
+- Improved the error message for so called 'versioned entities' (where entities with `0` or `null` ids are always unequal), so it's more discoverable what to do in that situation. ([Issue 932](https://github.com/jqno/equalsverifier/issues/932))
 
 ## [3.15.8] - 2024-03-01
 

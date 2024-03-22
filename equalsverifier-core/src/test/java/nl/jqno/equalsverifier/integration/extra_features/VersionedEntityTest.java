@@ -3,9 +3,11 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+import java.util.UUID;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Id;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +21,8 @@ public class VersionedEntityTest {
             .when(() -> EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class).verify())
             .assertFailure()
             .assertMessageContains(
-                "object does not equal an identical copy of itself",
-                Warning.IDENTICAL_COPY.toString()
+                "entity does not equal an identical copy of itself",
+                Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString()
             );
     }
 
@@ -48,11 +50,11 @@ public class VersionedEntityTest {
     @Test
     public void fail_whenInstanceWithAZeroIdDoesNotEqualItself_givenAVersionedEntityWithState() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(StringVersionedEntity.class).verify())
+            .when(() -> EqualsVerifier.forClass(LongIdStringFieldVersionedEntity.class).verify())
             .assertFailure()
             .assertMessageContains(
-                "object does not equal an identical copy of itself",
-                Warning.IDENTICAL_COPY.toString()
+                "entity does not equal an identical copy of itself",
+                Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString()
             );
     }
 
@@ -61,7 +63,7 @@ public class VersionedEntityTest {
         ExpectedException
             .when(() ->
                 EqualsVerifier
-                    .forClass(StringVersionedEntity.class)
+                    .forClass(LongIdStringFieldVersionedEntity.class)
                     .suppress(Warning.IDENTICAL_COPY)
                     .verify()
             )
@@ -72,7 +74,39 @@ public class VersionedEntityTest {
     @Test
     public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(StringVersionedEntity.class)
+            .forClass(LongIdStringFieldVersionedEntity.class)
+            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
+            .verify();
+    }
+
+    @Test
+    public void fail_whenInstanceWithANullIdDoesNotEqualItself_givenAVersionedEntityWithState() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(UuidIdStringFieldVersionedEntity.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "entity does not equal an identical copy of itself",
+                Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString()
+            );
+    }
+
+    @Test
+    public void fail_whenInstanceWithANonnullIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(UuidIdStringFieldVersionedEntity.class)
+                    .suppress(Warning.IDENTICAL_COPY)
+                    .verify()
+            )
+            .assertFailure()
+            .assertMessageContains("Unnecessary suppression", Warning.IDENTICAL_COPY.toString());
+    }
+
+    @Test
+    public void succeed_whenInstanceWithANullIdDoesNotEqualItselfAndInstanceWithANonnullIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+        EqualsVerifier
+            .forClass(UuidIdStringFieldVersionedEntity.class)
             .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
             .verify();
     }
@@ -143,6 +177,7 @@ public class VersionedEntityTest {
             .assertMessageContains("catch me if you can");
     }
 
+    @Entity
     public static final class OtherwiseStatelessVersionedEntity {
 
         @Id
@@ -170,7 +205,8 @@ public class VersionedEntityTest {
         }
     }
 
-    public static final class StringVersionedEntity {
+    @Entity
+    public static final class LongIdStringFieldVersionedEntity {
 
         @Id
         private final long id;
@@ -178,17 +214,17 @@ public class VersionedEntityTest {
         @SuppressWarnings("unused")
         private final String s;
 
-        public StringVersionedEntity(long id, String s) {
+        public LongIdStringFieldVersionedEntity(long id, String s) {
             this.id = id;
             this.s = s;
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (!(obj instanceof StringVersionedEntity)) {
+            if (!(obj instanceof LongIdStringFieldVersionedEntity)) {
                 return false;
             }
-            StringVersionedEntity other = (StringVersionedEntity) obj;
+            LongIdStringFieldVersionedEntity other = (LongIdStringFieldVersionedEntity) obj;
             if (id == 0L && other.id == 0L) {
                 return false;
             }
@@ -201,6 +237,39 @@ public class VersionedEntityTest {
         }
     }
 
+    @Entity
+    public static final class UuidIdStringFieldVersionedEntity {
+
+        @Id
+        private final UUID id;
+
+        @SuppressWarnings("unused")
+        private final String s;
+
+        public UuidIdStringFieldVersionedEntity(UUID id, String s) {
+            this.id = id;
+            this.s = s;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof UuidIdStringFieldVersionedEntity)) {
+                return false;
+            }
+            UuidIdStringFieldVersionedEntity other = (UuidIdStringFieldVersionedEntity) obj;
+            if (id == null && other.id == null) {
+                return false;
+            }
+            return Objects.equals(id, other.id);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id);
+        }
+    }
+
+    @Entity
     public static final class WeakStringVersionedEntity {
 
         @Id
@@ -231,6 +300,7 @@ public class VersionedEntityTest {
         }
     }
 
+    @Entity
     public static final class NullCheckStringVersionedEntity {
 
         @Id
@@ -259,6 +329,7 @@ public class VersionedEntityTest {
         }
     }
 
+    @Entity
     public static final class BusinessKeyStringVersionedEntity {
 
         @Id
@@ -286,6 +357,7 @@ public class VersionedEntityTest {
         }
     }
 
+    @Entity
     private static class CanEqualVersionedEntity {
 
         private final Long id;
@@ -318,6 +390,7 @@ public class VersionedEntityTest {
         }
     }
 
+    @Entity
     private static class NonReflexiveCanEqualVersionedEntity extends CanEqualVersionedEntity {
 
         public NonReflexiveCanEqualVersionedEntity(Long id) {

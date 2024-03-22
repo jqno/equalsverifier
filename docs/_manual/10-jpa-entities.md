@@ -39,7 +39,7 @@ public boolean equals(Object obj) {
     }
     Foo other = (Foo)obj;
     if (id == 0L && other.id == 0L) {
-        return super.equals(obj);
+        return false;
     }
     return id == other.id;
 }
@@ -47,13 +47,29 @@ public boolean equals(Object obj) {
 
 You might see an error message such as this one:
 
-    Reflexivity: object does not equal an identical copy of itself:
+    Reflexivity: entity does not equal an identical copy of itself:
       Foo@123456
-    If this is intentional, consider suppressing Warning.IDENTICAL_COPY
+    If this is intentional, consider suppressing Warning.IDENTICAL_COPYFOR_VERSIONED_ENTITY
 
-In that case, you can call `suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)`.
+In that case, you can call `suppress(Warning.SURROGATE_KEY, Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)`: `SURROGATE_KEY` because the identity is based on the entity's keys, and `IDENTICAL_COPY_FOR_VERSIONED_ENTITY` to allow the (small) breach in reflexivity.
 
-(`Warning.IDENTICAL_COPY`, which the error message suggests, is not appropriate in this case because that is meant for classes which have no state at all.)
+Similarly, if the entity has a business key, like so:
+
+{% highlight java %}
+@Override
+public boolean equals(Object obj) {
+    if (!(obj instanceof Foo)) {
+        return false;
+    }
+    Foo other = (Foo)obj;
+    if (id == 0L && other.id == 0L) {
+        return false;
+    }
+    return Objects.equals(someField, other.someField);
+}
+{% endhighlight %}
+
+You will get the same error message. In this case you can simply call `suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)`, without also suppressing `Warning.SURROGATE_KEY`.
 
 
 ### Materialized fields

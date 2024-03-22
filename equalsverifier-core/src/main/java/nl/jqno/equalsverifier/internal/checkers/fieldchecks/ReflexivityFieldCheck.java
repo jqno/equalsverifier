@@ -14,6 +14,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
+import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -125,13 +126,27 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             );
             assertFalse(f, left.equals(right));
         } else {
-            Formatter f = Formatter.of(
-                "Reflexivity: object does not equal an identical copy of itself:\n  %%" +
-                "\nIf this is intentional, consider suppressing Warning.%%",
-                left,
-                Warning.IDENTICAL_COPY.toString()
+            boolean isEntity = annotationCache.hasClassAnnotation(
+                typeTag.getType(),
+                SupportedAnnotations.ENTITY
             );
-            assertEquals(f, left, right);
+            if (isEntity) {
+                Formatter f = Formatter.of(
+                    "Reflexivity: entity does not equal an identical copy of itself:\n  %%" +
+                    "\nIf this is intentional, consider suppressing Warning.%%.",
+                    left,
+                    Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString()
+                );
+                assertEquals(f, left, right);
+            } else {
+                Formatter f = Formatter.of(
+                    "Reflexivity: object does not equal an identical copy of itself:\n  %%" +
+                    "\nIf this is intentional, consider suppressing Warning.%%.",
+                    left,
+                    Warning.IDENTICAL_COPY.toString()
+                );
+                assertEquals(f, left, right);
+            }
         }
     }
 }
