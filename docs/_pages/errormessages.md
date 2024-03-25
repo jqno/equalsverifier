@@ -4,7 +4,7 @@ permalink: /errormessages/
 ---
 ## Introduction
 
-Did EqualsVerifier give an error message that you didn't understand? I try to make the error messages as clear as possible, but unfortunately Java's stacktraces leave little room for explanation sometimes. This page should help make sense of some of EqualsVerifier's error messages.
+Did EqualsVerifier give an error message that you didn't understand? I try to make the error messages as clear as possible, but unfortunately Java's stacktraces leave little room for explanation sometimes. This page should help make sense of some of EqualsVerifier's error messages. Note that this is not intended to be an exhaustive list, buf if you found a message confusing please let me know.
 
 Before you continue, please check your class's `toString` method. Since EqualsVerifier relies on `toString` when generating error messages, overriding it helps with getting better error messages. I recommend including the name of the class, and a summary of all the fields relevant to the equals contract. For example:
 
@@ -40,5 +40,6 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Subclass: … equals subclass instance …](/equalsverifier/errormessages/subclass-equals-subclass-instance)
 * [Subclass: object is not equal to an instance of a trivial subclass with equal fields](/equalsverifier/errormessages/subclass-object-is-not-equal-to-an-instance-of-a-trivial-subclass-with-equal-fields)
 * [Symmetry: … does not equal superclass instance …](/equalsverifier/errormessages/symmetry-does-not-equal-superclass-instance)
+* [Transient field foo should not be included in equals/hashCode contract](/equalsverifier/errormessages/transient-field)
 * [Unable to make field foo accessible: module bar does not "opens bar" to baz](/equalsverifier/errormessages/unable-to-make-field-accessible)
 * [Unsupported class file major version _x_](/equalsverifier/errormessages/unsupported-class-file-major-version)
