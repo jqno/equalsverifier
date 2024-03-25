@@ -39,6 +39,12 @@ jobs:
             java: 21
             dist: temurin
             flags: ""
+          - title: "Supported JDK 22"
+            experimental: false
+            cache-id: "jdk22"
+            java: 22
+            dist: temurin
+            flags: ""
           - title: "Experimental JDK EA (simplified)"
             experimental: true
             cache-id: "jdk-ea-simple"
