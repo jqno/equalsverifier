@@ -205,6 +205,36 @@ public class AbstractDelegationTest {
             .assertMessageContains("This is AbstractMethodError's original message");
     }
 
+    @Test
+    public void failGracefully_whenAFieldsEqualsMethodDoesntDoAnIdentityCheckButCallsAnAbstractField() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
+                    .verify()
+            )
+            .assertFailure()
+            .assertCause(AbstractMethodError.class)
+            .assertMessageContains(
+                ABSTRACT_DELEGATION,
+                EQUALS_DELEGATES,
+                PREFAB,
+                AbstractEqualsWithoutIdentityCheckDelegator.class.getSimpleName()
+            );
+    }
+
+    @Test
+    public void succeed_whenAFieldsEqualsMethodDoesntDoAnIdentityCheckButCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
+        EqualsVerifier
+            .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
+            .withPrefabValues(
+                AbstractEqualsWithoutIdentityCheckDelegator.class,
+                new AbstractEqualsWithoutIdentityCheckDelegatorImpl(1),
+                new AbstractEqualsWithoutIdentityCheckDelegatorImpl(2)
+            )
+            .verify();
+    }
+
     private abstract static class AbstractClass {
 
         private int i;
@@ -282,6 +312,48 @@ public class AbstractDelegationTest {
     static final class AbstractEqualsDelegatorImpl extends AbstractEqualsDelegator {
 
         public AbstractEqualsDelegatorImpl(int i) {
+            super(i);
+        }
+
+        @Override
+        public boolean theAnswer() {
+            return false;
+        }
+    }
+
+    abstract static class AbstractEqualsWithoutIdentityCheckDelegator {
+
+        private final int i;
+
+        public AbstractEqualsWithoutIdentityCheckDelegator(int i) {
+            this.i = i;
+        }
+
+        abstract boolean theAnswer();
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof AbstractEqualsWithoutIdentityCheckDelegator)) {
+                return false;
+            }
+            if (theAnswer()) {
+                return true;
+            }
+            AbstractEqualsWithoutIdentityCheckDelegator other =
+                (AbstractEqualsWithoutIdentityCheckDelegator) obj;
+            return i == other.i;
+        }
+
+        @Override
+        public int hashCode() {
+            return defaultHashCode(this);
+        }
+    }
+
+    static final class AbstractEqualsWithoutIdentityCheckDelegatorImpl
+        extends AbstractEqualsWithoutIdentityCheckDelegator {
+
+        public AbstractEqualsWithoutIdentityCheckDelegatorImpl(int i) {
             super(i);
         }
 
@@ -610,6 +682,32 @@ public class AbstractDelegationTest {
         @Override
         public int hashCode() {
             return defaultHashCode(this);
+        }
+    }
+
+    static class EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod {
+
+        private final AbstractEqualsWithoutIdentityCheckDelegator id;
+
+        protected EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod(
+            AbstractEqualsWithoutIdentityCheckDelegator id
+        ) {
+            this.id = id;
+        }
+
+        @Override
+        public final boolean equals(Object other) {
+            if (!(other instanceof EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod)) {
+                return false;
+            }
+            EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod that =
+                (EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod) other;
+            return Objects.equals(id, that.id);
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(id);
         }
     }
 }

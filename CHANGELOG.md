@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- AbstractMethodError when a the `equals` method in a field's class calls an abstract method. ([Issue 938](https://github.com/jqno/equalsverifier/issues/938))
+
 ## [3.16] - 2024-03-22
 
 ### Added

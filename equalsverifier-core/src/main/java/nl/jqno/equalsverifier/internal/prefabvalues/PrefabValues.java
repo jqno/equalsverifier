@@ -117,6 +117,7 @@ public class PrefabValues {
      * @param typeStack Keeps track of recursion in the type.
      * @return A value that is different from {@code value}.
      */
+    // CHECKSTYLE OFF: CyclomaticComplexity
     public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         if (
@@ -134,11 +135,20 @@ public class PrefabValues {
         if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
             return tuple.getBlue();
         }
-        if (!type.isArray() && value != null && tuple.getRed().equals(value)) {
-            return tuple.getBlue();
+        if (!type.isArray() && value != null) {
+            try {
+                // red's equals can potentially call an abstract method
+                if (tuple.getRed().equals(value)) {
+                    return tuple.getBlue();
+                }
+            } catch (AbstractMethodError e) {
+                return tuple.getRed();
+            }
         }
         return tuple.getRed();
     }
+
+    // CHECKSTYLE ON: CyclomaticComplexity
 
     private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
         return PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
