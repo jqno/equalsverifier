@@ -9,7 +9,7 @@ permalink: /resources/
 
 ## Fork me on GitHub!
 
-The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier). You can file bug reports or feature requests there.
+The source for this project is hosted on [GitHub](https://github.com/jqno/equalsverifier). You can [submit bug reports or feature requests](/equalsverifier/submit-an-issue) there.
 
 Pull Requests are welcome! But please also [open an issue](https://github.com/jqno/equalsverifier/issues) so we can discuss it first. I'm happy to help you on your way!
 

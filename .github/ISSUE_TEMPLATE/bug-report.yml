@@ -3,6 +3,13 @@ description: Create a report to help fix a problem in EqualsVerifier.
 title: '[Bug] '
 body:
 
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for taking the time to submit a bug report and trying to improve EqualsVerifier! I appreciate it!
+
+        Before you continue, please take a moment to look at ["Submitting an issue"](http://jqno.nl/equalsverifier/submit-an-issue/).
+
   - type: textarea
     id: description
     attributes:
