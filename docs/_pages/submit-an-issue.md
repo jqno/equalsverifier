@@ -26,6 +26,7 @@ Ideally, I would like to be able to copy/paste your reproducer directly from the
 
 However! I also need the reproduction to be _minimal_. That means that it contains the least amount of code necessary to trigger the issue. The less code you give me, the quicker I'll be able to find your problem. That means:
 
+- try to eliminate fields that don't directly contribute to the issue;
 - try to eliminate any third-party dependencies. If you can't, specify which one you need, including its version number;
 - try to eliminate any annotations you might have on your class, like Lombok, Spring, JPA/Hibernate, etc.;
 - try to eliminate classes that the class under test depends on (i.e., superclasses, fields, inner classes, etc.);
