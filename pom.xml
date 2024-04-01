@@ -94,7 +94,7 @@
         <version.flatten-maven-plugin>1.6.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.11</version.jacoco>
         <version.maven-antrun-plugin>3.1.0</version.maven-antrun-plugin>
-        <version.maven-assembly-plugin>3.6.0</version.maven-assembly-plugin>
+        <version.maven-assembly-plugin>3.7.1</version.maven-assembly-plugin>
         <version.maven-compiler-plugin>3.13.0</version.maven-compiler-plugin>
         <version.maven-enforcer-plugin>3.4.1</version.maven-enforcer-plugin>
         <version.maven-jar-plugin>3.3.0</version.maven-jar-plugin>
