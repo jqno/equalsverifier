@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.16.1] - 2024-04-03
+
 ### Fixed
 
 - IllegalArgumentException `argument type mismatch` when a field's type has a wildcard generic and the underlying type has a type bound (such as `T extends Serializable`). ([Issue 940](https://github.com/jqno/equalsverifier/issues/940))
@@ -1217,7 +1219,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16.1...HEAD
+[3.16.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16...equalsverifier-3.16.1
 [3.16]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.8...equalsverifier-3.16
 [3.15.8]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.7...equalsverifier-3.15.8
 [3.15.7]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.6...equalsverifier-3.15.7
