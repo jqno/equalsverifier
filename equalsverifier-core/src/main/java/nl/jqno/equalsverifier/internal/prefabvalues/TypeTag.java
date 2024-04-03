@@ -47,11 +47,12 @@ public final class TypeTag {
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field, TypeTag enclosingType) {
-        return resolve(field.getGenericType(), enclosingType, false);
+        return resolve(field.getGenericType(), field.getType(), enclosingType, false);
     }
 
     private static TypeTag resolve(
         Type type,
+        Class<?> typeAsClass,
         TypeTag enclosingType,
         boolean shortCircuitRecursiveTypeBound
     ) {
@@ -62,17 +63,19 @@ public final class TypeTag {
         if (type instanceof ParameterizedType) {
             return processParameterizedType(
                 (ParameterizedType) type,
+                typeAsClass,
                 enclosingType,
                 nestedTags,
                 shortCircuitRecursiveTypeBound
             );
         }
         if (type instanceof GenericArrayType) {
-            return processGenericArray((GenericArrayType) type, enclosingType);
+            return processGenericArray((GenericArrayType) type, typeAsClass, enclosingType);
         }
         if (type instanceof WildcardType) {
             return processWildcard(
                 (WildcardType) type,
+                typeAsClass,
                 enclosingType,
                 shortCircuitRecursiveTypeBound
             );
@@ -80,6 +83,7 @@ public final class TypeTag {
         if (type instanceof TypeVariable) {
             return processTypeVariable(
                 (TypeVariable<?>) type,
+                typeAsClass,
                 enclosingType,
                 shortCircuitRecursiveTypeBound
             );
@@ -95,19 +99,26 @@ public final class TypeTag {
 
     private static TypeTag processParameterizedType(
         ParameterizedType type,
+        Class<?> typeAsClass,
         TypeTag enclosingType,
         List<TypeTag> nestedTags,
         boolean shortCircuitRecursiveTypeBound
     ) {
         Type[] typeArgs = type.getActualTypeArguments();
         for (Type typeArg : typeArgs) {
-            nestedTags.add(resolve(typeArg, enclosingType, shortCircuitRecursiveTypeBound));
+            nestedTags.add(
+                resolve(typeArg, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound)
+            );
         }
         return new TypeTag((Class<?>) type.getRawType(), nestedTags);
     }
 
-    private static TypeTag processGenericArray(GenericArrayType type, TypeTag enclosingType) {
-        TypeTag tag = resolve(type.getGenericComponentType(), enclosingType, false);
+    private static TypeTag processGenericArray(
+        GenericArrayType type,
+        Class<?> typeAsClass,
+        TypeTag enclosingType
+    ) {
+        TypeTag tag = resolve(type.getGenericComponentType(), typeAsClass, enclosingType, false);
         String arrayTypeName = "[L" + tag.getType().getName() + ";";
         Class<?> arrayType = classForName(arrayTypeName);
         return new TypeTag(arrayType, tag.getGenericTypes());
@@ -115,20 +126,30 @@ public final class TypeTag {
 
     private static TypeTag processWildcard(
         WildcardType type,
+        Class<?> typeAsClass,
         TypeTag enclosingType,
         boolean shortCircuitRecursiveTypeBound
     ) {
         for (Type b : type.getLowerBounds()) {
-            return resolve(b, enclosingType, shortCircuitRecursiveTypeBound);
+            return resolve(b, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
         for (Type b : type.getUpperBounds()) {
-            return resolve(b, enclosingType, shortCircuitRecursiveTypeBound);
+            TypeTag upper = resolve(b, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
+            if (!Object.class.equals(upper.getType())) {
+                return upper;
+            }
+        }
+        for (TypeVariable<?> tv : typeAsClass.getTypeParameters()) {
+            for (Type b : tv.getBounds()) {
+                return resolve(b, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
+            }
         }
         return new TypeTag(Object.class);
     }
 
     private static TypeTag processTypeVariable(
         TypeVariable<?> type,
+        Class<?> typeAsClass,
         TypeTag enclosingType,
         boolean shortCircuitRecursiveTypeBound
     ) {
@@ -139,7 +160,7 @@ public final class TypeTag {
         }
         for (Type b : type.getBounds()) {
             if (!shortCircuitRecursiveTypeBound) {
-                return resolve(b, enclosingType, true);
+                return resolve(b, typeAsClass, enclosingType, true);
             }
         }
         return new TypeTag(Object.class);

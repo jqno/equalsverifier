@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- IllegalArgumentException `argument type mismatch` when a field's type has a wildcard generic and the underlying type has a type bound (such as `T extends Serializable`). ([Issue 940](https://github.com/jqno/equalsverifier/issues/940))
 - AbstractMethodError when a the `equals` method in a field's class calls an abstract method. ([Issue 938](https://github.com/jqno/equalsverifier/issues/938))
 
 ## [3.16] - 2024-03-22
