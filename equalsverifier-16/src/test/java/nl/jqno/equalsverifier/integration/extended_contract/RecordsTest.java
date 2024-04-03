@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.Serializable;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -141,6 +142,11 @@ public class RecordsTest {
             .verify();
     }
 
+    @Test
+    public void succeed_whenRecord() {
+        EqualsVerifier.forClass(WildcardGenericRecordContainer.class).verify();
+    }
+
     record SimpleRecord(int i, String s) {}
 
     private record PrivateSimpleRecord(int i, String s) {}
@@ -247,4 +253,8 @@ public class RecordsTest {
             }
         }
     }
+
+    record BoundedGenericRecord<T extends Serializable>(T t) {}
+
+    record WildcardGenericRecordContainer(BoundedGenericRecord<?> bgr) {}
 }
