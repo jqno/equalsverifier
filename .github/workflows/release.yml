@@ -6,9 +6,6 @@ on:
       version:
         description: 'Release version'
         required: true
-      nextVersion:
-        description: 'Next version after release (-SNAPSHOT will be added automatically)'
-        required: true
 
 jobs:
   build:
@@ -24,6 +21,10 @@ jobs:
           java-version: 21
           distribution: temurin
           cache: maven
+      - name: 'Calculate next version'
+        run: echo "NEXT_VERSION=$(bash .github/scripts/next-version.sh ${{ github.event.inputs.version }})" >> "$GITHUB_ENV"
+      - name: 'Print version information'
+        run: echo -e "New version ${{ github.event.inputs.version }}\nNext version $NEXT_VERSION"
       - name: 'Set release version'
         run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.version }}
       - name: 'Update version in documentation'
@@ -36,7 +37,7 @@ jobs:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
           message: Bumps version to ${{ github.event.inputs.version }}
       - name: 'Stage release'
-        run: mvn clean deploy --no-transfer-progress --batch-mode -DaltDeploymentRepository=local::default::file://`pwd`/target/staging-deploy
+        run: mvn clean deploy --no-transfer-progress --batch-mode "-DaltDeploymentRepository=local::default::file://$(pwd)/target/staging-deploy"
       - name: 'Run JReleaser'
         uses: jreleaser/release-action@v2
         with:
@@ -51,12 +52,12 @@ jobs:
           JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_USERNAME }}
           JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD: ${{ secrets.JRELEASER_NEXUS2_MAVEN_CENTRAL_PASSWORD }}
       - name: 'Set release version'
-        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion=${{ github.event.inputs.nextVersion }}-SNAPSHOT
+        run: mvn versions:set --no-transfer-progress --batch-mode -DnewVersion="$NEXT_VERSION"
       - name: 'Commit & push changes'
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: "Prepares for next development iteration: ${{ github.event.inputs.nextVersion }}-SNAPSHOT"
+          message: "Prepares for next development iteration: $NEXT_VERSION"
           tags: false
       - name: 'Print diagnostic information'
         run: |
