@@ -57,7 +57,7 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.JRELEASER_GITHUB_TOKEN }}
-          message: "Prepares for next development iteration: $NEXT_VERSION"
+          message: "Prepares for next development iteration"
           tags: false
       - name: 'Print diagnostic information'
         run: |
