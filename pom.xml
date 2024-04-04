@@ -294,6 +294,7 @@
                         <version>${version.prettier.maven}</version>
                         <configuration>
                             <prettierJavaVersion>${version.prettier-java.maven}</prettierJavaVersion>
+                            <nodeVersion>21.7.2</nodeVersion>
                         </configuration>
                         <executions>
                             <execution>
