@@ -28,6 +28,8 @@ EqualsVerifier's Maven coordinates are:
 Now you can write a test:
 
 ```java
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void equalsContract() {
     EqualsVerifier.forClass(Foo.class).verify();
@@ -37,6 +39,8 @@ public void equalsContract() {
 EqualsVerifier is an opinionated library, which means that it can be quite strict. If you feel it's too much, you can make it more lenient:
 
 ```java
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void equalsContract() {
     EqualsVerifier.simple().forClass(Foo.class).verify();

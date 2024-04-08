@@ -26,6 +26,8 @@ Have you ever written an `equals` method, along with five screens of unit tests 
 EqualsVerifier helps you. Testing `equals` can be as simple as:
 
 {% highlight java %}
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void equalsContract() {
     EqualsVerifier.forClass(Foo.class).verify();
@@ -35,6 +37,8 @@ public void equalsContract() {
 EqualsVerifier is an opinionated library, which means that it can be quite strict. If you feel it's too much, you can make it more lenient:
 
 {% highlight java %}
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void simpleEqualsContract() {
     EqualsVerifier.simple().forClass(Foo.class).verify();

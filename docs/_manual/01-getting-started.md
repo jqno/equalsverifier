@@ -31,6 +31,8 @@ If you need to download the jar files directly, you can download them from [mave
 This is what EqualsVerfier can look like in your test:
 
 {% highlight java %}
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void equalsContract() {
     EqualsVerifier.forClass(Foo.class)
@@ -54,6 +56,8 @@ Here are the most common issues you might run into on your first try:
 If you still think EqualsVerifier is too strict, you can make it more lenient:
 
 {% highlight java %}
+import nl.jqno.equalsverifier.*;
+
 @Test
 public void equalsContract() {
     EqualsVerifier.simple()
