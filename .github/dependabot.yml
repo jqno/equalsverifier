@@ -3,9 +3,16 @@ updates:
   - package-ecosystem: "maven"
     directory: "/"
     schedule:
-      interval: "monthly"
-    open-pull-requests-limit: 10
+      interval: "weekly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
-      interval: "monthly"
+      interval: "weekly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
