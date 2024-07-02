@@ -30,6 +30,8 @@ public class MultipleTypeEqualsVerifierTest {
         "nl.jqno.equalsverifier.testhelpers.packages.twoincorrect";
     private static final String SUBCLASSES_PACKAGE =
         "nl.jqno.equalsverifier.testhelpers.packages.subclasses";
+    private static final String SOME_RECURSIVE_PACKAGE =
+        "nl.jqno.equalsverifier.testhelpers.packages.somerecursive";
     private static final String INCORRECT_M = INCORRECT_PACKAGE + ".IncorrectM";
     private static final String INCORRECT_N = INCORRECT_PACKAGE + ".IncorrectN";
     private static final String INCORRECT_O = INCORRECT_PACKAGE + ".subpackage.IncorrectO";
@@ -64,6 +66,15 @@ public class MultipleTypeEqualsVerifierTest {
     @Test
     public void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
         EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperI.class).verify();
+    }
+
+    @Test
+    public void doesNotReportNonrecursive_whenPackageContainsRecursiveAndNonrecursiveClasses() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forPackage(SOME_RECURSIVE_PACKAGE).verify())
+            .assertFailure()
+            .assertMessageContains("Recursive datastructure", "RecursiveA", "RecursiveB")
+            .assertMessageDoesNotContain("Nonrecursive");
     }
 
     @Test
