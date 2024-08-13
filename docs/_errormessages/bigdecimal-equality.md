@@ -79,8 +79,8 @@ If values like `1` and `1.0` *should* be equal then some options are:
     }
     ```
 
-    Unfortunately it is difficult to confirm this has been done. This check will then want disabling by suppressing `Warning.BIGDECIMAL_EQUALITY`
-    and will not catch regressions.
+    Unfortunately it is imporssible for EqualsVerifier to confirm this has been done. Therefore, you still need to suppress
+    `Warning.BIGDECIMAL_EQUALITY` in this case.
 
 If performance is important then you will want to consider the costs of using `BigDecimal` and of where and how normalisation
 is achieved. Option 2 performs the work when objects are stored in a `HashSet` or used as keys in a `HashMap`. Option 3
