@@ -103,7 +103,7 @@ Here's a description of the modules:
 | ----------------------------- | --------------------------------------------------------------------- |
 | docs                          | project's Jekyll website                                              |
 | equalsverifier-core           | the actual EqualsVerifier code                                        |
-| equalsverifier-11             | tests for Java 11 and up                                              |
+| equalsverifier-11             | logic for modules, tests for Java 11 and up                           |
 | equalsverifier-16             | logic for records, and corresponding tests                            |
 | equalsverifier-17             | logic for sealed classes, and corresponding tests                     |
 | equalsverifier-21             | tests for record pattern matching                                     |

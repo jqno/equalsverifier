@@ -30,6 +30,7 @@ public class JarAsserter {
 
     public void assertPresenceOfMultiReleaseClasses() {
         assertPresenceOf(
+            "/META-INF/versions/11" + EV + "/internal/reflection/ModuleHelper.class",
             "/META-INF/versions/16" + EV + "/internal/reflection/RecordsHelper.class",
             "/META-INF/versions/17" + EV + "/internal/reflection/SealedTypesHelper.class"
         );

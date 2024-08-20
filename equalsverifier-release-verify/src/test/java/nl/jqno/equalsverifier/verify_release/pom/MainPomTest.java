@@ -31,12 +31,13 @@ public class MainPomTest {
     @Test
     public void dependencies() {
         assertAll(
-            () -> pom.assertNumberOfDependencies(5),
+            () -> pom.assertNumberOfDependencies(6),
             () -> pom.assertDependencyIsOptional(1),
             () -> pom.assertDependencyIsOptional(2),
             () -> pom.assertDependencyIsOptional(3),
-            () -> pom.assertDependency(4, "org.objenesis", "objenesis"),
-            () -> pom.assertDependency(5, "net.bytebuddy", "byte-buddy")
+            () -> pom.assertDependencyIsOptional(4),
+            () -> pom.assertDependency(5, "org.objenesis", "objenesis"),
+            () -> pom.assertDependency(6, "net.bytebuddy", "byte-buddy")
         );
     }
 }
