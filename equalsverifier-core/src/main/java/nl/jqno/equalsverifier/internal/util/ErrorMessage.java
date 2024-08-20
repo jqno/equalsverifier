@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import nl.jqno.equalsverifier.internal.reflection.ModuleHelper;
+
 public final class ErrorMessage {
 
     private ErrorMessage() {}
@@ -10,10 +12,11 @@ public final class ErrorMessage {
     public static String suffix() {
         return Formatter
             .of(
-                "%%\n(EqualsVerifier %%, JDK %% on %%)",
+                "%%\n(EqualsVerifier %%, JDK %% running on %%, on %%)",
                 WEBSITE_URL,
                 ErrorMessage.class.getPackage().getImplementationVersion(),
                 System.getProperty("java.version"),
+                ModuleHelper.runsOnModulePath() ? "modulepath" : "classpath",
                 System.getProperty("os.name")
             )
             .format();

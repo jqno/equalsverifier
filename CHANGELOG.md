@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The line in the error message that shows the version of EqualsVerifier and the JDK, now also indicates whether EqualsVerifier runs on the classpath or the modulepath.
+
 ## [3.16.1] - 2024-04-03
 
 ### Fixed
