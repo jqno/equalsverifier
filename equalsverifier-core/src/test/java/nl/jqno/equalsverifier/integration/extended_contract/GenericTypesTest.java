@@ -8,6 +8,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
@@ -91,6 +93,32 @@ public class GenericTypesTest {
     @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class).verify();
+    }
+
+    @Test
+    public void failGracefully_whenClassHasASelfReferenceGenericParameter() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(SelfReferringGenericType.class).verify())
+            .assertFailure()
+            .assertMessageContains(
+                "Reflection error",
+                "try adding a prefab value",
+                "field wrapped",
+                "of type " + SelfReferringGenericType.class.getName()
+            );
+    }
+
+    @Test
+    public void succeed_whenClassHasASelfReferenceGenericParameter_givenPrefabValues() {
+        EqualsVerifier
+            .forClass(SelfReferringGenericType.class)
+            .withPrefabValues(
+                SelfReferringGenericType.class,
+                new SelfReferringGenericType<>(1),
+                new SelfReferringGenericType<>(2)
+            )
+            .suppress(Warning.NONFINAL_FIELDS)
+            .verify();
     }
 
     static final class JavaGenericTypeContainer {
@@ -702,6 +730,33 @@ public class GenericTypesTest {
         @Override
         public int hashCode() {
             return defaultHashCode(this);
+        }
+    }
+
+    public static class SelfReferringGenericType<T extends SelfReferringGenericType<T>> {
+
+        private T wrapped;
+
+        // Everything below is boilerplate to be able to run the tests; the bit above this comment is what matters
+
+        private final int i;
+
+        public SelfReferringGenericType(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (!(obj instanceof SelfReferringGenericType)) {
+                return false;
+            }
+            SelfReferringGenericType<?> other = (SelfReferringGenericType<?>) obj;
+            return i == other.i && Objects.equals(wrapped, other.wrapped);
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(i, wrapped);
         }
     }
 }
