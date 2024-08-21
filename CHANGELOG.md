@@ -15,7 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The error message in some edge cases involving complex generics and abstract classes is now improved. ([Issue 983](https://github.com/jqno/equalsverifier/issues/983))
 - The line in the error message that shows the version of EqualsVerifier and the JDK, now also indicates whether EqualsVerifier runs on the classpath or the modulepath.
+
+### Deprecated
+
+- `withResetCaches()` was once needed for use in Quarkus, but caches are now reset automatically on every run.
 
 ## [3.16.1] - 2024-04-03
 

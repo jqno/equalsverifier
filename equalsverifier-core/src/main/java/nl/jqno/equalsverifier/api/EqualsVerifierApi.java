@@ -90,6 +90,8 @@ public interface EqualsVerifierApi<T> {
      * that would normally be equal, to be unequal, because their ClassLoaders don't match.
      *
      * @return {@code this}, for easy method chaining.
+     * @deprecated No longer needed; this happens automatically.
      */
+    @Deprecated
     EqualsVerifierApi<T> withResetCaches();
 }

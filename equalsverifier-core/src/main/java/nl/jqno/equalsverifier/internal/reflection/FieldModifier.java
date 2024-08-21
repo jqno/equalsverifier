@@ -139,9 +139,13 @@ public final class FieldModifier {
         try {
             changer.change();
         } catch (IllegalArgumentException e) {
-            if (e.getMessage().startsWith("Can not set")) {
+            String msg = e.getMessage();
+            if (msg.startsWith("Can not set") || msg.startsWith("Can not get")) {
                 throw new ReflectionException(
-                    "Reflection error: perhaps a ClassLoader problem?\nTry re-running with #withResetCaches()",
+                    "Reflection error: try adding a prefab value for field " +
+                    field.getName() +
+                    " of type " +
+                    field.getType().getName(),
                     e
                 );
             } else {

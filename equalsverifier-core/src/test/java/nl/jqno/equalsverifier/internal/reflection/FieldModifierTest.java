@@ -7,11 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -331,20 +329,6 @@ public class FieldModifierTest {
 
         doChangeField(foo, "points");
         assertEquals(RED_NEW_POINT, foo.points[0]);
-    }
-
-    @Test
-    public void shouldDetectClassloaderIssue() throws Exception {
-        // We're faking the problem by using two entirely different classes.
-        // In reality, this problem comes up with the same types, but loaded by different class loaders,
-        // which makes them effectively different types as well. This was hard to fake in a test.
-        Object foo = new ObjectContainer();
-        Field field = PrimitiveContainer.class.getField("field");
-        FieldModifier fm = FieldModifier.of(field, foo);
-
-        ReflectionException e = assertThrows(ReflectionException.class, () -> fm.set(new Object()));
-
-        assertTrue(e.getMessage().contains("perhaps a ClassLoader problem?"));
     }
 
     private void setField(Object object, String fieldName, Object value) {

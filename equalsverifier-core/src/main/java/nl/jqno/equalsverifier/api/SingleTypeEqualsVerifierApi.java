@@ -328,10 +328,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * @deprecated No longer needed; this happens automatically.
+     */
+    @Deprecated
     @Override
     public SingleTypeEqualsVerifierApi<T> withResetCaches() {
-        ObjenesisWrapper.reset();
         return this;
     }
 
@@ -402,6 +405,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
+        ObjenesisWrapper.reset();
         if (type.isEnum() || type.isInterface()) {
             return;
         }

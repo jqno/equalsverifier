@@ -14,7 +14,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.ErrorMessage;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
-import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
@@ -80,10 +79,13 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * @deprecated No longer needed; this happens automatically.
+     */
+    @Deprecated
     @Override
     public MultipleTypeEqualsVerifierApi withResetCaches() {
-        ObjenesisWrapper.reset();
         return this;
     }
 

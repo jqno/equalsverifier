@@ -12,7 +12,6 @@ import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
-import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
@@ -104,10 +103,13 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         return this;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * @deprecated No longer needed; this happens automatically.
+     */
+    @Deprecated
     @Override
     public ConfiguredEqualsVerifier withResetCaches() {
-        ObjenesisWrapper.reset();
         return this;
     }
 
