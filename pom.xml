@@ -571,5 +571,24 @@
                 <module>equalsverifier-release-verify</module>
             </modules>
         </profile>
+
+        <profile>
+            <id>openrewrite</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openrewrite.maven</groupId>
+                        <artifactId>rewrite-maven-plugin</artifactId>
+                        <version>5.39.0</version>
+                        <configuration>
+                            <activeRecipes>
+                                <recipe>org.openrewrite.java.format.AutoFormat</recipe>
+                            </activeRecipes>
+                            <failOnDryRunResults>true</failOnDryRunResults>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
