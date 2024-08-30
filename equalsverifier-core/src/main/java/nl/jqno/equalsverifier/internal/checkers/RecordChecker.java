@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
-import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
@@ -9,7 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -31,16 +31,9 @@ public class RecordChecker<T> implements Checker {
             return;
         }
 
-        verifyRecordPrecondition(accessor.getRedAccessor(config.getTypeTag()));
-        verifyRecordPrecondition(
-            accessor.getDefaultValuesAccessor(
-                config.getTypeTag(),
-                config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
-                config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
-                config.getNonnullFields(),
-                config.getAnnotationCache()
-            )
-        );
+        SubjectCreator<T> subjectCreator = config.getSubjectCreator();
+        verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.plain()));
+        verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted(config)));
     }
 
     private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {

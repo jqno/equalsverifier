@@ -7,6 +7,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
@@ -20,6 +21,7 @@ public class HierarchyChecker<T> implements Checker {
     private final Configuration<T> config;
     private final Class<T> type;
     private final TypeTag typeTag;
+    private final SubjectCreator<T> subjectCreator;
     private final ClassAccessor<T> classAccessor;
     private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
@@ -44,6 +46,7 @@ public class HierarchyChecker<T> implements Checker {
 
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
+        this.subjectCreator = config.getSubjectCreator();
         this.classAccessor = config.getClassAccessor();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
@@ -67,7 +70,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
-            T reference = classAccessor.getRedObject(typeTag);
+            T reference = subjectCreator.plain();
             Object equalSuper = getEqualSuper(reference);
 
             Formatter formatter = Formatter.of(
@@ -87,15 +90,9 @@ public class HierarchyChecker<T> implements Checker {
                 // instance.
             }
         } else {
-            safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
+            safelyCheckSuperProperties(ObjectAccessor.of(subjectCreator.plain()));
             safelyCheckSuperProperties(
-                classAccessor.getDefaultValuesAccessor(
-                    typeTag,
-                    config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
-                    config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
-                    config.getNonnullFields(),
-                    config.getAnnotationCache()
-                )
+                ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted(config))
             );
         }
     }
@@ -167,8 +164,8 @@ public class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
-        T reference = referenceAccessor.get();
+        T reference = subjectCreator.plain();
+        ObjectAccessor<T> referenceAccessor = ObjectAccessor.of(reference);
         T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
 
         if (config.isUsingGetClass()) {
@@ -204,8 +201,8 @@ public class HierarchyChecker<T> implements Checker {
             );
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
-        T reference = referenceAccessor.get();
+        T reference = subjectCreator.plain();
+        ObjectAccessor<T> referenceAccessor = ObjectAccessor.of(reference);
         T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
         assertFalse(
             Formatter.of(
