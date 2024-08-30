@@ -28,8 +28,8 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
-    public ReflexivityFieldCheck(SubjectCreator<T> subjectCreator, Configuration<T> config) {
-        this.subjectCreator = subjectCreator;
+    public ReflexivityFieldCheck(Configuration<T> config) {
+        this.subjectCreator = config.getSubjectCreator();
         this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();

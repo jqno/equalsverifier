@@ -19,15 +19,12 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 )
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
-    private final SubjectCreator<T> subjectCreator;
     private final Configuration<T> config;
+    private final SubjectCreator<T> subjectCreator;
 
-    public NullPointerExceptionFieldCheck(
-        SubjectCreator<T> subjectCreator,
-        Configuration<T> config
-    ) {
-        this.subjectCreator = subjectCreator;
+    public NullPointerExceptionFieldCheck(Configuration<T> config) {
         this.config = config;
+        this.subjectCreator = config.getSubjectCreator();
     }
 
     @Override

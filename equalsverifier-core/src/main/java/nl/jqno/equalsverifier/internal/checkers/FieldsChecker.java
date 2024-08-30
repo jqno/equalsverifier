@@ -30,7 +30,7 @@ public class FieldsChecker<T> implements Checker {
         this.config = config;
 
         final TypeTag typeTag = config.getTypeTag();
-        final SubjectCreator<T> subjectCreator = new SubjectCreator<>(config);
+        final SubjectCreator<T> subjectCreator = config.getSubjectCreator();
 
         final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
@@ -43,9 +43,8 @@ public class FieldsChecker<T> implements Checker {
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck =
             new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
-        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(subjectCreator, config);
-        this.significantFieldCheck =
-            new SignificantFieldCheck<>(subjectCreator, config, isCachedHashCodeField);
+        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
+        this.significantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
         this.transientFieldsCheck =
             new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
@@ -58,7 +57,7 @@ public class FieldsChecker<T> implements Checker {
             );
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
-        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(subjectCreator, config);
+        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
     }
 
     @Override

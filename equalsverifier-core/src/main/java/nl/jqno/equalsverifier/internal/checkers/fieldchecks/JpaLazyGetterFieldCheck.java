@@ -31,8 +31,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final Function<String, String> fieldnameToGetter;
     private final boolean strictHashcode;
 
-    public JpaLazyGetterFieldCheck(SubjectCreator<T> subjectCreator, Configuration<T> config) {
-        this.subjectCreator = subjectCreator;
+    public JpaLazyGetterFieldCheck(Configuration<T> config) {
+        this.subjectCreator = config.getSubjectCreator();
         this.instanceCreator = config.getInstanceCreator();
         this.type = config.getType();
         this.accessor = config.getClassAccessor();

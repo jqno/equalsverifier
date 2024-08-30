@@ -14,16 +14,14 @@ public class SubjectCreator<T> {
 
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
-    private final Configuration<T> config;
 
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
         justification = "PrefabValues is inherently mutable."
     )
-    public SubjectCreator(Configuration<T> config) {
-        this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
-        this.config = config;
+    public SubjectCreator(TypeTag typeTag, PrefabValues prefabValues) {
+        this.typeTag = typeTag;
+        this.prefabValues = prefabValues;
     }
 
     public T plain() {
@@ -34,7 +32,7 @@ public class SubjectCreator<T> {
         return createSubject().withDefaultedField(field).get();
     }
 
-    public T withAllFieldsDefaulted() {
+    public T withAllFieldsDefaulted(Configuration<T> config) {
         return withAllFields((acc, f) ->
             FieldProbe.of(f, config).canBeDefault() ? acc.withDefaultedField(f) : acc
         );

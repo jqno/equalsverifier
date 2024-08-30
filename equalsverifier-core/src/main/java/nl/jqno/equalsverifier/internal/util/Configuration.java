@@ -11,6 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.VintageInstanceCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
@@ -41,6 +42,7 @@ public final class Configuration<T> {
     private final ClassAccessor<T> classAccessor;
     private final AnnotationCache annotationCache;
     private final Set<String> ignoredFields;
+    private final SubjectCreator<T> subjectCreator;
     private final InstanceCreator instanceCreator;
 
     private final List<T> equalExamples;
@@ -80,6 +82,7 @@ public final class Configuration<T> {
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
         this.instanceCreator = new VintageInstanceCreator(prefabValues);
+        this.subjectCreator = new SubjectCreator<>(typeTag, prefabValues);
     }
 
     public static <T> Configuration<T> build(
@@ -288,6 +291,10 @@ public final class Configuration<T> {
 
     public Set<String> getIgnoredFields() {
         return Collections.unmodifiableSet(ignoredFields);
+    }
+
+    public SubjectCreator<T> getSubjectCreator() {
+        return subjectCreator;
     }
 
     public InstanceCreator getInstanceCreator() {
