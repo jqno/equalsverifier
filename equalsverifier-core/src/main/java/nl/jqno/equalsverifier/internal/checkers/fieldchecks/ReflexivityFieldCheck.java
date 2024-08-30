@@ -7,10 +7,8 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -21,17 +19,17 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
-    private final SubjectCreator<T> subjectCreator;
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
+    private final SubjectCreator<T> subjectCreator;
+    private final InstanceCreator instanceCreator;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
     public ReflexivityFieldCheck(Configuration<T> config) {
-        this.subjectCreator = config.getSubjectCreator();
         this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
+        this.subjectCreator = config.getSubjectCreator();
+        this.instanceCreator = config.getInstanceCreator();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.nonnullFields = config.getNonnullFields();
         this.annotationCache = config.getAnnotationCache();
@@ -75,8 +73,9 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         }
 
         TypeTag tag = TypeTag.of(field, typeTag);
-        Object left = subjectCreator.withFieldSetTo(field, prefabValues.giveRed(tag));
-        Object right = subjectCreator.withFieldSetTo(field, prefabValues.giveRedCopy(tag));
+        Tuple<?> tuple = instanceCreator.instantiate(tag);
+        Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
+        Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
 
         Formatter f = Formatter.of(
             "Reflexivity: == used instead of .equals() on field: %%" +

@@ -5,8 +5,8 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -17,7 +17,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public static final String ERROR_DOC_TITLE = "String equality";
 
     private final SubjectCreator<T> subjectCreator;
-    private final PrefabValues prefabValues;
+    private final InstanceCreator instanceCreator;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     @SuppressFBWarnings(
@@ -26,11 +26,11 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     )
     public StringFieldCheck(
         SubjectCreator<T> subjectCreator,
-        PrefabValues prefabValues,
+        InstanceCreator instanceCreator,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer
     ) {
         this.subjectCreator = subjectCreator;
-        this.prefabValues = prefabValues;
+        this.instanceCreator = instanceCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
@@ -44,7 +44,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
             String.class.equals(fieldProbe.getType()) &&
             !FieldAccessor.of(fieldProbe.getField()).fieldIsStatic()
         ) {
-            String red = prefabValues.giveRed(new TypeTag(String.class));
+            String red = instanceCreator.<String>instantiate(new TypeTag(String.class)).getRed();
 
             final T reference;
             final T copy;

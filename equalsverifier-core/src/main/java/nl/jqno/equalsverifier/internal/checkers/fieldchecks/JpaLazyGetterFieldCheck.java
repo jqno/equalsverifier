@@ -10,9 +10,9 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -54,8 +54,9 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, "equals", getterName, classProbe.hasMethod(getterName));
 
         Class<T> sub = throwingGetterCreator(getterName);
-        T red1 = instanceCreator.<T>instantiate(new TypeTag(sub)).getRed();
-        T red2 = ObjectAccessor.of(red1, sub).copy();
+        Tuple<T> tuple = instanceCreator.<T>instantiate(new TypeTag(sub));
+        T red1 = tuple.getRed();
+        T red2 = tuple.getRedCopy();
 
         boolean equalsExceptionCaught = false;
         try {

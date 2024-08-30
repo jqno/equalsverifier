@@ -5,7 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -17,14 +17,14 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private final Class<T> type;
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
+    private final InstanceCreator instanceCreator;
     private final ClassProbe<T> classProbe;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public AbstractDelegationChecker(Configuration<T> config) {
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
+        this.instanceCreator = config.getInstanceCreator();
         this.classProbe = config.getClassProbe();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
@@ -35,8 +35,9 @@ public class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        T instance = prefabValues.giveRed(typeTag);
-        T copy = prefabValues.giveBlue(typeTag);
+        Tuple<T> tuple = instanceCreator.instantiate(typeTag);
+        T instance = tuple.getRed();
+        T copy = tuple.getBlue();
         checkAbstractDelegation(instance, copy);
     }
 
@@ -72,7 +73,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
         try {
-            return prefabValues.giveTuple(tag);
+            return instanceCreator.instantiate(tag);
         } catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.
             return null;
