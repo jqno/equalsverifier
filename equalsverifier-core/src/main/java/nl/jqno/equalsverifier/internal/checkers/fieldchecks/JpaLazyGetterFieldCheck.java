@@ -10,11 +10,12 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -23,18 +24,18 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
+    private final InstanceCreator instanceCreator;
     private final Class<T> type;
     private final ClassAccessor<T> accessor;
-    private final PrefabValues prefabValues;
     private final AnnotationCache annotationCache;
     private final Function<String, String> fieldnameToGetter;
     private final boolean strictHashcode;
 
     public JpaLazyGetterFieldCheck(SubjectCreator<T> subjectCreator, Configuration<T> config) {
         this.subjectCreator = subjectCreator;
+        this.instanceCreator = config.getInstanceCreator();
         this.type = config.getType();
         this.accessor = config.getClassAccessor();
-        this.prefabValues = config.getPrefabValues();
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
         this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);
@@ -54,10 +55,10 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         }
 
         assertEntity(fieldName, "equals", getterName, accessor.hasMethod(getterName));
-        ClassAccessor<T> subAccessor = throwingGetterAccessor(getterName);
 
-        T red1 = subAccessor.getRedObject(TypeTag.NULL);
-        T red2 = subAccessor.getRedObject(TypeTag.NULL);
+        Class<T> sub = throwingGetterCreator(getterName);
+        T red1 = instanceCreator.<T>instantiate(new TypeTag(sub)).getRed();
+        T red2 = ObjectAccessor.of(red1, sub).copy();
 
         boolean equalsExceptionCaught = false;
         try {
@@ -99,8 +100,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         );
     }
 
-    private ClassAccessor<T> throwingGetterAccessor(String getterName) {
-        Class<T> sub = Instantiator.giveDynamicSubclass(
+    private Class<T> throwingGetterCreator(String getterName) {
+        return Instantiator.giveDynamicSubclass(
             type,
             getterName,
             builder ->
@@ -108,7 +109,6 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                     .method(named(getterName))
                     .intercept(throwing(EqualsVerifierInternalBugException.class))
         );
-        return ClassAccessor.of(sub, prefabValues);
     }
 
     private void assertEntity(

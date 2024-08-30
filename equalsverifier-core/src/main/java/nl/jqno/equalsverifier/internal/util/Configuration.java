@@ -10,6 +10,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
+import nl.jqno.equalsverifier.internal.instantiation.VintageInstanceCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
@@ -39,6 +41,7 @@ public final class Configuration<T> {
     private final ClassAccessor<T> classAccessor;
     private final AnnotationCache annotationCache;
     private final Set<String> ignoredFields;
+    private final InstanceCreator instanceCreator;
 
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
@@ -76,6 +79,7 @@ public final class Configuration<T> {
         this.fieldnameToGetter = fieldnameToGetter;
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
+        this.instanceCreator = new VintageInstanceCreator(prefabValues);
     }
 
     public static <T> Configuration<T> build(
@@ -284,5 +288,9 @@ public final class Configuration<T> {
 
     public Set<String> getIgnoredFields() {
         return Collections.unmodifiableSet(ignoredFields);
+    }
+
+    public InstanceCreator getInstanceCreator() {
+        return instanceCreator;
     }
 }

@@ -5,7 +5,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-public class VintageFieldInstantiationStrategy implements FieldInstantiationStrategy {
+public class VintageInstanceCreator implements InstanceCreator {
 
     private final PrefabValues prefabValues;
 
@@ -13,7 +13,7 @@ public class VintageFieldInstantiationStrategy implements FieldInstantiationStra
         value = "EI_EXPOSE_REP2",
         justification = "PrefabValues is inherently mutable."
     )
-    public VintageFieldInstantiationStrategy(PrefabValues prefabValues) {
+    public VintageInstanceCreator(PrefabValues prefabValues) {
         this.prefabValues = prefabValues;
     }
 
