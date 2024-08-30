@@ -7,11 +7,11 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
@@ -65,8 +65,8 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         if (FieldAccessor.of(field).fieldIsStatic()) {
             return;
         }
-        ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
-        if (!fieldTypeAccessor.declaresEquals()) {
+        ClassProbe<?> fieldTypeProbe = new ClassProbe<>(fieldType);
+        if (!fieldTypeProbe.declaresEquals()) {
             return;
         }
         if (fieldType.isSynthetic()) {

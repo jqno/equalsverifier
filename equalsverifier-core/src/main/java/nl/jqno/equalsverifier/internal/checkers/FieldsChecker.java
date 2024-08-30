@@ -5,7 +5,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -62,10 +61,9 @@ public class FieldsChecker<T> implements Checker {
 
     @Override
     public void check() {
-        ClassAccessor<T> classAccessor = config.getClassAccessor();
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor.getType(), config);
+        FieldInspector<T> inspector = new FieldInspector<>(config.getType(), config);
 
-        if (!classAccessor.isEqualsInheritedFromObject()) {
+        if (!config.getClassProbe().isEqualsInheritedFromObject()) {
             inspector.check(arrayFieldCheck);
             inspector.check(floatAndDoubleFieldCheck);
             inspector.check(reflexivityFieldCheck);

@@ -9,11 +9,8 @@ import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -26,7 +23,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final SubjectCreator<T> subjectCreator;
     private final InstanceCreator instanceCreator;
     private final Class<T> type;
-    private final ClassAccessor<T> accessor;
+    private final ClassProbe<T> classProbe;
     private final AnnotationCache annotationCache;
     private final Function<String, String> fieldnameToGetter;
     private final boolean strictHashcode;
@@ -35,7 +32,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         this.subjectCreator = config.getSubjectCreator();
         this.instanceCreator = config.getInstanceCreator();
         this.type = config.getType();
-        this.accessor = config.getClassAccessor();
+        this.classProbe = config.getClassProbe();
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
         this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);
@@ -54,7 +51,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        assertEntity(fieldName, "equals", getterName, accessor.hasMethod(getterName));
+        assertEntity(fieldName, "equals", getterName, classProbe.hasMethod(getterName));
 
         Class<T> sub = throwingGetterCreator(getterName);
         T red1 = instanceCreator.<T>instantiate(new TypeTag(sub)).getRed();

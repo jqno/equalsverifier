@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -18,14 +18,14 @@ public class AbstractDelegationChecker<T> implements Checker {
     private final Class<T> type;
     private final TypeTag typeTag;
     private final PrefabValues prefabValues;
-    private final ClassAccessor<T> classAccessor;
+    private final ClassProbe<T> classProbe;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     public AbstractDelegationChecker(Configuration<T> config) {
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
         this.prefabValues = config.getPrefabValues();
-        this.classAccessor = config.getClassAccessor();
+        this.classProbe = config.getClassProbe();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -41,8 +41,8 @@ public class AbstractDelegationChecker<T> implements Checker {
     }
 
     private void checkAbstractEqualsAndHashCode() {
-        boolean equalsIsAbstract = classAccessor.isEqualsAbstract();
-        boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
+        boolean equalsIsAbstract = classProbe.isEqualsAbstract();
+        boolean hashCodeIsAbstract = classProbe.isHashCodeAbstract();
 
         if (equalsIsAbstract && hashCodeIsAbstract) {
             fail(

@@ -9,8 +9,8 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -26,8 +26,8 @@ public class RecordChecker<T> implements Checker {
 
     @Override
     public void check() {
-        ClassAccessor<T> accessor = config.getClassAccessor();
-        if (!accessor.isRecord()) {
+        ClassProbe<T> probe = config.getClassProbe();
+        if (!probe.isRecord()) {
             return;
         }
 

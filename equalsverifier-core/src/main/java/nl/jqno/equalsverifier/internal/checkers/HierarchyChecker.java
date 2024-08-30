@@ -7,9 +7,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -22,7 +22,7 @@ public class HierarchyChecker<T> implements Checker {
     private final Class<T> type;
     private final TypeTag typeTag;
     private final SubjectCreator<T> subjectCreator;
-    private final ClassAccessor<T> classAccessor;
+    private final ClassProbe<T> classProbe;
     private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
     private final boolean hasRedefinedSubclass;
@@ -47,10 +47,10 @@ public class HierarchyChecker<T> implements Checker {
         this.type = config.getType();
         this.typeTag = config.getTypeTag();
         this.subjectCreator = config.getSubjectCreator();
-        this.classAccessor = config.getClassAccessor();
+        this.classProbe = config.getClassProbe();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
-        this.typeIsSealed = classAccessor.isSealed();
+        this.typeIsSealed = classProbe.isSealed();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -64,8 +64,8 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkSuperclass() {
-        ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-        if (superAccessor.isEqualsInheritedFromObject() || superAccessor.isSealed()) {
+        ClassProbe<? super T> superProbe = classProbe.getSuperProbe();
+        if (superProbe.isEqualsInheritedFromObject() || superProbe.isSealed()) {
             return;
         }
 
