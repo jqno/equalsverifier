@@ -72,7 +72,7 @@ public final class Configuration<T> {
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
         this.instanceCreator = new VintageInstanceCreator(prefabValues);
-        this.subjectCreator = new VintageSubjectCreator<>(typeTag, prefabValues);
+        this.subjectCreator = new ModernSubjectCreator<>(typeTag, instanceCreator);
         this.classProbe = new ClassProbe<>(type);
     }
 
