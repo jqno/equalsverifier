@@ -5,9 +5,22 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
+
+    @ArchTest
+    public static final ArchRule DONT_USE_VINTAGE_REFLECTION_DIRECTLY = noClasses()
+        .that()
+        .resideInAPackage("nl.jqno.equalsverifier.internal.checkers..")
+        .should()
+        .accessClassesThat()
+        .areAssignableTo(ClassAccessor.class)
+        .orShould()
+        .accessClassesThat()
+        .areAssignableTo(PrefabValues.class);
 
     @ArchTest
     public static final ArchRule APACHE_COMMONS = noClasses()
