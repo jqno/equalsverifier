@@ -8,19 +8,23 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     private final TypeTag typeTag;
+    private final Configuration<T> config;
     private final InstanceCreator instanceCreator;
     private final ClassProbe<T> classProbe;
 
     public ModernSubjectCreator(
         TypeTag typeTag,
+        Configuration<T> config,
         InstanceCreator instanceCreator,
         ClassProbe<T> classProbe
     ) {
         this.typeTag = typeTag;
+        this.config = config;
         this.instanceCreator = instanceCreator;
         this.classProbe = classProbe;
     }
@@ -78,7 +82,10 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     private T createInstance(Map<Field, Object> values) {
         for (Field f : fields()) {
-            if (!values.containsKey(f)) {
+            boolean fieldIsAbsent = !values.containsKey(f);
+            boolean fieldCannotBeNull =
+                values.get(f) == null && !FieldProbe.of(f, config).canBeDefault();
+            if (fieldIsAbsent || fieldCannotBeNull) {
                 Object value = instantiate(f).getRed();
                 values.put(f, value);
             }
@@ -93,7 +100,6 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
             for (Field f : values.keySet()) {
                 Object value = values.get(f);
                 if (value == null) {
-                    // TODO if fieldProbe.canBeDefault()...
                     accessor.withDefaultedField(f);
                 } else {
                     accessor.withFieldSetTo(f, value);
