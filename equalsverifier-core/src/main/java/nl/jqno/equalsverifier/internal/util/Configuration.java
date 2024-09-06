@@ -71,9 +71,9 @@ public final class Configuration<T> {
         this.fieldnameToGetter = fieldnameToGetter;
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
-        this.instanceCreator = new VintageInstanceCreator(prefabValues);
-        this.subjectCreator = new ModernSubjectCreator<>(typeTag, instanceCreator);
         this.classProbe = new ClassProbe<>(type);
+        this.instanceCreator = new VintageInstanceCreator(prefabValues);
+        this.subjectCreator = new ModernSubjectCreator<>(typeTag, instanceCreator, classProbe);
     }
 
     public static <T> Configuration<T> build(

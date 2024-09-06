@@ -6,16 +6,24 @@ import java.util.Map;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     private final TypeTag typeTag;
     private final InstanceCreator instanceCreator;
+    private final ClassProbe<T> classProbe;
 
-    public ModernSubjectCreator(TypeTag typeTag, InstanceCreator instanceCreator) {
+    public ModernSubjectCreator(
+        TypeTag typeTag,
+        InstanceCreator instanceCreator,
+        ClassProbe<T> classProbe
+    ) {
         this.typeTag = typeTag;
         this.instanceCreator = instanceCreator;
+        this.classProbe = classProbe;
     }
 
     @Override
@@ -76,8 +84,24 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
                 values.put(f, value);
             }
         }
+
         // maak een instance met veld-waardes uit `values`: kijk af uit FallbackFactory
-        return null;
+        if (classProbe.isRecord()) {
+            return null;
+        } else {
+            T instance = Instantiator.<T>of(typeTag.getType()).instantiate();
+            ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
+            for (Field f : values.keySet()) {
+                Object value = values.get(f);
+                if (value == null) {
+                    // TODO if fieldProbe.canBeDefault()...
+                    accessor.withDefaultedField(f);
+                } else {
+                    accessor.withFieldSetTo(f, value);
+                }
+            }
+            return instance;
+        }
     }
 
     private Map<Field, Object> empty() {
@@ -91,7 +115,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     private FieldIterable fields() {
-        return FieldIterable.of(typeTag.getType());
+        return FieldIterable.ofIgnoringStatic(typeTag.getType());
     }
 
     private Tuple<?> instantiate(Field f) {
