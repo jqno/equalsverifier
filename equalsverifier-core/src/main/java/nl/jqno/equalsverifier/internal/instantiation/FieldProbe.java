@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -54,6 +55,10 @@ public final class FieldProbe {
 
     public boolean fieldIsPrimitive() {
         return getType().isPrimitive();
+    }
+
+    public boolean fieldIsStatic() {
+        return Modifier.isStatic(field.getModifiers());
     }
 
     public boolean canBeDefault() {

@@ -66,6 +66,9 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     @Override
     public T withFieldChanged(Field field) {
+        if (FieldProbe.of(field, config).fieldIsStatic()) {
+            return plain();
+        }
         Object value = instantiate(field).getBlue();
         return createInstance(with(field, value));
     }
@@ -97,7 +100,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         } else {
             T instance = Instantiator.<T>of(typeTag.getType()).instantiate();
             ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
-            for (Field f : values.keySet()) {
+            for (Field f : fields()) {
                 Object value = values.get(f);
                 if (value == null) {
                     accessor.withDefaultedField(f);
