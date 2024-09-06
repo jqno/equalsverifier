@@ -1,17 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
-
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.instantiation.RecordProbe;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -25,18 +21,18 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
  */
 final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
-    private final Constructor<T> constructor;
+    private final RecordProbe<T> probe;
 
     /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
     /* default */RecordObjectAccessor(T object, Class<T> type) {
         super(object, type);
-        this.constructor = getRecordConstructor();
+        this.probe = new RecordProbe<>(type);
     }
 
     /** {@inheritDoc} */
     @Override
     public T copy() {
-        List<?> params = fields().map(this::getField).collect(Collectors.toList());
+        List<?> params = probe.fields().map(this::getField).collect(Collectors.toList());
         return callRecordConstructor(params);
     }
 
@@ -120,71 +116,13 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     private ObjectAccessor<T> makeAccessor(Function<Field, Object> determineValue) {
-        List<Object> params = fields().map(determineValue).collect(Collectors.toList());
+        List<Object> params = probe.fields().map(determineValue).collect(Collectors.toList());
         T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
     }
 
-    private Stream<Field> fields() {
-        return StreamSupport.stream(FieldIterable.ofIgnoringStatic(type()).spliterator(), false);
-    }
-
-    private Constructor<T> getRecordConstructor() {
-        return rethrow(() -> {
-            List<Class<?>> constructorTypes = fields()
-                .map(Field::getType)
-                .collect(Collectors.toList());
-            Constructor<T> result = type()
-                .getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
-            result.setAccessible(true);
-            return result;
-        });
-    }
-
     private T callRecordConstructor(List<?> params) {
-        return rethrow(
-            () -> constructor.newInstance(params.toArray(new Object[0])),
-            e -> buildMessage(e, constructor.getDeclaringClass(), params)
-        );
-    }
-
-    private String buildMessage(Throwable e, Class<?> type, List<?> params) {
-        String prefix =
-            "Record: failed to run constructor for record type " +
-            type.getName() +
-            "\n  These were the values passed to the constructor: " +
-            params;
-
-        if (e.getCause() instanceof NullPointerException) {
-            return (
-                prefix +
-                "\n  If the record does not accept null values for its constructor parameters," +
-                " consider suppressing Warning.NULL_FIELDS."
-            );
-        }
-
-        boolean hasZeros = false;
-        boolean hasSomethingElse = false;
-        for (Object p : params) {
-            if (PrimitiveMappers.ZEROS.contains(p)) {
-                hasZeros = true;
-            } else {
-                // nulls are already eliminated
-                hasSomethingElse = true;
-            }
-        }
-
-        String msg = prefix;
-        if (hasZeros) {
-            msg +=
-            "\n  If the record does not accept 0 or false as a value for its constructor parameters," +
-            " consider suppressing Warning.ZERO_FIELDS.";
-        }
-        if (hasSomethingElse) {
-            msg +=
-            "\n  If the record does not accept any of the given values for its constructor parameters," +
-            " consider providing prefab values for the types of those fields.";
-        }
-        return msg;
+        RecordProbe<T> p = new RecordProbe<>(type());
+        return p.callRecordConstructor(params);
     }
 }

@@ -19,6 +19,10 @@ public class RecordProbe<T> {
         this.type = type;
     }
 
+    public Stream<Field> fields() {
+        return StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false);
+    }
+
     public T callRecordConstructor(List<?> params) {
         Constructor<T> constructor = getRecordConstructor();
         return rethrow(
@@ -38,10 +42,6 @@ public class RecordProbe<T> {
             result.setAccessible(true);
             return result;
         });
-    }
-
-    private Stream<Field> fields() {
-        return StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false);
     }
 
     private String buildMessage(Throwable e, List<?> params) {
