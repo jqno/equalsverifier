@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
@@ -97,7 +98,13 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         if (classProbe.isRecord()) {
             List<Object> params = new ArrayList<>();
             for (Field f : fields()) {
-                params.add(values.get(f));
+                Object value = values.get(f);
+                if (value == null) {
+                    Object def = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
+                    params.add(def);
+                } else {
+                    params.add(value);
+                }
             }
             RecordProbe<T> recordProbe = new RecordProbe<>(type);
             return recordProbe.callRecordConstructor(params);
