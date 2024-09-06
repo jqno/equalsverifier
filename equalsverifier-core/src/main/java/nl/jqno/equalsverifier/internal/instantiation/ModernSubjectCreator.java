@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -94,11 +93,16 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
             }
         }
 
-        // maak een instance met veld-waardes uit `values`: kijk af uit FallbackFactory
+        Class<T> type = typeTag.getType();
         if (classProbe.isRecord()) {
-            return null;
+            List<Object> params = new ArrayList<>();
+            for (Field f : fields()) {
+                params.add(values.get(f));
+            }
+            RecordProbe<T> recordProbe = new RecordProbe<>(type);
+            return recordProbe.callRecordConstructor(params);
         } else {
-            T instance = Instantiator.<T>of(typeTag.getType()).instantiate();
+            T instance = Instantiator.<T>of(type).instantiate();
             ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
             for (Field f : fields()) {
                 Object value = values.get(f);
