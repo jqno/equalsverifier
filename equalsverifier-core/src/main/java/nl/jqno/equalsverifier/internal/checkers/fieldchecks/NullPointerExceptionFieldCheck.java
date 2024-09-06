@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 @SuppressFBWarnings(
@@ -22,9 +23,9 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
     private final Configuration<T> config;
     private final SubjectCreator<T> subjectCreator;
 
-    public NullPointerExceptionFieldCheck(Configuration<T> config) {
-        this.config = config;
-        this.subjectCreator = config.getSubjectCreator();
+    public NullPointerExceptionFieldCheck(Context<T> context) {
+        this.config = context.getConfiguration();
+        this.subjectCreator = context.getSubjectCreator();
     }
 
     @Override

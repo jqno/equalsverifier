@@ -25,14 +25,7 @@ import nl.jqno.equalsverifier.internal.checkers.RecordChecker;
 import nl.jqno.equalsverifier.internal.checkers.SignatureChecker;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.ErrorMessage;
-import nl.jqno.equalsverifier.internal.util.FieldNameExtractor;
-import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
-import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
-import nl.jqno.equalsverifier.internal.util.Validations;
+import nl.jqno.equalsverifier.internal.util.*;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -412,6 +405,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
+        Context<T> context = new Context<>(config);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -420,8 +414,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields
         );
 
-        verifyWithoutExamples(config);
-        verifyWithExamples(config);
+        verifyWithoutExamples(context);
+        verifyWithExamples(context);
     }
 
     private Configuration<T> buildConfig() {
@@ -444,12 +438,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         );
     }
 
-    private void verifyWithoutExamples(Configuration<T> config) {
+    private void verifyWithoutExamples(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
         Checker[] checkers = {
-            new SignatureChecker<>(config),
-            new AbstractDelegationChecker<>(config),
-            new NullChecker<>(config),
-            new RecordChecker<>(config),
+            new SignatureChecker<>(context),
+            new AbstractDelegationChecker<>(context),
+            new NullChecker<>(context),
+            new RecordChecker<>(context),
             new CachedHashCodeChecker<>(config)
         };
 
@@ -458,12 +453,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         }
     }
 
-    private void verifyWithExamples(Configuration<T> config) {
+    private void verifyWithExamples(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
         Checker[] checkers = {
             new ExamplesChecker<>(config),
-            new HierarchyChecker<>(config),
-            new FieldsChecker<>(config),
-            new MapEntryHashCodeRequirementChecker<>(config)
+            new HierarchyChecker<>(context),
+            new FieldsChecker<>(context),
+            new MapEntryHashCodeRequirementChecker<>(context)
         };
 
         for (Checker checker : checkers) {

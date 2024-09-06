@@ -15,6 +15,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
@@ -26,10 +27,12 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
-    public ReflexivityFieldCheck(Configuration<T> config) {
+    public ReflexivityFieldCheck(Context<T> context) {
+        this.subjectCreator = context.getSubjectCreator();
+        this.instanceCreator = context.getInstanceCreator();
+
+        Configuration<T> config = context.getConfiguration();
         this.typeTag = config.getTypeTag();
-        this.subjectCreator = config.getSubjectCreator();
-        this.instanceCreator = config.getInstanceCreator();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.nonnullFields = config.getNonnullFields();
         this.annotationCache = config.getAnnotationCache();

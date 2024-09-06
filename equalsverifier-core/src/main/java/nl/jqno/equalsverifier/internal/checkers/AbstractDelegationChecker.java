@@ -9,9 +9,7 @@ import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class AbstractDelegationChecker<T> implements Checker {
 
@@ -21,11 +19,12 @@ public class AbstractDelegationChecker<T> implements Checker {
     private final ClassProbe<T> classProbe;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public AbstractDelegationChecker(Configuration<T> config) {
-        this.type = config.getType();
+    public AbstractDelegationChecker(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
+        this.type = context.getType();
         this.typeTag = config.getTypeTag();
-        this.instanceCreator = config.getInstanceCreator();
-        this.classProbe = config.getClassProbe();
+        this.instanceCreator = context.getInstanceCreator();
+        this.classProbe = context.getClassProbe();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 

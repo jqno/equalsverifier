@@ -27,11 +27,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private final Predicate<FieldAccessor> isCachedHashCodeField;
 
     public SignificantFieldCheck(
-        Configuration<T> config,
+        Context<T> context,
         Predicate<FieldAccessor> isCachedHashCodeField
     ) {
-        this.config = config;
-        this.subjectCreator = config.getSubjectCreator();
+        this.subjectCreator = context.getSubjectCreator();
+        this.config = context.getConfiguration();
         this.type = config.getType();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
@@ -57,6 +57,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         );
         if (fieldProbe.canBeDefault()) {
             checkValues(
+                // TODO: Configuration weghalen als field?
                 subjectCreator.withAllFieldsDefaulted(config),
                 subjectCreator.withAllFieldsDefaulted(config),
                 subjectCreator.withAllFieldsDefaultedExcept(fieldProbe.getField()),

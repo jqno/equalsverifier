@@ -12,9 +12,7 @@ import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class HierarchyChecker<T> implements Checker {
 
@@ -30,8 +28,8 @@ public class HierarchyChecker<T> implements Checker {
     private final boolean typeIsSealed;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public HierarchyChecker(Configuration<T> config) {
-        this.config = config;
+    public HierarchyChecker(Context<T> context) {
+        this.config = context.getConfiguration();
 
         this.strictnessSuppressed =
             config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
@@ -44,10 +42,10 @@ public class HierarchyChecker<T> implements Checker {
             );
         }
 
-        this.type = config.getType();
+        this.type = context.getType();
         this.typeTag = config.getTypeTag();
-        this.subjectCreator = config.getSubjectCreator();
-        this.classProbe = config.getClassProbe();
+        this.subjectCreator = context.getSubjectCreator();
+        this.classProbe = context.getClassProbe();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
         this.typeIsSealed = classProbe.isSealed();

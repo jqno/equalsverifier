@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
-import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class SignatureChecker<T> implements Checker {
@@ -18,10 +18,10 @@ public class SignatureChecker<T> implements Checker {
     private final ClassProbe<T> classProbe;
     private final Set<Warning> warningsToSuppress;
 
-    public SignatureChecker(Configuration<T> config) {
-        this.type = config.getType();
-        this.classProbe = config.getClassProbe();
-        this.warningsToSuppress = config.getWarningsToSuppress();
+    public SignatureChecker(Context<T> context) {
+        this.type = context.getType();
+        this.classProbe = context.getClassProbe();
+        this.warningsToSuppress = context.getConfiguration().getWarningsToSuppress();
     }
 
     @Override

@@ -16,6 +16,7 @@ import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
@@ -28,11 +29,13 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
     private final Function<String, String> fieldnameToGetter;
     private final boolean strictHashcode;
 
-    public JpaLazyGetterFieldCheck(Configuration<T> config) {
-        this.subjectCreator = config.getSubjectCreator();
-        this.instanceCreator = config.getInstanceCreator();
-        this.type = config.getType();
-        this.classProbe = config.getClassProbe();
+    public JpaLazyGetterFieldCheck(Context<T> context) {
+        this.subjectCreator = context.getSubjectCreator();
+        this.instanceCreator = context.getInstanceCreator();
+        this.type = context.getType();
+        this.classProbe = context.getClassProbe();
+
+        Configuration<T> config = context.getConfiguration();
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
         this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);

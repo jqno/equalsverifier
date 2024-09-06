@@ -9,9 +9,11 @@ import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 
 public class FieldsChecker<T> implements Checker {
 
+    private final Context<T> context;
     private final Configuration<T> config;
     private final ArrayFieldCheck<T> arrayFieldCheck;
     private final FloatAndDoubleFieldCheck<T> floatAndDoubleFieldCheck;
@@ -25,11 +27,12 @@ public class FieldsChecker<T> implements Checker {
     private final BigDecimalFieldCheck<T> bigDecimalFieldCheck;
     private final JpaLazyGetterFieldCheck<T> jpaLazyGetterFieldCheck;
 
-    public FieldsChecker(Configuration<T> config) {
-        this.config = config;
+    public FieldsChecker(Context<T> context) {
+        this.context = context;
+        this.config = context.getConfiguration();
 
         final TypeTag typeTag = config.getTypeTag();
-        final SubjectCreator<T> subjectCreator = config.getSubjectCreator();
+        final SubjectCreator<T> subjectCreator = context.getSubjectCreator();
 
         final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
@@ -42,8 +45,8 @@ public class FieldsChecker<T> implements Checker {
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
         this.mutableStateFieldCheck =
             new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
-        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(config);
-        this.significantFieldCheck = new SignificantFieldCheck<>(config, isCachedHashCodeField);
+        this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(context);
+        this.significantFieldCheck = new SignificantFieldCheck<>(context, isCachedHashCodeField);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
         this.transientFieldsCheck =
             new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
@@ -51,25 +54,25 @@ public class FieldsChecker<T> implements Checker {
         this.stringFieldCheck =
             new StringFieldCheck<>(
                 subjectCreator,
-                config.getInstanceCreator(),
+                context.getInstanceCreator(),
                 config.getCachedHashCodeInitializer()
             );
         this.bigDecimalFieldCheck =
             new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
-        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(config);
+        this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(context);
     }
 
     @Override
     public void check() {
-        FieldInspector<T> inspector = new FieldInspector<>(config.getType(), config);
+        FieldInspector<T> inspector = new FieldInspector<>(context.getType(), config);
 
-        if (!config.getClassProbe().isEqualsInheritedFromObject()) {
+        if (!context.getClassProbe().isEqualsInheritedFromObject()) {
             inspector.check(arrayFieldCheck);
             inspector.check(floatAndDoubleFieldCheck);
             inspector.check(reflexivityFieldCheck);
         }
 
-        if (!ignoreMutability(config.getType())) {
+        if (!ignoreMutability(context.getType())) {
             inspector.check(mutableStateFieldCheck);
         }
 

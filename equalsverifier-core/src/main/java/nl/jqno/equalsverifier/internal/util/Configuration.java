@@ -6,7 +6,6 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
@@ -33,10 +32,6 @@ public final class Configuration<T> {
 
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
-
-    private final SubjectCreator<T> subjectCreator;
-    private final InstanceCreator instanceCreator;
-    private final ClassProbe<T> classProbe;
 
     // CHECKSTYLE OFF: ParameterNumber
     private Configuration(
@@ -71,9 +66,6 @@ public final class Configuration<T> {
         this.fieldnameToGetter = fieldnameToGetter;
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
-        this.classProbe = new ClassProbe<>(type);
-        this.instanceCreator = new VintageInstanceCreator(prefabValues);
-        this.subjectCreator = new ModernSubjectCreator<>(typeTag, instanceCreator, classProbe);
     }
 
     public static <T> Configuration<T> build(
@@ -282,17 +274,5 @@ public final class Configuration<T> {
 
     public Set<String> getIgnoredFields() {
         return Collections.unmodifiableSet(ignoredFields);
-    }
-
-    public SubjectCreator<T> getSubjectCreator() {
-        return subjectCreator;
-    }
-
-    public InstanceCreator getInstanceCreator() {
-        return instanceCreator;
-    }
-
-    public ClassProbe<T> getClassProbe() {
-        return classProbe;
     }
 }

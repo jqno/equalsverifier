@@ -4,23 +4,26 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.Objects;
+import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class MapEntryHashCodeRequirementChecker<T> implements Checker {
 
     private final Configuration<T> config;
+    private final InstanceCreator instanceCreator;
 
-    public MapEntryHashCodeRequirementChecker(Configuration<T> config) {
-        this.config = config;
+    public MapEntryHashCodeRequirementChecker(Context<T> context) {
+        this.config = context.getConfiguration();
+        this.instanceCreator = context.getInstanceCreator();
     }
 
     @Override
     public void check() {
         if (Map.Entry.class.isAssignableFrom(config.getType())) {
-            Map.Entry<?, ?> e = (Map.Entry<?, ?>) config
-                .getInstanceCreator()
-                .instantiate(config.getTypeTag())
+            Map.Entry<?, ?> e = instanceCreator
+                .<Map.Entry<?, ?>>instantiate(config.getTypeTag())
                 .getRed();
 
             int expectedHashCode = Objects.hashCode(e.getKey()) ^ Objects.hashCode(e.getValue());
