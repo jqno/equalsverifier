@@ -17,7 +17,6 @@ import nl.jqno.equalsverifier.internal.util.*;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
-    private final Configuration<T> config;
     private final SubjectCreator<T> subjectCreator;
     private final Class<T> type;
     private final EnumSet<Warning> warningsToSuppress;
@@ -31,7 +30,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         Predicate<FieldAccessor> isCachedHashCodeField
     ) {
         this.subjectCreator = context.getSubjectCreator();
-        this.config = context.getConfiguration();
+        Configuration<T> config = context.getConfiguration();
         this.type = config.getType();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.ignoredFields = config.getIgnoredFields();
@@ -57,9 +56,8 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         );
         if (fieldProbe.canBeDefault()) {
             checkValues(
-                // TODO: Configuration weghalen als field?
-                subjectCreator.withAllFieldsDefaulted(config),
-                subjectCreator.withAllFieldsDefaulted(config),
+                subjectCreator.withAllFieldsDefaulted(),
+                subjectCreator.withAllFieldsDefaulted(),
                 subjectCreator.withAllFieldsDefaultedExcept(fieldProbe.getField()),
                 fieldProbe,
                 true

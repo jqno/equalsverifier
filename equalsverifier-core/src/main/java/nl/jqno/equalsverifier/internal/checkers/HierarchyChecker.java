@@ -89,9 +89,7 @@ public class HierarchyChecker<T> implements Checker {
             }
         } else {
             safelyCheckSuperProperties(ObjectAccessor.of(subjectCreator.plain()));
-            safelyCheckSuperProperties(
-                ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted(config))
-            );
+            safelyCheckSuperProperties(ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted()));
         }
     }
 

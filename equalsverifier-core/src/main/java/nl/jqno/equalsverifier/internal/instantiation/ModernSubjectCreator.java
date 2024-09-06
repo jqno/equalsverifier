@@ -8,7 +8,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
@@ -37,7 +36,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     @Override
-    public T withAllFieldsDefaulted(Configuration<T> config) {
+    public T withAllFieldsDefaulted() {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
             values.put(f, null);

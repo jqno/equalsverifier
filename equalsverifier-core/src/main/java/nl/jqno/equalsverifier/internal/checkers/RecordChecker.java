@@ -33,9 +33,7 @@ public class RecordChecker<T> implements Checker {
 
         SubjectCreator<T> subjectCreator = context.getSubjectCreator();
         verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.plain()));
-        verifyRecordPrecondition(
-            ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted(context.getConfiguration()))
-        );
+        verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted()));
     }
 
     private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {

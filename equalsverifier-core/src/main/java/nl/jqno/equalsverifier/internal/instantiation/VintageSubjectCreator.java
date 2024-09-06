@@ -13,14 +13,20 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 public class VintageSubjectCreator<T> implements SubjectCreator<T> {
 
     private final TypeTag typeTag;
+    private final Configuration<T> config;
     private final PrefabValues prefabValues;
 
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
         justification = "PrefabValues is inherently mutable."
     )
-    public VintageSubjectCreator(TypeTag typeTag, PrefabValues prefabValues) {
+    public VintageSubjectCreator(
+        TypeTag typeTag,
+        Configuration<T> config,
+        PrefabValues prefabValues
+    ) {
         this.typeTag = typeTag;
+        this.config = config;
         this.prefabValues = prefabValues;
     }
 
@@ -35,7 +41,7 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     @Override
-    public T withAllFieldsDefaulted(Configuration<T> config) {
+    public T withAllFieldsDefaulted() {
         return withAllFields((acc, f) ->
             FieldProbe.of(f, config).canBeDefault() ? acc.withDefaultedField(f) : acc
         );
