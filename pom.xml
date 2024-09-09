@@ -104,8 +104,8 @@
         <version.maven-surefire-plugin>3.5.0</version.maven-surefire-plugin>
         <version.pitest.github>0.1.0</version.pitest.github>
         <version.pitest.junit5>1.2.1</version.pitest.junit5>
-        <version.pitest.maven>1.16.2</version.pitest.maven>
-        <version.spotbugs.maven>4.8.6.2</version.spotbugs.maven>
+        <version.pitest.maven>1.16.3</version.pitest.maven>
+        <version.spotbugs.maven>4.8.6.3</version.spotbugs.maven>
         <version.spotbugs>4.8.6</version.spotbugs>
         <version.prettier.maven>0.22</version.prettier.maven>
         <version.prettier-java.maven>2.4.0</version.prettier-java.maven>
