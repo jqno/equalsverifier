@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 
     private final Class<S> source;
-    private Function<S, T> copy;
+    private final Function<S, T> copy;
 
     public CopyFactory(Class<S> source, Function<S, T> copy) {
         this.source = source;
