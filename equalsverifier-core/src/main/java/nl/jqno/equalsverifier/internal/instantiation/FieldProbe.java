@@ -91,7 +91,7 @@ public final class FieldProbe {
             return !isWarningZeroSuppressed;
         }
 
-        boolean isAnnotated = isNonnull(field, annotationCache);
+        boolean isAnnotated = isAnnotatedNonnull();
         boolean isMentionedExplicitly = nonnullFields.contains(field.getName());
         return !isWarningNullSuppressed && !isAnnotated && !isMentionedExplicitly;
     }
@@ -100,12 +100,9 @@ public final class FieldProbe {
      * Checks whether the given field is marked with an Nonnull annotation, whether directly, or
      * through some default annotation mechanism.
      *
-     * @param field The field to be checked.
-     * @param annotationCache To provide access to the annotations on the field and the field's
-     *     class
      * @return True if the field is to be treated as Nonnull.
      */
-    public static boolean isNonnull(Field field, AnnotationCache annotationCache) {
+    public boolean isAnnotatedNonnull() {
         Class<?> type = field.getDeclaringClass();
         if (annotationCache.hasFieldAnnotation(type, field.getName(), NONNULL)) {
             return true;

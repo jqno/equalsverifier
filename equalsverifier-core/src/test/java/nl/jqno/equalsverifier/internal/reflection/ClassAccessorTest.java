@@ -4,16 +4,7 @@ import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.v
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
-import java.util.Set;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.testhelpers.annotations.NonNull;
+import nl.jqno.equalsverifier.internal.prefabvalues.*;
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
@@ -29,8 +20,6 @@ public class ClassAccessorTest {
     private PrefabValues prefabValues;
     private ClassAccessor<PointContainer> pointContainerAccessor;
     private ClassAccessor<AbstractEqualsAndHashCode> abstractEqualsAndHashCodeAccessor;
-    private ClassAccessor<DefaultValues> defaultValuesClassAccessor;
-    private AnnotationCache defaultValuesAnnotationCache;
 
     @BeforeEach
     public void setup() {
@@ -39,11 +28,6 @@ public class ClassAccessorTest {
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
         abstractEqualsAndHashCodeAccessor =
             ClassAccessor.of(AbstractEqualsAndHashCode.class, prefabValues);
-        defaultValuesClassAccessor = ClassAccessor.of(DefaultValues.class, prefabValues);
-
-        defaultValuesAnnotationCache = new AnnotationCache();
-        new AnnotationCacheBuilder(SupportedAnnotations.values(), new HashSet<>())
-            .build(DefaultValues.class, defaultValuesAnnotationCache);
     }
 
     /* Tests the false case. The true case is tested in {@link ClassAccessorCompilerTest}. */
@@ -240,85 +224,6 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getDefaultValuesAccessor_withNoNonnullValues() {
-        ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(
-                TypeTag.NULL,
-                false,
-                false,
-                new HashSet<>(),
-                defaultValuesAnnotationCache
-            );
-        DefaultValues foo = objectAccessor.get();
-        assertNull(foo.s);
-        // The rest is tested in getDefaultValuesObject
-    }
-
-    @Test
-    public void getDefaultValuesAccessor_withOneNonnullValue() {
-        Set<String> nonnullFields = new HashSet<>();
-        nonnullFields.add("s");
-        ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(
-                TypeTag.NULL,
-                false,
-                false,
-                nonnullFields,
-                defaultValuesAnnotationCache
-            );
-        DefaultValues foo = objectAccessor.get();
-        assertNotNull(foo.s);
-        // The rest is tested in getDefaultValuesObject
-    }
-
-    @Test
-    public void getDefaultValuesAccessor_whenNullWarningIsSuppressed() {
-        ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(
-                TypeTag.NULL,
-                true,
-                false,
-                new HashSet<>(),
-                defaultValuesAnnotationCache
-            );
-        DefaultValues foo = objectAccessor.get();
-        assertNotNull(foo.s);
-        // The rest is tested in getDefaultValuesObject
-    }
-
-    @Test
-    public void getDefaultValuesAccessor_whenZeroWarningIsSuppressed() {
-        ObjectAccessor<DefaultValues> objectAccessor =
-            defaultValuesClassAccessor.getDefaultValuesAccessor(
-                TypeTag.NULL,
-                false,
-                true,
-                new HashSet<>(),
-                defaultValuesAnnotationCache
-            );
-        DefaultValues foo = objectAccessor.get();
-        assertNotEquals(0, foo.i);
-        // The rest is tested in getDefaultValuesObject
-    }
-
-    @Test
-    public void getDefaultValuesAccessor_objectContent() {
-        ClassAccessor<DefaultValues> accessor = ClassAccessor.of(DefaultValues.class, prefabValues);
-        DefaultValues foo = accessor
-            .getDefaultValuesAccessor(
-                TypeTag.NULL,
-                false,
-                false,
-                new HashSet<>(),
-                defaultValuesAnnotationCache
-            )
-            .get();
-        assertEquals(0, foo.i);
-        assertNull(foo.s);
-        assertNotNull(foo.t);
-    }
-
-    @Test
     public void instantiateAllTypes() {
         ClassAccessor.of(AllTypesContainer.class, prefabValues).getRedObject(TypeTag.NULL);
     }
@@ -356,15 +261,6 @@ public class ClassAccessorTest {
     private void assertObjectHasNoNullFields(PointContainer foo) {
         assertNotNull(foo);
         assertNotNull(foo.getPoint());
-    }
-
-    static class DefaultValues {
-
-        int i;
-        String s;
-
-        @NonNull
-        String t;
     }
 
     static class MethodContainer {

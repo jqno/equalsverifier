@@ -5,12 +5,8 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
-import java.util.Set;
-import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor} can create two
@@ -276,59 +272,6 @@ public class ClassAccessor<T> {
         return buildObjectAccessor()
             .scramble(prefabValues, enclosingType, typeStack)
             .scramble(prefabValues, enclosingType, typeStack);
-    }
-
-    /**
-     * Returns an {@link ObjectAccessor} for an instance of T where all the fields are initialized
-     * to their default values. I.e., 0 for ints, and null for objects (except when the field is
-     * marked with a NonNull annotation).
-     *
-     * @param enclosingType Describes the type that contains this object as a field, to determine
-     *     any generic parameters it may contain.
-     * @param isWarningNullSuppressed Whether reference fields must be non-null (a.k.a., whether
-     *     Warnings.NULL_FIELDS is suppressed).
-     * @param isWarningZeroSuppressed Whether primitive fields must be non-0 (a.k.a., whether
-     *     Warnings.ZERO_FIELDS is suppressed).
-     * @param nonnullFields Fields which are not allowed to be set to null.
-     * @param annotationCache To check for any NonNull annotations.
-     * @return An {@link ObjectAccessor} for an instance of T where all the fields are initialized
-     *     to their default values.
-     */
-    public ObjectAccessor<T> getDefaultValuesAccessor(
-        TypeTag enclosingType,
-        boolean isWarningNullSuppressed,
-        boolean isWarningZeroSuppressed,
-        Set<String> nonnullFields,
-        AnnotationCache annotationCache
-    ) {
-        Predicate<Field> canBeDefault = f ->
-            canBeDefault(
-                f,
-                enclosingType,
-                isWarningNullSuppressed,
-                isWarningZeroSuppressed,
-                nonnullFields,
-                annotationCache
-            );
-        return buildObjectAccessor().clear(canBeDefault, prefabValues, enclosingType);
-    }
-
-    private boolean canBeDefault(
-        Field f,
-        TypeTag enclosingType,
-        boolean isWarningNullSuppressed,
-        boolean isWarningZeroSuppressed,
-        Set<String> nonnullFields,
-        AnnotationCache annotationCache
-    ) {
-        FieldAccessor accessor = FieldAccessor.of(f);
-        if (accessor.fieldIsPrimitive()) {
-            return !isWarningZeroSuppressed;
-        }
-
-        boolean isAnnotated = NonnullAnnotationVerifier.fieldIsNonnull(f, annotationCache);
-        boolean isMentionedExplicitly = nonnullFields.contains(f.getName());
-        return !isWarningNullSuppressed && !isAnnotated && !isMentionedExplicitly;
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {

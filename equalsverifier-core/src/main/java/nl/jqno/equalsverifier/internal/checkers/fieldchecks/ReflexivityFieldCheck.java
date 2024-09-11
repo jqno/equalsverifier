@@ -12,7 +12,6 @@ import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
@@ -96,7 +95,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         }
 
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
-        boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
+        boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull();
         boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());
         if (nullWarningIsSuppressed || fieldIsNonNull || fieldIsMentionedExplicitly) {
             return;

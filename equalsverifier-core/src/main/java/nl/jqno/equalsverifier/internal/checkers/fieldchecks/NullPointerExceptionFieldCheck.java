@@ -9,7 +9,6 @@ import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -36,12 +35,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         if (fieldProbe.fieldIsPrimitive()) {
             return;
         }
-        if (
-            NonnullAnnotationVerifier.fieldIsNonnull(
-                fieldProbe.getField(),
-                config.getAnnotationCache()
-            )
-        ) {
+        if (fieldProbe.isAnnotatedNonnull()) {
             return;
         }
 
