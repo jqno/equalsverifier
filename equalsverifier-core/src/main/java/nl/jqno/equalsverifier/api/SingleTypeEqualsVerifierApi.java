@@ -1,31 +1,19 @@
 package nl.jqno.equalsverifier.api;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.checkers.AbstractDelegationChecker;
-import nl.jqno.equalsverifier.internal.checkers.CachedHashCodeChecker;
-import nl.jqno.equalsverifier.internal.checkers.Checker;
-import nl.jqno.equalsverifier.internal.checkers.ExamplesChecker;
-import nl.jqno.equalsverifier.internal.checkers.FieldsChecker;
-import nl.jqno.equalsverifier.internal.checkers.HierarchyChecker;
-import nl.jqno.equalsverifier.internal.checkers.MapEntryHashCodeRequirementChecker;
-import nl.jqno.equalsverifier.internal.checkers.NullChecker;
-import nl.jqno.equalsverifier.internal.checkers.RecordChecker;
-import nl.jqno.equalsverifier.internal.checkers.SignatureChecker;
+import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.util.*;
+import nl.jqno.equalsverifier.internal.util.Formatter;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -404,8 +392,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         }
         Validations.validateClassCanBeVerified(type);
 
-        Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config);
+        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
+        PrefabValues prefabValues = new PrefabValues(cache);
+
+        Configuration<T> config = buildConfig(prefabValues);
+        Context<T> context = new Context<>(config, prefabValues);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -418,7 +409,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         verifyWithExamples(context);
     }
 
-    private Configuration<T> buildConfig() {
+    private Configuration<T> buildConfig(PrefabValues prefabValues) {
         return Configuration.build(
             type,
             allExcludedFields,
@@ -430,11 +421,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             usingGetClass,
             warningsToSuppress,
             fieldnameToGetter,
-            factoryCache,
             ignoredAnnotationClassNames,
             actualFields,
             equalExamples,
-            unequalExamples
+            unequalExamples,
+            prefabValues
         );
     }
 

@@ -6,7 +6,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
@@ -25,8 +26,6 @@ public final class Configuration<T> {
     private final Function<String, String> fieldnameToGetter;
 
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
-    private final ClassAccessor<T> classAccessor;
     private final AnnotationCache annotationCache;
     private final Set<String> ignoredFields;
 
@@ -37,8 +36,6 @@ public final class Configuration<T> {
     private Configuration(
         Class<T> type,
         TypeTag typeTag,
-        ClassAccessor<T> classAccessor,
-        PrefabValues prefabValues,
         Set<String> ignoredFields,
         Set<String> nonnullFields,
         AnnotationCache annotationCache,
@@ -53,8 +50,6 @@ public final class Configuration<T> {
     ) {
         this.type = type;
         this.typeTag = typeTag;
-        this.classAccessor = classAccessor;
-        this.prefabValues = prefabValues;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
         this.annotationCache = annotationCache;
@@ -79,15 +74,13 @@ public final class Configuration<T> {
         boolean usingGetClass,
         EnumSet<Warning> warningsToSuppress,
         Function<String, String> fieldnameToGetter,
-        FactoryCache factoryCache,
         Set<String> ignoredAnnotationClassNames,
         Set<String> actualFields,
         List<T> equalExamples,
-        List<T> unequalExamples
+        List<T> unequalExamples,
+        PrefabValues prefabValues
     ) {
         TypeTag typeTag = new TypeTag(type);
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        PrefabValues prefabValues = new PrefabValues(cache);
         ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
         AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
         Set<String> ignoredFields = determineIgnoredFields(
@@ -106,8 +99,6 @@ public final class Configuration<T> {
         return new Configuration<>(
             type,
             typeTag,
-            classAccessor,
-            prefabValues,
             ignoredFields,
             nonnullFields,
             annotationCache,
@@ -253,18 +244,6 @@ public final class Configuration<T> {
 
     public TypeTag getTypeTag() {
         return typeTag;
-    }
-
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP",
-        justification = "PrefabValues is inherently mutable."
-    )
-    public PrefabValues getPrefabValues() {
-        return prefabValues;
-    }
-
-    public ClassAccessor<T> getClassAccessor() {
-        return classAccessor;
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable.")

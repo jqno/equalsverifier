@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.internal.instantiation.*;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 public final class Context<T> {
 
@@ -10,11 +11,11 @@ public final class Context<T> {
     private final SubjectCreator<T> subjectCreator;
     private final InstanceCreator instanceCreator;
 
-    public Context(Configuration<T> configuration) {
+    public Context(Configuration<T> configuration, PrefabValues prefabValues) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
-        this.instanceCreator = new VintageInstanceCreator(configuration.getPrefabValues());
+        this.instanceCreator = new VintageInstanceCreator(prefabValues);
         this.subjectCreator =
             new ModernSubjectCreator<>(
                 configuration.getTypeTag(),

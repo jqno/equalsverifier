@@ -2,7 +2,8 @@ package nl.jqno.equalsverifier.internal.util;
 
 import java.util.*;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 public final class ConfigurationHelper {
 
@@ -25,11 +26,11 @@ public final class ConfigurationHelper {
                 ? EnumSet.noneOf(Warning.class)
                 : EnumSet.copyOf(Arrays.asList(warnings)),
             null,
-            new FactoryCache(),
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptyList(),
-            Collections.emptyList()
+            Collections.emptyList(),
+            new PrefabValues(JavaApiPrefabValues.build())
         );
     }
 
@@ -48,11 +49,11 @@ public final class ConfigurationHelper {
             false,
             EnumSet.noneOf(Warning.class),
             null,
-            new FactoryCache(),
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptyList(),
-            Collections.emptyList()
+            Collections.emptyList(),
+            new PrefabValues(JavaApiPrefabValues.build())
         );
     }
 }
