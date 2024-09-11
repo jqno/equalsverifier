@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Modifier;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.SealedTypesHelper;
 
@@ -18,7 +17,7 @@ public class ClassProbe<T> {
         this.type = type;
     }
 
-    /** @return The class on which {@link ClassAccessor} operates. */
+    /** @return The class on which {@link ClassProbe} operates. */
     public Class<T> getType() {
         return type;
     }
