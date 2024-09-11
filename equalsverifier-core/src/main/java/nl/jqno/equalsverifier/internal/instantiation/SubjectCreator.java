@@ -10,4 +10,5 @@ public interface SubjectCreator<T> {
     T withFieldSetTo(Field field, Object value);
     T withFieldChanged(Field field);
     T withAllFieldsChanged();
+    T withAllFieldsShallowlyChanged();
 }

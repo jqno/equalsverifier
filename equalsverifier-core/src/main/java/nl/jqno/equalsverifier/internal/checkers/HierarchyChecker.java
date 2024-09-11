@@ -9,7 +9,6 @@ import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
@@ -18,7 +17,6 @@ public class HierarchyChecker<T> implements Checker {
 
     private final Configuration<T> config;
     private final Class<T> type;
-    private final TypeTag typeTag;
     private final SubjectCreator<T> subjectCreator;
     private final ClassProbe<T> classProbe;
     private final Class<? extends T> redefinedSubclass;
@@ -43,7 +41,6 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         this.type = context.getType();
-        this.typeTag = config.getTypeTag();
         this.subjectCreator = context.getSubjectCreator();
         this.classProbe = context.getClassProbe();
         this.redefinedSubclass = config.getRedefinedSubclass();
@@ -88,8 +85,14 @@ public class HierarchyChecker<T> implements Checker {
                 // instance.
             }
         } else {
-            safelyCheckSuperProperties(ObjectAccessor.of(subjectCreator.plain()));
-            safelyCheckSuperProperties(ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted()));
+            safelyCheckSuperProperties(
+                subjectCreator.plain(),
+                subjectCreator.withAllFieldsShallowlyChanged()
+            );
+            safelyCheckSuperProperties(
+                subjectCreator.withAllFieldsDefaulted(),
+                subjectCreator.withAllFieldsShallowlyChanged()
+            );
         }
     }
 
@@ -97,21 +100,15 @@ public class HierarchyChecker<T> implements Checker {
         value = "DCN_NULLPOINTER_EXCEPTION",
         justification = "The equals method in a superclasses can throw an NPE, but it's a specific non-goal to do something with that here."
     )
-    private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
+    private void safelyCheckSuperProperties(T reference, T shallowScrambled) {
         if (strictnessSuppressed) {
             return;
         }
 
-        T reference = referenceAccessor.get();
         Object equalSuper = getEqualSuper(reference);
 
-        T shallowCopy = referenceAccessor.copy();
-        ObjectAccessor<T> scrambledAccessor = ObjectAccessor
-            .of(shallowCopy)
-            .shallowScramble(config.getPrefabValues(), typeTag);
-
         try {
-            checkSuperProperties(reference, equalSuper, scrambledAccessor.get());
+            checkSuperProperties(reference, equalSuper, shallowScrambled);
         } catch (AbstractMethodError | NullPointerException ignored) {
             // In these cases, we'll assume all super properties hold.
             // The problems we test for, can never occur anyway if you can't instantiate a super

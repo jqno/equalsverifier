@@ -83,6 +83,16 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         return createInstance(values);
     }
 
+    @Override
+    public T withAllFieldsShallowlyChanged() {
+        Map<Field, Object> values = empty();
+        for (Field f : nonSuperFields()) {
+            Object value = instantiate(f).getBlue();
+            values.put(f, value);
+        }
+        return createInstance(values);
+    }
+
     private T createInstance(Map<Field, Object> values) {
         for (Field f : fields()) {
             boolean fieldIsAbsent = !values.containsKey(f);
@@ -135,6 +145,10 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     private FieldIterable fields() {
         return FieldIterable.ofIgnoringStatic(typeTag.getType());
+    }
+
+    private FieldIterable nonSuperFields() {
+        return FieldIterable.ofIgnoringSuperAndStatic(typeTag.getType());
     }
 
     private Tuple<?> instantiate(Field f) {

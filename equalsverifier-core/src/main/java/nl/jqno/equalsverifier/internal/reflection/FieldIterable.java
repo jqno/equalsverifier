@@ -57,6 +57,17 @@ public final class FieldIterable implements Iterable<Field> {
     }
 
     /**
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type},
+     * but that ignores its the declared fields of its superclasses, as well as its static fields.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterable.
+     */
+    public static FieldIterable ofIgnoringSuperAndStatic(Class<?> type) {
+        return new FieldIterable(type, false, false);
+    }
+
+    /**
      * Returns an iterator over all declared fields of the class and all of its superclasses.
      *
      * @return An iterator over all declared fields of the class and all of its superclasses.

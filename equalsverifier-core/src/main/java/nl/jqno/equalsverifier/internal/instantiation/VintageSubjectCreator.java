@@ -67,9 +67,24 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
         return withAllFields((acc, f) -> acc.withChangedField(f, prefabValues, typeTag));
     }
 
+    @Override
+    public T withAllFieldsShallowlyChanged() {
+        return withTheseFields(
+            FieldIterable.ofIgnoringSuper(typeTag.getType()),
+            (acc, f) -> acc.withChangedField(f, prefabValues, typeTag)
+        );
+    }
+
     private T withAllFields(BiFunction<ObjectAccessor<T>, Field, ObjectAccessor<T>> modifier) {
+        return withTheseFields(FieldIterable.of(typeTag.getType()), modifier);
+    }
+
+    private T withTheseFields(
+        FieldIterable fields,
+        BiFunction<ObjectAccessor<T>, Field, ObjectAccessor<T>> modifier
+    ) {
         ObjectAccessor<T> accessor = createSubject();
-        for (Field f : FieldIterable.of(typeTag.getType())) {
+        for (Field f : fields) {
             accessor = modifier.apply(accessor, f);
         }
         return accessor.get();
