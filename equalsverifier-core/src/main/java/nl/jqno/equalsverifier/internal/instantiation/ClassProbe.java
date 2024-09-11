@@ -7,6 +7,9 @@ import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.SealedTypesHelper;
 
+/**
+ * Provides read-only reflective access to a class.
+ */
 public class ClassProbe<T> {
 
     private final Class<T> type;

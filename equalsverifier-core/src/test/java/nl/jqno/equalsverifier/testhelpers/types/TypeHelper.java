@@ -266,6 +266,12 @@ public class TypeHelper {
         public int field;
     }
 
+    public static final class NonNullContainer {
+
+        @NonNull
+        public Object field = new Object();
+    }
+
     public static final class StaticFinalContainer {
 
         public static final int CONST = 42;

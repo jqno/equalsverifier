@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
+import static nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
@@ -7,10 +8,13 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
+/**
+ * Provides read-only reflective access to one field of an object.
+ */
 public final class FieldProbe {
 
     private final Field field;
@@ -19,6 +23,7 @@ public final class FieldProbe {
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
+    /** Private constructor. Call {@link #of(Field, Configuration)} to instantiate. */
     private FieldProbe(Field field, Configuration<?> config) {
         this.field = field;
         this.isWarningZeroSuppressed = config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS);
@@ -27,15 +32,30 @@ public final class FieldProbe {
         this.annotationCache = config.getAnnotationCache();
     }
 
+    /**
+     * Factory method.
+     *
+     * @param field The field to access.
+     * @param config A configuration object; cannot be null.
+     * @return A {@link FieldProbe} for {@link #field}.
+     */
     public static FieldProbe of(Field field, Configuration<?> config) {
         return new FieldProbe(field, config);
     }
 
+    /** @return The field itself. */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "Can't defensively copy a Field.")
     public Field getField() {
         return field;
     }
 
+    /**
+     * Tries to get the field's value.
+     *
+     * @param object The object that contains the field whose value we want to get.
+     * @return The field's value.
+     * @throws ReflectionException If the operation fails.
+     */
     @SuppressFBWarnings(
         value = "DP_DO_INSIDE_DO_PRIVILEGED",
         justification = "Only called in test code, not production."
@@ -45,29 +65,66 @@ public final class FieldProbe {
         return rethrow(() -> field.get(object));
     }
 
+    /** @return The field's type. */
     public Class<?> getType() {
         return field.getType();
     }
 
+    /** @return The field's name. */
     public String getName() {
         return field.getName();
     }
 
+    /** @return Whether the field is of a primitive type. */
     public boolean fieldIsPrimitive() {
         return getType().isPrimitive();
     }
 
+    /** @return Whether the field is marked with the static modifier. */
     public boolean fieldIsStatic() {
         return Modifier.isStatic(field.getModifiers());
     }
 
+    /** @return Whether the field can be set to the default value for its type. */
     public boolean canBeDefault() {
         if (fieldIsPrimitive()) {
             return !isWarningZeroSuppressed;
         }
 
-        boolean isAnnotated = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
+        boolean isAnnotated = isNonnull(field, annotationCache);
         boolean isMentionedExplicitly = nonnullFields.contains(field.getName());
         return !isWarningNullSuppressed && !isAnnotated && !isMentionedExplicitly;
+    }
+
+    /**
+     * Checks whether the given field is marked with an Nonnull annotation, whether directly, or
+     * through some default annotation mechanism.
+     *
+     * @param field The field to be checked.
+     * @param annotationCache To provide access to the annotations on the field and the field's
+     *     class
+     * @return True if the field is to be treated as Nonnull.
+     */
+    public static boolean isNonnull(Field field, AnnotationCache annotationCache) {
+        Class<?> type = field.getDeclaringClass();
+        if (annotationCache.hasFieldAnnotation(type, field.getName(), NONNULL)) {
+            return true;
+        }
+        if (annotationCache.hasFieldAnnotation(type, field.getName(), NULLABLE)) {
+            return false;
+        }
+        boolean hasFindbugsAnnotation = annotationCache.hasClassAnnotation(
+            type,
+            FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL
+        );
+        boolean hasJsr305Annotation = annotationCache.hasClassAnnotation(
+            type,
+            JSR305_DEFAULT_ANNOTATION_NONNULL
+        );
+        boolean hasDefaultAnnotation = annotationCache.hasClassAnnotation(
+            type,
+            DEFAULT_ANNOTATION_NONNULL
+        );
+        return hasFindbugsAnnotation || hasJsr305Annotation || hasDefaultAnnotation;
     }
 }
