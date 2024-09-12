@@ -6,7 +6,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -32,14 +31,14 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         if (config.getNonnullFields().contains(fieldProbe.getName())) {
             return;
         }
-        if (fieldProbe.fieldIsPrimitive()) {
+        if (fieldProbe.isPrimitive()) {
             return;
         }
         if (fieldProbe.isAnnotatedNonnull()) {
             return;
         }
 
-        if (FieldAccessor.of(fieldProbe.getField()).fieldIsStatic()) {
+        if (fieldProbe.isStatic()) {
             T reference = subjectCreator.plain();
             FieldModifier fieldModifier = FieldModifier.of(fieldProbe.getField(), reference);
             Object saved = ObjectAccessor.of(reference).getField(fieldProbe.getField());

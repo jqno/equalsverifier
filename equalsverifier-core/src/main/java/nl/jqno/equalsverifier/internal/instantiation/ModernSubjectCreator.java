@@ -66,7 +66,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     @Override
     public T withFieldChanged(Field field) {
-        if (FieldProbe.of(field, config).fieldIsStatic()) {
+        if (FieldProbe.of(field, config).isStatic()) {
             return plain();
         }
         Object value = instantiate(field).getBlue();

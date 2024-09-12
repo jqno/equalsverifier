@@ -6,13 +6,12 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
-    private final Predicate<FieldAccessor> isCachedHashCodeField;
+    private final Predicate<FieldProbe> isCachedHashCodeField;
 
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
@@ -20,7 +19,7 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
     )
     public MutableStateFieldCheck(
         SubjectCreator<T> subjectCreator,
-        Predicate<FieldAccessor> isCachedHashCodeField
+        Predicate<FieldProbe> isCachedHashCodeField
     ) {
         this.subjectCreator = subjectCreator;
         this.isCachedHashCodeField = isCachedHashCodeField;
@@ -28,8 +27,7 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(FieldProbe fieldProbe) {
-        FieldAccessor fieldAccessor = FieldAccessor.of(fieldProbe.getField());
-        if (isCachedHashCodeField.test(fieldAccessor)) {
+        if (isCachedHashCodeField.test(fieldProbe)) {
             return;
         }
 
@@ -40,7 +38,7 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
         T changed = subjectCreator.withFieldChanged(fieldProbe.getField());
         boolean equalAfter = reference.equals(changed);
 
-        if (equalBefore && !equalAfter && !fieldAccessor.fieldIsFinal()) {
+        if (equalBefore && !equalAfter && !fieldProbe.isFinal()) {
             String message =
                 "Mutability: equals depends on mutable field %%.\n" +
                 "Make the field final, suppress Warning.NONFINAL_FIELDS or use" +

@@ -3,14 +3,12 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
-import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
@@ -23,12 +21,9 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> ignoredFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final AnnotationCache annotationCache;
-    private final Predicate<FieldAccessor> isCachedHashCodeField;
+    private final Predicate<FieldProbe> isCachedHashCodeField;
 
-    public SignificantFieldCheck(
-        Context<T> context,
-        Predicate<FieldAccessor> isCachedHashCodeField
-    ) {
+    public SignificantFieldCheck(Context<T> context, Predicate<FieldProbe> isCachedHashCodeField) {
         this.subjectCreator = context.getSubjectCreator();
         Configuration<T> config = context.getConfiguration();
         this.type = config.getType();
@@ -41,9 +36,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
     @Override
     public void execute(FieldProbe fieldProbe) {
-        Field changedField = fieldProbe.getField();
-        FieldAccessor fieldAccessor = FieldAccessor.of(changedField);
-        if (isCachedHashCodeField.test(fieldAccessor)) {
+        if (isCachedHashCodeField.test(fieldProbe)) {
             return;
         }
 
@@ -92,7 +85,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             equalToItself,
             equalsChanged,
             reference,
-            FieldAccessor.of(probe.getField()),
+            probe,
             fieldName,
             testWithNull
         );
@@ -136,11 +129,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         boolean equalToItself,
         boolean equalsChanged,
         T object,
-        FieldAccessor fieldAccessor,
+        FieldProbe fieldProbe,
         String fieldName,
         boolean testWithNull
     ) {
-        if (!shouldAllFieldsBeUsed(fieldAccessor) || !isFieldEligible(fieldAccessor)) {
+        if (!shouldAllFieldsBeUsed(fieldProbe) || !isFieldEligible(fieldProbe)) {
             return;
         }
 
@@ -154,7 +147,7 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
             !thisFieldIsMarkedAsId &&
             annotationCache.hasClassAnnotation(type, SupportedAnnotations.ID);
 
-        if (!fieldIsEmptyAndItsOk(thisFieldIsMarkedAsId, fieldAccessor, object)) {
+        if (!fieldIsEmptyAndItsOk(thisFieldIsMarkedAsId, fieldProbe, object)) {
             if (!fieldShouldBeIgnored) {
                 assertTrue(
                     Formatter.of("Significant fields: equals does not use %%.", fieldName),
@@ -179,22 +172,22 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
         );
     }
 
-    private boolean shouldAllFieldsBeUsed(FieldAccessor fieldAccessor) {
+    private boolean shouldAllFieldsBeUsed(FieldProbe fieldProbe) {
         return (
             !warningsToSuppress.contains(Warning.ALL_FIELDS_SHOULD_BE_USED) &&
             !(warningsToSuppress.contains(Warning.ALL_NONFINAL_FIELDS_SHOULD_BE_USED) &&
-                !fieldAccessor.fieldIsFinal())
+                !fieldProbe.isFinal())
         );
     }
 
-    private boolean isFieldEligible(FieldAccessor fieldAccessor) {
+    private boolean isFieldEligible(FieldProbe fieldProbe) {
         return (
-            !fieldAccessor.fieldIsStatic() &&
-            !fieldAccessor.fieldIsTransient() &&
-            !fieldAccessor.fieldIsEmptyOrSingleValueEnum() &&
+            !fieldProbe.isStatic() &&
+            !fieldProbe.isTransient() &&
+            !fieldProbe.isEmptyOrSingleValueEnum() &&
             !annotationCache.hasFieldAnnotation(
                 type,
-                fieldAccessor.getField().getName(),
+                fieldProbe.getField().getName(),
                 SupportedAnnotations.TRANSIENT
             )
         );
@@ -202,11 +195,11 @@ public class SignificantFieldCheck<T> implements FieldCheck<T> {
 
     private boolean fieldIsEmptyAndItsOk(
         boolean thisFieldIsMarkedAsId,
-        FieldAccessor fieldAccessor,
+        FieldProbe fieldProbe,
         T object
     ) {
-        Object value = fieldAccessor.get(object);
-        Class<?> fieldType = fieldAccessor.getFieldType();
+        Object value = fieldProbe.getValue(object);
+        Class<?> fieldType = fieldProbe.getType();
         Object zero = PrimitiveMappers.DEFAULT_WRAPPED_VALUE_MAPPER.get(fieldType);
         boolean fieldIsEmpty = value == null || value.equals(zero);
 

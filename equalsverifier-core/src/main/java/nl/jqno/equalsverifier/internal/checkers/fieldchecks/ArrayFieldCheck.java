@@ -6,7 +6,6 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -30,8 +29,7 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         if (!arrayType.isArray()) {
             return;
         }
-        FieldAccessor fieldAccessor = FieldAccessor.of(fieldProbe.getField());
-        if (!fieldAccessor.canBeModifiedReflectively()) {
+        if (!fieldProbe.canBeModifiedReflectively()) {
             return;
         }
 

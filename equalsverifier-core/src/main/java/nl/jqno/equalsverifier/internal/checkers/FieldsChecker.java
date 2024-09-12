@@ -3,9 +3,9 @@ package nl.jqno.equalsverifier.internal.checkers;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
+import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -37,8 +37,8 @@ public class FieldsChecker<T> implements Checker {
         final String cachedHashCodeFieldName = config
             .getCachedHashCodeInitializer()
             .getCachedHashCodeFieldName();
-        final Predicate<FieldAccessor> isCachedHashCodeField = a ->
-            a.getFieldName().equals(cachedHashCodeFieldName);
+        final Predicate<FieldProbe> isCachedHashCodeField = p ->
+            p.getName().equals(cachedHashCodeFieldName);
 
         this.arrayFieldCheck =
             new ArrayFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());

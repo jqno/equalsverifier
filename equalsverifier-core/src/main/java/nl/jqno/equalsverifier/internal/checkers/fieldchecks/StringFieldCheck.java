@@ -8,7 +8,6 @@ import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -40,10 +39,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
         justification = "String prefab values are probably not localized."
     )
     public void execute(FieldProbe fieldProbe) {
-        if (
-            String.class.equals(fieldProbe.getType()) &&
-            !FieldAccessor.of(fieldProbe.getField()).fieldIsStatic()
-        ) {
+        if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             String red = instanceCreator.<String>instantiate(new TypeTag(String.class)).getRed();
 
             final T reference;

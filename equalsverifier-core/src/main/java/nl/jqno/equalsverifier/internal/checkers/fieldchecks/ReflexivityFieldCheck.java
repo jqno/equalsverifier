@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.*;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Configuration;
@@ -44,7 +43,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         }
 
         checkReferenceReflexivity();
-        checkValueReflexivity(fieldProbe.getField());
+        checkValueReflexivity(fieldProbe);
         checkNullReflexivity(fieldProbe);
     }
 
@@ -54,15 +53,15 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         checkReflexivityFor(left, right);
     }
 
-    private void checkValueReflexivity(Field field) {
-        Class<?> fieldType = field.getType();
+    private void checkValueReflexivity(FieldProbe probe) {
+        Class<?> fieldType = probe.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
         }
         if (fieldType.equals(Object.class) || fieldType.isInterface()) {
             return;
         }
-        if (FieldAccessor.of(field).fieldIsStatic()) {
+        if (probe.isStatic()) {
             return;
         }
         ClassProbe<?> fieldTypeProbe = new ClassProbe<>(fieldType);
@@ -74,6 +73,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
+        Field field = probe.getField();
         TypeTag tag = TypeTag.of(field, typeTag);
         Tuple<?> tuple = instanceCreator.instantiate(tag);
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
@@ -82,7 +82,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Formatter f = Formatter.of(
             "Reflexivity: == used instead of .equals() on field: %%" +
             "\nIf this is intentional, consider suppressing Warning.%%",
-            field.getName(),
+            probe.getName(),
             Warning.REFERENCE_EQUALITY.toString()
         );
         assertEquals(f, left, right);
@@ -90,7 +90,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     private void checkNullReflexivity(FieldProbe fieldProbe) {
         Field field = fieldProbe.getField();
-        if (fieldProbe.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
+        if (fieldProbe.isPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
             return;
         }
 

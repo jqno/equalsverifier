@@ -76,18 +76,34 @@ public final class FieldProbe {
     }
 
     /** @return Whether the field is of a primitive type. */
-    public boolean fieldIsPrimitive() {
+    public boolean isPrimitive() {
         return getType().isPrimitive();
     }
 
+    /** @return Whether the field is marked with the final modifier. */
+    public boolean isFinal() {
+        return Modifier.isFinal(field.getModifiers());
+    }
+
     /** @return Whether the field is marked with the static modifier. */
-    public boolean fieldIsStatic() {
+    public boolean isStatic() {
         return Modifier.isStatic(field.getModifiers());
+    }
+
+    /** @return Whether the field is marked with the transient modifier. */
+    public boolean isTransient() {
+        return Modifier.isTransient(field.getModifiers());
+    }
+
+    /** @return Whether the field is an enum with a single value. */
+    public boolean isEmptyOrSingleValueEnum() {
+        Class<?> type = field.getType();
+        return type.isEnum() && type.getEnumConstants().length <= 1;
     }
 
     /** @return Whether the field can be set to the default value for its type. */
     public boolean canBeDefault() {
-        if (fieldIsPrimitive()) {
+        if (isPrimitive()) {
             return !isWarningZeroSuppressed;
         }
 
@@ -123,5 +139,20 @@ public final class FieldProbe {
             DEFAULT_ANNOTATION_NONNULL
         );
         return hasFindbugsAnnotation || hasJsr305Annotation || hasDefaultAnnotation;
+    }
+
+    /**
+     * Determines whether the field can be modified using reflection.
+     *
+     * @return Whether or not the field can be modified reflectively.
+     */
+    public boolean canBeModifiedReflectively() {
+        if (field.isSynthetic()) {
+            return false;
+        }
+        if (isFinal() && isStatic()) {
+            return false;
+        }
+        return true;
     }
 }

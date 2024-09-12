@@ -27,56 +27,112 @@ public class FieldProbeTest {
     @Test
     public void getType() {
         ObjectContainer foo = new ObjectContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
         assertEquals(Object.class, probe.getType());
     }
 
     @Test
     public void getName() {
         ObjectContainer foo = new ObjectContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
         assertEquals(FIELD_NAME, probe.getName());
     }
 
     @Test
     public void isNotPrimitive() {
         ObjectContainer foo = new ObjectContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
-        assertFalse(probe.fieldIsPrimitive());
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertFalse(probe.isPrimitive());
     }
 
     @Test
     public void isPrimitive() {
         PrimitiveContainer foo = new PrimitiveContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
-        assertTrue(probe.fieldIsPrimitive());
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertTrue(probe.isPrimitive());
+    }
+
+    @Test
+    public void isNotFinal() {
+        ObjectContainer foo = new ObjectContainer();
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertFalse(probe.isFinal());
+    }
+
+    @Test
+    public void isFinal() {
+        FinalContainer foo = new FinalContainer();
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertTrue(probe.isFinal());
     }
 
     @Test
     public void isNotStatic() {
         ObjectContainer foo = new ObjectContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
-        assertFalse(probe.fieldIsStatic());
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertFalse(probe.isStatic());
     }
 
     @Test
     public void isStatic() {
         StaticContainer foo = new StaticContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
-        assertTrue(probe.fieldIsStatic());
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertTrue(probe.isStatic());
+    }
+
+    @Test
+    public void isNotTransient() {
+        ObjectContainer foo = new ObjectContainer();
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertFalse(probe.isTransient());
+    }
+
+    @Test
+    public void isTransient() {
+        TransientContainer foo = new TransientContainer();
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertTrue(probe.isTransient());
+    }
+
+    @Test
+    public void isNotEnum() {
+        PrimitiveContainer foo = new PrimitiveContainer();
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
+        assertFalse(probe.isEmptyOrSingleValueEnum());
+    }
+
+    @Test
+    public void isEnumButNotSingleValue() {
+        EnumContainer foo = new EnumContainer();
+        FieldProbe probe = getProbeFor(foo, "twoElementEnum");
+        assertFalse(probe.isEmptyOrSingleValueEnum());
+    }
+
+    @Test
+    public void isSingleValueEnum() {
+        EnumContainer foo = new EnumContainer();
+        FieldProbe probe = getProbeFor(foo, "oneElementEnum");
+        assertTrue(probe.isEmptyOrSingleValueEnum());
+    }
+
+    @Test
+    public void isEmptyEnum() {
+        EnumContainer foo = new EnumContainer();
+        FieldProbe probe = getProbeFor(foo, "emptyEnum");
+        assertTrue(probe.isEmptyOrSingleValueEnum());
     }
 
     @Test
     public void canBeDefault_forObject() {
         ObjectContainer foo = new ObjectContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
         assertTrue(probe.canBeDefault());
     }
 
     @Test
     public void canBeDefault_primitive() {
         PrimitiveContainer foo = new PrimitiveContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
         assertTrue(probe.canBeDefault());
     }
 
@@ -105,11 +161,11 @@ public class FieldProbeTest {
     @Test
     public void canBeDefault_annotated() {
         NonNullContainer foo = new NonNullContainer();
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        FieldProbe probe = getProbeFor(foo, FIELD_NAME);
         assertFalse(probe.canBeDefault());
     }
 
-    private FieldProbe getAccessorFor(Object object, String fieldName) {
+    private FieldProbe getProbeFor(Object object, String fieldName) {
         return getAccessorFor(
             object,
             fieldName,

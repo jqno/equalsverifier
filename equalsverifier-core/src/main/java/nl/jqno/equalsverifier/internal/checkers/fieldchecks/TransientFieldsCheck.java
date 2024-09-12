@@ -6,7 +6,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -39,8 +38,7 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
             fieldProbe.getName(),
             SupportedAnnotations.TRANSIENT
         );
-        boolean fieldIsTransient =
-            FieldAccessor.of(fieldProbe.getField()).fieldIsTransient() || hasAnnotation;
+        boolean fieldIsTransient = fieldProbe.isTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
                 Formatter.of(
