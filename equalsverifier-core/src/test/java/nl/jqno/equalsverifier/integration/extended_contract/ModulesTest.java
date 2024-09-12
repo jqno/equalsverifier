@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import java.text.AttributedString;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
@@ -19,7 +20,12 @@ public class ModulesTest {
     @DisabledForJreRange(max = JRE.JAVA_11)
     public void giveProperErrorMessage_whenClassUnderTestIsInaccessible() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(AttributedString.class).verify())
+            .when(() ->
+                EqualsVerifier
+                    .forClass(AttributedString.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
+            )
             .assertFailure()
             .assertMessageContains("The class", "Consider opening");
     }

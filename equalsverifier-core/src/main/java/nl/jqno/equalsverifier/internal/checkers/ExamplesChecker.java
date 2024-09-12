@@ -5,26 +5,29 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class ExamplesChecker<T> implements Checker {
 
     private final Class<T> type;
     private final List<T> equalExamples;
     private final List<T> unequalExamples;
+    private final SubjectCreator<T> subjectCreator;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ExamplesChecker(Configuration<T> config) {
+    public ExamplesChecker(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
         this.type = config.getType();
         this.equalExamples = config.getEqualExamples();
         this.unequalExamples = config.getUnequalExamples();
+        this.subjectCreator = context.getSubjectCreator();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -43,9 +46,21 @@ public class ExamplesChecker<T> implements Checker {
             }
         }
 
-        for (T reference : unequalExamples) {
+        List<T> unequals = ensureEnoughExamples(unequalExamples);
+        for (T reference : unequals) {
             checkSingle(reference);
         }
+    }
+
+    private List<T> ensureEnoughExamples(List<T> examples) {
+        if (examples.size() > 0) {
+            return examples;
+        }
+
+        List<T> result = new ArrayList<>();
+        result.add(subjectCreator.plain());
+        result.add(subjectCreator.withAllFieldsChanged());
+        return result;
     }
 
     private void checkPreconditions() {

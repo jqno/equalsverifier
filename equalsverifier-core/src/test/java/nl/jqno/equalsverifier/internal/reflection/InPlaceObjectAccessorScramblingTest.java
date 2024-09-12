@@ -7,7 +7,6 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.*;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -136,8 +135,9 @@ public class InPlaceObjectAccessorScramblingTest {
 
         ExpectedException
             .when(() -> doScramble(as))
-            .assertThrows(ModuleException.class)
-            .assertDescriptionContains("The class", "Consider opening");
+            // InaccessibleObjectException, but it's not available in Java 8
+            .assertThrows(RuntimeException.class)
+            .assertMessageContains("accessible: module", "does not \"opens");
     }
 
     @Test
@@ -147,8 +147,9 @@ public class InPlaceObjectAccessorScramblingTest {
 
         ExpectedException
             .when(() -> doScramble(ic))
-            .assertThrows(ModuleException.class)
-            .assertDescriptionContains("Field as", "Consider opening");
+            // InaccessibleObjectException, but it's not available in Java 8
+            .assertThrows(RuntimeException.class)
+            .assertMessageContains("accessible: module", "does not \"opens");
     }
 
     @SuppressWarnings("unchecked")

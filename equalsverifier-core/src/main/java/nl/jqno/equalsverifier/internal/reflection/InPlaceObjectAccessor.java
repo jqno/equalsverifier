@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
@@ -76,40 +75,9 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
         Function<Class<?>, FieldIterable> it
     ) {
         for (Field field : it.apply(type())) {
-            try {
-                fieldModifierFor(field).changeField(prefabValues, enclosingType, typeStack);
-            } catch (ModuleException e) {
-                handleInaccessibleObjectException(e.getCause(), field);
-            } catch (RuntimeException e) {
-                // InaccessibleObjectException is not yet available in Java 8
-                if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
-                    handleInaccessibleObjectException(e, field);
-                } else {
-                    throw e;
-                }
-            }
+            fieldModifierFor(field).changeField(prefabValues, enclosingType, typeStack);
         }
         return this;
-    }
-
-    private void handleInaccessibleObjectException(Throwable e, Field field) {
-        if (e.getMessage() != null && e.getMessage().contains(type().getCanonicalName())) {
-            throw new ModuleException(
-                "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
-                e
-            );
-        } else {
-            throw new ModuleException(
-                "Field " +
-                field.getName() +
-                " of type " +
-                field.getType().getName() +
-                " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
-                field.getType().getName() +
-                ".",
-                e
-            );
-        }
     }
 
     /** {@inheritDoc} */

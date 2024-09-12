@@ -10,8 +10,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -392,11 +390,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         }
         Validations.validateClassCanBeVerified(type);
 
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        PrefabValues prefabValues = new PrefabValues(cache);
-
-        Configuration<T> config = buildConfig(prefabValues);
-        Context<T> context = new Context<>(config, prefabValues);
+        Configuration<T> config = buildConfig();
+        Context<T> context = new Context<>(config, factoryCache);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -409,7 +404,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         verifyWithExamples(context);
     }
 
-    private Configuration<T> buildConfig(PrefabValues prefabValues) {
+    private Configuration<T> buildConfig() {
         return Configuration.build(
             type,
             allExcludedFields,
@@ -424,8 +419,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             ignoredAnnotationClassNames,
             actualFields,
             equalExamples,
-            unequalExamples,
-            prefabValues
+            unequalExamples
         );
     }
 
@@ -445,9 +439,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void verifyWithExamples(Context<T> context) {
-        Configuration<T> config = context.getConfiguration();
         Checker[] checkers = {
-            new ExamplesChecker<>(config),
+            new ExamplesChecker<>(context),
             new HierarchyChecker<>(context),
             new FieldsChecker<>(context),
             new MapEntryHashCodeRequirementChecker<>(context)

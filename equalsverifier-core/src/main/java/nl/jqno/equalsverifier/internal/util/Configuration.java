@@ -6,9 +6,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 public final class Configuration<T> {
@@ -77,11 +75,9 @@ public final class Configuration<T> {
         Set<String> ignoredAnnotationClassNames,
         Set<String> actualFields,
         List<T> equalExamples,
-        List<T> unequalExamples,
-        PrefabValues prefabValues
+        List<T> unequalExamples
     ) {
         TypeTag typeTag = new TypeTag(type);
-        ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
         AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
         Set<String> ignoredFields = determineIgnoredFields(
             type,
@@ -94,7 +90,6 @@ public final class Configuration<T> {
         Function<String, String> converter = fieldnameToGetter != null
             ? fieldnameToGetter
             : DEFAULT_FIELDNAME_TO_GETTER_CONVERTER;
-        List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
         return new Configuration<>(
             type,
@@ -109,7 +104,7 @@ public final class Configuration<T> {
             warningsToSuppress,
             converter,
             equalExamples,
-            unequals
+            unequalExamples
         );
     }
 
@@ -185,21 +180,6 @@ public final class Configuration<T> {
                 .collect(Collectors.toSet());
         }
         return excludedFields;
-    }
-
-    private static <T> List<T> ensureUnequalExamples(
-        TypeTag typeTag,
-        ClassAccessor<T> classAccessor,
-        List<T> examples
-    ) {
-        if (examples.size() > 0) {
-            return examples;
-        }
-
-        List<T> result = new ArrayList<>();
-        result.add(classAccessor.getRedObject(typeTag));
-        result.add(classAccessor.getBlueObject(typeTag));
-        return result;
     }
 
     public Class<T> getType() {

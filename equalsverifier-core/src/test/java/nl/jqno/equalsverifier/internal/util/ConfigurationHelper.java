@@ -2,8 +2,6 @@ package nl.jqno.equalsverifier.internal.util;
 
 import java.util.*;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 
 public final class ConfigurationHelper {
 
@@ -29,8 +27,7 @@ public final class ConfigurationHelper {
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptyList(),
-            Collections.emptyList(),
-            new PrefabValues(JavaApiPrefabValues.build())
+            Collections.emptyList()
         );
     }
 
@@ -52,8 +49,7 @@ public final class ConfigurationHelper {
             Collections.emptySet(),
             Collections.emptySet(),
             Collections.emptyList(),
-            Collections.emptyList(),
-            new PrefabValues(JavaApiPrefabValues.build())
+            Collections.emptyList()
         );
     }
 }

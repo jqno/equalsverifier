@@ -4,6 +4,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
@@ -85,7 +86,16 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             int modifiers = field.getModifiers();
             boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
             if (!isStaticAndFinal) {
-                prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
+                try {
+                    prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
+                } catch (RuntimeException e) {
+                    // InaccessibleObjectException is not yet available in Java 8
+                    if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
+                        handleInaccessibleObjectException(e, type, field);
+                    } else {
+                        throw e;
+                    }
+                }
             }
         }
     }
@@ -100,5 +110,18 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         T blue = accessor.getBlueObject(tag, typeStack);
         T redCopy = accessor.getRedObject(tag, typeStack);
         return new Tuple<>(red, blue, redCopy);
+    }
+
+    private void handleInaccessibleObjectException(Throwable e, Class<?> type, Field field) {
+        throw new ModuleException(
+            "Field " +
+            field.getName() +
+            " of type " +
+            field.getType().getName() +
+            " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
+            field.getType().getName() +
+            ".",
+            e
+        );
     }
 }
