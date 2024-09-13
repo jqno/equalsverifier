@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 class InstanceCreator<T> {
@@ -33,8 +32,10 @@ class InstanceCreator<T> {
 
     private T createClassInstance(Map<Field, Object> values) {
         T instance = Instantiator.of(type).instantiate();
-        ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
-        traverseFields(values, (f, v) -> accessor.withFieldSetTo(f, v));
+        traverseFields(
+            values,
+            (f, v) -> new FieldMutator(FieldProbe.of(f)).setNewValue(instance, v)
+        );
         return instance;
     }
 
