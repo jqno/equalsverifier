@@ -20,14 +20,14 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     private final TypeTag typeTag;
     private final SubjectCreator<T> subjectCreator;
-    private final InstanceCreator instanceCreator;
+    private final ValueProvider valueProvider;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> nonnullFields;
     private final AnnotationCache annotationCache;
 
     public ReflexivityFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
-        this.instanceCreator = context.getInstanceCreator();
+        this.valueProvider = context.getValueProvider();
 
         Configuration<T> config = context.getConfiguration();
         this.typeTag = config.getTypeTag();
@@ -75,7 +75,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
         Field field = probe.getField();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = instanceCreator.instantiate(tag);
+        Tuple<?> tuple = valueProvider.provide(tag);
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
         Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
 

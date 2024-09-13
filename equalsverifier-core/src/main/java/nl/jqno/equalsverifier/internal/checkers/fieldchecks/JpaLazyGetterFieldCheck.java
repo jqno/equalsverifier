@@ -22,7 +22,7 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
-    private final InstanceCreator instanceCreator;
+    private final ValueProvider valueProvider;
     private final Class<T> type;
     private final ClassProbe<T> classProbe;
     private final AnnotationCache annotationCache;
@@ -31,7 +31,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
     public JpaLazyGetterFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
-        this.instanceCreator = context.getInstanceCreator();
+        this.valueProvider = context.getValueProvider();
         this.type = context.getType();
         this.classProbe = context.getClassProbe();
 
@@ -57,7 +57,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, "equals", getterName, classProbe.hasMethod(getterName));
 
         Class<T> sub = throwingGetterCreator(getterName);
-        Tuple<T> tuple = instanceCreator.<T>instantiate(new TypeTag(sub));
+        Tuple<T> tuple = valueProvider.<T>provide(new TypeTag(sub));
         T red1 = tuple.getRed();
         T red2 = tuple.getRedCopy();
 

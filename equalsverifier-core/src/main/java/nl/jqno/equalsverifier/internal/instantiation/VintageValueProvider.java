@@ -6,7 +6,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 
-public class VintageInstanceCreator implements InstanceCreator {
+public class VintageValueProvider implements ValueProvider {
 
     private final PrefabValues prefabValues;
 
@@ -14,12 +14,12 @@ public class VintageInstanceCreator implements InstanceCreator {
         value = "EI_EXPOSE_REP2",
         justification = "PrefabValues is inherently mutable."
     )
-    public VintageInstanceCreator(PrefabValues prefabValues) {
+    public VintageValueProvider(PrefabValues prefabValues) {
         this.prefabValues = prefabValues;
     }
 
     @Override
-    public <T> Tuple<T> instantiate(TypeTag tag) {
+    public <T> Tuple<T> provide(TypeTag tag) {
         try {
             return prefabValues.giveTuple(tag);
         } catch (RuntimeException e) {

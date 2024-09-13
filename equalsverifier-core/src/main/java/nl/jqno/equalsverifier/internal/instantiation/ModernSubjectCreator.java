@@ -15,18 +15,18 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     private final TypeTag typeTag;
     private final Class<T> type;
     private final Configuration<T> config;
-    private final InstanceCreator instanceCreator;
+    private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
 
     public ModernSubjectCreator(
         TypeTag typeTag,
         Configuration<T> config,
-        InstanceCreator instanceCreator
+        ValueProvider valueProvider
     ) {
         this.typeTag = typeTag;
         this.type = typeTag.getType();
         this.config = config;
-        this.instanceCreator = instanceCreator;
+        this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
     }
 
@@ -110,7 +110,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         ModernSubjectCreator<T> superCreator = new ModernSubjectCreator<T>(
             superTag,
             config,
-            instanceCreator
+            valueProvider
         );
 
         Map<Field, Object> values = empty();
@@ -189,6 +189,6 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     private Tuple<?> instantiate(Field f) {
-        return instanceCreator.instantiate(TypeTag.of(f, typeTag));
+        return valueProvider.provide(TypeTag.of(f, typeTag));
     }
 }

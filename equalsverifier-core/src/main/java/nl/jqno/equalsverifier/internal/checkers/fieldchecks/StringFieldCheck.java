@@ -5,8 +5,8 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -16,7 +16,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public static final String ERROR_DOC_TITLE = "String equality";
 
     private final SubjectCreator<T> subjectCreator;
-    private final InstanceCreator instanceCreator;
+    private final ValueProvider valueProvider;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     @SuppressFBWarnings(
@@ -25,11 +25,11 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     )
     public StringFieldCheck(
         SubjectCreator<T> subjectCreator,
-        InstanceCreator instanceCreator,
+        ValueProvider instanceCreator,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer
     ) {
         this.subjectCreator = subjectCreator;
-        this.instanceCreator = instanceCreator;
+        this.valueProvider = instanceCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
@@ -40,7 +40,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     )
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
-            String red = instanceCreator.<String>instantiate(new TypeTag(String.class)).getRed();
+            String red = valueProvider.<String>provide(new TypeTag(String.class)).getRed();
 
             final T reference;
             final T copy;

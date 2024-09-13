@@ -54,7 +54,7 @@ public class FieldsChecker<T> implements Checker {
         this.stringFieldCheck =
             new StringFieldCheck<>(
                 subjectCreator,
-                context.getInstanceCreator(),
+                context.getValueProvider(),
                 config.getCachedHashCodeInitializer()
             );
         this.bigDecimalFieldCheck =

@@ -11,7 +11,7 @@ public final class Context<T> {
     private final Configuration<T> configuration;
     private final ClassProbe<T> classProbe;
     private final SubjectCreator<T> subjectCreator;
-    private final InstanceCreator instanceCreator;
+    private final ValueProvider valueProvider;
 
     public Context(Configuration<T> configuration, FactoryCache factoryCache) {
         this.type = configuration.getType();
@@ -21,9 +21,9 @@ public final class Context<T> {
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         PrefabValues prefabValues = new PrefabValues(cache);
 
-        this.instanceCreator = new VintageInstanceCreator(prefabValues);
+        this.valueProvider = new VintageValueProvider(prefabValues);
         this.subjectCreator =
-            new ModernSubjectCreator<>(configuration.getTypeTag(), configuration, instanceCreator);
+            new ModernSubjectCreator<>(configuration.getTypeTag(), configuration, valueProvider);
     }
 
     public Class<T> getType() {
@@ -38,8 +38,8 @@ public final class Context<T> {
         return classProbe;
     }
 
-    public InstanceCreator getInstanceCreator() {
-        return instanceCreator;
+    public ValueProvider getValueProvider() {
+        return valueProvider;
     }
 
     public SubjectCreator<T> getSubjectCreator() {
