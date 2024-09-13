@@ -12,15 +12,13 @@ import org.junit.jupiter.api.Test;
 public class FieldProbeTest {
 
     private static final String FIELD_NAME = "field";
+    private Configuration<?> config = ConfigurationHelper.emptyConfiguration(ObjectContainer.class);
 
     @Test
     public void getField() throws NoSuchFieldException {
         ObjectContainer foo = new ObjectContainer();
         Field field = foo.getClass().getDeclaredField(FIELD_NAME);
-        FieldProbe probe = FieldProbe.of(
-            field,
-            ConfigurationHelper.emptyConfiguration(ObjectContainer.class)
-        );
+        FieldProbe probe = FieldProbe.of(field);
         assertSame(field, probe.getField());
     }
 
@@ -126,57 +124,50 @@ public class FieldProbeTest {
     public void canBeDefault_forObject() {
         ObjectContainer foo = new ObjectContainer();
         FieldProbe probe = getProbeFor(foo, FIELD_NAME);
-        assertTrue(probe.canBeDefault());
+        assertTrue(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_primitive() {
         PrimitiveContainer foo = new PrimitiveContainer();
         FieldProbe probe = getProbeFor(foo, FIELD_NAME);
-        assertTrue(probe.canBeDefault());
+        assertTrue(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_primitiveWithWarningSuppressed() {
         PrimitiveContainer foo = new PrimitiveContainer();
-        Configuration<?> config = ConfigurationHelper.emptyConfiguration(
-            foo.getClass(),
-            Warning.ZERO_FIELDS
-        );
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME, config);
-        assertFalse(probe.canBeDefault());
+        config = ConfigurationHelper.emptyConfiguration(foo.getClass(), Warning.ZERO_FIELDS);
+        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        assertFalse(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_isMentionedExplicitly() {
         ObjectContainer foo = new ObjectContainer();
-        Configuration<?> config = ConfigurationHelper.emptyConfigurationWithNonnullFields(
-            foo.getClass(),
-            FIELD_NAME
-        );
-        FieldProbe probe = getAccessorFor(foo, FIELD_NAME, config);
-        assertFalse(probe.canBeDefault());
+        config =
+            ConfigurationHelper.emptyConfigurationWithNonnullFields(foo.getClass(), FIELD_NAME);
+        FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
+        assertFalse(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_annotated() {
         NonNullContainer foo = new NonNullContainer();
+        config =
+            ConfigurationHelper.emptyConfigurationWithNonnullFields(foo.getClass(), FIELD_NAME);
         FieldProbe probe = getProbeFor(foo, FIELD_NAME);
-        assertFalse(probe.canBeDefault());
+        assertFalse(probe.canBeDefault(config));
     }
 
     private FieldProbe getProbeFor(Object object, String fieldName) {
-        return getAccessorFor(
-            object,
-            fieldName,
-            ConfigurationHelper.emptyConfiguration(object.getClass())
-        );
+        return getAccessorFor(object, fieldName);
     }
 
-    private FieldProbe getAccessorFor(Object object, String fieldName, Configuration<?> config) {
+    private FieldProbe getAccessorFor(Object object, String fieldName) {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
-            return FieldProbe.of(field, config);
+            return FieldProbe.of(field);
         } catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }

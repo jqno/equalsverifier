@@ -33,7 +33,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         if (fieldProbe.isPrimitive()) {
             return;
         }
-        if (fieldProbe.isAnnotatedNonnull()) {
+        if (fieldProbe.isAnnotatedNonnull(config.getAnnotationCache())) {
             return;
         }
 

@@ -65,7 +65,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     @Override
     public T withFieldChanged(Field field) {
-        if (FieldProbe.of(field, config).isStatic()) {
+        if (FieldProbe.of(field).isStatic()) {
             return plain();
         }
         Object value = valuesFor(field).getBlue();
@@ -96,7 +96,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public T copy(T original) {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
-            Object value = FieldProbe.of(f, config).getValue(original);
+            Object value = FieldProbe.of(f).getValue(original);
             values.put(f, value);
         }
         return createInstance(values);
@@ -106,7 +106,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public Object copyIntoSuperclass(T original) {
         Map<Field, Object> values = empty();
         for (Field f : superFields()) {
-            Object value = FieldProbe.of(f, config).getValue(original);
+            Object value = FieldProbe.of(f).getValue(original);
             values.put(f, value);
         }
 
@@ -120,7 +120,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
-            Object value = FieldProbe.of(f, config).getValue(original);
+            Object value = FieldProbe.of(f).getValue(original);
             values.put(f, value);
         }
 
@@ -139,7 +139,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         for (Field f : fields()) {
             boolean fieldIsAbsent = !values.containsKey(f);
             boolean fieldCannotBeNull =
-                values.get(f) == null && !FieldProbe.of(f, config).canBeDefault();
+                values.get(f) == null && !FieldProbe.of(f).canBeDefault(config);
             if (fieldIsAbsent || fieldCannotBeNull) {
                 Object value = valuesFor(f).getRed();
                 values.put(f, value);

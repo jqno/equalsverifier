@@ -45,7 +45,7 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
     @Override
     public T withAllFieldsDefaulted() {
         return withAllFields((acc, f) ->
-            FieldProbe.of(f, config).canBeDefault() ? acc.withDefaultedField(f) : acc
+            FieldProbe.of(f).canBeDefault(config) ? acc.withDefaultedField(f) : acc
         );
     }
 

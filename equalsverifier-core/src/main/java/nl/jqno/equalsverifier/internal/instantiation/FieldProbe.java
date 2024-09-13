@@ -6,7 +6,6 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
@@ -18,29 +17,20 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 public final class FieldProbe {
 
     private final Field field;
-    private final boolean isWarningZeroSuppressed;
-    private final boolean isWarningNullSuppressed;
-    private final Set<String> nonnullFields;
-    private final AnnotationCache annotationCache;
 
-    /** Private constructor. Call {@link #of(Field, Configuration)} to instantiate. */
-    private FieldProbe(Field field, Configuration<?> config) {
+    /** Private constructor. Call {@link #of(Field)} to instantiate. */
+    private FieldProbe(Field field) {
         this.field = field;
-        this.isWarningZeroSuppressed = config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS);
-        this.isWarningNullSuppressed = config.getWarningsToSuppress().contains(Warning.NULL_FIELDS);
-        this.nonnullFields = config.getNonnullFields();
-        this.annotationCache = config.getAnnotationCache();
     }
 
     /**
      * Factory method.
      *
      * @param field The field to access.
-     * @param config A configuration object; cannot be null.
      * @return A {@link FieldProbe} for {@link #field}.
      */
-    public static FieldProbe of(Field field, Configuration<?> config) {
-        return new FieldProbe(field, config);
+    public static FieldProbe of(Field field) {
+        return new FieldProbe(field);
     }
 
     /** @return The field itself. */
@@ -101,24 +91,32 @@ public final class FieldProbe {
         return type.isEnum() && type.getEnumConstants().length <= 1;
     }
 
-    /** @return Whether the field can be set to the default value for its type. */
-    public boolean canBeDefault() {
+    /**
+     * @param config The configuration affects whether a given field van be default.
+     * @return Whether the field can be set to the default value for its type.
+     */
+    public boolean canBeDefault(Configuration<?> config) {
         if (isPrimitive()) {
-            return !isWarningZeroSuppressed;
+            return !config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS);
         }
 
-        boolean isAnnotated = isAnnotatedNonnull();
-        boolean isMentionedExplicitly = nonnullFields.contains(field.getName());
-        return !isWarningNullSuppressed && !isAnnotated && !isMentionedExplicitly;
+        boolean isAnnotated = isAnnotatedNonnull(config.getAnnotationCache());
+        boolean isMentionedExplicitly = config.getNonnullFields().contains(field.getName());
+        return (
+            !config.getWarningsToSuppress().contains(Warning.NULL_FIELDS) &&
+            !isAnnotated &&
+            !isMentionedExplicitly
+        );
     }
 
     /**
      * Checks whether the given field is marked with an Nonnull annotation, whether directly, or
      * through some default annotation mechanism.
      *
+     * @param annotationCache To retrieve annotations from.
      * @return True if the field is to be treated as Nonnull.
      */
-    public boolean isAnnotatedNonnull() {
+    public boolean isAnnotatedNonnull(AnnotationCache annotationCache) {
         Class<?> type = field.getDeclaringClass();
         if (annotationCache.hasFieldAnnotation(type, field.getName(), NONNULL)) {
             return true;

@@ -95,7 +95,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         }
 
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
-        boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull();
+        boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull(annotationCache);
         boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());
         if (nullWarningIsSuppressed || fieldIsNonNull || fieldIsMentionedExplicitly) {
             return;
