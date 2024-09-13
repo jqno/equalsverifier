@@ -3,10 +3,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -34,7 +32,7 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         }
 
         T reference = subjectCreator.plain();
-        T changed = replaceInnermostArrayValue(reference, fieldProbe.getField());
+        T changed = replaceInnermostArrayValue(reference, fieldProbe);
 
         if (arrayType.getComponentType().isArray()) {
             assertDeep(fieldProbe.getName(), reference, changed);
@@ -43,10 +41,9 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private T replaceInnermostArrayValue(T reference, Field field) {
-        ObjectAccessor<T> objectAccessor = ObjectAccessor.of(reference);
-        Object newArray = arrayCopy(objectAccessor.getField(field));
-        return subjectCreator.withFieldSetTo(field, newArray);
+    private T replaceInnermostArrayValue(T reference, FieldProbe fieldProbe) {
+        Object newArray = arrayCopy(fieldProbe.getValue(reference));
+        return subjectCreator.withFieldSetTo(fieldProbe.getField(), newArray);
     }
 
     private Object arrayCopy(Object array) {

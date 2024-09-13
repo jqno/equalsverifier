@@ -8,6 +8,7 @@ import com.tngtech.archunit.lang.ArchRule;
 import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -19,6 +20,9 @@ public final class ArchitectureTest {
         .should()
         .accessClassesThat()
         .areAssignableTo(ClassAccessor.class)
+        .orShould()
+        .accessClassesThat()
+        .areAssignableTo(ObjectAccessor.class)
         .orShould()
         .accessClassesThat()
         .areAssignableTo(FieldAccessor.class)

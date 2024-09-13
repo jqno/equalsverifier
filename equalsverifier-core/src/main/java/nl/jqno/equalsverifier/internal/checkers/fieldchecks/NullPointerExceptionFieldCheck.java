@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -41,7 +40,7 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
         if (fieldProbe.isStatic()) {
             T reference = subjectCreator.plain();
             FieldModifier fieldModifier = FieldModifier.of(fieldProbe.getField(), reference);
-            Object saved = ObjectAccessor.of(reference).getField(fieldProbe.getField());
+            Object saved = fieldProbe.getValue(reference);
 
             fieldModifier.defaultStaticField();
             performTests(fieldProbe.getField(), subjectCreator.plain(), subjectCreator.plain());
