@@ -75,8 +75,12 @@ public final class Instantiator<T> {
      * @return An instance of an anonymous subclass of T.
      */
     public T instantiateAnonymousSubclass() {
-        Class<T> proxyClass = giveDynamicSubclass(type, "", b -> b);
+        Class<T> proxyClass = giveDynamicSubclass(type);
         return ObjenesisWrapper.getObjenesis().newInstance(proxyClass);
+    }
+
+    public static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {
+        return giveDynamicSubclass(superclass, "", b -> b);
     }
 
     @SuppressWarnings("unchecked")

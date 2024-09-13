@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.util.*;
 
@@ -158,8 +158,12 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        ObjectAccessor<T> referenceAccessor = ObjectAccessor.of(reference);
-        T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
+
+        @SuppressWarnings("unchecked")
+        Class<T> anonymousSubclass = (Class<T>) Instantiator.giveDynamicSubclass(
+            reference.getClass() // don't use type directly, as reference may already be a subclass if type was abstract
+        );
+        T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
 
         if (config.isUsingGetClass()) {
             Formatter formatter = Formatter.of(
