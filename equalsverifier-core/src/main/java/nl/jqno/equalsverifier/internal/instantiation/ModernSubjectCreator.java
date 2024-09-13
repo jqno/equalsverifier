@@ -93,7 +93,13 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         return createInstance(values);
     }
 
-    private T createInstance(Map<Field, Object> values) {
+    private T createInstance(Map<Field, Object> givens) {
+        Map<Field, Object> values = determineValues(givens);
+        return classProbe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
+    }
+
+    private Map<Field, Object> determineValues(Map<Field, Object> givens) {
+        Map<Field, Object> values = new HashMap<>(givens);
         for (Field f : fields()) {
             boolean fieldIsAbsent = !values.containsKey(f);
             boolean fieldCannotBeNull =
@@ -103,34 +109,36 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
                 values.put(f, value);
             }
         }
+        return values;
+    }
 
-        Class<T> type = typeTag.getType();
-        if (classProbe.isRecord()) {
-            List<Object> params = new ArrayList<>();
-            for (Field f : fields()) {
-                Object value = values.get(f);
-                if (value == null) {
-                    Object def = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
-                    params.add(def);
-                } else {
-                    params.add(value);
-                }
+    private T createRecordInstance(Map<Field, Object> values) {
+        List<Object> params = new ArrayList<>();
+        for (Field f : fields()) {
+            Object value = values.get(f);
+            if (value == null) {
+                Object def = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
+                params.add(def);
+            } else {
+                params.add(value);
             }
-            RecordProbe<T> recordProbe = new RecordProbe<>(type);
-            return recordProbe.callRecordConstructor(params);
-        } else {
-            T instance = Instantiator.<T>of(type).instantiate();
-            ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
-            for (Field f : fields()) {
-                Object value = values.get(f);
-                if (value == null) {
-                    accessor.withDefaultedField(f);
-                } else {
-                    accessor.withFieldSetTo(f, value);
-                }
-            }
-            return instance;
         }
+        RecordProbe<T> recordProbe = new RecordProbe<>(typeTag.getType());
+        return recordProbe.callRecordConstructor(params);
+    }
+
+    private T createClassInstance(Map<Field, Object> values) {
+        T instance = Instantiator.<T>of(typeTag.getType()).instantiate();
+        ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
+        for (Field f : fields()) {
+            Object value = values.get(f);
+            if (value == null) {
+                accessor.withDefaultedField(f);
+            } else {
+                accessor.withFieldSetTo(f, value);
+            }
+        }
+        return instance;
     }
 
     private Map<Field, Object> empty() {
