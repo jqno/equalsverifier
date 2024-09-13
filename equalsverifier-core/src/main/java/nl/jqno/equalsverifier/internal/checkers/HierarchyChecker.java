@@ -195,8 +195,7 @@ public class HierarchyChecker<T> implements Checker {
         }
 
         T reference = subjectCreator.plain();
-        ObjectAccessor<T> referenceAccessor = ObjectAccessor.of(reference);
-        T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
+        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass);
         assertFalse(
             Formatter.of(
                 "Subclass:\n  %%\nequals subclass instance\n  %%",

@@ -87,6 +87,11 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
         return ObjectAccessor.of(original, type.getSuperclass()).copy();
     }
 
+    @Override
+    public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
+        return ObjectAccessor.of(original).copyIntoSubclass(subType);
+    }
+
     private T withAllFields(BiFunction<ObjectAccessor<T>, Field, ObjectAccessor<T>> modifier) {
         return withTheseFields(FieldIterable.of(type), modifier);
     }

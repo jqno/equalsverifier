@@ -1,14 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
@@ -70,7 +68,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         if (FieldProbe.of(field, config).isStatic()) {
             return plain();
         }
-        Object value = instantiate(field).getBlue();
+        Object value = valuesFor(field).getBlue();
         return createInstance(with(field, value));
     }
 
@@ -78,7 +76,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public T withAllFieldsChanged() {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
-            Object value = instantiate(f).getBlue();
+            Object value = valuesFor(f).getBlue();
             values.put(f, value);
         }
         return createInstance(values);
@@ -88,7 +86,7 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public T withAllFieldsShallowlyChanged() {
         Map<Field, Object> values = empty();
         for (Field f : nonSuperFields()) {
-            Object value = instantiate(f).getBlue();
+            Object value = valuesFor(f).getBlue();
             values.put(f, value);
         }
         return createInstance(values);
@@ -106,25 +104,34 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     @Override
     public Object copyIntoSuperclass(T original) {
-        TypeTag superTag = new TypeTag(type.getSuperclass());
-        ModernSubjectCreator<T> superCreator = new ModernSubjectCreator<T>(
-            superTag,
-            config,
-            valueProvider
-        );
-
         Map<Field, Object> values = empty();
-        for (Field f : superCreator.fields()) {
+        for (Field f : superFields()) {
             Object value = FieldProbe.of(f, config).getValue(original);
             values.put(f, value);
         }
 
-        return superCreator.createInstance(values);
+        InstanceCreator<? super T> superCreator = new InstanceCreator<>(
+            new ClassProbe<>(type.getSuperclass())
+        );
+        return superCreator.instantiate(values);
+    }
+
+    @Override
+    public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
+        Map<Field, Object> values = empty();
+        for (Field f : fields()) {
+            Object value = FieldProbe.of(f, config).getValue(original);
+            values.put(f, value);
+        }
+
+        InstanceCreator<S> subCreator = new InstanceCreator<>(new ClassProbe<>(subType));
+        return subCreator.instantiate(values);
     }
 
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
-        return classProbe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
+        InstanceCreator<T> instaceCreator = new InstanceCreator<>(classProbe);
+        return instaceCreator.instantiate(values);
     }
 
     private Map<Field, Object> determineValues(Map<Field, Object> givens) {
@@ -134,40 +141,11 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
             boolean fieldCannotBeNull =
                 values.get(f) == null && !FieldProbe.of(f, config).canBeDefault();
             if (fieldIsAbsent || fieldCannotBeNull) {
-                Object value = instantiate(f).getRed();
+                Object value = valuesFor(f).getRed();
                 values.put(f, value);
             }
         }
         return values;
-    }
-
-    private T createRecordInstance(Map<Field, Object> values) {
-        List<Object> params = new ArrayList<>();
-        for (Field f : fields()) {
-            Object value = values.get(f);
-            if (value == null) {
-                Object def = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
-                params.add(def);
-            } else {
-                params.add(value);
-            }
-        }
-        RecordProbe<T> recordProbe = new RecordProbe<>(type);
-        return recordProbe.callRecordConstructor(params);
-    }
-
-    private T createClassInstance(Map<Field, Object> values) {
-        T instance = Instantiator.of(type).instantiate();
-        ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
-        for (Field f : fields()) {
-            Object value = values.get(f);
-            if (value == null) {
-                accessor.withDefaultedField(f);
-            } else {
-                accessor.withFieldSetTo(f, value);
-            }
-        }
-        return instance;
     }
 
     private Map<Field, Object> empty() {
@@ -184,11 +162,15 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         return FieldIterable.ofIgnoringStatic(type);
     }
 
+    private FieldIterable superFields() {
+        return FieldIterable.ofIgnoringStatic(type.getSuperclass());
+    }
+
     private FieldIterable nonSuperFields() {
         return FieldIterable.ofIgnoringSuperAndStatic(type);
     }
 
-    private Tuple<?> instantiate(Field f) {
+    private Tuple<?> valuesFor(Field f) {
         return valueProvider.provide(TypeTag.of(f, typeTag));
     }
 }

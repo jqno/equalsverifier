@@ -13,4 +13,5 @@ public interface SubjectCreator<T> {
     T withAllFieldsShallowlyChanged();
     T copy(T original);
     Object copyIntoSuperclass(T original);
+    <S extends T> S copyIntoSubclass(T original, Class<S> subType);
 }
