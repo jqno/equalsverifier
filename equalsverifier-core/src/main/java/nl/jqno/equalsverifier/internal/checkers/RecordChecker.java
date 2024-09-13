@@ -12,16 +12,17 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class RecordChecker<T> implements Checker {
 
     private final Context<T> context;
+    private final SubjectCreator<T> subjectCreator;
 
     public RecordChecker(Context<T> context) {
         this.context = context;
+        this.subjectCreator = context.getSubjectCreator();
     }
 
     @Override
@@ -31,15 +32,13 @@ public class RecordChecker<T> implements Checker {
             return;
         }
 
-        SubjectCreator<T> subjectCreator = context.getSubjectCreator();
-        verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.plain()));
-        verifyRecordPrecondition(ObjectAccessor.of(subjectCreator.withAllFieldsDefaulted()));
+        verifyRecordPrecondition(subjectCreator.plain());
+        verifyRecordPrecondition(subjectCreator.withAllFieldsDefaulted());
     }
 
-    private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {
+    private void verifyRecordPrecondition(T original) {
         Class<T> type = context.getType();
-        T original = originalAccessor.get();
-        T copy = originalAccessor.copy();
+        T copy = subjectCreator.copy(original);
 
         if (original.equals(copy)) {
             return;

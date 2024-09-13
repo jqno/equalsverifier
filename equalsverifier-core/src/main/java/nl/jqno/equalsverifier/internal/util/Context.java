@@ -23,12 +23,7 @@ public final class Context<T> {
 
         this.instanceCreator = new VintageInstanceCreator(prefabValues);
         this.subjectCreator =
-            new ModernSubjectCreator<>(
-                configuration.getTypeTag(),
-                configuration,
-                instanceCreator,
-                classProbe
-            );
+            new ModernSubjectCreator<>(configuration.getTypeTag(), configuration, instanceCreator);
     }
 
     public Class<T> getType() {

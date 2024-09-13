@@ -11,4 +11,6 @@ public interface SubjectCreator<T> {
     T withFieldChanged(Field field);
     T withAllFieldsChanged();
     T withAllFieldsShallowlyChanged();
+    T copy(T original);
+    Object copyIntoSuperclass(T original);
 }

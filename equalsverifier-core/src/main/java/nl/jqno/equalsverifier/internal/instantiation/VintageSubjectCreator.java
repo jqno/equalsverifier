@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 public class VintageSubjectCreator<T> implements SubjectCreator<T> {
 
     private final TypeTag typeTag;
+    private final Class<T> type;
     private final Configuration<T> config;
     private final PrefabValues prefabValues;
 
@@ -26,6 +27,7 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
         PrefabValues prefabValues
     ) {
         this.typeTag = typeTag;
+        this.type = typeTag.getType();
         this.config = config;
         this.prefabValues = prefabValues;
     }
@@ -70,13 +72,23 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
     @Override
     public T withAllFieldsShallowlyChanged() {
         return withTheseFields(
-            FieldIterable.ofIgnoringSuper(typeTag.getType()),
+            FieldIterable.ofIgnoringSuper(type),
             (acc, f) -> acc.withChangedField(f, prefabValues, typeTag)
         );
     }
 
+    @Override
+    public T copy(T original) {
+        return ObjectAccessor.of(original).copy();
+    }
+
+    @Override
+    public Object copyIntoSuperclass(T original) {
+        return ObjectAccessor.of(original, type.getSuperclass()).copy();
+    }
+
     private T withAllFields(BiFunction<ObjectAccessor<T>, Field, ObjectAccessor<T>> modifier) {
-        return withTheseFields(FieldIterable.of(typeTag.getType()), modifier);
+        return withTheseFields(FieldIterable.of(type), modifier);
     }
 
     private T withTheseFields(
@@ -91,7 +103,7 @@ public class VintageSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     private ObjectAccessor<T> createSubject() {
-        ClassAccessor<T> accessor = ClassAccessor.of(typeTag.getType(), prefabValues);
+        ClassAccessor<T> accessor = ClassAccessor.of(type, prefabValues);
         return accessor.getRedAccessor(TypeTag.NULL);
     }
 }

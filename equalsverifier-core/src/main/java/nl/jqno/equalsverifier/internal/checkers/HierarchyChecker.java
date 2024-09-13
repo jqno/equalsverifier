@@ -149,7 +149,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private Object getEqualSuper(T reference) {
-        return ObjectAccessor.of(reference, type.getSuperclass()).copy();
+        return subjectCreator.copyIntoSuperclass(reference);
     }
 
     private void checkSubclass() {

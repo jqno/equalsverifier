@@ -11,7 +11,6 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class ExamplesChecker<T> implements Checker {
@@ -96,7 +95,7 @@ public class ExamplesChecker<T> implements Checker {
     }
 
     private void checkSingle(T reference) {
-        final T copy = ObjectAccessor.of(reference, type).copy();
+        final T copy = subjectCreator.copy(reference);
 
         checkReflexivity(reference);
         checkNonNullity(reference);

@@ -13,6 +13,7 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {
 
     private final TypeTag typeTag;
+    private final Class<T> type;
     private final Configuration<T> config;
     private final InstanceCreator instanceCreator;
     private final ClassProbe<T> classProbe;
@@ -20,13 +21,13 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     public ModernSubjectCreator(
         TypeTag typeTag,
         Configuration<T> config,
-        InstanceCreator instanceCreator,
-        ClassProbe<T> classProbe
+        InstanceCreator instanceCreator
     ) {
         this.typeTag = typeTag;
+        this.type = typeTag.getType();
         this.config = config;
         this.instanceCreator = instanceCreator;
-        this.classProbe = classProbe;
+        this.classProbe = new ClassProbe<>(type);
     }
 
     @Override
@@ -93,6 +94,34 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
         return createInstance(values);
     }
 
+    @Override
+    public T copy(T original) {
+        Map<Field, Object> values = empty();
+        for (Field f : fields()) {
+            Object value = FieldProbe.of(f, config).getValue(original);
+            values.put(f, value);
+        }
+        return createInstance(values);
+    }
+
+    @Override
+    public Object copyIntoSuperclass(T original) {
+        TypeTag superTag = new TypeTag(type.getSuperclass());
+        ModernSubjectCreator<T> superCreator = new ModernSubjectCreator<T>(
+            superTag,
+            config,
+            instanceCreator
+        );
+
+        Map<Field, Object> values = empty();
+        for (Field f : superCreator.fields()) {
+            Object value = FieldProbe.of(f, config).getValue(original);
+            values.put(f, value);
+        }
+
+        return superCreator.createInstance(values);
+    }
+
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
         return classProbe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
@@ -123,12 +152,12 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
                 params.add(value);
             }
         }
-        RecordProbe<T> recordProbe = new RecordProbe<>(typeTag.getType());
+        RecordProbe<T> recordProbe = new RecordProbe<>(type);
         return recordProbe.callRecordConstructor(params);
     }
 
     private T createClassInstance(Map<Field, Object> values) {
-        T instance = Instantiator.<T>of(typeTag.getType()).instantiate();
+        T instance = Instantiator.of(type).instantiate();
         ObjectAccessor<T> accessor = ObjectAccessor.of(instance);
         for (Field f : fields()) {
             Object value = values.get(f);
@@ -152,11 +181,11 @@ public class ModernSubjectCreator<T> implements SubjectCreator<T> {
     }
 
     private FieldIterable fields() {
-        return FieldIterable.ofIgnoringStatic(typeTag.getType());
+        return FieldIterable.ofIgnoringStatic(type);
     }
 
     private FieldIterable nonSuperFields() {
-        return FieldIterable.ofIgnoringSuperAndStatic(typeTag.getType());
+        return FieldIterable.ofIgnoringSuperAndStatic(type);
     }
 
     private Tuple<?> instantiate(Field f) {
