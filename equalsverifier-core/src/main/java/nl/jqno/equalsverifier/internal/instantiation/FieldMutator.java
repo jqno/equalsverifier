@@ -4,12 +4,12 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 
-class FieldMutator {
+public class FieldMutator {
 
     private final FieldProbe probe;
     private final Field field;
 
-    FieldMutator(FieldProbe probe) {
+    public FieldMutator(FieldProbe probe) {
         this.probe = probe;
         this.field = probe.getField();
     }

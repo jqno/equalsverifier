@@ -4,12 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.instantiation.FieldMutator;
 import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Context;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.util.*;
 
 @SuppressFBWarnings(
     value = "RV_RETURN_VALUE_IGNORED",
@@ -39,12 +37,15 @@ public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
         if (fieldProbe.isStatic()) {
             T reference = subjectCreator.plain();
-            FieldModifier fieldModifier = FieldModifier.of(fieldProbe.getField(), reference);
+            FieldMutator fieldMutator = new FieldMutator(fieldProbe);
             Object saved = fieldProbe.getValue(reference);
 
-            fieldModifier.defaultStaticField();
+            fieldMutator.setNewValue(
+                reference,
+                PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(fieldProbe.getType())
+            );
             performTests(fieldProbe.getField(), subjectCreator.plain(), subjectCreator.plain());
-            fieldModifier.set(saved);
+            fieldMutator.setNewValue(reference, saved);
         } else {
             T changed = subjectCreator.withFieldDefaulted(fieldProbe.getField());
             performTests(fieldProbe.getField(), subjectCreator.plain(), changed);
