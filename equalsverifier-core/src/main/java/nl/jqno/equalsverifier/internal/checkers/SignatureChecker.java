@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 

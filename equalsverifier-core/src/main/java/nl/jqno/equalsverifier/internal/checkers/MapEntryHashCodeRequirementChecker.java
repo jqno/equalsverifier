@@ -4,7 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.Objects;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;

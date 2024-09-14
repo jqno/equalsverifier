@@ -4,11 +4,11 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
-import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class AbstractDelegationChecker<T> implements Checker {

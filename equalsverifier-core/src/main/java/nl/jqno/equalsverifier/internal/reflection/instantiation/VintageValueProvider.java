@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;

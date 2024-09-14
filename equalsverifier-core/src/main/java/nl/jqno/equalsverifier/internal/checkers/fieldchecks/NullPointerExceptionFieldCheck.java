@@ -4,9 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.instantiation.FieldMutator;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.FieldMutator;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.*;
 
 @SuppressFBWarnings(

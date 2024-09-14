@@ -1,10 +1,8 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Modifier;
-import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
-import nl.jqno.equalsverifier.internal.reflection.SealedTypesHelper;
 
 /**
  * Provides read-only reflective access to a class.

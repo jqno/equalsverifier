@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.FieldCheck;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 
 public class FieldInspector<T> {
 

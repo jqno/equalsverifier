@@ -7,10 +7,10 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class SignificantFieldCheck<T> implements FieldCheck<T> {

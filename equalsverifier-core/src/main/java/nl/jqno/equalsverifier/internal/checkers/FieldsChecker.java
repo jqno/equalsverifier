@@ -3,11 +3,11 @@ package nl.jqno.equalsverifier.internal.checkers;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
-import nl.jqno.equalsverifier.internal.instantiation.FieldProbe;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 

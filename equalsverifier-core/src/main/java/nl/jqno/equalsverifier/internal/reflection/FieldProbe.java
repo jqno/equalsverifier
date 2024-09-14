@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;

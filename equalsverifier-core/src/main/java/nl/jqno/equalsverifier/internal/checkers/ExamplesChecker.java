@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class ExamplesChecker<T> implements Checker {

@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;

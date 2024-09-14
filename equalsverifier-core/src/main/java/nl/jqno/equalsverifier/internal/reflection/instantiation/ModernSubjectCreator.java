@@ -1,11 +1,13 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class ModernSubjectCreator<T> implements SubjectCreator<T> {

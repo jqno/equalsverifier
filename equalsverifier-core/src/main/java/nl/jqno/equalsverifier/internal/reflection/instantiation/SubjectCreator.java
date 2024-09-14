@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import java.lang.reflect.Field;
 

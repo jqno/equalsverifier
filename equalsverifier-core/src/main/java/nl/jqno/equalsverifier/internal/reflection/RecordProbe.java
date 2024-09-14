@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public class RecordProbe<T> {

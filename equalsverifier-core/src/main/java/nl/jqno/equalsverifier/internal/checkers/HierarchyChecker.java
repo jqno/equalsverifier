@@ -7,10 +7,10 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.instantiation.ClassProbe;
-import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class HierarchyChecker<T> implements Checker {

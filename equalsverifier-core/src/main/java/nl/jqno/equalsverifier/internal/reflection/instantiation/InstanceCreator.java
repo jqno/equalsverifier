@@ -1,12 +1,11 @@
-package nl.jqno.equalsverifier.internal.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 class InstanceCreator<T> {
