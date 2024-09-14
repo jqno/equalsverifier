@@ -1,9 +1,11 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +58,6 @@ public class RecordObjectAccessorCopyingTest {
         return new RecordObjectAccessor<T>(object, (Class<T>) object.getClass());
     }
 
-    @SuppressWarnings("unchecked")
     private <T> T instantiate(Class<T> type) {
         return Instantiator.of(type).instantiate();
     }

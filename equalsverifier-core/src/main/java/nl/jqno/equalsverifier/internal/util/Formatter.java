@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.util;
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 
 /**
  * Formats a string with the contents of one or more objects.

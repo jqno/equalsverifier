@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;

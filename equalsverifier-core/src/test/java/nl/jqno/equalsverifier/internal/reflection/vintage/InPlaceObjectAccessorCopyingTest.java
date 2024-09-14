@@ -1,8 +1,9 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;

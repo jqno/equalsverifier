@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.assertEquals;
