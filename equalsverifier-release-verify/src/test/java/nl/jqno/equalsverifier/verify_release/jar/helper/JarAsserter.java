@@ -24,7 +24,7 @@ public class JarAsserter {
         assertPresenceOf(
             EV + "/EqualsVerifier.class",
             EV + "/internal/reflection/vintage/ClassAccessor.class",
-            EV + "/internal/prefabvalues/PrefabValues.class"
+            EV + "/internal/checkers/HierarchyChecker.class"
         );
     }
 
