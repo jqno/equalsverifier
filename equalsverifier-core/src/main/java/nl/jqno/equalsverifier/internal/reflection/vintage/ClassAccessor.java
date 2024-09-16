@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor} can create two
@@ -15,12 +15,12 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabVal
 public class ClassAccessor<T> {
 
     private final Class<T> type;
-    private final PrefabValues prefabValues;
+    private final VintageValueProvider valueProvider;
 
     /** Private constructor. Call {@link #of(Class, PrefabValues)} instead. */
-    ClassAccessor(Class<T> type, PrefabValues prefabValues) {
+    ClassAccessor(Class<T> type, VintageValueProvider valueProvider) {
         this.type = type;
-        this.prefabValues = prefabValues;
+        this.valueProvider = valueProvider;
     }
 
     /**
@@ -28,11 +28,11 @@ public class ClassAccessor<T> {
      *
      * @param <T> The class on which {@link ClassAccessor} operates.
      * @param type The class on which {@link ClassAccessor} operates. Should be the same as T.
-     * @param prefabValues Prefabricated values with which to fill instantiated objects.
+     * @param valueProvider Prefabricated values with which to fill instantiated objects.
      * @return A {@link ClassAccessor} for T.
      */
-    public static <T> ClassAccessor<T> of(Class<T> type, PrefabValues prefabValues) {
-        return new ClassAccessor<>(type, prefabValues);
+    public static <T> ClassAccessor<T> of(Class<T> type, VintageValueProvider valueProvider) {
+        return new ClassAccessor<>(type, valueProvider);
     }
 
     /**
@@ -60,7 +60,7 @@ public class ClassAccessor<T> {
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
     ) {
-        return buildObjectAccessor().scramble(prefabValues, enclosingType, typeStack);
+        return buildObjectAccessor().scramble(valueProvider, enclosingType, typeStack);
     }
 
     /**
@@ -89,8 +89,8 @@ public class ClassAccessor<T> {
         LinkedHashSet<TypeTag> typeStack
     ) {
         return buildObjectAccessor()
-            .scramble(prefabValues, enclosingType, typeStack)
-            .scramble(prefabValues, enclosingType, typeStack);
+            .scramble(valueProvider, enclosingType, typeStack)
+            .scramble(valueProvider, enclosingType, typeStack);
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {

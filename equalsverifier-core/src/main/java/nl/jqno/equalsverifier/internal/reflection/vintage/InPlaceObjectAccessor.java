@@ -5,7 +5,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Implementation of ObjectAccessor that modifies its wrapped object in-place through reflection.
@@ -32,12 +32,12 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
     ) {
         for (Field field : FieldIterable.of(type())) {
-            fieldModifierFor(field).changeField(prefabValues, enclosingType, typeStack);
+            fieldModifierFor(field).changeField(valueProvider, enclosingType, typeStack);
         }
         return this;
     }

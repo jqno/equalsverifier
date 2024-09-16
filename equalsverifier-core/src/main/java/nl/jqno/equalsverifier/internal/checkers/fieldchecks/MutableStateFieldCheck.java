@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
@@ -13,10 +12,6 @@ public class MutableStateFieldCheck<T> implements FieldCheck<T> {
     private final SubjectCreator<T> subjectCreator;
     private final Predicate<FieldProbe> isCachedHashCodeField;
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "PrefabValues is inherently mutable."
-    )
     public MutableStateFieldCheck(
         SubjectCreator<T> subjectCreator,
         Predicate<FieldProbe> isCachedHashCodeField

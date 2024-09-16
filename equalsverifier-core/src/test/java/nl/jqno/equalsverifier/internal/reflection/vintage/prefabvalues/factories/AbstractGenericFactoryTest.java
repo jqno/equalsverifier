@@ -8,8 +8,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,7 +25,7 @@ public class AbstractGenericFactoryTest {
                 @Override
                 public Tuple<String> createValues(
                     TypeTag tag,
-                    PrefabValues prefabValues,
+                    VintageValueProvider valueProvider,
                     LinkedHashSet<TypeTag> typeStack
                 ) {
                     return Tuple.of("red", "blue", new String("red"));

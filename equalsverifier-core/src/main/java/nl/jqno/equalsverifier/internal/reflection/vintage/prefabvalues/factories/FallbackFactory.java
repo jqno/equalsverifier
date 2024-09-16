@@ -8,21 +8,21 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates types "by force".
  *
  * <p>It instantiates the type using bytecode magic, bypassing the constructor. Then it uses {@link
- * PrefabValues} to fill up all the fields, recursively.
+ * VintageValueProvider} to fill up all the fields, recursively.
  */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     @Override
     public Tuple<T> createValues(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         @SuppressWarnings("unchecked")
@@ -34,11 +34,11 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             return giveEnumInstances(tag);
         }
         if (type.isArray()) {
-            return giveArrayInstances(tag, prefabValues, clone);
+            return giveArrayInstances(tag, valueProvider, clone);
         }
 
-        traverseFields(tag, prefabValues, clone);
-        return giveInstances(tag, prefabValues, clone);
+        traverseFields(tag, valueProvider, clone);
+        return giveInstances(tag, valueProvider, clone);
     }
 
     private Tuple<T> giveEnumInstances(TypeTag tag) {
@@ -58,27 +58,27 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     @SuppressWarnings("unchecked")
     private Tuple<T> giveArrayInstances(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
-        prefabValues.realizeCacheFor(componentTag, typeStack);
+        valueProvider.realizeCacheFor(componentTag, typeStack);
 
         T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, prefabValues.giveRed(componentTag));
+        Array.set(red, 0, valueProvider.giveRed(componentTag));
         T blue = (T) Array.newInstance(componentType, 1);
-        Array.set(blue, 0, prefabValues.giveBlue(componentTag));
+        Array.set(blue, 0, valueProvider.giveBlue(componentTag));
         T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, prefabValues.giveRed(componentTag));
+        Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
 
         return new Tuple<>(red, blue, redCopy);
     }
 
     private void traverseFields(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         Class<?> type = tag.getType();
@@ -87,7 +87,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
             if (!isStaticAndFinal) {
                 try {
-                    prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
+                    valueProvider.realizeCacheFor(TypeTag.of(field, tag), typeStack);
                 } catch (RuntimeException e) {
                     // InaccessibleObjectException is not yet available in Java 8
                     if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
@@ -102,10 +102,10 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     private Tuple<T> giveInstances(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
-        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), prefabValues);
+        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider);
         T red = accessor.getRedObject(tag, typeStack);
         T blue = accessor.getBlueObject(tag, typeStack);
         T redCopy = accessor.getRedObject(tag, typeStack);

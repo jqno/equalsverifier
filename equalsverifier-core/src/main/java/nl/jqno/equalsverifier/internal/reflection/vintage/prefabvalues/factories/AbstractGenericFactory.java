@@ -8,7 +8,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Abstract implementation of {@link PrefabValueFactory} that provides helper functions for dealing
@@ -36,16 +36,16 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     protected TypeTag determineAndCacheActualTypeTag(
         int n,
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
-        return determineAndCacheActualTypeTag(n, tag, prefabValues, typeStack, null);
+        return determineAndCacheActualTypeTag(n, tag, valueProvider, typeStack, null);
     }
 
     protected TypeTag determineAndCacheActualTypeTag(
         int n,
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack,
         Class<?> bottomType
     ) {
@@ -53,7 +53,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
         if (bottomType != null && result.getType().equals(Object.class)) {
             result = new TypeTag(bottomType);
         }
-        prefabValues.realizeCacheFor(result, typeStack);
+        valueProvider.realizeCacheFor(result, typeStack);
         return result;
     }
 

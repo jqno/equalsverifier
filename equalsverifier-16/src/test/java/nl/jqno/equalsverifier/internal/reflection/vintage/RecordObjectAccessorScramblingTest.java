@@ -9,7 +9,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,12 +17,12 @@ public class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private FactoryCache factoryCache;
-    private nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues prefabValues;
+    private VintageValueProvider valueProvider;
 
     @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
-        prefabValues = new PrefabValues(factoryCache);
+        valueProvider = new VintageValueProvider(factoryCache);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(prefabValues, TypeTag.NULL, EMPTY_TYPE_STACK);
+        return create(object).scramble(valueProvider, TypeTag.NULL, EMPTY_TYPE_STACK);
     }
 
     record Point(int x, int y) {}

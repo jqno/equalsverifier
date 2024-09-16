@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
@@ -13,27 +13,26 @@ import java.util.List;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PrefabValuesTest {
+public class VintageValueProviderTest {
 
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
     private FactoryCache factoryCache = new FactoryCache();
-    private PrefabValues pv;
+    private VintageValueProvider vp;
 
     @BeforeEach
     public void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));
-        pv = new PrefabValues(factoryCache);
+        vp = new VintageValueProvider(factoryCache);
     }
 
     @Test
@@ -46,78 +45,78 @@ public class PrefabValuesTest {
 
     @Test
     public void giveRedFromFactory() {
-        assertEquals("r", pv.giveRed(STRING_TAG));
+        assertEquals("r", vp.giveRed(STRING_TAG));
     }
 
     @Test
     public void giveRedFromCache() {
-        pv.giveRed(STRING_TAG);
-        assertEquals("r", pv.giveRed(STRING_TAG));
+        vp.giveRed(STRING_TAG);
+        assertEquals("r", vp.giveRed(STRING_TAG));
     }
 
     @Test
     public void giveBlueFromFactory() {
-        assertEquals("b", pv.giveBlue(STRING_TAG));
+        assertEquals("b", vp.giveBlue(STRING_TAG));
     }
 
     @Test
     public void giveBlueFromCache() {
-        pv.giveBlue(STRING_TAG);
-        assertEquals("b", pv.giveBlue(STRING_TAG));
+        vp.giveBlue(STRING_TAG);
+        assertEquals("b", vp.giveBlue(STRING_TAG));
     }
 
     @Test
     public void giveRedCopyFromFactory() {
-        assertEquals("r", pv.giveRedCopy(STRING_TAG));
-        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+        assertEquals("r", vp.giveRedCopy(STRING_TAG));
+        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
     }
 
     @Test
     public void giveRedCopyFromCache() {
-        pv.giveRedCopy(STRING_TAG);
-        assertEquals("r", pv.giveRedCopy(STRING_TAG));
-        assertNotSame(pv.giveRed(STRING_TAG), pv.giveRedCopy(STRING_TAG));
+        vp.giveRedCopy(STRING_TAG);
+        assertEquals("r", vp.giveRedCopy(STRING_TAG));
+        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
     }
 
     @Test
     public void giveRedFromFallbackFactory() {
-        Point actual = pv.giveRed(POINT_TAG);
+        Point actual = vp.giveRed(POINT_TAG);
         assertEquals(new Point(42, 42), actual);
     }
 
     @Test
     public void giveBlueFromFallbackFactory() {
-        Point actual = pv.giveBlue(POINT_TAG);
+        Point actual = vp.giveBlue(POINT_TAG);
         assertEquals(new Point(1337, 1337), actual);
     }
 
     @Test
     public void giveRedCopyFromFallbackFactory() {
-        Point actual = pv.giveRedCopy(POINT_TAG);
+        Point actual = vp.giveRedCopy(POINT_TAG);
         assertEquals(new Point(42, 42), actual);
-        assertNotSame(pv.giveRed(POINT_TAG), actual);
+        assertNotSame(vp.giveRed(POINT_TAG), actual);
     }
 
     @Test
     public void giveTuple() {
-        Tuple<Point> actual = pv.giveTuple(POINT_TAG);
+        Tuple<Point> actual = vp.giveTuple(POINT_TAG);
         assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 
     @Test
     public void fallbackDoesNotAffectStaticFields() {
         int expected = StaticContainer.staticInt;
-        pv.giveRed(new TypeTag(StaticContainer.class));
+        vp.giveRed(new TypeTag(StaticContainer.class));
         assertEquals(expected, StaticContainer.staticInt);
     }
 
     @Test
     public void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        pv = new PrefabValues(factoryCache);
+        vp = new VintageValueProvider(factoryCache);
 
-        List<String> strings = pv.giveRed(new TypeTag(List.class, STRING_TAG));
-        List<Integer> ints = pv.giveRed(new TypeTag(List.class, INT_TAG));
+        List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
+        List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
 
         assertEquals("r", strings.get(0));
         assertEquals(42, (int) ints.get(0));
@@ -131,19 +130,19 @@ public class PrefabValuesTest {
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
         factoryCache.put(int.class, values(-1, -2, -1));
-        pv = new PrefabValues(factoryCache);
-        assertEquals(-1, (int) pv.giveRed(INT_TAG));
-        assertEquals(-2, (int) pv.giveBlue(INT_TAG));
+        vp = new VintageValueProvider(factoryCache);
+        assertEquals(-1, (int) vp.giveRed(INT_TAG));
+        assertEquals(-2, (int) vp.giveBlue(INT_TAG));
     }
 
     @Test
     public void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
-        pv = new PrefabValues(factoryCache);
-        assertEquals(Lazy.X, pv.giveRed(lazyTag));
-        assertEquals(Lazy.Y, pv.giveBlue(lazyTag));
-        assertEquals(Lazy.X, pv.giveRedCopy(lazyTag));
+        vp = new VintageValueProvider(factoryCache);
+        assertEquals(Lazy.X, vp.giveRed(lazyTag));
+        assertEquals(Lazy.Y, vp.giveBlue(lazyTag));
+        assertEquals(Lazy.X, vp.giveRedCopy(lazyTag));
     }
 
     @Test
@@ -156,11 +155,11 @@ public class PrefabValuesTest {
             (t, p, ts) ->
                 Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X)
         );
-        pv = new PrefabValues(factoryCache);
+        vp = new VintageValueProvider(factoryCache);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {
-            pv.giveRed(throwingInitializerTag);
+            vp.giveRed(throwingInitializerTag);
             fail("Expected an exception");
         } catch (Error e) {
             // succeed
@@ -203,7 +202,7 @@ public class PrefabValuesTest {
         @Override
         public Tuple<String> createValues(
             TypeTag tag,
-            PrefabValues prefabValues,
+            VintageValueProvider valueProvider,
             LinkedHashSet<TypeTag> typeStack
         ) {
             red += "r";
@@ -219,19 +218,19 @@ public class PrefabValuesTest {
         @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
             TypeTag tag,
-            PrefabValues prefabValues,
+            VintageValueProvider valueProvider,
             LinkedHashSet<TypeTag> typeStack
         ) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
             List red = new ArrayList<>();
-            red.add(prefabValues.giveRed(subtag));
+            red.add(valueProvider.giveRed(subtag));
 
             List blue = new ArrayList<>();
-            blue.add(prefabValues.giveBlue(subtag));
+            blue.add(valueProvider.giveBlue(subtag));
 
             List redCopy = new ArrayList<>();
-            redCopy.add(prefabValues.giveRed(subtag));
+            redCopy.add(valueProvider.giveRed(subtag));
 
             return new Tuple<>(red, blue, redCopy);
         }

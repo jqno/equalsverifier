@@ -7,7 +7,7 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
@@ -22,7 +22,7 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     @Override
     public Tuple<T> createValues(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
@@ -33,10 +33,10 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         boolean useEmpty = false;
         int n = tag.getType().getTypeParameters().length;
         for (int i = 0; i < n; i++) {
-            TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, prefabValues, clone);
+            TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, valueProvider, clone);
 
-            Object redValue = prefabValues.giveRed(paramTag);
-            Object blueValue = prefabValues.giveBlue(paramTag);
+            Object redValue = valueProvider.giveRed(paramTag);
+            Object blueValue = valueProvider.giveBlue(paramTag);
             if (redValue.equals(blueValue)) { // This happens with single-element enums
                 useEmpty = true;
             }

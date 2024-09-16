@@ -4,7 +4,7 @@ import java.util.LinkedHashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 
@@ -19,16 +19,16 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
     @Override
     public Tuple<T> createValues(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag sourceTag = copyGenericTypesInto(source, tag);
-        prefabValues.realizeCacheFor(sourceTag, clone);
+        valueProvider.realizeCacheFor(sourceTag, clone);
 
-        S redSource = prefabValues.giveRed(sourceTag);
-        S blueSource = prefabValues.giveBlue(sourceTag);
-        S redCopySource = prefabValues.giveRedCopy(sourceTag);
+        S redSource = valueProvider.giveRed(sourceTag);
+        S blueSource = valueProvider.giveBlue(sourceTag);
+        S redCopySource = valueProvider.giveRedCopy(sourceTag);
 
         return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
     }

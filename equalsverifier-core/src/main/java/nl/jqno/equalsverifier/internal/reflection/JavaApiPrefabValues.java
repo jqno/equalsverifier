@@ -28,14 +28,14 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.ExternalFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
 /**
- * Creates instances of classes for use in a {@link PrefabValues} object.
+ * Creates instances of classes for use in a {@link VintageValueProvider} object.
  *
  * <p>Contains hand-made instances of well-known Java API classes that cannot be instantiated
  * dynamically because of an internal infinite recursion of types, or other issues.
@@ -432,7 +432,7 @@ public final class JavaApiPrefabValues {
         addFactory(CopyOnWriteArraySet.class, collection(CopyOnWriteArraySet::new));
         addFactory(HashSet.class, collection(HashSet::new));
         addFactory(TreeSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
-        addFactory(EnumSet.class, new EnumSetFactory<>(EnumSet::copyOf));
+        addFactory(EnumSet.class, new EnumSetFactory<>(c -> EnumSet.copyOf(c)));
         addValues(
             BitSet.class,
             BitSet.valueOf(new byte[] { 0 }),

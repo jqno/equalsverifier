@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.SimpleFactory;
 import org.junit.jupiter.api.Test;
 
 public class SimpleFactoryTest {

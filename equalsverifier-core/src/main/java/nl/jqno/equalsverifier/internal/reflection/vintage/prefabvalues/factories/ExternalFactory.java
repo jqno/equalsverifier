@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.FactoryProvider;
 
 public class ExternalFactory<T> implements PrefabValueFactory<T> {
@@ -26,7 +26,7 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
     @Override
     public Tuple<T> createValues(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         if (factoryCache == null) {
@@ -36,6 +36,6 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
         }
 
         PrefabValueFactory<T> factory = factoryCache.get(tag.getType());
-        return factory.createValues(tag, prefabValues, typeStack);
+        return factory.createValues(tag, valueProvider, typeStack);
     }
 }

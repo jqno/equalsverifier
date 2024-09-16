@@ -7,7 +7,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public final class FieldModifier {
 
@@ -49,7 +49,7 @@ public final class FieldModifier {
      *
      * <p>Ignores static fields and fields that can't be modified reflectively.
      *
-     * @param prefabValues If the field is of a type contained within prefabValues, the new value
+     * @param valueProvider If the field is of a type contained within prefabValues, the new value
      *     will be taken from it.
      * @param enclosingType A tag for the type that contains the field. Needed to determine a
      *     generic type, if it has one..
@@ -57,13 +57,13 @@ public final class FieldModifier {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
     ) {
         FieldChanger fm = () -> {
             TypeTag tag = TypeTag.of(field, enclosingType);
-            Object newValue = prefabValues.giveOther(tag, field.get(object), typeStack);
+            Object newValue = valueProvider.giveOther(tag, field.get(object), typeStack);
             field.set(object, newValue);
         };
         change(fm, false);

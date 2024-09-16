@@ -9,7 +9,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
@@ -21,15 +21,15 @@ public class ClassAccessorTest {
 
     private LinkedHashSet<TypeTag> empty;
     private FactoryCache factoryCache;
-    private PrefabValues prefabValues;
+    private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
 
     @BeforeEach
     public void setup() {
         empty = new LinkedHashSet<>();
         factoryCache = JavaApiPrefabValues.build();
-        prefabValues = new PrefabValues(factoryCache);
-        pointContainerAccessor = ClassAccessor.of(PointContainer.class, prefabValues);
+        valueProvider = new VintageValueProvider(factoryCache);
+        pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class ClassAccessorTest {
     public void getRedObjectGeneric() {
         ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(
             GenericTypeVariableListContainer.class,
-            prefabValues
+            valueProvider
         );
         GenericTypeVariableListContainer foo = accessor.getRedObject(
             new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)),
@@ -71,7 +71,7 @@ public class ClassAccessorTest {
     public void getBlueObjectGeneric() {
         ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(
             GenericTypeVariableListContainer.class,
-            prefabValues
+            valueProvider
         );
         GenericTypeVariableListContainer foo = accessor.getBlueObject(
             new TypeTag(GenericTypeVariableListContainer.class, new TypeTag(String.class)),
@@ -99,13 +99,13 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateAllTypes() {
-        ClassAccessor.of(AllTypesContainer.class, prefabValues).getRedObject(TypeTag.NULL, empty);
+        ClassAccessor.of(AllTypesContainer.class, valueProvider).getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateArrayTypes() {
         ClassAccessor
-            .of(AllArrayTypesContainer.class, prefabValues)
+            .of(AllArrayTypesContainer.class, valueProvider)
             .getRedObject(TypeTag.NULL, empty);
     }
 
@@ -115,25 +115,25 @@ public class ClassAccessorTest {
             TwoStepNodeB.class,
             values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
-        prefabValues = new PrefabValues(factoryCache);
-        ClassAccessor.of(TwoStepNodeA.class, prefabValues).getRedObject(TypeTag.NULL, empty);
+        valueProvider = new VintageValueProvider(factoryCache);
+        ClassAccessor.of(TwoStepNodeA.class, valueProvider).getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateInterfaceField() {
-        ClassAccessor.of(InterfaceContainer.class, prefabValues).getRedObject(TypeTag.NULL, empty);
+        ClassAccessor.of(InterfaceContainer.class, valueProvider).getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateAbstractClassField() {
         ClassAccessor
-            .of(AbstractClassContainer.class, prefabValues)
+            .of(AbstractClassContainer.class, valueProvider)
             .getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void anInvalidTypeShouldNotThrowAnExceptionUponCreation() {
-        ClassAccessor.of(null, prefabValues);
+        ClassAccessor.of(null, valueProvider);
     }
 
     private void assertObjectHasNoNullFields(PointContainer foo) {

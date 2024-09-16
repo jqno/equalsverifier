@@ -4,9 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
-/** Contains a cache of prefabricated values, for {@link PrefabValues}. */
-class Cache {
+/** Contains a cache of prefabricated values, for {@link VintageValueProvider}. */
+public class Cache {
 
     @SuppressWarnings("rawtypes")
     private final Map<TypeTag, Tuple> cache = new HashMap<>();

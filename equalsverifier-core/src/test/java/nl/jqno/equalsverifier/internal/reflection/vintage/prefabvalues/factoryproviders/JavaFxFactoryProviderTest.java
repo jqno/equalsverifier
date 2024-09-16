@@ -8,9 +8,8 @@ import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,11 +18,11 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {
 
-    private PrefabValues prefabValues;
+    private VintageValueProvider valueProvider;
 
     @BeforeEach
     public void setUp() {
-        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
+        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build());
     }
 
     @Test
@@ -40,10 +39,10 @@ public class JavaFxFactoryProviderTest {
             GenericContainer.class.getName(),
             List.class
         );
-        Tuple<GenericContainer> tuple = factory.createValues(tag, prefabValues, null);
+        Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertEquals(prefabValues.giveRed(listTag), tuple.getRed().t);
-        assertEquals(prefabValues.giveBlue(listTag), tuple.getBlue().t);
+        assertEquals(valueProvider.giveRed(listTag), tuple.getRed().t);
+        assertEquals(valueProvider.giveBlue(listTag), tuple.getBlue().t);
         assertEquals(String.class, tuple.getRed().t.get(0).getClass());
     }
 
@@ -64,10 +63,10 @@ public class JavaFxFactoryProviderTest {
             GenericMultiContainer.class.getName(),
             Map.class
         );
-        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, prefabValues, null);
+        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertEquals(prefabValues.giveRed(mapTag), tuple.getRed().t);
-        assertEquals(prefabValues.giveBlue(mapTag), tuple.getBlue().t);
+        assertEquals(valueProvider.giveRed(mapTag), tuple.getRed().t);
+        assertEquals(valueProvider.giveBlue(mapTag), tuple.getBlue().t);
 
         Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
         assertEquals(String.class, next.getKey().getClass());

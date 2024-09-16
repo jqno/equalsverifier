@@ -8,8 +8,7 @@ import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.MapFactory;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,7 @@ public class MapFactoryTest {
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
     private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
-    private PrefabValues prefabValues;
+    private VintageValueProvider valueProvider;
     private String red;
     private String blue;
     private Object redObject;
@@ -49,19 +48,19 @@ public class MapFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        prefabValues = new PrefabValues(JavaApiPrefabValues.build());
-        red = prefabValues.giveRed(STRING_TYPETAG);
-        blue = prefabValues.giveBlue(STRING_TYPETAG);
-        redObject = prefabValues.giveRed(OBJECT_TYPETAG);
-        blueObject = prefabValues.giveBlue(OBJECT_TYPETAG);
-        redEnum = prefabValues.giveBlue(ONEELEMENTENUM_TYPETAG);
+        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build());
+        red = valueProvider.giveRed(STRING_TYPETAG);
+        blue = valueProvider.giveBlue(STRING_TYPETAG);
+        redObject = valueProvider.giveRed(OBJECT_TYPETAG);
+        blueObject = valueProvider.giveBlue(OBJECT_TYPETAG);
+        redEnum = valueProvider.giveBlue(ONEELEMENTENUM_TYPETAG);
     }
 
     @Test
     public void createMapsOfStringToString() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(
             STRINGSTRINGMAP_TYPETAG,
-            prefabValues,
+            valueProvider,
             typeStack
         );
         assertEquals(mapOf(red, blue), tuple.getRed());
@@ -70,14 +69,14 @@ public class MapFactoryTest {
 
     @Test
     public void createMapsOfWildcard() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, prefabValues, typeStack);
+        Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, valueProvider, typeStack);
         assertEquals(mapOf(redObject, blueObject), tuple.getRed());
         assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }
 
     @Test
     public void createRawMaps() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, prefabValues, typeStack);
+        Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, typeStack);
         assertEquals(mapOf(redObject, blueObject), tuple.getRed());
         assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }
@@ -86,7 +85,7 @@ public class MapFactoryTest {
     public void createMapOfOneElementEnumKey() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(
             ONEELEMENTENUMKEYMAP_TYPETAG,
-            prefabValues,
+            valueProvider,
             typeStack
         );
         assertEquals(mapOf(redEnum, blueObject), tuple.getRed());

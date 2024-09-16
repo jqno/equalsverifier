@@ -11,8 +11,7 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.FallbackFactory;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
@@ -26,7 +25,7 @@ import org.junit.jupiter.api.Test;
 public class FallbackFactoryTest {
 
     private FallbackFactory<?> factory;
-    private PrefabValues prefabValues;
+    private VintageValueProvider valueProvider;
     private LinkedHashSet<TypeTag> typeStack;
 
     @BeforeEach
@@ -34,7 +33,7 @@ public class FallbackFactoryTest {
         factory = new FallbackFactory<>();
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
-        prefabValues = new PrefabValues(factoryCache);
+        valueProvider = new VintageValueProvider(factoryCache);
         typeStack = new LinkedHashSet<>();
     }
 
@@ -55,7 +54,7 @@ public class FallbackFactoryTest {
 
     @Test
     public void giveArray() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), prefabValues, typeStack);
+        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
         assertArrayEquals(new int[] { 42 }, (int[]) tuple.getRed());
         assertArrayEquals(new int[] { 1337 }, (int[]) tuple.getBlue());
     }
@@ -75,7 +74,7 @@ public class FallbackFactoryTest {
     @Test
     public void dontGiveRecursiveClass() {
         ExpectedException
-            .when(() -> factory.createValues(new TypeTag(Node.class), prefabValues, typeStack))
+            .when(() -> factory.createValues(new TypeTag(Node.class), valueProvider, typeStack))
             .assertThrows(RecursionException.class);
     }
 
@@ -83,7 +82,7 @@ public class FallbackFactoryTest {
     public void dontGiveTwoStepRecursiveClass() {
         ExpectedException
             .when(() ->
-                factory.createValues(new TypeTag(TwoStepNodeA.class), prefabValues, typeStack)
+                factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, typeStack)
             )
             .assertThrows(RecursionException.class)
             .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");
@@ -92,12 +91,13 @@ public class FallbackFactoryTest {
     @Test
     public void dontGiveRecursiveArray() {
         ExpectedException
-            .when(() -> factory.createValues(new TypeTag(NodeArray.class), prefabValues, typeStack))
+            .when(() -> factory.createValues(new TypeTag(NodeArray.class), valueProvider, typeStack)
+            )
             .assertThrows(RecursionException.class);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
-        Tuple<?> tuple = factory.createValues(new TypeTag(type), prefabValues, typeStack);
+        Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, typeStack);
         assertEquals(expectedRed, tuple.getRed());
         assertEquals(expectedBlue, tuple.getBlue());
     }

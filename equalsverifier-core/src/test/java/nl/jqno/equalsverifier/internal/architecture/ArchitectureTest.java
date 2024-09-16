@@ -7,10 +7,11 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProviderCreatorTest;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProviderTest;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
@@ -26,7 +27,10 @@ public final class ArchitectureTest {
             Context.class,
             PrefabValuesApi.class,
             JavaApiPrefabValues.class,
-            FactoryCacheFactory.class
+            // 👇 Test classes
+            FactoryCacheFactory.class,
+            VintageValueProviderTest.class,
+            VintageValueProviderCreatorTest.class
         )
         .and()
         .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")
@@ -46,10 +50,7 @@ public final class ArchitectureTest {
         .areAssignableTo(ObjectAccessor.class)
         .orShould()
         .accessClassesThat()
-        .areAssignableTo(FieldModifier.class)
-        .orShould()
-        .accessClassesThat()
-        .areAssignableTo(PrefabValues.class);
+        .areAssignableTo(FieldModifier.class);
 
     @ArchTest
     public static final ArchRule APACHE_COMMONS = noClasses()

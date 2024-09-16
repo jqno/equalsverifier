@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Wraps an object to provide access to it. ObjectAccessor can copy and scramble the wrapped object.
@@ -90,14 +90,14 @@ public abstract class ObjectAccessor<T> {
      * initialized to a compile-time constant in the field declaration. These fields may be left
      * unmodified.
      *
-     * @param prefabValues Prefabricated values to take values from.
+     * @param valueProvider Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
      * @param typeStack Keeps track of recursion in the type.
      * @return An accessor to the scrambled object.
      */
     public abstract ObjectAccessor<T> scramble(
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
     );

@@ -1,18 +1,14 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.*;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
+import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
+import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.copy;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
-import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
@@ -111,7 +107,7 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
         @Override
         public Tuple<T> createValues(
             TypeTag tag,
-            PrefabValues prefabValues,
+            VintageValueProvider valueProvider,
             LinkedHashSet<TypeTag> typeStack
         ) {
             ConditionalInstantiator ci = new ConditionalInstantiator(fullyQualifiedTypeName);
@@ -119,15 +115,15 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
 
             T red = ci.instantiate(
                 classes(parameterRawType),
-                objects(prefabValues.giveRed(singleParameterTag))
+                objects(valueProvider.giveRed(singleParameterTag))
             );
             T blue = ci.instantiate(
                 classes(parameterRawType),
-                objects(prefabValues.giveBlue(singleParameterTag))
+                objects(valueProvider.giveBlue(singleParameterTag))
             );
             T redCopy = ci.instantiate(
                 classes(parameterRawType),
-                objects(prefabValues.giveRed(singleParameterTag))
+                objects(valueProvider.giveRed(singleParameterTag))
             );
 
             return Tuple.of(red, blue, redCopy);

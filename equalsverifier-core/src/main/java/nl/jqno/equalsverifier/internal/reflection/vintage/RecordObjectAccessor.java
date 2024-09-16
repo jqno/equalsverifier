@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through
@@ -37,14 +37,14 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         TypeTag enclosingType,
         LinkedHashSet<TypeTag> typeStack
     ) {
         return makeAccessor(f -> {
             Object value = getField(f);
             TypeTag tag = TypeTag.of(f, enclosingType);
-            return prefabValues.giveOther(tag, value, typeStack);
+            return valueProvider.giveOther(tag, value, typeStack);
         });
     }
 

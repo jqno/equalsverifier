@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumSetFactory;
@@ -43,7 +43,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         cache.put(TreeMultiset.class, collection(() -> TreeMultiset.create(OBJECT_COMPARATOR)));
         cache.put(LinkedHashMultiset.class, collection(LinkedHashMultiset::create));
         cache.put(ConcurrentHashMultiset.class, collection(ConcurrentHashMultiset::create));
-        cache.put(EnumMultiset.class, new EnumSetFactory<>(EnumMultiset::create));
+        cache.put(EnumMultiset.class, new EnumSetFactory<>(c -> EnumMultiset.create(c)));
         cache.put(ImmutableMultiset.class, copy(Set.class, ImmutableMultiset::copyOf));
         cache.put(
             ImmutableSortedMultiset.class,
@@ -79,7 +79,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         cache.put(HashBiMap.class, map(HashBiMap::create));
         cache.put(EnumHashBiMap.class, copy(EnumMap.class, EnumHashBiMap::create));
         cache.put(ImmutableBiMap.class, copy(Map.class, ImmutableBiMap::copyOf));
-        cache.put(EnumBiMap.class, new EnumMapFactory<>(EnumBiMap::create));
+        cache.put(EnumBiMap.class, new EnumMapFactory<>(c -> EnumBiMap.create(c)));
     }
 
     @SuppressWarnings("unchecked")
@@ -159,19 +159,19 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         @Override
         public Tuple<T> createValues(
             TypeTag tag,
-            PrefabValues prefabValues,
+            VintageValueProvider valueProvider,
             LinkedHashSet<TypeTag> typeStack
         ) {
             LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-            TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
-            TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
+            TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
+            TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
 
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
-            blue.put(prefabValues.giveBlue(keyTag), prefabValues.giveBlue(valueTag));
-            redCopy.put(prefabValues.giveRed(keyTag), prefabValues.giveBlue(valueTag));
+            red.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
+            blue.put(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
+            redCopy.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
 
             return Tuple.of(red, blue, redCopy);
         }
@@ -189,31 +189,31 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         @Override
         public Tuple<T> createValues(
             TypeTag tag,
-            PrefabValues prefabValues,
+            VintageValueProvider valueProvider,
             LinkedHashSet<TypeTag> typeStack
         ) {
             LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
-            TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, prefabValues, clone);
-            TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, prefabValues, clone);
-            TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, prefabValues, clone);
+            TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
+            TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
+            TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, valueProvider, clone);
 
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
             red.put(
-                prefabValues.giveRed(columnTag),
-                prefabValues.giveRed(rowTag),
-                prefabValues.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag),
+                valueProvider.giveRed(rowTag),
+                valueProvider.giveBlue(valueTag)
             );
             blue.put(
-                prefabValues.giveBlue(columnTag),
-                prefabValues.giveBlue(rowTag),
-                prefabValues.giveBlue(valueTag)
+                valueProvider.giveBlue(columnTag),
+                valueProvider.giveBlue(rowTag),
+                valueProvider.giveBlue(valueTag)
             );
             redCopy.put(
-                prefabValues.giveRed(columnTag),
-                prefabValues.giveRed(rowTag),
-                prefabValues.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag),
+                valueProvider.giveRed(rowTag),
+                valueProvider.giveBlue(valueTag)
             );
 
             return Tuple.of(red, blue, redCopy);

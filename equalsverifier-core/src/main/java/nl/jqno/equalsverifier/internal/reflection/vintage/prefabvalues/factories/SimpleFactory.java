@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Implementation of {@link PrefabValueFactory} that holds on to two instances that have already
@@ -20,7 +20,7 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     @Override
     public Tuple<T> createValues(
         TypeTag tag,
-        PrefabValues prefabValues,
+        VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
         return tuple;

@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,10 +64,9 @@ public class RecordObjectAccessorTest {
     public void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class).instantiate();
 
-        nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues pv =
-            new PrefabValues(JavaApiPrefabValues.build());
+        VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build());
         ExpectedException
-            .when(() -> accessorFor(instance).scramble(pv, TypeTag.NULL, EMPTY_TYPE_STACK))
+            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)
             .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }

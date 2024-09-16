@@ -10,7 +10,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
@@ -23,13 +23,13 @@ import org.junit.jupiter.api.condition.JRE;
 public class InPlaceObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
-    private PrefabValues prefabValues;
+    private VintageValueProvider valueProviderTest;
 
     @BeforeEach
     public void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
-        prefabValues = new PrefabValues(factoryCache);
+        valueProviderTest = new VintageValueProvider(factoryCache);
     }
 
     @Test
@@ -153,7 +153,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(prefabValues, TypeTag.NULL, EMPTY_TYPE_STACK);
+        return create(object).scramble(valueProviderTest, TypeTag.NULL, EMPTY_TYPE_STACK);
     }
 
     static final class StringContainer {

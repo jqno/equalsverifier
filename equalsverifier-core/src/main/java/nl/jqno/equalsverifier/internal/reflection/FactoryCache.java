@@ -3,10 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
-/** Contains a cache of factories, for {@link PrefabValues}. */
+/** Contains a cache of factories, for {@link VintageValueProvider}. */
 public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFactory<?>>> {
 
     /**

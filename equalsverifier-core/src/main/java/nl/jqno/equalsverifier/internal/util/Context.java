@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 public final class Context<T> {
 
@@ -22,9 +22,8 @@ public final class Context<T> {
         this.classProbe = new ClassProbe<>(configuration.getType());
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        PrefabValues prefabValues = new PrefabValues(cache);
 
-        this.valueProvider = new VintageValueProvider(prefabValues);
+        this.valueProvider = new VintageValueProvider(cache);
         this.subjectCreator =
             new SubjectCreator<>(configuration.getTypeTag(), configuration, valueProvider);
     }
@@ -41,6 +40,10 @@ public final class Context<T> {
         return classProbe;
     }
 
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP",
+        justification = "VintageValueProvider can use a mutable cache."
+    )
     public ValueProvider getValueProvider() {
         return valueProvider;
     }
