@@ -1,10 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
@@ -22,14 +20,6 @@ public class InPlaceObjectAccessorTest {
         Object foo = new Object();
         InPlaceObjectAccessor<Object> accessor = create(foo);
         assertSame(foo, accessor.get());
-    }
-
-    @Test
-    public void getField() throws Exception {
-        Point p = new Point(1, 2);
-        Field f = Point.class.getDeclaredField("y");
-        InPlaceObjectAccessor<Point> accessor = create(p);
-        assertEquals(2, accessor.getField(f));
     }
 
     @SuppressWarnings("unchecked")

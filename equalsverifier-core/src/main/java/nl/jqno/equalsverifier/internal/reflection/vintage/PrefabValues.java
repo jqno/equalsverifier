@@ -105,19 +105,6 @@ public class PrefabValues {
      * @param <T> The type of the value.
      * @param tag A description of the desired type, including generic parameters.
      * @param value A value that is different from the value that will be returned.
-     * @return A value that is different from {@code value}.
-     */
-    public <T> T giveOther(TypeTag tag, T value) {
-        return giveOther(tag, value, new LinkedHashSet<>());
-    }
-
-    /**
-     * Returns a prefabricated value of the specified type, that is different from the specified
-     * value.
-     *
-     * @param <T> The type of the value.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param value A value that is different from the value that will be returned.
      * @param typeStack Keeps track of recursion in the type.
      * @return A value that is different from {@code value}.
      */

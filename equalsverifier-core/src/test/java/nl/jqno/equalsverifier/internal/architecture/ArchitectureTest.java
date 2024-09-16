@@ -5,7 +5,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageSubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
@@ -20,12 +19,7 @@ public final class ArchitectureTest {
     @ArchTest
     public static final ArchRule ONLY_VINTAGE_INSTANTIATORS_CAN_USE_VINTAGE_REFLECTION = noClasses()
         .that()
-        .doNotBelongToAnyOf(
-            VintageSubjectCreator.class,
-            VintageValueProvider.class,
-            Context.class,
-            PrefabValuesApi.class
-        )
+        .doNotBelongToAnyOf(VintageValueProvider.class, Context.class, PrefabValuesApi.class)
         .and()
         .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")
         .and()

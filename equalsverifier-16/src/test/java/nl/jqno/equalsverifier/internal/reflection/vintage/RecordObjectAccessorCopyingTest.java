@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class RecordObjectAccessorCopyingTest {
@@ -24,8 +24,8 @@ public class RecordObjectAccessorCopyingTest {
     public void shallowCopy() {
         Object original = instantiate(RecordContainer.class);
         Object copy = copyOf(original);
-        ObjectAccessor<?> originalAccessor = create(original);
-        ObjectAccessor<?> copyAccessor = create(copy);
+        RecordObjectAccessor<?> originalAccessor = create(original);
+        RecordObjectAccessor<?> copyAccessor = create(copy);
 
         assertNotSame(original, copy);
         for (Field f : FieldIterable.of(original.getClass())) {
@@ -33,24 +33,6 @@ public class RecordObjectAccessorCopyingTest {
             Object b = copyAccessor.getField(f);
             assertSame(a, b);
         }
-    }
-
-    @Test
-    public void copyIntoSubclass() {
-        Object object = instantiate(SimpleRecord.class);
-        ExpectedException
-            .when(() -> create(object).copyIntoSubclass(null))
-            .assertThrows(EqualsVerifierInternalBugException.class)
-            .assertMessageContains("Can't copy a record into a subclass of itself.");
-    }
-
-    @Test
-    public void copyIntoAnonymousSubclass() {
-        Object object = instantiate(SimpleRecord.class);
-        ExpectedException
-            .when(() -> create(object).copyIntoAnonymousSubclass())
-            .assertThrows(EqualsVerifierInternalBugException.class)
-            .assertMessageContains("Can't copy a record into an anonymous subclass of itself.");
     }
 
     @SuppressWarnings("unchecked")

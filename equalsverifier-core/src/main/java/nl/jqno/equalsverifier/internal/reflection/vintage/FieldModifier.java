@@ -7,7 +7,6 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public final class FieldModifier {
 
@@ -32,43 +31,6 @@ public final class FieldModifier {
     }
 
     /**
-     * Tries to set the field to the specified value.
-     *
-     * <p>Includes static fields but ignores fields that can't be modified reflectively.
-     *
-     * @param value The value that the field should get.
-     * @throws ReflectionException If the operation fails.
-     */
-    public void set(Object value) {
-        change(() -> field.set(object, value), true);
-    }
-
-    /**
-     * Tries to make the field null. Ignores static fields and fields that can't be modified
-     * reflectively.
-     *
-     * @throws ReflectionException If the operation fails.
-     */
-    public void defaultField() {
-        change(this::setFieldToDefault, false);
-    }
-
-    /**
-     * Tries to make the field null. Includes static fields but ignores fields that can't be
-     * modified reflectively.
-     *
-     * @throws ReflectionException If the operation fails.
-     */
-    public void defaultStaticField() {
-        change(this::setFieldToDefault, true);
-    }
-
-    private void setFieldToDefault() throws IllegalAccessException {
-        Class<?> type = field.getType();
-        field.set(object, PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(type));
-    }
-
-    /**
      * Copies field's value to the corresponding field in the specified object.
      *
      * <p>Ignores static fields and fields that can't be modified reflectively.
@@ -78,22 +40,6 @@ public final class FieldModifier {
      */
     public void copyTo(Object to) {
         change(() -> field.set(to, field.get(object)), false);
-    }
-
-    /**
-     * Changes the field's value to something else. The new value will never be null. Other than
-     * that, the precise value is undefined.
-     *
-     * <p>Ignores static fields and fields that can't be modified reflectively.
-     *
-     * @param prefabValues If the field is of a type contained within prefabValues, the new value
-     *     will be taken from it.
-     * @param enclosingType A tag for the type that contains the field. Needed to determine a
-     *     generic type, if it has one..
-     * @throws ReflectionException If the operation fails.
-     */
-    public void changeField(PrefabValues prefabValues, TypeTag enclosingType) {
-        changeField(prefabValues, enclosingType, new LinkedHashSet<>());
     }
 
     /**

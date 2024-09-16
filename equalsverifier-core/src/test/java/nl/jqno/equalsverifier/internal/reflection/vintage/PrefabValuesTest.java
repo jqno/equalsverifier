@@ -3,17 +3,17 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +24,6 @@ public class PrefabValuesTest {
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
-    private static final TypeTag STRING_ARRAY_TAG = new TypeTag(String[].class);
 
     private FactoryCache factoryCache = new FactoryCache();
     private PrefabValues pv;
@@ -102,87 +101,6 @@ public class PrefabValuesTest {
     public void giveTuple() {
         Tuple<Point> actual = pv.giveTuple(POINT_TAG);
         assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
-    }
-
-    @Test
-    public void giveOtherWhenValueIsKnown() {
-        Point red = pv.giveRed(POINT_TAG);
-        Point blue = pv.giveBlue(POINT_TAG);
-        assertEquals(blue, pv.giveOther(POINT_TAG, red));
-        assertEquals(red, pv.giveOther(POINT_TAG, blue));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsCloneOfKnown() {
-        Point red = new Point(42, 42);
-        Point blue = new Point(1337, 1337);
-        assertEquals(blue, pv.giveOther(POINT_TAG, red));
-        assertEquals(red, pv.giveOther(POINT_TAG, blue));
-
-        // Sanity check
-        assertEquals(red, pv.giveRed(POINT_TAG));
-        assertEquals(blue, pv.giveBlue(POINT_TAG));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsUnknown() {
-        Point value = new Point(-1, -1);
-        Point expected = pv.giveRed(POINT_TAG);
-        assertEquals(expected, pv.giveOther(POINT_TAG, value));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsPrimitive() {
-        int expected = pv.giveRed(INT_TAG);
-        assertEquals(expected, (int) pv.giveOther(INT_TAG, -10));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsNull() {
-        Point expected = pv.giveRed(POINT_TAG);
-        assertEquals(expected, pv.giveOther(POINT_TAG, null));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsNullAndTypeWouldThrowNpe() {
-        TypeTag tag = new TypeTag(NpeThrowing.class);
-        NpeThrowing expected = pv.giveRed(tag);
-        assertEquals(expected, pv.giveOther(tag, null));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsKnownArray() {
-        String[] red = pv.giveRed(STRING_ARRAY_TAG);
-        String[] blue = pv.giveBlue(STRING_ARRAY_TAG);
-        assertArrayEquals(blue, pv.giveOther(STRING_ARRAY_TAG, red));
-        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, blue));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsCloneOfKnownArray() {
-        String[] red = { "r" };
-        String[] blue = { "b" };
-        assertArrayEquals(blue, pv.giveOther(STRING_ARRAY_TAG, red));
-        assertArrayEquals(red, pv.giveOther(STRING_ARRAY_TAG, blue));
-
-        // Sanity check
-        assertArrayEquals(red, pv.<String[]>giveRed(STRING_ARRAY_TAG));
-        assertArrayEquals(blue, pv.<String[]>giveBlue(STRING_ARRAY_TAG));
-    }
-
-    @Test
-    public void giveOtherWhenValueIsUnknownArray() {
-        String[] value = { "hello world" };
-        String[] expected = pv.giveRed(STRING_ARRAY_TAG);
-        assertArrayEquals(expected, pv.giveOther(STRING_ARRAY_TAG, value));
-    }
-
-    @Test
-    public void giveOtherWhenTagDoesntMatchValue() {
-        ExpectedException
-            .when(() -> pv.giveOther(POINT_TAG, "not a point"))
-            .assertThrows(ReflectionException.class)
-            .assertMessageContains("TypeTag does not match value.");
     }
 
     @Test

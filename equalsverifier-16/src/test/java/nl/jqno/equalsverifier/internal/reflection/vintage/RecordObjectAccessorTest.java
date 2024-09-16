@@ -1,11 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -39,13 +37,6 @@ public class RecordObjectAccessorTest {
     public void get() {
         RecordObjectAccessor<Object> accessor = accessorFor(recordInstance);
         assertSame(recordInstance, accessor.get());
-    }
-
-    @Test
-    public void getField() throws Exception {
-        Field f = SimpleRecord.class.getDeclaredField("i");
-        RecordObjectAccessor<?> accessor = accessorFor(recordInstance);
-        assertEquals(42, accessor.getField(f));
     }
 
     @Test

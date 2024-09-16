@@ -60,18 +60,6 @@ public class InPlaceObjectAccessorScramblingTest {
         assertFalse(modified.equals(reference));
     }
 
-    @Test
-    public void shallowScramble() {
-        Point3D modified = new Point3D(2, 3, 4);
-        Point3D reference = copy(modified);
-
-        create(modified).shallowScramble(prefabValues, TypeTag.NULL);
-
-        assertFalse(modified.equals(reference));
-        modified.z = 4;
-        assertTrue(modified.equals(reference));
-    }
-
     @SuppressWarnings("static-access")
     @Test
     public void scrambleStaticFinal() {

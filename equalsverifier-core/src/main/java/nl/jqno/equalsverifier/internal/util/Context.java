@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.util;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ModernSubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
@@ -27,7 +26,7 @@ public final class Context<T> {
 
         this.valueProvider = new VintageValueProvider(prefabValues);
         this.subjectCreator =
-            new ModernSubjectCreator<>(configuration.getTypeTag(), configuration, valueProvider);
+            new SubjectCreator<>(configuration.getTypeTag(), configuration, valueProvider);
     }
 
     public Class<T> getType() {
