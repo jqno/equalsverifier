@@ -2,12 +2,12 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
@@ -83,8 +83,8 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     ) {
         Class<?> type = tag.getType();
         for (Field field : FieldIterable.of(type)) {
-            int modifiers = field.getModifiers();
-            boolean isStaticAndFinal = Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers);
+            FieldProbe probe = FieldProbe.of(field);
+            boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
             if (!isStaticAndFinal) {
                 try {
                     prefabValues.realizeCacheFor(TypeTag.of(field, tag), typeStack);
