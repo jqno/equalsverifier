@@ -17,6 +17,7 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
+    private final Map<Field, Tuple<?>> fieldCache = new HashMap<>();
 
     public SubjectCreator(TypeTag typeTag, Configuration<T> config, ValueProvider valueProvider) {
         this.typeTag = typeTag;
@@ -158,6 +159,11 @@ public class SubjectCreator<T> {
     }
 
     private Tuple<?> valuesFor(Field f) {
-        return valueProvider.provide(TypeTag.of(f, typeTag));
+        if (fieldCache.containsKey(f)) {
+            return fieldCache.get(f);
+        }
+        Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
+        fieldCache.put(f, tuple);
+        return tuple;
     }
 }
