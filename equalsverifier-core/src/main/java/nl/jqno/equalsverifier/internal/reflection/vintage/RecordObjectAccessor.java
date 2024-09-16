@@ -5,9 +5,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 /**
  * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through

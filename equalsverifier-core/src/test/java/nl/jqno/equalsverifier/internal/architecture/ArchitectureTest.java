@@ -5,13 +5,15 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
+import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -19,11 +21,15 @@ public final class ArchitectureTest {
     @ArchTest
     public static final ArchRule ONLY_VINTAGE_INSTANTIATORS_CAN_USE_VINTAGE_REFLECTION = noClasses()
         .that()
-        .doNotBelongToAnyOf(VintageValueProvider.class, Context.class, PrefabValuesApi.class)
+        .doNotBelongToAnyOf(
+            VintageValueProvider.class,
+            Context.class,
+            PrefabValuesApi.class,
+            JavaApiPrefabValues.class,
+            FactoryCacheFactory.class
+        )
         .and()
         .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")
-        .and()
-        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.prefabvalues..")
         .should()
         .accessClassesThat()
         .resideInAPackage("nl.jqno.equalsverifier.internal.reflection.vintage..");
@@ -74,7 +80,7 @@ public final class ArchitectureTest {
     );
 
     private static final String FACTORYPROVIDER_PATTERN =
-        "nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders..";
+        "nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders..";
     private static final String TEST_CLASS_PATTERN = ".*Test(\\$.*)?$";
 
     private ArchitectureTest() {

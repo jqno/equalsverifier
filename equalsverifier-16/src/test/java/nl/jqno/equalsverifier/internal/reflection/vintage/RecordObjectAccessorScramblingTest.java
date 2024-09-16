@@ -1,14 +1,15 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +17,7 @@ public class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private FactoryCache factoryCache;
-    private PrefabValues prefabValues;
+    private nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues prefabValues;
 
     @BeforeEach
     public void setup() throws Exception {

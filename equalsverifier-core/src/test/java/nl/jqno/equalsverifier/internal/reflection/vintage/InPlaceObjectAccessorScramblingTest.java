@@ -1,13 +1,16 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import nl.jqno.equalsverifier.internal.prefabvalues.*;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;

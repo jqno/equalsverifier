@@ -2,9 +2,10 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 /**
  * Implementation of ObjectAccessor that modifies its wrapped object in-place through reflection.

@@ -7,9 +7,10 @@ import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,7 +64,8 @@ public class RecordObjectAccessorTest {
     public void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class).instantiate();
 
-        PrefabValues pv = new PrefabValues(JavaApiPrefabValues.build());
+        nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues pv =
+            new PrefabValues(JavaApiPrefabValues.build());
         ExpectedException
             .when(() -> accessorFor(instance).scramble(pv, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)

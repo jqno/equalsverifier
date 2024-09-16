@@ -5,8 +5,9 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 public final class FieldModifier {
 

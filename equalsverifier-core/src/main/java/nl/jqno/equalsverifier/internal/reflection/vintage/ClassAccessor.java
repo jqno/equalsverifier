@@ -1,8 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor} can create two

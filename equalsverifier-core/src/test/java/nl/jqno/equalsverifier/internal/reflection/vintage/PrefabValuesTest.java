@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
+import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -10,10 +10,11 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;

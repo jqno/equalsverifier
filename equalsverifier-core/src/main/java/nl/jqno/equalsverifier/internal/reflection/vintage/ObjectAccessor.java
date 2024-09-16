@@ -1,8 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.PrefabValues;
 
 /**
  * Wraps an object to provide access to it. ObjectAccessor can copy and scramble the wrapped object.
