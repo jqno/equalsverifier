@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public final class JavaFxFactoryProvider implements FactoryProvider {
 

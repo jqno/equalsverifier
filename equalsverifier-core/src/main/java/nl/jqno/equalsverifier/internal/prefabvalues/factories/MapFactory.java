@@ -3,9 +3,9 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.function.Supplier;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /**
  * Implementation of {@link PrefabValueFactory} that specializes in creating implementations of

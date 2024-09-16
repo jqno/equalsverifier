@@ -7,7 +7,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;

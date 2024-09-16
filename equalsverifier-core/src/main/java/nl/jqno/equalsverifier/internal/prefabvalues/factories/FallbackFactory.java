@@ -5,11 +5,11 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates types "by force".

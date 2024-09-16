@@ -3,12 +3,12 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.function.BiFunction;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class VintageSubjectCreator<T> implements SubjectCreator<T> {

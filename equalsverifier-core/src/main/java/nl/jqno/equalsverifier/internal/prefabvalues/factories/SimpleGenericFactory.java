@@ -5,9 +5,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 

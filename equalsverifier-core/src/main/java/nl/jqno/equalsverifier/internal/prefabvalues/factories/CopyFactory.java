@@ -2,9 +2,9 @@ package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import java.util.LinkedHashSet;
 import java.util.function.Function;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 

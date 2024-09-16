@@ -5,11 +5,11 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factoryproviders.FactoryProvider;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public class ExternalFactory<T> implements PrefabValueFactory<T> {
 

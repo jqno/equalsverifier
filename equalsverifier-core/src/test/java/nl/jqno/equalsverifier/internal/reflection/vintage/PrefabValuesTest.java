@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
@@ -9,9 +9,13 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
+import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -225,18 +229,19 @@ public class PrefabValuesTest {
 
     @Test
     public void addLazyFactoryIsLazy() {
-        TypeTag throwingLazyTag = new TypeTag(ThrowingLazy.class);
+        TypeTag throwingInitializerTag = new TypeTag(ThrowingInitializer.class);
 
         // Shouldn't throw, because constructing PrefabValues doesn't instantiate objects:
         factoryCache.put(
-            ThrowingLazy.class.getName(),
-            (t, p, ts) -> Tuple.of(ThrowingLazy.X, ThrowingLazy.Y, ThrowingLazy.X)
+            ThrowingInitializer.class.getName(),
+            (t, p, ts) ->
+                Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X)
         );
         pv = new PrefabValues(factoryCache);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {
-            pv.giveRed(throwingLazyTag);
+            pv.giveRed(throwingInitializerTag);
             fail("Expected an exception");
         } catch (Error e) {
             // succeed
@@ -347,18 +352,5 @@ public class PrefabValuesTest {
         public String toString() {
             return "Lazy: " + i;
         }
-    }
-
-    @SuppressWarnings("unused")
-    public static class ThrowingLazy {
-        {
-            // Throwing something that will immediately be thrown when the class is constructed.
-            if (true) {
-                throw new IllegalStateException("initializing");
-            }
-        }
-
-        public static final ThrowingLazy X = new ThrowingLazy();
-        public static final ThrowingLazy Y = new ThrowingLazy();
     }
 }

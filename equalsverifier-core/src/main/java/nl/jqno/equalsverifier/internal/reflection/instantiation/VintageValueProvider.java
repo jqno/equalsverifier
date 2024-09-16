@@ -2,9 +2,9 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public class VintageValueProvider implements ValueProvider {
 

@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

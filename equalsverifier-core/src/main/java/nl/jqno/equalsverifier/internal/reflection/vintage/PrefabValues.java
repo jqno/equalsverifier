@@ -1,10 +1,14 @@
-package nl.jqno.equalsverifier.internal.prefabvalues;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.prefabvalues.Cache;
+import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
+import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
+import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;

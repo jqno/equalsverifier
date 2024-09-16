@@ -2,9 +2,10 @@ package nl.jqno.equalsverifier.internal.prefabvalues;
 
 import java.util.HashMap;
 import java.util.Map;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /** Contains a cache of prefabricated values, for {@link PrefabValues}. */
-class Cache {
+public class Cache {
 
     @SuppressWarnings("rawtypes")
     private final Map<TypeTag, Tuple> cache = new HashMap<>();

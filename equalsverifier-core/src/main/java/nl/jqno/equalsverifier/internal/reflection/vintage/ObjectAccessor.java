@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.function.Predicate;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 

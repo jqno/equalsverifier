@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /** Contains a cache of factories, for {@link PrefabValues}. */
 public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFactory<?>>> {

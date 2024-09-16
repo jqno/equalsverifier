@@ -7,13 +7,13 @@ import com.google.common.reflect.TypeToken;
 import java.util.*;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumMapFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.Factories;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 public final class GuavaFactoryProvider implements FactoryProvider {
 

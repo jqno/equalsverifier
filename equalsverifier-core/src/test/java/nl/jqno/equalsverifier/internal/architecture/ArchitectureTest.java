@@ -5,11 +5,11 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {

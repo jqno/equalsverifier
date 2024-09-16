@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.prefabvalues.factories;
 
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
 import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /**
  * Creates instances of generic types for use as prefab value.

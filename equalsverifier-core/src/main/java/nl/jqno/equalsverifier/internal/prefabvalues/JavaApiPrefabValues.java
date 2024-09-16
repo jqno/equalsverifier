@@ -33,6 +33,7 @@ import nl.jqno.equalsverifier.internal.prefabvalues.factories.EnumSetFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.ExternalFactory;
 import nl.jqno.equalsverifier.internal.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
 
 /**
  * Creates instances of classes for use in a {@link PrefabValues} object.
