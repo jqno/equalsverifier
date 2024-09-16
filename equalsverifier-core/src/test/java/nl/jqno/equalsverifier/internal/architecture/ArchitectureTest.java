@@ -8,7 +8,6 @@ import com.tngtech.archunit.lang.ArchRule;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageSubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
@@ -45,9 +44,6 @@ public final class ArchitectureTest {
         .orShould()
         .accessClassesThat()
         .areAssignableTo(ObjectAccessor.class)
-        .orShould()
-        .accessClassesThat()
-        .areAssignableTo(FieldAccessor.class)
         .orShould()
         .accessClassesThat()
         .areAssignableTo(FieldModifier.class)

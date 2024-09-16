@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.function.Predicate;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 
 /**
@@ -77,7 +78,7 @@ public abstract class ObjectAccessor<T> {
      */
     @SuppressWarnings("unchecked")
     public T getField(Field field) {
-        return (T) FieldAccessor.of(field).get(object);
+        return (T) FieldProbe.of(field).getValue(object);
     }
 
     /**

@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public final class FieldModifier {
@@ -122,11 +123,11 @@ public final class FieldModifier {
     }
 
     private void change(FieldChanger changer, boolean includeStatic) {
-        FieldAccessor accessor = FieldAccessor.of(field);
-        if (!accessor.canBeModifiedReflectively()) {
+        FieldProbe probe = FieldProbe.of(field);
+        if (!probe.canBeModifiedReflectively()) {
             return;
         }
-        if (!includeStatic && accessor.fieldIsStatic()) {
+        if (!includeStatic && probe.isStatic()) {
             return;
         }
 
