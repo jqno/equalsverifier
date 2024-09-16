@@ -5,14 +5,35 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageSubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValues;
+import nl.jqno.equalsverifier.internal.util.Context;
+import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
+
+    @ArchTest
+    public static final ArchRule ONLY_VINTAGE_INSTANTIATORS_CAN_USE_VINTAGE_REFLECTION = noClasses()
+        .that()
+        .doNotBelongToAnyOf(
+            VintageSubjectCreator.class,
+            VintageValueProvider.class,
+            Context.class,
+            PrefabValuesApi.class
+        )
+        .and()
+        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")
+        .and()
+        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.prefabvalues..")
+        .should()
+        .accessClassesThat()
+        .resideInAPackage("nl.jqno.equalsverifier.internal.reflection.vintage..");
 
     @ArchTest
     public static final ArchRule DONT_USE_VINTAGE_REFLECTION_DIRECTLY = noClasses()

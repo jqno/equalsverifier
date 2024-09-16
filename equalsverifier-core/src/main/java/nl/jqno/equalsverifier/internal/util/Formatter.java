@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.util;
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 
 /**
  * Formats a string with the contents of one or more objects.
@@ -83,9 +83,7 @@ public final class Formatter {
 
     private String stringifyByReflection(Object obj) {
         StringBuilder result = new StringBuilder();
-
         Class<?> type = obj.getClass();
-        ObjectAccessor<?> accessor = ObjectAccessor.of(obj);
 
         result.append("[");
         String typeName = type.getSimpleName().replaceAll("\\$\\$DynamicSubclass.*", "");
@@ -98,7 +96,9 @@ public final class Formatter {
             result.append(" ");
             result.append(fieldName);
             result.append("=");
-            Object value = accessor.getField(field);
+
+            FieldProbe probe = FieldProbe.of(field);
+            Object value = probe.getValue(obj);
             result.append(stringify(value));
         }
 
