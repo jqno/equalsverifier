@@ -1,22 +1,22 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.Cache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 public class VintageValueProvider implements ValueProvider {
 
-    private final Cache cache = new Cache();
+    // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
+    private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
+
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
 
@@ -105,9 +105,10 @@ public class VintageValueProvider implements ValueProvider {
      * @param typeStack Keeps track of recursion in the type.
      * @return A tuple of two different values of the given type.
      */
+    @SuppressWarnings("unchecked")
     public <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         realizeCacheFor(tag, typeStack);
-        return cache.getTuple(tag);
+        return (Tuple<T>) valueCache.get(tag);
     }
 
     /**
@@ -171,9 +172,9 @@ public class VintageValueProvider implements ValueProvider {
      * @param typeStack Keeps track of recursion in the type.
      */
     public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        if (!cache.contains(tag)) {
+        if (!valueCache.containsKey(tag)) {
             Tuple<T> tuple = createTuple(tag, typeStack);
-            addToCache(tag, tuple);
+            valueCache.put(tag, tuple);
         }
     }
 
@@ -191,9 +192,5 @@ public class VintageValueProvider implements ValueProvider {
         @SuppressWarnings("unchecked")
         Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
         return result;
-    }
-
-    private void addToCache(TypeTag tag, Tuple<?> tuple) {
-        cache.put(tag, tuple.getRed(), tuple.getBlue(), tuple.getRedCopy());
     }
 }
