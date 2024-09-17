@@ -1,13 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
 /** Contains a cache of factories, for {@link VintageValueProvider}. */
-public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFactory<?>>> {
+public class FactoryCache {
 
     /**
      * We store Strings instead of Classes, so that the cache can be lazy and initializers won't be
@@ -82,14 +81,8 @@ public class FactoryCache implements Iterable<Map.Entry<String, PrefabValueFacto
     }
 
     private void copy(FactoryCache to, FactoryCache from) {
-        for (Map.Entry<String, PrefabValueFactory<?>> entry : from) {
+        for (Map.Entry<String, PrefabValueFactory<?>> entry : from.cache.entrySet()) {
             to.put(entry.getKey(), entry.getValue());
         }
-    }
-
-    /** Provides an iterator over all available factories. */
-    @Override
-    public Iterator<Map.Entry<String, PrefabValueFactory<?>>> iterator() {
-        return cache.entrySet().iterator();
     }
 }

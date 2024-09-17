@@ -54,4 +54,22 @@ public class FactoryCacheTest {
     public void doesntContain() {
         assertFalse(cache.contains(STRING_CLASS));
     }
+
+    @Test
+    public void merge() {
+        FactoryCache a = new FactoryCache();
+        a.put(STRING_CLASS, STRING_FACTORY);
+
+        FactoryCache b = new FactoryCache();
+        b.put(INT_CLASS, INT_FACTORY);
+
+        FactoryCache combined = a.merge(b);
+
+        assertTrue(combined.contains(STRING_CLASS));
+        assertTrue(combined.contains(INT_CLASS));
+
+        assertFalse(a == combined);
+        assertFalse(a.contains(INT_CLASS));
+        assertFalse(b.contains(STRING_CLASS));
+    }
 }

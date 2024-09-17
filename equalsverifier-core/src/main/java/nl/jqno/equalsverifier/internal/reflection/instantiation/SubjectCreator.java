@@ -3,11 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 
 public class SubjectCreator<T> {
@@ -17,7 +13,7 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
-    private final Map<Field, Tuple<?>> fieldCache = new HashMap<>();
+    private final FieldCache fieldCache = new FieldCache();
 
     public SubjectCreator(TypeTag typeTag, Configuration<T> config, ValueProvider valueProvider) {
         this.typeTag = typeTag;
@@ -159,11 +155,12 @@ public class SubjectCreator<T> {
     }
 
     private Tuple<?> valuesFor(Field f) {
-        if (fieldCache.containsKey(f)) {
-            return fieldCache.get(f);
+        String fieldName = f.getName();
+        if (fieldCache.contains(fieldName)) {
+            return fieldCache.get(fieldName);
         }
         Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
-        fieldCache.put(f, tuple);
+        fieldCache.put(fieldName, tuple);
         return tuple;
     }
 }
