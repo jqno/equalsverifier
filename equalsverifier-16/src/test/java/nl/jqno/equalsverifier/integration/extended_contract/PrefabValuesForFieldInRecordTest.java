@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +19,6 @@ public class PrefabValuesForFieldInRecordTest {
         EqualsVerifier
             .forClass(SinglePrecondition.class)
             .withPrefabValuesForField("i", 111, 142)
-            .suppress(Warning.ZERO_FIELDS)
             .verify();
     }
 
@@ -51,7 +49,6 @@ public class PrefabValuesForFieldInRecordTest {
             .forClass(DualPrecondition.class)
             .withPrefabValuesForField("x", 111, 142)
             .withPrefabValuesForField("y", 505, 555)
-            .suppress(Warning.ZERO_FIELDS)
             .verify();
     }
 
