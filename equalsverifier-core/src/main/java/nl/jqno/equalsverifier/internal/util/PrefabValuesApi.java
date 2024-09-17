@@ -6,6 +6,8 @@ import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.fa
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
@@ -30,6 +32,30 @@ public final class PrefabValuesApi {
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
                 factoryCache.put(otherType, values(red, blue, red));
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> void addPrefabValuesForField(
+        FieldCache fieldCache,
+        Class<?> type,
+        String fieldName,
+        T red,
+        T blue
+    ) {
+        Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
+        Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+
+        if (red.getClass().isArray()) {
+            fieldCache.put(fieldName, new Tuple<>(red, blue, red));
+        } else {
+            try {
+                T redCopy = ObjectAccessor.of(red).copy();
+                fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
+            } catch (RuntimeException ignored) {
+                /* specifically, on Java 9+: InacessibleObjectException */
+                fieldCache.put(fieldName, new Tuple<>(red, blue, red));
             }
         }
     }

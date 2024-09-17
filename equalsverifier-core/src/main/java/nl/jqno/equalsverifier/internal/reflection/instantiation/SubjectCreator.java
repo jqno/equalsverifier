@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,14 +16,20 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache = new FieldCache();
+    private final FieldCache fieldCache;
 
-    public SubjectCreator(TypeTag typeTag, Configuration<T> config, ValueProvider valueProvider) {
-        this.typeTag = typeTag;
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
+    public SubjectCreator(
+        Configuration<T> config,
+        ValueProvider valueProvider,
+        FieldCache fieldCache
+    ) {
+        this.typeTag = config.getTypeTag();
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
+        this.fieldCache = fieldCache;
     }
 
     public T plain() {

@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -28,6 +29,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
+    private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -104,6 +106,29 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
         PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, blue);
+        return this;
+    }
+
+    /**
+     * Adds prefabricated values for instance fields with a given name (and only the fields with
+     * the given name) that EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S> The class of the prefabricated values.
+     * @param fieldName The name of the field that the prefabricated values are linked to.
+     * @param red An instance of {@code S}.
+     * @param blue Another instance of {@code S}, not equal to {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException If {@code red} or {@code blue} is null, or if the named field
+     *     does not exist in the class.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     */
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(
+        String fieldName,
+        S red,
+        S blue
+    ) {
+        Validations.validateFieldNameExists(type, fieldName, actualFields);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, type, fieldName, red, blue);
         return this;
     }
 
@@ -391,7 +416,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache);
+        Context<T> context = new Context<>(config, factoryCache, fieldCache);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),

@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
@@ -16,16 +14,18 @@ public final class Context<T> {
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
 
-    public Context(Configuration<T> configuration, FactoryCache factoryCache) {
+    public Context(
+        Configuration<T> configuration,
+        FactoryCache factoryCache,
+        FieldCache fieldCache
+    ) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-
         this.valueProvider = new VintageValueProvider(cache);
-        this.subjectCreator =
-            new SubjectCreator<>(configuration.getTypeTag(), configuration, valueProvider);
+        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, fieldCache);
     }
 
     public Class<T> getType() {

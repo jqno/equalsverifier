@@ -33,7 +33,7 @@ public final class Validations {
         givenFields.forEach(f -> validateFieldNameExists(type, f, actualFields));
     }
 
-    private static void validateFieldNameExists(
+    public static void validateFieldNameExists(
         Class<?> type,
         String field,
         Set<String> actualFields
@@ -87,6 +87,31 @@ public final class Validations {
             red.equals(blue),
             "both prefab values of type " + type.getSimpleName() + " are equal."
         );
+    }
+
+    public static <T> void validateFieldTypeMatches(
+        Class<T> container,
+        String fieldName,
+        Class<?> fieldType
+    ) {
+        try {
+            Field f = container.getDeclaredField(fieldName);
+            validate(
+                f.getType().equals(fieldType),
+                "Prefab values for field " +
+                fieldName +
+                " should  be of type " +
+                f.getType().getSimpleName() +
+                " but are " +
+                fieldType.getSimpleName() +
+                "."
+            );
+        } catch (NoSuchFieldException e) {
+            validate(
+                false,
+                "Class " + container.getSimpleName() + " has no field named " + fieldName + "."
+            );
+        }
     }
 
     public static <T> void validateGenericPrefabValues(
