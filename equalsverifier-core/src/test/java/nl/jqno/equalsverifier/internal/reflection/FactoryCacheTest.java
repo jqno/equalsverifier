@@ -1,8 +1,7 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues;
+package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.SimpleFactory;
 import org.junit.jupiter.api.Test;
