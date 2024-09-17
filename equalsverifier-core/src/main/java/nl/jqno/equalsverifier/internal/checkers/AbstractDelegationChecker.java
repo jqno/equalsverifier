@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.*;
 
@@ -15,6 +16,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private final Class<T> type;
     private final TypeTag typeTag;
+    private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
@@ -23,6 +25,7 @@ public class AbstractDelegationChecker<T> implements Checker {
         Configuration<T> config = context.getConfiguration();
         this.type = context.getType();
         this.typeTag = config.getTypeTag();
+        this.subjectCreator = context.getSubjectCreator();
         this.valueProvider = context.getValueProvider();
         this.classProbe = context.getClassProbe();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
@@ -34,9 +37,8 @@ public class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        Tuple<T> tuple = valueProvider.provide(typeTag);
-        T instance = tuple.getRed();
-        T copy = tuple.getBlue();
+        T instance = subjectCreator.plain();
+        T copy = subjectCreator.plain();
         checkAbstractDelegation(instance, copy);
     }
 

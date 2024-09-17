@@ -3,8 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Rethrow;
 
 public class SubjectCreator<T> {
 
@@ -114,8 +116,8 @@ public class SubjectCreator<T> {
 
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
-        InstanceCreator<T> instaceCreator = new InstanceCreator<>(classProbe);
-        return instaceCreator.instantiate(values);
+        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe);
+        return Rethrow.rethrow(() -> instanceCreator.instantiate(values));
     }
 
     private Map<Field, Object> determineValues(Map<Field, Object> givens) {
@@ -159,8 +161,21 @@ public class SubjectCreator<T> {
         if (fieldCache.contains(fieldName)) {
             return fieldCache.get(fieldName);
         }
-        Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
-        fieldCache.put(fieldName, tuple);
-        return tuple;
+        try {
+            Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
+            fieldCache.put(fieldName, tuple);
+            return tuple;
+        } catch (ModuleException e) {
+            throw new ModuleException(
+                "Field " +
+                f.getName() +
+                " of type " +
+                f.getType().getName() +
+                " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
+                f.getType().getName() +
+                ".",
+                e
+            );
+        }
     }
 }

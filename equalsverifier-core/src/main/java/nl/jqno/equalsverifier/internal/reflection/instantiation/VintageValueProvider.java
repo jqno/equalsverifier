@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
@@ -11,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
+import nl.jqno.equalsverifier.internal.util.Rethrow;
 
 public class VintageValueProvider implements ValueProvider {
 
@@ -32,19 +32,7 @@ public class VintageValueProvider implements ValueProvider {
 
     @Override
     public <T> Tuple<T> provide(TypeTag tag) {
-        try {
-            return giveTuple(tag);
-        } catch (RuntimeException e) {
-            // InaccessibleObjectException is not yet available in Java 8
-            if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
-                throw new ModuleException(
-                    "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
-                    e
-                );
-            } else {
-                throw e;
-            }
-        }
+        return Rethrow.rethrow(() -> giveTuple(tag));
     }
 
     /**

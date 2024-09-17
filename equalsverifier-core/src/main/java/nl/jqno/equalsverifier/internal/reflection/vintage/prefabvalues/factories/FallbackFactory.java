@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -86,16 +85,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             FieldProbe probe = FieldProbe.of(field);
             boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
             if (!isStaticAndFinal) {
-                try {
-                    valueProvider.realizeCacheFor(TypeTag.of(field, tag), typeStack);
-                } catch (RuntimeException e) {
-                    // InaccessibleObjectException is not yet available in Java 8
-                    if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
-                        handleInaccessibleObjectException(e, type, field);
-                    } else {
-                        throw e;
-                    }
-                }
+                valueProvider.realizeCacheFor(TypeTag.of(field, tag), typeStack);
             }
         }
     }
@@ -110,18 +100,5 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         T blue = accessor.getBlueObject(tag, typeStack);
         T redCopy = accessor.getRedObject(tag, typeStack);
         return new Tuple<>(red, blue, redCopy);
-    }
-
-    private void handleInaccessibleObjectException(Throwable e, Class<?> type, Field field) {
-        throw new ModuleException(
-            "Field " +
-            field.getName() +
-            " of type " +
-            field.getType().getName() +
-            " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
-            field.getType().getName() +
-            ".",
-            e
-        );
     }
 }
