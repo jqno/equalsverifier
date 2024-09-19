@@ -113,9 +113,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * Adds prefabricated values for instance fields with a given name (and only the fields with
      * the given name) that EqualsVerifier cannot instantiate by itself.
      *
-     * Automatically suppresses {@code Warning.ZERO_FIELDS}, because fields that get a specific
-     * prefabricated value should usually not be assigned to zero.
-     *
      * @param <S> The class of the prefabricated values.
      * @param fieldName The name of the field that the prefabricated values are linked to.
      * @param red An instance of {@code S}.
@@ -133,7 +130,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateFieldNameExists(type, fieldName, actualFields);
         PrefabValuesApi.addPrefabValuesForField(fieldCache, type, fieldName, red, blue);
         withNonnullFields(fieldName);
-        suppress(Warning.ZERO_FIELDS);
         return this;
     }
 

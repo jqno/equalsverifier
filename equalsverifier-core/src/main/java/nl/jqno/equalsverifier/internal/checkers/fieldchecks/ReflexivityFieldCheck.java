@@ -101,6 +101,9 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         if (fieldProbe.isPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
             return;
         }
+        if (prefabbedFields.contains(fieldProbe.getName())) {
+            return;
+        }
 
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
         boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull(annotationCache);

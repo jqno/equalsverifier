@@ -97,7 +97,10 @@ public final class FieldProbe {
      */
     public boolean canBeDefault(Configuration<?> config) {
         if (isPrimitive()) {
-            return !config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS);
+            return (
+                !config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS) &&
+                !config.getPrefabbedFields().contains(getName())
+            );
         }
 
         boolean isAnnotated = isAnnotatedNonnull(config.getAnnotationCache());
