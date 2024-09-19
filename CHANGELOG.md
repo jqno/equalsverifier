@@ -13,6 +13,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- #withPrefabValuesForField method, where you can assign prefab values to a field instead of to a class. The values will then be used for that field only. ([Issue 747](https://github.com/jqno/equalsverifier/issues/747))
+
+### Changed
+
+- The internal instantiation logic has been heavily refactored.
+
+### Deprecated
+
+- `Warning.ZERO_FIELDS`: the use case for this Warning is better handled by the new `#withPrefabValuesForField` method.
+
 ## [3.16.2] - 2024-08-23
 
 ### Changed
