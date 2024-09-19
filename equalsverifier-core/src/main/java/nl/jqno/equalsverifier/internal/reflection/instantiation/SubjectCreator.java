@@ -9,6 +9,10 @@ import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 
+/**
+ * Creates a subject, i.e. an instance of the class that is currently being tested by
+ * EqualsVerifier.
+ */
 public class SubjectCreator<T> {
 
     private final TypeTag typeTag;
@@ -18,6 +22,13 @@ public class SubjectCreator<T> {
     private final ClassProbe<T> classProbe;
     private final FieldCache fieldCache;
 
+    /**
+     * Constructor.
+     *
+     * @param config A configuration object.
+     * @param valueProvider To provide values for the fields of the subject.
+     * @param fieldCache Prepared values for the fields of the subject.
+     */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(
         Configuration<T> config,
@@ -32,14 +43,34 @@ public class SubjectCreator<T> {
         this.fieldCache = fieldCache;
     }
 
+    /**
+     * Creates an instance with all values set with prefab values assigned to their respective field
+     * names or types, or, if no prefab values are given, values created by the
+     * {@link ValueProvider}.
+     *
+     * @return A plain instance.
+     */
     public T plain() {
         return createInstance(empty());
     }
 
+    /**
+     * Creates a {@link #plain()} instance, but with the given field set to its type's default
+     * value: null for object references, 0 for numbers, false for booleans.
+     *
+     * @param field The field to default.
+     * @return A plain instance with a field defaulted.
+     */
     public T withFieldDefaulted(Field field) {
         return createInstance(with(field, null));
     }
 
+    /**
+     * Creates an instance with all values set to their type's default value: null for object
+     * references, 0 for numbers, false for booleans.
+     *
+     * @return An instance with all fields defaulted.
+     */
     public T withAllFieldsDefaulted() {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
@@ -48,6 +79,14 @@ public class SubjectCreator<T> {
         return createInstance(values);
     }
 
+    /**
+     * Creates an instance with all values set to their type's default value: null for object
+     * references, 0 for numbers, false for booleans; except for the given field which is set
+     * to its {@link #plain()} value.
+     *
+     * @param field The field that should not be defaulted.
+     * @return An instance with all fields defaulted except for {@code field}.
+     */
     public T withAllFieldsDefaultedExcept(Field field) {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
@@ -58,10 +97,23 @@ public class SubjectCreator<T> {
         return createInstance(values);
     }
 
+    /**
+     * Creates a {@link #plain()} instance, but with the given field set to the given value.
+     *
+     * @param field The field to assign the given value.
+     * @param value The value to assign to the given field.
+     * @return A plain instance with one field assigned the given value.
+     */
     public T withFieldSetTo(Field field, Object value) {
         return createInstance(with(field, value));
     }
 
+    /**
+     * Creates a {@link #plain()} instance, but with the given field set to another value.
+     *
+     * @param field The field to change.
+     * @return A plain instance with a field changed.
+     */
     public T withFieldChanged(Field field) {
         if (FieldProbe.of(field).isStatic()) {
             return plain();
@@ -70,6 +122,11 @@ public class SubjectCreator<T> {
         return createInstance(with(field, value));
     }
 
+    /**
+     * Creates a {@link #plain()} instance, but with all fields set to another value.
+     *
+     * @return A plain instance with all fields changed.
+     */
     public T withAllFieldsChanged() {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
@@ -79,6 +136,13 @@ public class SubjectCreator<T> {
         return createInstance(values);
     }
 
+    /**
+     * Creates a {@link #plain()} instance, but with all fields that are declared in the current
+     * class set to another value. Fields coming from the superclasses get their {@link #plain()}
+     * value.
+     *
+     * @return A plain instance with all non-inherited fields changed.
+     */
     public T withAllFieldsShallowlyChanged() {
         Map<Field, Object> values = empty();
         for (Field f : nonSuperFields()) {
@@ -88,6 +152,13 @@ public class SubjectCreator<T> {
         return createInstance(values);
     }
 
+    /**
+     * Creates a new instance with all fields set to the same value as their counterparts from
+     * {@code original}.
+     *
+     * @param original The instance to copy.
+     * @return A copy of the given original.
+     */
     public T copy(T original) {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {
@@ -97,6 +168,13 @@ public class SubjectCreator<T> {
         return createInstance(values);
     }
 
+    /**
+     * Creates a new instance of the superclass of the current class, with all fields that exist
+     * within that superclass set to the same value as their counterparts from {@code original}.
+     *
+     * @param original The instance to copy.
+     * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
+     */
     public Object copyIntoSuperclass(T original) {
         Map<Field, Object> values = empty();
         for (Field f : superFields()) {
@@ -110,6 +188,17 @@ public class SubjectCreator<T> {
         return superCreator.instantiate(values);
     }
 
+    /**
+     * Creates a new instance of the given subclass of the current class, with all fields that also
+     * exist in the current class set to the same value as their counterparts from
+     * {@code original}. All fields declared in the subclass are set to their {@link #plain()}
+     * values.
+     *
+     * @param <S> A subtype of original's type.
+     * @param original The instance to copy.
+     * @param subType A subtype of original's type.
+     * @return An instance of the given subType, but otherwise a copy of the given original.
+     */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
         Map<Field, Object> values = empty();
         for (Field f : fields()) {

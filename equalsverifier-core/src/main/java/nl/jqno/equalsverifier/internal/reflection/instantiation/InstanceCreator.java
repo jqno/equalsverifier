@@ -8,16 +8,25 @@ import java.util.function.BiConsumer;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
+/**
+ * Creates an instance of a class or record.
+ */
 class InstanceCreator<T> {
 
     private final Class<T> type;
     private final ClassProbe<T> probe;
 
+    /** Constructor. */
     public InstanceCreator(ClassProbe<T> probe) {
         this.type = probe.getType();
         this.probe = probe;
     }
 
+    /**
+     * Creates an instance of the given type, with its field set to the given values. If no value
+     * is given for a specific field, the field will be set to its default value: null for object
+     * references, 0 for numbers, false for booleans.
+     */
     public T instantiate(Map<Field, Object> values) {
         return probe.isRecord() ? createRecordInstance(values) : createClassInstance(values);
     }

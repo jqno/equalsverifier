@@ -12,6 +12,13 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 
+/**
+ * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
+ *
+ * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been
+ * using since its inception. This strategy is quite hacky and messy, and other strategies might
+ * be preferable.
+ */
 public class VintageValueProvider implements ValueProvider {
 
     // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
@@ -30,6 +37,7 @@ public class VintageValueProvider implements ValueProvider {
         this.factoryCache = factoryCache;
     }
 
+    /** {@inheritDoc} */
     @Override
     public <T> Tuple<T> provide(TypeTag tag) {
         return Rethrow.rethrow(() -> giveTuple(tag));
@@ -72,31 +80,6 @@ public class VintageValueProvider implements ValueProvider {
      */
     public <T> T giveRedCopy(TypeTag tag) {
         return this.<T>giveTuple(tag).getRedCopy();
-    }
-
-    /**
-     * Returns a tuple of two different prefabricated values of the specified type.
-     *
-     * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return A tuple of two different values of the given type.
-     */
-    public <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, new LinkedHashSet<>());
-    }
-
-    /**
-     * Returns a tuple of two different prefabricated values of the specified type.
-     *
-     * @param <T> The returned tuple will have this generic type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param typeStack Keeps track of recursion in the type.
-     * @return A tuple of two different values of the given type.
-     */
-    @SuppressWarnings("unchecked")
-    public <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, typeStack);
-        return (Tuple<T>) valueCache.get(tag);
     }
 
     /**
@@ -164,6 +147,16 @@ public class VintageValueProvider implements ValueProvider {
             Tuple<T> tuple = createTuple(tag, typeStack);
             valueCache.put(tag, tuple);
         }
+    }
+
+    private <T> Tuple<T> giveTuple(TypeTag tag) {
+        return giveTuple(tag, new LinkedHashSet<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
+        return (Tuple<T>) valueCache.get(tag);
     }
 
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {

@@ -44,6 +44,12 @@ public class VintageValueProviderTest {
     }
 
     @Test
+    public void provide() {
+        Tuple<Point> actual = vp.provide(POINT_TAG);
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
+    }
+
+    @Test
     public void giveRedFromFactory() {
         assertEquals("r", vp.giveRed(STRING_TAG));
     }
@@ -95,12 +101,6 @@ public class VintageValueProviderTest {
         Point actual = vp.giveRedCopy(POINT_TAG);
         assertEquals(new Point(42, 42), actual);
         assertNotSame(vp.giveRed(POINT_TAG), actual);
-    }
-
-    @Test
-    public void giveTuple() {
-        Tuple<Point> actual = vp.giveTuple(POINT_TAG);
-        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 
     @Test
