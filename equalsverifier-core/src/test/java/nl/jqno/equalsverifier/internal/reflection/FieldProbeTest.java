@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
@@ -135,9 +134,10 @@ public class FieldProbeTest {
     }
 
     @Test
-    public void canBeDefault_primitiveWithWarningSuppressed() {
+    public void canBeDefault_primitiveWithPrefabbedField() {
         PrimitiveContainer foo = new PrimitiveContainer();
-        config = ConfigurationHelper.emptyConfiguration(foo.getClass(), Warning.ZERO_FIELDS);
+        config =
+            ConfigurationHelper.emptyConfigurationWithPrefabbedFields(foo.getClass(), FIELD_NAME);
         FieldProbe probe = getAccessorFor(foo, FIELD_NAME);
         assertFalse(probe.canBeDefault(config));
     }

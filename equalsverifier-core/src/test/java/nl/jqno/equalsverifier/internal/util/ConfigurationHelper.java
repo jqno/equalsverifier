@@ -54,4 +54,27 @@ public final class ConfigurationHelper {
             Collections.emptyList()
         );
     }
+
+    public static final <T> Configuration<T> emptyConfigurationWithPrefabbedFields(
+        Class<T> type,
+        String... fieldNames
+    ) {
+        return Configuration.build(
+            type,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptySet(),
+            new HashSet<>(Arrays.asList(fieldNames)),
+            null,
+            false,
+            null,
+            false,
+            EnumSet.noneOf(Warning.class),
+            null,
+            Collections.emptySet(),
+            Collections.emptySet(),
+            Collections.emptyList(),
+            Collections.emptyList()
+        );
+    }
 }

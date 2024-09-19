@@ -97,14 +97,11 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void checkNullReflexivity(FieldProbe fieldProbe) {
-        Field field = fieldProbe.getField();
-        if (fieldProbe.isPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
-            return;
-        }
         if (prefabbedFields.contains(fieldProbe.getName())) {
             return;
         }
 
+        Field field = fieldProbe.getField();
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
         boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull(annotationCache);
         boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());
