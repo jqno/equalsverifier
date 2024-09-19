@@ -2,6 +2,9 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class FieldCacheTest {
@@ -44,5 +47,15 @@ public class FieldCacheTest {
     @Test
     public void doesntContain() {
         assertFalse(cache.contains(stringField));
+    }
+
+    @Test
+    public void getFieldNames() {
+        assertEquals(Collections.emptySet(), cache.getFieldNames());
+
+        cache.put(stringField, stringValues);
+        Set<String> expected = new HashSet<>();
+        expected.add(stringField);
+        assertEquals(expected, cache.getFieldNames());
     }
 }

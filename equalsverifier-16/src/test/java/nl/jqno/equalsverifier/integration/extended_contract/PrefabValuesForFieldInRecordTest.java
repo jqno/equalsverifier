@@ -55,7 +55,7 @@ public class PrefabValuesForFieldInRecordTest {
     record SinglePrecondition(int i) {
         public SinglePrecondition {
             if (i < 100 || i > 200) {
-                throw new IllegalArgumentException("i must be between 100 and 200!");
+                throw new IllegalArgumentException("i must be between 100 and 200! But was " + i);
             }
         }
     }
@@ -63,10 +63,10 @@ public class PrefabValuesForFieldInRecordTest {
     record DualPrecondition(int x, int y) {
         public DualPrecondition {
             if (x < 100 || x > 200) {
-                throw new IllegalArgumentException("x must be between 100 and 200!");
+                throw new IllegalArgumentException("x must be between 100 and 200! But was " + x);
             }
             if (y < 500 || y > 600) {
-                throw new IllegalArgumentException("y must be between 500 and 600!");
+                throw new IllegalArgumentException("y must be between 500 and 600! But was " + y);
             }
         }
     }

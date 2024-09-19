@@ -96,11 +96,15 @@ public final class Validations {
     ) {
         try {
             Field f = container.getDeclaredField(fieldName);
+            boolean sameFields = f.getType().equals(fieldType);
+            boolean compatibleFields = fieldType.equals(
+                PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(f.getType())
+            );
             validate(
-                f.getType().equals(fieldType),
+                !sameFields && !compatibleFields,
                 "Prefab values for field " +
                 fieldName +
-                " should  be of type " +
+                " should be of type " +
                 f.getType().getSimpleName() +
                 " but are " +
                 fieldType.getSimpleName() +

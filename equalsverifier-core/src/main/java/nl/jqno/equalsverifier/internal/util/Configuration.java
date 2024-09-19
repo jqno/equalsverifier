@@ -16,6 +16,7 @@ public final class Configuration<T> {
 
     private final Class<T> type;
     private final Set<String> nonnullFields;
+    private final Set<String> prefabbedFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
     private final Class<? extends T> redefinedSubclass;
@@ -36,6 +37,7 @@ public final class Configuration<T> {
         TypeTag typeTag,
         Set<String> ignoredFields,
         Set<String> nonnullFields,
+        Set<String> prefabbedFields,
         AnnotationCache annotationCache,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer,
         boolean hasRedefinedSuperclass,
@@ -50,6 +52,7 @@ public final class Configuration<T> {
         this.typeTag = typeTag;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
+        this.prefabbedFields = prefabbedFields;
         this.annotationCache = annotationCache;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
         this.hasRedefinedSuperclass = hasRedefinedSuperclass;
@@ -66,6 +69,7 @@ public final class Configuration<T> {
         Set<String> excludedFields,
         Set<String> includedFields,
         Set<String> nonnullFields,
+        Set<String> prefabbedFields,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer,
         boolean hasRedefinedSuperclass,
         Class<? extends T> redefinedSubclass,
@@ -96,6 +100,7 @@ public final class Configuration<T> {
             typeTag,
             ignoredFields,
             nonnullFields,
+            prefabbedFields,
             annotationCache,
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
@@ -188,6 +193,10 @@ public final class Configuration<T> {
 
     public Set<String> getNonnullFields() {
         return Collections.unmodifiableSet(nonnullFields);
+    }
+
+    public Set<String> getPrefabbedFields() {
+        return Collections.unmodifiableSet(prefabbedFields);
     }
 
     public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {

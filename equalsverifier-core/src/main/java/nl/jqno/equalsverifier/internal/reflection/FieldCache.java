@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 
 /** Contains a cache for values connected to specific fields, for {@link SubjectCreator}. */
@@ -50,5 +49,12 @@ public class FieldCache {
      */
     public boolean contains(String fieldName) {
         return cache.containsKey(fieldName);
+    }
+
+    /**
+     * @return The fields preset in the cache.
+     */
+    public Set<String> getFieldNames() {
+        return new HashSet<>(cache.keySet());
     }
 }
