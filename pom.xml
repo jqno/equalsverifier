@@ -347,7 +347,6 @@
                             </dependency>
                         </dependencies>
                         <configuration>
-                            <verbose>true</verbose>
                             <jvmArgs>
                                 <jvmArg>${argline.preview}</jvmArg>
                             </jvmArgs>
