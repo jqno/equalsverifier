@@ -18,6 +18,13 @@ public class JpaLazyEntityTest {
     }
 
     @Test
+    public void basicGetterAbsent() {
+        ExpectedException
+            .when(() -> EqualsVerifier.forClass(LazyFieldWithoutGetterContainer.class).verify())
+            .assertFailure();
+    }
+
+    @Test
     public void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier.forClass(CorrectBasicJpaEagerFieldContainer.class).verify();
     }
@@ -257,6 +264,27 @@ public class JpaLazyEntityTest {
                 getManyToMany(),
                 getElementCollection()
             );
+        }
+    }
+
+    @Entity
+    static class LazyFieldWithoutGetterContainer {
+
+        @OneToMany
+        private String basic;
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof LazyFieldWithoutGetterContainer)) {
+                return false;
+            }
+            LazyFieldWithoutGetterContainer other = (LazyFieldWithoutGetterContainer) obj;
+            return Objects.equals(basic, other.basic);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(basic);
         }
     }
 

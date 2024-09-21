@@ -127,7 +127,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         S red,
         S blue
     ) {
-        Validations.validateFieldNameExists(type, fieldName, actualFields);
         PrefabValuesApi.addPrefabValuesForField(fieldCache, type, fieldName, red, blue);
         withNonnullFields(fieldName);
         return this;
