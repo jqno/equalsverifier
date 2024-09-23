@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import org.objenesis.Objenesis;
 
 /**
  * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through
@@ -29,7 +30,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public T copy() {
+    public T copy(Objenesis objenesis) {
         List<?> params = probe.fields().map(this::getField).collect(Collectors.toList());
         return callRecordConstructor(params);
     }

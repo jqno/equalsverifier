@@ -12,6 +12,8 @@ import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class SubjectCreatorTest {
 
@@ -25,7 +27,13 @@ public class SubjectCreatorTest {
     );
     private ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private FieldCache fieldCache = new FieldCache();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, fieldCache);
+    private Objenesis objenesis = new ObjenesisStd();
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(
+        config,
+        valueProvider,
+        fieldCache,
+        objenesis
+    );
 
     private Field fieldX;
     private Field fieldI;

@@ -11,8 +11,12 @@ import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class InPlaceObjectAccessorCopyingTest {
+
+    private Objenesis objenesis = new ObjenesisStd();
 
     @Test
     public void copyHappyPath() {
@@ -61,11 +65,11 @@ public class InPlaceObjectAccessorCopyingTest {
     }
 
     private <T> T copyOf(T from) {
-        return create(from).copy();
+        return create(from).copy(objenesis);
     }
 
     private <T> T copyOf(T from, Class<T> type) {
-        return new InPlaceObjectAccessor<T>(from, type).copy();
+        return new InPlaceObjectAccessor<T>(from, type).copy(objenesis);
     }
 
     private static <T> void assertAllFieldsEqual(T original, T copy, Class<? extends T> type) {

@@ -20,17 +20,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class InPlaceObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private Objenesis objenesis;
     private VintageValueProvider valueProviderTest;
 
     @BeforeEach
     public void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
-        valueProviderTest = new VintageValueProvider(factoryCache);
+        objenesis = new ObjenesisStd();
+        valueProviderTest = new VintageValueProvider(factoryCache, objenesis);
     }
 
     @Test
@@ -146,7 +150,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     private <T> T copy(T object) {
-        return create(object).copy();
+        return create(object).copy(objenesis);
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {

@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
+import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {
 
@@ -17,6 +18,7 @@ public final class PrefabValuesApi {
 
     public static <T> void addPrefabValues(
         FactoryCache factoryCache,
+        Objenesis objenesis,
         Class<T> otherType,
         T red,
         T blue
@@ -27,7 +29,7 @@ public final class PrefabValuesApi {
             factoryCache.put(otherType, values(red, blue, red));
         } else {
             try {
-                T redCopy = ObjectAccessor.of(red).copy();
+                T redCopy = ObjectAccessor.of(red).copy(objenesis);
                 factoryCache.put(otherType, values(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
@@ -39,6 +41,7 @@ public final class PrefabValuesApi {
     @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
         FieldCache fieldCache,
+        Objenesis objenesis,
         Class<?> type,
         String fieldName,
         T red,
@@ -51,7 +54,7 @@ public final class PrefabValuesApi {
             fieldCache.put(fieldName, new Tuple<>(red, blue, red));
         } else {
             try {
-                T redCopy = ObjectAccessor.of(red).copy();
+                T redCopy = ObjectAccessor.of(red).copy(objenesis);
                 fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */

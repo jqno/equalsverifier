@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
+import org.objenesis.Objenesis;
 
 /**
  * Creates a subject, i.e. an instance of the class that is currently being tested by
@@ -21,6 +22,7 @@ public class SubjectCreator<T> {
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
     private final FieldCache fieldCache;
+    private final Objenesis objenesis;
 
     /**
      * Constructor.
@@ -28,12 +30,14 @@ public class SubjectCreator<T> {
      * @param config A configuration object.
      * @param valueProvider To provide values for the fields of the subject.
      * @param fieldCache Prepared values for the fields of the subject.
+     * @param objenesis Needed by InstanceCreator to instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(
         Configuration<T> config,
         ValueProvider valueProvider,
-        FieldCache fieldCache
+        FieldCache fieldCache,
+        Objenesis objenesis
     ) {
         this.typeTag = config.getTypeTag();
         this.type = typeTag.getType();
@@ -41,6 +45,7 @@ public class SubjectCreator<T> {
         this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
         this.fieldCache = fieldCache;
+        this.objenesis = objenesis;
     }
 
     /**
@@ -160,12 +165,8 @@ public class SubjectCreator<T> {
      * @return A copy of the given original.
      */
     public T copy(T original) {
-        Map<Field, Object> values = empty();
-        for (Field f : fields()) {
-            Object value = FieldProbe.of(f).getValue(original);
-            values.put(f, value);
-        }
-        return createInstance(values);
+        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe, objenesis);
+        return Rethrow.rethrow(() -> instanceCreator.copy(original));
     }
 
     /**
@@ -176,16 +177,11 @@ public class SubjectCreator<T> {
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
     public Object copyIntoSuperclass(T original) {
-        Map<Field, Object> values = empty();
-        for (Field f : superFields()) {
-            Object value = FieldProbe.of(f).getValue(original);
-            values.put(f, value);
-        }
-
         InstanceCreator<? super T> superCreator = new InstanceCreator<>(
-            new ClassProbe<>(type.getSuperclass())
+            new ClassProbe<>(type.getSuperclass()),
+            objenesis
         );
-        return superCreator.instantiate(values);
+        return superCreator.copy(original);
     }
 
     /**
@@ -200,19 +196,13 @@ public class SubjectCreator<T> {
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
-        Map<Field, Object> values = empty();
-        for (Field f : fields()) {
-            Object value = FieldProbe.of(f).getValue(original);
-            values.put(f, value);
-        }
-
-        InstanceCreator<S> subCreator = new InstanceCreator<>(new ClassProbe<>(subType));
-        return subCreator.instantiate(values);
+        InstanceCreator<S> subCreator = new InstanceCreator<>(new ClassProbe<>(subType), objenesis);
+        return subCreator.copy(original);
     }
 
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
-        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe);
+        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe, objenesis);
         return Rethrow.rethrow(() -> instanceCreator.instantiate(values));
     }
 
@@ -242,10 +232,6 @@ public class SubjectCreator<T> {
 
     private FieldIterable fields() {
         return FieldIterable.ofIgnoringStatic(type);
-    }
-
-    private FieldIterable superFields() {
-        return FieldIterable.ofIgnoringStatic(type.getSuperclass());
     }
 
     private FieldIterable nonSuperFields() {

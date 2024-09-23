@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProv
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
 
 @SuppressWarnings("rawtypes")
 public class SimpleGenericFactoryTest {
@@ -50,7 +51,7 @@ public class SimpleGenericFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build());
+        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
         redString = valueProvider.giveRed(STRING_TYPETAG);
         blueString = valueProvider.giveBlue(STRING_TYPETAG);
         redInt = valueProvider.giveRed(INTEGER_TYPETAG);

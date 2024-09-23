@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import org.objenesis.Objenesis;
 
 /**
  * Instantiates and populates objects of a given class. {@link ClassAccessor} can create two
@@ -16,11 +17,13 @@ public class ClassAccessor<T> {
 
     private final Class<T> type;
     private final VintageValueProvider valueProvider;
+    private final Objenesis objenesis;
 
     /** Private constructor. Call {@link #of(Class, PrefabValues)} instead. */
-    ClassAccessor(Class<T> type, VintageValueProvider valueProvider) {
+    ClassAccessor(Class<T> type, VintageValueProvider valueProvider, Objenesis objenesis) {
         this.type = type;
         this.valueProvider = valueProvider;
+        this.objenesis = objenesis;
     }
 
     /**
@@ -29,10 +32,15 @@ public class ClassAccessor<T> {
      * @param <T> The class on which {@link ClassAccessor} operates.
      * @param type The class on which {@link ClassAccessor} operates. Should be the same as T.
      * @param valueProvider Prefabricated values with which to fill instantiated objects.
+     * @param objenesis To instantiate non-record classes.
      * @return A {@link ClassAccessor} for T.
      */
-    public static <T> ClassAccessor<T> of(Class<T> type, VintageValueProvider valueProvider) {
-        return new ClassAccessor<>(type, valueProvider);
+    public static <T> ClassAccessor<T> of(
+        Class<T> type,
+        VintageValueProvider valueProvider,
+        Objenesis objenesis
+    ) {
+        return new ClassAccessor<>(type, valueProvider, objenesis);
     }
 
     /**
@@ -94,7 +102,7 @@ public class ClassAccessor<T> {
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {
-        T object = Instantiator.of(type).instantiate();
+        T object = Instantiator.of(type, objenesis).instantiate();
         return ObjectAccessor.of(object);
     }
 }

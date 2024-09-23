@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
+import org.objenesis.Objenesis;
 
 /**
  * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
@@ -25,16 +26,18 @@ public class VintageValueProvider implements ValueProvider {
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
     private final FactoryCache factoryCache;
-    private final PrefabValueFactory<?> fallbackFactory = new FallbackFactory<>();
+    private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
      *
      * @param factoryCache The factories that can be used to create values.
+     * @param objenesis To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public VintageValueProvider(FactoryCache factoryCache) {
+    public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
         this.factoryCache = factoryCache;
+        this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
 
     /** {@inheritDoc} */

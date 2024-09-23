@@ -13,7 +13,7 @@ import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
-import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
+import org.objenesis.Objenesis;
 
 /**
  * Instantiates objects of a given class.
@@ -33,10 +33,12 @@ public final class Instantiator<T> {
     private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
+    private final Objenesis objenesis;
 
     /** Private constructor. Call {@link #of(Class)} to instantiate. */
-    private Instantiator(Class<T> type) {
+    private Instantiator(Class<T> type, Objenesis objenesis) {
         this.type = type;
+        this.objenesis = objenesis;
     }
 
     /**
@@ -44,17 +46,18 @@ public final class Instantiator<T> {
      *
      * @param <T> The class on which {@link Instantiator} operates.
      * @param type The class on which {@link Instantiator} operates. Should be the same as T.
+     * @param objenesis To instantiate non-record classes.
      * @return An {@link Instantiator} for {@link #type}.
      */
-    public static <T> Instantiator<T> of(Class<T> type) {
+    public static <T> Instantiator<T> of(Class<T> type, Objenesis objenesis) {
         if (SealedTypesHelper.isSealed(type)) {
             Class<T> concrete = SealedTypesHelper.findInstantiableSubclass(type).get();
-            return Instantiator.of(concrete);
+            return Instantiator.of(concrete, objenesis);
         }
         if (Modifier.isAbstract(type.getModifiers())) {
-            return new Instantiator<>(giveDynamicSubclass(type, "", b -> b));
+            return new Instantiator<>(giveDynamicSubclass(type, "", b -> b), objenesis);
         }
-        return new Instantiator<>(type);
+        return new Instantiator<>(type, objenesis);
     }
 
     /**
@@ -66,7 +69,7 @@ public final class Instantiator<T> {
      * @return An object of type T.
      */
     public T instantiate() {
-        return ObjenesisWrapper.getObjenesis().newInstance(type);
+        return objenesis.newInstance(type);
     }
 
     /**
@@ -76,7 +79,7 @@ public final class Instantiator<T> {
      */
     public T instantiateAnonymousSubclass() {
         Class<T> proxyClass = giveDynamicSubclass(type);
-        return ObjenesisWrapper.getObjenesis().newInstance(proxyClass);
+        return objenesis.newInstance(proxyClass);
     }
 
     public static <S> Class<S> giveDynamicSubclass(Class<S> superclass) {

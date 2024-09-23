@@ -14,6 +14,7 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorypr
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
 
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {
@@ -22,7 +23,7 @@ public class JavaFxFactoryProviderTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build());
+        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
     }
 
     @Test

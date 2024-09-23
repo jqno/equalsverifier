@@ -6,6 +6,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import org.objenesis.Objenesis;
 
 /**
  * Implementation of ObjectAccessor that modifies its wrapped object in-place through reflection.
@@ -21,8 +22,8 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** {@inheritDoc} */
     @Override
-    public T copy() {
-        T copy = Instantiator.of(type()).instantiate();
+    public T copy(Objenesis objenesis) {
+        T copy = Instantiator.of(type(), objenesis).instantiate();
         for (Field field : FieldIterable.of(type())) {
             fieldModifierFor(field).copyTo(copy);
         }

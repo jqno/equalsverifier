@@ -21,6 +21,8 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class FallbackFactoryTest {
 
@@ -30,10 +32,11 @@ public class FallbackFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        factory = new FallbackFactory<>();
+        Objenesis objenesis = new ObjenesisStd();
+        factory = new FallbackFactory<>(objenesis);
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
-        valueProvider = new VintageValueProvider(factoryCache);
+        valueProvider = new VintageValueProvider(factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
     }
 

@@ -8,8 +8,12 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorCopyingTest {
+
+    private Objenesis objenesis = new ObjenesisStd();
 
     @Test
     public void copyHappyPath() {
@@ -41,11 +45,11 @@ public class RecordObjectAccessorCopyingTest {
     }
 
     private <T> T instantiate(Class<T> type) {
-        return Instantiator.of(type).instantiate();
+        return Instantiator.of(type, objenesis).instantiate();
     }
 
     private <T> T copyOf(T from) {
-        return create(from).copy();
+        return create(from).copy(objenesis);
     }
 
     record SimpleRecord(int i, String s) {}

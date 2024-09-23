@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorScramblingTest {
 
@@ -22,7 +23,7 @@ public class RecordObjectAccessorScramblingTest {
     @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider = new VintageValueProvider(factoryCache);
+        valueProvider = new VintageValueProvider(factoryCache, new ObjenesisStd());
     }
 
     @Test

@@ -20,6 +20,7 @@ import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.ObjenesisStd;
 
 public class AnnotationCacheBuilderTest {
 
@@ -407,7 +408,7 @@ public class AnnotationCacheBuilderTest {
     @Test
     public void dynamicClassDoesntGetProcessed_butDoesntThrowEither() {
         Class<?> type = Instantiator
-            .of(AnnotatedWithRuntime.class)
+            .of(AnnotatedWithRuntime.class, new ObjenesisStd())
             .instantiateAnonymousSubclass()
             .getClass();
         build(type);

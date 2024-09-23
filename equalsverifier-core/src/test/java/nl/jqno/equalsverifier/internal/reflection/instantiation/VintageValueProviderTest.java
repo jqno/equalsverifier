@@ -18,6 +18,8 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class VintageValueProviderTest {
 
@@ -25,6 +27,7 @@ public class VintageValueProviderTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
+    private Objenesis objenesis = new ObjenesisStd();
     private FactoryCache factoryCache = new FactoryCache();
     private VintageValueProvider vp;
 
@@ -32,7 +35,7 @@ public class VintageValueProviderTest {
     public void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));
-        vp = new VintageValueProvider(factoryCache);
+        vp = new VintageValueProvider(factoryCache, objenesis);
     }
 
     @Test
@@ -113,7 +116,7 @@ public class VintageValueProviderTest {
     @Test
     public void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        vp = new VintageValueProvider(factoryCache);
+        vp = new VintageValueProvider(factoryCache, objenesis);
 
         List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
         List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
@@ -130,7 +133,7 @@ public class VintageValueProviderTest {
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
         factoryCache.put(int.class, values(-1, -2, -1));
-        vp = new VintageValueProvider(factoryCache);
+        vp = new VintageValueProvider(factoryCache, objenesis);
         assertEquals(-1, (int) vp.giveRed(INT_TAG));
         assertEquals(-2, (int) vp.giveBlue(INT_TAG));
     }
@@ -139,7 +142,7 @@ public class VintageValueProviderTest {
     public void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
-        vp = new VintageValueProvider(factoryCache);
+        vp = new VintageValueProvider(factoryCache, objenesis);
         assertEquals(Lazy.X, vp.giveRed(lazyTag));
         assertEquals(Lazy.Y, vp.giveBlue(lazyTag));
         assertEquals(Lazy.X, vp.giveRedCopy(lazyTag));
@@ -155,7 +158,7 @@ public class VintageValueProviderTest {
             (t, p, ts) ->
                 Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X)
         );
-        vp = new VintageValueProvider(factoryCache);
+        vp = new VintageValueProvider(factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {

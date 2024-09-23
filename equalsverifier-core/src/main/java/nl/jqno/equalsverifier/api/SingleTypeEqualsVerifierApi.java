@@ -13,6 +13,8 @@ import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -39,6 +41,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private Set<String> ignoredAnnotationClassNames = new HashSet<>();
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
+    private final Objenesis objenesis;
 
     /**
      * Constructor.
@@ -46,8 +49,19 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      */
     public SingleTypeEqualsVerifierApi(Class<T> type) {
+        this(type, new ObjenesisStd());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     * @param objenesis To instantiate non-record classes.
+     */
+    public SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
         this.type = type;
-        actualFields = FieldNameExtractor.extractFieldNames(type);
+        this.actualFields = FieldNameExtractor.extractFieldNames(type);
+        this.objenesis = objenesis;
     }
 
     /**
@@ -56,6 +70,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param factoryCache Factories that can be used to create values.
+     * @param objenesis To instantiate non-record classes.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
      * @param converter A function that converts from field name to getter name.
@@ -64,10 +79,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
+        Objenesis objenesis,
         boolean usingGetClass,
         Function<String, String> converter
     ) {
-        this(type);
+        this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
@@ -83,7 +99,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         List<T> equalExamples,
         List<T> unequalExamples
     ) {
-        this(type);
+        this(type, new ObjenesisStd());
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
     }
@@ -105,7 +121,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -127,7 +143,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         S red,
         S blue
     ) {
-        PrefabValuesApi.addPrefabValuesForField(fieldCache, type, fieldName, red, blue);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
         withNonnullFields(fieldName);
         return this;
     }
@@ -409,14 +425,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
-        ObjenesisWrapper.reset();
         if (type.isEnum() || type.isInterface()) {
             return;
         }
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, fieldCache);
+        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),

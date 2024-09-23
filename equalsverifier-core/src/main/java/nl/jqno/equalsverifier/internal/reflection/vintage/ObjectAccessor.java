@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import org.objenesis.Objenesis;
 
 /**
  * Wraps an object to provide access to it. ObjectAccessor can copy and scramble the wrapped object.
@@ -73,9 +74,10 @@ public abstract class ObjectAccessor<T> {
      *
      * <p>Note: it does a "shallow" copy. Reference fields are not copied recursively.
      *
+     * @param objenesis Needed to instantiate the copy.
      * @return A shallow copy.
      */
-    public abstract T copy();
+    public abstract T copy(Objenesis objenesis);
 
     /**
      * Modifies all fields of the wrapped object that are declared in T and in its superclasses. It

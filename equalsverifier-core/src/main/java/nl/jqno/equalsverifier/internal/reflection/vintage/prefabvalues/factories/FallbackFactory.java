@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
+import org.objenesis.Objenesis;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates types "by force".
@@ -17,6 +18,12 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
  * VintageValueProvider} to fill up all the fields, recursively.
  */
 public class FallbackFactory<T> implements PrefabValueFactory<T> {
+
+    private final Objenesis objenesis;
+
+    public FallbackFactory(Objenesis objenesis) {
+        this.objenesis = objenesis;
+    }
 
     @Override
     public Tuple<T> createValues(
@@ -95,7 +102,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         VintageValueProvider valueProvider,
         LinkedHashSet<TypeTag> typeStack
     ) {
-        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider);
+        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);
         T red = accessor.getRedObject(tag, typeStack);
         T blue = accessor.getBlueObject(tag, typeStack);
         T redCopy = accessor.getRedObject(tag, typeStack);

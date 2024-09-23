@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import org.objenesis.Objenesis;
 
 public final class Context<T> {
 
@@ -23,7 +24,8 @@ public final class Context<T> {
     public Context(
         Configuration<T> configuration,
         FactoryCache factoryCache,
-        FieldCache fieldCache
+        FieldCache fieldCache,
+        Objenesis objenesis
     ) {
         this.type = configuration.getType();
         this.configuration = configuration;
@@ -31,8 +33,9 @@ public final class Context<T> {
         this.fieldCache = fieldCache;
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        this.valueProvider = new VintageValueProvider(cache);
-        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, fieldCache);
+        this.valueProvider = new VintageValueProvider(cache, objenesis);
+        this.subjectCreator =
+            new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
     }
 
     public Class<T> getType() {

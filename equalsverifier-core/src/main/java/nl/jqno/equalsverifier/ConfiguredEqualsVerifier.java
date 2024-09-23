@@ -14,6 +14,8 @@ import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.Validations;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
@@ -21,6 +23,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     private final FactoryCache factoryCache;
     private boolean usingGetClass;
     private Function<String, String> fieldnameToGetter;
+    private final Objenesis objenesis = new ObjenesisStd();
 
     /** Constructor. */
     public ConfiguredEqualsVerifier() {
@@ -64,7 +67,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /** {@inheritDoc} */
     @Override
     public <S> ConfiguredEqualsVerifier withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -125,6 +128,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
             type,
             EnumSet.copyOf(warningsToSuppress),
             factoryCache,
+            objenesis,
             usingGetClass,
             fieldnameToGetter
         );
