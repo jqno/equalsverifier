@@ -57,7 +57,15 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
-        assertEntity(fieldName, "equals", getterName, classProbe.hasMethod(getterName));
+        assertTrue(
+            Formatter.of(
+                "Class %% doesn't contain getter %%() for field %%.",
+                classProbe.getType().getSimpleName(),
+                getterName,
+                fieldName
+            ),
+            classProbe.hasMethod(getterName)
+        );
 
         Class<T> sub = throwingGetterCreator(getterName);
         Tuple<T> tuple = valueProvider.<T>provide(new TypeTag(sub));

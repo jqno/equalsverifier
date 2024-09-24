@@ -21,7 +21,8 @@ public class JpaLazyEntityTest {
     public void basicGetterAbsent() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(LazyFieldWithoutGetterContainer.class).verify())
-            .assertFailure();
+            .assertFailure()
+            .assertMessageContains("doesn't contain getter getBasic() for field basic");
     }
 
     @Test

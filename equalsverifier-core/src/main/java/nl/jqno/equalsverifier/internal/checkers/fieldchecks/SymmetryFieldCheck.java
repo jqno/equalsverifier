@@ -23,12 +23,10 @@ public class SymmetryFieldCheck<T> implements FieldCheck<T> {
     public void execute(FieldProbe fieldProbe) {
         T left = subjectCreator.plain();
         T right = subjectCreator.plain();
-        T changedLeft = subjectCreator.withFieldChanged(fieldProbe.getField());
         T changedRight = subjectCreator.withFieldChanged(fieldProbe.getField());
 
         checkSymmetry(left, right);
         checkSymmetry(left, changedRight);
-        checkSymmetry(changedLeft, changedRight);
     }
 
     private void checkSymmetry(T left, T right) {

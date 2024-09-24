@@ -17,7 +17,7 @@ public class WithPrefabValuesForFieldTest {
     private final int iBlue = 142;
 
     @Test
-    public void fail_whenRecordHasSinglePrecondition() {
+    public void fail_whenClassHasSinglePrecondition() {
         ExpectedException
             .when(() ->
                 EqualsVerifier
@@ -30,7 +30,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenRecordHasSinglePrecondition_givenPrefabValuesForField() {
+    public void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField() {
         EqualsVerifier
             .forClass(SinglePrecondition.class)
             .withPrefabValuesForField("point", pRed, pBlue)
@@ -38,7 +38,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void fail_whenRecordHasDualPrecondition() {
+    public void fail_whenClassHasDualPrecondition() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
             .assertFailure()
@@ -46,7 +46,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void fail_whenRecordHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
+    public void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
         ExpectedException
             .when(() ->
                 EqualsVerifier
@@ -59,7 +59,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenRecordHasDualPrecondition_givenPrefabValueForBothFields() {
+    public void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
             .forClass(DualPrecondition.class)
             .withPrefabValuesForField("x", iRed, iBlue)
@@ -131,6 +131,21 @@ public class WithPrefabValuesForFieldTest {
             .assertMessageContains(
                 "Precondition",
                 "both prefab values of type FinalPoint are equal"
+            );
+    }
+
+    @Test
+    public void throw_whenFieldsDontMatch() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(SinglePrecondition.class)
+                    .withPrefabValuesForField("point", 1, 2)
+            )
+            .assertThrows(IllegalStateException.class)
+            .assertMessageContains(
+                "Precondition",
+                "for field point should be of type FinalPoint but are"
             );
     }
 
