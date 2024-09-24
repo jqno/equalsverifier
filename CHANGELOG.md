@@ -13,13 +13,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.17] - 2024-09-24
+
 ### Added
 
 - #withPrefabValuesForField method, where you can assign prefab values to a field instead of to a class. The values will then be used for that field only. ([Issue 747](https://github.com/jqno/equalsverifier/issues/747))
 
 ### Changed
 
-- The internal instantiation logic has been heavily refactored.
+- The internal instantiation logic has been heavily refactored, to be more robust and extensible for future enhancements.
 
 ### Deprecated
 
@@ -1242,7 +1244,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16.2...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17...HEAD
+[3.17]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16.2...equalsverifier-3.17
 [3.16.2]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16.1...equalsverifier-3.16.2
 [3.16.1]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.16...equalsverifier-3.16.1
 [3.16]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.15.8...equalsverifier-3.16
