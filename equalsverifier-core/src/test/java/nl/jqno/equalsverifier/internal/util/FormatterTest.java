@@ -8,8 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 public class FormatterTest {
+
+    private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
     public void noParameters() {
@@ -69,35 +73,38 @@ public class FormatterTest {
 
     @Test
     public void oneAbstractParameter() {
-        Instantiator<Abstract> i = Instantiator.of(Abstract.class);
+        Instantiator<Abstract> i = Instantiator.of(Abstract.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format(), containsString("Abstract: [Abstract x=0]"));
     }
 
     @Test
     public void oneConcreteSubclassParameter() {
-        Instantiator<AbstractImpl> i = Instantiator.of(AbstractImpl.class);
+        Instantiator<AbstractImpl> i = Instantiator.of(AbstractImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
         assertThat(f.format(), containsString("Concrete: something concrete"));
     }
 
     @Test
     public void oneDelegatedAbstractParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
+        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format(), containsString("Abstract: [AbstractDelegation y=0]"));
     }
 
     @Test
     public void oneDelegatedConcreteSubclassParameter() {
-        Instantiator<AbstractDelegationImpl> i = Instantiator.of(AbstractDelegationImpl.class);
+        Instantiator<AbstractDelegationImpl> i = Instantiator.of(
+            AbstractDelegationImpl.class,
+            objenesis
+        );
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
         assertThat(f.format(), containsString("Concrete: something concrete"));
     }
 
     @Test
     public void oneThrowingContainerParameter() {
-        Instantiator<Throwing> i = Instantiator.of(Throwing.class);
+        Instantiator<Throwing> i = Instantiator.of(Throwing.class, objenesis);
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
@@ -107,7 +114,7 @@ public class FormatterTest {
 
     @Test
     public void oneAbstractContainerParameter() {
-        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class);
+        Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
         Formatter f = Formatter.of("AC: %%", ac);

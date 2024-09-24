@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.util;
 
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /**
@@ -33,7 +34,14 @@ public final class Rethrow {
         try {
             return supplier.get();
         } catch (RuntimeException e) {
-            throw e;
+            if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
+                throw new ModuleException(
+                    "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
+                    e
+                );
+            } else {
+                throw e;
+            }
         } catch (ReflectiveOperationException e) {
             throw new ReflectionException(errorMessage.apply(e), e);
         } catch (Exception e) {

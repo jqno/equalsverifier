@@ -7,20 +7,18 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class HierarchyChecker<T> implements Checker {
 
     private final Configuration<T> config;
     private final Class<T> type;
-    private final TypeTag typeTag;
-    private final ClassAccessor<T> classAccessor;
+    private final SubjectCreator<T> subjectCreator;
+    private final ClassProbe<T> classProbe;
     private final Class<? extends T> redefinedSubclass;
     private final boolean strictnessSuppressed;
     private final boolean hasRedefinedSubclass;
@@ -28,8 +26,8 @@ public class HierarchyChecker<T> implements Checker {
     private final boolean typeIsSealed;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public HierarchyChecker(Configuration<T> config) {
-        this.config = config;
+    public HierarchyChecker(Context<T> context) {
+        this.config = context.getConfiguration();
 
         this.strictnessSuppressed =
             config.getWarningsToSuppress().contains(Warning.STRICT_INHERITANCE);
@@ -42,12 +40,12 @@ public class HierarchyChecker<T> implements Checker {
             );
         }
 
-        this.type = config.getType();
-        this.typeTag = config.getTypeTag();
-        this.classAccessor = config.getClassAccessor();
+        this.type = context.getType();
+        this.subjectCreator = context.getSubjectCreator();
+        this.classProbe = context.getClassProbe();
         this.redefinedSubclass = config.getRedefinedSubclass();
         this.typeIsFinal = Modifier.isFinal(type.getModifiers());
-        this.typeIsSealed = classAccessor.isSealed();
+        this.typeIsSealed = classProbe.isSealed();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -61,13 +59,13 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private void checkSuperclass() {
-        ClassAccessor<? super T> superAccessor = classAccessor.getSuperAccessor();
-        if (superAccessor.isEqualsInheritedFromObject() || superAccessor.isSealed()) {
+        ClassProbe<? super T> superProbe = classProbe.getSuperProbe();
+        if (superProbe.isEqualsInheritedFromObject() || superProbe.isSealed()) {
             return;
         }
 
         if (config.hasRedefinedSuperclass() || config.isUsingGetClass()) {
-            T reference = classAccessor.getRedObject(typeTag);
+            T reference = subjectCreator.plain();
             Object equalSuper = getEqualSuper(reference);
 
             Formatter formatter = Formatter.of(
@@ -87,15 +85,13 @@ public class HierarchyChecker<T> implements Checker {
                 // instance.
             }
         } else {
-            safelyCheckSuperProperties(classAccessor.getRedAccessor(typeTag));
             safelyCheckSuperProperties(
-                classAccessor.getDefaultValuesAccessor(
-                    typeTag,
-                    config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
-                    config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
-                    config.getNonnullFields(),
-                    config.getAnnotationCache()
-                )
+                subjectCreator.plain(),
+                subjectCreator.withAllFieldsShallowlyChanged()
+            );
+            safelyCheckSuperProperties(
+                subjectCreator.withAllFieldsDefaulted(),
+                subjectCreator.withAllFieldsShallowlyChanged()
             );
         }
     }
@@ -104,21 +100,15 @@ public class HierarchyChecker<T> implements Checker {
         value = "DCN_NULLPOINTER_EXCEPTION",
         justification = "The equals method in a superclasses can throw an NPE, but it's a specific non-goal to do something with that here."
     )
-    private void safelyCheckSuperProperties(ObjectAccessor<T> referenceAccessor) {
+    private void safelyCheckSuperProperties(T reference, T shallowScrambled) {
         if (strictnessSuppressed) {
             return;
         }
 
-        T reference = referenceAccessor.get();
         Object equalSuper = getEqualSuper(reference);
 
-        T shallowCopy = referenceAccessor.copy();
-        ObjectAccessor<T> scrambledAccessor = ObjectAccessor
-            .of(shallowCopy)
-            .shallowScramble(config.getPrefabValues(), typeTag);
-
         try {
-            checkSuperProperties(reference, equalSuper, scrambledAccessor.get());
+            checkSuperProperties(reference, equalSuper, shallowScrambled);
         } catch (AbstractMethodError | NullPointerException ignored) {
             // In these cases, we'll assume all super properties hold.
             // The problems we test for, can never occur anyway if you can't instantiate a super
@@ -159,7 +149,7 @@ public class HierarchyChecker<T> implements Checker {
     }
 
     private Object getEqualSuper(T reference) {
-        return ObjectAccessor.of(reference, type.getSuperclass()).copy();
+        return subjectCreator.copyIntoSuperclass(reference);
     }
 
     private void checkSubclass() {
@@ -167,9 +157,13 @@ public class HierarchyChecker<T> implements Checker {
             return;
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
-        T reference = referenceAccessor.get();
-        T equalSub = referenceAccessor.copyIntoAnonymousSubclass();
+        T reference = subjectCreator.plain();
+
+        @SuppressWarnings("unchecked")
+        Class<T> anonymousSubclass = (Class<T>) Instantiator.giveDynamicSubclass(
+            reference.getClass() // don't use type directly, as reference may already be a subclass if type was abstract
+        );
+        T equalSub = subjectCreator.copyIntoSubclass(reference, anonymousSubclass);
 
         if (config.isUsingGetClass()) {
             Formatter formatter = Formatter.of(
@@ -204,9 +198,8 @@ public class HierarchyChecker<T> implements Checker {
             );
         }
 
-        ObjectAccessor<T> referenceAccessor = classAccessor.getRedAccessor(typeTag);
-        T reference = referenceAccessor.get();
-        T redefinedSub = referenceAccessor.copyIntoSubclass(redefinedSubclass);
+        T reference = subjectCreator.plain();
+        T redefinedSub = subjectCreator.copyIntoSubclass(reference, redefinedSubclass);
         assertFalse(
             Formatter.of(
                 "Subclass:\n  %%\nequals subclass instance\n  %%",

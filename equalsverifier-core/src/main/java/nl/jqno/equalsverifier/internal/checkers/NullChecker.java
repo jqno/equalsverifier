@@ -2,25 +2,23 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.NullPointerExceptionFieldCheck;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 
 public class NullChecker<T> implements Checker {
 
-    private final Configuration<T> config;
+    private final Context<T> context;
 
-    public NullChecker(Configuration<T> config) {
-        this.config = config;
+    public NullChecker(Context<T> context) {
+        this.context = context;
     }
 
     @Override
     public void check() {
-        if (config.getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
+        if (context.getConfiguration().getWarningsToSuppress().contains(Warning.NULL_FIELDS)) {
             return;
         }
 
-        ClassAccessor<T> classAccessor = config.getClassAccessor();
-        FieldInspector<T> inspector = new FieldInspector<>(classAccessor, config.getTypeTag());
-        inspector.check(new NullPointerExceptionFieldCheck<>(config));
+        FieldInspector<T> inspector = new FieldInspector<>(context.getType());
+        inspector.check(new NullPointerExceptionFieldCheck<>(context));
     }
 }

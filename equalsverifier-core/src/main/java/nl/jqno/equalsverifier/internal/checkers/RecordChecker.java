@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
-import static nl.jqno.equalsverifier.internal.util.Assert.*;
+import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
@@ -9,44 +9,36 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class RecordChecker<T> implements Checker {
 
-    private final Configuration<T> config;
+    private final Context<T> context;
+    private final SubjectCreator<T> subjectCreator;
 
-    public RecordChecker(Configuration<T> config) {
-        this.config = config;
+    public RecordChecker(Context<T> context) {
+        this.context = context;
+        this.subjectCreator = context.getSubjectCreator();
     }
 
     @Override
     public void check() {
-        ClassAccessor<T> accessor = config.getClassAccessor();
-        if (!accessor.isRecord()) {
+        ClassProbe<T> probe = context.getClassProbe();
+        if (!probe.isRecord()) {
             return;
         }
 
-        verifyRecordPrecondition(accessor.getRedAccessor(config.getTypeTag()));
-        verifyRecordPrecondition(
-            accessor.getDefaultValuesAccessor(
-                config.getTypeTag(),
-                config.getWarningsToSuppress().contains(Warning.NULL_FIELDS),
-                config.getWarningsToSuppress().contains(Warning.ZERO_FIELDS),
-                config.getNonnullFields(),
-                config.getAnnotationCache()
-            )
-        );
+        verifyRecordPrecondition(subjectCreator.plain());
+        verifyRecordPrecondition(subjectCreator.withAllFieldsDefaulted());
     }
 
-    private void verifyRecordPrecondition(ObjectAccessor<T> originalAccessor) {
-        Class<T> type = config.getType();
-        T original = originalAccessor.get();
-        T copy = originalAccessor.copy();
+    private void verifyRecordPrecondition(T original) {
+        Class<T> type = context.getType();
+        T copy = subjectCreator.copy(original);
 
         if (original.equals(copy)) {
             return;

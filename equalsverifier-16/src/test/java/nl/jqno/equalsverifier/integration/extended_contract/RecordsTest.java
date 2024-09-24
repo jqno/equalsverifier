@@ -52,15 +52,6 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenConstructorChecksValue_givenPrefabValues() {
-        EqualsVerifier
-            .forClass(ValueCheckingRecord.class)
-            .withPrefabValues(int.class, 10, 11)
-            .suppress(Warning.ZERO_FIELDS)
-            .verify();
-    }
-
-    @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
         ExpectedException
             .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())

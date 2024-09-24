@@ -1,38 +1,20 @@
 package nl.jqno.equalsverifier.api;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.checkers.AbstractDelegationChecker;
-import nl.jqno.equalsverifier.internal.checkers.CachedHashCodeChecker;
-import nl.jqno.equalsverifier.internal.checkers.Checker;
-import nl.jqno.equalsverifier.internal.checkers.ExamplesChecker;
-import nl.jqno.equalsverifier.internal.checkers.FieldsChecker;
-import nl.jqno.equalsverifier.internal.checkers.HierarchyChecker;
-import nl.jqno.equalsverifier.internal.checkers.MapEntryHashCodeRequirementChecker;
-import nl.jqno.equalsverifier.internal.checkers.NullChecker;
-import nl.jqno.equalsverifier.internal.checkers.RecordChecker;
-import nl.jqno.equalsverifier.internal.checkers.SignatureChecker;
+import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.ErrorMessage;
-import nl.jqno.equalsverifier.internal.util.FieldNameExtractor;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.internal.util.ObjenesisWrapper;
-import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
-import nl.jqno.equalsverifier.internal.util.Validations;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test with a fluent API.
@@ -49,6 +31,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
+    private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -58,6 +41,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private Set<String> ignoredAnnotationClassNames = new HashSet<>();
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
+    private final Objenesis objenesis;
 
     /**
      * Constructor.
@@ -65,8 +49,19 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      */
     public SingleTypeEqualsVerifierApi(Class<T> type) {
+        this(type, new ObjenesisStd());
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param type The class for which the {@code equals} method should be tested.
+     * @param objenesis To instantiate non-record classes.
+     */
+    public SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
         this.type = type;
-        actualFields = FieldNameExtractor.extractFieldNames(type);
+        this.actualFields = FieldNameExtractor.extractFieldNames(type);
+        this.objenesis = objenesis;
     }
 
     /**
@@ -75,6 +70,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param factoryCache Factories that can be used to create values.
+     * @param objenesis To instantiate non-record classes.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
      * @param converter A function that converts from field name to getter name.
@@ -83,10 +79,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
+        Objenesis objenesis,
         boolean usingGetClass,
         Function<String, String> converter
     ) {
-        this(type);
+        this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
@@ -102,7 +99,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         List<T> equalExamples,
         List<T> unequalExamples
     ) {
-        this(type);
+        this(type, new ObjenesisStd());
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
     }
@@ -124,7 +121,30 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
+        return this;
+    }
+
+    /**
+     * Adds prefabricated values for instance fields with a given name (and only the fields with
+     * the given name) that EqualsVerifier cannot instantiate by itself.
+     *
+     * @param <S> The class of the prefabricated values.
+     * @param fieldName The name of the field that the prefabricated values are linked to.
+     * @param red An instance of {@code S}.
+     * @param blue Another instance of {@code S}, not equal to {@code red}.
+     * @return {@code this}, for easy method chaining.
+     * @throws NullPointerException If {@code red} or {@code blue} is null, or if the named field
+     *     does not exist in the class.
+     * @throws IllegalArgumentException If {@code red} equals {@code blue}.
+     */
+    public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(
+        String fieldName,
+        S red,
+        S blue
+    ) {
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
+        withNonnullFields(fieldName);
         return this;
     }
 
@@ -405,13 +425,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     private void performVerification() {
-        ObjenesisWrapper.reset();
         if (type.isEnum() || type.isInterface()) {
             return;
         }
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
+        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -420,8 +440,8 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields
         );
 
-        verifyWithoutExamples(config);
-        verifyWithExamples(config);
+        verifyWithoutExamples(context);
+        verifyWithExamples(context);
     }
 
     private Configuration<T> buildConfig() {
@@ -430,13 +450,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields,
             allIncludedFields,
             nonnullFields,
+            fieldCache.getFieldNames(),
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
             redefinedSubclass,
             usingGetClass,
             warningsToSuppress,
             fieldnameToGetter,
-            factoryCache,
             ignoredAnnotationClassNames,
             actualFields,
             equalExamples,
@@ -444,12 +464,13 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         );
     }
 
-    private void verifyWithoutExamples(Configuration<T> config) {
+    private void verifyWithoutExamples(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
         Checker[] checkers = {
-            new SignatureChecker<>(config),
-            new AbstractDelegationChecker<>(config),
-            new NullChecker<>(config),
-            new RecordChecker<>(config),
+            new SignatureChecker<>(context),
+            new AbstractDelegationChecker<>(context),
+            new NullChecker<>(context),
+            new RecordChecker<>(context),
             new CachedHashCodeChecker<>(config)
         };
 
@@ -458,12 +479,12 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         }
     }
 
-    private void verifyWithExamples(Configuration<T> config) {
+    private void verifyWithExamples(Context<T> context) {
         Checker[] checkers = {
-            new ExamplesChecker<>(config),
-            new HierarchyChecker<>(config),
-            new FieldsChecker<>(config),
-            new MapEntryHashCodeRequirementChecker<>(config)
+            new ExamplesChecker<>(context),
+            new HierarchyChecker<>(context),
+            new FieldsChecker<>(context),
+            new MapEntryHashCodeRequirementChecker<>(context)
         };
 
         for (Checker checker : checkers) {

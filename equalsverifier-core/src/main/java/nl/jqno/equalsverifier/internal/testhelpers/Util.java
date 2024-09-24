@@ -4,8 +4,8 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 
 public final class Util {
 
@@ -57,7 +57,7 @@ public final class Util {
     }
 
     private static boolean isRelevant(Field f) {
-        return FieldAccessor.of(f).canBeModifiedReflectively();
+        return FieldProbe.of(f).canBeModifiedReflectively();
     }
 
     public static void coverThePrivateConstructor(Class<?> type) {

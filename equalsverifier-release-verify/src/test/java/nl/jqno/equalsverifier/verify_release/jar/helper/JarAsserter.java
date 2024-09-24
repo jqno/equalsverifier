@@ -23,8 +23,8 @@ public class JarAsserter {
     public void assertPresenceOfCoreClasses() {
         assertPresenceOf(
             EV + "/EqualsVerifier.class",
-            EV + "/internal/reflection/ClassAccessor.class",
-            EV + "/internal/prefabvalues/PrefabValues.class"
+            EV + "/internal/reflection/vintage/ClassAccessor.class",
+            EV + "/internal/checkers/HierarchyChecker.class"
         );
     }
 

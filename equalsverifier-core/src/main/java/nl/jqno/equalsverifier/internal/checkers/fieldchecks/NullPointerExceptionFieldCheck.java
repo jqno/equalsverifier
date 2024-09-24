@@ -4,12 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldModifier;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.reflection.FieldMutator;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.util.*;
 
 @SuppressFBWarnings(
     value = "RV_RETURN_VALUE_IGNORED",
@@ -17,40 +15,40 @@ import nl.jqno.equalsverifier.internal.util.Formatter;
 )
 public class NullPointerExceptionFieldCheck<T> implements FieldCheck<T> {
 
-    private Configuration<T> config;
+    private final Configuration<T> config;
+    private final SubjectCreator<T> subjectCreator;
 
-    public NullPointerExceptionFieldCheck(Configuration<T> config) {
-        this.config = config;
+    public NullPointerExceptionFieldCheck(Context<T> context) {
+        this.config = context.getConfiguration();
+        this.subjectCreator = context.getSubjectCreator();
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        if (config.getNonnullFields().contains(fieldAccessor.getFieldName())) {
+    public void execute(FieldProbe fieldProbe) {
+        if (config.getNonnullFields().contains(fieldProbe.getName())) {
             return;
         }
-        if (fieldAccessor.getFieldType().isPrimitive()) {
+        if (fieldProbe.isPrimitive()) {
             return;
         }
-        Field field = fieldAccessor.getField();
-        if (NonnullAnnotationVerifier.fieldIsNonnull(field, config.getAnnotationCache())) {
+        if (fieldProbe.isAnnotatedNonnull(config.getAnnotationCache())) {
             return;
         }
 
-        if (fieldAccessor.fieldIsStatic()) {
-            FieldModifier fieldModifier = FieldModifier.of(field, referenceAccessor.get());
-            Object saved = referenceAccessor.getField(field);
+        if (fieldProbe.isStatic()) {
+            T reference = subjectCreator.plain();
+            FieldMutator fieldMutator = new FieldMutator(fieldProbe);
+            Object saved = fieldProbe.getValue(reference);
 
-            fieldModifier.defaultStaticField();
-            performTests(field, referenceAccessor.get(), copyAccessor.get());
-            fieldModifier.set(saved);
+            fieldMutator.setNewValue(
+                reference,
+                PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(fieldProbe.getType())
+            );
+            performTests(fieldProbe.getField(), subjectCreator.plain(), subjectCreator.plain());
+            fieldMutator.setNewValue(reference, saved);
         } else {
-            ObjectAccessor<?> changed = copyAccessor.withDefaultedField(field);
-            performTests(field, referenceAccessor.get(), changed.get());
-            referenceAccessor.withDefaultedField(field);
+            T changed = subjectCreator.withFieldDefaulted(fieldProbe.getField());
+            performTests(fieldProbe.getField(), subjectCreator.plain(), changed);
         }
     }
 

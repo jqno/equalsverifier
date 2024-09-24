@@ -4,28 +4,30 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.Tuple;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
-import nl.jqno.equalsverifier.internal.util.Configuration;
-import nl.jqno.equalsverifier.internal.util.Formatter;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.util.*;
 
 public class AbstractDelegationChecker<T> implements Checker {
 
     private final Class<T> type;
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
-    private final ClassAccessor<T> classAccessor;
+    private final SubjectCreator<T> subjectCreator;
+    private final ValueProvider valueProvider;
+    private final ClassProbe<T> classProbe;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public AbstractDelegationChecker(Configuration<T> config) {
-        this.type = config.getType();
+    public AbstractDelegationChecker(Context<T> context) {
+        Configuration<T> config = context.getConfiguration();
+        this.type = context.getType();
         this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
-        this.classAccessor = config.getClassAccessor();
+        this.subjectCreator = context.getSubjectCreator();
+        this.valueProvider = context.getValueProvider();
+        this.classProbe = context.getClassProbe();
         this.cachedHashCodeInitializer = config.getCachedHashCodeInitializer();
     }
 
@@ -35,14 +37,14 @@ public class AbstractDelegationChecker<T> implements Checker {
 
         checkAbstractDelegationInFields();
 
-        T instance = prefabValues.giveRed(typeTag);
-        T copy = prefabValues.giveBlue(typeTag);
+        T instance = subjectCreator.plain();
+        T copy = subjectCreator.plain();
         checkAbstractDelegation(instance, copy);
     }
 
     private void checkAbstractEqualsAndHashCode() {
-        boolean equalsIsAbstract = classAccessor.isEqualsAbstract();
-        boolean hashCodeIsAbstract = classAccessor.isHashCodeAbstract();
+        boolean equalsIsAbstract = classProbe.isEqualsAbstract();
+        boolean hashCodeIsAbstract = classProbe.isHashCodeAbstract();
 
         if (equalsIsAbstract && hashCodeIsAbstract) {
             fail(
@@ -72,7 +74,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
         try {
-            return prefabValues.giveTuple(tag);
+            return valueProvider.provide(tag);
         } catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.
             return null;

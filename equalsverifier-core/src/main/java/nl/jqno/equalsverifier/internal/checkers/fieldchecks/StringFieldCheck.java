@@ -3,12 +3,11 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -16,7 +15,8 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
 
     public static final String ERROR_DOC_TITLE = "String equality";
 
-    private final PrefabValues prefabValues;
+    private final SubjectCreator<T> subjectCreator;
+    private final ValueProvider valueProvider;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
     @SuppressFBWarnings(
@@ -24,10 +24,12 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
         justification = "PrefabValues is inherently mutable."
     )
     public StringFieldCheck(
-        PrefabValues prefabValues,
+        SubjectCreator<T> subjectCreator,
+        ValueProvider instanceCreator,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer
     ) {
-        this.prefabValues = prefabValues;
+        this.subjectCreator = subjectCreator;
+        this.valueProvider = instanceCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
@@ -36,20 +38,15 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
         value = "DM_CONVERT_CASE",
         justification = "String prefab values are probably not localized."
     )
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        if (String.class.equals(fieldAccessor.getFieldType()) && !fieldAccessor.fieldIsStatic()) {
-            Field field = fieldAccessor.getField();
-            String red = prefabValues.giveRed(new TypeTag(String.class));
+    public void execute(FieldProbe fieldProbe) {
+        if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
+            String red = valueProvider.<String>provide(new TypeTag(String.class)).getRed();
 
             final T reference;
             final T copy;
             try {
-                reference = referenceAccessor.withFieldSetTo(field, red.toLowerCase()).get();
-                copy = copyAccessor.withFieldSetTo(field, red.toUpperCase()).get();
+                reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toLowerCase());
+                copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), red.toUpperCase());
             } catch (ReflectionException ignored) {
                 // Differently-cased String is not allowed, so cannot cause problems either.
                 return;
@@ -66,7 +63,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
                         ERROR_DOC_TITLE +
                         ": class uses equalsIgnoreCase to compare String field %%, but hashCode is case-sensitive." +
                         " Use toUpperCase() to determine the hashCode.",
-                        field.getName()
+                        fieldProbe.getName()
                     )
                 );
             }

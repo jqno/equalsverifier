@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 /** Signals that a recursion has been detected while traversing the fields of a data structure. */
 @SuppressWarnings("serial")

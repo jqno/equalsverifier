@@ -2,40 +2,40 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
-import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class FloatAndDoubleFieldCheck<T> implements FieldCheck<T> {
 
+    private final SubjectCreator<T> subjectCreator;
+
+    public FloatAndDoubleFieldCheck(SubjectCreator<T> subjectCreator) {
+        this.subjectCreator = subjectCreator;
+    }
+
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Class<?> type = fieldAccessor.getFieldType();
-        Field field = fieldAccessor.getField();
+    public void execute(FieldProbe fieldProbe) {
+        Class<?> type = fieldProbe.getType();
         if (isFloat(type)) {
-            T reference = referenceAccessor.withFieldSetTo(field, Float.NaN).get();
-            T copy = copyAccessor.withFieldSetTo(field, Float.NaN).get();
+            T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
+            T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Float.NaN);
             assertEquals(
                 Formatter.of(
                     "Float: equals doesn't use Float.compare for field %%.",
-                    field.getName()
+                    fieldProbe.getName()
                 ),
                 reference,
                 copy
             );
         }
         if (isDouble(type)) {
-            T reference = referenceAccessor.withFieldSetTo(field, Double.NaN).get();
-            T copy = copyAccessor.withFieldSetTo(field, Double.NaN).get();
+            T reference = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
+            T copy = subjectCreator.withFieldSetTo(fieldProbe.getField(), Double.NaN);
             assertEquals(
                 Formatter.of(
                     "Double: equals doesn't use Double.compare for field %%.",
-                    field.getName()
+                    fieldProbe.getName()
                 ),
                 reference,
                 copy

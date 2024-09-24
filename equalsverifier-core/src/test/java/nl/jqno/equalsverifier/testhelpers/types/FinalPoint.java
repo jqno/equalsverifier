@@ -10,6 +10,14 @@ public final class FinalPoint {
         this.y = y;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof FinalPoint)) {

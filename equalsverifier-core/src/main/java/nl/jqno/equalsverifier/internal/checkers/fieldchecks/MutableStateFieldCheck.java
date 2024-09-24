@@ -2,61 +2,43 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.lang.reflect.Field;
 import java.util.function.Predicate;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class MutableStateFieldCheck<T> implements FieldCheck<T> {
 
-    private final PrefabValues prefabValues;
-    private final TypeTag typeTag;
-    private final Predicate<FieldAccessor> isCachedHashCodeField;
+    private final SubjectCreator<T> subjectCreator;
+    private final Predicate<FieldProbe> isCachedHashCodeField;
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "PrefabValues is inherently mutable."
-    )
     public MutableStateFieldCheck(
-        PrefabValues prefabValues,
-        TypeTag typeTag,
-        Predicate<FieldAccessor> isCachedHashCodeField
+        SubjectCreator<T> subjectCreator,
+        Predicate<FieldProbe> isCachedHashCodeField
     ) {
-        this.prefabValues = prefabValues;
-        this.typeTag = typeTag;
+        this.subjectCreator = subjectCreator;
         this.isCachedHashCodeField = isCachedHashCodeField;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        if (isCachedHashCodeField.test(fieldAccessor)) {
+    public void execute(FieldProbe fieldProbe) {
+        if (isCachedHashCodeField.test(fieldProbe)) {
             return;
         }
 
-        Field field = fieldAccessor.getField();
-        T reference = referenceAccessor.get();
-        T copy = copyAccessor.get();
+        T reference = subjectCreator.plain();
+        T copy = subjectCreator.plain();
 
         boolean equalBefore = reference.equals(copy);
-        T changed = copyAccessor.withChangedField(field, prefabValues, typeTag).get();
+        T changed = subjectCreator.withFieldChanged(fieldProbe.getField());
         boolean equalAfter = reference.equals(changed);
 
-        if (equalBefore && !equalAfter && !fieldAccessor.fieldIsFinal()) {
+        if (equalBefore && !equalAfter && !fieldProbe.isFinal()) {
             String message =
                 "Mutability: equals depends on mutable field %%.\n" +
                 "Make the field final, suppress Warning.NONFINAL_FIELDS or use" +
                 " EqualsVerifier.simple()";
-            fail(Formatter.of(message, field.getName()));
+            fail(Formatter.of(message, fieldProbe.getName()));
         }
-
-        referenceAccessor.withChangedField(field, prefabValues, typeTag);
     }
 }

@@ -1,24 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.FactoryCache;
-import nl.jqno.equalsverifier.internal.prefabvalues.JavaApiPrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCacheBuilder;
-import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 
 public final class Configuration<T> {
 
@@ -27,6 +16,7 @@ public final class Configuration<T> {
 
     private final Class<T> type;
     private final Set<String> nonnullFields;
+    private final Set<String> prefabbedFields;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
     private final boolean hasRedefinedSuperclass;
     private final Class<? extends T> redefinedSubclass;
@@ -35,8 +25,6 @@ public final class Configuration<T> {
     private final Function<String, String> fieldnameToGetter;
 
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
-    private final ClassAccessor<T> classAccessor;
     private final AnnotationCache annotationCache;
     private final Set<String> ignoredFields;
 
@@ -47,10 +35,9 @@ public final class Configuration<T> {
     private Configuration(
         Class<T> type,
         TypeTag typeTag,
-        ClassAccessor<T> classAccessor,
-        PrefabValues prefabValues,
         Set<String> ignoredFields,
         Set<String> nonnullFields,
+        Set<String> prefabbedFields,
         AnnotationCache annotationCache,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer,
         boolean hasRedefinedSuperclass,
@@ -63,10 +50,9 @@ public final class Configuration<T> {
     ) {
         this.type = type;
         this.typeTag = typeTag;
-        this.classAccessor = classAccessor;
-        this.prefabValues = prefabValues;
         this.ignoredFields = ignoredFields;
         this.nonnullFields = nonnullFields;
+        this.prefabbedFields = prefabbedFields;
         this.annotationCache = annotationCache;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
         this.hasRedefinedSuperclass = hasRedefinedSuperclass;
@@ -83,22 +69,19 @@ public final class Configuration<T> {
         Set<String> excludedFields,
         Set<String> includedFields,
         Set<String> nonnullFields,
+        Set<String> prefabbedFields,
         CachedHashCodeInitializer<T> cachedHashCodeInitializer,
         boolean hasRedefinedSuperclass,
         Class<? extends T> redefinedSubclass,
         boolean usingGetClass,
         EnumSet<Warning> warningsToSuppress,
         Function<String, String> fieldnameToGetter,
-        FactoryCache factoryCache,
         Set<String> ignoredAnnotationClassNames,
         Set<String> actualFields,
         List<T> equalExamples,
         List<T> unequalExamples
     ) {
         TypeTag typeTag = new TypeTag(type);
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        PrefabValues prefabValues = new PrefabValues(cache);
-        ClassAccessor<T> classAccessor = ClassAccessor.of(type, prefabValues);
         AnnotationCache annotationCache = buildAnnotationCache(type, ignoredAnnotationClassNames);
         Set<String> ignoredFields = determineIgnoredFields(
             type,
@@ -111,15 +94,13 @@ public final class Configuration<T> {
         Function<String, String> converter = fieldnameToGetter != null
             ? fieldnameToGetter
             : DEFAULT_FIELDNAME_TO_GETTER_CONVERTER;
-        List<T> unequals = ensureUnequalExamples(typeTag, classAccessor, unequalExamples);
 
         return new Configuration<>(
             type,
             typeTag,
-            classAccessor,
-            prefabValues,
             ignoredFields,
             nonnullFields,
+            prefabbedFields,
             annotationCache,
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
@@ -128,7 +109,7 @@ public final class Configuration<T> {
             warningsToSuppress,
             converter,
             equalExamples,
-            unequals
+            unequalExamples
         );
     }
 
@@ -206,27 +187,16 @@ public final class Configuration<T> {
         return excludedFields;
     }
 
-    private static <T> List<T> ensureUnequalExamples(
-        TypeTag typeTag,
-        ClassAccessor<T> classAccessor,
-        List<T> examples
-    ) {
-        if (examples.size() > 0) {
-            return examples;
-        }
-
-        List<T> result = new ArrayList<>();
-        result.add(classAccessor.getRedObject(typeTag));
-        result.add(classAccessor.getBlueObject(typeTag));
-        return result;
-    }
-
     public Class<T> getType() {
         return type;
     }
 
     public Set<String> getNonnullFields() {
         return Collections.unmodifiableSet(nonnullFields);
+    }
+
+    public Set<String> getPrefabbedFields() {
+        return Collections.unmodifiableSet(prefabbedFields);
     }
 
     public CachedHashCodeInitializer<T> getCachedHashCodeInitializer() {
@@ -263,18 +233,6 @@ public final class Configuration<T> {
 
     public TypeTag getTypeTag() {
         return typeTag;
-    }
-
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP",
-        justification = "PrefabValues is inherently mutable."
-    )
-    public PrefabValues getPrefabValues() {
-        return prefabValues;
-    }
-
-    public ClassAccessor<T> getClassAccessor() {
-        return classAccessor;
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable.")

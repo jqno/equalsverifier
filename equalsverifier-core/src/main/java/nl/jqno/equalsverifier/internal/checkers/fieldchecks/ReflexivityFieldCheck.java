@@ -7,75 +7,69 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
-import nl.jqno.equalsverifier.internal.reflection.annotations.NonnullAnnotationVerifier;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     private final TypeTag typeTag;
-    private final PrefabValues prefabValues;
+    private final SubjectCreator<T> subjectCreator;
+    private final ValueProvider valueProvider;
     private final EnumSet<Warning> warningsToSuppress;
     private final Set<String> nonnullFields;
+    private final Set<String> prefabbedFields;
     private final AnnotationCache annotationCache;
+    private final FieldCache fieldCache;
 
-    public ReflexivityFieldCheck(Configuration<T> config) {
+    public ReflexivityFieldCheck(Context<T> context) {
+        this.subjectCreator = context.getSubjectCreator();
+        this.valueProvider = context.getValueProvider();
+
+        Configuration<T> config = context.getConfiguration();
         this.typeTag = config.getTypeTag();
-        this.prefabValues = config.getPrefabValues();
         this.warningsToSuppress = config.getWarningsToSuppress();
         this.nonnullFields = config.getNonnullFields();
+        this.prefabbedFields = config.getPrefabbedFields();
         this.annotationCache = config.getAnnotationCache();
+        this.fieldCache = context.getFieldCache();
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
+    public void execute(FieldProbe fieldProbe) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)) {
             return;
         }
 
-        checkReferenceReflexivity(referenceAccessor, copyAccessor);
-        checkValueReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
-        checkNullReflexivity(referenceAccessor, copyAccessor, fieldAccessor);
+        checkReferenceReflexivity();
+        checkValueReflexivity(fieldProbe);
+        checkNullReflexivity(fieldProbe);
     }
 
-    private void checkReferenceReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor
-    ) {
-        T left = referenceAccessor.get();
-        T right = copyAccessor.get();
+    private void checkReferenceReflexivity() {
+        T left = subjectCreator.plain();
+        T right = subjectCreator.plain();
         checkReflexivityFor(left, right);
     }
 
-    private void checkValueReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Field field = fieldAccessor.getField();
-        Class<?> fieldType = field.getType();
+    private void checkValueReflexivity(FieldProbe probe) {
+        Class<?> fieldType = probe.getType();
         if (warningsToSuppress.contains(Warning.REFERENCE_EQUALITY)) {
             return;
         }
         if (fieldType.equals(Object.class) || fieldType.isInterface()) {
             return;
         }
-        if (fieldAccessor.fieldIsStatic()) {
+        if (probe.isStatic()) {
             return;
         }
-        ClassAccessor<?> fieldTypeAccessor = ClassAccessor.of(fieldType, prefabValues);
-        if (!fieldTypeAccessor.declaresEquals()) {
+        ClassProbe<?> fieldTypeProbe = new ClassProbe<>(fieldType);
+        if (!fieldTypeProbe.declaresEquals()) {
             return;
         }
         if (fieldType.isSynthetic()) {
@@ -83,38 +77,40 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
             return;
         }
 
+        Field field = probe.getField();
+        String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Object left = referenceAccessor.withFieldSetTo(field, prefabValues.giveRed(tag)).get();
-        Object right = copyAccessor.withFieldSetTo(field, prefabValues.giveRedCopy(tag)).get();
+        Tuple<?> tuple = prefabbedFields.contains(fieldName)
+            ? fieldCache.get(fieldName)
+            : valueProvider.provide(tag);
+
+        Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
+        Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
 
         Formatter f = Formatter.of(
             "Reflexivity: == used instead of .equals() on field: %%" +
             "\nIf this is intentional, consider suppressing Warning.%%",
-            field.getName(),
+            probe.getName(),
             Warning.REFERENCE_EQUALITY.toString()
         );
         assertEquals(f, left, right);
     }
 
-    private void checkNullReflexivity(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        if (fieldAccessor.fieldIsPrimitive() && warningsToSuppress.contains(Warning.ZERO_FIELDS)) {
+    private void checkNullReflexivity(FieldProbe fieldProbe) {
+        if (prefabbedFields.contains(fieldProbe.getName())) {
             return;
         }
 
-        Field field = fieldAccessor.getField();
+        Field field = fieldProbe.getField();
         boolean nullWarningIsSuppressed = warningsToSuppress.contains(Warning.NULL_FIELDS);
-        boolean fieldIsNonNull = NonnullAnnotationVerifier.fieldIsNonnull(field, annotationCache);
+        boolean fieldIsNonNull = fieldProbe.isAnnotatedNonnull(annotationCache);
         boolean fieldIsMentionedExplicitly = nonnullFields.contains(field.getName());
         if (nullWarningIsSuppressed || fieldIsNonNull || fieldIsMentionedExplicitly) {
             return;
         }
 
-        T left = referenceAccessor.withDefaultedField(field).get();
-        T right = copyAccessor.withDefaultedField(field).get();
+        T left = subjectCreator.withFieldDefaulted(field);
+        T right = subjectCreator.withFieldDefaulted(field);
         checkReflexivityFor(left, right);
     }
 

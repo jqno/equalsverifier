@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier;
 
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+
 /**
  * Enum of warnings that can be suppressed in {@link nl.jqno.equalsverifier.EqualsVerifier}.
  *
@@ -206,12 +208,10 @@ public enum Warning {
     BIGDECIMAL_EQUALITY,
 
     /**
-     * Disables checks with fields with value 0 within {@code equals}, {@code hashCode} and
-     * {@code toString} methods.
+     * No longer does anything.
      *
-     * <p>Sometimes the constructor of a class makes sure no field can be 0. If this is the case,
-     * and if the fields cannot be made 0 later in the lifecycle of the class by setters or other
-     * methods, suppress this warning to disable the checks with fields that have value 0.
+     * @deprecated Use {@link SingleTypeEqualsVerifierApi#withPrefabValuesForField(String, Object, Object)} instead.
      */
+    @Deprecated
     ZERO_FIELDS
 }

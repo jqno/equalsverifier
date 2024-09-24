@@ -3,48 +3,47 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class ArrayFieldCheck<T> implements FieldCheck<T> {
 
-    private CachedHashCodeInitializer<T> cachedHashCodeInitializer;
+    private final SubjectCreator<T> subjectCreator;
+    private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ArrayFieldCheck(CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
+    public ArrayFieldCheck(
+        SubjectCreator<T> subjectCreator,
+        CachedHashCodeInitializer<T> cachedHashCodeInitializer
+    ) {
+        this.subjectCreator = subjectCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        Class<?> arrayType = fieldAccessor.getFieldType();
+    public void execute(FieldProbe fieldProbe) {
+        Class<?> arrayType = fieldProbe.getType();
         if (!arrayType.isArray()) {
             return;
         }
-        if (!fieldAccessor.canBeModifiedReflectively()) {
+        if (!fieldProbe.canBeModifiedReflectively()) {
             return;
         }
 
-        String fieldName = fieldAccessor.getFieldName();
-        T reference = referenceAccessor.get();
-        T changed = replaceInnermostArrayValue(copyAccessor, fieldAccessor.getField()).get();
+        T reference = subjectCreator.plain();
+        T changed = replaceInnermostArrayValue(reference, fieldProbe);
 
         if (arrayType.getComponentType().isArray()) {
-            assertDeep(fieldName, reference, changed);
+            assertDeep(fieldProbe.getName(), reference, changed);
         } else {
-            assertArray(fieldName, reference, changed);
+            assertArray(fieldProbe.getName(), reference, changed);
         }
     }
 
-    private ObjectAccessor<T> replaceInnermostArrayValue(ObjectAccessor<T> accessor, Field field) {
-        Object newArray = arrayCopy(accessor.getField(field));
-        return accessor.withFieldSetTo(field, newArray);
+    private T replaceInnermostArrayValue(T reference, FieldProbe fieldProbe) {
+        Object newArray = arrayCopy(fieldProbe.getValue(reference));
+        return subjectCreator.withFieldSetTo(fieldProbe.getField(), newArray);
     }
 
     private Object arrayCopy(Object array) {

@@ -8,20 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class SignatureChecker<T> implements Checker {
 
     private final Class<T> type;
-    private final ClassAccessor<T> classAccessor;
+    private final ClassProbe<T> classProbe;
     private final Set<Warning> warningsToSuppress;
 
-    public SignatureChecker(Configuration<T> config) {
-        this.type = config.getType();
-        this.classAccessor = config.getClassAccessor();
-        this.warningsToSuppress = config.getWarningsToSuppress();
+    public SignatureChecker(Context<T> context) {
+        this.type = context.getType();
+        this.classProbe = context.getClassProbe();
+        this.warningsToSuppress = context.getConfiguration().getWarningsToSuppress();
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SignatureChecker<T> implements Checker {
         boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(
             Warning.INHERITED_DIRECTLY_FROM_OBJECT
         );
-        boolean isDirectlyInherited = classAccessor.isEqualsInheritedFromObject();
+        boolean isDirectlyInherited = classProbe.isEqualsInheritedFromObject();
         if (dontAllowDirectlyInherited && isDirectlyInherited) {
             fail(
                 Formatter.of(

@@ -4,63 +4,73 @@ import static net.bytebuddy.implementation.ExceptionMethod.throwing;
 import static net.bytebuddy.matcher.ElementMatchers.named;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.prefabvalues.PrefabValues;
-import nl.jqno.equalsverifier.internal.prefabvalues.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.FieldAccessor;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.Configuration;
+import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
 public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
+    private final SubjectCreator<T> subjectCreator;
+    private final ValueProvider valueProvider;
     private final Class<T> type;
-    private final ClassAccessor<T> accessor;
-    private final PrefabValues prefabValues;
+    private final ClassProbe<T> classProbe;
     private final AnnotationCache annotationCache;
     private final Function<String, String> fieldnameToGetter;
-    private final TypeTag typeTag;
     private final boolean strictHashcode;
 
-    public JpaLazyGetterFieldCheck(Configuration<T> config) {
-        this.type = config.getType();
-        this.accessor = config.getClassAccessor();
-        this.prefabValues = config.getPrefabValues();
+    public JpaLazyGetterFieldCheck(Context<T> context) {
+        this.subjectCreator = context.getSubjectCreator();
+        this.valueProvider = context.getValueProvider();
+        this.type = context.getType();
+        this.classProbe = context.getClassProbe();
+
+        Configuration<T> config = context.getConfiguration();
         this.annotationCache = config.getAnnotationCache();
         this.fieldnameToGetter = config.getFieldnameToGetter();
-        this.typeTag = config.getTypeTag();
         this.strictHashcode = config.getWarningsToSuppress().contains(Warning.STRICT_HASHCODE);
     }
 
     @Override
-    public void execute(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor
-    ) {
-        String fieldName = fieldAccessor.getFieldName();
+    public void execute(FieldProbe fieldProbe) {
+        String fieldName = fieldProbe.getName();
         String getterName = fieldnameToGetter.apply(fieldName);
 
         if (
-            !fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor, true) ||
-            !fieldIsLazy(fieldAccessor) ||
+            !fieldIsUsed(fieldProbe.getField(), true) ||
+            !fieldIsLazy(fieldName) ||
             Modifier.isFinal(type.getModifiers())
         ) {
             return;
         }
 
-        assertEntity(fieldName, "equals", getterName, accessor.hasMethod(getterName));
-        ClassAccessor<T> subAccessor = throwingGetterAccessor(getterName);
+        assertTrue(
+            Formatter.of(
+                "Class %% doesn't contain getter %%() for field %%.",
+                classProbe.getType().getSimpleName(),
+                getterName,
+                fieldName
+            ),
+            classProbe.hasMethod(getterName)
+        );
 
-        T red1 = subAccessor.getRedObject(TypeTag.NULL);
-        T red2 = subAccessor.getRedObject(TypeTag.NULL);
+        Class<T> sub = throwingGetterCreator(getterName);
+        Tuple<T> tuple = valueProvider.<T>provide(new TypeTag(sub));
+        T red1 = tuple.getRed();
+        T red2 = tuple.getRedCopy();
 
         boolean equalsExceptionCaught = false;
         try {
@@ -70,8 +80,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         }
         assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
 
-        boolean usedInHashcode =
-            !strictHashcode || fieldIsUsed(referenceAccessor, copyAccessor, fieldAccessor, false);
+        boolean usedInHashcode = !strictHashcode || fieldIsUsed(fieldProbe.getField(), false);
         boolean hashCodeExceptionCaught = false;
         try {
             red1.hashCode();
@@ -81,16 +90,9 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
     }
 
-    private boolean fieldIsUsed(
-        ObjectAccessor<T> referenceAccessor,
-        ObjectAccessor<T> copyAccessor,
-        FieldAccessor fieldAccessor,
-        boolean forEquals
-    ) {
-        T red = referenceAccessor.get();
-        T blue = copyAccessor
-            .withChangedField(fieldAccessor.getField(), prefabValues, typeTag)
-            .get();
+    private boolean fieldIsUsed(Field field, boolean forEquals) {
+        T red = subjectCreator.plain();
+        T blue = subjectCreator.withFieldChanged(field);
 
         if (forEquals) {
             return !red.equals(blue);
@@ -99,23 +101,19 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         }
     }
 
-    private boolean fieldIsLazy(FieldAccessor fieldAccessor) {
+    private boolean fieldIsLazy(String fieldName) {
         return (
             annotationCache.hasFieldAnnotation(
                 type,
-                fieldAccessor.getFieldName(),
+                fieldName,
                 SupportedAnnotations.JPA_LINKED_FIELD
             ) ||
-            annotationCache.hasFieldAnnotation(
-                type,
-                fieldAccessor.getFieldName(),
-                SupportedAnnotations.JPA_LAZY_FIELD
-            )
+            annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.JPA_LAZY_FIELD)
         );
     }
 
-    private ClassAccessor<T> throwingGetterAccessor(String getterName) {
-        Class<T> sub = Instantiator.giveDynamicSubclass(
+    private Class<T> throwingGetterCreator(String getterName) {
+        return Instantiator.giveDynamicSubclass(
             type,
             getterName,
             builder ->
@@ -123,7 +121,6 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
                     .method(named(getterName))
                     .intercept(throwing(EqualsVerifierInternalBugException.class))
         );
-        return ClassAccessor.of(sub, prefabValues);
     }
 
     private void assertEntity(

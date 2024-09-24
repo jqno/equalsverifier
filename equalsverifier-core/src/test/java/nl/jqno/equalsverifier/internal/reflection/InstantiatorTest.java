@@ -17,51 +17,57 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClass;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ArrayContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Interface;
 import org.junit.jupiter.api.Test;
+import org.objenesis.Objenesis;
+import org.objenesis.ObjenesisStd;
 import org.w3c.dom.Element;
 
 public class InstantiatorTest {
 
+    private Objenesis objenesis = new ObjenesisStd();
+
     @Test
     public void instantiateClass() {
-        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
         Point p = instantiator.instantiate();
         assertEquals(Point.class, p.getClass());
     }
 
     @Test
     public void fieldsOfInstantiatedObjectHaveDefaultValues() {
-        ColorBlindColorPoint p = Instantiator.of(ColorBlindColorPoint.class).instantiate();
+        ColorBlindColorPoint p = Instantiator
+            .of(ColorBlindColorPoint.class, objenesis)
+            .instantiate();
         assertEquals(0, p.x);
         assertEquals(null, p.color);
     }
 
     @Test
     public void instantiateInterface() {
-        Instantiator<Interface> instantiator = Instantiator.of(Interface.class);
+        Instantiator<Interface> instantiator = Instantiator.of(Interface.class, objenesis);
         Interface i = instantiator.instantiate();
         assertTrue(Interface.class.isAssignableFrom(i.getClass()));
     }
 
     @Test
     public void instantiateFinalClass() {
-        Instantiator.of(FinalPoint.class);
+        Instantiator.of(FinalPoint.class, objenesis);
     }
 
     @Test
     public void instantiateArrayContainer() {
-        Instantiator.of(ArrayContainer.class);
+        Instantiator.of(ArrayContainer.class, objenesis);
     }
 
     @Test
     public void instantiateAbstractClass() {
-        Instantiator<AbstractClass> instantiator = Instantiator.of(AbstractClass.class);
+        Instantiator<AbstractClass> instantiator = Instantiator.of(AbstractClass.class, objenesis);
         AbstractClass ac = instantiator.instantiate();
         assertTrue(AbstractClass.class.isAssignableFrom(ac.getClass()));
     }
 
     @Test
     public void instantiateSubclass() {
-        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
         Point p = instantiator.instantiateAnonymousSubclass();
         assertFalse(p.getClass() == Point.class);
         assertTrue(Point.class.isAssignableFrom(p.getClass()));
@@ -70,26 +76,26 @@ public class InstantiatorTest {
     @Test
     public void instantiateAnNonToplevelClass() {
         class Something {}
-        Instantiator<Something> instantiator = Instantiator.of(Something.class);
+        Instantiator<Something> instantiator = Instantiator.of(Something.class, objenesis);
         instantiator.instantiateAnonymousSubclass();
     }
 
     @Test
     @SuppressWarnings("rawtypes")
     public void instantiateJavaApiClassWhichHasBootstrapClassLoader() {
-        Instantiator instantiator = Instantiator.of(List.class);
+        Instantiator instantiator = Instantiator.of(List.class, objenesis);
         instantiator.instantiateAnonymousSubclass();
     }
 
     @Test
     public void instantiateOrgW3cDomClassWhichHasBootstrapClassLoader() {
-        Instantiator<Element> instantiator = Instantiator.of(Element.class);
+        Instantiator<Element> instantiator = Instantiator.of(Element.class, objenesis);
         instantiator.instantiateAnonymousSubclass();
     }
 
     @Test
     public void instantiateTheSameSubclass() {
-        Instantiator<Point> instantiator = Instantiator.of(Point.class);
+        Instantiator<Point> instantiator = Instantiator.of(Point.class, objenesis);
         Class<?> expected = instantiator.instantiateAnonymousSubclass().getClass();
         Class<?> actual = instantiator.instantiateAnonymousSubclass().getClass();
         assertEquals(expected, actual);
