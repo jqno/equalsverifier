@@ -27,7 +27,7 @@ open module my.module {              // Note: open
 Note that this approach opens up the entire module for reflection. If you do not want this, even in your tests, you can be more precise in what you open up:
 
 {% highlight java %}
-open module my.module {
+module my.module {
     exports my.module;
     opens my.module.package.model;   // Open model package
 
