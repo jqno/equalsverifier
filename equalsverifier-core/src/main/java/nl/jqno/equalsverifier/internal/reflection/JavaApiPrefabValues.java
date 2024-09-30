@@ -327,23 +327,28 @@ public final class JavaApiPrefabValues {
     private void addUncommonClasses() {
         addFactory(ThreadLocal.class, simple(a -> ThreadLocal.withInitial(() -> a), null));
 
+        // Constructing java.sql.* classes reflectively, because they reside in a different module
+        // which causes trouble when running EqualsVerifier on the modulepath.
+        ConditionalInstantiator sqlDate = new ConditionalInstantiator("java.sql.Date");
+        ConditionalInstantiator sqlTime = new ConditionalInstantiator("java.sql.Time");
+        ConditionalInstantiator sqlTimestamp = new ConditionalInstantiator("java.sql.Timestamp");
         addValues(
-            java.sql.Date.class,
-            new java.sql.Date(1337),
-            new java.sql.Date(42),
-            new java.sql.Date(1337)
+            sqlDate.resolve(),
+            sqlDate.instantiate(classes(long.class), objects(1337)),
+            sqlDate.instantiate(classes(long.class), objects(42)),
+            sqlDate.instantiate(classes(long.class), objects(1337))
         );
         addValues(
-            java.sql.Time.class,
-            new java.sql.Time(1337),
-            new java.sql.Time(42),
-            new java.sql.Time(1337)
+            sqlTime.resolve(),
+            sqlTime.instantiate(classes(long.class), objects(1337)),
+            sqlTime.instantiate(classes(long.class), objects(42)),
+            sqlTime.instantiate(classes(long.class), objects(1337))
         );
         addValues(
-            java.sql.Timestamp.class,
-            new java.sql.Timestamp(1337),
-            new java.sql.Timestamp(42),
-            new java.sql.Timestamp(1337)
+            sqlTimestamp.resolve(),
+            sqlTimestamp.instantiate(classes(long.class), objects(1337)),
+            sqlTimestamp.instantiate(classes(long.class), objects(42)),
+            sqlTimestamp.instantiate(classes(long.class), objects(1337))
         );
 
         addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
