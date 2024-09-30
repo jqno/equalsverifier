@@ -14,7 +14,7 @@ public class InstanceCreator<T> {
 
     private final Class<T> type;
     private final ClassProbe<T> probe;
-    private final Objenesis objenesis;
+    private final Instantiator<T> instantiator;
 
     /**
      * Constructor.
@@ -25,7 +25,7 @@ public class InstanceCreator<T> {
     public InstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
         this.type = probe.getType();
         this.probe = probe;
-        this.objenesis = objenesis;
+        this.instantiator = Instantiator.of(type, objenesis);
     }
 
     /**
@@ -64,7 +64,7 @@ public class InstanceCreator<T> {
     }
 
     private T createClassInstance(Map<Field, Object> values) {
-        T instance = Instantiator.of(type, objenesis).instantiate();
+        T instance = instantiator.instantiate();
         traverseFields(
             values,
             (f, v) -> new FieldMutator(FieldProbe.of(f)).setNewValue(instance, v)

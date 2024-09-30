@@ -14,6 +14,7 @@ import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
 import org.objenesis.Objenesis;
+import org.objenesis.instantiator.ObjectInstantiator;
 
 /**
  * Instantiates objects of a given class.
@@ -34,11 +35,13 @@ public final class Instantiator<T> {
 
     private final Class<T> type;
     private final Objenesis objenesis;
+    private final ObjectInstantiator<T> objenesisInstantiator;
 
     /** Private constructor. Call {@link #of(Class)} to instantiate. */
     private Instantiator(Class<T> type, Objenesis objenesis) {
         this.type = type;
         this.objenesis = objenesis;
+        this.objenesisInstantiator = objenesis.getInstantiatorOf(type);
     }
 
     /**
@@ -69,7 +72,7 @@ public final class Instantiator<T> {
      * @return An object of type T.
      */
     public T instantiate() {
-        return objenesis.newInstance(type);
+        return objenesisInstantiator.newInstance();
     }
 
     /**

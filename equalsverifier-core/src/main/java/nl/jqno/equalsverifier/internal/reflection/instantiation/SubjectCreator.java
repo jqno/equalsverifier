@@ -23,6 +23,7 @@ public class SubjectCreator<T> {
     private final ClassProbe<T> classProbe;
     private final FieldCache fieldCache;
     private final Objenesis objenesis;
+    private final InstanceCreator<T> instanceCreator;
 
     /**
      * Constructor.
@@ -46,6 +47,7 @@ public class SubjectCreator<T> {
         this.classProbe = new ClassProbe<>(type);
         this.fieldCache = fieldCache;
         this.objenesis = objenesis;
+        this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
     }
 
     /**
@@ -165,7 +167,6 @@ public class SubjectCreator<T> {
      * @return A copy of the given original.
      */
     public T copy(T original) {
-        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe, objenesis);
         return Rethrow.rethrow(() -> instanceCreator.copy(original));
     }
 
@@ -202,7 +203,6 @@ public class SubjectCreator<T> {
 
     private T createInstance(Map<Field, Object> givens) {
         Map<Field, Object> values = determineValues(givens);
-        InstanceCreator<T> instanceCreator = new InstanceCreator<>(classProbe, objenesis);
         return Rethrow.rethrow(() -> instanceCreator.instantiate(values));
     }
 
