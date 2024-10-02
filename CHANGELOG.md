@@ -17,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Instantiates `java.sql.Date` only when available, so EqualsVerifier no longer throws `NoClassDefFoundError` when it's not available. ([Issue 746](https://github.com/jqno/equalsverifier/issues/746))
+- Instantiates `java.sql.Date` only when available, so EqualsVerifier no longer throws `NoClassDefFoundError` when it's not available (for instance, when running EqualsVerifier standalone instead of as part of a test suite). ([Issue 746](https://github.com/jqno/equalsverifier/issues/746))
 
 ## [3.17] - 2024-09-24
 
