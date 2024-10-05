@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.util.Map;
 import java.util.Objects;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
@@ -24,6 +25,7 @@ public class MapEntryHashCodeRequirementChecker<T> implements Checker {
         if (Map.Entry.class.isAssignableFrom(config.getType())) {
             Map.Entry<?, ?> e = valueProvider
                 .<Map.Entry<?, ?>>provide(config.getTypeTag())
+                .orElseThrow(() -> new NoValueException(config.getTypeTag()))
                 .getRed();
 
             int expectedHashCode = Objects.hashCode(e.getKey()) ^ Objects.hashCode(e.getValue());

@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
@@ -82,7 +83,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         TypeTag tag = TypeTag.of(field, typeTag);
         Tuple<?> tuple = prefabbedFields.contains(fieldName)
             ? fieldCache.get(fieldName)
-            : valueProvider.provide(tag);
+            : valueProvider.provide(tag).orElseThrow(() -> new NoValueException(tag));
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
         Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());

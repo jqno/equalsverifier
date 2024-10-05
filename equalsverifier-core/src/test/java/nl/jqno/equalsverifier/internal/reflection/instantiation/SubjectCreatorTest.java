@@ -5,9 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Optional;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,9 +51,6 @@ public class SubjectCreatorTest {
         fieldI = SomeClass.class.getDeclaredField("i");
         fieldS = SomeClass.class.getDeclaredField("s");
     }
-
-    @Test
-    public void sanity() {}
 
     @Test
     public void plain() {
@@ -194,16 +194,36 @@ public class SubjectCreatorTest {
         assertEquals(SomeSub.class, actual.getClass());
     }
 
+    @Test
+    public void noValueFound() {
+        sut = new SubjectCreator<>(config, new NoValueProvider(), fieldCache, objenesis);
+
+        ExpectedException
+            .when(() -> sut.plain())
+            .assertThrows(NoValueException.class)
+            .assertDescriptionContains("int");
+
+        assertEquals(expected, actual);
+    }
+
     static class SubjectCreatorTestValueProvider implements ValueProvider {
 
-        public <T> Tuple<T> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
             if (int.class.equals(tag.getType())) {
-                return Tuple.of(I_RED, I_BLUE, I_RED);
+                return Optional.of(Tuple.of(I_RED, I_BLUE, I_RED));
             }
             if (String.class.equals(tag.getType())) {
-                return Tuple.of(S_RED, S_BLUE, new String(S_RED));
+                return Optional.of(Tuple.of(S_RED, S_BLUE, new String(S_RED)));
             }
-            throw new IllegalStateException();
+            return Optional.empty();
+        }
+    }
+
+    static class NoValueProvider implements ValueProvider {
+
+        @Override
+        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+            return Optional.empty();
         }
     }
 

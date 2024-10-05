@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -18,7 +19,8 @@ public interface ValueProvider {
      *
      * @param <T> The returned tuple will have this generic type.
      * @param tag A description of the desired type, including generic parameters.
-     * @return A tuple of two different values of the given type.
+     * @return A tuple of two different values of the given type, or an empty Optional if none
+     *      could be found.
      */
-    <T> Tuple<T> provide(TypeTag tag);
+    <T> Optional<Tuple<T>> provide(TypeTag tag);
 }

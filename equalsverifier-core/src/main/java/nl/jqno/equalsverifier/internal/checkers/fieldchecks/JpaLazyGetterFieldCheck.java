@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
@@ -67,8 +68,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
             classProbe.hasMethod(getterName)
         );
 
-        Class<T> sub = throwingGetterCreator(getterName);
-        Tuple<T> tuple = valueProvider.<T>provide(new TypeTag(sub));
+        TypeTag sub = new TypeTag(throwingGetterCreator(getterName));
+        Tuple<T> tuple = valueProvider.<T>provide(sub).orElseThrow(() -> new NoValueException(sub));
         T red1 = tuple.getRed();
         T red2 = tuple.getRedCopy();
 
