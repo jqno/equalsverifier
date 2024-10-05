@@ -2,9 +2,7 @@ package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.*;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
 import org.objenesis.Objenesis;
 
 public final class Context<T> {
@@ -33,7 +31,8 @@ public final class Context<T> {
         this.fieldCache = fieldCache;
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        this.valueProvider = new VintageValueProvider(cache, objenesis);
+        ValueProvider vintage = new VintageValueProvider(cache, objenesis);
+        this.valueProvider = new ChainedValueProvider(vintage);
         this.subjectCreator =
             new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
     }

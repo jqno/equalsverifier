@@ -14,7 +14,7 @@ import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
 /**
- * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
+ * Provider of prefabricated instances of classes, using a "vintage" strategy for doing so.
  *
  * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been
  * using since its inception. This strategy is quite hacky and messy, and other strategies might
