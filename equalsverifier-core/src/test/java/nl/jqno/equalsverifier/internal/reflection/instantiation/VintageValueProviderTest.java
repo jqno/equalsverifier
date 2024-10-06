@@ -46,11 +46,8 @@ public class VintageValueProviderTest {
 
     @Test
     public void provide() {
-        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
-        assertEquals(
-            Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)),
-            actual.get()
-        );
+        Tuple<Point> actual = vp.provide(POINT_TAG);
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 
     @Test
@@ -248,7 +245,6 @@ public class VintageValueProviderTest {
         int regularInt = 3;
     }
 
-    @SuppressWarnings("unused")
     public static class Lazy {
 
         public static final Lazy X = new Lazy(1);

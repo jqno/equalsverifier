@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -42,10 +41,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
-            String red = valueProvider
-                .<String>provide(string)
-                .orElseThrow(() -> new NoValueException(string))
-                .getRed();
+            String red = valueProvider.<String>provide(string).getRed();
 
             final T reference;
             final T copy;

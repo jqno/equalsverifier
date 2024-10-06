@@ -23,10 +23,10 @@ public class ChainedValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
         return providers
             .stream()
-            .map(vp -> vp.<T>provide(tag))
+            .map(vp -> vp.<T>provide(tag, label))
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.empty());

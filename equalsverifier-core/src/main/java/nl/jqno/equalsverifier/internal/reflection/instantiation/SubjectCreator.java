@@ -247,7 +247,7 @@ public class SubjectCreator<T> {
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
             Tuple<?> tuple = valueProvider
-                .provide(fieldTag)
+                .provide(fieldTag, fieldName)
                 .orElseThrow(() -> new NoValueException(fieldTag));
             fieldCache.put(fieldName, tuple);
             return tuple;

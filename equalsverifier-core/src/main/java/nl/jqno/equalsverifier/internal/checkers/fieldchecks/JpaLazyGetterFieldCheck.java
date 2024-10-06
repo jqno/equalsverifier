@@ -9,12 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
@@ -69,7 +64,7 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         );
 
         TypeTag sub = new TypeTag(throwingGetterCreator(getterName));
-        Tuple<T> tuple = valueProvider.<T>provide(sub).orElseThrow(() -> new NoValueException(sub));
+        Tuple<T> tuple = valueProvider.provide(sub);
         T red1 = tuple.getRed();
         T red2 = tuple.getRedCopy();
 

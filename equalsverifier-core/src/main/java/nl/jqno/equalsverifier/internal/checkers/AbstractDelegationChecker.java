@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -75,7 +74,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private <U> Tuple<U> safelyGetTuple(TypeTag tag) {
         try {
-            return valueProvider.<U>provide(tag).orElseThrow(() -> new NoValueException(tag));
+            return valueProvider.provide(tag);
         } catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.
             return null;

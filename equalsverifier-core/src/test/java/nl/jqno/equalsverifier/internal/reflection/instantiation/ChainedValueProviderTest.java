@@ -3,8 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 public class ChainedValueProviderTest {
@@ -29,19 +31,28 @@ public class ChainedValueProviderTest {
     @Test
     public void returnsValueIfMatch() {
         sut = new ChainedValueProvider(intProvider);
-        assertEquals(1, sut.provide(INT).get().getRed());
+        assertEquals(1, sut.provide(INT).getRed());
     }
 
     @Test
     public void returnsEmptyIfNoMatch() {
         sut = new ChainedValueProvider(stringProvider);
-        assertEquals(Optional.empty(), sut.provide(INT));
+        assertEquals(Optional.empty(), sut.provide(INT, null));
+    }
+
+    @Test
+    public void throwsExceptionIfNoMatch() {
+        sut = new ChainedValueProvider(stringProvider);
+        ExpectedException
+            .when(() -> sut.provide(INT))
+            .assertThrows(NoValueException.class)
+            .assertDescriptionContains("Could not find a value for int");
     }
 
     @Test
     public void skipsNonMatchingValue() {
         sut = new ChainedValueProvider(stringProvider, intProvider);
-        assertEquals(1, sut.provide(INT).get().getRed());
+        assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, stringProvider.called);
         assertEquals(1, intProvider.called);
     }
@@ -55,7 +66,7 @@ public class ChainedValueProviderTest {
             1
         );
         sut = new ChainedValueProvider(intProvider, anotherIntProvider);
-        assertEquals(1, sut.provide(INT).get().getRed());
+        assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, intProvider.called);
         assertEquals(0, anotherIntProvider.called);
     }
@@ -73,7 +84,7 @@ public class ChainedValueProviderTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
             called++;
             if (tag.getType().equals(type)) {
                 return Optional.of((Tuple<T>) values);

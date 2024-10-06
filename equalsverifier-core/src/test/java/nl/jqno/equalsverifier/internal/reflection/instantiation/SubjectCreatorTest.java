@@ -208,7 +208,7 @@ public class SubjectCreatorTest {
 
     static class SubjectCreatorTestValueProvider implements ValueProvider {
 
-        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
             if (int.class.equals(tag.getType())) {
                 return Optional.of(Tuple.of(I_RED, I_BLUE, I_RED));
             }
@@ -222,7 +222,7 @@ public class SubjectCreatorTest {
     static class NoValueProvider implements ValueProvider {
 
         @Override
-        public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
             return Optional.empty();
         }
     }
