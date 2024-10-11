@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;
@@ -31,7 +31,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
-    private FieldCache fieldCache = new FieldCache();
+    private PrefabValueProvider prefabValueProvider = new PrefabValueProvider();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -121,7 +121,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(
+            prefabValueProvider,
+            factoryCache,
+            objenesis,
+            otherType,
+            red,
+            blue
+        );
         return this;
     }
 
@@ -143,7 +150,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         S red,
         S blue
     ) {
-        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
+        PrefabValuesApi.addPrefabValuesForField(
+            prefabValueProvider,
+            objenesis,
+            type,
+            fieldName,
+            red,
+            blue
+        );
         withNonnullFields(fieldName);
         return this;
     }
@@ -431,7 +445,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
+        Context<T> context = new Context<>(config, factoryCache, prefabValueProvider, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -450,7 +464,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields,
             allIncludedFields,
             nonnullFields,
-            fieldCache.getFieldNames(),
+            prefabValueProvider.getFieldNames(),
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
             redefinedSubclass,

@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
-import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -29,14 +28,8 @@ public class SubjectCreatorTest {
         SomeClass.class
     );
     private ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
-    private FieldCache fieldCache = new FieldCache();
     private Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(
-        config,
-        valueProvider,
-        fieldCache,
-        objenesis
-    );
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, objenesis);
 
     private Field fieldX;
     private Field fieldI;
@@ -196,7 +189,7 @@ public class SubjectCreatorTest {
 
     @Test
     public void noValueFound() {
-        sut = new SubjectCreator<>(config, new NoValueProvider(), fieldCache, objenesis);
+        sut = new SubjectCreator<>(config, new NoValueProvider(), objenesis);
 
         ExpectedException
             .when(() -> sut.plain())

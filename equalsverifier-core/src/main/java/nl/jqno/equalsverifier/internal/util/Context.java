@@ -10,7 +10,7 @@ public final class Context<T> {
     private final Class<T> type;
     private final Configuration<T> configuration;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache;
+    private final PrefabValueProvider prefabValueProvider;
 
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
@@ -22,19 +22,18 @@ public final class Context<T> {
     public Context(
         Configuration<T> configuration,
         FactoryCache factoryCache,
-        FieldCache fieldCache,
+        PrefabValueProvider prefabValueProvider,
         Objenesis objenesis
     ) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
-        this.fieldCache = fieldCache;
+        this.prefabValueProvider = prefabValueProvider;
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         ValueProvider vintage = new VintageValueProvider(cache, objenesis);
-        this.valueProvider = new ChainedValueProvider(vintage);
-        this.subjectCreator =
-            new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
+        this.valueProvider = new ChainedValueProvider(prefabValueProvider, vintage);
+        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 
     public Class<T> getType() {
@@ -50,8 +49,8 @@ public final class Context<T> {
     }
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "A cache is inherently mutable")
-    public FieldCache getFieldCache() {
-        return fieldCache;
+    public PrefabValueProvider getPrefabValueProvider() {
+        return prefabValueProvider;
     }
 
     @SuppressFBWarnings(

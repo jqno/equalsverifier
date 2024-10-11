@@ -31,14 +31,12 @@ public class SubjectCreator<T> {
      *
      * @param config A configuration object.
      * @param valueProvider To provide values for the fields of the subject.
-     * @param fieldCache Prepared values for the fields of the subject.
      * @param objenesis Needed by InstanceCreator to instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(
         Configuration<T> config,
         ValueProvider valueProvider,
-        FieldCache fieldCache,
         Objenesis objenesis
     ) {
         this.typeTag = config.getTypeTag();
@@ -46,7 +44,7 @@ public class SubjectCreator<T> {
         this.config = config;
         this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
-        this.fieldCache = fieldCache;
+        this.fieldCache = new FieldCache();
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
     }
