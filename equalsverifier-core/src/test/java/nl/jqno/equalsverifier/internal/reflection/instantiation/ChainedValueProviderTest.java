@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Optional;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -30,19 +30,19 @@ public class ChainedValueProviderTest {
 
     @Test
     public void returnsValueIfMatch() {
-        sut = new ChainedValueProvider(intProvider);
+        sut = new ChainedValueProvider(Arrays.asList(intProvider));
         assertEquals(1, sut.provide(INT).getRed());
     }
 
     @Test
     public void returnsEmptyIfNoMatch() {
-        sut = new ChainedValueProvider(stringProvider);
+        sut = new ChainedValueProvider(Arrays.asList(stringProvider));
         assertEquals(Optional.empty(), sut.provide(INT, null));
     }
 
     @Test
     public void throwsExceptionIfNoMatch() {
-        sut = new ChainedValueProvider(stringProvider);
+        sut = new ChainedValueProvider(Arrays.asList(stringProvider));
         ExpectedException
             .when(() -> sut.provide(INT))
             .assertThrows(NoValueException.class)
@@ -51,7 +51,7 @@ public class ChainedValueProviderTest {
 
     @Test
     public void skipsNonMatchingValue() {
-        sut = new ChainedValueProvider(stringProvider, intProvider);
+        sut = new ChainedValueProvider(Arrays.asList(stringProvider, intProvider));
         assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, stringProvider.called);
         assertEquals(1, intProvider.called);
@@ -65,10 +65,19 @@ public class ChainedValueProviderTest {
             2,
             1
         );
-        sut = new ChainedValueProvider(intProvider, anotherIntProvider);
+        sut = new ChainedValueProvider(Arrays.asList(intProvider, anotherIntProvider));
         assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, intProvider.called);
         assertEquals(0, anotherIntProvider.called);
+    }
+
+    @Test
+    public void makesDefensiveCopy() {
+        List<ValueProvider> providers = new ArrayList<>();
+        providers.add(stringProvider);
+        sut = new ChainedValueProvider(providers);
+        providers.add(intProvider);
+        assertEquals(Optional.empty(), sut.provide(INT, null));
     }
 
     static class SingleTypeValueProvider<X> implements ValueProvider {

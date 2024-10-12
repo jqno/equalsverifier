@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +75,11 @@ public class RecordObjectAccessorTest {
             .of(OtherThrowingConstructorRecord.class, objenesis)
             .instantiate();
 
-        VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);
+        VintageValueProvider vp = new VintageValueProvider(
+            EmptyValueProvider.INSTANCE,
+            JavaApiPrefabValues.build(),
+            objenesis
+        );
         ExpectedException
             .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)

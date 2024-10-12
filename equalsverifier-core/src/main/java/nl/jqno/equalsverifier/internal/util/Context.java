@@ -1,7 +1,11 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.*;
+import java.util.ArrayList;
+import java.util.List;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
 import org.objenesis.Objenesis;
 
@@ -30,9 +34,18 @@ public final class Context<T> {
         this.classProbe = new ClassProbe<>(configuration.getType());
         this.prefabValueProvider = prefabValueProvider;
 
+        List<ValueProvider> providers = new ArrayList<>();
+        providers.add(prefabValueProvider);
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        ValueProvider vintage = new VintageValueProvider(cache, objenesis);
-        this.valueProvider = new ChainedValueProvider(prefabValueProvider, vintage);
+        ValueProvider vintage = new VintageValueProvider(
+            new ChainedValueProvider(providers),
+            cache,
+            objenesis
+        );
+
+        providers.add(vintage);
+
+        this.valueProvider = new ChainedValueProvider(providers);
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 

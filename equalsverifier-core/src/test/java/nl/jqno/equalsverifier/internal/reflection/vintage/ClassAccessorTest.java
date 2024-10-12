@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
@@ -32,7 +33,8 @@ public class ClassAccessorTest {
         empty = new LinkedHashSet<>();
         objenesis = new ObjenesisStd();
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider =
+            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
     }
 
@@ -123,7 +125,8 @@ public class ClassAccessorTest {
             TwoStepNodeB.class,
             values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
-        valueProvider = new VintageValueProvider(factoryCache, objenesis);
+        valueProvider =
+            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
         ClassAccessor
             .of(TwoStepNodeA.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);

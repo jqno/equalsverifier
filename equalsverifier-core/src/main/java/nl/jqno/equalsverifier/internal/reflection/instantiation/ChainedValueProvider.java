@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -17,8 +17,8 @@ public class ChainedValueProvider implements ValueProvider {
      *
      * @param providers ValueProviders to delegate to when providing a value.
      */
-    public ChainedValueProvider(ValueProvider... providers) {
-        this.providers = Arrays.asList(providers);
+    public ChainedValueProvider(List<ValueProvider> providers) {
+        this.providers = new ArrayList<>(providers);
     }
 
     /** {@inheritDoc} */

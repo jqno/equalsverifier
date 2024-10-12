@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,7 +52,12 @@ public class SimpleGenericFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
+        valueProvider =
+            new VintageValueProvider(
+                EmptyValueProvider.INSTANCE,
+                JavaApiPrefabValues.build(),
+                new ObjenesisStd()
+            );
         redString = valueProvider.giveRed(STRING_TYPETAG);
         blueString = valueProvider.giveBlue(STRING_TYPETAG);
         redInt = valueProvider.giveRed(INTEGER_TYPETAG);

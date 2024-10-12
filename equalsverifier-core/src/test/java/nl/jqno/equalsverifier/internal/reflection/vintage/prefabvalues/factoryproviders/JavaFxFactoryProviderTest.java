@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,12 @@ public class JavaFxFactoryProviderTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
+        valueProvider =
+            new VintageValueProvider(
+                EmptyValueProvider.INSTANCE,
+                JavaApiPrefabValues.build(),
+                new ObjenesisStd()
+            );
     }
 
     @Test

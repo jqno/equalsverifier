@@ -25,17 +25,24 @@ public class VintageValueProvider implements ValueProvider {
     // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
     private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
 
+    private final ValueProvider valueProvider;
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
      *
+     * @param valueProvider Will be used to look up values before they are created.
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
+    public VintageValueProvider(
+        ValueProvider valueProvider,
+        FactoryCache factoryCache,
+        Objenesis objenesis
+    ) {
+        this.valueProvider = valueProvider;
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
@@ -165,6 +172,11 @@ public class VintageValueProvider implements ValueProvider {
     private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
         if (typeStack.contains(tag)) {
             throw new RecursionException(typeStack);
+        }
+
+        Optional<Tuple<T>> provided = valueProvider.provide(tag, null);
+        if (provided.isPresent()) {
+            return provided.get();
         }
 
         Class<T> type = tag.getType();
