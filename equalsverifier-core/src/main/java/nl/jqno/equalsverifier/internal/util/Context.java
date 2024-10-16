@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.ArrayList;
-import java.util.List;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
@@ -15,8 +13,8 @@ public final class Context<T> {
     private final Configuration<T> configuration;
     private final ClassProbe<T> classProbe;
 
-    private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
+    private final SubjectCreator<T> subjectCreator;
 
     @SuppressFBWarnings(
         value = "EI_EXPOSE_REP2",
@@ -32,19 +30,25 @@ public final class Context<T> {
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
 
-        List<ValueProvider> providers = new ArrayList<>();
-        providers.add(prefabValueProvider);
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        ValueProvider vintage = new VintageValueProvider(
-            new ChainedValueProvider(providers),
-            cache,
-            objenesis
-        );
-
-        providers.add(vintage);
-
-        this.valueProvider = new ChainedValueProvider(providers);
+        this.valueProvider = configureValueProviders(factoryCache, prefabValueProvider, objenesis);
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
+    }
+
+    private static ValueProvider configureValueProviders(
+        FactoryCache factoryCache,
+        PrefabValueProvider prefabValueProvider,
+        Objenesis objenesis
+    ) {
+        ChainedValueProvider mainChain = new ChainedValueProvider();
+        ChainedValueProvider vintageChain = new ChainedValueProvider();
+
+        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
+        ValueProvider vintage = new VintageValueProvider(vintageChain, cache, objenesis);
+
+        mainChain.register(prefabValueProvider, vintage);
+        vintageChain.register(prefabValueProvider);
+
+        return mainChain;
     }
 
     public Class<T> getType() {

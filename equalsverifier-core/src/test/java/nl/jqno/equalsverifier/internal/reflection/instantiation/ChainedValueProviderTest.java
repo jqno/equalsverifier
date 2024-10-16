@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.*;
+import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -26,23 +27,23 @@ public class ChainedValueProviderTest {
         "a"
     );
 
-    private ChainedValueProvider sut;
+    private ChainedValueProvider sut = new ChainedValueProvider();
 
     @Test
     public void returnsValueIfMatch() {
-        sut = new ChainedValueProvider(Arrays.asList(intProvider));
+        sut.register(intProvider);
         assertEquals(1, sut.provide(INT).getRed());
     }
 
     @Test
     public void returnsEmptyIfNoMatch() {
-        sut = new ChainedValueProvider(Arrays.asList(stringProvider));
+        sut.register(stringProvider);
         assertEquals(Optional.empty(), sut.provide(INT, null));
     }
 
     @Test
     public void throwsExceptionIfNoMatch() {
-        sut = new ChainedValueProvider(Arrays.asList(stringProvider));
+        sut.register(stringProvider);
         ExpectedException
             .when(() -> sut.provide(INT))
             .assertThrows(NoValueException.class)
@@ -51,7 +52,7 @@ public class ChainedValueProviderTest {
 
     @Test
     public void skipsNonMatchingValue() {
-        sut = new ChainedValueProvider(Arrays.asList(stringProvider, intProvider));
+        sut.register(stringProvider, intProvider);
         assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, stringProvider.called);
         assertEquals(1, intProvider.called);
@@ -65,7 +66,7 @@ public class ChainedValueProviderTest {
             2,
             1
         );
-        sut = new ChainedValueProvider(Arrays.asList(intProvider, anotherIntProvider));
+        sut.register(intProvider, anotherIntProvider);
         assertEquals(1, sut.provide(INT).getRed());
         assertEquals(1, intProvider.called);
         assertEquals(0, anotherIntProvider.called);
@@ -73,11 +74,19 @@ public class ChainedValueProviderTest {
 
     @Test
     public void makesDefensiveCopy() {
-        List<ValueProvider> providers = new ArrayList<>();
-        providers.add(stringProvider);
-        sut = new ChainedValueProvider(providers);
-        providers.add(intProvider);
+        ValueProvider[] providers = { stringProvider };
+        sut.register(providers);
+        providers[0] = intProvider;
         assertEquals(Optional.empty(), sut.provide(INT, null));
+    }
+
+    @Test
+    public void locksAfterFirstAssignment() {
+        sut.register(intProvider);
+        ExpectedException
+            .when(() -> sut.register(stringProvider))
+            .assertThrows(EqualsVerifierInternalBugException.class)
+            .assertMessageContains("Provider is locked");
     }
 
     static class SingleTypeValueProvider<X> implements ValueProvider {
