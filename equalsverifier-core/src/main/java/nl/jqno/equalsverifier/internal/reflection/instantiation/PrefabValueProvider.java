@@ -49,7 +49,7 @@ public class PrefabValueProvider implements ValueProvider {
      *      instance.
      * @param <T> The type of the instances.
      */
-    public <T> void register(Class<?> type, String label, T red, T blue, T redCopy) {
+    public <T> void register(Class<T> type, String label, T red, T blue, T redCopy) {
         Key key = new Key(type, label);
         Tuple<T> value = Tuple.of(red, blue, redCopy);
         cache.put(key, value);

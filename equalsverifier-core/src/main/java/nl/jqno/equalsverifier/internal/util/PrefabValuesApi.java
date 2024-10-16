@@ -50,10 +50,11 @@ public final class PrefabValuesApi {
         T red,
         T blue
     ) {
-        Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
+        Class<T> type = (Class<T>) red.getClass();
+
+        Validations.validateRedAndBluePrefabValues(type, red, blue);
         Validations.validateFieldTypeMatches(enclosingType, fieldName, red.getClass());
 
-        Class<?> type = red.getClass();
         if (type.isArray()) {
             provider.register(type, fieldName, red, blue, red);
         } else {
