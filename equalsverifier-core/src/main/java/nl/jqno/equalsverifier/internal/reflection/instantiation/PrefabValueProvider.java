@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -13,6 +12,28 @@ import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 public class PrefabValueProvider implements ValueProvider {
 
     private final Map<Key, Tuple<?>> cache = new HashMap<>();
+
+    /** Constructor. */
+    public PrefabValueProvider() {}
+
+    /**
+     * Private copy constructor.
+     *
+     * @param other The {@link GenericPrefabValueProvider} to copy.
+     */
+    private PrefabValueProvider(PrefabValueProvider other) {
+        this();
+        cache.putAll(other.cache);
+    }
+
+    /**
+     * Copies the cache of this PrefabValueProvider into a new instance.
+     *
+     * @return A copy of this PrefabValueProvider.
+     */
+    public PrefabValueProvider copy() {
+        return new PrefabValueProvider(this);
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -58,36 +79,4 @@ public class PrefabValueProvider implements ValueProvider {
     public Set<String> getFieldNames() {
         return cache.keySet().stream().map(k -> k.label).collect(Collectors.toSet());
     }
-
-    static final class Key {
-
-        private final Class<?> type;
-        private final String label;
-
-        private Key(Class<?> type, String label) {
-            this.type = type;
-            this.label = label;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Key)) {
-                return false;
-            }
-            Key other = (Key) obj;
-            return Objects.equals(type, other.type) && Objects.equals(label, other.label);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(type, label);
-        }
-
-        @Override
-        public String toString() {
-            return "Key: [" + type + "/" + label + "]";
-        }
-    }
-
-    static interface Value<T> extends Supplier<Tuple<T>> {}
 }

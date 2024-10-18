@@ -1,14 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.simple;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {
@@ -69,30 +68,22 @@ public final class PrefabValuesApi {
     }
 
     public static <T> void addGenericPrefabValues(
-        FactoryCache factoryCache,
+        GenericPrefabValueProvider provider,
         Class<T> otherType,
         Func1<?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 1);
+        Validations.validateGenericPrefabValues(otherType, 1);
+        provider.register(otherType, null, factory);
     }
 
     public static <T> void addGenericPrefabValues(
-        FactoryCache factoryCache,
+        GenericPrefabValueProvider provider,
         Class<T> otherType,
         Func2<?, ?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 2);
-    }
-
-    private static <T> void addGenericPrefabValueFactory(
-        FactoryCache factoryCache,
-        Class<T> otherType,
-        PrefabValueFactory<T> factory,
-        int arity
-    ) {
-        Validations.validateGenericPrefabValues(otherType, factory, arity);
-        factoryCache.put(otherType, factory);
+        Validations.validateGenericPrefabValues(otherType, 2);
+        provider.register(otherType, null, factory);
     }
 }

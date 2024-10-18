@@ -12,7 +12,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
 public final class Validations {
 
@@ -118,11 +117,7 @@ public final class Validations {
         }
     }
 
-    public static <T> void validateGenericPrefabValues(
-        Class<T> type,
-        PrefabValueFactory<T> factory,
-        int arity
-    ) {
+    public static <T> void validateGenericPrefabValues(Class<T> type, int arity) {
         validateNotNull(type, "type is null.");
 
         int n = type.getTypeParameters().length;

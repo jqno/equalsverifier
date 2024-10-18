@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
-import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
@@ -64,10 +63,12 @@ public class PrefabValueProviderTest {
     }
 
     @Test
-    public void keyEqualsAndHashCode() {
-        EqualsVerifier
-            .forClass(PrefabValueProvider.Key.class)
-            .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), new TypeTag(String.class))
-            .verify();
+    public void copy() {
+        sut.register(INT.getType(), "original", 1, 2, 1);
+        PrefabValueProvider anotherSut = sut.copy();
+        sut.register(INT.getType(), "invisibleToOther", 3, 4, 3);
+
+        assertEquals(Tuple.of(1, 2, 1), anotherSut.provide(INT, "original").get());
+        assertEquals(Optional.empty(), anotherSut.provide(INT, "invisibleToOther"));
     }
 }

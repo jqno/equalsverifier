@@ -24,19 +24,27 @@ public final class Context<T> {
         Configuration<T> configuration,
         FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
+        GenericPrefabValueProvider genericPrefabValueProvider,
         Objenesis objenesis
     ) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
 
-        this.valueProvider = configureValueProviders(factoryCache, prefabValueProvider, objenesis);
+        this.valueProvider =
+            configureValueProviders(
+                factoryCache,
+                prefabValueProvider,
+                genericPrefabValueProvider,
+                objenesis
+            );
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 
     private static ValueProvider configureValueProviders(
         FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
+        GenericPrefabValueProvider genericPrefabValueProvider,
         Objenesis objenesis
     ) {
         ChainedValueProvider mainChain = new ChainedValueProvider();
@@ -45,8 +53,9 @@ public final class Context<T> {
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         ValueProvider vintage = new VintageValueProvider(vintageChain, cache, objenesis);
 
-        mainChain.register(prefabValueProvider, vintage);
-        vintageChain.register(prefabValueProvider);
+        mainChain.register(prefabValueProvider, genericPrefabValueProvider, vintage);
+        vintageChain.register(prefabValueProvider, genericPrefabValueProvider);
+        genericPrefabValueProvider.setProvider(mainChain);
 
         return mainChain;
     }
