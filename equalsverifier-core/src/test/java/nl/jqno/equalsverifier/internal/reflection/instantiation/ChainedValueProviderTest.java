@@ -27,7 +27,8 @@ public class ChainedValueProviderTest {
         "a"
     );
 
-    private ChainedValueProvider sut = new ChainedValueProvider();
+    private final PrefabValueProvider prefab = new PrefabValueProvider();
+    private final ChainedValueProvider sut = new ChainedValueProvider(prefab);
 
     @Test
     public void returnsValueIfMatch() {
@@ -87,6 +88,20 @@ public class ChainedValueProviderTest {
             .when(() -> sut.register(stringProvider))
             .assertThrows(EqualsVerifierInternalBugException.class)
             .assertMessageContains("Provider is locked");
+    }
+
+    @Test
+    public void cachesWithoutLabelInPrefabValueProvider() {
+        sut.register(intProvider);
+        sut.provide(INT);
+        assertEquals(1, prefab.provide(INT).getRed());
+    }
+
+    @Test
+    public void cachesWithLabelInPrefabValueProvider() {
+        sut.register(intProvider);
+        sut.provide(INT, "label");
+        assertEquals(1, prefab.provide(INT, "label").get().getRed());
     }
 
     static class SingleTypeValueProvider<X> implements ValueProvider {

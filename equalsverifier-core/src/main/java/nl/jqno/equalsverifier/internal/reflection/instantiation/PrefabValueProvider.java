@@ -71,11 +71,29 @@ public class PrefabValueProvider implements ValueProvider {
      * @param <T> The type of the instances.
      */
     public <T> void register(Class<T> type, String label, T red, T blue, T redCopy) {
-        Key key = new Key(type, label);
-        Tuple<T> value = Tuple.of(red, blue, redCopy);
-        cache.put(key, value);
+        Tuple<T> tuple = Tuple.of(red, blue, redCopy);
+        register(type, label, tuple);
     }
 
+    /**
+     * Registers a prefab value.
+     *
+     * @param type The class of the prefabricated values.
+     * @param label The label that the prefabricated value is linked to, or null if the value is
+     *      not assigned to any label.
+     * @param tuple A tuple of instances of {@code T}.
+     * @param <T> The type of the instances.
+     */
+    public <T> void register(Class<T> type, String label, Tuple<T> tuple) {
+        Key key = new Key(type, label);
+        cache.put(key, tuple);
+    }
+
+    /**
+     * Returns the names of the fields for which a prefab value is currently known.
+     *
+     * @return The names of the fields for which a prefab value is currently known.
+     */
     public Set<String> getFieldNames() {
         return cache.keySet().stream().map(k -> k.label).collect(Collectors.toSet());
     }

@@ -22,7 +22,6 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
-    private final FieldCache fieldCache;
     private final Objenesis objenesis;
     private final InstanceCreator<T> instanceCreator;
 
@@ -44,7 +43,6 @@ public class SubjectCreator<T> {
         this.config = config;
         this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
-        this.fieldCache = new FieldCache();
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
     }
@@ -238,16 +236,11 @@ public class SubjectCreator<T> {
     }
 
     private Tuple<?> valuesFor(Field f) {
-        String fieldName = f.getName();
-        if (fieldCache.contains(fieldName)) {
-            return fieldCache.get(fieldName);
-        }
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
             Tuple<?> tuple = valueProvider
-                .provide(fieldTag, fieldName)
+                .provide(fieldTag, f.getName())
                 .orElseThrow(() -> new NoValueException(fieldTag));
-            fieldCache.put(fieldName, tuple);
             return tuple;
         } catch (ModuleException e) {
             throw new ModuleException(
