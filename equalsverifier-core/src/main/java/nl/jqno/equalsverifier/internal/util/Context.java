@@ -2,9 +2,9 @@ package nl.jqno.equalsverifier.internal.util;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import org.objenesis.Objenesis;
 
 public final class Context<T> {
@@ -22,7 +22,6 @@ public final class Context<T> {
     )
     public Context(
         Configuration<T> configuration,
-        FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
         GenericPrefabValueProvider genericPrefabValueProvider,
         Objenesis objenesis
@@ -31,9 +30,10 @@ public final class Context<T> {
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
 
+        FactoryCache cache = JavaApiPrefabValues.build();
         this.valueProvider =
             configureValueProviders(
-                factoryCache,
+                cache,
                 prefabValueProvider,
                 genericPrefabValueProvider,
                 objenesis
@@ -50,8 +50,7 @@ public final class Context<T> {
         ChainedValueProvider mainChain = new ChainedValueProvider();
         ChainedValueProvider vintageChain = new ChainedValueProvider();
 
-        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        ValueProvider vintage = new VintageValueProvider(vintageChain, cache, objenesis);
+        ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
 
         mainChain.register(prefabValueProvider, genericPrefabValueProvider, vintage);
         vintageChain.register(prefabValueProvider, genericPrefabValueProvider);

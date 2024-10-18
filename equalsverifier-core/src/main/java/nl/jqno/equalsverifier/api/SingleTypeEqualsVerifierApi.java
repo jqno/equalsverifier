@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.util.*;
@@ -32,7 +31,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
-    private FactoryCache factoryCache = new FactoryCache();
     private PrefabValueProvider prefabValueProvider = new PrefabValueProvider();
     private GenericPrefabValueProvider genericPrefabValueProvider =
         new GenericPrefabValueProvider();
@@ -73,7 +71,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
-     * @param factoryCache Factories that can be used to create values.
      * @param prefabValueProvider ValueProvider that records prefab values.
      * @param genericPrefabValueProvider ValueProvider that records generic prefab values.
      * @param objenesis To instantiate non-record classes.
@@ -85,11 +82,9 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         value = "EI_EXPOSE_REP2",
         justification = "GenericPrefabValueProvider has a mutable element"
     )
-    // CHECKSTYLE OFF: ParameterNumber
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
-        FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
         GenericPrefabValueProvider genericPrefabValueProvider,
         Objenesis objenesis,
@@ -98,14 +93,11 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     ) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
-        this.factoryCache = this.factoryCache.merge(factoryCache);
         this.prefabValueProvider = prefabValueProvider;
         this.genericPrefabValueProvider = genericPrefabValueProvider;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
-
-    // CHECKSTYLE ON: ParameterNumber
 
     /**
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object,
@@ -138,14 +130,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(
-            prefabValueProvider,
-            factoryCache,
-            objenesis,
-            otherType,
-            red,
-            blue
-        );
+        PrefabValuesApi.addPrefabValues(prefabValueProvider, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -464,7 +449,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Configuration<T> config = buildConfig();
         Context<T> context = new Context<>(
             config,
-            factoryCache,
             prefabValueProvider,
             genericPrefabValueProvider,
             objenesis
