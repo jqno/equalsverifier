@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import java.util.Optional;
+import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -14,11 +16,29 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
  */
 public interface ValueProvider {
     /**
-     * Returns a tuple of two different prefabricated values of the specified type.
+     * Returns a tuple of prefabricated values of the specified type, or, if none exists, returns
+     * an empty Optional.
      *
      * @param <T> The returned tuple will have this generic type.
      * @param tag A description of the desired type, including generic parameters.
-     * @return A tuple of two different values of the given type.
+     * @param label Returns only the value assigned to the given label, or if label is null,
+     *      returns the value that's not assigned to any label.
+     * @return A tuple of two different values of the given type, or an empty Optional if none
+     *      could be found.
      */
-    <T> Tuple<T> provide(TypeTag tag);
+    <T> Optional<Tuple<T>> provide(TypeTag tag, String label);
+
+    /**
+     * Returns a tuple of prefabricated values of the specified type, or, if none exists, throws a
+     * NoValueException.
+     *
+     * @param <T> The returned tuple will have this generic type.
+     * @param tag A description of the desired type, including generic parameters.
+     * @return A tuple of two different values of the given type, or an empty Optional if none
+     *      could be found.
+     * @throws NoValueException if no value could be found for the given tag.
+     */
+    default <T> Tuple<T> provide(TypeTag tag) {
+        return this.<T>provide(tag, null).orElseThrow(() -> new NoValueException(tag));
+    }
 }

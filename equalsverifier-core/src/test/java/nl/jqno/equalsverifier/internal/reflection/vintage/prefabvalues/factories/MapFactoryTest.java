@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,7 +50,12 @@ public class MapFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
+        valueProvider =
+            new VintageValueProvider(
+                EmptyValueProvider.INSTANCE,
+                JavaApiPrefabValues.build(),
+                new ObjenesisStd()
+            );
         red = valueProvider.giveRed(STRING_TYPETAG);
         blue = valueProvider.giveBlue(STRING_TYPETAG);
         redObject = valueProvider.giveRed(OBJECT_TYPETAG);

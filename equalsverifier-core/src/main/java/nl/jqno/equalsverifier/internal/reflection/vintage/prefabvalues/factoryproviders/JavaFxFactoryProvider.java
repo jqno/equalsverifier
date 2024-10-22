@@ -9,6 +9,7 @@ import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 

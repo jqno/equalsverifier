@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
@@ -23,7 +23,8 @@ public class RecordObjectAccessorScramblingTest {
     @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider = new VintageValueProvider(factoryCache, new ObjenesisStd());
+        valueProvider =
+            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, new ObjenesisStd());
     }
 
     @Test

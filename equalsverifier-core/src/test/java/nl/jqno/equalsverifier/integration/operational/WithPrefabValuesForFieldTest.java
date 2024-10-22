@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.Arrays;
 import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -157,6 +158,14 @@ public class WithPrefabValuesForFieldTest {
             .verify();
     }
 
+    @Test
+    public void succeed_whenPrefabForArrayIsOverridden() {
+        EqualsVerifier
+            .forClass(ThrowingArrayContainer.class)
+            .withPrefabValuesForField("field", new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 })
+            .verify();
+    }
+
     static final class SinglePrecondition {
 
         private final FinalPoint point;
@@ -237,6 +246,32 @@ public class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Objects.hash(date);
+        }
+    }
+
+    static final class ThrowingArrayContainer {
+
+        private final int[] field;
+
+        public ThrowingArrayContainer(int[] field) {
+            this.field = field;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ThrowingArrayContainer)) {
+                return false;
+            }
+            if (field != null && field.length == 1) {
+                throw new IllegalStateException("Don't use a built-in prefab value!");
+            }
+            ThrowingArrayContainer other = (ThrowingArrayContainer) obj;
+            return Arrays.equals(field, other.field);
+        }
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode(field);
         }
     }
 }

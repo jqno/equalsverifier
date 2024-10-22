@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
@@ -34,7 +34,8 @@ public class InPlaceObjectAccessorScramblingTest {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
-        valueProviderTest = new VintageValueProvider(factoryCache, objenesis);
+        valueProviderTest =
+            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
     }
 
     @Test

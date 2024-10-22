@@ -1,15 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.simple;
-import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
-
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.FieldCache;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {
@@ -17,7 +12,7 @@ public final class PrefabValuesApi {
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-        FactoryCache factoryCache,
+        PrefabValueProvider provider,
         Objenesis objenesis,
         Class<T> otherType,
         T red,
@@ -26,68 +21,62 @@ public final class PrefabValuesApi {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
-            factoryCache.put(otherType, values(red, blue, red));
+            provider.register(otherType, null, red, blue, red);
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                factoryCache.put(otherType, values(red, blue, redCopy));
+                provider.register(otherType, null, red, blue, redCopy);
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                factoryCache.put(otherType, values(red, blue, red));
+                provider.register(otherType, null, red, blue, red);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
-        FieldCache fieldCache,
+        PrefabValueProvider provider,
         Objenesis objenesis,
-        Class<?> type,
+        Class<?> enclosingType,
         String fieldName,
         T red,
         T blue
     ) {
-        Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
-        Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
+        Class<T> type = (Class<T>) red.getClass();
 
-        if (red.getClass().isArray()) {
-            fieldCache.put(fieldName, new Tuple<>(red, blue, red));
+        Validations.validateRedAndBluePrefabValues(type, red, blue);
+        Validations.validateFieldTypeMatches(enclosingType, fieldName, red.getClass());
+
+        if (type.isArray()) {
+            provider.register(type, fieldName, red, blue, red);
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
+                provider.register(type, fieldName, red, blue, redCopy);
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                fieldCache.put(fieldName, new Tuple<>(red, blue, red));
+                provider.register(type, fieldName, red, blue, red);
             }
         }
     }
 
     public static <T> void addGenericPrefabValues(
-        FactoryCache factoryCache,
+        GenericFactories factories,
         Class<T> otherType,
         Func1<?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 1);
+        Validations.validateGenericPrefabValues(otherType, 1);
+        factories.register(otherType, factory);
     }
 
     public static <T> void addGenericPrefabValues(
-        FactoryCache factoryCache,
+        GenericFactories factories,
         Class<T> otherType,
         Func2<?, ?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
-        addGenericPrefabValueFactory(factoryCache, otherType, simple(factory, null), 2);
-    }
-
-    private static <T> void addGenericPrefabValueFactory(
-        FactoryCache factoryCache,
-        Class<T> otherType,
-        PrefabValueFactory<T> factory,
-        int arity
-    ) {
-        Validations.validateGenericPrefabValues(otherType, factory, arity);
-        factoryCache.put(otherType, factory);
+        Validations.validateGenericPrefabValues(otherType, 2);
+        factories.register(otherType, factory);
     }
 }

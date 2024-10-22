@@ -5,7 +5,6 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import nl.jqno.equalsverifier.internal.reflection.FactoryCacheTest;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProviderCreatorTest;
@@ -15,7 +14,6 @@ import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
-import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -29,8 +27,6 @@ public final class ArchitectureTest {
             PrefabValuesApi.class,
             JavaApiPrefabValues.class,
             // 👇 Test classes
-            FactoryCacheFactory.class,
-            FactoryCacheTest.class,
             VintageValueProviderTest.class,
             VintageValueProviderCreatorTest.class
         )
