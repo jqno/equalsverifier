@@ -7,70 +7,71 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.util.Context;
 
+/**
+ * Provider of instances of generic types; factories of which have been provided by the user.
+ *
+ * Needs to be constructed by means of a GenericFactories instance, because of dependencies that
+ * would otherwise be cyclic, in the {@link Context} class.
+ */
 public class GenericPrefabValueProvider implements ValueProvider {
 
-    private final Map<Key, Func<?>> cache = new HashMap<>();
-    private ValueProvider provider;
-
-    /** Constructor. */
-    public GenericPrefabValueProvider() {}
+    private final Map<Key, Func<?>> cache;
+    private final ValueProvider provider;
 
     /**
-     * Private copy constructor.
+     * Private constructor.
      *
-     * @param other The {@link GenericPrefabValueProvider} to copy.
+     * @param factories The {@link GenericFactories} to use the cache from.
+     * @param provider A ValueProvider to use to provide instances for generic type parameters.
      */
-    private GenericPrefabValueProvider(GenericPrefabValueProvider other) {
-        this();
-        cache.putAll(other.cache);
-        setProvider(other.provider);
+    public GenericPrefabValueProvider(GenericFactories factories, ValueProvider provider) {
+        this.cache = factories.cache;
+        this.provider = provider;
     }
 
     /**
-     * Copies the cache of this GenericPrefabValueProvider into a new instance.
-     *
-     * @return A copy of this GenericPrefabValueProvider.
+     * Container for a cache that will be assigned to the GenericPrefabValueProvider when it is constructed.
      */
-    public GenericPrefabValueProvider copy() {
-        return new GenericPrefabValueProvider(this);
-    }
+    public static class GenericFactories {
 
-    /**
-     * Registers a prefab value with a single generic type argument.
-     *
-     * @param type The class of the prefabricated values.
-     * @param label The label that the prefabricated value is linked to, or null if the value is
-     *      not assigned to any label.
-     * @param factory A factory that can produce instances for {@code type}.
-     * @param <T> The type of the instances.
-     */
-    public <T> void register(Class<T> type, String label, Func1<?, T> factory) {
-        Key key = new Key(type, label);
-        cache.put(key, factory);
-    }
+        private final Map<Key, Func<?>> cache = new HashMap<>();
 
-    /**
-     * Registers a prefab value with two generic type arguments.
-     *
-     * @param type The class of the prefabricated values.
-     * @param label The label that the prefabricated value is linked to, or null if the value is
-     *      not assigned to any label.
-     * @param factory A factory that can produce instances for {@code type}.
-     * @param <T> The type of the instances.
-     */
-    public <T> void register(Class<T> type, String label, Func2<?, ?, T> factory) {
-        Key key = new Key(type, label);
-        cache.put(key, factory);
-    }
+        /**
+         * Registers a prefab value with a single generic type argument.
+         *
+         * @param type The class of the prefabricated values.
+         * @param factory A factory that can produce instances for {@code type}.
+         * @param <T> The type of the instances.
+         */
+        public <T> void register(Class<T> type, Func1<?, T> factory) {
+            Key key = new Key(type, null);
+            cache.put(key, factory);
+        }
 
-    /**
-     * Configures the valueProvider to be used for recursive value lookups.
-     *
-     * @param valueProvider The valueProvider to use.
-     */
-    public void setProvider(ValueProvider valueProvider) {
-        this.provider = valueProvider;
+        /**
+         * Registers a prefab value with two generic type arguments.
+         *
+         * @param type The class of the prefabricated values.
+         * @param factory A factory that can produce instances for {@code type}.
+         * @param <T> The type of the instances.
+         */
+        public <T> void register(Class<T> type, Func2<?, ?, T> factory) {
+            Key key = new Key(type, null);
+            cache.put(key, factory);
+        }
+
+        /**
+         * Copies the cache of this GenericFactories into a new instance.
+         *
+         * @return A copy of this GenericFactories.
+         */
+        public GenericFactories copy() {
+            GenericFactories copy = new GenericFactories();
+            copy.cache.putAll(this.cache);
+            return copy;
+        }
     }
 
     /** {@inheritDoc} */

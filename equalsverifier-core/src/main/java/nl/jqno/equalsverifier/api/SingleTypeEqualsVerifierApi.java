@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.api;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -10,7 +9,7 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -32,8 +31,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private PrefabValueProvider prefabValueProvider = new PrefabValueProvider();
-    private GenericPrefabValueProvider genericPrefabValueProvider =
-        new GenericPrefabValueProvider();
+    private GenericFactories genericFactories = new GenericFactories();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -72,21 +70,17 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param prefabValueProvider ValueProvider that records prefab values.
-     * @param genericPrefabValueProvider ValueProvider that records generic prefab values.
+     * @param genericFactories ValueProvider that records generic prefab values.
      * @param objenesis To instantiate non-record classes.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
      * @param converter A function that converts from field name to getter name.
      */
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "GenericPrefabValueProvider has a mutable element"
-    )
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         PrefabValueProvider prefabValueProvider,
-        GenericPrefabValueProvider genericPrefabValueProvider,
+        GenericFactories genericFactories,
         Objenesis objenesis,
         boolean usingGetClass,
         Function<String, String> converter
@@ -94,7 +88,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.prefabValueProvider = prefabValueProvider;
-        this.genericPrefabValueProvider = genericPrefabValueProvider;
+        this.genericFactories = genericFactories;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
@@ -170,7 +164,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<S> otherType,
         Func1<?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericPrefabValueProvider, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
         return this;
     }
 
@@ -180,7 +174,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<S> otherType,
         Func2<?, ?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericPrefabValueProvider, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
         return this;
     }
 
@@ -450,7 +444,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Context<T> context = new Context<>(
             config,
             prefabValueProvider,
-            genericPrefabValueProvider,
+            genericFactories,
             objenesis
         );
         Validations.validateProcessedAnnotations(

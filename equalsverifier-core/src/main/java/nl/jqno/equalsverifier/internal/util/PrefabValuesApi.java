@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import org.objenesis.Objenesis;
@@ -61,22 +61,22 @@ public final class PrefabValuesApi {
     }
 
     public static <T> void addGenericPrefabValues(
-        GenericPrefabValueProvider provider,
+        GenericFactories factories,
         Class<T> otherType,
         Func1<?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
         Validations.validateGenericPrefabValues(otherType, 1);
-        provider.register(otherType, null, factory);
+        factories.register(otherType, factory);
     }
 
     public static <T> void addGenericPrefabValues(
-        GenericPrefabValueProvider provider,
+        GenericFactories factories,
         Class<T> otherType,
         Func2<?, ?, T> factory
     ) {
         Validations.validateNotNull(factory, "factory is null.");
         Validations.validateGenericPrefabValues(otherType, 2);
-        provider.register(otherType, null, factory);
+        factories.register(otherType, factory);
     }
 }

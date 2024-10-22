@@ -4,6 +4,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import org.objenesis.Objenesis;
 
@@ -23,7 +24,7 @@ public final class Context<T> {
     public Context(
         Configuration<T> configuration,
         PrefabValueProvider prefabValueProvider,
-        GenericPrefabValueProvider genericPrefabValueProvider,
+        GenericFactories genericFactories,
         Objenesis objenesis
     ) {
         this.type = configuration.getType();
@@ -32,29 +33,24 @@ public final class Context<T> {
 
         FactoryCache cache = JavaApiPrefabValues.build();
         this.valueProvider =
-            configureValueProviders(
-                cache,
-                prefabValueProvider,
-                genericPrefabValueProvider,
-                objenesis
-            );
+            configureValueProviders(cache, prefabValueProvider, genericFactories, objenesis);
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 
     private static ValueProvider configureValueProviders(
         FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
-        GenericPrefabValueProvider genericPrefabValueProvider,
+        GenericFactories genericFactories,
         Objenesis objenesis
     ) {
         ChainedValueProvider mainChain = new ChainedValueProvider(prefabValueProvider);
         ChainedValueProvider vintageChain = new ChainedValueProvider(prefabValueProvider);
 
         ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
+        ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
 
-        mainChain.register(genericPrefabValueProvider, vintage);
-        vintageChain.register(genericPrefabValueProvider);
-        genericPrefabValueProvider.setProvider(mainChain);
+        mainChain.register(genericPrefab, vintage);
+        vintageChain.register(genericPrefab);
 
         return mainChain;
     }
