@@ -38,7 +38,7 @@ public class FallbackFactoryTest {
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
         valueProvider =
-            new VintageValueProvider(TestValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProvider.EMPTY_INSTANCE, factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
     }
 

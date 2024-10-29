@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 public class TupleTest {
 
-    private Tuple<String> tuple = new Tuple<>("red", "blue", new String("red"));
+    private Tuple<String> tuple = Tuple.of("red", "blue", new String("red"));
 
     @Test
     public void equalsAndHashCode() {
@@ -35,5 +35,17 @@ public class TupleTest {
     public void redAndRedCopyInvariant() {
         assertEquals(tuple.getRed(), tuple.getRedCopy());
         assertNotSame(tuple.getRed(), tuple.getRedCopy());
+    }
+
+    @Test
+    public void map() {
+        assertEquals(Tuple.of("redx", "bluex", "redx"), tuple.map(s -> s + "x"));
+    }
+
+    @Test
+    public void combine() {
+        Tuple<Integer> ints = Tuple.of(2, 3, 2);
+        Tuple<String> actual = Tuple.combine(tuple, ints, (s, n) -> s + n);
+        assertEquals(Tuple.of("red2", "blue3", "red2"), actual);
     }
 }
