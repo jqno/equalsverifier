@@ -47,11 +47,12 @@ public final class Context<T> {
         ChainedValueProvider vintageChain = new ChainedValueProvider(prefabValueProvider);
 
         ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
-        ValueProvider array = new ArrayValueProvider(mainChain);
+        ValueProvider arrays = new ArrayValueProvider(mainChain);
+        ValueProvider enums = new EnumValueProvider();
         ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
 
-        mainChain.register(genericPrefab, array, vintage);
-        vintageChain.register(genericPrefab, array);
+        mainChain.register(genericPrefab, arrays, enums, vintage);
+        vintageChain.register(genericPrefab, arrays, enums);
 
         return mainChain;
     }

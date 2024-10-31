@@ -2,7 +2,9 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
@@ -52,5 +54,13 @@ public class ArrayValueProviderTest {
             () -> assertArrayEquals(expected.getBlue(), actual.getBlue()),
             () -> assertArrayEquals(expected.getRedCopy(), actual.getRedCopy())
         );
+    }
+
+    @Test
+    public void noArray() {
+        TypeTag tag = new TypeTag(Object.class);
+        Optional<Tuple<Object>> actual = sut.provide(tag, null);
+
+        assertEquals(Optional.empty(), actual);
     }
 }

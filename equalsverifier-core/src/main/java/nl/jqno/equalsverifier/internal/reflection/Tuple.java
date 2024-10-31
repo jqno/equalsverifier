@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -74,17 +75,17 @@ public final class Tuple<T> {
             return false;
         }
         Tuple<?> other = (Tuple<?>) obj;
-        return red.equals(other.red) && blue.equals(other.blue) && redCopy.equals(other.redCopy);
+        return (
+            Objects.equals(red, other.red) &&
+            Objects.equals(blue, other.blue) &&
+            Objects.equals(redCopy, other.redCopy)
+        );
     }
 
     /** {@inheritDoc} */
     @Override
     public int hashCode() {
-        int result = 37;
-        result = (59 * result) + red.hashCode();
-        result = (59 * result) + blue.hashCode();
-        result = (59 * result) + redCopy.hashCode();
-        return result;
+        return Objects.hash(red, blue, redCopy);
     }
 
     /** {@inheritDoc} */
