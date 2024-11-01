@@ -5,9 +5,7 @@ import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
@@ -45,6 +43,9 @@ public final class TestValueProviders {
     }
 
     public static VintageValueProvider vintage(PrefabValueProvider prefabs, Objenesis objenesis) {
-        return new VintageValueProvider(prefabs, JavaApiPrefabValues.build(), objenesis);
+        ChainedValueProvider chain = new ChainedValueProvider(prefabs);
+        ValueProvider builtin = new BuiltinValueProvider();
+        chain.register(builtin);
+        return new VintageValueProvider(chain, JavaApiPrefabValues.build(), objenesis);
     }
 }
