@@ -1,15 +1,15 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.LinkedHashSet;
-import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
@@ -23,7 +23,7 @@ public class ClassAccessorTest {
 
     private LinkedHashSet<TypeTag> empty;
     private Objenesis objenesis;
-    private FactoryCache factoryCache;
+    private PrefabValueProvider prefabs;
     private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
 
@@ -31,9 +31,8 @@ public class ClassAccessorTest {
     public void setup() {
         empty = new LinkedHashSet<>();
         objenesis = new ObjenesisStd();
-        factoryCache = JavaApiPrefabValues.build();
-        valueProvider =
-            new VintageValueProvider(TestValueProvider.INSTANCE, factoryCache, objenesis);
+        prefabs = new PrefabValueProvider();
+        valueProvider = TestValueProviders.vintage(prefabs, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
     }
 
@@ -120,12 +119,11 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
-        factoryCache.put(
+        prefabs.register(
             TwoStepNodeB.class,
-            values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
+            null,
+            Tuple.of(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
-        valueProvider =
-            new VintageValueProvider(TestValueProvider.INSTANCE, factoryCache, objenesis);
         ClassAccessor
             .of(TwoStepNodeA.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);

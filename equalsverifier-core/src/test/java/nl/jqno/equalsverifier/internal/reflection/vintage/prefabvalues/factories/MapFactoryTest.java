@@ -5,15 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.objenesis.ObjenesisStd;
 
 @SuppressWarnings("rawtypes")
 public class MapFactoryTest {
@@ -50,12 +48,7 @@ public class MapFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider =
-            new VintageValueProvider(
-                TestValueProvider.INSTANCE,
-                JavaApiPrefabValues.build(),
-                new ObjenesisStd()
-            );
+        valueProvider = TestValueProviders.vintage();
         red = valueProvider.giveRed(STRING_TYPETAG);
         blue = valueProvider.giveBlue(STRING_TYPETAG);
         redObject = valueProvider.giveRed(OBJECT_TYPETAG);

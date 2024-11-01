@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
-import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -10,10 +9,10 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -35,10 +34,7 @@ public class FallbackFactoryTest {
     public void setUp() {
         Objenesis objenesis = new ObjenesisStd();
         factory = new FallbackFactory<>(objenesis);
-        FactoryCache factoryCache = new FactoryCache();
-        factoryCache.put(int.class, values(42, 1337, 42));
-        valueProvider =
-            new VintageValueProvider(TestValueProvider.EMPTY_INSTANCE, factoryCache, objenesis);
+        valueProvider = TestValueProviders.vintage(new PrefabValueProvider(), objenesis);
         typeStack = new LinkedHashSet<>();
     }
 
@@ -60,17 +56,13 @@ public class FallbackFactoryTest {
     @Test
     public void giveArray() {
         Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
-        assertArrayEquals(new int[] { 42 }, (int[]) tuple.getRed());
-        assertArrayEquals(new int[] { 1337 }, (int[]) tuple.getBlue());
+        assertArrayEquals(new int[] { 1 }, (int[]) tuple.getRed());
+        assertArrayEquals(new int[] { 2 }, (int[]) tuple.getBlue());
     }
 
     @Test
     public void giveClassWithFields() {
-        assertCorrectTuple(
-            IntContainer.class,
-            new IntContainer(42, 42),
-            new IntContainer(1337, 1337)
-        );
+        assertCorrectTuple(IntContainer.class, new IntContainer(1, 1), new IntContainer(2, 2));
         // Assert that static fields are untouched
         assertEquals(-100, IntContainer.staticI);
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
@@ -133,6 +125,11 @@ public class FallbackFactoryTest {
         @Override
         public int hashCode() {
             return defaultHashCode(this);
+        }
+
+        @Override
+        public String toString() {
+            return "IntContainer: " + finalI + "," + i;
         }
     }
 }

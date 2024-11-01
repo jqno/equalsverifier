@@ -1,13 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider.*;
+import static nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.Test;
 
 public class GenericPrefabValueProviderTest {
@@ -22,7 +22,7 @@ public class GenericPrefabValueProviderTest {
     private GenericFactories factories = new GenericFactories();
     private GenericPrefabValueProvider sut = new GenericPrefabValueProvider(
         factories,
-        TestValueProvider.INSTANCE
+        TestValueProviders.simple()
     );
 
     @Test
@@ -58,7 +58,7 @@ public class GenericPrefabValueProviderTest {
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
             otherFactories,
-            TestValueProvider.INSTANCE
+            TestValueProviders.simple()
         );
         assertEquals(STRINGS.map(s -> list(s + "x")), anotherSut.provide(LIST));
         assertEquals(Optional.empty(), anotherSut.provide(SET, null));
@@ -79,7 +79,7 @@ public class GenericPrefabValueProviderTest {
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
             otherFactories,
-            TestValueProvider.INSTANCE
+            TestValueProviders.simple()
         );
         assertEquals(
             Tuple.combine(INTS, STRINGS, (k, v) -> map(k - 1, v + "x")),

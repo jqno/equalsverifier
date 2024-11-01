@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProv
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 
@@ -28,7 +29,8 @@ public final class ArchitectureTest {
             JavaApiPrefabValues.class,
             // 👇 Test classes
             VintageValueProviderTest.class,
-            VintageValueProviderCreatorTest.class
+            VintageValueProviderCreatorTest.class,
+            TestValueProviders.class
         )
         .and()
         .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")

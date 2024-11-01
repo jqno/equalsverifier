@@ -4,15 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
-import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.objenesis.ObjenesisStd;
 
 @SuppressWarnings("rawtypes")
 public class SimpleGenericFactoryTest {
@@ -52,12 +50,7 @@ public class SimpleGenericFactoryTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider =
-            new VintageValueProvider(
-                TestValueProvider.INSTANCE,
-                JavaApiPrefabValues.build(),
-                new ObjenesisStd()
-            );
+        valueProvider = TestValueProviders.vintage();
         redString = valueProvider.giveRed(STRING_TYPETAG);
         blueString = valueProvider.giveBlue(STRING_TYPETAG);
         redInt = valueProvider.giveRed(INTEGER_TYPETAG);

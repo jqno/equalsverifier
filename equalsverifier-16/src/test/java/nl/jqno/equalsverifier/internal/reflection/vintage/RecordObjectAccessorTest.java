@@ -8,11 +8,11 @@ import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -75,11 +75,7 @@ public class RecordObjectAccessorTest {
             .of(OtherThrowingConstructorRecord.class, objenesis)
             .instantiate();
 
-        VintageValueProvider vp = new VintageValueProvider(
-            TestValueProvider.INSTANCE,
-            JavaApiPrefabValues.build(),
-            objenesis
-        );
+        VintageValueProvider vp = TestValueProviders.vintage(new PrefabValueProvider(), objenesis);
         ExpectedException
             .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)

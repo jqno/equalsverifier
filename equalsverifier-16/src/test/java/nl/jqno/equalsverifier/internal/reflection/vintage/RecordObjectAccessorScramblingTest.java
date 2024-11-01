@@ -9,10 +9,9 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorScramblingTest {
 
@@ -23,8 +22,7 @@ public class RecordObjectAccessorScramblingTest {
     @BeforeEach
     public void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider =
-            new VintageValueProvider(TestValueProvider.INSTANCE, factoryCache, new ObjenesisStd());
+        valueProvider = TestValueProviders.vintage();
     }
 
     @Test
