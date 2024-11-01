@@ -18,7 +18,9 @@ public class VintageValueProviderCreatorTest {
 
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
+    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
+    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
     private PrefabValueProvider prefabs;
     private VintageValueProvider valueProvider;
@@ -59,6 +61,23 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
+    public void oneStepRecursiveArrayType() {
+        prefabs.register(
+            NodeArray.class,
+            null,
+            Tuple.of(new NodeArray(), new NodeArray(), new NodeArray())
+        );
+        valueProvider.giveRed(NODE_ARRAY_TAG);
+    }
+
+    @Test
+    public void dontAddOneStepRecursiveArrayType() {
+        ExpectedException
+            .when(() -> valueProvider.giveRed(NODE_ARRAY_TAG))
+            .assertThrows(RecursionException.class);
+    }
+
+    @Test
     public void addTwoStepRecursiveType() {
         prefabs.register(
             TwoStepNodeB.class,
@@ -72,6 +91,23 @@ public class VintageValueProviderCreatorTest {
     public void dontAddTwoStepRecursiveType() {
         ExpectedException
             .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
+            .assertThrows(RecursionException.class);
+    }
+
+    @Test
+    public void twoStepRecursiveArrayType() {
+        prefabs.register(
+            TwoStepNodeArrayB.class,
+            null,
+            Tuple.of(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB())
+        );
+        valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
+    }
+
+    @Test
+    public void dontAddTwoStepRecursiveArrayType() {
+        ExpectedException
+            .when(() -> valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
             .assertThrows(RecursionException.class);
     }
 

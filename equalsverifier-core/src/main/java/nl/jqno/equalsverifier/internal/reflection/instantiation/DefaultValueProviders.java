@@ -22,12 +22,11 @@ public final class DefaultValueProviders {
         ChainedValueProvider vintageChain = new ChainedValueProvider(prefabValueProvider);
 
         ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
-        ValueProvider arrays = new ArrayValueProvider(mainChain);
         ValueProvider enums = new EnumValueProvider();
         ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
 
-        mainChain.register(genericPrefab, arrays, enums, vintage);
-        vintageChain.register(genericPrefab, arrays, enums);
+        mainChain.register(genericPrefab, enums, vintage);
+        vintageChain.register(genericPrefab, enums);
 
         return mainChain;
     }
@@ -39,10 +38,9 @@ public final class DefaultValueProviders {
         ChainedValueProvider mainChain = new ChainedValueProvider(prefabValueProvider);
 
         ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
-        ValueProvider arrays = new ArrayValueProvider(mainChain);
         ValueProvider enums = new EnumValueProvider();
 
-        mainChain.register(genericPrefab, arrays, enums);
+        mainChain.register(genericPrefab, enums);
 
         return mainChain;
     }

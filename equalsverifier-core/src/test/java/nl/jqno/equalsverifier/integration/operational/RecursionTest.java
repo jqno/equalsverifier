@@ -6,8 +6,11 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import com.google.common.collect.ImmutableList;
 import java.util.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
+import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -145,6 +148,32 @@ public class RecursionTest {
     @Test
     public void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
         EqualsVerifier.forClass(StaticFinalNodeContainer.class).verify();
+    }
+
+    @Test
+    public void fail_whenArrayIsRecursive_givenItIsPassedInAsAClass() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(NodeArray.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
+            )
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE);
+    }
+
+    @Test
+    public void fail_whenArrayIsIndirectlyRecursive_givenItIsPassedInAsAClass() {
+        ExpectedException
+            .when(() ->
+                EqualsVerifier
+                    .forClass(TwoStepNodeArrayA.class)
+                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                    .verify()
+            )
+            .assertFailure()
+            .assertMessageContains(RECURSIVE_DATASTRUCTURE);
     }
 
     static class Node {

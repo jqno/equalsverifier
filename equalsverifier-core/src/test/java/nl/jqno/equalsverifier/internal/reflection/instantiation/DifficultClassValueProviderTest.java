@@ -16,7 +16,6 @@ import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllArrayTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AllTypesContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.DisabledForJreRange;
 import org.junit.jupiter.api.condition.JRE;
@@ -72,7 +71,6 @@ public class DifficultClassValueProviderTest {
     }
 
     @Test
-    @Disabled
     public void recursionException_for_oneStepRecursiveArray() {
         tag = new TypeTag(NodeArray.class);
         checkForFailure(RecursionException.class);
@@ -90,7 +88,6 @@ public class DifficultClassValueProviderTest {
     }
 
     @Test
-    @Disabled
     public void recursionException_for_twoStepRecursiveArray() {
         tag = new TypeTag(TwoStepNodeArrayA.class);
         checkForFailure(RecursionException.class);
