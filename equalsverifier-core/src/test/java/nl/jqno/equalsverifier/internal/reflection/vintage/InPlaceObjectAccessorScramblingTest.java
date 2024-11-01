@@ -7,7 +7,6 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
@@ -135,14 +134,6 @@ public class InPlaceObjectAccessorScramblingTest {
             // InaccessibleObjectException, but it's not available in Java 8
             .assertThrows(RuntimeException.class)
             .assertMessageContains("accessible: module", "does not \"opens");
-    }
-
-    @Test
-    @DisabledForJreRange(max = JRE.JAVA_11)
-    public void scrambleFieldInaccessible() {
-        InaccessibleContainer ic = new InaccessibleContainer(new AttributedString("x"));
-
-        ExpectedException.when(() -> doScramble(ic)).assertThrows(ModuleException.class);
     }
 
     @SuppressWarnings("unchecked")

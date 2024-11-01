@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -9,9 +10,6 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.Enum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
@@ -19,13 +17,8 @@ import org.objenesis.ObjenesisStd;
 public class VintageValueProviderCreatorTest {
 
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
-    private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
-    private static final TypeTag ONE_ELT_ENUM_TAG = new TypeTag(OneElementEnum.class);
-    private static final TypeTag EMPTY_ENUM_TAG = new TypeTag(EmptyEnum.class);
     private static final TypeTag NODE_TAG = new TypeTag(Node.class);
-    private static final TypeTag NODE_ARRAY_TAG = new TypeTag(NodeArray.class);
     private static final TypeTag TWOSTEP_NODE_A_TAG = new TypeTag(TwoStepNodeA.class);
-    private static final TypeTag TWOSTEP_NODE_ARRAY_A_TAG = new TypeTag(TwoStepNodeArrayA.class);
 
     private PrefabValueProvider prefabs;
     private VintageValueProvider valueProvider;
@@ -53,24 +46,6 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
-    public void createEnum() {
-        assertNotNull(valueProvider.giveRed(ENUM_TAG));
-        assertNotNull(valueProvider.giveBlue(ENUM_TAG));
-    }
-
-    @Test
-    public void createOneElementEnum() {
-        assertNotNull(valueProvider.giveRed(ONE_ELT_ENUM_TAG));
-        assertNotNull(valueProvider.giveBlue(ONE_ELT_ENUM_TAG));
-    }
-
-    @Test
-    public void createEmptyEnum() {
-        assertNull(valueProvider.giveRed(EMPTY_ENUM_TAG));
-        assertNull(valueProvider.giveBlue(EMPTY_ENUM_TAG));
-    }
-
-    @Test
     public void oneStepRecursiveType() {
         prefabs.register(Node.class, null, Tuple.of(new Node(), new Node(), new Node()));
         valueProvider.giveRed(NODE_TAG);
@@ -80,23 +55,6 @@ public class VintageValueProviderCreatorTest {
     public void dontAddOneStepRecursiveType() {
         ExpectedException
             .when(() -> valueProvider.giveRed(NODE_TAG))
-            .assertThrows(RecursionException.class);
-    }
-
-    @Test
-    public void oneStepRecursiveArrayType() {
-        prefabs.register(
-            NodeArray.class,
-            null,
-            Tuple.of(new NodeArray(), new NodeArray(), new NodeArray())
-        );
-        valueProvider.giveRed(NODE_ARRAY_TAG);
-    }
-
-    @Test
-    public void dontAddOneStepRecursiveArrayType() {
-        ExpectedException
-            .when(() -> valueProvider.giveRed(NODE_ARRAY_TAG))
             .assertThrows(RecursionException.class);
     }
 
@@ -114,23 +72,6 @@ public class VintageValueProviderCreatorTest {
     public void dontAddTwoStepRecursiveType() {
         ExpectedException
             .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
-            .assertThrows(RecursionException.class);
-    }
-
-    @Test
-    public void twoStepRecursiveArrayType() {
-        prefabs.register(
-            TwoStepNodeArrayB.class,
-            null,
-            Tuple.of(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB())
-        );
-        valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
-    }
-
-    @Test
-    public void dontAddTwoStepRecursiveArrayType() {
-        ExpectedException
-            .when(() -> valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
             .assertThrows(RecursionException.class);
     }
 

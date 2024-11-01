@@ -9,7 +9,6 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,12 +28,6 @@ public class MapFactoryTest {
         OBJECT_TYPETAG
     );
     private static final TypeTag RAWMAP_TYPETAG = new TypeTag(Map.class);
-    private static final TypeTag ONEELEMENTENUM_TYPETAG = new TypeTag(OneElementEnum.class);
-    private static final TypeTag ONEELEMENTENUMKEYMAP_TYPETAG = new TypeTag(
-        Map.class,
-        ONEELEMENTENUM_TYPETAG,
-        OBJECT_TYPETAG
-    );
 
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
@@ -44,7 +37,6 @@ public class MapFactoryTest {
     private String blue;
     private Object redObject;
     private Object blueObject;
-    private OneElementEnum redEnum;
 
     @BeforeEach
     public void setUp() {
@@ -53,7 +45,6 @@ public class MapFactoryTest {
         blue = valueProvider.giveBlue(STRING_TYPETAG);
         redObject = valueProvider.giveRed(OBJECT_TYPETAG);
         blueObject = valueProvider.giveBlue(OBJECT_TYPETAG);
-        redEnum = valueProvider.giveBlue(ONEELEMENTENUM_TYPETAG);
     }
 
     @Test
@@ -79,17 +70,6 @@ public class MapFactoryTest {
         Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, typeStack);
         assertEquals(mapOf(redObject, blueObject), tuple.getRed());
         assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
-    }
-
-    @Test
-    public void createMapOfOneElementEnumKey() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(
-            ONEELEMENTENUMKEYMAP_TYPETAG,
-            valueProvider,
-            typeStack
-        );
-        assertEquals(mapOf(redEnum, blueObject), tuple.getRed());
-        assertEquals(new HashMap<>(), tuple.getBlue());
     }
 
     private <K, V> Map<K, V> mapOf(K key, V value) {

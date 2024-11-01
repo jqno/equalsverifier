@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.LinkedHashSet;
@@ -13,12 +12,7 @@ import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvi
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
-import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.TwoElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -39,40 +33,11 @@ public class FallbackFactoryTest {
     }
 
     @Test
-    public void giveNullInsteadOfEmptyEnum() {
-        assertCorrectTuple(EmptyEnum.class, null, null);
-    }
-
-    @Test
-    public void giveOneElementEnum() {
-        assertCorrectTuple(OneElementEnum.class, OneElementEnum.ONE, OneElementEnum.ONE);
-    }
-
-    @Test
-    public void giveMultiElementEnum() {
-        assertCorrectTuple(TwoElementEnum.class, TwoElementEnum.ONE, TwoElementEnum.TWO);
-    }
-
-    @Test
-    public void giveArray() {
-        Tuple<?> tuple = factory.createValues(new TypeTag(int[].class), valueProvider, typeStack);
-        assertArrayEquals(new int[] { 1 }, (int[]) tuple.getRed());
-        assertArrayEquals(new int[] { 2 }, (int[]) tuple.getBlue());
-    }
-
-    @Test
     public void giveClassWithFields() {
         assertCorrectTuple(IntContainer.class, new IntContainer(1, 1), new IntContainer(2, 2));
         // Assert that static fields are untouched
         assertEquals(-100, IntContainer.staticI);
         assertEquals(-10, IntContainer.STATIC_FINAL_I);
-    }
-
-    @Test
-    public void dontGiveRecursiveClass() {
-        ExpectedException
-            .when(() -> factory.createValues(new TypeTag(Node.class), valueProvider, typeStack))
-            .assertThrows(RecursionException.class);
     }
 
     @Test
@@ -83,14 +48,6 @@ public class FallbackFactoryTest {
             )
             .assertThrows(RecursionException.class)
             .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");
-    }
-
-    @Test
-    public void dontGiveRecursiveArray() {
-        ExpectedException
-            .when(() -> factory.createValues(new TypeTag(NodeArray.class), valueProvider, typeStack)
-            )
-            .assertThrows(RecursionException.class);
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {

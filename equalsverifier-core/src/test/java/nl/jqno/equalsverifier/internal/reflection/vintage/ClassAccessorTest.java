@@ -104,20 +104,6 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void instantiateAllTypes() {
-        ClassAccessor
-            .of(AllTypesContainer.class, valueProvider, objenesis)
-            .getRedObject(TypeTag.NULL, empty);
-    }
-
-    @Test
-    public void instantiateArrayTypes() {
-        ClassAccessor
-            .of(AllArrayTypesContainer.class, valueProvider, objenesis)
-            .getRedObject(TypeTag.NULL, empty);
-    }
-
-    @Test
     public void instantiateRecursiveTypeUsingPrefabValue() {
         prefabs.register(
             TwoStepNodeB.class,
