@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation.builtin;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -41,26 +42,28 @@ public class BuiltinJavaLangValueProvider implements ValueProvider {
         );
     }
 
-    private <T> Optional<Tuple<T>> attempt(
+    private Supplier<Tuple<?>> attempt(
         TypeTag tag,
-        Class<T> type,
+        Class<?> type,
         Object red,
         Object blue,
         Object redCopy
     ) {
-        if (tag.getType().equals(type)) {
-            return Optional.of(Tuple.of(red, blue, redCopy));
-        }
-        return Optional.empty();
+        return () -> {
+            if (tag.getType().equals(type)) {
+                return Tuple.of(red, blue, redCopy);
+            }
+            return null;
+        };
     }
 
     @SuppressWarnings("unchecked")
     @SafeVarargs
-    private static <T> Optional<T> or(Optional<?>... optionals) {
-        return (Optional<T>) Stream
-            .of(optionals)
-            .filter(Optional::isPresent)
-            .map(Optional::get)
+    private static <T> Optional<Tuple<T>> or(Supplier<Tuple<?>>... suppliers) {
+        return Stream
+            .of(suppliers)
+            .map(supplier -> (Tuple<T>) supplier.get())
+            .filter(tuple -> tuple != null)
             .findFirst();
     }
 
