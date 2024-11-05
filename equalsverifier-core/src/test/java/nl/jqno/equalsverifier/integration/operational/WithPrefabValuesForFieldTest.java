@@ -2,8 +2,7 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -166,6 +165,18 @@ public class WithPrefabValuesForFieldTest {
             .verify();
     }
 
+    @Test
+    public void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
+        EqualsVerifier
+            .forClass(ListContainer.class)
+            .withPrefabValuesForField(
+                "list",
+                Collections.singletonList("x"),
+                Collections.singletonList("y")
+            )
+            .verify();
+    }
+
     static final class SinglePrecondition {
 
         private final FinalPoint point;
@@ -272,6 +283,29 @@ public class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Arrays.hashCode(field);
+        }
+    }
+
+    static final class ListContainer {
+
+        private final List<String> list;
+
+        public ListContainer(List<String> list) {
+            this.list = list;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof ListContainer)) {
+                return false;
+            }
+            ListContainer other = (ListContainer) obj;
+            return Objects.equals(list, other.list);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(list);
         }
     }
 }
