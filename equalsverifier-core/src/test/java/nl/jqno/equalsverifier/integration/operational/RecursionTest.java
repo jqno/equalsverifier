@@ -43,8 +43,18 @@ public class RecursionTest {
     }
 
     @Test
+    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForField() {
+        EqualsVerifier.forClass(Node.class).withPrefabValuesForField("node", red, blue).verify();
+    }
+
+    @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, blue).verify();
+    }
+
+    @Test
+    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForFieldOfSuperclass() {
+        EqualsVerifier.forClass(SubNode.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
@@ -64,10 +74,26 @@ public class RecursionTest {
     }
 
     @Test
+    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForField() {
+        EqualsVerifier
+            .forClass(NodeContainer.class)
+            .withPrefabValuesForField("node", red, blue)
+            .verify();
+    }
+
+    @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
         EqualsVerifier
             .forClass(SubNodeContainer.class)
             .withPrefabValues(Node.class, red, blue)
+            .verify();
+    }
+
+    @Test
+    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForFieldOfSuperclass() {
+        EqualsVerifier
+            .forClass(SubNodeContainer.class)
+            .withPrefabValuesForField("node", red, blue)
             .verify();
     }
 
