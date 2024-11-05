@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- It's now possible to pass a subclass of a field's type into `#withPrefabValuesForField()`. ([Issue 1012](https://github.com/jqno/equalsverifier/issues/1012))
+
 ### Changed
 
 - The internal instantiation logic has been further refactored, to be more robust and extensible for future enhancements.
