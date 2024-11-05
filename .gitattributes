@@ -1,0 +1,6 @@
+* text=auto eol=lf
+
+# make sure that script files are always in the correct format, no matter the OS.
+# i.e. Windows needs batch files to have CRLF, but shell scripts always need to be LF, which is especially important for WSL contexts.
+*.sh           text eol=lf
+*.bat          text eol=crlf
