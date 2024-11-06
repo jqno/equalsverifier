@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.util;
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
+import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
@@ -43,7 +44,7 @@ public final class PrefabValuesApi {
         T red,
         T blue
     ) {
-        Field field = getField(enclosingType, fieldName);
+        Field field = findField(enclosingType, fieldName);
         Class<T> type = (Class<T>) field.getType();
 
         Validations.validateRedAndBluePrefabValues(type, red, blue);
@@ -62,18 +63,21 @@ public final class PrefabValuesApi {
         }
     }
 
-    private static Field getField(Class<?> type, String fieldName) {
-        try {
-            return type.getDeclaredField(fieldName);
-        } catch (NoSuchFieldException e) {
-            throw new IllegalStateException(
-                "Precondition: class " +
-                type.getSimpleName() +
-                " does not contain field " +
-                fieldName +
-                "."
-            );
+    private static Field findField(Class<?> type, String fieldName) {
+        for (Class<?> c : SuperclassIterable.ofIncludeSelf(type)) {
+            try {
+                return c.getDeclaredField(fieldName);
+            } catch (NoSuchFieldException ignored) {
+                // Do nothing
+            }
         }
+        throw new IllegalStateException(
+            "Precondition: class " +
+            type.getSimpleName() +
+            " does not contain field " +
+            fieldName +
+            "."
+        );
     }
 
     public static <T> void addGenericPrefabValues(
