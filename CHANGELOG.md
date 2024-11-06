@@ -15,6 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Fixes bug when passing a subclass of a field's type into `#withPrefabValues()` (which was introduced in the previous version). ([Issue 1014](https://github.com/jqno/equalsverifier/issues/1014))
 - In Windows builds, the handling of line endings didn't work properly. ([Issue 1015](https://github.com/jqno/equalsverifier/issues/1015))
 
 ## [3.17.2] - 2024-11-05
