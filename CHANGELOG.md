@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- In Windows builds, the handling of line endings didn't work properly. ([Issue 1015](https://github.com/jqno/equalsverifier/issues/1015))
+
 ## [3.17.2] - 2024-11-05
 
 ### Fixed
