@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
@@ -42,10 +43,11 @@ public final class PrefabValuesApi {
         T red,
         T blue
     ) {
-        Class<T> type = (Class<T>) red.getClass();
+        Field field = getField(enclosingType, fieldName);
+        Class<T> type = (Class<T>) field.getType();
 
         Validations.validateRedAndBluePrefabValues(type, red, blue);
-        Validations.validateFieldTypeMatches(enclosingType, fieldName, red.getClass());
+        Validations.validateFieldTypeMatches(field, red.getClass());
 
         if (type.isArray()) {
             provider.register(type, fieldName, red, blue, red);
@@ -57,6 +59,20 @@ public final class PrefabValuesApi {
                 /* specifically, on Java 9+: InacessibleObjectException */
                 provider.register(type, fieldName, red, blue, red);
             }
+        }
+    }
+
+    private static Field getField(Class<?> type, String fieldName) {
+        try {
+            return type.getDeclaredField(fieldName);
+        } catch (NoSuchFieldException e) {
+            throw new IllegalStateException(
+                "Precondition: class " +
+                type.getSimpleName() +
+                " does not contain field " +
+                fieldName +
+                "."
+            );
         }
     }
 
