@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 public class ChainedValueProviderTest {
 
     private static final TypeTag INT = new TypeTag(int.class);
+    private static final LinkedHashSet<TypeTag> EMPTY = new LinkedHashSet<>();
 
     private final SingleTypeValueProvider<Integer> intProvider = new SingleTypeValueProvider<>(
         int.class,
@@ -39,7 +40,7 @@ public class ChainedValueProviderTest {
     @Test
     public void returnsEmptyIfNoMatch() {
         sut.register(stringProvider);
-        assertEquals(Optional.empty(), sut.provide(INT, null));
+        assertEquals(Optional.empty(), sut.provide(INT, null, EMPTY));
     }
 
     @Test
@@ -78,7 +79,7 @@ public class ChainedValueProviderTest {
         ValueProvider[] providers = { stringProvider };
         sut.register(providers);
         providers[0] = intProvider;
-        assertEquals(Optional.empty(), sut.provide(INT, null));
+        assertEquals(Optional.empty(), sut.provide(INT, null, EMPTY));
     }
 
     @Test
@@ -100,8 +101,8 @@ public class ChainedValueProviderTest {
     @Test
     public void cachesWithLabelInPrefabValueProvider() {
         sut.register(intProvider);
-        sut.provide(INT, "label");
-        assertEquals(1, prefab.provide(INT, "label").get().getRed());
+        sut.provide(INT, "label", EMPTY);
+        assertEquals(1, prefab.provide(INT, "label", EMPTY).get().getRed());
     }
 
     static class SingleTypeValueProvider<X> implements ValueProvider {
@@ -117,7 +118,11 @@ public class ChainedValueProviderTest {
 
         @Override
         @SuppressWarnings("unchecked")
-        public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+        public <T> Optional<Tuple<T>> provide(
+            TypeTag tag,
+            String label,
+            LinkedHashSet<TypeTag> typeStack
+        ) {
             called++;
             if (tag.getType().equals(type)) {
                 return Optional.of((Tuple<T>) values);

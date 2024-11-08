@@ -49,8 +49,12 @@ public class VintageValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag)));
+    public <T> Optional<Tuple<T>> provide(
+        TypeTag tag,
+        String label,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, typeStack)));
     }
 
     /**
@@ -174,7 +178,7 @@ public class VintageValueProvider implements ValueProvider {
             throw new RecursionException(typeStack);
         }
 
-        Optional<Tuple<T>> provided = valueProvider.provide(tag, null);
+        Optional<Tuple<T>> provided = valueProvider.provide(tag, null, typeStack);
         if (provided.isPresent()) {
             return provided.get();
         }

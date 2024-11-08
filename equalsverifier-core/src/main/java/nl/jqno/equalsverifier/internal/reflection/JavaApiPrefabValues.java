@@ -364,7 +364,6 @@ public final class JavaApiPrefabValues {
                 ArrayList::new
             )
         );
-        addFactory(Collection.class, collection(ArrayList::new));
     }
 
     @SuppressWarnings("unchecked")

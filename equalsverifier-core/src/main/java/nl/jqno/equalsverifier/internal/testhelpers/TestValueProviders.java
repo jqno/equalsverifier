@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.testhelpers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -23,7 +24,11 @@ public final class TestValueProviders {
     public static ValueProvider empty() {
         return new ValueProvider() {
             @Override
-            public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+            public <T> Optional<Tuple<T>> provide(
+                TypeTag tag,
+                String label,
+                LinkedHashSet<TypeTag> typeStack
+            ) {
                 return Optional.empty();
             }
         };
@@ -43,9 +48,19 @@ public final class TestValueProviders {
     }
 
     public static VintageValueProvider vintage(PrefabValueProvider prefabs, Objenesis objenesis) {
-        ChainedValueProvider chain = new ChainedValueProvider(prefabs);
-        ValueProvider builtin = new BuiltinValueProvider();
-        chain.register(builtin);
-        return new VintageValueProvider(chain, JavaApiPrefabValues.build(), objenesis);
+        ChainedValueProvider mainChain = new ChainedValueProvider(prefabs);
+        ChainedValueProvider vintageChain = new ChainedValueProvider(prefabs);
+
+        ValueProvider builtin = new BuiltinValueProvider(mainChain);
+        VintageValueProvider vintage = new VintageValueProvider(
+            vintageChain,
+            JavaApiPrefabValues.build(),
+            objenesis
+        );
+
+        mainChain.register(builtin, vintage);
+        vintageChain.register(builtin);
+
+        return vintage;
     }
 }

@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -46,10 +44,14 @@ public class ChainedValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+    public <T> Optional<Tuple<T>> provide(
+        TypeTag tag,
+        String label,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         return providers
             .stream()
-            .map(vp -> vp.<T>provide(tag, label))
+            .map(vp -> vp.<T>provide(tag, label, typeStack))
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.empty())

@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -23,10 +24,11 @@ public interface ValueProvider {
      * @param tag A description of the desired type, including generic parameters.
      * @param label Returns only the value assigned to the given label, or if label is null,
      *      returns the value that's not assigned to any label.
+     * @param typeStack Keeps track of recursion.
      * @return A tuple of two different values of the given type, or an empty Optional if none
      *      could be found.
      */
-    <T> Optional<Tuple<T>> provide(TypeTag tag, String label);
+    <T> Optional<Tuple<T>> provide(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack);
 
     /**
      * Returns a tuple of prefabricated values of the specified type, or, if none exists, throws a
@@ -39,6 +41,7 @@ public interface ValueProvider {
      * @throws NoValueException if no value could be found for the given tag.
      */
     default <T> Tuple<T> provide(TypeTag tag) {
-        return this.<T>provide(tag, null).orElseThrow(() -> new NoValueException(tag));
+        return this.<T>provide(tag, null, new LinkedHashSet<>())
+            .orElseThrow(() -> new NoValueException(tag));
     }
 }

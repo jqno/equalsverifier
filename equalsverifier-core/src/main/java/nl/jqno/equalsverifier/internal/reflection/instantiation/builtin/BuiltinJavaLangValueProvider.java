@@ -1,9 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation.builtin;
 
+import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.attempt;
+import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.or;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.LinkedHashSet;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
@@ -15,7 +17,12 @@ public class BuiltinJavaLangValueProvider implements ValueProvider {
         justification = "We want to make an actual copy of a String"
     )
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+    public <T> Optional<Tuple<T>> provide(
+        TypeTag tag,
+        String label,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        Object red = new Object();
         return or(
             // Primitives
             attempt(tag, boolean.class, true, false, true),
@@ -36,35 +43,10 @@ public class BuiltinJavaLangValueProvider implements ValueProvider {
             attempt(tag, Long.class, 1000L, 2000L, Long.valueOf(1000L)),
             attempt(tag, Short.class, (short) 1000, (short) 2000, Short.valueOf((short) 1000)),
             // Special classes
-            attempt(tag, Object.class, new Object(), new Object(), new Object()),
+            attempt(tag, Object.class, red, new Object(), red),
             attempt(tag, String.class, "one", "two", new String("one")),
             attempt(tag, Enum.class, Dummy.RED, Dummy.BLUE, Dummy.RED)
         );
-    }
-
-    private Supplier<Tuple<?>> attempt(
-        TypeTag tag,
-        Class<?> type,
-        Object red,
-        Object blue,
-        Object redCopy
-    ) {
-        return () -> {
-            if (tag.getType().equals(type)) {
-                return Tuple.of(red, blue, redCopy);
-            }
-            return null;
-        };
-    }
-
-    @SuppressWarnings("unchecked")
-    @SafeVarargs
-    private static <T> Optional<Tuple<T>> or(Supplier<Tuple<?>>... suppliers) {
-        return Stream
-            .of(suppliers)
-            .map(supplier -> (Tuple<T>) supplier.get())
-            .filter(tuple -> tuple != null)
-            .findFirst();
     }
 
     private enum Dummy {

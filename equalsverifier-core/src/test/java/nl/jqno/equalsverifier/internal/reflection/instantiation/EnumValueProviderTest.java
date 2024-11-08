@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -34,7 +35,11 @@ public class EnumValueProviderTest {
 
     @Test
     public void noEnum() {
-        Optional<Tuple<Object>> actual = sut.provide(new TypeTag(Object.class), null);
+        Optional<Tuple<Object>> actual = sut.provide(
+            new TypeTag(Object.class),
+            null,
+            new LinkedHashSet<>()
+        );
         assertEquals(Optional.empty(), actual);
     }
 }

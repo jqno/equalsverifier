@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
@@ -239,7 +240,7 @@ public class SubjectCreator<T> {
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
             Tuple<?> tuple = valueProvider
-                .provide(fieldTag, f.getName())
+                .provide(fieldTag, f.getName(), new LinkedHashSet<>())
                 .orElseThrow(() -> new NoValueException(fieldTag));
             return tuple;
         } catch (ModuleException e) {

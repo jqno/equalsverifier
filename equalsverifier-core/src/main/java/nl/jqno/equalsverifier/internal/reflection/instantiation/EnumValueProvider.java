@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -7,7 +8,11 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 public class EnumValueProvider implements ValueProvider {
 
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+    public <T> Optional<Tuple<T>> provide(
+        TypeTag tag,
+        String label,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
         Class<T> type = tag.getType();
         if (!type.isEnum()) {
             return Optional.empty();

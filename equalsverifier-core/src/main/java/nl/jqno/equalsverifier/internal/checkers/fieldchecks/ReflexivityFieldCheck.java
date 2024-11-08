@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 
 import java.lang.reflect.Field;
 import java.util.EnumSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
@@ -80,7 +81,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
         Tuple<?> tuple = valueProvider
-            .provide(tag, fieldName)
+            .provide(tag, fieldName, new LinkedHashSet<>())
             .orElseThrow(() -> new NoValueException(tag, fieldName));
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());

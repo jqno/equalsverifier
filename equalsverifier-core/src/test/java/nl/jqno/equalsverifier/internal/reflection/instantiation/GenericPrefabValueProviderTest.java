@@ -18,6 +18,7 @@ public class GenericPrefabValueProviderTest {
     private static final TypeTag SET = new TypeTag(Set.class, new TypeTag(String.class));
     private static final TypeTag MAP = new TypeTag(Map.class, INTEGER, STRING);
     private static final TypeTag ENTRY = new TypeTag(Map.Entry.class, INTEGER, STRING);
+    private static final LinkedHashSet<TypeTag> EMPTY = new LinkedHashSet<>();
 
     private GenericFactories factories = new GenericFactories();
     private GenericPrefabValueProvider sut = new GenericPrefabValueProvider(
@@ -28,23 +29,23 @@ public class GenericPrefabValueProviderTest {
     @Test
     public void generic1_aRegisteredValueCanBeFound() {
         factories.register(LIST.getType(), (String s) -> list(s));
-        assertEquals(STRINGS.map(this::list), sut.provide(LIST, null).get());
+        assertEquals(STRINGS.map(this::list), sut.provide(LIST, null, EMPTY).get());
     }
 
     @Test
     public void generic2_aRegisteredValueCanBeFound() {
         factories.register(MAP.getType(), (Integer k, String v) -> map(k, v));
-        assertEquals(Tuple.combine(INTS, STRINGS, this::map), sut.provide(MAP, null).get());
+        assertEquals(Tuple.combine(INTS, STRINGS, this::map), sut.provide(MAP, null, EMPTY).get());
     }
 
     @Test
     public void generic1_anUnregisteredValueCanNotBeFound() {
-        assertEquals(Optional.empty(), sut.provide(LIST, null));
+        assertEquals(Optional.empty(), sut.provide(LIST, null, EMPTY));
     }
 
     @Test
     public void generic2_anUnregisteredValueCanNotBeFound() {
-        assertEquals(Optional.empty(), sut.provide(MAP, null));
+        assertEquals(Optional.empty(), sut.provide(MAP, null, EMPTY));
     }
 
     @Test
@@ -61,7 +62,7 @@ public class GenericPrefabValueProviderTest {
             TestValueProviders.simple()
         );
         assertEquals(STRINGS.map(s -> list(s + "x")), anotherSut.provide(LIST));
-        assertEquals(Optional.empty(), anotherSut.provide(SET, null));
+        assertEquals(Optional.empty(), anotherSut.provide(SET, null, EMPTY));
         // CHECKSTYLE ON: VariableDeclarationUsageDistance
     }
 
@@ -83,9 +84,9 @@ public class GenericPrefabValueProviderTest {
         );
         assertEquals(
             Tuple.combine(INTS, STRINGS, (k, v) -> map(k - 1, v + "x")),
-            anotherSut.provide(MAP, "original").get()
+            anotherSut.provide(MAP, "original", EMPTY).get()
         );
-        assertEquals(Optional.empty(), anotherSut.provide(ENTRY, null));
+        assertEquals(Optional.empty(), anotherSut.provide(ENTRY, null, EMPTY));
         // CHECKSTYLE ON: VariableDeclarationUsageDistance
     }
 
