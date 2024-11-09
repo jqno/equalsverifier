@@ -23,11 +23,12 @@ public final class DefaultValueProviders {
 
         ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
         ValueProvider builtin = new BuiltinValueProvider(mainChain);
+        ValueProvider array = new ArrayValueProvider(mainChain);
         ValueProvider enums = new EnumValueProvider();
         ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
 
-        mainChain.register(genericPrefab, builtin, enums, vintage);
-        vintageChain.register(genericPrefab, builtin, enums);
+        mainChain.register(genericPrefab, builtin, array, enums, vintage);
+        vintageChain.register(genericPrefab, builtin, array, enums);
 
         return mainChain;
     }

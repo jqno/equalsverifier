@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -32,33 +31,8 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>) typeStack.clone();
         clone.add(tag);
 
-        if (tag.getType().isArray()) {
-            return giveArrayInstances(tag, valueProvider, clone);
-        }
-
         traverseFields(tag, valueProvider, clone);
         return giveInstances(tag, valueProvider, clone);
-    }
-
-    @SuppressWarnings("unchecked")
-    private Tuple<T> giveArrayInstances(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
-        Class<T> type = tag.getType();
-        Class<?> componentType = type.getComponentType();
-        TypeTag componentTag = new TypeTag(componentType);
-        valueProvider.realizeCacheFor(componentTag, typeStack);
-
-        T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, valueProvider.giveRed(componentTag));
-        T blue = (T) Array.newInstance(componentType, 1);
-        Array.set(blue, 0, valueProvider.giveBlue(componentTag));
-        T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
-
-        return new Tuple<>(red, blue, redCopy);
     }
 
     private void traverseFields(
