@@ -76,13 +76,9 @@ public class GenericPrefabValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
-        Optional<Func<T>> maybeFactory = findFactory(type, label);
+        Optional<Func<T>> maybeFactory = findFactory(type, attributes.label);
         if (!maybeFactory.isPresent()) {
             return Optional.empty();
         }
@@ -109,7 +105,7 @@ public class GenericPrefabValueProvider implements ValueProvider {
         List<Object> redCopyValues = new ArrayList<>();
 
         for (TypeTag generic : tag.getGenericTypes()) {
-            Tuple<?> tuple = provider.provide(generic);
+            Tuple<?> tuple = provider.provideOrThrow(generic, Attributes.unlabeled());
             redValues.add(tuple.getRed());
             blueValues.add(tuple.getBlue());
             redCopyValues.add(tuple.getRedCopy());

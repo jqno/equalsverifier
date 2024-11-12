@@ -5,7 +5,6 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 
 import java.lang.reflect.Field;
 import java.util.EnumSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
@@ -14,6 +13,7 @@ import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -81,7 +81,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
         Tuple<?> tuple = valueProvider
-            .provide(tag, fieldName, new LinkedHashSet<>())
+            .provide(tag, Attributes.labeled(fieldName))
             .orElseThrow(() -> new NoValueException(tag, fieldName));
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());

@@ -1,9 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import java.lang.reflect.Array;
-import java.util.LinkedHashSet;
 import java.util.Optional;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -17,11 +15,7 @@ public class ArrayValueProvider implements ValueProvider {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
         if (!type.isArray()) {
             return Optional.empty();
@@ -31,10 +25,8 @@ public class ArrayValueProvider implements ValueProvider {
         TypeTag componentTag = new TypeTag(componentType);
 
         Tuple<?> tuple = componentType.isArray()
-            ? provide(componentTag)
-            : provider
-                .provide(componentTag, null, typeStack)
-                .orElseThrow(() -> new NoValueException(componentTag));
+            ? provideOrThrow(componentTag, attributes)
+            : provider.provideOrThrow(componentTag, attributes);
 
         T red = (T) Array.newInstance(componentType, 1);
         Array.set(red, 0, tuple.getRed());

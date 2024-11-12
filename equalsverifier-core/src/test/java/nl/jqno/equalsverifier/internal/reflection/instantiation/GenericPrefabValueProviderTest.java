@@ -1,24 +1,26 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import static nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders.*;
+import static nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders.INTS;
+import static nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders.STRINGS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.*;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.Test;
 
 public class GenericPrefabValueProviderTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private static final TypeTag INTEGER = new TypeTag(Integer.class);
     private static final TypeTag STRING = new TypeTag(String.class);
     private static final TypeTag LIST = new TypeTag(List.class, new TypeTag(String.class));
     private static final TypeTag SET = new TypeTag(Set.class, new TypeTag(String.class));
     private static final TypeTag MAP = new TypeTag(Map.class, INTEGER, STRING);
     private static final TypeTag ENTRY = new TypeTag(Map.Entry.class, INTEGER, STRING);
-    private static final LinkedHashSet<TypeTag> EMPTY = new LinkedHashSet<>();
 
     private GenericFactories factories = new GenericFactories();
     private GenericPrefabValueProvider sut = new GenericPrefabValueProvider(
@@ -29,23 +31,26 @@ public class GenericPrefabValueProviderTest {
     @Test
     public void generic1_aRegisteredValueCanBeFound() {
         factories.register(LIST.getType(), (String s) -> list(s));
-        assertEquals(STRINGS.map(this::list), sut.provide(LIST, null, EMPTY).get());
+        assertEquals(STRINGS.map(this::list), sut.provide(LIST, Attributes.unlabeled()).get());
     }
 
     @Test
     public void generic2_aRegisteredValueCanBeFound() {
         factories.register(MAP.getType(), (Integer k, String v) -> map(k, v));
-        assertEquals(Tuple.combine(INTS, STRINGS, this::map), sut.provide(MAP, null, EMPTY).get());
+        assertEquals(
+            Tuple.combine(INTS, STRINGS, this::map),
+            sut.provide(MAP, Attributes.unlabeled()).get()
+        );
     }
 
     @Test
     public void generic1_anUnregisteredValueCanNotBeFound() {
-        assertEquals(Optional.empty(), sut.provide(LIST, null, EMPTY));
+        assertEquals(Optional.empty(), sut.provide(LIST, Attributes.unlabeled()));
     }
 
     @Test
     public void generic2_anUnregisteredValueCanNotBeFound() {
-        assertEquals(Optional.empty(), sut.provide(MAP, null, EMPTY));
+        assertEquals(Optional.empty(), sut.provide(MAP, Attributes.unlabeled()));
     }
 
     @Test
@@ -55,14 +60,17 @@ public class GenericPrefabValueProviderTest {
         GenericFactories otherFactories = factories.copy();
         factories.register(SET.getType(), (String s) -> set(s + "y"));
 
-        assertEquals(STRINGS.map(s -> set(s + "y")), sut.provide(SET));
+        assertEquals(STRINGS.map(s -> set(s + "y")), sut.provideOrThrow(SET, EMPTY_ATTRIBUTES));
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
             otherFactories,
             TestValueProviders.simple()
         );
-        assertEquals(STRINGS.map(s -> list(s + "x")), anotherSut.provide(LIST));
-        assertEquals(Optional.empty(), anotherSut.provide(SET, null, EMPTY));
+        assertEquals(
+            STRINGS.map(s -> list(s + "x")),
+            anotherSut.provideOrThrow(LIST, EMPTY_ATTRIBUTES)
+        );
+        assertEquals(Optional.empty(), anotherSut.provide(SET, Attributes.unlabeled()));
         // CHECKSTYLE ON: VariableDeclarationUsageDistance
     }
 
@@ -75,7 +83,7 @@ public class GenericPrefabValueProviderTest {
 
         assertEquals(
             Tuple.combine(INTS, STRINGS, (k, v) -> entry(k + 1, v + "y")),
-            sut.provide(ENTRY)
+            sut.provideOrThrow(ENTRY, EMPTY_ATTRIBUTES)
         );
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
@@ -84,9 +92,9 @@ public class GenericPrefabValueProviderTest {
         );
         assertEquals(
             Tuple.combine(INTS, STRINGS, (k, v) -> map(k - 1, v + "x")),
-            anotherSut.provide(MAP, "original", EMPTY).get()
+            anotherSut.provide(MAP, Attributes.labeled("original")).get()
         );
-        assertEquals(Optional.empty(), anotherSut.provide(ENTRY, null, EMPTY));
+        assertEquals(Optional.empty(), anotherSut.provide(ENTRY, Attributes.unlabeled()));
         // CHECKSTYLE ON: VariableDeclarationUsageDistance
     }
 

@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.testhelpers;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -24,11 +23,7 @@ public final class TestValueProviders {
     public static ValueProvider empty() {
         return new ValueProvider() {
             @Override
-            public <T> Optional<Tuple<T>> provide(
-                TypeTag tag,
-                String label,
-                LinkedHashSet<TypeTag> typeStack
-            ) {
+            public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
                 return Optional.empty();
             }
         };

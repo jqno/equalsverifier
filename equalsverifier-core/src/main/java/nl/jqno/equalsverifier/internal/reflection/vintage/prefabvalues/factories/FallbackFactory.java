@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import org.objenesis.Objenesis;
@@ -25,11 +25,9 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        @SuppressWarnings("unchecked")
-        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>) typeStack.clone();
-        clone.add(tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
 
         traverseFields(tag, valueProvider, clone);
         return giveInstances(tag, valueProvider, clone);
@@ -38,14 +36,14 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     private void traverseFields(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
         Class<?> type = tag.getType();
         for (Field field : FieldIterable.of(type)) {
             FieldProbe probe = FieldProbe.of(field);
             boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
             if (!isStaticAndFinal) {
-                valueProvider.realizeCacheFor(TypeTag.of(field, tag), typeStack);
+                valueProvider.realizeCacheFor(TypeTag.of(field, tag), attributes);
             }
         }
     }
@@ -53,12 +51,12 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     private Tuple<T> giveInstances(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);
-        T red = accessor.getRedObject(tag, typeStack);
-        T blue = accessor.getBlueObject(tag, typeStack);
-        T redCopy = accessor.getRedObject(tag, typeStack);
+        T red = accessor.getRedObject(tag, attributes);
+        T blue = accessor.getBlueObject(tag, attributes);
+        T redCopy = accessor.getRedObject(tag, attributes);
         return new Tuple<>(red, blue, redCopy);
     }
 }

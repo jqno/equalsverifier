@@ -2,10 +2,10 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
@@ -25,9 +25,9 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 
         Collection red = new HashSet<>();

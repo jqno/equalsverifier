@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
-import java.util.LinkedHashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
@@ -20,9 +20,9 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag sourceTag = copyGenericTypesInto(source, tag);
         valueProvider.realizeCacheFor(sourceTag, clone);
 

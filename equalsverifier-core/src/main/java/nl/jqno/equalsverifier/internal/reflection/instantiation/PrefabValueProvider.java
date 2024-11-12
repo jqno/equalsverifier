@@ -37,16 +37,12 @@ public class PrefabValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Class<T> type = tag.getType();
-        Tuple<T> result = attempt(type, label);
+        Tuple<T> result = attempt(type, attributes.label);
         Class<?> boxed = PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(tag.getType());
         if (result == null && boxed != null) {
-            result = attempt(boxed, label);
+            result = attempt(boxed, attributes.label);
         }
         if (result == null) {
             result = attempt(type, null);

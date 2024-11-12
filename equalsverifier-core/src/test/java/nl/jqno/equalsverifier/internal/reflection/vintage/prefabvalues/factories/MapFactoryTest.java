@@ -3,10 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,7 +31,7 @@ public class MapFactoryTest {
 
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
-    private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private final Attributes attributes = Attributes.unlabeled();
     private VintageValueProvider valueProvider;
     private String red;
     private String blue;
@@ -52,7 +52,7 @@ public class MapFactoryTest {
         Tuple<Map> tuple = MAP_FACTORY.createValues(
             STRINGSTRINGMAP_TYPETAG,
             valueProvider,
-            typeStack
+            attributes
         );
         assertEquals(mapOf(red, blue), tuple.getRed());
         assertEquals(mapOf(blue, blue), tuple.getBlue());
@@ -60,14 +60,14 @@ public class MapFactoryTest {
 
     @Test
     public void createMapsOfWildcard() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, valueProvider, typeStack);
+        Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, valueProvider, attributes);
         assertEquals(mapOf(redObject, blueObject), tuple.getRed());
         assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }
 
     @Test
     public void createRawMaps() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, typeStack);
+        Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, attributes);
         assertEquals(mapOf(redObject, blueObject), tuple.getRed());
         assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
     }

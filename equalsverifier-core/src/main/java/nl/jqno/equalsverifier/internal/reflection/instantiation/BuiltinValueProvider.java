@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -18,16 +17,12 @@ public class BuiltinValueProvider implements ValueProvider {
     }
 
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         if (tag.getType().isPrimitive() || inPackage(tag, "java.lang")) {
-            return javaLang.provide(tag, label, typeStack);
+            return javaLang.provide(tag, attributes);
         }
         if (inPackage(tag, "java.util")) {
-            return javaUtil.provide(tag, label, typeStack);
+            return javaUtil.provide(tag, attributes);
         }
         return Optional.empty();
     }

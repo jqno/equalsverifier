@@ -3,9 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation.builtin;
 import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.attempt;
 import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.or;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Optional;
 import java.util.function.Supplier;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
@@ -20,11 +21,7 @@ public class BuiltinJavaUtilValueProvider implements ValueProvider {
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         return or(
             attempt(
                 tag,
@@ -35,7 +32,7 @@ public class BuiltinJavaUtilValueProvider implements ValueProvider {
                         tag.getGenericTypes().size() > 0
                             ? tag.getGenericTypes().get(0)
                             : new TypeTag(Object.class),
-                        typeStack
+                        attributes
                     )
             )
         );
@@ -44,11 +41,10 @@ public class BuiltinJavaUtilValueProvider implements ValueProvider {
     private <T, C extends Collection<T>> Tuple<C> build(
         Supplier<C> empty,
         TypeTag generic,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
         return valueProvider
-            .<T>provide(generic, null, typeStack)
-            .orElseThrow(() -> new NoValueException(generic))
+            .<T>provideOrThrow(generic, attributes)
             .map(fn -> {
                 C instance = empty.get();
                 instance.add(fn);

@@ -5,18 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.Test;
 
 public class ArrayValueProviderTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private ArrayValueProvider sut = new ArrayValueProvider(TestValueProviders.simple());
 
     @Test
     public void singleDimensionalArray() {
         TypeTag tag = new TypeTag(int[].class);
         Tuple<int[]> expected = TestValueProviders.INTS.map(i -> new int[] { i });
-        Tuple<int[]> actual = sut.provide(tag);
+        Tuple<int[]> actual = sut.provideOrThrow(tag, EMPTY_ATTRIBUTES);
 
         // Can't use Tuple.equals because the values are arrays
         assertAll(
@@ -30,7 +32,7 @@ public class ArrayValueProviderTest {
     public void twoDimensionalArray() {
         TypeTag tag = new TypeTag(String[][].class);
         Tuple<String[][]> expected = TestValueProviders.STRINGS.map(s -> new String[][] { { s } });
-        Tuple<String[][]> actual = sut.provide(tag);
+        Tuple<String[][]> actual = sut.provideOrThrow(tag, EMPTY_ATTRIBUTES);
 
         // Can't use Tuple.equals because the values are arrays
         assertAll(
@@ -44,7 +46,7 @@ public class ArrayValueProviderTest {
     public void multiDimensionalArray() {
         TypeTag tag = new TypeTag(int[][][].class);
         Tuple<int[][][]> expected = TestValueProviders.INTS.map(i -> new int[][][] { { { i } } });
-        Tuple<int[][][]> actual = sut.provide(tag);
+        Tuple<int[][][]> actual = sut.provideOrThrow(tag, EMPTY_ATTRIBUTES);
 
         // Can't use Tuple.equals because the values are arrays
         assertAll(

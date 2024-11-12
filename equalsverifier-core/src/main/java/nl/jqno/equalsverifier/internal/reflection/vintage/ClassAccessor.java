@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
@@ -45,60 +45,54 @@ public class ClassAccessor<T> {
 
     /**
      * Returns an instance of T that is not equal to the instance of T returned by {@link
-     * #getBlueObject(TypeTag, LinkedHashSet)}.
+     * #getBlueObject(TypeTag, Attributes)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return An instance of T.
      */
-    public T getRedObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
-        return getRedAccessor(enclosingType, typeStack).get();
+    public T getRedObject(TypeTag enclosingType, Attributes attributes) {
+        return getRedAccessor(enclosingType, attributes).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag, LinkedHashSet)}.
+     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag, Attributes)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return An {@link ObjectAccessor} for {@link #getRedObject}.
      */
-    public ObjectAccessor<T> getRedAccessor(
-        TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
-        return buildObjectAccessor().scramble(valueProvider, enclosingType, typeStack);
+    public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType, Attributes attributes) {
+        return buildObjectAccessor().scramble(valueProvider, enclosingType, attributes);
     }
 
     /**
      * Returns an instance of T that is not equal to the instance of T returned by {@link
-     * #getRedObject(TypeTag, LinkedHashSet)}.
+     * #getRedObject(TypeTag, Attributes)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return An instance of T.
      */
-    public T getBlueObject(TypeTag enclosingType, LinkedHashSet<TypeTag> typeStack) {
-        return getBlueAccessor(enclosingType, typeStack).get();
+    public T getBlueObject(TypeTag enclosingType, Attributes attributes) {
+        return getBlueAccessor(enclosingType, attributes).get();
     }
 
     /**
-     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, LinkedHashSet)}.
+     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, Attributes)}.
      *
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
-     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, LinkedHashSet)}.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
+     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, Attributes)}.
      */
-    public ObjectAccessor<T> getBlueAccessor(
-        TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType, Attributes attributes) {
         return buildObjectAccessor()
-            .scramble(valueProvider, enclosingType, typeStack)
-            .scramble(valueProvider, enclosingType, typeStack);
+            .scramble(valueProvider, enclosingType, attributes)
+            .scramble(valueProvider, enclosingType, attributes);
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {

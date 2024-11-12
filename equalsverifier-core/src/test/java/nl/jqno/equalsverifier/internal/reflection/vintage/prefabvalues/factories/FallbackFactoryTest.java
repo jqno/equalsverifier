@@ -4,11 +4,11 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
@@ -22,14 +22,14 @@ public class FallbackFactoryTest {
 
     private FallbackFactory<?> factory;
     private VintageValueProvider valueProvider;
-    private LinkedHashSet<TypeTag> typeStack;
+    private Attributes attributes;
 
     @BeforeEach
     public void setUp() {
         Objenesis objenesis = new ObjenesisStd();
         factory = new FallbackFactory<>(objenesis);
         valueProvider = TestValueProviders.vintage(new PrefabValueProvider(), objenesis);
-        typeStack = new LinkedHashSet<>();
+        attributes = Attributes.unlabeled();
     }
 
     @Test
@@ -44,14 +44,14 @@ public class FallbackFactoryTest {
     public void dontGiveTwoStepRecursiveClass() {
         ExpectedException
             .when(() ->
-                factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, typeStack)
+                factory.createValues(new TypeTag(TwoStepNodeA.class), valueProvider, attributes)
             )
             .assertThrows(RecursionException.class)
             .assertDescriptionContains("TwoStepNodeA", "TwoStepNodeB");
     }
 
     private <T> void assertCorrectTuple(Class<T> type, T expectedRed, T expectedBlue) {
-        Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, typeStack);
+        Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, attributes);
         assertEquals(expectedRed, tuple.getRed());
         assertEquals(expectedBlue, tuple.getBlue());
     }

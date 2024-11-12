@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeArrayA;
@@ -24,6 +25,7 @@ import org.objenesis.ObjenesisStd;
 
 public class DifficultClassValueProviderTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private final Objenesis objenesis = new ObjenesisStd();
     private final PrefabValueProvider prefabs = new PrefabValueProvider();
     private final ValueProvider valueProvider = DefaultValueProviders.withVintage(
@@ -94,7 +96,7 @@ public class DifficultClassValueProviderTest {
     }
 
     private void check() {
-        Tuple<?> value = valueProvider.provide(tag);
+        Tuple<?> value = valueProvider.provideOrThrow(tag, EMPTY_ATTRIBUTES);
 
         Class<?> expected = tag.getType();
         Class<?> actual = value.getRed().getClass();
@@ -102,7 +104,9 @@ public class DifficultClassValueProviderTest {
     }
 
     private void checkForFailure(Class<? extends Throwable> expectedException) {
-        ExpectedException.when(() -> valueProvider.provide(tag)).assertThrows(expectedException);
+        ExpectedException
+            .when(() -> valueProvider.provideOrThrow(tag, EMPTY_ATTRIBUTES))
+            .assertThrows(expectedException);
     }
 
     @SuppressWarnings("unused")

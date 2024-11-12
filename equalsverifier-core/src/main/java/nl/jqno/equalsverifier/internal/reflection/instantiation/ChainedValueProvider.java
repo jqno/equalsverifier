@@ -44,19 +44,15 @@ public class ChainedValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         return providers
             .stream()
-            .map(vp -> vp.<T>provide(tag, label, typeStack))
+            .map(vp -> vp.<T>provide(tag, attributes))
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.empty())
             .map(tuple -> {
-                prefabValueProvider.register(tag.getType(), label, tuple);
+                prefabValueProvider.register(tag.getType(), attributes.label, tuple);
                 return tuple;
             });
     }

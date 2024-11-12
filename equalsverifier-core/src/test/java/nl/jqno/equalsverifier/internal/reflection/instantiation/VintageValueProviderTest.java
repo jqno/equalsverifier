@@ -8,10 +8,10 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -49,7 +49,7 @@ public class VintageValueProviderTest {
 
     @Test
     public void provide() {
-        Tuple<Point> actual = vp.provide(POINT_TAG);
+        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, Attributes.unlabeled());
         assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 
@@ -203,7 +203,7 @@ public class VintageValueProviderTest {
         public Tuple<String> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
             red += "r";
             blue += "b";
@@ -219,7 +219,7 @@ public class VintageValueProviderTest {
         public Tuple<List> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 

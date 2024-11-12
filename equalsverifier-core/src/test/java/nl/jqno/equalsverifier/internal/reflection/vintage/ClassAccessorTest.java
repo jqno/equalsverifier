@@ -4,16 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeB;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.AbstractClassContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.GenericTypeVariableListContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.InterfaceContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -21,7 +23,7 @@ import org.objenesis.ObjenesisStd;
 
 public class ClassAccessorTest {
 
-    private LinkedHashSet<TypeTag> empty;
+    private Attributes empty;
     private Objenesis objenesis;
     private PrefabValueProvider prefabs;
     private VintageValueProvider valueProvider;
@@ -29,7 +31,7 @@ public class ClassAccessorTest {
 
     @BeforeEach
     public void setup() {
-        empty = new LinkedHashSet<>();
+        empty = Attributes.unlabeled();
         objenesis = new ObjenesisStd();
         prefabs = new PrefabValueProvider();
         valueProvider = TestValueProviders.vintage(prefabs, objenesis);

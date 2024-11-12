@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.B
 import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.or;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -17,11 +16,7 @@ public class BuiltinJavaLangValueProvider implements ValueProvider {
         justification = "We want to make an actual copy of a String"
     )
     @Override
-    public <T> Optional<Tuple<T>> provide(
-        TypeTag tag,
-        String label,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
         Object red = new Object();
         return or(
             // Primitives
