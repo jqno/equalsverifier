@@ -370,10 +370,6 @@ public final class JavaApiPrefabValues {
     private void addLists() {
         addFactory(List.class, collection(ArrayList::new));
         addFactory(CopyOnWriteArrayList.class, collection(CopyOnWriteArrayList::new));
-        addFactory(LinkedList.class, collection(LinkedList::new));
-        addFactory(ArrayList.class, collection(ArrayList::new));
-        addFactory(Vector.class, collection(Vector::new));
-        addFactory(Stack.class, collection(Stack::new));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
