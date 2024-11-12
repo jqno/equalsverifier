@@ -1,13 +1,15 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation.builtin;
 
-import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.attempt;
-import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinValueProviderHelper.or;
+import static nl.jqno.equalsverifier.internal.reflection.instantiation.builtin.BuiltinHelper.tuple;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+
+// CHECKSTYLE OFF: CyclomaticComplexity
+// CHECKSTYLE OFF: NPathComplexity
 
 public class BuiltinJavaLangValueProvider implements ValueProvider {
 
@@ -17,31 +19,71 @@ public class BuiltinJavaLangValueProvider implements ValueProvider {
     )
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        Object red = new Object();
-        return or(
-            // Primitives
-            attempt(tag, boolean.class, true, false, true),
-            attempt(tag, byte.class, (byte) 1, (byte) 2, (byte) 3),
-            attempt(tag, char.class, 'a', 'b', 'a'),
-            attempt(tag, double.class, 0.5D, 1.0D, 0.5D),
-            attempt(tag, float.class, 0.5F, 1.0F, 0.5F),
-            attempt(tag, int.class, 1, 2, 1),
-            attempt(tag, long.class, 1L, 2L, 1L),
-            attempt(tag, short.class, (short) 1, (short) 2, (short) 1),
-            // Boxed types
-            attempt(tag, Boolean.class, true, false, true),
-            attempt(tag, Byte.class, (byte) 1, (byte) 2, (byte) 1),
-            attempt(tag, Character.class, 'α', 'ω', Character.valueOf('α')),
-            attempt(tag, Double.class, 0.5D, 1.0D, Double.valueOf(0.5D)),
-            attempt(tag, Float.class, 0.5F, 1.0F, Float.valueOf(0.5F)),
-            attempt(tag, Integer.class, 1000, 2000, Integer.valueOf(1000)),
-            attempt(tag, Long.class, 1000L, 2000L, Long.valueOf(1000L)),
-            attempt(tag, Short.class, (short) 1000, (short) 2000, Short.valueOf((short) 1000)),
-            // Special classes
-            attempt(tag, Object.class, red, new Object(), red),
-            attempt(tag, String.class, "one", "two", new String("one")),
-            attempt(tag, Enum.class, Dummy.RED, Dummy.BLUE, Dummy.RED)
-        );
+        // Primitives
+        if (tag.matches(boolean.class)) {
+            return tuple(true, false, true);
+        }
+        if (tag.matches(byte.class)) {
+            return tuple((byte) 1, (byte) 2, (byte) 3);
+        }
+        if (tag.matches(char.class)) {
+            return tuple('a', 'b', 'a');
+        }
+        if (tag.matches(double.class)) {
+            return tuple(0.5D, 1.0D, 0.5D);
+        }
+        if (tag.matches(float.class)) {
+            return tuple(0.5F, 1.0F, 0.5F);
+        }
+        if (tag.matches(int.class)) {
+            return tuple(1, 2, 1);
+        }
+        if (tag.matches(long.class)) {
+            return tuple(1L, 2L, 1L);
+        }
+        if (tag.matches(short.class)) {
+            return tuple((short) 1, (short) 2, (short) 1);
+        }
+
+        // Boxed types
+        if (tag.matches(Boolean.class)) {
+            return tuple(true, false, true);
+        }
+        if (tag.matches(Byte.class)) {
+            return tuple((byte) 1, (byte) 2, (byte) 1);
+        }
+        if (tag.matches(Character.class)) {
+            return tuple('α', 'ω', Character.valueOf('α'));
+        }
+        if (tag.matches(Double.class)) {
+            return tuple(0.5D, 1.0D, Double.valueOf(0.5D));
+        }
+        if (tag.matches(Float.class)) {
+            return tuple(0.5F, 1.0F, Float.valueOf(0.5F));
+        }
+        if (tag.matches(Integer.class)) {
+            return tuple(1000, 2000, Integer.valueOf(1000));
+        }
+        if (tag.matches(Long.class)) {
+            return tuple(1000L, 2000L, Long.valueOf(1000L));
+        }
+        if (tag.matches(Short.class)) {
+            return tuple((short) 1000, (short) 2000, Short.valueOf((short) 1000));
+        }
+
+        // Special classes
+        if (tag.matches(Object.class)) {
+            Object red = new Object();
+            return tuple(red, new Object(), red);
+        }
+        if (tag.matches(String.class)) {
+            return tuple("one", "two", new String("one"));
+        }
+        if (tag.matches(Enum.class)) {
+            return tuple(Dummy.RED, Dummy.BLUE, Dummy.RED);
+        }
+
+        return Optional.empty();
     }
 
     private enum Dummy {

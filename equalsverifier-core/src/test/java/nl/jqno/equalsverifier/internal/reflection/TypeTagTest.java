@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -32,6 +31,22 @@ public class TypeTagTest {
     @Test
     public void typeCannotBeNull() {
         assertThrows(NullPointerException.class, () -> new TypeTag(null));
+    }
+
+    @Test
+    public void matches() {
+        assertTrue(new TypeTag(Integer.class).matches(Integer.class));
+    }
+
+    @Test
+    public void doesNotMatch() {
+        assertFalse(new TypeTag(Integer.class).matches(String.class));
+    }
+
+    @Test
+    public void doesNotMatchBoxed() {
+        assertFalse(new TypeTag(Integer.class).matches(int.class));
+        assertFalse(new TypeTag(int.class).matches(Integer.class));
     }
 
     @Test

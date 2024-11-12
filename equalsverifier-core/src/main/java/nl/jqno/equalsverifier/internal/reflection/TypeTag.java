@@ -50,6 +50,68 @@ public final class TypeTag {
         return resolve(field.getGenericType(), field.getType(), enclosingType, false);
     }
 
+    /**
+     * @param <T> The returned {@link Class} will have this generic type.
+     * @return The TypeTag's raw type.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Class<T> getType() {
+        return (Class<T>) type;
+    }
+
+    /** @return The TypeTag's generic types. */
+    public List<TypeTag> getGenericTypes() {
+        return Collections.unmodifiableList(genericTypes);
+    }
+
+    /**
+     * Determines whether another type matches the type described by this TypeTag.
+     *
+     * @param anotherType The type to match with this TypeTag.
+     * @return true if the given type matches with this TypeTag, false otherwise.
+     */
+    public boolean matches(Class<?> anotherType) {
+        return type.equals(anotherType);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof TypeTag)) {
+            return false;
+        }
+        TypeTag other = (TypeTag) obj;
+        return type.equals(other.type) && genericTypes.equals(other.genericTypes);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        int result = 37;
+        result = (59 * result) + type.hashCode();
+        result = (59 * result) + genericTypes.hashCode();
+        return result;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        StringBuilder s = new StringBuilder("");
+        s.append(type.getSimpleName());
+        if (genericTypes.size() >= 1) {
+            s.append("<");
+            s.append(genericTypes.get(0));
+        }
+        for (int i = 1; i < genericTypes.size(); i++) {
+            s.append(", ");
+            s.append(genericTypes.get(i));
+        }
+        if (genericTypes.size() >= 1) {
+            s.append(">");
+        }
+        return s.toString();
+    }
+
     private static TypeTag resolve(
         Type type,
         Class<?> typeAsClass,
@@ -179,58 +241,6 @@ public final class TypeTag {
             lookup.put(name, tag);
         }
         return lookup;
-    }
-
-    /**
-     * @param <T> The returned {@link Class} will have this generic type.
-     * @return The TypeTag's raw type.
-     */
-    @SuppressWarnings("unchecked")
-    public <T> Class<T> getType() {
-        return (Class<T>) type;
-    }
-
-    /** @return The TypeTag's generic types. */
-    public List<TypeTag> getGenericTypes() {
-        return Collections.unmodifiableList(genericTypes);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof TypeTag)) {
-            return false;
-        }
-        TypeTag other = (TypeTag) obj;
-        return type.equals(other.type) && genericTypes.equals(other.genericTypes);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int hashCode() {
-        int result = 37;
-        result = (59 * result) + type.hashCode();
-        result = (59 * result) + genericTypes.hashCode();
-        return result;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public String toString() {
-        StringBuilder s = new StringBuilder("");
-        s.append(type.getSimpleName());
-        if (genericTypes.size() >= 1) {
-            s.append("<");
-            s.append(genericTypes.get(0));
-        }
-        for (int i = 1; i < genericTypes.size(); i++) {
-            s.append(", ");
-            s.append(genericTypes.get(i));
-        }
-        if (genericTypes.size() >= 1) {
-            s.append(">");
-        }
-        return s.toString();
     }
 
     private static final class NullType {}
