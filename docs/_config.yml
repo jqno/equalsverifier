@@ -32,6 +32,7 @@ author:
   stackoverflow_tag: equalsverifier
   uri_author: https://jqno.nl
   twitter_author: jqno
+  bluesky_author: "https://bsky.app/profile/jqno.bsky.social"
   mastodon_author: "https://mastodon.online/@jqno"
 
 twitter:
@@ -46,6 +47,9 @@ footer:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/jqno"
+    - label: "Bluesky"
+      icon: "fab fa-fw fa-bluesky"
+      url: "https://bsky.app/profile/jqno.bsky.social"
     - label: "Mastodon"
       icon: "fab fa-fw fa-mastodon"
       url: "https://mastodon.online/@jqno"
@@ -71,7 +75,7 @@ collections:
     permalink: /:collection/:path/
 
 # Build settings
-remote_theme: mmistakes/minimal-mistakes@4.20.2
+remote_theme: mmistakes/minimal-mistakes@4.26.2
 plugins:
   - jekyll-feed
   - jekyll-include-cache
