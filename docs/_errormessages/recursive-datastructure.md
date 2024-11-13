@@ -46,7 +46,10 @@ class SparseArrayContainer {
 // ...
 
 EqualsVerifier.forClass(SparseArrayContainer.class)
-    .withPrefabValues(SparseArray.class, new SparseArray(1), new SparseArray(2, 3))
+    .withPrefabValues(
+        SparseArray.class,
+        new SparseArray(1),
+        new SparseArray(2, 3))
     .verify();
 {% endhighlight %}
 
@@ -56,7 +59,9 @@ In these cases, you can use `withGenericPrefabValues`:
 
 {% highlight java %}
 EqualsVerifier.forClass(SparseArrayContainer.class)
-    .withGenericPrefabValues(SparseArray.class, element -> new SparseArray(element))
+    .withGenericPrefabValues(
+        SparseArray.class,
+        element -> new SparseArray(element))
     .verify();
 {% endhighlight %}
 
