@@ -4,7 +4,6 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
@@ -26,7 +25,6 @@ public final class Context<T> {
     public Context(
         Configuration<T> configuration,
         FactoryCache factoryCache,
-        PrefabValueProvider prefabValueProvider,
         GenericFactories genericFactories,
         Objenesis objenesis
     ) {
@@ -35,8 +33,7 @@ public final class Context<T> {
         this.classProbe = new ClassProbe<>(configuration.getType());
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
-        this.valueProvider =
-            DefaultValueProviders.create(cache, prefabValueProvider, genericFactories, objenesis);
+        this.valueProvider = DefaultValueProviders.create(cache, genericFactories, objenesis);
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);
     }
 

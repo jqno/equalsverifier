@@ -11,7 +11,6 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -33,7 +32,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
-    private PrefabValueProvider prefabValueProvider = new PrefabValueProvider();
     private GenericFactories genericFactories = new GenericFactories();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
@@ -74,7 +72,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param factoryCache Factories that can be used to create values.
-     * @param prefabValueProvider ValueProvider that records prefab values.
      * @param genericFactories ValueProvider that records generic prefab values.
      * @param objenesis To instantiate non-record classes.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
@@ -85,12 +82,10 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         value = "EI_EXPOSE_REP2",
         justification = "FactoryCache is inherently mutable"
     )
-    // CHECKSTYLE OFF: ParameterNumber
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        PrefabValueProvider prefabValueProvider,
         GenericFactories genericFactories,
         Objenesis objenesis,
         boolean usingGetClass,
@@ -99,13 +94,10 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = factoryCache;
-        this.prefabValueProvider = prefabValueProvider;
         this.genericFactories = genericFactories;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
-
-    // CHECKSTYLE ON: ParameterNumber
 
     /**
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object,
@@ -456,13 +448,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(
-            config,
-            factoryCache,
-            prefabValueProvider,
-            genericFactories,
-            objenesis
-        );
+        Context<T> context = new Context<>(config, factoryCache, genericFactories, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),

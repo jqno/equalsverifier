@@ -11,12 +11,11 @@ public final class DefaultValueProviders {
 
     public static ValueProvider create(
         FactoryCache factoryCache,
-        PrefabValueProvider prefabValueProvider,
         GenericFactories genericFactories,
         Objenesis objenesis
     ) {
-        ChainedValueProvider mainChain = new ChainedValueProvider(prefabValueProvider);
-        ChainedValueProvider vintageChain = new ChainedValueProvider(prefabValueProvider);
+        ChainedValueProvider mainChain = new ChainedValueProvider();
+        ChainedValueProvider vintageChain = new ChainedValueProvider();
 
         ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
         ValueProvider genericPrefab = new GenericPrefabValueProvider(genericFactories, mainChain);
