@@ -49,7 +49,7 @@ public class VintageValueProviderTest {
 
     @Test
     public void provide() {
-        Tuple<Point> actual = vp.provide(POINT_TAG);
+        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, null);
         assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
     }
 

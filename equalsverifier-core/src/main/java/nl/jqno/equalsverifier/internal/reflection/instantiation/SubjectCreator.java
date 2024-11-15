@@ -5,7 +5,6 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
@@ -238,9 +237,7 @@ public class SubjectCreator<T> {
     private Tuple<?> valuesFor(Field f) {
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
-            Tuple<?> tuple = valueProvider
-                .provide(fieldTag, f.getName())
-                .orElseThrow(() -> new NoValueException(fieldTag));
+            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag, f.getName());
             return tuple;
         } catch (ModuleException e) {
             throw new ModuleException(

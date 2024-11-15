@@ -34,11 +34,13 @@ public interface ValueProvider {
      *
      * @param <T> The returned tuple will have this generic type.
      * @param tag A description of the desired type, including generic parameters.
+     * @param label Returns only the value assigned to the given label, or if label is null,
+     *      returns the value that's not assigned to any label.
      * @return A tuple of two different values of the given type, or an empty Optional if none
      *      could be found.
      * @throws NoValueException if no value could be found for the given tag.
      */
-    default <T> Tuple<T> provide(TypeTag tag) {
-        return this.<T>provide(tag, null).orElseThrow(() -> new NoValueException(tag));
+    default <T> Tuple<T> provideOrThrow(TypeTag tag, String label) {
+        return this.<T>provide(tag, label).orElseThrow(() -> new NoValueException(tag));
     }
 }

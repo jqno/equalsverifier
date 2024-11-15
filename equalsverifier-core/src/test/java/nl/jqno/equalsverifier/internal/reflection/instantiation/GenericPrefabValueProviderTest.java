@@ -62,13 +62,16 @@ public class GenericPrefabValueProviderTest {
         factories.register(SET.getType(), (String s) -> set(s + "y"));
 
         construct();
-        assertEquals(Tuple.of(set("ay"), set("by"), set("ay")), sut.provide(SET));
+        assertEquals(Tuple.of(set("ay"), set("by"), set("ay")), sut.provideOrThrow(SET, null));
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
             otherFactories,
             prefab
         );
-        assertEquals(Tuple.of(list("ax"), list("bx"), list("ax")), anotherSut.provide(LIST));
+        assertEquals(
+            Tuple.of(list("ax"), list("bx"), list("ax")),
+            anotherSut.provideOrThrow(LIST, null)
+        );
         assertEquals(Optional.empty(), anotherSut.provide(SET, null));
         // CHECKSTYLE ON: VariableDeclarationUsageDistance
     }
@@ -81,7 +84,10 @@ public class GenericPrefabValueProviderTest {
         factories.register(ENTRY.getType(), (Integer k, String v) -> entry(k + 1, v + "y"));
 
         construct();
-        assertEquals(Tuple.of(entry(4, "ay"), entry(3, "by"), entry(4, "ay")), sut.provide(ENTRY));
+        assertEquals(
+            Tuple.of(entry(4, "ay"), entry(3, "by"), entry(4, "ay")),
+            sut.provideOrThrow(ENTRY, null)
+        );
 
         GenericPrefabValueProvider anotherSut = new GenericPrefabValueProvider(
             otherFactories,

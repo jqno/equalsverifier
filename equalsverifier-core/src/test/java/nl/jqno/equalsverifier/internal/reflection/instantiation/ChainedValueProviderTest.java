@@ -33,7 +33,7 @@ public class ChainedValueProviderTest {
     @Test
     public void returnsValueIfMatch() {
         sut.register(intProvider);
-        assertEquals(1, sut.provide(INT).getRed());
+        assertEquals(1, sut.provideOrThrow(INT, null).getRed());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class ChainedValueProviderTest {
     public void throwsExceptionIfNoMatch() {
         sut.register(stringProvider);
         ExpectedException
-            .when(() -> sut.provide(INT))
+            .when(() -> sut.provideOrThrow(INT, null))
             .assertThrows(NoValueException.class)
             .assertDescriptionContains("Could not find a value for int");
     }
@@ -54,7 +54,7 @@ public class ChainedValueProviderTest {
     @Test
     public void skipsNonMatchingValue() {
         sut.register(stringProvider, intProvider);
-        assertEquals(1, sut.provide(INT).getRed());
+        assertEquals(1, sut.provideOrThrow(INT, null).getRed());
         assertEquals(1, stringProvider.called);
         assertEquals(1, intProvider.called);
     }
@@ -68,7 +68,7 @@ public class ChainedValueProviderTest {
             1
         );
         sut.register(intProvider, anotherIntProvider);
-        assertEquals(1, sut.provide(INT).getRed());
+        assertEquals(1, sut.provideOrThrow(INT, null).getRed());
         assertEquals(1, intProvider.called);
         assertEquals(0, anotherIntProvider.called);
     }
@@ -93,8 +93,8 @@ public class ChainedValueProviderTest {
     @Test
     public void cachesWithoutLabelInPrefabValueProvider() {
         sut.register(intProvider);
-        sut.provide(INT);
-        assertEquals(1, prefab.provide(INT).getRed());
+        sut.provideOrThrow(INT, null);
+        assertEquals(1, prefab.provideOrThrow(INT, null).getRed());
     }
 
     @Test

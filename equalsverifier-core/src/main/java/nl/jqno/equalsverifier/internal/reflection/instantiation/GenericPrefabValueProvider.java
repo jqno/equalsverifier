@@ -105,7 +105,7 @@ public class GenericPrefabValueProvider implements ValueProvider {
         List<Object> redCopyValues = new ArrayList<>();
 
         for (TypeTag generic : tag.getGenericTypes()) {
-            Tuple<?> tuple = provider.provide(generic);
+            Tuple<?> tuple = provider.provideOrThrow(generic, null);
             redValues.add(tuple.getRed());
             blueValues.add(tuple.getBlue());
             redCopyValues.add(tuple.getRedCopy());
