@@ -5,13 +5,13 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
+import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProviderCreatorTest;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProviderTest;
-import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FieldModifier;
-import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.*;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 
@@ -26,6 +26,8 @@ public final class ArchitectureTest {
             Context.class,
             PrefabValuesApi.class,
             JavaApiPrefabValues.class,
+            ConfiguredEqualsVerifier.class,
+            SingleTypeEqualsVerifierApi.class,
             // 👇 Test classes
             VintageValueProviderTest.class,
             VintageValueProviderCreatorTest.class

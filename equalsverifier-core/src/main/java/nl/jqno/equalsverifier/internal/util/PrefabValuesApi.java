@@ -1,11 +1,14 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
+
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import org.objenesis.Objenesis;
 
@@ -14,7 +17,7 @@ public final class PrefabValuesApi {
     private PrefabValuesApi() {}
 
     public static <T> void addPrefabValues(
-        PrefabValueProvider provider,
+        FactoryCache factoryCache,
         Objenesis objenesis,
         Class<T> otherType,
         T red,
@@ -23,14 +26,14 @@ public final class PrefabValuesApi {
         Validations.validateRedAndBluePrefabValues(otherType, red, blue);
 
         if (red.getClass().isArray()) {
-            provider.register(otherType, null, red, blue, red);
+            factoryCache.put(otherType, values(red, blue, red));
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                provider.register(otherType, null, red, blue, redCopy);
+                factoryCache.put(otherType, values(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                provider.register(otherType, null, red, blue, red);
+                factoryCache.put(otherType, values(red, blue, red));
             }
         }
     }

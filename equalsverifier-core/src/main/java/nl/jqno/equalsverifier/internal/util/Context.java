@@ -25,6 +25,7 @@ public final class Context<T> {
     )
     public Context(
         Configuration<T> configuration,
+        FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
         GenericFactories genericFactories,
         Objenesis objenesis
@@ -33,7 +34,7 @@ public final class Context<T> {
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
 
-        FactoryCache cache = JavaApiPrefabValues.build();
+        FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         this.valueProvider =
             DefaultValueProviders.create(cache, prefabValueProvider, genericFactories, objenesis);
         this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, objenesis);

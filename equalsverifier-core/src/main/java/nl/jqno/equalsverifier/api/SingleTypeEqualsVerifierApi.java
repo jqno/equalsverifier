@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.api;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -11,6 +12,7 @@ import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;
@@ -30,6 +32,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean usingGetClass = false;
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
+    private FactoryCache factoryCache = new FactoryCache();
     private PrefabValueProvider prefabValueProvider = new PrefabValueProvider();
     private GenericFactories genericFactories = new GenericFactories();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
@@ -69,6 +72,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
+     * @param factoryCache Factories that can be used to create values.
      * @param prefabValueProvider ValueProvider that records prefab values.
      * @param genericFactories ValueProvider that records generic prefab values.
      * @param objenesis To instantiate non-record classes.
@@ -76,9 +80,15 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     equals} method, instead of an {@code instanceof} check.
      * @param converter A function that converts from field name to getter name.
      */
+    @SuppressFBWarnings(
+        value = "EI_EXPOSE_REP2",
+        justification = "FactoryCache is inherently mutable"
+    )
+    // CHECKSTYLE OFF: ParameterNumber
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
+        FactoryCache factoryCache,
         PrefabValueProvider prefabValueProvider,
         GenericFactories genericFactories,
         Objenesis objenesis,
@@ -87,11 +97,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     ) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
+        this.factoryCache = factoryCache;
         this.prefabValueProvider = prefabValueProvider;
         this.genericFactories = genericFactories;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
+
+    // CHECKSTYLE ON: ParameterNumber
 
     /**
      * Constructor, only to be called by {@link RelaxedEqualsVerifierApi#andUnequalExamples(Object,
@@ -124,7 +137,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     /** {@inheritDoc} */
     @Override
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
-        PrefabValuesApi.addPrefabValues(prefabValueProvider, objenesis, otherType, red, blue);
+        PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
         return this;
     }
 
@@ -443,6 +456,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Configuration<T> config = buildConfig();
         Context<T> context = new Context<>(
             config,
+            factoryCache,
             prefabValueProvider,
             genericFactories,
             objenesis
