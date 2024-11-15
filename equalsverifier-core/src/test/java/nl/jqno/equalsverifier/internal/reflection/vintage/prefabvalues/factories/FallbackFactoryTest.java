@@ -12,8 +12,8 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.NodeArray;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -38,7 +38,7 @@ public class FallbackFactoryTest {
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
     }
 

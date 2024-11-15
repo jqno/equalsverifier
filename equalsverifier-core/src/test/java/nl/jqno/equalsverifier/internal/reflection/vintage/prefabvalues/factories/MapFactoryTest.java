@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.OneElementEnum;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ public class MapFactoryTest {
     public void setUp() {
         valueProvider =
             new VintageValueProvider(
-                EmptyValueProvider.INSTANCE,
+                TestValueProviders.empty(),
                 JavaApiPrefabValues.build(),
                 new ObjenesisStd()
             );

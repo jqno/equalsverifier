@@ -14,7 +14,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.ThrowingInitializer;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +36,7 @@ public class VintageValueProviderTest {
     public void setUp() {
         factoryCache.put(String.class, new AppendingStringTestFactory());
         factoryCache.put(int.class, values(42, 1337, 42));
-        vp = new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+        vp = new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class VintageValueProviderTest {
     @Test
     public void stringListIsSeparateFromIntegerList() {
         factoryCache.put(List.class, new ListTestFactory());
-        vp = new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+        vp = new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
 
         List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
         List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
@@ -134,7 +134,7 @@ public class VintageValueProviderTest {
     @Test
     public void addingATypeTwiceOverrulesTheExistingOne() {
         factoryCache.put(int.class, values(-1, -2, -1));
-        vp = new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+        vp = new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         assertEquals(-1, (int) vp.giveRed(INT_TAG));
         assertEquals(-2, (int) vp.giveBlue(INT_TAG));
     }
@@ -143,7 +143,7 @@ public class VintageValueProviderTest {
     public void addLazyFactoryWorks() {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
-        vp = new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+        vp = new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         assertEquals(Lazy.X, vp.giveRed(lazyTag));
         assertEquals(Lazy.Y, vp.giveBlue(lazyTag));
         assertEquals(Lazy.X, vp.giveRedCopy(lazyTag));
@@ -159,7 +159,7 @@ public class VintageValueProviderTest {
             (t, p, ts) ->
                 Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X)
         );
-        vp = new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+        vp = new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {

@@ -7,8 +7,8 @@ import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCacheFactory;
-import nl.jqno.equalsverifier.internal.testhelpers.EmptyValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
+import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.EmptyEnum;
@@ -39,7 +39,7 @@ public class VintageValueProviderCreatorTest {
         objenesis = new ObjenesisStd();
         factoryCache = FactoryCacheFactory.withPrimitiveFactories();
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
     }
 
     @Test
@@ -80,7 +80,7 @@ public class VintageValueProviderCreatorTest {
     public void oneStepRecursiveType() {
         factoryCache.put(Node.class, values(new Node(), new Node(), new Node()));
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         valueProvider.giveRed(NODE_TAG);
     }
 
@@ -98,7 +98,7 @@ public class VintageValueProviderCreatorTest {
             values(new NodeArray(), new NodeArray(), new NodeArray())
         );
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         valueProvider.giveRed(NODE_ARRAY_TAG);
     }
 
@@ -116,7 +116,7 @@ public class VintageValueProviderCreatorTest {
             values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
@@ -134,7 +134,7 @@ public class VintageValueProviderCreatorTest {
             values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB())
         );
         valueProvider =
-            new VintageValueProvider(EmptyValueProvider.INSTANCE, factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
 
