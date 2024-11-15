@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import com.google.common.collect.ImmutableList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -140,9 +139,8 @@ public class RecursionTest {
             .assertMessageContains(
                 RECURSIVE_DATASTRUCTURE,
                 ImmutableListTree.class.getSimpleName(),
-                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
-                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()
-            ); // I'd prefer not to have this last one though.
+                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString()
+            );
     }
 
     @Test
