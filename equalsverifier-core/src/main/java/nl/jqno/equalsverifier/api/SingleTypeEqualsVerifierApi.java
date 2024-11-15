@@ -42,6 +42,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();
     private Set<String> ignoredAnnotationClassNames = new HashSet<>();
+    private Set<String> prefabbedFieldNames = new HashSet<>();
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
     private final Objenesis objenesis;
@@ -160,13 +161,14 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         S blue
     ) {
         PrefabValuesApi.addPrefabValuesForField(
-            prefabValueProvider,
+            factoryCache,
             objenesis,
             type,
             fieldName,
             red,
             blue
         );
+        prefabbedFieldNames.add(fieldName);
         withNonnullFields(fieldName);
         return this;
     }
@@ -479,7 +481,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields,
             allIncludedFields,
             nonnullFields,
-            prefabValueProvider.getFieldNames(),
+            prefabbedFieldNames,
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
             redefinedSubclass,

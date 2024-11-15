@@ -22,8 +22,7 @@ import org.objenesis.Objenesis;
  */
 public class VintageValueProvider implements ValueProvider {
 
-    // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
-    private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
+    private final Map<Key, Tuple<?>> valueCache = new HashMap<>();
 
     private final ValueProvider valueProvider;
     private final FactoryCache factoryCache;
@@ -50,7 +49,7 @@ public class VintageValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag)));
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, label)));
     }
 
     /**
@@ -63,7 +62,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRed();
+        return this.<T>giveTuple(tag, null).getRed();
     }
 
     /**
@@ -76,7 +75,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "blue" prefabricated value.
      */
     public <T> T giveBlue(TypeTag tag) {
-        return this.<T>giveTuple(tag).getBlue();
+        return this.<T>giveTuple(tag, null).getBlue();
     }
 
     /**
@@ -89,7 +88,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRedCopy();
+        return this.<T>giveTuple(tag, null).getRedCopy();
     }
 
     /**
@@ -113,7 +112,7 @@ public class VintageValueProvider implements ValueProvider {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag, typeStack);
+        Tuple<T> tuple = giveTuple(tag, null, typeStack);
         if (tuple.getRed() == null) {
             return null;
         }
@@ -153,23 +152,37 @@ public class VintageValueProvider implements ValueProvider {
      * @param typeStack Keeps track of recursion in the type.
      */
     public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        if (!valueCache.containsKey(tag)) {
-            Tuple<T> tuple = createTuple(tag, typeStack);
-            valueCache.put(tag, tuple);
+        realizeCacheFor(tag, null, typeStack);
+    }
+
+    /**
+     * Makes sure that values for the specified type are present in the cache, but doesn't return
+     * them.
+     *
+     * @param <T> The desired type.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param label Adds the value assigned to the given label, if a label is given.
+     * @param typeStack Keeps track of recursion in the type.
+     */
+    public <T> void realizeCacheFor(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
+        Key key = Key.of(tag, label);
+        if (!valueCache.containsKey(key)) {
+            Tuple<T> tuple = createTuple(tag, label, typeStack);
+            valueCache.put(key, tuple);
         }
     }
 
-    private <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, new LinkedHashSet<>());
+    private <T> Tuple<T> giveTuple(TypeTag tag, String label) {
+        return giveTuple(tag, label, new LinkedHashSet<>());
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, typeStack);
-        return (Tuple<T>) valueCache.get(tag);
+    private <T> Tuple<T> giveTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, label, typeStack);
+        return (Tuple<T>) valueCache.get(Key.of(tag, label));
     }
 
-    private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+    private <T> Tuple<T> createTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
         if (typeStack.contains(tag)) {
             throw new RecursionException(typeStack);
         }
@@ -180,6 +193,10 @@ public class VintageValueProvider implements ValueProvider {
         }
 
         Class<T> type = tag.getType();
+        if (label != null && factoryCache.contains(type, label)) {
+            PrefabValueFactory<T> factory = factoryCache.get(type, label);
+            return factory.createValues(tag, this, typeStack);
+        }
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
             return factory.createValues(tag, this, typeStack);
@@ -188,5 +205,39 @@ public class VintageValueProvider implements ValueProvider {
         @SuppressWarnings("unchecked")
         Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
         return result;
+    }
+
+    private static final class Key {
+
+        final TypeTag tag;
+        final String label;
+
+        private Key(TypeTag tag, String label) {
+            this.tag = tag;
+            this.label = label;
+        }
+
+        public static Key of(TypeTag tag, String label) {
+            return new Key(tag, label);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Key)) {
+                return false;
+            }
+            Key other = (Key) obj;
+            return Objects.equals(tag, other.tag) && Objects.equals(label, other.label);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(tag, label);
+        }
+
+        @Override
+        public String toString() {
+            return "Key: [" + tag + "/" + label + "]";
+        }
     }
 }

@@ -7,7 +7,6 @@ import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.PrefabValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import org.objenesis.Objenesis;
@@ -40,7 +39,7 @@ public final class PrefabValuesApi {
 
     @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
-        PrefabValueProvider provider,
+        FactoryCache factoryCache,
         Objenesis objenesis,
         Class<?> enclosingType,
         String fieldName,
@@ -54,14 +53,14 @@ public final class PrefabValuesApi {
         Validations.validateFieldTypeMatches(field, red.getClass());
 
         if (type.isArray()) {
-            provider.register(type, fieldName, red, blue, red);
+            factoryCache.put(type, fieldName, values(red, blue, red));
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                provider.register(type, fieldName, red, blue, redCopy);
+                factoryCache.put(type, fieldName, values(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                provider.register(type, fieldName, red, blue, red);
+                factoryCache.put(type, fieldName, values(red, blue, red));
             }
         }
     }

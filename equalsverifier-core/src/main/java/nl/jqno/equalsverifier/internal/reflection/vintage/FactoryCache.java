@@ -102,6 +102,15 @@ public class FactoryCache {
     }
 
     /**
+     * @param type The type for which a factory is needed.
+     * @param label The label that the factory needs to be assigned to.
+     * @return Whether a factory is available for the given type.
+     */
+    public boolean contains(Class<?> type, String label) {
+        return cache.containsKey(Key.of(type.getName(), label));
+    }
+
+    /**
      * Returns a new {@code FactoryCache} instance containing the factories from {@code this} and
      * from the {@code other} cache.
      *
