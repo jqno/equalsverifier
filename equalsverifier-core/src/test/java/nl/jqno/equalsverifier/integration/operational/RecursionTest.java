@@ -137,9 +137,8 @@ public class RecursionTest {
             .assertMessageContains(
                 RECURSIVE_DATASTRUCTURE,
                 ImmutableListTree.class.getSimpleName(),
-                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
-                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()
-            ); // I'd prefer not to have this last one though.
+                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString()
+            );
     }
 
     @Test
