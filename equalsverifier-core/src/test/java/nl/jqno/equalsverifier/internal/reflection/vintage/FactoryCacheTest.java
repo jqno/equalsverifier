@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 public class FactoryCacheTest {
 
+    private static final String SOME_LABEL = "label";
     private static final Class<String> STRING_CLASS = String.class;
     private static final PrefabValueFactory<String> STRING_FACTORY = new SimpleFactory<>(
         "red",
@@ -27,6 +28,14 @@ public class FactoryCacheTest {
     public void putAndGetTuple() {
         cache.put(STRING_CLASS, STRING_FACTORY);
         assertEquals(STRING_FACTORY, cache.get(STRING_CLASS));
+        assertNull(cache.get(STRING_CLASS, SOME_LABEL));
+    }
+
+    @Test
+    public void putAndGetTupleWithLabel() {
+        cache.put(STRING_CLASS, SOME_LABEL, STRING_FACTORY);
+        assertEquals(STRING_FACTORY, cache.get(STRING_CLASS, SOME_LABEL));
+        assertNull(cache.get(STRING_CLASS));
     }
 
     @Test
@@ -39,9 +48,24 @@ public class FactoryCacheTest {
     }
 
     @Test
+    public void putTwiceAndGetBothWithLabel() {
+        cache.put(STRING_CLASS, SOME_LABEL, STRING_FACTORY);
+        cache.put(INT_CLASS, SOME_LABEL, INT_FACTORY);
+
+        assertEquals(INT_FACTORY, cache.get(INT_CLASS, SOME_LABEL));
+        assertEquals(STRING_FACTORY, cache.get(STRING_CLASS, SOME_LABEL));
+    }
+
+    @Test
     public void putNullAndGetNothingBack() {
         cache.put((Class<?>) null, STRING_FACTORY);
         assertNull(cache.get(null));
+    }
+
+    @Test
+    public void putNullAndGetNothingBackWithLabel() {
+        cache.put((Class<?>) null, SOME_LABEL, STRING_FACTORY);
+        assertNull(cache.get(null, SOME_LABEL));
     }
 
     @Test
@@ -51,8 +75,34 @@ public class FactoryCacheTest {
     }
 
     @Test
+    public void containsWithLabel() {
+        cache.put(STRING_CLASS, SOME_LABEL, STRING_FACTORY);
+        assertTrue(cache.contains(STRING_CLASS, SOME_LABEL));
+        assertFalse(cache.contains(STRING_CLASS));
+    }
+
+    @Test
     public void doesntContain() {
         assertFalse(cache.contains(STRING_CLASS));
+    }
+
+    @Test
+    public void doesntContainWithLabel() {
+        cache.put(STRING_CLASS, STRING_FACTORY);
+        assertFalse(cache.contains(STRING_CLASS, SOME_LABEL));
+    }
+
+    @Test
+    public void copy() {
+        cache.put(STRING_CLASS, STRING_FACTORY);
+
+        FactoryCache copy = cache.copy();
+        copy.put(INT_CLASS, INT_FACTORY);
+
+        assertTrue(copy.contains(STRING_CLASS));
+
+        assertFalse(copy == cache);
+        assertFalse(cache.contains(INT_CLASS));
     }
 
     @Test
