@@ -32,7 +32,7 @@ author:
   stackoverflow_tag: equalsverifier
   uri_author: https://jqno.nl
   twitter_author: jqno
-  bluesky_author: "https://bsky.app/profile/jqno.bsky.social"
+  bluesky_author: "https://bsky.app/profile/jqno.nl"
   mastodon_author: "https://mastodon.online/@jqno"
 
 twitter:
@@ -49,7 +49,7 @@ footer:
       url: "https://twitter.com/jqno"
     - label: "Bluesky"
       icon: "fab fa-fw fa-bluesky"
-      url: "https://bsky.app/profile/jqno.bsky.social"
+      url: "https://bsky.app/profile/jqno.nl"
     - label: "Mastodon"
       icon: "fab fa-fw fa-mastodon"
       url: "https://mastodon.online/@jqno"
