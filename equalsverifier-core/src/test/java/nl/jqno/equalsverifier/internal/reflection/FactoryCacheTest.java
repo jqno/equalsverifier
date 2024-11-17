@@ -56,6 +56,16 @@ public class FactoryCacheTest {
     }
 
     @Test
+    public void copy() {
+        cache.put(STRING_CLASS, STRING_FACTORY);
+        FactoryCache copy = cache.copy();
+        copy.put(INT_CLASS, INT_FACTORY);
+        assertTrue(copy.contains(STRING_CLASS));
+        assertFalse(copy == cache);
+        assertFalse(cache.contains(INT_CLASS));
+    }
+
+    @Test
     public void merge() {
         FactoryCache a = new FactoryCache();
         a.put(STRING_CLASS, STRING_FACTORY);

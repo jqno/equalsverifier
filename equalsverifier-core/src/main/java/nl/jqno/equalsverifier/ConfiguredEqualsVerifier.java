@@ -51,7 +51,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     public ConfiguredEqualsVerifier copy() {
         return new ConfiguredEqualsVerifier(
             EnumSet.copyOf(warningsToSuppress),
-            new FactoryCache().merge(factoryCache),
+            factoryCache.copy(),
             usingGetClass,
             fieldnameToGetter
         );
@@ -127,7 +127,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         return new SingleTypeEqualsVerifierApi<>(
             type,
             EnumSet.copyOf(warningsToSuppress),
-            factoryCache,
+            factoryCache.copy(),
             objenesis,
             usingGetClass,
             fieldnameToGetter

@@ -67,6 +67,17 @@ public class FactoryCache {
     }
 
     /**
+     * Returns a new {@code FactoryCache} instance containing the factories from {@code this}.
+     *
+     * @return a new instance containing factories from {@code this}
+     */
+    public FactoryCache copy() {
+        FactoryCache result = new FactoryCache();
+        addAll(result, this);
+        return result;
+    }
+
+    /**
      * Returns a new {@code FactoryCache} instance containing the factories from {@code this} and
      * from the {@code other} cache.
      *
@@ -75,12 +86,12 @@ public class FactoryCache {
      */
     public FactoryCache merge(FactoryCache other) {
         FactoryCache result = new FactoryCache();
-        copy(result, this);
-        copy(result, other);
+        addAll(result, this);
+        addAll(result, other);
         return result;
     }
 
-    private void copy(FactoryCache to, FactoryCache from) {
+    private void addAll(FactoryCache to, FactoryCache from) {
         for (Map.Entry<String, PrefabValueFactory<?>> entry : from.cache.entrySet()) {
             to.put(entry.getKey(), entry.getValue());
         }
