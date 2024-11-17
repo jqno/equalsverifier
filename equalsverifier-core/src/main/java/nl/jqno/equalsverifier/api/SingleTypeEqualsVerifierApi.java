@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -32,7 +31,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
-    private GenericFactories genericFactories = new GenericFactories();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -72,7 +70,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type The class for which the {@code equals} method should be tested.
      * @param warningsToSuppress A list of warnings to suppress in {@code EqualsVerifier}.
      * @param factoryCache Factories that can be used to create values.
-     * @param genericFactories ValueProvider that records generic prefab values.
      * @param objenesis To instantiate non-record classes.
      * @param usingGetClass Whether {@code getClass} is used in the implementation of the {@code
      *     equals} method, instead of an {@code instanceof} check.
@@ -86,7 +83,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        GenericFactories genericFactories,
         Objenesis objenesis,
         boolean usingGetClass,
         Function<String, String> converter
@@ -94,7 +90,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
         this.factoryCache = factoryCache;
-        this.genericFactories = genericFactories;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
@@ -171,7 +166,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<S> otherType,
         Func1<?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
@@ -181,7 +176,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Class<S> otherType,
         Func2<?, ?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
@@ -448,7 +443,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, genericFactories, objenesis);
+        Context<T> context = new Context<>(config, factoryCache, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),

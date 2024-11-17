@@ -10,7 +10,6 @@ import nl.jqno.equalsverifier.api.EqualsVerifierApi;
 import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.GenericPrefabValueProvider.GenericFactories;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
@@ -22,33 +21,24 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     private final EnumSet<Warning> warningsToSuppress;
     private final FactoryCache factoryCache;
-    private final GenericFactories genericFactories;
     private boolean usingGetClass;
     private Function<String, String> fieldnameToGetter;
     private final Objenesis objenesis = new ObjenesisStd();
 
     /** Constructor. */
     public ConfiguredEqualsVerifier() {
-        this(
-            EnumSet.noneOf(Warning.class),
-            new FactoryCache(),
-            new GenericFactories(),
-            false,
-            null
-        );
+        this(EnumSet.noneOf(Warning.class), new FactoryCache(), false, null);
     }
 
     /** Private constructor. For internal use only. */
     private ConfiguredEqualsVerifier(
         EnumSet<Warning> warningsToSuppress,
         FactoryCache factoryCache,
-        GenericFactories genericFactories,
         boolean usingGetClass,
         Function<String, String> fieldnameToGetter
     ) {
         this.warningsToSuppress = warningsToSuppress;
         this.factoryCache = factoryCache;
-        this.genericFactories = genericFactories;
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = fieldnameToGetter;
     }
@@ -62,7 +52,6 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         return new ConfiguredEqualsVerifier(
             EnumSet.copyOf(warningsToSuppress),
             new FactoryCache().merge(factoryCache),
-            genericFactories.copy(),
             usingGetClass,
             fieldnameToGetter
         );
@@ -88,7 +77,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         Class<S> otherType,
         Func1<?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
@@ -98,7 +87,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         Class<S> otherType,
         Func2<?, ?, S> factory
     ) {
-        PrefabValuesApi.addGenericPrefabValues(genericFactories, otherType, factory);
+        PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
@@ -139,7 +128,6 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
             type,
             EnumSet.copyOf(warningsToSuppress),
             new FactoryCache().merge(factoryCache),
-            genericFactories.copy(),
             objenesis,
             usingGetClass,
             fieldnameToGetter
