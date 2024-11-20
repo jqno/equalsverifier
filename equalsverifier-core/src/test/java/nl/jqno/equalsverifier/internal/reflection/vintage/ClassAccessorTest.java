@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
@@ -23,6 +24,7 @@ public class ClassAccessorTest {
 
     private LinkedHashSet<TypeTag> empty;
     private Objenesis objenesis;
+    private CachedValueProvider cache;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
@@ -31,9 +33,10 @@ public class ClassAccessorTest {
     public void setup() {
         empty = new LinkedHashSet<>();
         objenesis = new ObjenesisStd();
+        cache = new CachedValueProvider();
         factoryCache = JavaApiPrefabValues.build();
         valueProvider =
-            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
         pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
     }
 
@@ -125,7 +128,7 @@ public class ClassAccessorTest {
             values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
         valueProvider =
-            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
         ClassAccessor
             .of(TwoStepNodeA.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);

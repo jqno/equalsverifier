@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 /**
- * Provider of prefabricated instances of classes, delegating to other ValueProviders in sequence.
+ * Provider of instances of classes, delegating to other ValueProviders in sequence.
  */
 public class ChainedValueProvider implements ValueProvider {
 

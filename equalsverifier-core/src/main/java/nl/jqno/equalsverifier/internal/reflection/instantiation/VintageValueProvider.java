@@ -22,9 +22,8 @@ import org.objenesis.Objenesis;
  */
 public class VintageValueProvider implements ValueProvider {
 
-    private final Map<Key, Tuple<?>> valueCache = new HashMap<>();
-
     private final ValueProvider valueProvider;
+    private final CachedValueProvider cache;
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
@@ -32,16 +31,19 @@ public class VintageValueProvider implements ValueProvider {
      * Constructor.
      *
      * @param valueProvider Will be used to look up values before they are created.
+     * @param cache The values that have already been constructed.
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public VintageValueProvider(
         ValueProvider valueProvider,
+        CachedValueProvider cache,
         FactoryCache factoryCache,
         Objenesis objenesis
     ) {
         this.valueProvider = valueProvider;
+        this.cache = cache;
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
@@ -165,10 +167,9 @@ public class VintageValueProvider implements ValueProvider {
      * @param typeStack Keeps track of recursion in the type.
      */
     public <T> void realizeCacheFor(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
-        Key key = Key.of(tag, label);
-        if (!valueCache.containsKey(key)) {
+        if (!cache.contains(tag, label)) {
             Tuple<T> tuple = createTuple(tag, label, typeStack);
-            valueCache.put(key, tuple);
+            cache.put(tag, label, tuple);
         }
     }
 
@@ -179,7 +180,7 @@ public class VintageValueProvider implements ValueProvider {
     @SuppressWarnings("unchecked")
     private <T> Tuple<T> giveTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
         realizeCacheFor(tag, label, typeStack);
-        return (Tuple<T>) valueCache.get(Key.of(tag, label));
+        return (Tuple<T>) cache.provide(tag, label).get();
     }
 
     private <T> Tuple<T> createTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
@@ -205,39 +206,5 @@ public class VintageValueProvider implements ValueProvider {
         @SuppressWarnings("unchecked")
         Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
         return result;
-    }
-
-    private static final class Key {
-
-        final TypeTag tag;
-        final String label;
-
-        private Key(TypeTag tag, String label) {
-            this.tag = tag;
-            this.label = label;
-        }
-
-        public static Key of(TypeTag tag, String label) {
-            return new Key(tag, label);
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Key)) {
-                return false;
-            }
-            Key other = (Key) obj;
-            return Objects.equals(tag, other.tag) && Objects.equals(label, other.label);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(tag, label);
-        }
-
-        @Override
-        public String toString() {
-            return "Key: [" + tag + "/" + label + "]";
-        }
     }
 }

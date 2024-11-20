@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -35,10 +36,11 @@ public class FallbackFactoryTest {
     public void setUp() {
         Objenesis objenesis = new ObjenesisStd();
         factory = new FallbackFactory<>(objenesis);
+        CachedValueProvider cache = new CachedValueProvider();
         FactoryCache factoryCache = new FactoryCache();
         factoryCache.put(int.class, values(42, 1337, 42));
         valueProvider =
-            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
         typeStack = new LinkedHashSet<>();
     }
 

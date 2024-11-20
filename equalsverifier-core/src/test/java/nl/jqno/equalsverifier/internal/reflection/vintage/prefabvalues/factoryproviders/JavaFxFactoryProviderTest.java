@@ -8,6 +8,7 @@ import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
@@ -27,6 +28,7 @@ public class JavaFxFactoryProviderTest {
         valueProvider =
             new VintageValueProvider(
                 TestValueProviders.empty(),
+                new CachedValueProvider(),
                 JavaApiPrefabValues.build(),
                 new ObjenesisStd()
             );

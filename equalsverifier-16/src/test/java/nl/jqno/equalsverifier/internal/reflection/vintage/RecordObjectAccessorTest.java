@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
@@ -77,6 +78,7 @@ public class RecordObjectAccessorTest {
 
         VintageValueProvider vp = new VintageValueProvider(
             TestValueProviders.empty(),
+            new CachedValueProvider(),
             JavaApiPrefabValues.build(),
             objenesis
         );
