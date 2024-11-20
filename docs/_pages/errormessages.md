@@ -26,6 +26,7 @@ This is not a complete list. I'll add to it as needed, so if you need help with 
 * [Double: equals doesn't use Double.compare for field foo](/equalsverifier/errormessages/double-equals-doesnt-use-doublecompare-for-field-foo)
 * [Field foo of type Bar is not accessible via the Java Module System.](/equalsverifier/errormessages/class-or-field-is-not-accessible-jpms)
 * [Float: equals doesn't use Float.compare for field foo](/equalsverifier/errormessages/float-equals-doesnt-use-floatcompare-for-field-foo)
+* [Java _x_ is not supported by the current version of Byte Buddy which officially supports Java _y_](/equalsverifier/errormessages/byte-buddy)
 * [JPA Entity: direct reference to field foo used instead of getter](/equalsverifier/errormessages/jpa-direct-reference-instead-of-getter)
 * [Mutability: equals depends on mutable field](/equalsverifier/errormessages/mutability-equals-depends-on-mutable-field)
 * [NoClassDefFoundError](/equalsverifier/errormessages/noclassdeffounderror)
