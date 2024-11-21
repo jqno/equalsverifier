@@ -9,10 +9,11 @@ public final class DefaultValueProviders {
     private DefaultValueProviders() {}
 
     public static ValueProvider create(FactoryCache factoryCache, Objenesis objenesis) {
-        ChainedValueProvider mainChain = new ChainedValueProvider();
-        ChainedValueProvider vintageChain = new ChainedValueProvider();
-
         CachedValueProvider cache = new CachedValueProvider();
+
+        ChainedValueProvider mainChain = new ChainedValueProvider(cache);
+        ChainedValueProvider vintageChain = new ChainedValueProvider(cache);
+
         ValueProvider vintage = new VintageValueProvider(
             vintageChain,
             cache,

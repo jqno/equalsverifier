@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +15,13 @@ public class ChainedValueProvider implements ValueProvider {
 
     private boolean locked = false;
     private final List<ValueProvider> providers = new ArrayList<>();
+    private final CachedValueProvider cache;
+
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
+    public ChainedValueProvider(CachedValueProvider cache) {
+        this.cache = cache;
+        providers.add(cache);
+    }
 
     /**
      * Adds providers to the chain, so they can be delegated to when providing a value.
@@ -35,11 +43,14 @@ public class ChainedValueProvider implements ValueProvider {
     /** {@inheritDoc} */
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
-        return providers
+        Optional<Tuple<T>> result = providers
             .stream()
             .map(vp -> vp.<T>provide(tag, label))
             .filter(Optional::isPresent)
             .findFirst()
             .orElse(Optional.empty());
+
+        result.ifPresent(r -> cache.put(tag, label, r));
+        return result;
     }
 }

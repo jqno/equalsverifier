@@ -27,7 +27,8 @@ public class ChainedValueProviderTest {
         "a"
     );
 
-    private final ChainedValueProvider sut = new ChainedValueProvider();
+    private final CachedValueProvider cache = new CachedValueProvider();
+    private final ChainedValueProvider sut = new ChainedValueProvider(cache);
 
     @Test
     public void returnsValueIfMatch() {
@@ -70,6 +71,14 @@ public class ChainedValueProviderTest {
         assertEquals(1, sut.provideOrThrow(INT, null).getRed());
         assertEquals(1, intProvider.called);
         assertEquals(0, anotherIntProvider.called);
+    }
+
+    @Test
+    public void updatesTheCache() {
+        sut.register(intProvider);
+        sut.provideOrThrow(INT, null);
+
+        assertEquals(1, cache.provideOrThrow(INT, null).getRed());
     }
 
     @Test
