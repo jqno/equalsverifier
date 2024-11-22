@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
@@ -38,7 +38,6 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             return giveArrayInstances(tag, valueProvider, clone);
         }
 
-        traverseFields(tag, valueProvider, clone);
         return giveInstances(tag, valueProvider, clone);
     }
 
@@ -75,21 +74,6 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
 
         return new Tuple<>(red, blue, redCopy);
-    }
-
-    private void traverseFields(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
-        Class<?> type = tag.getType();
-        for (Field field : FieldIterable.of(type)) {
-            FieldProbe probe = FieldProbe.of(field);
-            boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
-            if (!isStaticAndFinal) {
-                valueProvider.realizeCacheFor(TypeTag.of(field, tag), attributes);
-            }
-        }
     }
 
     private Tuple<T> giveInstances(
