@@ -46,7 +46,6 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
         if (bottomType != null && result.getType().equals(Object.class)) {
             result = new TypeTag(bottomType);
         }
-        valueProvider.realizeCacheFor(result, attributes);
         return result;
     }
 

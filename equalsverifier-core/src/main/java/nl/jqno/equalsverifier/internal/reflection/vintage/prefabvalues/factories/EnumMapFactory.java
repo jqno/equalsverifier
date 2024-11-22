@@ -30,9 +30,9 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
         Map red = new HashMap<>();
         Map blue = new HashMap<>();
         Map redCopy = new HashMap<>();
-        red.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
-        blue.put(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
-        redCopy.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
+        red.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
+        blue.put(valueProvider.giveBlue(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
+        redCopy.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
 
         return Tuple.of(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }

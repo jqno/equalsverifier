@@ -23,7 +23,6 @@ import org.objenesis.Objenesis;
 public class VintageValueProvider implements ValueProvider {
 
     private final ValueProvider valueProvider;
-    private final CachedValueProvider cache;
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
@@ -43,7 +42,6 @@ public class VintageValueProvider implements ValueProvider {
         Objenesis objenesis
     ) {
         this.valueProvider = valueProvider;
-        this.cache = cache;
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
@@ -64,7 +62,11 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRed();
+        return giveRed(tag, Attributes.unlabeled());
+    }
+
+    public <T> T giveRed(TypeTag tag, Attributes attributes) {
+        return this.<T>giveTuple(tag, attributes).getRed();
     }
 
     /**
@@ -77,7 +79,11 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "blue" prefabricated value.
      */
     public <T> T giveBlue(TypeTag tag) {
-        return this.<T>giveTuple(tag).getBlue();
+        return giveBlue(tag, Attributes.unlabeled());
+    }
+
+    public <T> T giveBlue(TypeTag tag, Attributes attributes) {
+        return this.<T>giveTuple(tag, attributes).getBlue();
     }
 
     /**
@@ -90,7 +96,11 @@ public class VintageValueProvider implements ValueProvider {
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
-        return this.<T>giveTuple(tag).getRedCopy();
+        return giveRedCopy(tag, Attributes.unlabeled());
+    }
+
+    public <T> T giveRedCopy(TypeTag tag, Attributes attributes) {
+        return this.<T>giveTuple(tag, attributes).getRedCopy();
     }
 
     /**
@@ -145,32 +155,8 @@ public class VintageValueProvider implements ValueProvider {
         return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
     }
 
-    /**
-     * Makes sure that values for the specified type are present in the cache, but doesn't return
-     * them.
-     *
-     * @param <T> The desired type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param attributes Keeps track of recursion in the type.
-     */
-    public <T> void realizeCacheFor(TypeTag tag, Attributes attributes) {
-        if (!cache.contains(tag, attributes.label)) {
-            Tuple<T> tuple = createTuple(tag, attributes);
-            cache.put(tag, attributes.label, tuple);
-        }
-    }
-
-    private <T> Tuple<T> giveTuple(TypeTag tag) {
-        return giveTuple(tag, Attributes.unlabeled());
-    }
-
     @SuppressWarnings("unchecked")
     private <T> Tuple<T> giveTuple(TypeTag tag, Attributes attributes) {
-        realizeCacheFor(tag, attributes);
-        return (Tuple<T>) cache.provide(tag, attributes).get();
-    }
-
-    private <T> Tuple<T> createTuple(TypeTag tag, Attributes attributes) {
         if (attributes.typeStack.contains(tag)) {
             throw new RecursionException(attributes.typeStack);
         }
@@ -190,8 +176,6 @@ public class VintageValueProvider implements ValueProvider {
             return factory.createValues(tag, this, attributes);
         }
 
-        @SuppressWarnings("unchecked")
-        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, attributes);
-        return result;
+        return (Tuple<T>) fallbackFactory.createValues(tag, this, attributes);
     }
 }

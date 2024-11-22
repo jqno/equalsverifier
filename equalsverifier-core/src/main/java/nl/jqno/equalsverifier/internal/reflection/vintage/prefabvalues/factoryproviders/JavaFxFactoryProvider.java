@@ -117,15 +117,15 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
 
             T red = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveRed(singleParameterTag))
+                objects(valueProvider.giveRed(singleParameterTag, attributes))
             );
             T blue = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveBlue(singleParameterTag))
+                objects(valueProvider.giveBlue(singleParameterTag, attributes))
             );
             T redCopy = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveRed(singleParameterTag))
+                objects(valueProvider.giveRed(singleParameterTag, attributes))
             );
 
             return Tuple.of(red, blue, redCopy);

@@ -52,15 +52,6 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
-    public void createSecondTimeIsNoOp() {
-        Point red = valueProvider.giveRed(POINT_TAG);
-        Point blue = valueProvider.giveBlue(POINT_TAG);
-
-        assertSame(red, valueProvider.giveRed(POINT_TAG));
-        assertSame(blue, valueProvider.giveBlue(POINT_TAG));
-    }
-
-    @Test
     public void createEnum() {
         assertNotNull(valueProvider.giveRed(ENUM_TAG));
         assertNotNull(valueProvider.giveBlue(ENUM_TAG));

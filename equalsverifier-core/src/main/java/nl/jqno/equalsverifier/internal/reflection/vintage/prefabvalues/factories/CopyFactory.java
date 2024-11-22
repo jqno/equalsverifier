@@ -24,11 +24,10 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
     ) {
         Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag sourceTag = copyGenericTypesInto(source, tag);
-        valueProvider.realizeCacheFor(sourceTag, clone);
 
-        S redSource = valueProvider.giveRed(sourceTag);
-        S blueSource = valueProvider.giveBlue(sourceTag);
-        S redCopySource = valueProvider.giveRedCopy(sourceTag);
+        S redSource = valueProvider.giveRed(sourceTag, clone);
+        S blueSource = valueProvider.giveBlue(sourceTag, clone);
+        S redCopySource = valueProvider.giveRedCopy(sourceTag, clone);
 
         return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
     }

@@ -35,17 +35,9 @@ public class VintageValueProviderTest {
 
     @BeforeEach
     public void setUp() {
-        factoryCache.put(String.class, new AppendingStringTestFactory());
+        factoryCache.put(String.class, values("r", "b", new String("r")));
         factoryCache.put(int.class, values(42, 1337, 42));
         vp = new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
-    }
-
-    @Test
-    public void sanityTestFactoryIncreasesStringLength() {
-        AppendingStringTestFactory f = new AppendingStringTestFactory();
-        assertEquals("r", f.createValues(null, null, null).getRed());
-        assertEquals("rr", f.createValues(null, null, null).getRed());
-        assertEquals("rrr", f.createValues(null, null, null).getRed());
     }
 
     @Test
@@ -60,31 +52,12 @@ public class VintageValueProviderTest {
     }
 
     @Test
-    public void giveRedFromCache() {
-        vp.giveRed(STRING_TAG);
-        assertEquals("r", vp.giveRed(STRING_TAG));
-    }
-
-    @Test
     public void giveBlueFromFactory() {
         assertEquals("b", vp.giveBlue(STRING_TAG));
     }
 
     @Test
-    public void giveBlueFromCache() {
-        vp.giveBlue(STRING_TAG);
-        assertEquals("b", vp.giveBlue(STRING_TAG));
-    }
-
-    @Test
     public void giveRedCopyFromFactory() {
-        assertEquals("r", vp.giveRedCopy(STRING_TAG));
-        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
-    }
-
-    @Test
-    public void giveRedCopyFromCache() {
-        vp.giveRedCopy(STRING_TAG);
         assertEquals("r", vp.giveRedCopy(STRING_TAG));
         assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
     }
@@ -191,28 +164,6 @@ public class VintageValueProviderTest {
 
         public int hashCode() {
             return i;
-        }
-    }
-
-    private static class AppendingStringTestFactory implements PrefabValueFactory<String> {
-
-        private String red;
-        private String blue;
-
-        public AppendingStringTestFactory() {
-            red = "";
-            blue = "";
-        }
-
-        @Override
-        public Tuple<String> createValues(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            Attributes attributes
-        ) {
-            red += "r";
-            blue += "b";
-            return new Tuple<>(red, blue, new String(red));
         }
     }
 

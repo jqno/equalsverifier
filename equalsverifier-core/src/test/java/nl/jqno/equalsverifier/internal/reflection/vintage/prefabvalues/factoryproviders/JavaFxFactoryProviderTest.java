@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
@@ -48,7 +49,11 @@ public class JavaFxFactoryProviderTest {
             GenericContainer.class.getName(),
             List.class
         );
-        Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
+        Tuple<GenericContainer> tuple = factory.createValues(
+            tag,
+            valueProvider,
+            Attributes.unlabeled()
+        );
 
         assertEquals(valueProvider.giveRed(listTag), tuple.getRed().t);
         assertEquals(valueProvider.giveBlue(listTag), tuple.getBlue().t);
@@ -72,7 +77,11 @@ public class JavaFxFactoryProviderTest {
             GenericMultiContainer.class.getName(),
             Map.class
         );
-        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
+        Tuple<GenericMultiContainer> tuple = factory.createValues(
+            tag,
+            valueProvider,
+            Attributes.unlabeled()
+        );
 
         assertEquals(valueProvider.giveRed(mapTag), tuple.getRed().t);
         assertEquals(valueProvider.giveBlue(mapTag), tuple.getBlue().t);

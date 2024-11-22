@@ -170,9 +170,15 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
-            blue.put(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
-            redCopy.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
+            red.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
+            blue.put(
+                valueProvider.giveBlue(keyTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
+            );
+            redCopy.put(
+                valueProvider.giveRed(keyTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
+            );
 
             return Tuple.of(red, blue, redCopy);
         }
@@ -202,19 +208,19 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T blue = factory.get();
             T redCopy = factory.get();
             red.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag, clone),
+                valueProvider.giveRed(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
             blue.put(
-                valueProvider.giveBlue(columnTag),
-                valueProvider.giveBlue(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveBlue(columnTag, clone),
+                valueProvider.giveBlue(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
             redCopy.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag, clone),
+                valueProvider.giveRed(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
 
             return Tuple.of(red, blue, redCopy);
