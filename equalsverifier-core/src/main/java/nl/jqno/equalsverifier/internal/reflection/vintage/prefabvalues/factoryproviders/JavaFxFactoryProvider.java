@@ -8,6 +8,7 @@ import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.fa
 import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
@@ -109,7 +110,7 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
             ConditionalInstantiator ci = new ConditionalInstantiator(fullyQualifiedTypeName);
             TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);

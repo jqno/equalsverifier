@@ -20,7 +20,7 @@ public final class TestValueProviders {
     public static ValueProvider empty() {
         return new ValueProvider() {
             @Override
-            public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+            public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
                 return Optional.empty();
             }
         };
@@ -30,7 +30,7 @@ public final class TestValueProviders {
         return new ValueProvider() {
             @SuppressWarnings("unchecked")
             @Override
-            public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
+            public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
                 if (tag.getType().equals(int.class)) {
                     return Optional.of((Tuple<T>) INTS);
                 }

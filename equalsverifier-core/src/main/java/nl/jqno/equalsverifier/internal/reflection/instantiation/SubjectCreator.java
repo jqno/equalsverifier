@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
@@ -237,7 +238,10 @@ public class SubjectCreator<T> {
     private Tuple<?> valuesFor(Field f) {
         try {
             TypeTag fieldTag = TypeTag.of(f, typeTag);
-            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag, f.getName());
+            Tuple<?> tuple = valueProvider.provideOrThrow(
+                fieldTag,
+                Attributes.labeled(f.getName())
+            );
             return tuple;
         } catch (ModuleException e) {
             throw new ModuleException(

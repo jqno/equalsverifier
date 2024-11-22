@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
@@ -22,7 +22,7 @@ import org.objenesis.ObjenesisStd;
 
 public class ClassAccessorTest {
 
-    private LinkedHashSet<TypeTag> empty;
+    private Attributes empty;
     private Objenesis objenesis;
     private CachedValueProvider cache;
     private FactoryCache factoryCache;
@@ -31,7 +31,7 @@ public class ClassAccessorTest {
 
     @BeforeEach
     public void setup() {
-        empty = new LinkedHashSet<>();
+        empty = Attributes.unlabeled();
         objenesis = new ObjenesisStd();
         cache = new CachedValueProvider();
         factoryCache = JavaApiPrefabValues.build();

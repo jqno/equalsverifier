@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
@@ -24,9 +24,9 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
 

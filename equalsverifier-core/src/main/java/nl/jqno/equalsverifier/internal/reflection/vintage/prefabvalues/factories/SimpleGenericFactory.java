@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
@@ -23,9 +23,9 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
 
         List<Object> redValues = new ArrayList<>();
         List<Object> blueValues = new ArrayList<>();

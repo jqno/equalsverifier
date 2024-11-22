@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
@@ -95,12 +95,12 @@ public abstract class ObjectAccessor<T> {
      * @param valueProvider Prefabricated values to take values from.
      * @param enclosingType Describes the type that contains this object as a field, to determine
      *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return An accessor to the scrambled object.
      */
     public abstract ObjectAccessor<T> scramble(
         VintageValueProvider valueProvider,
         TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     );
 }

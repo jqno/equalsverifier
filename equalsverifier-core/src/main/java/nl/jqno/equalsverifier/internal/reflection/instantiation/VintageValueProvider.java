@@ -50,8 +50,8 @@ public class VintageValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, label)));
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, attributes)));
     }
 
     /**
@@ -64,7 +64,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
-        return this.<T>giveTuple(tag, null).getRed();
+        return this.<T>giveTuple(tag).getRed();
     }
 
     /**
@@ -77,7 +77,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "blue" prefabricated value.
      */
     public <T> T giveBlue(TypeTag tag) {
-        return this.<T>giveTuple(tag, null).getBlue();
+        return this.<T>giveTuple(tag).getBlue();
     }
 
     /**
@@ -90,7 +90,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
-        return this.<T>giveTuple(tag, null).getRedCopy();
+        return this.<T>giveTuple(tag).getRedCopy();
     }
 
     /**
@@ -100,11 +100,11 @@ public class VintageValueProvider implements ValueProvider {
      * @param <T> The type of the value.
      * @param tag A description of the desired type, including generic parameters.
      * @param value A value that is different from the value that will be returned.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return A value that is different from {@code value}.
      */
     // CHECKSTYLE OFF: CyclomaticComplexity
-    public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
+    public <T> T giveOther(TypeTag tag, T value, Attributes attributes) {
         Class<T> type = tag.getType();
         if (
             value != null &&
@@ -114,7 +114,7 @@ public class VintageValueProvider implements ValueProvider {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag, null, typeStack);
+        Tuple<T> tuple = giveTuple(tag, attributes);
         if (tuple.getRed() == null) {
             return null;
         }
@@ -151,60 +151,47 @@ public class VintageValueProvider implements ValueProvider {
      *
      * @param <T> The desired type.
      * @param tag A description of the desired type, including generic parameters.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param attributes Keeps track of recursion in the type.
      */
-    public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, null, typeStack);
-    }
-
-    /**
-     * Makes sure that values for the specified type are present in the cache, but doesn't return
-     * them.
-     *
-     * @param <T> The desired type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param label Adds the value assigned to the given label, if a label is given.
-     * @param typeStack Keeps track of recursion in the type.
-     */
-    public <T> void realizeCacheFor(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
-        if (!cache.contains(tag, label)) {
-            Tuple<T> tuple = createTuple(tag, label, typeStack);
-            cache.put(tag, label, tuple);
+    public <T> void realizeCacheFor(TypeTag tag, Attributes attributes) {
+        if (!cache.contains(tag, attributes.label)) {
+            Tuple<T> tuple = createTuple(tag, attributes);
+            cache.put(tag, attributes.label, tuple);
         }
     }
 
-    private <T> Tuple<T> giveTuple(TypeTag tag, String label) {
-        return giveTuple(tag, label, new LinkedHashSet<>());
+    private <T> Tuple<T> giveTuple(TypeTag tag) {
+        return giveTuple(tag, Attributes.unlabeled());
     }
 
     @SuppressWarnings("unchecked")
-    private <T> Tuple<T> giveTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
-        realizeCacheFor(tag, label, typeStack);
-        return (Tuple<T>) cache.provide(tag, label).get();
+    private <T> Tuple<T> giveTuple(TypeTag tag, Attributes attributes) {
+        realizeCacheFor(tag, attributes);
+        return (Tuple<T>) cache.provide(tag, attributes).get();
     }
 
-    private <T> Tuple<T> createTuple(TypeTag tag, String label, LinkedHashSet<TypeTag> typeStack) {
-        if (typeStack.contains(tag)) {
-            throw new RecursionException(typeStack);
+    private <T> Tuple<T> createTuple(TypeTag tag, Attributes attributes) {
+        if (attributes.typeStack.contains(tag)) {
+            throw new RecursionException(attributes.typeStack);
         }
 
-        Optional<Tuple<T>> provided = valueProvider.provide(tag, null);
+        Optional<Tuple<T>> provided = valueProvider.provide(tag, attributes);
         if (provided.isPresent()) {
             return provided.get();
         }
 
         Class<T> type = tag.getType();
-        if (label != null && factoryCache.contains(type, label)) {
-            PrefabValueFactory<T> factory = factoryCache.get(type, label);
-            return factory.createValues(tag, this, typeStack);
+        if (attributes.label != null && factoryCache.contains(type, attributes.label)) {
+            PrefabValueFactory<T> factory = factoryCache.get(type, attributes.label);
+            return factory.createValues(tag, this, attributes);
         }
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
-            return factory.createValues(tag, this, typeStack);
+            return factory.createValues(tag, this, attributes);
         }
 
         @SuppressWarnings("unchecked")
-        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
+        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, attributes);
         return result;
     }
 }

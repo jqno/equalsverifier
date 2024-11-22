@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
@@ -160,9 +161,9 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
-            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            Attributes clone = attributes.cloneAndAdd(tag);
             TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
 
@@ -190,9 +191,9 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
-            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            Attributes clone = attributes.cloneAndAdd(tag);
             TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
             TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, valueProvider, clone);

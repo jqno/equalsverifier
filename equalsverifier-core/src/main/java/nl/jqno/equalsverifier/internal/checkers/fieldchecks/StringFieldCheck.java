@@ -8,6 +8,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -42,7 +43,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
             String red = valueProvider
-                .<String>provideOrThrow(string, fieldProbe.getName())
+                .<String>provideOrThrow(string, Attributes.labeled(fieldProbe.getName()))
                 .getRed();
 
             final T reference;

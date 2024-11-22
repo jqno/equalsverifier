@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorScramblingTest {
 
-    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private CachedValueProvider cache;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
@@ -66,7 +66,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(valueProvider, TypeTag.NULL, EMPTY_TYPE_STACK);
+        return create(object).scramble(valueProvider, TypeTag.NULL, EMPTY_ATTRIBUTES);
     }
 
     record Point(int x, int y) {}

@@ -39,8 +39,8 @@ public class CachedValueProvider implements ValueProvider {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, String label) {
-        Key key = Key.of(tag, label);
+    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
+        Key key = Key.of(tag, attributes.label);
         if (cache.containsKey(key)) {
             return Optional.of((Tuple<T>) cache.get(key));
         }

@@ -5,12 +5,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.AttributedString;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
@@ -26,7 +26,7 @@ import org.objenesis.ObjenesisStd;
 
 public class InPlaceObjectAccessorScramblingTest {
 
-    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private Objenesis objenesis;
     private VintageValueProvider valueProviderTest;
 
@@ -161,7 +161,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(valueProviderTest, TypeTag.NULL, EMPTY_TYPE_STACK);
+        return create(object).scramble(valueProviderTest, TypeTag.NULL, EMPTY_ATTRIBUTES);
     }
 
     static final class StringContainer {
