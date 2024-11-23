@@ -1,8 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.lang.reflect.Array;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
@@ -83,7 +85,11 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);
         T red = accessor.getRedObject(tag, attributes);
         T blue = accessor.getBlueObject(tag, attributes);
-        T redCopy = accessor.getRedObject(tag, attributes);
+
+        @SuppressWarnings("unchecked")
+        Class<T> actualType = (Class<T>) red.getClass();
+        T redCopy = new InstanceCreator<>(new ClassProbe<T>(actualType), objenesis).copy(red);
+
         return new Tuple<>(red, blue, redCopy);
     }
 }
