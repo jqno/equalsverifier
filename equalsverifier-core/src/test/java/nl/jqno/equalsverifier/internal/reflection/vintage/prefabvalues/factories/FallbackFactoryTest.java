@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
@@ -75,6 +76,18 @@ public class FallbackFactoryTest {
     }
 
     @Test
+    public void redCopyIsNotSameAsRed() {
+        Tuple<?> tuple = factory.createValues(
+            new TypeTag(IntContainer.class),
+            valueProvider,
+            typeStack
+        );
+
+        assertEquals(tuple.getRed(), tuple.getRedCopy());
+        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+    }
+
+    @Test
     public void dontGiveRecursiveClass() {
         ExpectedException
             .when(() -> factory.createValues(new TypeTag(Node.class), valueProvider, typeStack))
@@ -103,6 +116,7 @@ public class FallbackFactoryTest {
         Tuple<?> tuple = factory.createValues(new TypeTag(type), valueProvider, typeStack);
         assertEquals(expectedRed, tuple.getRed());
         assertEquals(expectedBlue, tuple.getBlue());
+        assertEquals(expectedRed, tuple.getRedCopy());
     }
 
     private static final class IntContainer {
