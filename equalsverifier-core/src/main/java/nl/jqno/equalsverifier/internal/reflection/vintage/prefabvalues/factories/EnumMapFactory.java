@@ -27,12 +27,15 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone, Enum.class);
 
+        Tuple<?> key = valueProvider.provideOrThrow(keyTag, clone);
+        Tuple<?> value = valueProvider.provideOrThrow(valueTag, clone);
+
         Map red = new HashMap<>();
         Map blue = new HashMap<>();
         Map redCopy = new HashMap<>();
-        red.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
-        blue.put(valueProvider.giveBlue(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
-        redCopy.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
+        red.put(key.getRed(), value.getBlue());
+        blue.put(key.getBlue(), value.getBlue());
+        redCopy.put(key.getRedCopy(), value.getBlue());
 
         return Tuple.of(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }

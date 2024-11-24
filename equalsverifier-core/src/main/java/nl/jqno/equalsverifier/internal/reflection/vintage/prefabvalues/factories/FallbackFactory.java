@@ -5,6 +5,7 @@ import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.InstanceCreator;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
@@ -60,19 +61,20 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     @SuppressWarnings("unchecked")
     private Tuple<T> giveArrayInstances(
         TypeTag tag,
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         Attributes attributes
     ) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
 
+        Tuple<?> component = valueProvider.provideOrThrow(componentTag, attributes);
         T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, valueProvider.giveRed(componentTag, attributes));
+        Array.set(red, 0, component.getRed());
         T blue = (T) Array.newInstance(componentType, 1);
-        Array.set(blue, 0, valueProvider.giveBlue(componentTag, attributes));
+        Array.set(blue, 0, component.getBlue());
         T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, valueProvider.giveRed(componentTag, attributes));
+        Array.set(redCopy, 0, component.getRed());
 
         return new Tuple<>(red, blue, redCopy);
     }

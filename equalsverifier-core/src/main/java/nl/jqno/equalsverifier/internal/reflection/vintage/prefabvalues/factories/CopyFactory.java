@@ -8,11 +8,11 @@ import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProv
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 
-    private final Class<S> source;
+    private final Class<S> type;
     private final Function<S, T> copy;
 
     public CopyFactory(Class<S> source, Function<S, T> copy) {
-        this.source = source;
+        this.type = source;
         this.copy = copy;
     }
 
@@ -23,12 +23,11 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
         Attributes attributes
     ) {
         Attributes clone = attributes.cloneAndAdd(tag);
-        TypeTag sourceTag = copyGenericTypesInto(source, tag);
+        TypeTag sourceTag = copyGenericTypesInto(type, tag);
 
-        S redSource = valueProvider.giveRed(sourceTag, clone);
-        S blueSource = valueProvider.giveBlue(sourceTag, clone);
-        S redCopySource = valueProvider.giveRedCopy(sourceTag, clone);
+        Tuple<S> source = valueProvider.provideOrThrow(sourceTag, clone);
+        Tuple<T> copied = source.map(copy::apply);
 
-        return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
+        return Tuple.of(copied.getRed(), copied.getBlue(), copied.getRedCopy());
     }
 }

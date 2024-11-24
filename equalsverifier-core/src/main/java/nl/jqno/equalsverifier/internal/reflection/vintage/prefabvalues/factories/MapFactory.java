@@ -34,20 +34,19 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
         // values.
         // But don't do it in the Blue map, or they may cancel each other out again.
 
-        Object redKey = valueProvider.giveRed(keyTag, clone);
-        Object blueKey = valueProvider.giveBlue(keyTag, clone);
-        Object blueValue = valueProvider.giveBlue(valueTag, clone);
+        Tuple<?> key = valueProvider.provideOrThrow(keyTag, clone);
+        Tuple<?> value = valueProvider.provideOrThrow(valueTag, clone);
 
         T red = createEmpty.get();
-        red.put(redKey, blueValue);
+        red.put(key.getRed(), value.getBlue());
 
         T blue = createEmpty.get();
-        if (!redKey.equals(blueKey)) { // This happens with single-element enums
-            blue.put(valueProvider.giveBlue(keyTag, clone), blueValue);
+        if (!key.getRed().equals(key.getBlue())) { // This happens with single-element enums
+            blue.put(key.getBlue(), value.getBlue());
         }
 
         T redCopy = createEmpty.get();
-        redCopy.put(redKey, blueValue);
+        redCopy.put(key.getRed(), value.getBlue());
 
         return new Tuple<>(red, blue, redCopy);
     }
