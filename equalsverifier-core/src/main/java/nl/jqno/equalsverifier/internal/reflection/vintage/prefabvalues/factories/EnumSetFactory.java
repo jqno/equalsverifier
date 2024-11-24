@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates EnumSets using reflection, while
@@ -22,11 +22,7 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
+    public Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes) {
         Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 

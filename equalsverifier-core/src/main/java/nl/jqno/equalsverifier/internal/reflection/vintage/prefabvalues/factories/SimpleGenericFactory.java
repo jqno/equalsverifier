@@ -6,8 +6,8 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
@@ -20,11 +20,7 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
+    public Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes) {
         Attributes clone = attributes.cloneAndAdd(tag);
 
         List<Object> redValues = new ArrayList<>();

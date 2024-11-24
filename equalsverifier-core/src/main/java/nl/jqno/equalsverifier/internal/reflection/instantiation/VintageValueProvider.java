@@ -1,15 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import java.util.*;
+import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
-import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
@@ -101,58 +99,6 @@ public class VintageValueProvider implements ValueProvider {
 
     public <T> T giveRedCopy(TypeTag tag, Attributes attributes) {
         return this.<T>giveTuple(tag, attributes).getRedCopy();
-    }
-
-    /**
-     * Returns a prefabricated value of the specified type, that is different from the specified
-     * value.
-     *
-     * @param <T> The type of the value.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param value A value that is different from the value that will be returned.
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
-     * @return A value that is different from {@code value}.
-     */
-    // CHECKSTYLE OFF: CyclomaticComplexity
-    public <T> T giveOther(TypeTag tag, T value, Attributes attributes) {
-        Class<T> type = tag.getType();
-        if (
-            value != null &&
-            !type.isAssignableFrom(value.getClass()) &&
-            !wraps(type, value.getClass())
-        ) {
-            throw new ReflectionException("TypeTag does not match value.");
-        }
-
-        Tuple<T> tuple = giveTuple(tag, attributes);
-        if (tuple.getRed() == null) {
-            return null;
-        }
-        if (type.isArray() && arraysAreDeeplyEqual(tuple.getRed(), value)) {
-            return tuple.getBlue();
-        }
-        if (!type.isArray() && value != null) {
-            try {
-                // red's equals can potentially call an abstract method
-                if (tuple.getRed().equals(value)) {
-                    return tuple.getBlue();
-                }
-            } catch (AbstractMethodError e) {
-                return tuple.getRed();
-            }
-        }
-        return tuple.getRed();
-    }
-
-    // CHECKSTYLE ON: CyclomaticComplexity
-
-    private boolean wraps(Class<?> expectedClass, Class<?> actualClass) {
-        return PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(expectedClass) == actualClass;
-    }
-
-    private boolean arraysAreDeeplyEqual(Object x, Object y) {
-        // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
-        return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
     }
 
     @SuppressWarnings("unchecked")

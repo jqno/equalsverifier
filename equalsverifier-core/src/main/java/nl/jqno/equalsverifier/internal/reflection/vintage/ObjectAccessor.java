@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -99,7 +99,7 @@ public abstract class ObjectAccessor<T> {
      * @return An accessor to the scrambled object.
      */
     public abstract ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         TypeTag enclosingType,
         Attributes attributes
     );

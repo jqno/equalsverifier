@@ -4,8 +4,8 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -33,7 +33,7 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         TypeTag enclosingType,
         Attributes attributes
     ) {

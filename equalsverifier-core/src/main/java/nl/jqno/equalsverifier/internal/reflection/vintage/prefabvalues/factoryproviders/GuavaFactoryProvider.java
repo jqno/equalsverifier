@@ -8,13 +8,10 @@ import java.util.*;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumSetFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.*;
 
 public final class GuavaFactoryProvider implements FactoryProvider {
 
@@ -160,7 +157,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         @Override
         public Tuple<T> createValues(
             TypeTag tag,
-            VintageValueProvider valueProvider,
+            ValueProvider valueProvider,
             Attributes attributes
         ) {
             Attributes clone = attributes.cloneAndAdd(tag);
@@ -170,15 +167,13 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
-            blue.put(
-                valueProvider.giveBlue(keyTag, clone),
-                valueProvider.giveBlue(valueTag, clone)
-            );
-            redCopy.put(
-                valueProvider.giveRed(keyTag, clone),
-                valueProvider.giveBlue(valueTag, clone)
-            );
+
+            Tuple<K> key = valueProvider.provideOrThrow(keyTag, clone);
+            Tuple<V> value = valueProvider.provideOrThrow(valueTag, clone);
+
+            red.put(key.getRed(), value.getBlue());
+            blue.put(key.getBlue(), value.getBlue());
+            redCopy.put(key.getRed(), value.getBlue());
 
             return Tuple.of(red, blue, redCopy);
         }
@@ -196,7 +191,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         @Override
         public Tuple<T> createValues(
             TypeTag tag,
-            VintageValueProvider valueProvider,
+            ValueProvider valueProvider,
             Attributes attributes
         ) {
             Attributes clone = attributes.cloneAndAdd(tag);
@@ -207,21 +202,14 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(
-                valueProvider.giveRed(columnTag, clone),
-                valueProvider.giveRed(rowTag, clone),
-                valueProvider.giveBlue(valueTag, clone)
-            );
-            blue.put(
-                valueProvider.giveBlue(columnTag, clone),
-                valueProvider.giveBlue(rowTag, clone),
-                valueProvider.giveBlue(valueTag, clone)
-            );
-            redCopy.put(
-                valueProvider.giveRed(columnTag, clone),
-                valueProvider.giveRed(rowTag, clone),
-                valueProvider.giveBlue(valueTag, clone)
-            );
+
+            Tuple<C> column = valueProvider.provideOrThrow(columnTag, clone);
+            Tuple<R> row = valueProvider.provideOrThrow(rowTag, clone);
+            Tuple<V> value = valueProvider.provideOrThrow(valueTag, clone);
+
+            red.put(column.getRed(), row.getRed(), value.getBlue());
+            blue.put(column.getBlue(), row.getBlue(), value.getBlue());
+            redCopy.put(column.getRed(), row.getRed(), value.getBlue());
 
             return Tuple.of(red, blue, redCopy);
         }

@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Implementation of {@link PrefabValueFactory} that holds on to two instances that have already
@@ -18,11 +18,7 @@ public class SimpleFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
+    public Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes) {
         return tuple;
     }
 }

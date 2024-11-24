@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Abstract implementation of {@link PrefabValueFactory} that provides helper functions for dealing
@@ -29,7 +29,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     protected TypeTag determineAndCacheActualTypeTag(
         int n,
         TypeTag tag,
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         Attributes attributes
     ) {
         return determineAndCacheActualTypeTag(n, tag, valueProvider, attributes, null);
@@ -38,7 +38,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     protected TypeTag determineAndCacheActualTypeTag(
         int n,
         TypeTag tag,
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         Attributes attributes,
         Class<?> bottomType
     ) {

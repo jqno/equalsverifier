@@ -26,11 +26,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
+    public Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes) {
         Attributes clone = attributes.cloneAndAdd(tag);
 
         Class<T> type = tag.getType();
@@ -81,7 +77,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
     private Tuple<T> giveInstances(
         TypeTag tag,
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         Attributes attributes
     ) {
         ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);

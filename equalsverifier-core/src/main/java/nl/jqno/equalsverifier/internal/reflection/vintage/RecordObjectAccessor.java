@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -38,7 +38,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         TypeTag enclosingType,
         Attributes attributes
     ) {

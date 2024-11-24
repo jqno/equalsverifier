@@ -6,8 +6,8 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public final class FieldModifier {
 
@@ -57,7 +57,7 @@ public final class FieldModifier {
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         TypeTag enclosingType,
         Attributes attributes
     ) {

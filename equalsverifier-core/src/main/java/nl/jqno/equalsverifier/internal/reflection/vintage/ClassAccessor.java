@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -16,11 +16,11 @@ import org.objenesis.Objenesis;
 public class ClassAccessor<T> {
 
     private final Class<T> type;
-    private final VintageValueProvider valueProvider;
+    private final ValueProvider valueProvider;
     private final Objenesis objenesis;
 
     /** Private constructor. Call {@link #of(Class, PrefabValues)} instead. */
-    ClassAccessor(Class<T> type, VintageValueProvider valueProvider, Objenesis objenesis) {
+    ClassAccessor(Class<T> type, ValueProvider valueProvider, Objenesis objenesis) {
         this.type = type;
         this.valueProvider = valueProvider;
         this.objenesis = objenesis;
@@ -37,7 +37,7 @@ public class ClassAccessor<T> {
      */
     public static <T> ClassAccessor<T> of(
         Class<T> type,
-        VintageValueProvider valueProvider,
+        ValueProvider valueProvider,
         Objenesis objenesis
     ) {
         return new ClassAccessor<>(type, valueProvider, objenesis);

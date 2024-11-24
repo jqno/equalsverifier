@@ -6,8 +6,8 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.FactoryProvider;
 
@@ -24,11 +24,7 @@ public class ExternalFactory<T> implements PrefabValueFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        Attributes attributes
-    ) {
+    public Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes) {
         if (factoryCache == null) {
             ConditionalInstantiator ci = new ConditionalInstantiator(factoryName);
             FactoryProvider provider = ci.instantiate(classes(), objects());

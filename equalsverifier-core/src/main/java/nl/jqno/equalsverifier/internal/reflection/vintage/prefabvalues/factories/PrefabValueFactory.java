@@ -2,8 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Creates instances of generic types for use as prefab value.
@@ -20,5 +20,5 @@ public interface PrefabValueFactory<T> {
      * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
      * @return A "red" instance of {@code T}.
      */
-    Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, Attributes attributes);
+    Tuple<T> createValues(TypeTag tag, ValueProvider valueProvider, Attributes attributes);
 }

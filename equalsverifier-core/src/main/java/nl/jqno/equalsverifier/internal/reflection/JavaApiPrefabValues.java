@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
@@ -636,14 +637,10 @@ public final class JavaApiPrefabValues {
             AtomicReferenceArray.class,
             (tag, pv, stack) -> {
                 TypeTag y = tag.getGenericTypes().get(0);
-                Object[] red = new Object[] { pv.giveRed(y) };
-                Object[] blue = new Object[] { pv.giveBlue(y) };
-                Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
-                return Tuple.of(
-                    new AtomicReferenceArray(red),
-                    new AtomicReferenceArray(blue),
-                    new AtomicReferenceArray(redCopy)
-                );
+                return pv
+                    .provideOrThrow(y, Attributes.unlabeled())
+                    .map(v -> new Object[] { v })
+                    .map(arr -> new AtomicReferenceArray<>(arr));
             }
         );
 

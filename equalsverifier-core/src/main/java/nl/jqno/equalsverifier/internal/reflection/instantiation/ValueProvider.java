@@ -1,10 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 
 /**
  * Creator of prefabricated instances of classes.
@@ -42,6 +45,53 @@ public interface ValueProvider {
     default <T> Tuple<T> provideOrThrow(TypeTag tag, Attributes attributes) {
         return this.<T>provide(tag, attributes).orElseThrow(() -> new NoValueException(tag));
     }
+
+    /**
+     * Returns a prefabricated value of the specified type, that is different from the specified
+     * value.
+     *
+     * @param <T> The type of the value.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param value A value that is different from the value that will be returned.
+     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
+     * @return A value that is different from {@code value}.
+     */
+    // CHECKSTYLE OFF: CyclomaticComplexity
+    default <T> T giveOther(TypeTag tag, T value, Attributes attributes) {
+        Class<T> type = tag.getType();
+        if (
+            value != null &&
+            !type.isAssignableFrom(value.getClass()) &&
+            PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(type) != value.getClass()
+        ) {
+            throw new ReflectionException("TypeTag does not match value.");
+        }
+
+        Tuple<T> tuple = provideOrThrow(tag, attributes);
+        if (tuple.getRed() == null) {
+            return null;
+        }
+        if (
+            type.isArray() &&
+            // Arrays.deepEquals doesn't accept Object values so we need to wrap them in another array.
+            Arrays.deepEquals(new Object[] { tuple.getRed() }, new Object[] { value })
+        ) {
+            return tuple.getBlue();
+        }
+        if (!type.isArray() && value != null) {
+            try {
+                // red's equals can potentially call an abstract method
+                if (tuple.getRed().equals(value)) {
+                    return tuple.getBlue();
+                }
+            } catch (AbstractMethodError e) {
+                return tuple.getRed();
+            }
+        }
+        return tuple.getRed();
+    }
+
+    // CHECKSTYLE ON: CyclomaticComplexity
 
     /**
      * Container for metadata needed to provide values.

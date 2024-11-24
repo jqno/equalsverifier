@@ -174,21 +174,20 @@ public class VintageValueProviderTest {
         @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
             TypeTag tag,
-            VintageValueProvider valueProvider,
+            ValueProvider valueProvider,
             Attributes attributes
         ) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
-            List red = new ArrayList<>();
-            red.add(valueProvider.giveRed(subtag));
+            Tuple<List> tuple = valueProvider
+                .provideOrThrow(subtag, Attributes.unlabeled())
+                .map(val -> {
+                    List list = new ArrayList<>();
+                    list.add(val);
+                    return list;
+                });
 
-            List blue = new ArrayList<>();
-            blue.add(valueProvider.giveBlue(subtag));
-
-            List redCopy = new ArrayList<>();
-            redCopy.add(valueProvider.giveRed(subtag));
-
-            return new Tuple<>(red, blue, redCopy);
+            return new Tuple<>(tuple.getRed(), tuple.getBlue(), tuple.getRedCopy());
         }
     }
 
