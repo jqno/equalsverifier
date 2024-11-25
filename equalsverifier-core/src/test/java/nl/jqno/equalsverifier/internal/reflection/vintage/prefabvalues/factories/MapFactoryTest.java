@@ -19,6 +19,7 @@ import org.objenesis.ObjenesisStd;
 @SuppressWarnings("rawtypes")
 public class MapFactoryTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(
         Map.class,
@@ -58,11 +59,20 @@ public class MapFactoryTest {
                 JavaApiPrefabValues.build(),
                 new ObjenesisStd()
             );
-        red = valueProvider.giveRed(STRING_TYPETAG);
-        blue = valueProvider.giveBlue(STRING_TYPETAG);
-        redObject = valueProvider.giveRed(OBJECT_TYPETAG);
-        blueObject = valueProvider.giveBlue(OBJECT_TYPETAG);
-        redEnum = valueProvider.giveBlue(ONEELEMENTENUM_TYPETAG);
+
+        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, attributes);
+        red = strings.getRed();
+        blue = strings.getBlue();
+
+        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, attributes);
+        redObject = objects.getRed();
+        blueObject = objects.getBlue();
+
+        Tuple<OneElementEnum> enums = valueProvider.provideOrThrow(
+            ONEELEMENTENUM_TYPETAG,
+            attributes
+        );
+        redEnum = enums.getBlue();
     }
 
     @Test

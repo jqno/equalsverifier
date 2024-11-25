@@ -50,57 +50,6 @@ public class VintageValueProvider implements ValueProvider {
         return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, attributes)));
     }
 
-    /**
-     * Returns the "red" prefabricated value of the specified type.
-     *
-     * <p>It's always a different value from the "blue" one.
-     *
-     * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return The "red" prefabricated value.
-     */
-    public <T> T giveRed(TypeTag tag) {
-        return giveRed(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveRed(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getRed();
-    }
-
-    /**
-     * Returns the "blue" prefabricated value of the specified type.
-     *
-     * <p>It's always a different value from the "red" one.
-     *
-     * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return The "blue" prefabricated value.
-     */
-    public <T> T giveBlue(TypeTag tag) {
-        return giveBlue(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveBlue(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getBlue();
-    }
-
-    /**
-     * Returns a shallow copy of the "red" prefabricated value of the specified type.
-     *
-     * <p>When possible, it's equal to but not the same as the "red" object.
-     *
-     * @param <T> The return value is cast to this type.
-     * @param tag A description of the desired type, including generic parameters.
-     * @return A shallow copy of the "red" prefabricated value.
-     */
-    public <T> T giveRedCopy(TypeTag tag) {
-        return giveRedCopy(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveRedCopy(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getRedCopy();
-    }
-
     @SuppressWarnings("unchecked")
     private <T> Tuple<T> giveTuple(TypeTag tag, Attributes attributes) {
         if (attributes.typeStack.contains(tag)) {

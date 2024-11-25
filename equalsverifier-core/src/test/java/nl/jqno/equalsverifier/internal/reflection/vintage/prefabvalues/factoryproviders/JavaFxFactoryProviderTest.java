@@ -22,6 +22,8 @@ import org.objenesis.ObjenesisStd;
 @SuppressWarnings("rawtypes")
 public class JavaFxFactoryProviderTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
+
     private VintageValueProvider valueProvider;
 
     @BeforeEach
@@ -55,8 +57,9 @@ public class JavaFxFactoryProviderTest {
             Attributes.unlabeled()
         );
 
-        assertEquals(valueProvider.giveRed(listTag), tuple.getRed().t);
-        assertEquals(valueProvider.giveBlue(listTag), tuple.getBlue().t);
+        Tuple<?> list = valueProvider.provideOrThrow(listTag, EMPTY_ATTRIBUTES);
+        assertEquals(list.getRed(), tuple.getRed().t);
+        assertEquals(list.getBlue(), tuple.getBlue().t);
         assertEquals(String.class, tuple.getRed().t.get(0).getClass());
     }
 
@@ -83,8 +86,9 @@ public class JavaFxFactoryProviderTest {
             Attributes.unlabeled()
         );
 
-        assertEquals(valueProvider.giveRed(mapTag), tuple.getRed().t);
-        assertEquals(valueProvider.giveBlue(mapTag), tuple.getBlue().t);
+        Tuple<?> map = valueProvider.provideOrThrow(mapTag, EMPTY_ATTRIBUTES);
+        assertEquals(map.getRed(), tuple.getRed().t);
+        assertEquals(map.getBlue(), tuple.getBlue().t);
 
         Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
         assertEquals(String.class, next.getKey().getClass());

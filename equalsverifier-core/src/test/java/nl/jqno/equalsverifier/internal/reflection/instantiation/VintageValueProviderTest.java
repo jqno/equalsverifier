@@ -24,6 +24,7 @@ import org.objenesis.ObjenesisStd;
 
 public class VintageValueProviderTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private static final TypeTag STRING_TAG = new TypeTag(String.class);
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
@@ -47,44 +48,21 @@ public class VintageValueProviderTest {
     }
 
     @Test
-    public void giveRedFromFactory() {
-        assertEquals("r", vp.giveRed(STRING_TAG));
-    }
-
-    @Test
-    public void giveBlueFromFactory() {
-        assertEquals("b", vp.giveBlue(STRING_TAG));
-    }
-
-    @Test
-    public void giveRedCopyFromFactory() {
-        assertEquals("r", vp.giveRedCopy(STRING_TAG));
-        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
+    public void provideFromFactory() {
+        assertEquals(Tuple.of("r", "b", "r"), vp.provideOrThrow(STRING_TAG, EMPTY_ATTRIBUTES));
     }
 
     @Test
     public void giveRedFromFallbackFactory() {
-        Point actual = vp.giveRed(POINT_TAG);
-        assertEquals(new Point(42, 42), actual);
-    }
-
-    @Test
-    public void giveBlueFromFallbackFactory() {
-        Point actual = vp.giveBlue(POINT_TAG);
-        assertEquals(new Point(1337, 1337), actual);
-    }
-
-    @Test
-    public void giveRedCopyFromFallbackFactory() {
-        Point actual = vp.giveRedCopy(POINT_TAG);
-        assertEquals(new Point(42, 42), actual);
-        assertNotSame(vp.giveRed(POINT_TAG), actual);
+        Tuple<Point> actual = vp.provideOrThrow(POINT_TAG, EMPTY_ATTRIBUTES);
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
+        assertNotSame(actual.getRed(), actual.getRedCopy());
     }
 
     @Test
     public void fallbackDoesNotAffectStaticFields() {
         int expected = StaticContainer.staticInt;
-        vp.giveRed(new TypeTag(StaticContainer.class));
+        vp.provideOrThrow(new TypeTag(StaticContainer.class), EMPTY_ATTRIBUTES);
         assertEquals(expected, StaticContainer.staticInt);
     }
 
@@ -93,8 +71,12 @@ public class VintageValueProviderTest {
         factoryCache.put(List.class, new ListTestFactory());
         vp = new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
 
-        List<String> strings = vp.giveRed(new TypeTag(List.class, STRING_TAG));
-        List<Integer> ints = vp.giveRed(new TypeTag(List.class, INT_TAG));
+        List<String> strings = vp
+            .<List<String>>provideOrThrow(new TypeTag(List.class, STRING_TAG), EMPTY_ATTRIBUTES)
+            .getRed();
+        List<Integer> ints = vp
+            .<List<Integer>>provideOrThrow(new TypeTag(List.class, INT_TAG), EMPTY_ATTRIBUTES)
+            .getRed();
 
         assertEquals("r", strings.get(0));
         assertEquals(42, (int) ints.get(0));
@@ -109,8 +91,8 @@ public class VintageValueProviderTest {
     public void addingATypeTwiceOverrulesTheExistingOne() {
         factoryCache.put(int.class, values(-1, -2, -1));
         vp = new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
-        assertEquals(-1, (int) vp.giveRed(INT_TAG));
-        assertEquals(-2, (int) vp.giveBlue(INT_TAG));
+        assertEquals(-1, (int) vp.provideOrThrow(INT_TAG, EMPTY_ATTRIBUTES).getRed());
+        assertEquals(-2, (int) vp.provideOrThrow(INT_TAG, EMPTY_ATTRIBUTES).getBlue());
     }
 
     @Test
@@ -118,9 +100,10 @@ public class VintageValueProviderTest {
         TypeTag lazyTag = new TypeTag(Lazy.class);
         factoryCache.put(Lazy.class.getName(), values(Lazy.X, Lazy.Y, Lazy.X));
         vp = new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
-        assertEquals(Lazy.X, vp.giveRed(lazyTag));
-        assertEquals(Lazy.Y, vp.giveBlue(lazyTag));
-        assertEquals(Lazy.X, vp.giveRedCopy(lazyTag));
+        Tuple<?> tuple = vp.provideOrThrow(lazyTag, EMPTY_ATTRIBUTES);
+        assertEquals(Lazy.X, tuple.getRed());
+        assertEquals(Lazy.Y, tuple.getBlue());
+        assertEquals(Lazy.X, tuple.getRedCopy());
     }
 
     @Test
@@ -135,9 +118,9 @@ public class VintageValueProviderTest {
         );
         vp = new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
 
-        // Should throw, because `giveRed` does instantiate objects:
+        // Should throw, because `provideOrThrow` does instantiate objects:
         try {
-            vp.giveRed(throwingInitializerTag);
+            vp.provideOrThrow(throwingInitializerTag, EMPTY_ATTRIBUTES);
             fail("Expected an exception");
         } catch (Error e) {
             // succeed

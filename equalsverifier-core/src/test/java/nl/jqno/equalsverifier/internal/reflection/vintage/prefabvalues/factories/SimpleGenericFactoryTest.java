@@ -18,6 +18,7 @@ import org.objenesis.ObjenesisStd;
 @SuppressWarnings("rawtypes")
 public class SimpleGenericFactoryTest {
 
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag INTEGER_TYPETAG = new TypeTag(Integer.class);
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
@@ -60,12 +61,18 @@ public class SimpleGenericFactoryTest {
                 JavaApiPrefabValues.build(),
                 new ObjenesisStd()
             );
-        redString = valueProvider.giveRed(STRING_TYPETAG);
-        blueString = valueProvider.giveBlue(STRING_TYPETAG);
-        redInt = valueProvider.giveRed(INTEGER_TYPETAG);
-        blueInt = valueProvider.giveBlue(INTEGER_TYPETAG);
-        redObject = valueProvider.giveRed(OBJECT_TYPETAG);
-        blueObject = valueProvider.giveBlue(OBJECT_TYPETAG);
+
+        Tuple<String> strings = valueProvider.provideOrThrow(STRING_TYPETAG, EMPTY_ATTRIBUTES);
+        redString = strings.getRed();
+        blueString = strings.getBlue();
+
+        Tuple<Integer> ints = valueProvider.provideOrThrow(INTEGER_TYPETAG, EMPTY_ATTRIBUTES);
+        redInt = ints.getRed();
+        blueInt = ints.getBlue();
+
+        Tuple<Object> objects = valueProvider.provideOrThrow(OBJECT_TYPETAG, EMPTY_ATTRIBUTES);
+        redObject = objects.getRed();
+        blueObject = objects.getBlue();
     }
 
     @Test
