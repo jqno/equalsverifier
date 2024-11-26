@@ -16,6 +16,11 @@ import org.junit.jupiter.api.Test;
 public class GenericTypesTest {
 
     @Test
+    public void succeed_whenClassHasGenericFieldThatsSpecifiedToABuiltinGeneric() {
+        EqualsVerifier.forClass(GenericContainerWithBuiltin.class).verify();
+    }
+
+    @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
     }
@@ -121,6 +126,29 @@ public class GenericTypesTest {
             .verify();
     }
 
+    static final class GenericContainerWithBuiltin {
+
+        private final Generic<List<String>> b;
+
+        public GenericContainerWithBuiltin(Generic<List<String>> b) {
+            this.b = b;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof GenericContainerWithBuiltin)) {
+                return false;
+            }
+            GenericContainerWithBuiltin other = (GenericContainerWithBuiltin) obj;
+            return Objects.equals(b, other.b);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(b);
+        }
+    }
+
     static final class JavaGenericTypeContainer {
 
         private final Optional<Point> optional;
@@ -169,6 +197,30 @@ public class GenericTypesTest {
         @Override
         public String toString() {
             return "JavaGenericTypeContainer: " + optional + ", " + supplier.get();
+        }
+    }
+
+    static final class Generic<T> {
+
+        private final T t;
+
+        public Generic(T t) {
+            this.t = t;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Generic)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Generic<T> other = (Generic<T>) obj;
+            return Objects.equals(t, other.t);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(t);
         }
     }
 
