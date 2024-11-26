@@ -82,7 +82,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         VintageValueProvider valueProvider,
         Attributes attributes
     ) {
-        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);
+        ClassAccessor<T> accessor = new ClassAccessor<>(tag.getType(), valueProvider, objenesis);
         T red = accessor.getRedObject(tag, attributes);
         T blue = accessor.getBlueObject(tag, attributes);
 

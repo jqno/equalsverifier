@@ -19,28 +19,17 @@ public class ClassAccessor<T> {
     private final VintageValueProvider valueProvider;
     private final Objenesis objenesis;
 
-    /** Private constructor. Call {@link #of(Class, PrefabValues)} instead. */
-    ClassAccessor(Class<T> type, VintageValueProvider valueProvider, Objenesis objenesis) {
-        this.type = type;
-        this.valueProvider = valueProvider;
-        this.objenesis = objenesis;
-    }
-
     /**
-     * Factory method.
+     * Constructor.
      *
-     * @param <T> The class on which {@link ClassAccessor} operates.
      * @param type The class on which {@link ClassAccessor} operates. Should be the same as T.
      * @param valueProvider Prefabricated values with which to fill instantiated objects.
      * @param objenesis To instantiate non-record classes.
-     * @return A {@link ClassAccessor} for T.
      */
-    public static <T> ClassAccessor<T> of(
-        Class<T> type,
-        VintageValueProvider valueProvider,
-        Objenesis objenesis
-    ) {
-        return new ClassAccessor<>(type, valueProvider, objenesis);
+    public ClassAccessor(Class<T> type, VintageValueProvider valueProvider, Objenesis objenesis) {
+        this.type = type;
+        this.valueProvider = valueProvider;
+        this.objenesis = objenesis;
     }
 
     /**
@@ -53,19 +42,7 @@ public class ClassAccessor<T> {
      * @return An instance of T.
      */
     public T getRedObject(TypeTag enclosingType, Attributes attributes) {
-        return getRedAccessor(enclosingType, attributes).get();
-    }
-
-    /**
-     * Returns an {@link ObjectAccessor} for {@link #getRedObject(TypeTag, Attributes)}.
-     *
-     * @param enclosingType Describes the type that contains this object as a field, to determine
-     *     any generic parameters it may contain.
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
-     * @return An {@link ObjectAccessor} for {@link #getRedObject}.
-     */
-    public ObjectAccessor<T> getRedAccessor(TypeTag enclosingType, Attributes attributes) {
-        return buildObjectAccessor().scramble(valueProvider, enclosingType, attributes);
+        return buildObjectAccessor().scramble(valueProvider, enclosingType, attributes).get();
     }
 
     /**
@@ -78,21 +55,10 @@ public class ClassAccessor<T> {
      * @return An instance of T.
      */
     public T getBlueObject(TypeTag enclosingType, Attributes attributes) {
-        return getBlueAccessor(enclosingType, attributes).get();
-    }
-
-    /**
-     * Returns an {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, Attributes)}.
-     *
-     * @param enclosingType Describes the type that contains this object as a field, to determine
-     *     any generic parameters it may contain.
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
-     * @return An {@link ObjectAccessor} for {@link #getBlueObject(TypeTag, Attributes)}.
-     */
-    public ObjectAccessor<T> getBlueAccessor(TypeTag enclosingType, Attributes attributes) {
         return buildObjectAccessor()
             .scramble(valueProvider, enclosingType, attributes)
-            .scramble(valueProvider, enclosingType, attributes);
+            .scramble(valueProvider, enclosingType, attributes)
+            .get();
     }
 
     private ObjectAccessor<T> buildObjectAccessor() {
