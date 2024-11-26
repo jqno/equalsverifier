@@ -1,7 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.reflection.instantiation.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ChainedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 public final class DefaultValueProviders {

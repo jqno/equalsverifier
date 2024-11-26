@@ -11,6 +11,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;

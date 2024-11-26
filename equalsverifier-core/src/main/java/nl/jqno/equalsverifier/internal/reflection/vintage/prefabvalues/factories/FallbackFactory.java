@@ -6,8 +6,8 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.InstanceCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ClassAccessor;
 import org.objenesis.Objenesis;
 
 /**

@@ -4,7 +4,7 @@ import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 

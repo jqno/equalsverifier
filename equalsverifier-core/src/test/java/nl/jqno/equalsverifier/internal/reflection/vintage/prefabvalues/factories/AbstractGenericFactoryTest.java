@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

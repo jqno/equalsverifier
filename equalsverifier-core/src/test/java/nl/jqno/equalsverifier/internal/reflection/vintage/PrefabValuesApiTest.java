@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.util;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 

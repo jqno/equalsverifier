@@ -1,12 +1,12 @@
-package nl.jqno.equalsverifier.internal.reflection.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.*;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCacheFactory;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.FactoryCacheFactory;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;

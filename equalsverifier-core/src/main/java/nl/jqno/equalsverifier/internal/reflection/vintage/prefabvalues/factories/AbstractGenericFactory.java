@@ -8,7 +8,7 @@ import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 
 /**
  * Abstract implementation of {@link PrefabValueFactory} that provides helper functions for dealing

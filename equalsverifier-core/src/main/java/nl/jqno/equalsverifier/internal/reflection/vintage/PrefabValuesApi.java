@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.util;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.simple;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
@@ -7,9 +7,9 @@ import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
+import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {

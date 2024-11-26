@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection.instantiation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;

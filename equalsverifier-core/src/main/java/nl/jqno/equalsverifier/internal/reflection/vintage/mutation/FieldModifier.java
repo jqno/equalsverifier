@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 
 public final class FieldModifier {
 

@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;

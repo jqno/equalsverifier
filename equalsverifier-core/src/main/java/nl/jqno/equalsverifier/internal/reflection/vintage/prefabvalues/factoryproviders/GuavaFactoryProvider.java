@@ -9,12 +9,9 @@ import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumSetFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.*;
 
 public final class GuavaFactoryProvider implements FactoryProvider {
 

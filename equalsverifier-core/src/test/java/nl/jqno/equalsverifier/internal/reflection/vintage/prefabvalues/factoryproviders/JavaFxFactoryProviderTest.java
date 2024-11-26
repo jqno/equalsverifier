@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;

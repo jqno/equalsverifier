@@ -1,6 +1,8 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
+
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 
 public final class FactoryCacheFactory {
 
