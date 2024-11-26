@@ -14,23 +14,23 @@ public class CachedValueProvider implements ValueProvider {
     /**
      * Adds a value to the cache.
      *
-     * @param tag The type to assign the value to.
+     * @param type The type to assign the value to.
      * @param label The label that the value should be linked to.
      * @param tuple The value to add to the cache.
      */
-    public void put(TypeTag tag, String label, Tuple<?> tuple) {
-        cache.put(Key.of(tag, label), tuple);
+    public void put(Class<?> type, String label, Tuple<?> tuple) {
+        cache.put(Key.of(type, label), tuple);
     }
 
     /**
      * Checks if a value is already present in the cache.
      *
-     * @param tag The type for which we want to see if a value is present.
+     * @param type The type for which we want to see if a value is present.
      * @param label The label that the value should be linked to.
      * @return Whether a value for the given tag and label is present in the cache.
      */
-    public boolean contains(TypeTag tag, String label) {
-        Key key = Key.of(tag, label);
+    public boolean contains(Class<?> type, String label) {
+        Key key = Key.of(type, label);
         return cache.containsKey(key);
     }
 
@@ -40,7 +40,7 @@ public class CachedValueProvider implements ValueProvider {
     @SuppressWarnings("unchecked")
     @Override
     public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        Key key = Key.of(tag, attributes.label);
+        Key key = Key.of(tag.getType(), attributes.label);
         if (cache.containsKey(key)) {
             return Optional.of((Tuple<T>) cache.get(key));
         }
@@ -49,16 +49,16 @@ public class CachedValueProvider implements ValueProvider {
 
     private static final class Key {
 
-        final TypeTag tag;
+        final Class<?> type;
         final String label;
 
-        private Key(TypeTag tag, String label) {
-            this.tag = tag;
+        private Key(Class<?> type, String label) {
+            this.type = type;
             this.label = label;
         }
 
-        public static Key of(TypeTag tag, String label) {
-            return new Key(tag, label);
+        public static Key of(Class<?> type, String label) {
+            return new Key(type, label);
         }
 
         @Override
@@ -67,17 +67,17 @@ public class CachedValueProvider implements ValueProvider {
                 return false;
             }
             Key other = (Key) obj;
-            return Objects.equals(tag, other.tag) && Objects.equals(label, other.label);
+            return Objects.equals(type, other.type) && Objects.equals(label, other.label);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(tag, label);
+            return Objects.hash(type, label);
         }
 
         @Override
         public String toString() {
-            return "Key: [" + tag + "/" + label + "]";
+            return "Key: [" + type + "/" + label + "]";
         }
     }
 }

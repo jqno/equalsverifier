@@ -50,7 +50,7 @@ public class ChainedValueProvider implements ValueProvider {
             .findFirst()
             .orElse(Optional.empty());
 
-        result.ifPresent(r -> cache.put(tag, attributes.label, r));
+        result.ifPresent(r -> cache.put(tag.getType(), attributes.label, r));
         return result;
     }
 }
