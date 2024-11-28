@@ -91,6 +91,11 @@ public class GenericTypesTest {
     }
 
     @Test
+    public void succeed_whenEqualsLooksAtGenericContent_givenTwoGenericFields() {
+        EqualsVerifier.forClass(TwoGenericsContainerWithIntrospection.class).verify();
+    }
+
+    @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsContainer.class).verify();
     }
@@ -742,6 +747,38 @@ public class GenericTypesTest {
                 }
             }
             return result;
+        }
+    }
+
+    public static final class TwoGenericsContainerWithIntrospection {
+
+        private final List<String> stringList = new ArrayList<>();
+        private final List<Integer> intList = new ArrayList<>();
+
+        @SuppressWarnings("unused")
+        @Override
+        public boolean equals(Object obj) {
+            if (stringList != null && stringList.size() > 0) {
+                String key = stringList.get(0); // force a cast
+            }
+            if (intList != null && intList.size() > 0) {
+                Integer key = intList.get(0); // force a cast
+            }
+
+            if (!(obj instanceof TwoGenericsContainerWithIntrospection)) {
+                return false;
+            }
+            TwoGenericsContainerWithIntrospection other =
+                (TwoGenericsContainerWithIntrospection) obj;
+            return (
+                Objects.equals(stringList, other.stringList) &&
+                Objects.equals(intList, other.intList)
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stringList, intList);
         }
     }
 
