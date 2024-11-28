@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache.Key;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.SimpleFactory;
 import org.junit.jupiter.api.Test;
@@ -121,5 +123,10 @@ public class FactoryCacheTest {
         assertFalse(a == combined);
         assertFalse(a.contains(INT_CLASS));
         assertFalse(b.contains(STRING_CLASS));
+    }
+
+    @Test
+    public void key() {
+        EqualsVerifier.forClass(Key.class).verify();
     }
 }

@@ -140,7 +140,7 @@ public class FactoryCache {
         }
     }
 
-    private static final class Key {
+    static final class Key {
 
         final String typeName;
         final String label;

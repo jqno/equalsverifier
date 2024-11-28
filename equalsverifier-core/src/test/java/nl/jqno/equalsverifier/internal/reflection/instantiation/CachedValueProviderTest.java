@@ -3,8 +3,10 @@ package nl.jqno.equalsverifier.internal.reflection.instantiation;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
+import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider.Key;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import org.junit.jupiter.api.Test;
 
@@ -48,5 +50,13 @@ public class CachedValueProviderTest {
     @Test
     public void anUnregisteredValueCanNotBeFound() {
         assertEquals(Optional.empty(), sut.provide(INT, Attributes.unlabeled()));
+    }
+
+    @Test
+    public void key() {
+        EqualsVerifier
+            .forClass(Key.class)
+            .withPrefabValues(TypeTag.class, new TypeTag(String.class), new TypeTag(Integer.class))
+            .verify();
     }
 }

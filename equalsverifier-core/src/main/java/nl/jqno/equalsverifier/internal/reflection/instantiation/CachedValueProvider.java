@@ -23,18 +23,6 @@ public class CachedValueProvider implements ValueProvider {
     }
 
     /**
-     * Checks if a value is already present in the cache.
-     *
-     * @param tag The type for which we want to see if a value is present.
-     * @param label The label that the value should be linked to.
-     * @return Whether a value for the given tag and label is present in the cache.
-     */
-    public boolean contains(TypeTag tag, String label) {
-        Key key = Key.of(tag, label);
-        return cache.containsKey(key);
-    }
-
-    /**
      * {@inheritDoc}}
      */
     @SuppressWarnings("unchecked")
@@ -51,7 +39,7 @@ public class CachedValueProvider implements ValueProvider {
         return Optional.empty();
     }
 
-    private static final class Key {
+    static final class Key {
 
         final TypeTag tag;
         final String label;
