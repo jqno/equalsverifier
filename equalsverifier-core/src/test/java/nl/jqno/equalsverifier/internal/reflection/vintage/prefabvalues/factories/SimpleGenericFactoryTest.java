@@ -2,12 +2,13 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.LinkedHashSet;
 import java.util.Optional;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Pair;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ public class SimpleGenericFactoryTest {
     );
     private static final PrefabValueFactory<Pair> PAIR_FACTORY = Factories.simple(Pair::new, null);
 
-    private final LinkedHashSet<TypeTag> typeStack = new LinkedHashSet<>();
+    private final Attributes attributes = Attributes.unlabeled();
     private VintageValueProvider valueProvider;
     private String redString;
     private String blueString;
@@ -55,6 +56,7 @@ public class SimpleGenericFactoryTest {
         valueProvider =
             new VintageValueProvider(
                 TestValueProviders.empty(),
+                new CachedValueProvider(),
                 JavaApiPrefabValues.build(),
                 new ObjenesisStd()
             );
@@ -71,7 +73,7 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(
             STRINGOPTIONAL_TYPETAG,
             valueProvider,
-            typeStack
+            attributes
         );
         assertEquals(Optional.of(redString), tuple.getRed());
         assertEquals(Optional.of(blueString), tuple.getBlue());
@@ -82,7 +84,7 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(
             WILDCARDOPTIONAL_TYPETAG,
             valueProvider,
-            typeStack
+            attributes
         );
         assertEquals(Optional.of(redObject), tuple.getRed());
         assertEquals(Optional.of(blueObject), tuple.getBlue());
@@ -93,7 +95,7 @@ public class SimpleGenericFactoryTest {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(
             RAWOPTIONAL_TYPETAG,
             valueProvider,
-            typeStack
+            attributes
         );
         assertEquals(Optional.of(redObject), tuple.getRed());
         assertEquals(Optional.of(blueObject), tuple.getBlue());
@@ -101,7 +103,7 @@ public class SimpleGenericFactoryTest {
 
     @Test
     public void createSomethingWithMoreThanOneTypeParameter() {
-        Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, valueProvider, typeStack);
+        Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, valueProvider, attributes);
         assertEquals(new Pair<>(redString, redInt), tuple.getRed());
         assertEquals(new Pair<>(blueString, blueInt), tuple.getBlue());
     }

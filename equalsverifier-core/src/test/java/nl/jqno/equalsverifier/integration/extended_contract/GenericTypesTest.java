@@ -16,6 +16,11 @@ import org.junit.jupiter.api.Test;
 public class GenericTypesTest {
 
     @Test
+    public void succeed_whenClassHasGenericFieldThatsSpecifiedToABuiltinGeneric() {
+        EqualsVerifier.forClass(GenericContainerWithBuiltin.class).verify();
+    }
+
+    @Test
     public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
     }
@@ -86,6 +91,11 @@ public class GenericTypesTest {
     }
 
     @Test
+    public void succeed_whenEqualsLooksAtGenericContent_givenTwoGenericFields() {
+        EqualsVerifier.forClass(TwoGenericsContainerWithIntrospection.class).verify();
+    }
+
+    @Test
     public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsContainer.class).verify();
     }
@@ -119,6 +129,29 @@ public class GenericTypesTest {
             )
             .suppress(Warning.NONFINAL_FIELDS)
             .verify();
+    }
+
+    static final class GenericContainerWithBuiltin {
+
+        private final Generic<List<String>> b;
+
+        public GenericContainerWithBuiltin(Generic<List<String>> b) {
+            this.b = b;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof GenericContainerWithBuiltin)) {
+                return false;
+            }
+            GenericContainerWithBuiltin other = (GenericContainerWithBuiltin) obj;
+            return Objects.equals(b, other.b);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(b);
+        }
     }
 
     static final class JavaGenericTypeContainer {
@@ -169,6 +202,30 @@ public class GenericTypesTest {
         @Override
         public String toString() {
             return "JavaGenericTypeContainer: " + optional + ", " + supplier.get();
+        }
+    }
+
+    static final class Generic<T> {
+
+        private final T t;
+
+        public Generic(T t) {
+            this.t = t;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Generic)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Generic<T> other = (Generic<T>) obj;
+            return Objects.equals(t, other.t);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(t);
         }
     }
 
@@ -690,6 +747,38 @@ public class GenericTypesTest {
                 }
             }
             return result;
+        }
+    }
+
+    public static final class TwoGenericsContainerWithIntrospection {
+
+        private final List<String> stringList = new ArrayList<>();
+        private final List<Integer> intList = new ArrayList<>();
+
+        @SuppressWarnings("unused")
+        @Override
+        public boolean equals(Object obj) {
+            if (stringList != null && stringList.size() > 0) {
+                String key = stringList.get(0); // force a cast
+            }
+            if (intList != null && intList.size() > 0) {
+                Integer key = intList.get(0); // force a cast
+            }
+
+            if (!(obj instanceof TwoGenericsContainerWithIntrospection)) {
+                return false;
+            }
+            TwoGenericsContainerWithIntrospection other =
+                (TwoGenericsContainerWithIntrospection) obj;
+            return (
+                Objects.equals(stringList, other.stringList) &&
+                Objects.equals(intList, other.intList)
+            );
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(stringList, intList);
         }
     }
 

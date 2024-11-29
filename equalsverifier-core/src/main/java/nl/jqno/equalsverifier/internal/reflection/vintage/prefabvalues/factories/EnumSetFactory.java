@@ -2,11 +2,11 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factorie
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 
 /**
  * Implementation of {@link PrefabValueFactory} that instantiates EnumSets using reflection, while
@@ -25,17 +25,17 @@ public class EnumSetFactory<T> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag entryTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
 
         Collection red = new HashSet<>();
         Collection blue = new HashSet<>();
         Collection redCopy = new HashSet<>();
-        red.add(valueProvider.giveRed(entryTag));
-        blue.add(valueProvider.giveBlue(entryTag));
-        redCopy.add(valueProvider.giveRed(entryTag));
+        red.add(valueProvider.giveRed(entryTag, clone));
+        blue.add(valueProvider.giveBlue(entryTag, clone));
+        redCopy.add(valueProvider.giveRed(entryTag, clone));
 
         return new Tuple<>(factory.apply(red), factory.apply(blue), factory.apply(redCopy));
     }

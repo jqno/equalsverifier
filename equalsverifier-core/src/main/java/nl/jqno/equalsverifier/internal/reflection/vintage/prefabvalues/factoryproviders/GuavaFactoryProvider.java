@@ -8,12 +8,10 @@ import java.util.*;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumMapFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.EnumSetFactory;
-import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.*;
 
 public final class GuavaFactoryProvider implements FactoryProvider {
 
@@ -160,18 +158,24 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
-            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            Attributes clone = attributes.cloneAndAdd(tag);
             TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
 
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
-            blue.put(valueProvider.giveBlue(keyTag), valueProvider.giveBlue(valueTag));
-            redCopy.put(valueProvider.giveRed(keyTag), valueProvider.giveBlue(valueTag));
+            red.put(valueProvider.giveRed(keyTag, clone), valueProvider.giveBlue(valueTag, clone));
+            blue.put(
+                valueProvider.giveBlue(keyTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
+            );
+            redCopy.put(
+                valueProvider.giveRed(keyTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
+            );
 
             return Tuple.of(red, blue, redCopy);
         }
@@ -190,9 +194,9 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
+            Attributes attributes
         ) {
-            LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+            Attributes clone = attributes.cloneAndAdd(tag);
             TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
             TypeTag valueTag = determineAndCacheActualTypeTag(2, tag, valueProvider, clone);
@@ -201,19 +205,19 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T blue = factory.get();
             T redCopy = factory.get();
             red.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag, clone),
+                valueProvider.giveRed(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
             blue.put(
-                valueProvider.giveBlue(columnTag),
-                valueProvider.giveBlue(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveBlue(columnTag, clone),
+                valueProvider.giveBlue(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
             redCopy.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
+                valueProvider.giveRed(columnTag, clone),
+                valueProvider.giveRed(rowTag, clone),
+                valueProvider.giveBlue(valueTag, clone)
             );
 
             return Tuple.of(red, blue, redCopy);

@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
-import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 
 /**
  * Implementation of {@link PrefabValueFactory} that specializes in creating implementations of
@@ -24,9 +24,9 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
-        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
+        Attributes clone = attributes.cloneAndAdd(tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
 
@@ -34,16 +34,16 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
         // values.
         // But don't do it in the Blue map, or they may cancel each other out again.
 
-        Object redKey = valueProvider.giveRed(keyTag);
-        Object blueKey = valueProvider.giveBlue(keyTag);
-        Object blueValue = valueProvider.giveBlue(valueTag);
+        Object redKey = valueProvider.giveRed(keyTag, clone);
+        Object blueKey = valueProvider.giveBlue(keyTag, clone);
+        Object blueValue = valueProvider.giveBlue(valueTag, clone);
 
         T red = createEmpty.get();
         red.put(redKey, blueValue);
 
         T blue = createEmpty.get();
         if (!redKey.equals(blueKey)) { // This happens with single-element enums
-            blue.put(valueProvider.giveBlue(keyTag), blueValue);
+            blue.put(valueProvider.giveBlue(keyTag, clone), blueValue);
         }
 
         T redCopy = createEmpty.get();

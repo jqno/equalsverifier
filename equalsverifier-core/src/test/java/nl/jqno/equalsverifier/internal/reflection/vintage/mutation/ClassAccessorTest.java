@@ -1,14 +1,16 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.TwoStepNodeA;
@@ -21,20 +23,23 @@ import org.objenesis.ObjenesisStd;
 
 public class ClassAccessorTest {
 
-    private LinkedHashSet<TypeTag> empty;
+    private Attributes empty;
     private Objenesis objenesis;
+    private CachedValueProvider cache;
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
     private ClassAccessor<PointContainer> pointContainerAccessor;
 
     @BeforeEach
     public void setup() {
-        empty = new LinkedHashSet<>();
+        empty = Attributes.unlabeled();
         objenesis = new ObjenesisStd();
+        cache = new CachedValueProvider();
         factoryCache = JavaApiPrefabValues.build();
         valueProvider =
-            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
-        pointContainerAccessor = ClassAccessor.of(PointContainer.class, valueProvider, objenesis);
+            new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
+        pointContainerAccessor =
+            new ClassAccessor<>(PointContainer.class, valueProvider, objenesis);
     }
 
     @Test
@@ -45,7 +50,7 @@ public class ClassAccessorTest {
     @Test
     @SuppressWarnings("rawtypes")
     public void getRedObjectGeneric() {
-        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(
+        ClassAccessor<GenericTypeVariableListContainer> accessor = new ClassAccessor<>(
             GenericTypeVariableListContainer.class,
             valueProvider,
             objenesis
@@ -58,16 +63,6 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getRedAccessor() {
-        PointContainer foo = pointContainerAccessor.getRedObject(TypeTag.NULL, empty);
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getRedAccessor(
-            TypeTag.NULL,
-            empty
-        );
-        assertEquals(foo, objectAccessor.get());
-    }
-
-    @Test
     public void getBlueObject() {
         assertObjectHasNoNullFields(pointContainerAccessor.getBlueObject(TypeTag.NULL, empty));
     }
@@ -75,7 +70,7 @@ public class ClassAccessorTest {
     @Test
     @SuppressWarnings("rawtypes")
     public void getBlueObjectGeneric() {
-        ClassAccessor<GenericTypeVariableListContainer> accessor = ClassAccessor.of(
+        ClassAccessor<GenericTypeVariableListContainer> accessor = new ClassAccessor<>(
             GenericTypeVariableListContainer.class,
             valueProvider,
             objenesis
@@ -88,16 +83,6 @@ public class ClassAccessorTest {
     }
 
     @Test
-    public void getBlueAccessor() {
-        PointContainer foo = pointContainerAccessor.getBlueObject(TypeTag.NULL, empty);
-        ObjectAccessor<PointContainer> objectAccessor = pointContainerAccessor.getBlueAccessor(
-            TypeTag.NULL,
-            empty
-        );
-        assertEquals(foo, objectAccessor.get());
-    }
-
-    @Test
     public void redAndBlueNotEqual() {
         PointContainer red = pointContainerAccessor.getRedObject(TypeTag.NULL, empty);
         PointContainer blue = pointContainerAccessor.getBlueObject(TypeTag.NULL, empty);
@@ -106,15 +91,13 @@ public class ClassAccessorTest {
 
     @Test
     public void instantiateAllTypes() {
-        ClassAccessor
-            .of(AllTypesContainer.class, valueProvider, objenesis)
+        new ClassAccessor<>(AllTypesContainer.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateArrayTypes() {
-        ClassAccessor
-            .of(AllArrayTypesContainer.class, valueProvider, objenesis)
+        new ClassAccessor<>(AllArrayTypesContainer.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);
     }
 
@@ -125,29 +108,26 @@ public class ClassAccessorTest {
             values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
         );
         valueProvider =
-            new VintageValueProvider(TestValueProviders.empty(), factoryCache, objenesis);
-        ClassAccessor
-            .of(TwoStepNodeA.class, valueProvider, objenesis)
+            new VintageValueProvider(TestValueProviders.empty(), cache, factoryCache, objenesis);
+        new ClassAccessor<>(TwoStepNodeA.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateInterfaceField() {
-        ClassAccessor
-            .of(InterfaceContainer.class, valueProvider, objenesis)
+        new ClassAccessor<>(InterfaceContainer.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void instantiateAbstractClassField() {
-        ClassAccessor
-            .of(AbstractClassContainer.class, valueProvider, objenesis)
+        new ClassAccessor<>(AbstractClassContainer.class, valueProvider, objenesis)
             .getRedObject(TypeTag.NULL, empty);
     }
 
     @Test
     public void anInvalidTypeShouldNotThrowAnExceptionUponCreation() {
-        ClassAccessor.of(null, valueProvider, objenesis);
+        new ClassAccessor<>(null, valueProvider, objenesis);
     }
 
     private void assertObjectHasNoNullFields(PointContainer foo) {

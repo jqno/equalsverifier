@@ -1,9 +1,10 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ChainedValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 public final class DefaultValueProviders {
@@ -11,12 +12,20 @@ public final class DefaultValueProviders {
     private DefaultValueProviders() {}
 
     public static ValueProvider create(FactoryCache factoryCache, Objenesis objenesis) {
-        ChainedValueProvider mainChain = new ChainedValueProvider();
-        ChainedValueProvider vintageChain = new ChainedValueProvider();
+        CachedValueProvider cache = new CachedValueProvider();
 
-        ValueProvider vintage = new VintageValueProvider(vintageChain, factoryCache, objenesis);
+        ChainedValueProvider mainChain = new ChainedValueProvider(cache);
+        ChainedValueProvider vintageChain = new ChainedValueProvider(cache);
 
-        mainChain.register(vintage);
+        ValueProvider vintage = new VintageValueProvider(
+            vintageChain,
+            cache,
+            factoryCache,
+            objenesis
+        );
+
+        mainChain.register(cache, vintage);
+        vintageChain.register(cache);
 
         return mainChain;
     }

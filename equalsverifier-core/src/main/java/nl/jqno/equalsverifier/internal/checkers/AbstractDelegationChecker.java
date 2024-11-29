@@ -10,6 +10,7 @@ import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class AbstractDelegationChecker<T> implements Checker {
@@ -74,7 +75,7 @@ public class AbstractDelegationChecker<T> implements Checker {
 
     private <U> Tuple<U> safelyGetTuple(TypeTag tag, String fieldName) {
         try {
-            return valueProvider.provideOrThrow(tag, fieldName);
+            return valueProvider.provideOrThrow(tag, Attributes.labeled(fieldName));
         } catch (Exception ignored) {
             // If it fails for some reason, any reason, just return null so we can skip the test.
             return null;

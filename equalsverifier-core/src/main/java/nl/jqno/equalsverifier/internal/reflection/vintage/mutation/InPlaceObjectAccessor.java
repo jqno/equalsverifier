@@ -1,11 +1,11 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import java.lang.reflect.Field;
-import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -35,10 +35,10 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> scramble(
         VintageValueProvider valueProvider,
         TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
+        Attributes attributes
     ) {
         for (Field field : FieldIterable.of(type())) {
-            fieldModifierFor(field).changeField(valueProvider, enclosingType, typeStack);
+            fieldModifierFor(field).changeField(valueProvider, enclosingType, attributes);
         }
         return this;
     }

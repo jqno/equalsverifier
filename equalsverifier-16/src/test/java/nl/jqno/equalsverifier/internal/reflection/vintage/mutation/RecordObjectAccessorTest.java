@@ -1,16 +1,17 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
+import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +21,7 @@ import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorTest {
 
-    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
+    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
     private Objenesis objenesis;
     private Object recordInstance;
 
@@ -77,11 +78,12 @@ public class RecordObjectAccessorTest {
 
         VintageValueProvider vp = new VintageValueProvider(
             TestValueProviders.empty(),
+            new CachedValueProvider(),
             JavaApiPrefabValues.build(),
             objenesis
         );
         ExpectedException
-            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
+            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_ATTRIBUTES))
             .assertThrows(ReflectionException.class)
             .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }
