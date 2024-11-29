@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixes bug where the wrong generic type was provided when multiple fields of the same type but with different generic parameters exist. ([Issue 1022](https://github.com/jqno/equalsverifier/issues/1022))
 
+### Changed
+
+- The internal instantiation logic has been further refactored, to be more robust and extensible for future enhancements.
+
 ## [3.17.3] - 2024-11-07
 
 ### Fixed
