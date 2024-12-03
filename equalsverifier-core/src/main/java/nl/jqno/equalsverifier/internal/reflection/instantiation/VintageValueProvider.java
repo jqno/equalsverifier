@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;

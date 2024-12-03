@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")

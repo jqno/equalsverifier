@@ -86,14 +86,6 @@
             <version>${version.bytebuddy}</version>
         </dependency>
 
-        <!-- Provided dependencies -->
-        <dependency>
-            <groupId>com.github.spotbugs</groupId>
-            <artifactId>spotbugs-annotations</artifactId>
-            <version>${version.spotbugs}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Shared test dependencies -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -111,6 +103,12 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>${version.commons-lang3}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-annotations</artifactId>
+            <version>${version.spotbugs}</version>
             <scope>test</scope>
         </dependency>
 

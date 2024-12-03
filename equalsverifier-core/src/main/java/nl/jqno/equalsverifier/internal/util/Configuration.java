@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.reflection.annotations.*;
 

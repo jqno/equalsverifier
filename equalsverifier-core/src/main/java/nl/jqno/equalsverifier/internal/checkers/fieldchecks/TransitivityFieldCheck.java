@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.Formatter;

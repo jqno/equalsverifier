@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
