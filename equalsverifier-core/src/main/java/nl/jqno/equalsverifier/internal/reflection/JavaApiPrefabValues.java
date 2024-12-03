@@ -5,7 +5,6 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.PrintStream;
@@ -29,6 +28,7 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.*;

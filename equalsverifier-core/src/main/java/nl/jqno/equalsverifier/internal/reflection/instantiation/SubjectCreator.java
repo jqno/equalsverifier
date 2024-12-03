@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;

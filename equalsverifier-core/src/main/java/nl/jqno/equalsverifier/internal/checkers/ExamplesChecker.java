@@ -3,11 +3,11 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;

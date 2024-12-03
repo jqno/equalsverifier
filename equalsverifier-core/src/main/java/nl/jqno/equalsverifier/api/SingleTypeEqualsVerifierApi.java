@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.api;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.util.*;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -8,6 +7,7 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
