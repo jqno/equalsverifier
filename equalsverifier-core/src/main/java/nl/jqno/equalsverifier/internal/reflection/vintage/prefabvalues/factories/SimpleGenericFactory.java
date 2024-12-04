@@ -1,13 +1,13 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Supplier;
 import nl.jqno.equalsverifier.Func;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
 
@@ -23,9 +23,9 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
-        Attributes clone = attributes.cloneAndAdd(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
         List<Object> redValues = new ArrayList<>();
         List<Object> blueValues = new ArrayList<>();
@@ -35,8 +35,8 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
         for (int i = 0; i < n; i++) {
             TypeTag paramTag = determineAndCacheActualTypeTag(i, tag, valueProvider, clone);
 
-            Object redValue = valueProvider.giveRed(paramTag, clone);
-            Object blueValue = valueProvider.giveBlue(paramTag, clone);
+            Object redValue = valueProvider.giveRed(paramTag);
+            Object blueValue = valueProvider.giveBlue(paramTag);
             if (redValue.equals(blueValue)) { // This happens with single-element enums
                 useEmpty = true;
             }

@@ -1,13 +1,13 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public final class FieldModifier {
 
@@ -53,17 +53,17 @@ public final class FieldModifier {
      *     will be taken from it.
      * @param enclosingType A tag for the type that contains the field. Needed to determine a
      *     generic type, if it has one..
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
+     * @param typeStack Keeps track of recursion in the type.
      * @throws ReflectionException If the operation fails.
      */
     public void changeField(
         VintageValueProvider valueProvider,
         TypeTag enclosingType,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
         FieldChanger fm = () -> {
             TypeTag tag = TypeTag.of(field, enclosingType);
-            Object newValue = valueProvider.giveOther(tag, field.get(object), attributes);
+            Object newValue = valueProvider.giveOther(tag, field.get(object), typeStack);
             field.set(object, newValue);
         };
         change(fm, false);

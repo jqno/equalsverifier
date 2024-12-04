@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryp
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import org.joda.time.*;
 import org.joda.time.chrono.GregorianChronology;
 import org.joda.time.chrono.ISOChronology;

@@ -1,20 +1,18 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.AttributedString;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.StaticFinalContainer;
@@ -27,7 +25,7 @@ import org.objenesis.ObjenesisStd;
 
 public class InPlaceObjectAccessorScramblingTest {
 
-    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
+    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private Objenesis objenesis;
     private VintageValueProvider valueProviderTest;
 
@@ -36,13 +34,7 @@ public class InPlaceObjectAccessorScramblingTest {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
-        valueProviderTest =
-            new VintageValueProvider(
-                TestValueProviders.empty(),
-                new CachedValueProvider(),
-                factoryCache,
-                objenesis
-            );
+        valueProviderTest = new VintageValueProvider(factoryCache, objenesis);
     }
 
     @Test
@@ -162,7 +154,7 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(valueProviderTest, TypeTag.NULL, EMPTY_ATTRIBUTES);
+        return create(object).scramble(valueProviderTest, TypeTag.NULL, EMPTY_TYPE_STACK);
     }
 
     static final class StringContainer {

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class ClassProbeSealedTest {
+public class ClassAccessorSealedTest {
 
     @Test
     public void isNotSealed() {

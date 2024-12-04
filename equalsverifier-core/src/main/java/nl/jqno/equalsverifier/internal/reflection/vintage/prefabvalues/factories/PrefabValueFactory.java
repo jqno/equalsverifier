@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
+import java.util.LinkedHashSet;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 /**
  * Creates instances of generic types for use as prefab value.
@@ -17,8 +17,13 @@ public interface PrefabValueFactory<T> {
      *
      * @param tag The typetag of the type for which to create values.
      * @param valueProvider Repository for querying instances of generic types of the type tag.
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
+     * @param typeStack A stack of {@link TypeTag}s that require tag in order to be created. Used
+     *     for recursion detection.
      * @return A "red" instance of {@code T}.
      */
-    Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, Attributes attributes);
+    Tuple<T> createValues(
+        TypeTag tag,
+        VintageValueProvider valueProvider,
+        LinkedHashSet<TypeTag> typeStack
+    );
 }

@@ -1,14 +1,12 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
-import java.util.Arrays;
-import java.util.Optional;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.FallbackFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
@@ -16,7 +14,7 @@ import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
 /**
- * Provider of prefabricated instances of classes, using a "vintage" strategy for doing so.
+ * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
  *
  * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been
  * using since its inception. This strategy is quite hacky and messy, and other strategies might
@@ -24,34 +22,28 @@ import org.objenesis.Objenesis;
  */
 public class VintageValueProvider implements ValueProvider {
 
-    private final ValueProvider valueProvider;
+    // I'd like to remove this, but that affects recursion detection it a way I can't yet explain
+    private final Map<TypeTag, Tuple<?>> valueCache = new HashMap<>();
+
     private final FactoryCache factoryCache;
     private final PrefabValueFactory<?> fallbackFactory;
 
     /**
      * Constructor.
      *
-     * @param valueProvider Will be used to look up values before they are created.
-     * @param cache The values that have already been constructed.
      * @param factoryCache The factories that can be used to create values.
      * @param objenesis To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public VintageValueProvider(
-        ValueProvider valueProvider,
-        CachedValueProvider cache,
-        FactoryCache factoryCache,
-        Objenesis objenesis
-    ) {
-        this.valueProvider = valueProvider;
+    public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
         this.factoryCache = factoryCache;
         this.fallbackFactory = new FallbackFactory<>(objenesis);
     }
 
     /** {@inheritDoc} */
     @Override
-    public <T> Optional<Tuple<T>> provide(TypeTag tag, Attributes attributes) {
-        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag, attributes)));
+    public <T> Tuple<T> provide(TypeTag tag) {
+        return Rethrow.rethrow(() -> giveTuple(tag));
     }
 
     /**
@@ -64,11 +56,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "red" prefabricated value.
      */
     public <T> T giveRed(TypeTag tag) {
-        return giveRed(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveRed(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getRed();
+        return this.<T>giveTuple(tag).getRed();
     }
 
     /**
@@ -81,11 +69,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return The "blue" prefabricated value.
      */
     public <T> T giveBlue(TypeTag tag) {
-        return giveBlue(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveBlue(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getBlue();
+        return this.<T>giveTuple(tag).getBlue();
     }
 
     /**
@@ -98,11 +82,7 @@ public class VintageValueProvider implements ValueProvider {
      * @return A shallow copy of the "red" prefabricated value.
      */
     public <T> T giveRedCopy(TypeTag tag) {
-        return giveRedCopy(tag, Attributes.unlabeled());
-    }
-
-    public <T> T giveRedCopy(TypeTag tag, Attributes attributes) {
-        return this.<T>giveTuple(tag, attributes).getRedCopy();
+        return this.<T>giveTuple(tag).getRedCopy();
     }
 
     /**
@@ -112,11 +92,11 @@ public class VintageValueProvider implements ValueProvider {
      * @param <T> The type of the value.
      * @param tag A description of the desired type, including generic parameters.
      * @param value A value that is different from the value that will be returned.
-     * @param attributes Provides metadata needed to provide a value and to keep track of recursion.
+     * @param typeStack Keeps track of recursion in the type.
      * @return A value that is different from {@code value}.
      */
     // CHECKSTYLE OFF: CyclomaticComplexity
-    public <T> T giveOther(TypeTag tag, T value, Attributes attributes) {
+    public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
         if (
             value != null &&
@@ -126,7 +106,7 @@ public class VintageValueProvider implements ValueProvider {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
-        Tuple<T> tuple = giveTuple(tag, attributes);
+        Tuple<T> tuple = giveTuple(tag, typeStack);
         if (tuple.getRed() == null) {
             return null;
         }
@@ -157,27 +137,44 @@ public class VintageValueProvider implements ValueProvider {
         return Arrays.deepEquals(new Object[] { x }, new Object[] { y });
     }
 
-    @SuppressWarnings("unchecked")
-    private <T> Tuple<T> giveTuple(TypeTag tag, Attributes attributes) {
-        if (attributes.typeStack.contains(tag)) {
-            throw new RecursionException(attributes.typeStack);
+    /**
+     * Makes sure that values for the specified type are present in the cache, but doesn't return
+     * them.
+     *
+     * @param <T> The desired type.
+     * @param tag A description of the desired type, including generic parameters.
+     * @param typeStack Keeps track of recursion in the type.
+     */
+    public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        if (!valueCache.containsKey(tag)) {
+            Tuple<T> tuple = createTuple(tag, typeStack);
+            valueCache.put(tag, tuple);
         }
+    }
 
-        Optional<Tuple<T>> provided = valueProvider.provide(tag, attributes);
-        if (provided.isPresent()) {
-            return provided.get();
+    private <T> Tuple<T> giveTuple(TypeTag tag) {
+        return giveTuple(tag, new LinkedHashSet<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> Tuple<T> giveTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        realizeCacheFor(tag, typeStack);
+        return (Tuple<T>) valueCache.get(tag);
+    }
+
+    private <T> Tuple<T> createTuple(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {
+        if (typeStack.contains(tag)) {
+            throw new RecursionException(typeStack);
         }
 
         Class<T> type = tag.getType();
-        if (attributes.label != null && factoryCache.contains(type, attributes.label)) {
-            PrefabValueFactory<T> factory = factoryCache.get(type, attributes.label);
-            return factory.createValues(tag, this, attributes);
-        }
         if (factoryCache.contains(type)) {
             PrefabValueFactory<T> factory = factoryCache.get(type);
-            return factory.createValues(tag, this, attributes);
+            return factory.createValues(tag, this, typeStack);
         }
 
-        return (Tuple<T>) fallbackFactory.createValues(tag, this, attributes);
+        @SuppressWarnings("unchecked")
+        Tuple<T> result = (Tuple<T>) fallbackFactory.createValues(tag, this, typeStack);
+        return result;
     }
 }

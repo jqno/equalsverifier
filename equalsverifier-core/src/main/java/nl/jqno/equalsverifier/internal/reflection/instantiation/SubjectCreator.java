@@ -1,12 +1,11 @@
 package nl.jqno.equalsverifier.internal.reflection.instantiation;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
@@ -22,6 +21,7 @@ public class SubjectCreator<T> {
     private final Configuration<T> config;
     private final ValueProvider valueProvider;
     private final ClassProbe<T> classProbe;
+    private final FieldCache fieldCache;
     private final Objenesis objenesis;
     private final InstanceCreator<T> instanceCreator;
 
@@ -30,12 +30,14 @@ public class SubjectCreator<T> {
      *
      * @param config A configuration object.
      * @param valueProvider To provide values for the fields of the subject.
+     * @param fieldCache Prepared values for the fields of the subject.
      * @param objenesis Needed by InstanceCreator to instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(
         Configuration<T> config,
         ValueProvider valueProvider,
+        FieldCache fieldCache,
         Objenesis objenesis
     ) {
         this.typeTag = config.getTypeTag();
@@ -43,6 +45,7 @@ public class SubjectCreator<T> {
         this.config = config;
         this.valueProvider = valueProvider;
         this.classProbe = new ClassProbe<>(type);
+        this.fieldCache = fieldCache;
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
     }
@@ -236,12 +239,13 @@ public class SubjectCreator<T> {
     }
 
     private Tuple<?> valuesFor(Field f) {
+        String fieldName = f.getName();
+        if (fieldCache.contains(fieldName)) {
+            return fieldCache.get(fieldName);
+        }
         try {
-            TypeTag fieldTag = TypeTag.of(f, typeTag);
-            Tuple<?> tuple = valueProvider.provideOrThrow(
-                fieldTag,
-                Attributes.labeled(f.getName())
-            );
+            Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
+            fieldCache.put(fieldName, tuple);
             return tuple;
         } catch (ModuleException e) {
             throw new ModuleException(

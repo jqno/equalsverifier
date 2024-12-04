@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;

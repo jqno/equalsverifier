@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
+import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
 public final class Validations {
 
@@ -88,24 +89,40 @@ public final class Validations {
         );
     }
 
-    public static <T> void validateFieldTypeMatches(Field field, Class<?> realFieldType) {
-        boolean typeCompatible = field.getType().isAssignableFrom(realFieldType);
-        boolean wrappingCompatible = realFieldType.equals(
-            PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(field.getType())
-        );
-        validate(
-            !typeCompatible && !wrappingCompatible,
-            "Prefab values for field " +
-            field.getName() +
-            " should be of type " +
-            field.getType().getSimpleName() +
-            " but are " +
-            realFieldType.getSimpleName() +
-            "."
-        );
+    public static <T> void validateFieldTypeMatches(
+        Class<T> container,
+        String fieldName,
+        Class<?> fieldType
+    ) {
+        try {
+            Field f = container.getDeclaredField(fieldName);
+            boolean sameFields = f.getType().equals(fieldType);
+            boolean compatibleFields = fieldType.equals(
+                PrimitiveMappers.PRIMITIVE_OBJECT_MAPPER.get(f.getType())
+            );
+            validate(
+                !sameFields && !compatibleFields,
+                "Prefab values for field " +
+                fieldName +
+                " should be of type " +
+                f.getType().getSimpleName() +
+                " but are " +
+                fieldType.getSimpleName() +
+                "."
+            );
+        } catch (NoSuchFieldException e) {
+            validate(
+                false,
+                "Class " + container.getSimpleName() + " has no field named " + fieldName + "."
+            );
+        }
     }
 
-    public static <T> void validateGenericPrefabValues(Class<T> type, int arity) {
+    public static <T> void validateGenericPrefabValues(
+        Class<T> type,
+        PrefabValueFactory<T> factory,
+        int arity
+    ) {
         validateNotNull(type, "type is null.");
 
         int n = type.getTypeParameters().length;

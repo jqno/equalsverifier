@@ -4,7 +4,7 @@ import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.fa
 
 import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 
 public final class JavaxFactoryProvider implements FactoryProvider {
 

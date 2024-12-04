@@ -1,14 +1,14 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.objenesis.Objenesis;
 
 /**
@@ -40,12 +40,12 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     public ObjectAccessor<T> scramble(
         VintageValueProvider valueProvider,
         TypeTag enclosingType,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
         return makeAccessor(f -> {
             Object value = getField(f);
             TypeTag tag = TypeTag.of(f, enclosingType);
-            return valueProvider.giveOther(tag, value, attributes);
+            return valueProvider.giveOther(tag, value, typeStack);
         });
     }
 

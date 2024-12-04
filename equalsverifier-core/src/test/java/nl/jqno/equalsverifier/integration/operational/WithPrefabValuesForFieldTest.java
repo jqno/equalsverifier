@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -157,41 +157,6 @@ public class WithPrefabValuesForFieldTest {
             .verify();
     }
 
-    @Test
-    public void succeed_whenPrefabForArrayIsOverridden() {
-        EqualsVerifier
-            .forClass(ThrowingArrayContainer.class)
-            .withPrefabValuesForField("field", new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 })
-            .verify();
-    }
-
-    @Test
-    public void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
-        EqualsVerifier
-            .forClass(ListContainer.class)
-            .withPrefabValuesForField(
-                "list",
-                Collections.singletonList("x"),
-                Collections.singletonList("y")
-            )
-            .verify();
-    }
-
-    @Test
-    public void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
-        DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
-        DifficultGeneric two = new DifficultGeneric(null);
-
-        EqualsVerifier
-            .forClass(DifficultGeneric.class)
-            .withPrefabValuesForField(
-                "list",
-                Collections.singletonList(one),
-                Collections.singletonList(two)
-            )
-            .verify();
-    }
-
     static final class SinglePrecondition {
 
         private final FinalPoint point;
@@ -272,78 +237,6 @@ public class WithPrefabValuesForFieldTest {
         @Override
         public int hashCode() {
             return Objects.hash(date);
-        }
-    }
-
-    static final class ThrowingArrayContainer {
-
-        private final int[] field;
-
-        public ThrowingArrayContainer(int[] field) {
-            this.field = field;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof ThrowingArrayContainer)) {
-                return false;
-            }
-            if (field != null && field.length == 1) {
-                throw new IllegalStateException("Don't use a built-in prefab value!");
-            }
-            ThrowingArrayContainer other = (ThrowingArrayContainer) obj;
-            return Arrays.equals(field, other.field);
-        }
-
-        @Override
-        public int hashCode() {
-            return Arrays.hashCode(field);
-        }
-    }
-
-    static final class ListContainer {
-
-        private final List<String> list;
-
-        public ListContainer(List<String> list) {
-            this.list = list;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof ListContainer)) {
-                return false;
-            }
-            ListContainer other = (ListContainer) obj;
-            return Objects.equals(list, other.list);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(list);
-        }
-    }
-
-    public final class DifficultGeneric {
-
-        private final List<DifficultGeneric> list;
-
-        public DifficultGeneric(List<DifficultGeneric> list) {
-            this.list = list;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof DifficultGeneric)) {
-                return false;
-            }
-            DifficultGeneric other = (DifficultGeneric) obj;
-            return Objects.equals(list, other.list);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(list);
         }
     }
 }

@@ -134,7 +134,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenRecordHasBoundedWildcardGeneric() {
+    public void succeed_whenRecord() {
         EqualsVerifier.forClass(WildcardGenericRecordContainer.class).verify();
     }
 

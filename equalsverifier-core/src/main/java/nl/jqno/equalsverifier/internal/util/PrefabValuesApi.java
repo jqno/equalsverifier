@@ -1,15 +1,15 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage;
+package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.simple;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 
-import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
-import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
+import nl.jqno.equalsverifier.internal.reflection.Tuple;
+import nl.jqno.equalsverifier.internal.reflection.vintage.ObjectAccessor;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
-import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 
 public final class PrefabValuesApi {
@@ -40,47 +40,27 @@ public final class PrefabValuesApi {
 
     @SuppressWarnings("unchecked")
     public static <T> void addPrefabValuesForField(
-        FactoryCache factoryCache,
+        FieldCache fieldCache,
         Objenesis objenesis,
-        Class<?> enclosingType,
+        Class<?> type,
         String fieldName,
         T red,
         T blue
     ) {
-        Field field = findField(enclosingType, fieldName);
-        Class<T> type = (Class<T>) field.getType();
+        Validations.validateRedAndBluePrefabValues((Class<T>) red.getClass(), red, blue);
+        Validations.validateFieldTypeMatches(type, fieldName, red.getClass());
 
-        Validations.validateRedAndBluePrefabValues(type, red, blue);
-        Validations.validateFieldTypeMatches(field, red.getClass());
-
-        if (type.isArray()) {
-            factoryCache.put(type, fieldName, values(red, blue, red));
+        if (red.getClass().isArray()) {
+            fieldCache.put(fieldName, new Tuple<>(red, blue, red));
         } else {
             try {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
-                factoryCache.put(type, fieldName, values(red, blue, redCopy));
+                fieldCache.put(fieldName, new Tuple<>(red, blue, redCopy));
             } catch (RuntimeException ignored) {
                 /* specifically, on Java 9+: InacessibleObjectException */
-                factoryCache.put(type, fieldName, values(red, blue, red));
+                fieldCache.put(fieldName, new Tuple<>(red, blue, red));
             }
         }
-    }
-
-    private static Field findField(Class<?> type, String fieldName) {
-        for (Class<?> c : SuperclassIterable.ofIncludeSelf(type)) {
-            try {
-                return c.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException ignored) {
-                // Do nothing
-            }
-        }
-        throw new IllegalStateException(
-            "Precondition: class " +
-            type.getSimpleName() +
-            " does not contain field " +
-            fieldName +
-            "."
-        );
     }
 
     public static <T> void addGenericPrefabValues(
@@ -107,7 +87,7 @@ public final class PrefabValuesApi {
         PrefabValueFactory<T> factory,
         int arity
     ) {
-        Validations.validateGenericPrefabValues(otherType, arity);
+        Validations.validateGenericPrefabValues(otherType, factory, arity);
         factoryCache.put(otherType, factory);
     }
 }

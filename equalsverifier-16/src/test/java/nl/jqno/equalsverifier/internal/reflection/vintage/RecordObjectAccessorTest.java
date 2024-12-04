@@ -1,19 +1,17 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Constructor;
+import java.util.LinkedHashSet;
 import java.util.Objects;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -21,7 +19,7 @@ import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorTest {
 
-    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
+    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private Objenesis objenesis;
     private Object recordInstance;
 
@@ -76,14 +74,9 @@ public class RecordObjectAccessorTest {
             .of(OtherThrowingConstructorRecord.class, objenesis)
             .instantiate();
 
-        VintageValueProvider vp = new VintageValueProvider(
-            TestValueProviders.empty(),
-            new CachedValueProvider(),
-            JavaApiPrefabValues.build(),
-            objenesis
-        );
+        VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);
         ExpectedException
-            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_ATTRIBUTES))
+            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
             .assertThrows(ReflectionException.class)
             .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }

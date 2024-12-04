@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 
 /**
  * Contains the results of an {@link nl.jqno.equalsverifier.EqualsVerifier} run.

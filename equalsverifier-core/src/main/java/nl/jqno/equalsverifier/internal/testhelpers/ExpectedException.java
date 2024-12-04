@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.testhelpers;
 
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 
 @SuppressFBWarnings(

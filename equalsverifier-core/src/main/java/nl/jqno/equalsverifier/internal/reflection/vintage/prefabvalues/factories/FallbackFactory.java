@@ -1,13 +1,14 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
 import java.lang.reflect.Array;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import java.lang.reflect.Field;
+import java.util.LinkedHashSet;
+import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.InstanceCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ClassAccessor;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.vintage.ClassAccessor;
 import org.objenesis.Objenesis;
 
 /**
@@ -28,9 +29,11 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
-        Attributes clone = attributes.cloneAndAdd(tag);
+        @SuppressWarnings("unchecked")
+        LinkedHashSet<TypeTag> clone = (LinkedHashSet<TypeTag>) typeStack.clone();
+        clone.add(tag);
 
         Class<T> type = tag.getType();
         if (type.isEnum()) {
@@ -40,6 +43,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
             return giveArrayInstances(tag, valueProvider, clone);
         }
 
+        traverseFields(tag, valueProvider, clone);
         return giveInstances(tag, valueProvider, clone);
     }
 
@@ -61,35 +65,47 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
     private Tuple<T> giveArrayInstances(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
         Class<T> type = tag.getType();
         Class<?> componentType = type.getComponentType();
         TypeTag componentTag = new TypeTag(componentType);
+        valueProvider.realizeCacheFor(componentTag, typeStack);
 
         T red = (T) Array.newInstance(componentType, 1);
-        Array.set(red, 0, valueProvider.giveRed(componentTag, attributes));
+        Array.set(red, 0, valueProvider.giveRed(componentTag));
         T blue = (T) Array.newInstance(componentType, 1);
-        Array.set(blue, 0, valueProvider.giveBlue(componentTag, attributes));
+        Array.set(blue, 0, valueProvider.giveBlue(componentTag));
         T redCopy = (T) Array.newInstance(componentType, 1);
-        Array.set(redCopy, 0, valueProvider.giveRed(componentTag, attributes));
+        Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
 
         return new Tuple<>(red, blue, redCopy);
+    }
+
+    private void traverseFields(
+        TypeTag tag,
+        VintageValueProvider valueProvider,
+        LinkedHashSet<TypeTag> typeStack
+    ) {
+        Class<?> type = tag.getType();
+        for (Field field : FieldIterable.of(type)) {
+            FieldProbe probe = FieldProbe.of(field);
+            boolean isStaticAndFinal = probe.isStatic() && probe.isFinal();
+            if (!isStaticAndFinal) {
+                valueProvider.realizeCacheFor(TypeTag.of(field, tag), typeStack);
+            }
+        }
     }
 
     private Tuple<T> giveInstances(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
-        ClassAccessor<T> accessor = new ClassAccessor<>(tag.getType(), valueProvider, objenesis);
-        T red = accessor.getRedObject(tag, attributes);
-        T blue = accessor.getBlueObject(tag, attributes);
-
-        @SuppressWarnings("unchecked")
-        Class<T> actualType = (Class<T>) red.getClass();
-        T redCopy = new InstanceCreator<>(new ClassProbe<T>(actualType), objenesis).copy(red);
-
+        ClassAccessor<T> accessor = ClassAccessor.of(tag.getType(), valueProvider, objenesis);
+        T red = accessor.getRedObject(tag, typeStack);
+        T blue = accessor.getBlueObject(tag, typeStack);
+        T redCopy = accessor.getRedObject(tag, typeStack);
         return new Tuple<>(red, blue, redCopy);
     }
 }

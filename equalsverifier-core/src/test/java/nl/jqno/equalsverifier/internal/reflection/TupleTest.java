@@ -36,16 +36,4 @@ public class TupleTest {
         assertEquals(tuple.getRed(), tuple.getRedCopy());
         assertNotSame(tuple.getRed(), tuple.getRedCopy());
     }
-
-    @Test
-    public void map() {
-        assertEquals(Tuple.of("redx", "bluex", "redx"), tuple.map(s -> s + "x"));
-    }
-
-    @Test
-    public void combine() {
-        Tuple<Integer> ints = Tuple.of(2, 3, 2);
-        Tuple<String> actual = Tuple.combine(tuple, ints, (s, n) -> s + n);
-        assertEquals(Tuple.of("red2", "blue3", "red2"), actual);
-    }
 }

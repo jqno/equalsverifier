@@ -8,12 +8,9 @@ import java.util.Map;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,13 +23,7 @@ public class JavaFxFactoryProviderTest {
 
     @BeforeEach
     public void setUp() {
-        valueProvider =
-            new VintageValueProvider(
-                TestValueProviders.empty(),
-                new CachedValueProvider(),
-                JavaApiPrefabValues.build(),
-                new ObjenesisStd()
-            );
+        valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
     }
 
     @Test
@@ -49,11 +40,7 @@ public class JavaFxFactoryProviderTest {
             GenericContainer.class.getName(),
             List.class
         );
-        Tuple<GenericContainer> tuple = factory.createValues(
-            tag,
-            valueProvider,
-            Attributes.unlabeled()
-        );
+        Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
 
         assertEquals(valueProvider.giveRed(listTag), tuple.getRed().t);
         assertEquals(valueProvider.giveBlue(listTag), tuple.getBlue().t);
@@ -77,11 +64,7 @@ public class JavaFxFactoryProviderTest {
             GenericMultiContainer.class.getName(),
             Map.class
         );
-        Tuple<GenericMultiContainer> tuple = factory.createValues(
-            tag,
-            valueProvider,
-            Attributes.unlabeled()
-        );
+        Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
 
         assertEquals(valueProvider.giveRed(mapTag), tuple.getRed().t);
         assertEquals(valueProvider.giveBlue(mapTag), tuple.getBlue().t);

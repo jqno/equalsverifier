@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories;
 
+import java.util.LinkedHashSet;
 import java.util.function.Function;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 
 public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
 
@@ -20,14 +20,15 @@ public class CopyFactory<T, S> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(
         TypeTag tag,
         VintageValueProvider valueProvider,
-        Attributes attributes
+        LinkedHashSet<TypeTag> typeStack
     ) {
-        Attributes clone = attributes.cloneAndAdd(tag);
+        LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag sourceTag = copyGenericTypesInto(source, tag);
+        valueProvider.realizeCacheFor(sourceTag, clone);
 
-        S redSource = valueProvider.giveRed(sourceTag, clone);
-        S blueSource = valueProvider.giveBlue(sourceTag, clone);
-        S redCopySource = valueProvider.giveRedCopy(sourceTag, clone);
+        S redSource = valueProvider.giveRed(sourceTag);
+        S blueSource = valueProvider.giveBlue(sourceTag);
+        S redCopySource = valueProvider.giveRedCopy(sourceTag);
 
         return Tuple.of(copy.apply(redSource), copy.apply(blueSource), copy.apply(redCopySource));
     }

@@ -4,7 +4,10 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import com.google.common.collect.ImmutableList;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -43,18 +46,8 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForField() {
-        EqualsVerifier.forClass(Node.class).withPrefabValuesForField("node", red, blue).verify();
-    }
-
-    @Test
     public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, blue).verify();
-    }
-
-    @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForFieldOfSuperclass() {
-        EqualsVerifier.forClass(SubNode.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
@@ -74,26 +67,10 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForField() {
-        EqualsVerifier
-            .forClass(NodeContainer.class)
-            .withPrefabValuesForField("node", red, blue)
-            .verify();
-    }
-
-    @Test
     public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
         EqualsVerifier
             .forClass(SubNodeContainer.class)
             .withPrefabValues(Node.class, red, blue)
-            .verify();
-    }
-
-    @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForFieldOfSuperclass() {
-        EqualsVerifier
-            .forClass(SubNodeContainer.class)
-            .withPrefabValuesForField("node", red, blue)
             .verify();
     }
 
@@ -137,8 +114,9 @@ public class RecursionTest {
             .assertMessageContains(
                 RECURSIVE_DATASTRUCTURE,
                 ImmutableListTree.class.getSimpleName(),
-                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString()
-            );
+                new TypeTag(ImmutableList.class, new TypeTag(ImmutableListTree.class)).toString(),
+                new TypeTag(Collection.class, new TypeTag(ImmutableListTree.class)).toString()
+            ); // I'd prefer not to have this last one though.
     }
 
     @Test

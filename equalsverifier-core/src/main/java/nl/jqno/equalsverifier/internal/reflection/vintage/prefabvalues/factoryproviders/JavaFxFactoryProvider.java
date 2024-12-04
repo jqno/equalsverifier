@@ -5,16 +5,10 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.copy;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
-import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.*;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.AbstractGenericFactory;
 import nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.PrefabValueFactory;
 
@@ -114,22 +108,22 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
         public Tuple<T> createValues(
             TypeTag tag,
             VintageValueProvider valueProvider,
-            Attributes attributes
+            LinkedHashSet<TypeTag> typeStack
         ) {
             ConditionalInstantiator ci = new ConditionalInstantiator(fullyQualifiedTypeName);
             TypeTag singleParameterTag = copyGenericTypesInto(parameterRawType, tag);
 
             T red = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveRed(singleParameterTag, attributes))
+                objects(valueProvider.giveRed(singleParameterTag))
             );
             T blue = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveBlue(singleParameterTag, attributes))
+                objects(valueProvider.giveBlue(singleParameterTag))
             );
             T redCopy = ci.instantiate(
                 classes(parameterRawType),
-                objects(valueProvider.giveRed(singleParameterTag, attributes))
+                objects(valueProvider.giveRed(singleParameterTag))
             );
 
             return Tuple.of(red, blue, redCopy);

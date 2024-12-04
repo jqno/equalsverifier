@@ -9,10 +9,10 @@ import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.api.EqualsVerifierApi;
 import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
+import nl.jqno.equalsverifier.internal.util.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.util.Validations;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
@@ -51,7 +51,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     public ConfiguredEqualsVerifier copy() {
         return new ConfiguredEqualsVerifier(
             EnumSet.copyOf(warningsToSuppress),
-            factoryCache.copy(),
+            new FactoryCache().merge(factoryCache),
             usingGetClass,
             fieldnameToGetter
         );
@@ -127,7 +127,7 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
         return new SingleTypeEqualsVerifierApi<>(
             type,
             EnumSet.copyOf(warningsToSuppress),
-            factoryCache.copy(),
+            factoryCache,
             objenesis,
             usingGetClass,
             fieldnameToGetter

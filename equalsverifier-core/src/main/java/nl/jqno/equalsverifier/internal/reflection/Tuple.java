@@ -1,8 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
-
 /**
  * Container for three values of the same type: a "red" one, a "blue" one, and a shallow copy of the
  * "red" one.
@@ -53,18 +50,6 @@ public final class Tuple<T> {
     /** @return The shallow copy of the red value. */
     public T getRedCopy() {
         return redCopy;
-    }
-
-    public <R> Tuple<R> map(Function<T, R> fn) {
-        return Tuple.of(fn.apply(red), fn.apply(blue), fn.apply(redCopy));
-    }
-
-    public static <T, U, R> Tuple<R> combine(Tuple<T> t, Tuple<U> u, BiFunction<T, U, R> fn) {
-        return Tuple.of(
-            fn.apply(t.getRed(), u.getRed()),
-            fn.apply(t.getBlue(), u.getBlue()),
-            fn.apply(t.getRedCopy(), u.getRedCopy())
-        );
     }
 
     /** {@inheritDoc} */

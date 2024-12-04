@@ -1,39 +1,29 @@
-package nl.jqno.equalsverifier.internal.reflection.vintage.mutation;
+package nl.jqno.equalsverifier.internal.reflection.vintage;
 
 import static nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factories.Factories.values;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
+import java.util.LinkedHashSet;
+import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.CachedValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.testhelpers.TestValueProviders;
+import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
 public class RecordObjectAccessorScramblingTest {
 
-    private static final Attributes EMPTY_ATTRIBUTES = Attributes.unlabeled();
-    private CachedValueProvider cache;
+    private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
     public void setup() throws Exception {
-        cache = new CachedValueProvider();
         factoryCache = JavaApiPrefabValues.build();
-        valueProvider =
-            new VintageValueProvider(
-                TestValueProviders.empty(),
-                cache,
-                factoryCache,
-                new ObjenesisStd()
-            );
+        valueProvider = new VintageValueProvider(factoryCache, new ObjenesisStd());
     }
 
     @Test
@@ -67,7 +57,7 @@ public class RecordObjectAccessorScramblingTest {
     }
 
     private ObjectAccessor<Object> doScramble(Object object) {
-        return create(object).scramble(valueProvider, TypeTag.NULL, EMPTY_ATTRIBUTES);
+        return create(object).scramble(valueProvider, TypeTag.NULL, EMPTY_TYPE_STACK);
     }
 
     record Point(int x, int y) {}

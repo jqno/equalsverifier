@@ -3,10 +3,10 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
