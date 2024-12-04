@@ -42,8 +42,8 @@ public class VintageValueProvider implements ValueProvider {
 
     /** {@inheritDoc} */
     @Override
-    public <T> Tuple<T> provide(TypeTag tag) {
-        return Rethrow.rethrow(() -> giveTuple(tag));
+    public <T> Optional<Tuple<T>> provide(TypeTag tag) {
+        return Rethrow.rethrow(() -> Optional.of(giveTuple(tag)));
     }
 
     /**

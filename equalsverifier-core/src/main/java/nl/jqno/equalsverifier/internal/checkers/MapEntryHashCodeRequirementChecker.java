@@ -23,7 +23,7 @@ public class MapEntryHashCodeRequirementChecker<T> implements Checker {
     public void check() {
         if (Map.Entry.class.isAssignableFrom(config.getType())) {
             Map.Entry<?, ?> e = valueProvider
-                .<Map.Entry<?, ?>>provide(config.getTypeTag())
+                .<Map.Entry<?, ?>>provideOrThrow(config.getTypeTag())
                 .getRed();
 
             int expectedHashCode = Objects.hashCode(e.getKey()) ^ Objects.hashCode(e.getValue());

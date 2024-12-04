@@ -7,9 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 import nl.jqno.equalsverifier.internal.reflection.FactoryCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -48,8 +46,11 @@ public class VintageValueProviderTest {
 
     @Test
     public void provide() {
-        Tuple<Point> actual = vp.provide(POINT_TAG);
-        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual);
+        Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
+        assertEquals(
+            Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)),
+            actual.get()
+        );
     }
 
     @Test

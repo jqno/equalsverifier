@@ -244,7 +244,8 @@ public class SubjectCreator<T> {
             return fieldCache.get(fieldName);
         }
         try {
-            Tuple<?> tuple = valueProvider.provide(TypeTag.of(f, typeTag));
+            TypeTag fieldTag = TypeTag.of(f, typeTag);
+            Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag);
             fieldCache.put(fieldName, tuple);
             return tuple;
         } catch (ModuleException e) {
