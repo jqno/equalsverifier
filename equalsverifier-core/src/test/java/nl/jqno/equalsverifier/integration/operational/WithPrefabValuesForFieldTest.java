@@ -177,6 +177,20 @@ public class WithPrefabValuesForFieldTest {
             .verify();
     }
 
+    @Test
+    public void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
+        DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
+        DifficultGeneric two = new DifficultGeneric(null);
+        EqualsVerifier
+            .forClass(DifficultGeneric.class)
+            .withPrefabValuesForField(
+                "list",
+                Collections.singletonList(one),
+                Collections.singletonList(two)
+            )
+            .verify();
+    }
+
     static final class SinglePrecondition {
 
         private final FinalPoint point;
@@ -300,6 +314,29 @@ public class WithPrefabValuesForFieldTest {
                 return false;
             }
             ListContainer other = (ListContainer) obj;
+            return Objects.equals(list, other.list);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(list);
+        }
+    }
+
+    public final class DifficultGeneric {
+
+        private final List<DifficultGeneric> list;
+
+        public DifficultGeneric(List<DifficultGeneric> list) {
+            this.list = list;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof DifficultGeneric)) {
+                return false;
+            }
+            DifficultGeneric other = (DifficultGeneric) obj;
             return Objects.equals(list, other.list);
         }
 
