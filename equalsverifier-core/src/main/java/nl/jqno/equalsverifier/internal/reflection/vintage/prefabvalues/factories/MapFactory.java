@@ -43,7 +43,7 @@ public class MapFactory<T extends Map> extends AbstractGenericFactory<T> {
 
         T blue = createEmpty.get();
         if (!redKey.equals(blueKey)) { // This happens with single-element enums
-            blue.put(valueProvider.giveBlue(keyTag), blueValue);
+            blue.put(blueKey, blueValue);
         }
 
         T redCopy = createEmpty.get();
