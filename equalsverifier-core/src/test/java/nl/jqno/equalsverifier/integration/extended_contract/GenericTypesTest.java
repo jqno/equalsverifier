@@ -872,7 +872,9 @@ public class GenericTypesTest {
 
         @Override
         public final boolean equals(final Object o) {
-            if (!(o instanceof ArrayMapContainerContainer)) return false;
+            if (!(o instanceof ArrayMapContainerContainer)) {
+                return false;
+            }
             final ArrayMapContainerContainer that = (ArrayMapContainerContainer) o;
             return Objects.equals(mapContainer, that.mapContainer);
         }
