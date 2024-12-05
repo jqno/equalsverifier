@@ -131,6 +131,19 @@ public class GenericTypesTest {
             .verify();
     }
 
+    @Test
+    public void succeed_whenClassContainsAMapWithAnArray() {
+        EqualsVerifier.forClass(ArrayMapContainer.class).withNonnullFields("map").verify();
+    }
+
+    @Test
+    public void succeed_whenClassContainsAClassThatContainsAMapWithArray() {
+        EqualsVerifier
+            .forClass(ArrayMapContainerContainer.class)
+            .withNonnullFields("mapContainer")
+            .verify();
+    }
+
     static final class GenericContainerWithBuiltin {
 
         private final Generic<List<String>> b;
@@ -846,6 +859,65 @@ public class GenericTypesTest {
         @Override
         public final int hashCode() {
             return Objects.hash(i, wrapped);
+        }
+    }
+
+    static class ArrayMapContainerContainer {
+
+        private final ArrayMapContainer mapContainer;
+
+        public ArrayMapContainerContainer(final ArrayMapContainer mapContainer) {
+            this.mapContainer = mapContainer;
+        }
+
+        @Override
+        public final boolean equals(final Object o) {
+            if (!(o instanceof ArrayMapContainerContainer)) return false;
+            final ArrayMapContainerContainer that = (ArrayMapContainerContainer) o;
+            return Objects.equals(mapContainer, that.mapContainer);
+        }
+
+        @Override
+        public final int hashCode() {
+            return Objects.hashCode(mapContainer);
+        }
+    }
+
+    static class ArrayMapContainer {
+
+        private final Map<String, byte[]> map;
+
+        public ArrayMapContainer(final Map<String, byte[]> map) {
+            this.map = map;
+        }
+
+        @Override
+        public final boolean equals(final Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (!(o instanceof ArrayMapContainer)) {
+                return false;
+            }
+            final ArrayMapContainer that = (ArrayMapContainer) o;
+            if (map.size() != that.map.size()) {
+                return false;
+            }
+            for (final Map.Entry<String, byte[]> entry : map.entrySet()) {
+                if (!Arrays.equals(entry.getValue(), that.map.get(entry.getKey()))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        @Override
+        public final int hashCode() {
+            int hashCode = 0;
+            for (final Map.Entry<String, byte[]> entry : map.entrySet()) {
+                hashCode += entry.getKey().hashCode() ^ Arrays.hashCode(entry.getValue());
+            }
+            return hashCode;
         }
     }
 }
