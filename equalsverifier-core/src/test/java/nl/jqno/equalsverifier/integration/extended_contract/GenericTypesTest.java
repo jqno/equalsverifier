@@ -167,6 +167,30 @@ public class GenericTypesTest {
         }
     }
 
+    static final class Generic<T> {
+
+        private final T t;
+
+        public Generic(T t) {
+            this.t = t;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (!(obj instanceof Generic)) {
+                return false;
+            }
+            @SuppressWarnings("unchecked")
+            Generic<T> other = (Generic<T>) obj;
+            return Objects.equals(t, other.t);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(t);
+        }
+    }
+
     static final class JavaGenericTypeContainer {
 
         private final Optional<Point> optional;
@@ -215,30 +239,6 @@ public class GenericTypesTest {
         @Override
         public String toString() {
             return "JavaGenericTypeContainer: " + optional + ", " + supplier.get();
-        }
-    }
-
-    static final class Generic<T> {
-
-        private final T t;
-
-        public Generic(T t) {
-            this.t = t;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (!(obj instanceof Generic)) {
-                return false;
-            }
-            @SuppressWarnings("unchecked")
-            Generic<T> other = (Generic<T>) obj;
-            return Objects.equals(t, other.t);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(t);
         }
     }
 
