@@ -13,7 +13,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.17.5] - 2024-12-06
+
+### Fixed
+
+- SpotBugs-annotations dependency is suddenly needed in builds that do certain kinds of annotation processing. ([Issue 1026](https://github.com/jqno/equalsverifier/issues/1026))
+- Significant fields error when testing a class with a field that has a Map with an array as its value type. ([Issue 1027](https://github.com/jqno/equalsverifier/issues/1027))
+
+### Changed
+
+- Reverted the refactorings introduced in versions 3.17.2, 3.17.3 and 3.17.4, as they were causing more problems than they were solving.
+
 ## [3.17.4] - 2024-11-29
+
+### Fixed
 
 - Fixes bug where the wrong generic type was provided when multiple fields of the same type but with different generic parameters exist. ([Issue 1022](https://github.com/jqno/equalsverifier/issues/1022))
 
