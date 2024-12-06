@@ -5,9 +5,11 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ClassAccessor;
-import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.FieldModifier;
-import nl.jqno.equalsverifier.internal.reflection.vintage.mutation.ObjectAccessor;
+import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ClassAccessor;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.FieldModifier;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.reflection.ObjectAccessor;
+import nl.jqno.equalsverifier.testhelpers.FactoryCacheFactory;
 
 @AnalyzeClasses(packages = "nl.jqno.equalsverifier")
 public final class ArchitectureTest {
@@ -15,15 +17,19 @@ public final class ArchitectureTest {
     @ArchTest
     public static final ArchRule ONLY_VINTAGE_INSTANTIATORS_CAN_USE_VINTAGE_REFLECTION = noClasses()
         .that()
-        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.reflection.vintage..")
+        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.instantiation.vintage..")
+        .and()
+        .doNotBelongToAnyOf(
+            JavaApiPrefabValues.class,
+            // 👇 Test classes
+            FactoryCacheFactory.class
+        )
         .should()
         .accessClassesThat()
-        .resideInAPackage("nl.jqno.equalsverifier.internal.reflection.vintage.mutation..")
+        .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues..")
         .orShould()
         .accessClassesThat()
-        .resideInAPackage(
-            "nl.jqno.equalsverifier.internal.reflection.vintage.mutation.prefabvalues.."
-        );
+        .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.reflection..");
 
     @ArchTest
     public static final ArchRule DONT_USE_VINTAGE_REFLECTION_DIRECTLY = noClasses()
@@ -68,7 +74,7 @@ public final class ArchitectureTest {
     );
 
     private static final String FACTORYPROVIDER_PATTERN =
-        "nl.jqno.equalsverifier.internal.reflection.vintage.prefabvalues.factoryproviders..";
+        "nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders..";
     private static final String TEST_CLASS_PATTERN = ".*Test(\\$.*)?$";
 
     private ArchitectureTest() {

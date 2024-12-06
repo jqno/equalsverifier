@@ -7,13 +7,11 @@ import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
@@ -27,6 +25,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
     private final Set<String> nonnullFields;
     private final Set<String> prefabbedFields;
     private final AnnotationCache annotationCache;
+    private final FieldCache fieldCache;
 
     public ReflexivityFieldCheck(Context<T> context) {
         this.subjectCreator = context.getSubjectCreator();
@@ -38,6 +37,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         this.nonnullFields = config.getNonnullFields();
         this.prefabbedFields = config.getPrefabbedFields();
         this.annotationCache = config.getAnnotationCache();
+        this.fieldCache = context.getFieldCache();
     }
 
     @Override
@@ -80,9 +80,9 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Field field = probe.getField();
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = valueProvider
-            .provide(tag, Attributes.labeled(fieldName))
-            .orElseThrow(() -> new NoValueException(tag, fieldName));
+        Tuple<?> tuple = prefabbedFields.contains(fieldName)
+            ? fieldCache.get(fieldName)
+            : valueProvider.provideOrThrow(tag);
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
         Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());

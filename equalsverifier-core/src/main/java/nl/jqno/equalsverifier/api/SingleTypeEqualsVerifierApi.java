@@ -7,11 +7,11 @@ import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
-import nl.jqno.equalsverifier.internal.reflection.vintage.FactoryCache;
-import nl.jqno.equalsverifier.internal.reflection.vintage.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.util.*;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 import org.objenesis.Objenesis;
@@ -32,6 +32,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private boolean hasRedefinedSuperclass = false;
     private Class<? extends T> redefinedSubclass = null;
     private FactoryCache factoryCache = new FactoryCache();
+    private FieldCache fieldCache = new FieldCache();
     private CachedHashCodeInitializer<T> cachedHashCodeInitializer =
         CachedHashCodeInitializer.passthrough();
     private Function<String, String> fieldnameToGetter = null;
@@ -39,7 +40,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     private Set<String> allIncludedFields = new HashSet<>();
     private Set<String> nonnullFields = new HashSet<>();
     private Set<String> ignoredAnnotationClassNames = new HashSet<>();
-    private Set<String> prefabbedFieldNames = new HashSet<>();
     private List<T> equalExamples = new ArrayList<>();
     private List<T> unequalExamples = new ArrayList<>();
     private final Objenesis objenesis;
@@ -76,10 +76,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     equals} method, instead of an {@code instanceof} check.
      * @param converter A function that converts from field name to getter name.
      */
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "FactoryCache is inherently mutable"
-    )
     public SingleTypeEqualsVerifierApi(
         Class<T> type,
         EnumSet<Warning> warningsToSuppress,
@@ -90,7 +86,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     ) {
         this(type, objenesis);
         this.warningsToSuppress = EnumSet.copyOf(warningsToSuppress);
-        this.factoryCache = factoryCache;
+        this.factoryCache = this.factoryCache.merge(factoryCache);
         this.usingGetClass = usingGetClass;
         this.fieldnameToGetter = converter;
     }
@@ -148,15 +144,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         S red,
         S blue
     ) {
-        PrefabValuesApi.addPrefabValuesForField(
-            factoryCache,
-            objenesis,
-            type,
-            fieldName,
-            red,
-            blue
-        );
-        prefabbedFieldNames.add(fieldName);
+        PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
         withNonnullFields(fieldName);
         return this;
     }
@@ -444,7 +432,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, objenesis);
+        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
         Validations.validateProcessedAnnotations(
             type,
             config.getAnnotationCache(),
@@ -463,7 +451,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
             allExcludedFields,
             allIncludedFields,
             nonnullFields,
-            prefabbedFieldNames,
+            fieldCache.getFieldNames(),
             cachedHashCodeInitializer,
             hasRedefinedSuperclass,
             redefinedSubclass,

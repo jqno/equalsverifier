@@ -181,7 +181,6 @@ public class WithPrefabValuesForFieldTest {
     public void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
         DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
         DifficultGeneric two = new DifficultGeneric(null);
-
         EqualsVerifier
             .forClass(DifficultGeneric.class)
             .withPrefabValuesForField(

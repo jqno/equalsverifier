@@ -4,11 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider.Attributes;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -42,9 +41,7 @@ public class StringFieldCheck<T> implements FieldCheck<T> {
     public void execute(FieldProbe fieldProbe) {
         if (String.class.equals(fieldProbe.getType()) && !fieldProbe.isStatic()) {
             TypeTag string = new TypeTag(String.class);
-            String red = valueProvider
-                .<String>provideOrThrow(string, Attributes.labeled(fieldProbe.getName()))
-                .getRed();
+            String red = valueProvider.<String>provideOrThrow(string).getRed();
 
             final T reference;
             final T copy;

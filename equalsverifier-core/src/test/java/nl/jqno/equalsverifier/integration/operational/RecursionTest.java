@@ -4,7 +4,9 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import com.google.common.collect.ImmutableList;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;

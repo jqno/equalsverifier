@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
