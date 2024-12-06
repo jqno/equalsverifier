@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 

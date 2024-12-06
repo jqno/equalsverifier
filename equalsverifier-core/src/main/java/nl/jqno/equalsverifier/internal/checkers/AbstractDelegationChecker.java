@@ -4,12 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
 import java.lang.reflect.Field;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.Tuple;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class AbstractDelegationChecker<T> implements Checker {

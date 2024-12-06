@@ -1,10 +1,13 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
-import nl.jqno.equalsverifier.internal.reflection.*;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.SubjectCreator;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.ValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.instantiation.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
+import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
+import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
+import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
+import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
+import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import org.objenesis.Objenesis;
 
 public final class Context<T> {
