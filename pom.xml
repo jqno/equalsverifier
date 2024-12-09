@@ -107,8 +107,6 @@
         <version.pitest.maven>1.17.2</version.pitest.maven>
         <version.spotbugs.maven>4.8.6.6</version.spotbugs.maven>
         <version.spotbugs>4.8.6</version.spotbugs>
-        <version.prettier.maven>0.22</version.prettier.maven>
-        <version.prettier-java.maven>2.4.0</version.prettier-java.maven>
     </properties>
 
     <build>
@@ -293,24 +291,6 @@
                             <execution>
                                 <id>run-spotbugs</id>
                                 <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>com.hubspot.maven.plugins</groupId>
-                        <artifactId>prettier-maven-plugin</artifactId>
-                        <version>${version.prettier.maven}</version>
-                        <configuration>
-                            <prettierJavaVersion>${version.prettier-java.maven}</prettierJavaVersion>
-                            <nodeVersion>21.7.2</nodeVersion>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <phase>validate</phase>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
