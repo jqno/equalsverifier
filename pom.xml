@@ -66,7 +66,7 @@
         <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.95</analysis.jacoco.threshold>
-        <analysis.checkstyle.config>checkstyle-config.xml</analysis.checkstyle.config>
+        <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
 
