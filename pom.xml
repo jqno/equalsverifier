@@ -69,6 +69,8 @@
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
         <analysis.spotbugs.effort>Max</analysis.spotbugs.effort>
         <analysis.spotbugs.threshold>Low</analysis.spotbugs.threshold>
+        <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
+        <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
 
         <version.bytebuddy>1.15.10</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
@@ -107,6 +109,7 @@
         <version.pitest.maven>1.17.2</version.pitest.maven>
         <version.spotbugs.maven>4.8.6.6</version.spotbugs.maven>
         <version.spotbugs>4.8.6</version.spotbugs>
+        <version.spotless>2.43.0</version.spotless>
     </properties>
 
     <build>
@@ -291,6 +294,29 @@
                             <execution>
                                 <id>run-spotbugs</id>
                                 <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>com.diffplug.spotless</groupId>
+                        <artifactId>spotless-maven-plugin</artifactId>
+                        <version>${version.spotless}</version>
+                        <configuration>
+                            <java>
+                                <importOrder>
+                                    <file>${analysis.spotless.importorder.config}</file>
+                                </importOrder>
+                                <eclipse>
+                                    <file>${analysis.spotless.formatter.config}</file>
+                                </eclipse>
+                            </java>
+                        </configuration>
+                        <executions>
+                            <execution>
                                 <goals>
                                     <goal>check</goal>
                                 </goals>
