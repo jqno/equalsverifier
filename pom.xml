@@ -234,7 +234,6 @@
         <profile>
             <id>static-analysis</id>
             <activation>
-                <jdk>[21,)</jdk>
                 <property>
                     <name>!disableStaticAnalysis</name>
                 </property>
@@ -384,7 +383,6 @@
             <!-- This profile exists for Checkstyle's regression CI: see issues 216 and 586 -->
             <id>static-analysis-checkstyle</id>
             <activation>
-                <jdk>[17,)</jdk>
                 <property>
                     <name>!disableStaticAnalysis</name>
                 </property>

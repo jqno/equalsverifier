@@ -20,25 +20,25 @@ jobs:
             cache-id: "jdk8"
             java: 8
             dist: temurin
-            flags: ""
+            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 11"
             experimental: false
             cache-id: "jdk11"
             java: 11
             dist: temurin
-            flags: ""
+            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 17"
             experimental: false
             cache-id: "jdk17"
             java: 17
             dist: temurin
-            flags: ""
+            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 21"
             experimental: false
             cache-id: "jdk21"
             java: 21
             dist: temurin
-            flags: ""
+            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 23"
             experimental: false
             cache-id: "jdk23"
