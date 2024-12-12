@@ -207,7 +207,7 @@ public class VintageValueProviderTest {
                 LinkedHashSet<TypeTag> typeStack) {
             red += "r";
             blue += "b";
-            return new Tuple<>(red, blue, new String(red));
+            return Tuple.of(red, blue, new String(red));
         }
     }
 
@@ -231,7 +231,7 @@ public class VintageValueProviderTest {
             List redCopy = new ArrayList<>();
             redCopy.add(valueProvider.giveRed(subtag));
 
-            return new Tuple<>(red, blue, redCopy);
+            return Tuple.of(red, blue, redCopy);
         }
     }
 

@@ -47,11 +47,11 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
 
         switch (enumConstants.length) {
         case 0:
-            return new Tuple<>(null, null, null);
+            return Tuple.of(null, null, null);
         case 1:
-            return new Tuple<>(enumConstants[0], enumConstants[0], enumConstants[0]);
+            return Tuple.of(enumConstants[0], enumConstants[0], enumConstants[0]);
         default:
-            return new Tuple<>(enumConstants[0], enumConstants[1], enumConstants[0]);
+            return Tuple.of(enumConstants[0], enumConstants[1], enumConstants[0]);
         }
     }
 
@@ -72,7 +72,7 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         T redCopy = (T) Array.newInstance(componentType, 1);
         Array.set(redCopy, 0, valueProvider.giveRed(componentTag));
 
-        return new Tuple<>(red, blue, redCopy);
+        return Tuple.of(red, blue, redCopy);
     }
 
     private Tuple<T> giveInstances(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {
@@ -80,6 +80,6 @@ public class FallbackFactory<T> implements PrefabValueFactory<T> {
         T red = accessor.getRedObject(tag, typeStack);
         T blue = accessor.getBlueObject(tag, typeStack);
         T redCopy = accessor.getRedObject(tag, typeStack);
-        return new Tuple<>(red, blue, redCopy);
+        return Tuple.of(red, blue, redCopy);
     }
 }
