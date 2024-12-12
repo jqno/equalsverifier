@@ -6,16 +6,11 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.EqualsVerifierReport;
+import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.Warning;
-import nl.jqno.equalsverifier.internal.util.ErrorMessage;
-import nl.jqno.equalsverifier.internal.util.Formatter;
-import nl.jqno.equalsverifier.internal.util.ListBuilders;
-import nl.jqno.equalsverifier.internal.util.Validations;
+import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.util.*;
 
 /**
  * Helps to construct an {@link EqualsVerifier} test for several types at once with a fluent API.
@@ -32,6 +27,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set suppressions on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi suppress(Warning... warnings) {
         ev.suppress(warnings);
         return this;
@@ -39,6 +36,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withPrefabValues(Class<S> otherType, S red, S blue) {
         ev.withPrefabValues(otherType, red, blue);
         return this;
@@ -46,6 +45,10 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED",
+            justification = "Set generic prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -53,6 +56,10 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(
+            value = "RV_RETURN_VALUE_IGNORED",
+            justification = "Set generic prefab values on ev, but return `this`")
     public <S> MultipleTypeEqualsVerifierApi withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         ev.withGenericPrefabValues(otherType, factory);
         return this;
@@ -60,6 +67,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set usingGetClass on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi usingGetClass() {
         ev.usingGetClass();
         return this;
@@ -67,6 +76,8 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
+    @SuppressFBWarnings(value = "RV_RETURN_VALUE_IGNORED", justification = "Set converters on ev, but return `this`")
     public MultipleTypeEqualsVerifierApi withFieldnameToGetterConverter(Function<String, String> converter) {
         ev.withFieldnameToGetterConverter(converter);
         return this;
@@ -74,11 +85,12 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @deprecated No longer needed; this happens automatically.
      */
     @Deprecated
     @Override
+    @CheckReturnValue
     public MultipleTypeEqualsVerifierApi withResetCaches() {
         return this;
     }
@@ -90,6 +102,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @param more More types to remove from the list of types to verify.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public MultipleTypeEqualsVerifierApi except(Class<?> type, Class<?>... more) {
         List<Class<?>> typesToRemove = ListBuilders.buildListOfAtLeastOne(type, more);
         removeTypes(typesToRemove);
@@ -102,6 +115,7 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
      * @param exclusionPredicate A Predicate matching classes to remove from the list of types to verify.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public MultipleTypeEqualsVerifierApi except(Predicate<Class<?>> exclusionPredicate) {
         List<Class<?>> typesToRemove = types.stream().filter(exclusionPredicate).collect(Collectors.toList());
         removeTypes(typesToRemove);

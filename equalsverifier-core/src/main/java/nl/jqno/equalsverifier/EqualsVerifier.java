@@ -50,6 +50,7 @@ public final class EqualsVerifier {
      *
      * @return A reusable configuration object with a fluent API.
      */
+    @CheckReturnValue
     public static ConfiguredEqualsVerifier configure() {
         return new ConfiguredEqualsVerifier();
     }
@@ -60,6 +61,7 @@ public final class EqualsVerifier {
      *
      * @return A reusable configuration object with a fluent API.
      */
+    @CheckReturnValue
     public static ConfiguredEqualsVerifier simple() {
         return new ConfiguredEqualsVerifier().suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS);
     }
@@ -71,6 +73,7 @@ public final class EqualsVerifier {
      * @param <T>  The type.
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
         return new SingleTypeEqualsVerifierApi<>(type);
     }
@@ -81,6 +84,7 @@ public final class EqualsVerifier {
      * @param classes An iterable containing the classes for which {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
         return new MultipleTypeEqualsVerifierApi(ListBuilders.fromIterable(classes), new ConfiguredEqualsVerifier());
     }
@@ -93,6 +97,7 @@ public final class EqualsVerifier {
      * @param more   More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?> second, Class<?>... more) {
         return new MultipleTypeEqualsVerifierApi(ListBuilders.buildListOfAtLeastTwo(first, second, more),
                 new ConfiguredEqualsVerifier());
@@ -108,6 +113,7 @@ public final class EqualsVerifier {
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName) {
         return forPackage(packageName, false);
     }
@@ -123,6 +129,7 @@ public final class EqualsVerifier {
      * @param scanRecursively true to scan all sub-packages
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, boolean scanRecursively) {
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, null, scanRecursively);
         Validations.validatePackageContainsClasses(packageName, classes);
@@ -143,6 +150,7 @@ public final class EqualsVerifier {
      * @param mustExtend  if not null, returns only classes that extend or implement this class.
      * @return A fluent API for EqualsVerifier.
      */
+    @CheckReturnValue
     public static MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
         List<Class<?>> classes = PackageScanner.getClassesIn(packageName, mustExtend, true);
         Validations.validatePackageContainsClasses(packageName, classes);
@@ -175,6 +183,7 @@ public final class EqualsVerifier {
      * @return A fluent API for a more relaxed EqualsVerifier.
      */
     @SafeVarargs
+    @CheckReturnValue
     public static <T> RelaxedEqualsVerifierApi<T> forRelaxedEqualExamples(T first, T second, T... more) {
         List<T> examples = ListBuilders.buildListOfAtLeastTwo(first, second, more);
 

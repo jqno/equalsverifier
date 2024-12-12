@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Tools like IntelliJ, Spotbugs and ErrorProne now report when you forget to call `.verify()` at the end of an EqualsVerifier invocation (through the `@CheckReturnValue` annotation).
+
 ## [3.17.5] - 2024-12-06
 
 ### Fixed

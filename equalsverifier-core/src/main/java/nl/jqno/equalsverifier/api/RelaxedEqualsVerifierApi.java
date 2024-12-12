@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLea
 import java.util.Collections;
 import java.util.List;
 
+import nl.jqno.equalsverifier.CheckReturnValue;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Validations;
@@ -37,6 +38,7 @@ public class RelaxedEqualsVerifierApi<T> {
      * @param example An instance of T that is unequal to the previously supplied equal examples.
      * @return An instance of {@link EqualsVerifier}.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> andUnequalExample(T example) {
         return andUnequalExamples(example);
     }
@@ -51,6 +53,7 @@ public class RelaxedEqualsVerifierApi<T> {
      * @return An instance of {@link EqualsVerifier}.
      */
     @SafeVarargs
+    @CheckReturnValue
     public final SingleTypeEqualsVerifierApi<T> andUnequalExamples(T first, T... more) {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
         Validations.validateUnequalExamples(unequalExamples, equalExamples);

@@ -3,11 +3,9 @@ package nl.jqno.equalsverifier.api;
 import java.util.*;
 import java.util.function.Function;
 
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.EqualsVerifierReport;
+import nl.jqno.equalsverifier.*;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.*;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -101,6 +99,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> suppress(Warning... warnings) {
         Collections.addAll(warningsToSuppress, warnings);
         Validations.validateWarnings(warningsToSuppress);
@@ -111,6 +110,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValues(Class<S> otherType, S red, S blue) {
         PrefabValuesApi.addPrefabValues(factoryCache, objenesis, otherType, red, blue);
         return this;
@@ -129,14 +129,15 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *                                      the class.
      * @throws IllegalArgumentException If {@code red} equals {@code blue}.
      */
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withPrefabValuesForField(String fieldName, S red, S blue) {
         PrefabValuesApi.addPrefabValuesForField(fieldCache, objenesis, type, fieldName, red, blue);
-        withNonnullFields(fieldName);
-        return this;
+        return withNonnullFields(fieldName);
     }
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
@@ -144,6 +145,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public <S> SingleTypeEqualsVerifierApi<T> withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
@@ -151,6 +153,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> usingGetClass() {
         this.usingGetClass = true;
         return this;
@@ -158,6 +161,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /** {@inheritDoc} */
     @Override
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withFieldnameToGetterConverter(Function<String, String> converter) {
         this.fieldnameToGetter = converter;
         return this;
@@ -174,6 +178,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredFields(String... fields) {
         return withFieldsAddedAndValidated(allExcludedFields, Arrays.asList(fields));
     }
@@ -186,6 +191,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param fields Fields that should be ignored.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withOnlyTheseFields(String... fields) {
         return withFieldsAddedAndValidated(allIncludedFields, Arrays.asList(fields));
     }
@@ -212,6 +218,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param fields Fields that can never be null.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withNonnullFields(String... fields) {
         List<String> fieldsAsList = Arrays.asList(fields);
         nonnullFields.addAll(fieldsAsList);
@@ -231,6 +238,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param annotations Annotations to ignore.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withIgnoredAnnotations(Class<?>... annotations) {
         Validations.validateGivenAnnotations(annotations);
         for (Class<?> ignoredAnnotation : annotations) {
@@ -248,6 +256,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSuperclass() {
         this.hasRedefinedSuperclass = true;
         return this;
@@ -265,6 +274,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @see Warning#STRICT_INHERITANCE
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withRedefinedSubclass(Class<? extends T> subclass) {
         this.redefinedSubclass = subclass;
         return this;
@@ -297,6 +307,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *                                    initialized properly.
      * @return {@code this}, for easy method chaining.
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withCachedHashCode(
             String cachedHashCodeField,
             String calculateHashCodeMethod,
@@ -314,6 +325,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      * @see #withCachedHashCode(String, String, Object)
      */
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withLombokCachedHashCode(T example) {
         cachedHashCodeInitializer = CachedHashCodeInitializer.lombokCachedHashcode(example);
         return this;
@@ -321,11 +333,12 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
 
     /**
      * {@inheritDoc}
-     * 
+     *
      * @deprecated No longer needed; this happens automatically.
      */
     @Deprecated
     @Override
+    @CheckReturnValue
     public SingleTypeEqualsVerifierApi<T> withResetCaches() {
         return this;
     }
