@@ -53,8 +53,10 @@
     </issueManagement>
 
     <properties>
-        <encoding>UTF-8</encoding>
         <version.java.base>8</version.java.base>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.source.skip>true</maven.source.skip>
         <maven.install.skip>true</maven.install.skip>
@@ -404,7 +406,6 @@
                         <configuration>
                             <configLocation>${analysis.checkstyle.config}</configLocation>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <encoding>UTF-8</encoding>
                             <linkXRef>false</linkXRef>
                             <consoleOutput>true</consoleOutput>
                         </configuration>
