@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.StringFieldCheck;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -11,15 +12,14 @@ public class StringTest {
     @Test
     public void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(IncorrectIgnoreCaseStringEquals.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                StringFieldCheck.ERROR_DOC_TITLE,
-                "equalsIgnoreCase",
-                "hashCode",
-                "toUpperCase()",
-                "String field caseInsensitiveString"
-            );
+                .when(() -> EqualsVerifier.forClass(IncorrectIgnoreCaseStringEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    StringFieldCheck.ERROR_DOC_TITLE,
+                    "equalsIgnoreCase",
+                    "hashCode",
+                    "toUpperCase()",
+                    "String field caseInsensitiveString");
     }
 
     @Test
@@ -30,21 +30,16 @@ public class StringTest {
     @Test
     public void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive_givenHashCodeIsCached() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(IncorrectCachedIgnoreCaseStringEquals.class)
-                    .withCachedHashCode(
-                        "cachedHashCode",
-                        "calcHashCode",
-                        new IncorrectCachedIgnoreCaseStringEquals("a")
-                    )
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                StringFieldCheck.ERROR_DOC_TITLE,
-                "String field caseInsensitiveString"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(IncorrectCachedIgnoreCaseStringEquals.class)
+                            .withCachedHashCode(
+                                "cachedHashCode",
+                                "calcHashCode",
+                                new IncorrectCachedIgnoreCaseStringEquals("a"))
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(StringFieldCheck.ERROR_DOC_TITLE, "String field caseInsensitiveString");
     }
 
     private static final class IncorrectIgnoreCaseStringEquals {
@@ -62,8 +57,8 @@ public class StringTest {
             }
             IncorrectIgnoreCaseStringEquals other = (IncorrectIgnoreCaseStringEquals) obj;
             return caseInsensitiveString == null
-                ? other.caseInsensitiveString == null
-                : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
+                    ? other.caseInsensitiveString == null
+                    : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
         }
 
         @Override
@@ -87,15 +82,13 @@ public class StringTest {
             }
             CorrectIgnoreCaseStringEquals other = (CorrectIgnoreCaseStringEquals) obj;
             return caseInsensitiveString == null
-                ? other.caseInsensitiveString == null
-                : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
+                    ? other.caseInsensitiveString == null
+                    : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(
-                caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase()
-            );
+            return Objects.hash(caseInsensitiveString == null ? "" : caseInsensitiveString.toUpperCase());
         }
     }
 
@@ -114,11 +107,10 @@ public class StringTest {
             if (!(obj instanceof IncorrectCachedIgnoreCaseStringEquals)) {
                 return false;
             }
-            IncorrectCachedIgnoreCaseStringEquals other =
-                (IncorrectCachedIgnoreCaseStringEquals) obj;
+            IncorrectCachedIgnoreCaseStringEquals other = (IncorrectCachedIgnoreCaseStringEquals) obj;
             return caseInsensitiveString == null
-                ? other.caseInsensitiveString == null
-                : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
+                    ? other.caseInsensitiveString == null
+                    : caseInsensitiveString.equalsIgnoreCase(other.caseInsensitiveString);
         }
 
         @Override

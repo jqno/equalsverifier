@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
@@ -33,9 +34,9 @@ public class RecordsTest {
     @Test
     public void fail_whenConstructorChecksNull() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NullCheckingRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "Warning.NULL_FIELDS");
+                .when(() -> EqualsVerifier.forClass(NullCheckingRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record:", "failed to run constructor", "Warning.NULL_FIELDS");
     }
 
     @Test
@@ -46,33 +47,33 @@ public class RecordsTest {
     @Test
     public void fail_whenConstructorChecksValue() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "prefab values");
+                .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record invariant", "intField");
+                .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "intField");
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record invariant", "stringField");
+                .when(() -> EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "stringField");
     }
 
     @Test
     public void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record invariant", "intField", "stringField");
+                .when(() -> EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record invariant", "intField", "stringField");
     }
 
     @Test
@@ -83,41 +84,41 @@ public class RecordsTest {
     @Test
     public void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NotAllFieldsRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Significant fields");
+                .when(() -> EqualsVerifier.forClass(NotAllFieldsRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
     public void fail_whenRecordConstructorThrows() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record", "failed to run constructor");
+                .when(() -> EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to run constructor");
     }
 
     @Test
     public void fail_whenRecordConstructorThrowsNpe() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NullFieldRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record", "failed to run constructor");
+                .when(() -> EqualsVerifier.forClass(NullFieldRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to run constructor");
     }
 
     @Test
     public void fail_whenRecordAccessorThrows() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record", "failed to run accessor method");
+                .when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to run accessor method");
     }
 
     @Test
     public void fail_whenRecordAccessorThrowsNpe() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record", "failed to run accessor method", "s()");
+                .when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record", "failed to run accessor method", "s()");
     }
 
     @Test
@@ -128,9 +129,9 @@ public class RecordsTest {
     @Test
     public void succeed_whenRecordValidatesInput_givenValidPrefabValues() {
         EqualsVerifier
-            .forClass(ValidatingConstructorRecord.class)
-            .withPrefabValues(String.class, "valid-1", "valid-2")
-            .verify();
+                .forClass(ValidatingConstructorRecord.class)
+                .withPrefabValues(String.class, "valid-1", "valid-2")
+                .verify();
     }
 
     @Test

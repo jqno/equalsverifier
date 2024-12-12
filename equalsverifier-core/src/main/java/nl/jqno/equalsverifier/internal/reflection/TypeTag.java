@@ -4,12 +4,14 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 
 import java.lang.reflect.*;
 import java.util.*;
+
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 
 /**
  * Represents a generic type, including raw type and generic type parameters.
  *
- * <p>If the type is not generic, the genericTypes list will be empty.
+ * <p>
+ * If the type is not generic, the genericTypes list will be empty.
  */
 public final class TypeTag {
 
@@ -22,7 +24,7 @@ public final class TypeTag {
     /**
      * Constructor.
      *
-     * @param type The raw type.
+     * @param type         The raw type.
      * @param genericTypes A list of TypeTags for each generic type parameter.
      */
     public TypeTag(Class<?> type, TypeTag... genericTypes) {
@@ -38,12 +40,11 @@ public final class TypeTag {
     }
 
     /**
-     * Resolves a TypeTag from the type of a {@link Field} instance, using an enclosing type to
-     * determine any generic parameters the field may contain.
+     * Resolves a TypeTag from the type of a {@link Field} instance, using an enclosing type to determine any generic
+     * parameters the field may contain.
      *
-     * @param field The field to resolve.
-     * @param enclosingType The type that contains the field, used to determine any generic
-     *     parameters it may contain.
+     * @param field         The field to resolve.
+     * @param enclosingType The type that contains the field, used to determine any generic parameters it may contain.
      * @return The TypeTag for the given field.
      */
     public static TypeTag of(Field field, TypeTag enclosingType) {
@@ -51,11 +52,10 @@ public final class TypeTag {
     }
 
     private static TypeTag resolve(
-        Type type,
-        Class<?> typeAsClass,
-        TypeTag enclosingType,
-        boolean shortCircuitRecursiveTypeBound
-    ) {
+            Type type,
+            Class<?> typeAsClass,
+            TypeTag enclosingType,
+            boolean shortCircuitRecursiveTypeBound) {
         List<TypeTag> nestedTags = new ArrayList<>();
         if (type instanceof Class) {
             return processClass((Class<?>) type, nestedTags);
@@ -66,31 +66,23 @@ public final class TypeTag {
                 typeAsClass,
                 enclosingType,
                 nestedTags,
-                shortCircuitRecursiveTypeBound
-            );
+                shortCircuitRecursiveTypeBound);
         }
         if (type instanceof GenericArrayType) {
             return processGenericArray((GenericArrayType) type, typeAsClass, enclosingType);
         }
         if (type instanceof WildcardType) {
-            return processWildcard(
-                (WildcardType) type,
-                typeAsClass,
-                enclosingType,
-                shortCircuitRecursiveTypeBound
-            );
+            return processWildcard((WildcardType) type, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
         if (type instanceof TypeVariable) {
             return processTypeVariable(
                 (TypeVariable<?>) type,
                 typeAsClass,
                 enclosingType,
-                shortCircuitRecursiveTypeBound
-            );
+                shortCircuitRecursiveTypeBound);
         }
         throw new EqualsVerifierInternalBugException(
-            "Failed to tag type " + type.toString() + " (" + type.getClass() + ")"
-        );
+                "Failed to tag type " + type.toString() + " (" + type.getClass() + ")");
     }
 
     private static TypeTag processClass(Class<?> type, List<TypeTag> nestedTags) {
@@ -98,26 +90,19 @@ public final class TypeTag {
     }
 
     private static TypeTag processParameterizedType(
-        ParameterizedType type,
-        Class<?> typeAsClass,
-        TypeTag enclosingType,
-        List<TypeTag> nestedTags,
-        boolean shortCircuitRecursiveTypeBound
-    ) {
+            ParameterizedType type,
+            Class<?> typeAsClass,
+            TypeTag enclosingType,
+            List<TypeTag> nestedTags,
+            boolean shortCircuitRecursiveTypeBound) {
         Type[] typeArgs = type.getActualTypeArguments();
         for (Type typeArg : typeArgs) {
-            nestedTags.add(
-                resolve(typeArg, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound)
-            );
+            nestedTags.add(resolve(typeArg, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound));
         }
         return new TypeTag((Class<?>) type.getRawType(), nestedTags);
     }
 
-    private static TypeTag processGenericArray(
-        GenericArrayType type,
-        Class<?> typeAsClass,
-        TypeTag enclosingType
-    ) {
+    private static TypeTag processGenericArray(GenericArrayType type, Class<?> typeAsClass, TypeTag enclosingType) {
         TypeTag tag = resolve(type.getGenericComponentType(), typeAsClass, enclosingType, false);
         String arrayTypeName = "[L" + tag.getType().getName() + ";";
         Class<?> arrayType = classForName(arrayTypeName);
@@ -125,11 +110,10 @@ public final class TypeTag {
     }
 
     private static TypeTag processWildcard(
-        WildcardType type,
-        Class<?> typeAsClass,
-        TypeTag enclosingType,
-        boolean shortCircuitRecursiveTypeBound
-    ) {
+            WildcardType type,
+            Class<?> typeAsClass,
+            TypeTag enclosingType,
+            boolean shortCircuitRecursiveTypeBound) {
         for (Type b : type.getLowerBounds()) {
             return resolve(b, typeAsClass, enclosingType, shortCircuitRecursiveTypeBound);
         }
@@ -148,11 +132,10 @@ public final class TypeTag {
     }
 
     private static TypeTag processTypeVariable(
-        TypeVariable<?> type,
-        Class<?> typeAsClass,
-        TypeTag enclosingType,
-        boolean shortCircuitRecursiveTypeBound
-    ) {
+            TypeVariable<?> type,
+            Class<?> typeAsClass,
+            TypeTag enclosingType,
+            boolean shortCircuitRecursiveTypeBound) {
         Map<String, TypeTag> typeVariableLookup = buildLookup(enclosingType);
         String typeVariableName = type.getName();
         if (typeVariableLookup.containsKey(typeVariableName)) {

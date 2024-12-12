@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
@@ -16,7 +17,7 @@ import org.objenesis.Objenesis;
 final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
 
     /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
-    /* default */InPlaceObjectAccessor(T object, Class<T> type) {
+    /* default */ InPlaceObjectAccessor(T object, Class<T> type) {
         super(object, type);
     }
 
@@ -33,10 +34,9 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
-        TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+            VintageValueProvider valueProvider,
+            TypeTag enclosingType,
+            LinkedHashSet<TypeTag> typeStack) {
         for (Field field : FieldIterable.of(type())) {
             fieldModifierFor(field).changeField(valueProvider, enclosingType, typeStack);
         }

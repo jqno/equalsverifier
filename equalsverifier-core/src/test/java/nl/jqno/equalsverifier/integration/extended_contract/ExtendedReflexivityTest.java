@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -19,89 +20,78 @@ public class ExtendedReflexivityTest {
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForObjects() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
-            .assertFailure()
-            .assertMessageContains("Reflexivity", "== used instead of .equals()", "stringField");
+                .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "== used instead of .equals()", "stringField");
     }
 
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(UsesDoubleEqualSign.class)
-            .suppress(Warning.REFERENCE_EQUALITY)
-            .verify();
+        EqualsVerifier.forClass(UsesDoubleEqualSign.class).suppress(Warning.REFERENCE_EQUALITY).verify();
     }
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Reflexivity", "== used instead of .equals()", "characterField");
+                .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "== used instead of .equals()", "characterField");
     }
 
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class)
-            .suppress(Warning.REFERENCE_EQUALITY)
-            .verify();
+                .forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
     }
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Reflexivity", "== used instead of .equals()", "integerField");
+                .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "== used instead of .equals()", "integerField");
     }
 
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class)
-            .suppress(Warning.REFERENCE_EQUALITY)
-            .verify();
+                .forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
     }
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Reflexivity", "== used instead of .equals()", "longField");
+                .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "== used instead of .equals()", "longField");
     }
 
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class)
-            .suppress(Warning.REFERENCE_EQUALITY)
-            .verify();
+                .forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
     }
 
     @Test
     public void fail_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Reflexivity", "== used instead of .equals()", "shortField");
+                .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class).verify())
+                .assertFailure()
+                .assertMessageContains("Reflexivity", "== used instead of .equals()", "shortField");
     }
 
     @Test
     public void succeed_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class)
-            .suppress(Warning.REFERENCE_EQUALITY)
-            .verify();
+                .forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class)
+                .suppress(Warning.REFERENCE_EQUALITY)
+                .verify();
     }
 
     @Test
@@ -178,8 +168,7 @@ public class ExtendedReflexivityTest {
             if (!(obj instanceof UsesDoubleEqualSignOnBoxedCharacterPrimitive)) {
                 return false;
             }
-            UsesDoubleEqualSignOnBoxedCharacterPrimitive other =
-                (UsesDoubleEqualSignOnBoxedCharacterPrimitive) obj;
+            UsesDoubleEqualSignOnBoxedCharacterPrimitive other = (UsesDoubleEqualSignOnBoxedCharacterPrimitive) obj;
             return characterField == other.characterField;
         }
 
@@ -202,8 +191,7 @@ public class ExtendedReflexivityTest {
             if (!(obj instanceof UsesDoubleEqualSignOnBoxedIntegerPrimitive)) {
                 return false;
             }
-            UsesDoubleEqualSignOnBoxedIntegerPrimitive other =
-                (UsesDoubleEqualSignOnBoxedIntegerPrimitive) obj;
+            UsesDoubleEqualSignOnBoxedIntegerPrimitive other = (UsesDoubleEqualSignOnBoxedIntegerPrimitive) obj;
             return integerField == other.integerField;
         }
 
@@ -226,8 +214,7 @@ public class ExtendedReflexivityTest {
             if (!(obj instanceof UsesDoubleEqualSignOnBoxedLongPrimitive)) {
                 return false;
             }
-            UsesDoubleEqualSignOnBoxedLongPrimitive other =
-                (UsesDoubleEqualSignOnBoxedLongPrimitive) obj;
+            UsesDoubleEqualSignOnBoxedLongPrimitive other = (UsesDoubleEqualSignOnBoxedLongPrimitive) obj;
             return longField == other.longField;
         }
 
@@ -250,8 +237,7 @@ public class ExtendedReflexivityTest {
             if (!(obj instanceof UsesDoubleEqualSignOnBoxedShortPrimitive)) {
                 return false;
             }
-            UsesDoubleEqualSignOnBoxedShortPrimitive other =
-                (UsesDoubleEqualSignOnBoxedShortPrimitive) obj;
+            UsesDoubleEqualSignOnBoxedShortPrimitive other = (UsesDoubleEqualSignOnBoxedShortPrimitive) obj;
             return shortField == other.shortField;
         }
 

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
@@ -13,58 +14,45 @@ public class WithPrefabValuesTest {
 
     @Test
     public void succeed_whenPrefabValuesAreOfSameTypeAsClassUnderTest() {
-        EqualsVerifier
-            .forClass(FinalPoint.class)
-            .withPrefabValues(FinalPoint.class, red, blue)
-            .verify();
+        EqualsVerifier.forClass(FinalPoint.class).withPrefabValues(FinalPoint.class, red, blue).verify();
     }
 
     @Test
     public void throw_whenTypeIsNull() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(WithPrefabValuesTest.class)
-                    .withPrefabValues(null, red, blue)
-            )
-            .assertThrows(NullPointerException.class);
+                .when(() -> EqualsVerifier.forClass(WithPrefabValuesTest.class).withPrefabValues(null, red, blue))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenFirstPrefabValueIsNull() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(WithPrefabValuesTest.class)
-                    .withPrefabValues(FinalPoint.class, null, blue)
-            )
-            .assertThrows(NullPointerException.class);
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(WithPrefabValuesTest.class)
+                            .withPrefabValues(FinalPoint.class, null, blue))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenSecondPrefabValueIsNull() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(WithPrefabValuesTest.class)
-                    .withPrefabValues(FinalPoint.class, red, null)
-            )
-            .assertThrows(NullPointerException.class);
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(WithPrefabValuesTest.class)
+                            .withPrefabValues(FinalPoint.class, red, null))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenThePrefabValuesAreTheSame() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(WithPrefabValuesTest.class)
-                    .withPrefabValues(FinalPoint.class, red, red)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "both prefab values of type FinalPoint are equal"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(WithPrefabValuesTest.class)
+                            .withPrefabValues(FinalPoint.class, red, red))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
     }
 
     @Test
@@ -73,27 +61,19 @@ public class WithPrefabValuesTest {
         FinalPoint red2 = new FinalPoint(4, 4);
 
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(WithPrefabValuesTest.class)
-                    .withPrefabValues(FinalPoint.class, red1, red2)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "both prefab values of type FinalPoint are equal"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(WithPrefabValuesTest.class)
+                            .withPrefabValues(FinalPoint.class, red1, red2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
     }
 
     @Test
     public void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
         EqualsVerifier
-            .forClass(FinalPoint.class)
-            .withPrefabValues(
-                LocalDate.class,
-                LocalDate.of(2018, 12, 24),
-                LocalDate.of(2018, 12, 25)
-            )
-            .verify();
+                .forClass(FinalPoint.class)
+                .withPrefabValues(LocalDate.class, LocalDate.of(2018, 12, 24), LocalDate.of(2018, 12, 25))
+                .verify();
     }
 }

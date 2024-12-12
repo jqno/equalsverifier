@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -20,158 +21,135 @@ public class JakartaIdTest {
 
     @Test
     public void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
+        EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier
-            .forClass(JakartaIdSurrogateKeyPerson.class)
-            .suppress(Warning.SURROGATE_KEY)
-            .verify();
-        EqualsVerifier
-            .forClass(JakartaIdSurrogateKeyPersonReorderedFields.class)
-            .suppress(Warning.SURROGATE_KEY)
-            .verify();
+                .forClass(JakartaIdSurrogateKeyPersonReorderedFields.class)
+                .suppress(Warning.SURROGATE_KEY)
+                .verify();
     }
 
     @Test
     public void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
+        EqualsVerifier.forClass(JakartaIdValueKeyPerson.class).suppress(Warning.SURROGATE_OR_BUSINESS_KEY).verify();
         EqualsVerifier
-            .forClass(JakartaIdValueKeyPerson.class)
-            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
-            .verify();
-        EqualsVerifier
-            .forClass(JakartaIdValueKeyPersonReorderedFields.class)
-            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
-            .verify();
+                .forClass(JakartaIdValueKeyPersonReorderedFields.class)
+                .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+                .verify();
     }
 
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPerson.class)
-                    .withIgnoredAnnotations(jakarta.persistence.Id.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Significant fields", "equals does not use id");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdBusinessKeyPerson.class)
+                            .withIgnoredAnnotations(jakarta.persistence.Id.class)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use id");
     }
 
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "id is marked @Id",
-                "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY"
-            );
+                .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "id is marked @Id",
+                    "equals should not use it",
+                    "Suppress Warning.SURROGATE_KEY");
     }
 
     @Test
     public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(JakartaIdSurrogateKeyPersonReorderedFields.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "equals does not use socialSecurity",
-                "Suppress Warning.SURROGATE_KEY"
-            );
+                .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPersonReorderedFields.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "equals does not use socialSecurity",
+                    "Suppress Warning.SURROGATE_KEY");
     }
 
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "id is marked @Id",
-                "Warning.SURROGATE_KEY",
-                "equals does not use"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdBusinessKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "id is marked @Id",
+                    "Warning.SURROGATE_KEY",
+                    "equals does not use");
     }
 
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPersonReorderedFields.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "equals should not use socialSecurity",
-                "Warning.SURROGATE_KEY is suppressed and it is not marked as @Id",
-                "but it does"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdBusinessKeyPersonReorderedFields.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "equals should not use socialSecurity",
+                    "Warning.SURROGATE_KEY is suppressed and it is not marked as @Id",
+                    "but it does");
     }
 
     @Test
     public void succeed_whenEmbeddedIdIsUsedCorrectly() {
         EqualsVerifier.forClass(JakartaEmbeddedIdBusinessKeyPerson.class).verify();
-        EqualsVerifier
-            .forClass(JakartaEmbeddedIdSurrogateKeyPerson.class)
-            .suppress(Warning.SURROGATE_KEY)
-            .verify();
+        EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
     public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "id is marked @Id or @EmbeddedId",
-                "equals should not use it",
-                "Suppress Warning.SURROGATE_KEY"
-            );
+                .when(() -> EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "id is marked @Id or @EmbeddedId",
+                    "equals should not use it",
+                    "Suppress Warning.SURROGATE_KEY");
     }
 
     @Test
     public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "id is marked @Id or @EmbeddedId",
-                "Warning.SURROGATE_KEY",
-                "equals does not use"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Significant fields",
+                    "id is marked @Id or @EmbeddedId",
+                    "Warning.SURROGATE_KEY",
+                    "equals does not use");
     }
 
     @Test
     public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
-                    .withOnlyTheseFields("id")
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaEmbeddedIdBusinessKeyPerson.class)
+                            .withOnlyTheseFields("id")
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
+                    "Suppress Warning.SURROGATE_KEY");
     }
 
     @Test
@@ -182,30 +160,26 @@ public class JakartaIdTest {
     @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NaturalIdBusinessKeyPerson.class)
-                    .withIgnoredAnnotations(NaturalId.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Significant fields", "equals does not use name");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NaturalIdBusinessKeyPerson.class)
+                            .withIgnoredAnnotations(NaturalId.class)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use name");
     }
 
     @Test
     public void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
-        EqualsVerifier
-            .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
-            .withIgnoredFields("name")
-            .verify();
+        EqualsVerifier.forClass(JakartaIdBusinessKeyPersonDoesntUseName.class).withIgnoredFields("name").verify();
     }
 
     @Test
     public void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
         EqualsVerifier
-            .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
-            .withOnlyTheseFields("socialSecurity", "birthdate")
-            .verify();
+                .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
+                .withOnlyTheseFields("socialSecurity", "birthdate")
+                .verify();
     }
 
     @Test
@@ -221,9 +195,9 @@ public class JakartaIdTest {
     @Test
     public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
         EqualsVerifier
-            .forClass(JakartaIdVersionedEntity.class)
-            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
-            .verify();
+                .forClass(JakartaIdVersionedEntity.class)
+                .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
+                .verify();
     }
 
     @Test
@@ -234,164 +208,139 @@ public class JakartaIdTest {
     @Test
     public void fail_whenIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPerson.class)
-                    .withOnlyTheseFields("id")
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
-                "Suppress Warning.SURROGATE_KEY"
-            );
+                .when(
+                    () -> EqualsVerifier.forClass(JakartaIdBusinessKeyPerson.class).withOnlyTheseFields("id").verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.",
+                    "Suppress Warning.SURROGATE_KEY");
     }
 
     @Test
     public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NaturalIdBusinessKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NaturalIdBusinessKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't suppress Warning.SURROGATE_KEY when fields are marked @NaturalId.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdSurrogateKeyPerson.class)
-                    .withOnlyTheseFields("socialSecurity")
-                    .suppress(Warning.SURROGATE_KEY)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdSurrogateKeyPerson.class)
+                            .withOnlyTheseFields("socialSecurity")
+                            .suppress(Warning.SURROGATE_KEY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition",
+                    "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdSurrogateKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .withOnlyTheseFields("socialSecurity")
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdSurrogateKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .withOnlyTheseFields("socialSecurity"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition",
+                    "you can't use withOnlyTheseFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdSurrogateKeyPerson.class)
-                    .withIgnoredFields("socialSecurity")
-                    .suppress(Warning.SURROGATE_KEY)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdSurrogateKeyPerson.class)
+                            .withIgnoredFields("socialSecurity")
+                            .suppress(Warning.SURROGATE_KEY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdSurrogateKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY)
-                    .withIgnoredFields("socialSecurity")
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdSurrogateKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY)
+                            .withIgnoredFields("socialSecurity"))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition: you can't use withIgnoredFields when Warning.SURROGATE_KEY is suppressed.");
     }
 
     @Test
     public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NaturalIdBusinessKeyPerson.class)
-                    .withOnlyTheseFields("socialSecurity")
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't use withOnlyTheseFields when fields are marked with @NaturalId."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NaturalIdBusinessKeyPerson.class)
+                            .withOnlyTheseFields("socialSecurity")
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't use withOnlyTheseFields when fields are marked with @NaturalId.");
     }
 
     @Test
     public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NaturalIdBusinessKeyPerson.class)
-                    .withIgnoredFields("socialSecurity")
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't use withIgnoredFields when fields are marked with @NaturalId."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NaturalIdBusinessKeyPerson.class)
+                            .withIgnoredFields("socialSecurity")
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't use withIgnoredFields when fields are marked with @NaturalId.");
     }
 
     @Test
     public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NaturalIdBusinessKeyPerson.class)
-                    .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NaturalIdBusinessKeyPerson.class)
+                            .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Precondition: you can't suppress Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY when fields are marked with @NaturalId.");
     }
 
     @Test
     public void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(JakartaIdBusinessKeyPerson.class)
-                    .suppress(Warning.SURROGATE_KEY, Warning.SURROGATE_OR_BUSINESS_KEY)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "you can't suppress Warning.SURROGATE_KEY when Warning.SURROGATE_OR_BUSINESS_KEY is also suppressed."
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(JakartaIdBusinessKeyPerson.class)
+                            .suppress(Warning.SURROGATE_KEY, Warning.SURROGATE_OR_BUSINESS_KEY))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains(
+                    "Precondition",
+                    "you can't suppress Warning.SURROGATE_KEY when Warning.SURROGATE_OR_BUSINESS_KEY is also suppressed.");
     }
 
     @Test
     public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Significant fields");
+                .when(() -> EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
@@ -402,10 +351,10 @@ public class JakartaIdTest {
     @Test
     public void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
         EqualsVerifier
-            .forClass(JakartaIdDirtyTrackingPerson.class)
-            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
-            .withOnlyTheseFields("id", "version", "isDirty")
-            .verify();
+                .forClass(JakartaIdDirtyTrackingPerson.class)
+                .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+                .withOnlyTheseFields("id", "version", "isDirty")
+                .verify();
     }
 
     static class JakartaIdBusinessKeyPerson {
@@ -417,12 +366,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JakartaIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public JakartaIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -435,11 +379,9 @@ public class JakartaIdTest {
                 return false;
             }
             JakartaIdBusinessKeyPerson other = (JakartaIdBusinessKeyPerson) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            return Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -458,11 +400,10 @@ public class JakartaIdTest {
         private final UUID id;
 
         public JakartaIdBusinessKeyPersonReorderedFields(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+                UUID id,
+                String socialSecurity,
+                String name,
+                LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -474,13 +415,10 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdBusinessKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdBusinessKeyPersonReorderedFields other =
-                (JakartaIdBusinessKeyPersonReorderedFields) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            JakartaIdBusinessKeyPersonReorderedFields other = (JakartaIdBusinessKeyPersonReorderedFields) obj;
+            return Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -498,12 +436,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JakartaIdSurrogateKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public JakartaIdSurrogateKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -535,11 +468,10 @@ public class JakartaIdTest {
         private final UUID id;
 
         public JakartaIdSurrogateKeyPersonReorderedFields(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+                UUID id,
+                String socialSecurity,
+                String name,
+                LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -551,8 +483,7 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdSurrogateKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdSurrogateKeyPersonReorderedFields other =
-                (JakartaIdSurrogateKeyPersonReorderedFields) obj;
+            JakartaIdSurrogateKeyPersonReorderedFields other = (JakartaIdSurrogateKeyPersonReorderedFields) obj;
             return Objects.equals(id, other.id);
         }
 
@@ -571,12 +502,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JakartaIdValueKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public JakartaIdValueKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -589,12 +515,10 @@ public class JakartaIdTest {
                 return false;
             }
             JakartaIdValueKeyPerson other = (JakartaIdValueKeyPerson) obj;
-            return (
-                Objects.equals(id, other.id) &&
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            return Objects.equals(id, other.id)
+                    && Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -613,11 +537,10 @@ public class JakartaIdTest {
         private final UUID id;
 
         public JakartaIdValueKeyPersonReorderedFields(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+                UUID id,
+                String socialSecurity,
+                String name,
+                LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -629,14 +552,11 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdValueKeyPersonReorderedFields)) {
                 return false;
             }
-            JakartaIdValueKeyPersonReorderedFields other =
-                (JakartaIdValueKeyPersonReorderedFields) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate) &&
-                Objects.equals(id, other.id)
-            );
+            JakartaIdValueKeyPersonReorderedFields other = (JakartaIdValueKeyPersonReorderedFields) obj;
+            return Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate)
+                    && Objects.equals(id, other.id);
         }
 
         @Override
@@ -654,12 +574,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JakartaEmbeddedIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public JakartaEmbeddedIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -672,11 +587,9 @@ public class JakartaIdTest {
                 return false;
             }
             JakartaEmbeddedIdBusinessKeyPerson other = (JakartaEmbeddedIdBusinessKeyPerson) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            return Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -694,12 +607,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public JakartaEmbeddedIdSurrogateKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public JakartaEmbeddedIdSurrogateKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -732,12 +640,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public NaturalIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public NaturalIdBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -769,11 +672,10 @@ public class JakartaIdTest {
         private final LocalDate birthdate;
 
         public JakartaIdBusinessKeyPersonDoesntUseName(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+                UUID id,
+                String socialSecurity,
+                String name,
+                LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -785,12 +687,8 @@ public class JakartaIdTest {
             if (!(obj instanceof JakartaIdBusinessKeyPersonDoesntUseName)) {
                 return false;
             }
-            JakartaIdBusinessKeyPersonDoesntUseName other =
-                (JakartaIdBusinessKeyPersonDoesntUseName) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            JakartaIdBusinessKeyPersonDoesntUseName other = (JakartaIdBusinessKeyPersonDoesntUseName) obj;
+            return Objects.equals(socialSecurity, other.socialSecurity) && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -815,11 +713,9 @@ public class JakartaIdTest {
                 return false;
             }
             JakartaIdBusinessKeyPersonEntity other = (JakartaIdBusinessKeyPersonEntity) obj;
-            return (
-                Objects.equals(socialSecurity, other.socialSecurity) &&
-                Objects.equals(name, other.name) &&
-                Objects.equals(birthdate, other.birthdate)
-            );
+            return Objects.equals(socialSecurity, other.socialSecurity)
+                    && Objects.equals(name, other.name)
+                    && Objects.equals(birthdate, other.birthdate);
         }
 
         @Override
@@ -867,11 +763,10 @@ public class JakartaIdTest {
         private final LocalDate birthdate;
 
         public NonHibernateNaturalIdBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+                UUID id,
+                String socialSecurity,
+                String name,
+                LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -883,8 +778,7 @@ public class JakartaIdTest {
             if (!(obj instanceof NonHibernateNaturalIdBusinessKeyPerson)) {
                 return false;
             }
-            NonHibernateNaturalIdBusinessKeyPerson other =
-                (NonHibernateNaturalIdBusinessKeyPerson) obj;
+            NonHibernateNaturalIdBusinessKeyPerson other = (NonHibernateNaturalIdBusinessKeyPerson) obj;
             return Objects.equals(socialSecurity, other.socialSecurity);
         }
 
@@ -931,12 +825,7 @@ public class JakartaIdTest {
         private final String name;
         private final LocalDate birthdate;
 
-        public MethodAnnotatedBusinessKeyPerson(
-            UUID id,
-            String socialSecurity,
-            String name,
-            LocalDate birthdate
-        ) {
+        public MethodAnnotatedBusinessKeyPerson(UUID id, String socialSecurity, String name, LocalDate birthdate) {
             this.id = id;
             this.socialSecurity = socialSecurity;
             this.name = name;
@@ -1029,11 +918,9 @@ public class JakartaIdTest {
                 return false;
             }
             JakartaIdDirtyTrackingPerson other = (JakartaIdDirtyTrackingPerson) obj;
-            return (
-                Objects.equals(id, other.id) &&
-                Objects.equals(version, other.version) &&
-                Objects.equals(isDirty, other.isDirty)
-            );
+            return Objects.equals(id, other.id)
+                    && Objects.equals(version, other.version)
+                    && Objects.equals(isDirty, other.isDirty);
         }
 
         @Override

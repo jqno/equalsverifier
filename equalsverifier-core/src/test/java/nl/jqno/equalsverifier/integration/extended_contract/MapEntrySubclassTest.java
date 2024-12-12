@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Map;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -11,9 +12,9 @@ class MapEntrySubclassTest {
     @Test
     void fails_whenMapEntryHashCodeContractIsNotHonored() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
-            .assertFailure()
-            .assertMessageContains("Map.Entry: hashCode for", "should be", "but was");
+                .when(() -> EqualsVerifier.forClass(HashCodeContractNotHonored.class).verify())
+                .assertFailure()
+                .assertMessageContains("Map.Entry: hashCode for", "should be", "but was");
     }
 
     @Test

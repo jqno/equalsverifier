@@ -15,14 +15,9 @@ public class SymmetryTest {
     @Test
     public void fail_whenEqualsIsNotSymmetrical() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                SYMMETRY,
-                NOT_SYMMETRIC,
-                AND,
-                SymmetryIntentionallyBroken.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify())
+                .assertFailure()
+                .assertMessageContains(SYMMETRY, NOT_SYMMETRIC, AND, SymmetryIntentionallyBroken.class.getSimpleName());
     }
 
     static final class SymmetryIntentionallyBroken {

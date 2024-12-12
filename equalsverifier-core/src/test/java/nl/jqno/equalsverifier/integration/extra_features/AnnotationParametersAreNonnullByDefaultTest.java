@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.parametersarenonnullbydefault.ParametersAreNonnullByDefaultOnPackage;
@@ -28,40 +29,28 @@ public class AnnotationParametersAreNonnullByDefaultTest {
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
-        EqualsVerifier
-            .forClass(ParametersAreNonnullByDefaultOuter.FMiddle.FInnerInner.class)
-            .verify();
+        EqualsVerifier.forClass(ParametersAreNonnullByDefaultOuter.FMiddle.FInnerInner.class).verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
         EqualsVerifier
-            .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+                .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        EqualsVerifier
-            .forClass(ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals.class)
-            .verify();
+        EqualsVerifier.forClass(ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 
     @ParametersAreNonnullByDefault
@@ -157,7 +146,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
                 return false;
             }
             ParametersAreNonnullByDefaultWithNullableOnClass other =
-                (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
+                    (ParametersAreNonnullByDefaultWithNullableOnClass) obj;
             return o.equals(other.o);
         }
 
@@ -183,7 +172,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
                 return false;
             }
             ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals other =
-                (ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
+                    (ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 

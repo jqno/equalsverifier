@@ -13,8 +13,8 @@ public final class ListBuilders {
      * Builds a list with at least one example.
      *
      * @param first The first example.
-     * @param more Zero or more additional examples.
-     * @param <T> The type of example.
+     * @param more  Zero or more additional examples.
+     * @param <T>   The type of example.
      * @return A list with at least one example.
      */
     @SafeVarargs
@@ -33,10 +33,10 @@ public final class ListBuilders {
     /**
      * Builds a list with at least two examples.
      *
-     * @param first The first example.
+     * @param first  The first example.
      * @param second The second example.
-     * @param more Zero or more additional examples.
-     * @param <T> The type of example.
+     * @param more   Zero or more additional examples.
+     * @param <T>    The type of example.
      * @return A list with at least two examples.
      */
     @SafeVarargs
@@ -72,7 +72,7 @@ public final class ListBuilders {
      * Builds a list from the elements of an Iterable.
      *
      * @param iterable The iterable containing the elements.
-     * @param <T> The type of the elements.
+     * @param <T>      The type of the elements.
      * @return A list with the elements of the Iterable.
      */
     public static <T> List<T> fromIterable(Iterable<T> iterable) {
@@ -87,7 +87,7 @@ public final class ListBuilders {
      * Determines whether a list contains the same example more than once.
      *
      * @param list The list that may or may not contain duplicates.
-     * @param <T> The type of example.
+     * @param <T>  The type of example.
      * @return Whether the given list contains duplicates.
      */
     public static <T> boolean listContainsDuplicates(List<T> list) {

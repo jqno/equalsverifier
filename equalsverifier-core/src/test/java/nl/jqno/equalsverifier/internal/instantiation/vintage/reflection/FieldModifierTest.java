@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,8 @@ public class FieldModifierTest {
         try {
             Field field = object.getClass().getDeclaredField(fieldName);
             return FieldModifier.of(field, object);
-        } catch (NoSuchFieldException e) {
+        }
+        catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }
     }

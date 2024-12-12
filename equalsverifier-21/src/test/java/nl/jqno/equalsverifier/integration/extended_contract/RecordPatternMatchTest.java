@@ -14,10 +14,7 @@ public class RecordPatternMatchTest {
     record Point(int x, int y) {
         @Override
         public boolean equals(Object obj) {
-            return (
-                this == obj ||
-                (obj instanceof Point(int otherX, int otherY) && x == otherX && y == otherY)
-            );
+            return(this==obj||(obj instanceof Point(int otherX,int otherY)&&x==otherX&&y==otherY));
         }
 
         @Override

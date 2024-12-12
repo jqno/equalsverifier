@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.exceptions;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
@@ -15,13 +16,11 @@ public class RecursionException extends MessagingException {
     /**
      * Constructor.
      *
-     * @param typeStack A collection of types that have been encountered prior to detecting the
-     *     recursion.
+     * @param typeStack A collection of types that have been encountered prior to detecting the recursion.
      */
     @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "There's no such thing as an UnmodifiableLinkedHashSet and we need the ordering."
-    )
+            value = "EI_EXPOSE_REP2",
+            justification = "There's no such thing as an UnmodifiableLinkedHashSet and we need the ordering.")
     public RecursionException(LinkedHashSet<TypeTag> typeStack) {
         super();
         this.typeStack = typeStack;

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.function.Function;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -18,11 +19,7 @@ public final class EnumMapFactory<T> extends AbstractGenericFactory<T> {
     }
 
     @Override
-    public Tuple<T> createValues(
-        TypeTag tag,
-        VintageValueProvider valueProvider,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+    public Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
         TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone, Enum.class);
         TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone, Enum.class);

@@ -4,5 +4,4 @@ import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PACKAGE)
-public @interface NonNullFields {
-}
+public @interface NonNullFields {}

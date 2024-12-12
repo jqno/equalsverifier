@@ -16,81 +16,70 @@ public final class ArchitectureTest {
 
     @ArchTest
     public static final ArchRule ONLY_VINTAGE_INSTANTIATORS_CAN_USE_VINTAGE_REFLECTION = noClasses()
-        .that()
-        .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.instantiation.vintage..")
-        .and()
-        .doNotBelongToAnyOf(
-            JavaApiPrefabValues.class,
-            // 👇 Test classes
-            FactoryCacheFactory.class
-        )
-        .should()
-        .accessClassesThat()
-        .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues..")
-        .orShould()
-        .accessClassesThat()
-        .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.reflection..");
+            .that()
+            .resideOutsideOfPackage("nl.jqno.equalsverifier.internal.instantiation.vintage..")
+            .and()
+            .doNotBelongToAnyOf(
+                JavaApiPrefabValues.class,
+                // 👇 Test classes
+                FactoryCacheFactory.class)
+            .should()
+            .accessClassesThat()
+            .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues..")
+            .orShould()
+            .accessClassesThat()
+            .resideInAPackage("nl.jqno.equalsverifier.internal.instantiation.vintage.reflection..");
 
     @ArchTest
     public static final ArchRule DONT_USE_VINTAGE_REFLECTION_DIRECTLY = noClasses()
-        .that()
-        .resideInAPackage("nl.jqno.equalsverifier.internal.checkers..")
-        .should()
-        .accessClassesThat()
-        .areAssignableTo(ClassAccessor.class)
-        .orShould()
-        .accessClassesThat()
-        .areAssignableTo(ObjectAccessor.class)
-        .orShould()
-        .accessClassesThat()
-        .areAssignableTo(FieldModifier.class);
+            .that()
+            .resideInAPackage("nl.jqno.equalsverifier.internal.checkers..")
+            .should()
+            .accessClassesThat()
+            .areAssignableTo(ClassAccessor.class)
+            .orShould()
+            .accessClassesThat()
+            .areAssignableTo(ObjectAccessor.class)
+            .orShould()
+            .accessClassesThat()
+            .areAssignableTo(FieldModifier.class);
 
     @ArchTest
     public static final ArchRule APACHE_COMMONS = noClasses()
-        .that()
-        .haveNameNotMatching(".*SuperclassTest.*")
-        .should()
-        .accessClassesThat()
-        .resideInAPackage("org.apache.commons..");
+            .that()
+            .haveNameNotMatching(".*SuperclassTest.*")
+            .should()
+            .accessClassesThat()
+            .resideInAPackage("org.apache.commons..");
 
     @ArchTest
-    public static final ArchRule AWT = dontAllowImports_outsideFactoryProvidersAndTests_from(
-        "java.awt.common.."
-    );
+    public static final ArchRule AWT = dontAllowImports_outsideFactoryProvidersAndTests_from("java.awt.common..");
 
     @ArchTest
-    public static final ArchRule GUAVA = dontAllowImports_outsideFactoryProvidersAndTests_from(
-        "com.google.common.."
-    );
+    public static final ArchRule GUAVA = dontAllowImports_outsideFactoryProvidersAndTests_from("com.google.common..");
 
     @ArchTest
-    public static final ArchRule JAVAFX = dontAllowImports_outsideFactoryProvidersAndTests_from(
-        "javafx.."
-    );
+    public static final ArchRule JAVAFX = dontAllowImports_outsideFactoryProvidersAndTests_from("javafx..");
 
     @ArchTest
-    public static final ArchRule JODA = dontAllowImports_outsideFactoryProvidersAndTests_from(
-        "org.joda.."
-    );
+    public static final ArchRule JODA = dontAllowImports_outsideFactoryProvidersAndTests_from("org.joda..");
 
     private static final String FACTORYPROVIDER_PATTERN =
-        "nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders..";
+            "nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders..";
     private static final String TEST_CLASS_PATTERN = ".*Test(\\$.*)?$";
 
     private ArchitectureTest() {
         // Do not instantiate
     }
 
-    private static ArchRule dontAllowImports_outsideFactoryProvidersAndTests_from(
-        String packageName
-    ) {
+    private static ArchRule dontAllowImports_outsideFactoryProvidersAndTests_from(String packageName) {
         return noClasses()
-            .that()
-            .resideOutsideOfPackage(FACTORYPROVIDER_PATTERN)
-            .and()
-            .haveNameNotMatching(TEST_CLASS_PATTERN)
-            .should()
-            .accessClassesThat()
-            .resideInAPackage(packageName);
+                .that()
+                .resideOutsideOfPackage(FACTORYPROVIDER_PATTERN)
+                .and()
+                .haveNameNotMatching(TEST_CLASS_PATTERN)
+                .should()
+                .accessClassesThat()
+                .resideInAPackage(packageName);
     }
 }

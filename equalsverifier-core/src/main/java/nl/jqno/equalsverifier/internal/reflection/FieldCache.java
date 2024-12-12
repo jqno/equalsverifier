@@ -1,23 +1,24 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.util.*;
+
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 
 /** Contains a cache for values connected to specific fields, for {@link SubjectCreator}. */
 public class FieldCache {
 
     /**
-     * We store Strings instead of Fields, to make it easier to interact with when we don't
-     * actually have a reference to a Field.
+     * We store Strings instead of Fields, to make it easier to interact with when we don't actually have a reference to
+     * a Field.
      */
     private final Map<String, Tuple<?>> cache = new HashMap<>();
 
     /**
      * Adds the given factory to the cache and associates it with the given type.
      *
-     * @param <T> The type of the values.
+     * @param <T>       The type of the values.
      * @param fieldName The name of the field to associate with the values.
-     * @param tuple The tuple that contains the values.
+     * @param tuple     The tuple that contains the values.
      */
     public <T> void put(String fieldName, Tuple<T> tuple) {
         if (fieldName != null) {
@@ -28,10 +29,10 @@ public class FieldCache {
     /**
      * Retrieves the values from the cache for the given field.
      *
-     * <p>What happens when there are no values, is undefined. Always call {@link #contains(String)}
-     * first.
+     * <p>
+     * What happens when there are no values, is undefined. Always call {@link #contains(String)} first.
      *
-     * @param <T> The returned values will have this as generic type.
+     * @param <T>       The returned values will have this as generic type.
      * @param fieldName The name of the field for which values are needed.
      * @return A tuple of values for the given type, or {@code null} if none is available.
      */

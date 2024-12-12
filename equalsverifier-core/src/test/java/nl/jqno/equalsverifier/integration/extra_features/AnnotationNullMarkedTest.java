@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.jspecify.NullMarkedOnPackage;
@@ -34,21 +35,14 @@ public class AnnotationNullMarkedTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NullMarkedWithNullableOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NullMarkedWithNullableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClassAndWarningSuppressed() {
-        EqualsVerifier
-            .forClass(NullMarkedWithNullableOnClass.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(NullMarkedWithNullableOnClass.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
@@ -174,7 +168,7 @@ public class AnnotationNullMarkedTest {
                 return false;
             }
             NullMarkedWithNullableOnClassAndNullCheckInEquals other =
-                (NullMarkedWithNullableOnClassAndNullCheckInEquals) obj;
+                    (NullMarkedWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 

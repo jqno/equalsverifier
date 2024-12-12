@@ -4,14 +4,15 @@ import static nl.jqno.equalsverifier.internal.util.ListBuilders.buildListOfAtLea
 
 import java.util.Collections;
 import java.util.List;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.util.Validations;
 
 /**
- * API class for {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}. Its
- * purpose is to make sure, at compile time, that a list of unequal examples is given, as well as
- * the list of equal examples that are supplied to the aforementioned method.
+ * API class for {@link EqualsVerifier#forRelaxedEqualExamples(Object, Object, Object...)}. Its purpose is to make sure,
+ * at compile time, that a list of unequal examples is given, as well as the list of equal examples that are supplied to
+ * the aforementioned method.
  */
 public class RelaxedEqualsVerifierApi<T> {
 
@@ -21,7 +22,7 @@ public class RelaxedEqualsVerifierApi<T> {
     /**
      * Constructor.
      *
-     * @param type The class for which the {@code equals} method should be tested.
+     * @param type     The class for which the {@code equals} method should be tested.
      * @param examples A list of example instances that are equal but not identical to one another.
      */
     public RelaxedEqualsVerifierApi(Class<T> type, List<T> examples) {
@@ -41,13 +42,12 @@ public class RelaxedEqualsVerifierApi<T> {
     }
 
     /**
-     * Asks for a list of unequal instances of T and subsequently returns a fully constructed
-     * instance of {@link EqualsVerifier}.
+     * Asks for a list of unequal instances of T and subsequently returns a fully constructed instance of
+     * {@link EqualsVerifier}.
      *
      * @param first An instance of T that is unequal to the previously supplied equal examples.
-     * @param more More instances of T, all of which are unequal to one another, to {@code first},
-     *     and to the previously supplied equal examples. May also contain instances of subclasses
-     *     of T.
+     * @param more  More instances of T, all of which are unequal to one another, to {@code first}, and to the
+     *                  previously supplied equal examples. May also contain instances of subclasses of T.
      * @return An instance of {@link EqualsVerifier}.
      */
     @SafeVarargs
@@ -55,6 +55,6 @@ public class RelaxedEqualsVerifierApi<T> {
         List<T> unequalExamples = buildListOfAtLeastOne(first, more);
         Validations.validateUnequalExamples(unequalExamples, equalExamples);
         return new SingleTypeEqualsVerifierApi<>(type, equalExamples, unequalExamples)
-            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED);
     }
 }

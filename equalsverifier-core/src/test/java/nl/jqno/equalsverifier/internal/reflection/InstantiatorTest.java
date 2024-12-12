@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
 import java.util.List;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.description.modifier.Visibility;
 import net.bytebuddy.dynamic.scaffold.TypeValidation;
@@ -34,9 +35,7 @@ public class InstantiatorTest {
 
     @Test
     public void fieldsOfInstantiatedObjectHaveDefaultValues() {
-        ColorBlindColorPoint p = Instantiator
-            .of(ColorBlindColorPoint.class, objenesis)
-            .instantiate();
+        ColorBlindColorPoint p = Instantiator.of(ColorBlindColorPoint.class, objenesis).instantiate();
         assertEquals(0, p.x);
         assertEquals(null, p.color);
     }
@@ -104,11 +103,11 @@ public class InstantiatorTest {
     @Test
     public void giveDynamicSubclass() throws Exception {
         class Super {}
-        Class<?> sub = Instantiator.giveDynamicSubclass(
-            Super.class,
-            "dynamicField",
-            b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE)
-        );
+        Class<?> sub = Instantiator
+                .giveDynamicSubclass(
+                    Super.class,
+                    "dynamicField",
+                    b -> b.defineField("dynamicField", int.class, Visibility.PRIVATE));
         Field f = sub.getDeclaredField("dynamicField");
         assertNotNull(f);
     }
@@ -116,12 +115,12 @@ public class InstantiatorTest {
     @Test
     public void giveDynamicSubclassForClassWithNoPackage() {
         Class<?> type = new ByteBuddy()
-            .with(TypeValidation.DISABLED)
-            .subclass(Object.class)
-            .name("NoPackage")
-            .make()
-            .load(getClass().getClassLoader())
-            .getLoaded();
+                .with(TypeValidation.DISABLED)
+                .subclass(Object.class)
+                .name("NoPackage")
+                .make()
+                .load(getClass().getClassLoader())
+                .getLoaded();
         Instantiator.giveDynamicSubclass(type, "X", b -> b);
     }
 }

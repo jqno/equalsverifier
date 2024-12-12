@@ -77,7 +77,8 @@ public class ClassProbe<T> {
         try {
             type.getDeclaredMethod(name, parameterTypes);
             return true;
-        } catch (NoSuchMethodException e) {
+        }
+        catch (NoSuchMethodException e) {
             return false;
         }
     }
@@ -101,16 +102,14 @@ public class ClassProbe<T> {
     }
 
     private boolean isMethodAbstract(String name, Class<?>... parameterTypes) {
-        return rethrow(() ->
-            Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers())
-        );
+        return rethrow(() -> Modifier.isAbstract(type.getMethod(name, parameterTypes).getModifiers()));
     }
 
     /**
      * Determines whether T's {@code equals} method is inherited from {@link Object}.
      *
-     * @return true if T's {@code equals} method is inherited from {@link Object}; false if it is
-     *     overridden in T or in any of its superclasses (except {@link Object}).
+     * @return true if T's {@code equals} method is inherited from {@link Object}; false if it is overridden in T or in
+     *             any of its superclasses (except {@link Object}).
      */
     public boolean isEqualsInheritedFromObject() {
         ClassProbe<? super T> i = this;

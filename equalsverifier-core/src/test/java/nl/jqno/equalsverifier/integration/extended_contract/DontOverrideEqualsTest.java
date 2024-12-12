@@ -11,17 +11,17 @@ public class DontOverrideEqualsTest {
     @Test
     public void fail_whenEqualsIsInheritedDirectlyFromObject() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify())
-            .assertFailure()
-            .assertMessageContains("Equals is inherited directly from Object");
+                .when(() -> EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify())
+                .assertFailure()
+                .assertMessageContains("Equals is inherited directly from Object");
     }
 
     @Test
     public void succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(NoEqualsNoHashCodeMethod.class)
-            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-            .verify();
+                .forClass(NoEqualsNoHashCodeMethod.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .verify();
     }
 
     @Test
@@ -32,19 +32,19 @@ public class DontOverrideEqualsTest {
     @Test
     public void succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
         EqualsVerifier
-            .forClass(Pojo.class)
-            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-            .suppress(Warning.NONFINAL_FIELDS, Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+                .forClass(Pojo.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .suppress(Warning.NONFINAL_FIELDS, Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
     }
 
     @Test
     public void succeed_whenClassInheritsFromSomethingWithStateAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
         EqualsVerifier
-            .forClass(SubclassWithoutEqualsButWithStateFromSuper.class)
-            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED, Warning.TRANSIENT_FIELDS)
-            .verify();
+                .forClass(SubclassWithoutEqualsButWithStateFromSuper.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED, Warning.TRANSIENT_FIELDS)
+                .verify();
     }
 
     static final class NoEqualsNoHashCodeMethod {}
@@ -80,6 +80,5 @@ public class DontOverrideEqualsTest {
         private int i = 10;
     }
 
-    static final class SubclassWithoutEqualsButWithStateFromSuper
-        extends SomethingWithoutEqualsButWithState {}
+    static final class SubclassWithoutEqualsButWithStateFromSuper extends SomethingWithoutEqualsButWithState {}
 }

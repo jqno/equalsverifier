@@ -8,6 +8,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathException;
 import javax.xml.xpath.XPathFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -33,16 +34,8 @@ public class PomReader {
         assertEquals(
             value,
             actual,
-            "Expected: " +
-            value +
-            ", but was: " +
-            actual +
-            "\nFilename: " +
-            filename +
-            "; expression: [" +
-            expression +
-            "]"
-        );
+            "Expected: " + value + ", but was: " + actual + "\nFilename: " + filename + "; expression: [" + expression
+                    + "]");
     }
 
     public void assertNodeSize(int expectedLength, String expression) {
@@ -50,27 +43,17 @@ public class PomReader {
         assertEquals(
             expectedLength,
             nodes.getLength(),
-            "Expected node to have " +
-            expectedLength +
-            " nodes, but it has " +
-            nodes.getLength() +
-            "!\nFilename: " +
-            filename +
-            "; expression: [" +
-            expression +
-            "]"
-        );
+            "Expected node to have " + expectedLength + " nodes, but it has " + nodes.getLength() + "!\nFilename: "
+                    + filename + "; expression: [" + expression + "]");
     }
 
     private Object getValue(String expression, QName qname) {
         try {
             var expr = xpath.compile(expression);
             return expr.evaluate(doc, qname);
-        } catch (XPathException e) {
-            throw new AssertionError(
-                "Failed to parse " + filename + " with expression [" + expression + "]",
-                e
-            );
+        }
+        catch (XPathException e) {
+            throw new AssertionError("Failed to parse " + filename + " with expression [" + expression + "]", e);
         }
     }
 }

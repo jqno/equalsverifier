@@ -7,8 +7,9 @@ import java.util.Set;
 /**
  * Contains all properties of an annotation necessary to to make decisions about that annotation.
  *
- * <p>Note that this object does not contain all possible properties; only the ones that are
- * actually used by EqualsVerifier.
+ * <p>
+ * Note that this object does not contain all possible properties; only the ones that are actually used by
+ * EqualsVerifier.
  */
 public class AnnotationProperties {
 
@@ -33,7 +34,7 @@ public class AnnotationProperties {
     /**
      * Adds the content of an enum value property.
      *
-     * @param name The name of the enum value property.
+     * @param name  The name of the enum value property.
      * @param value The content of the enum value property.
      */
     public void putEnumValue(String name, String value) {
@@ -53,7 +54,7 @@ public class AnnotationProperties {
     /**
      * Adds the content of an array value property.
      *
-     * @param name The name of the array value property.
+     * @param name   The name of the array value property.
      * @param values The content of the array value property.
      */
     public void putArrayValues(String name, Set<String> values) {

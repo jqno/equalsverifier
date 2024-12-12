@@ -7,6 +7,7 @@ import java.text.AttributedString;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
@@ -130,10 +131,10 @@ public class InPlaceObjectAccessorScramblingTest {
         AttributedString as = new AttributedString("x");
 
         ExpectedException
-            .when(() -> doScramble(as))
-            // InaccessibleObjectException, but it's not available in Java 8
-            .assertThrows(RuntimeException.class)
-            .assertMessageContains("accessible: module", "does not \"opens");
+                .when(() -> doScramble(as))
+                // InaccessibleObjectException, but it's not available in Java 8
+                .assertThrows(RuntimeException.class)
+                .assertMessageContains("accessible: module", "does not \"opens");
     }
 
     @Test
@@ -174,12 +175,8 @@ public class InPlaceObjectAccessorScramblingTest {
 
     static final class GenericContainerContainer {
 
-        private final GenericContainer<String> strings = new GenericContainer<>(
-            new ArrayList<String>()
-        );
-        private final GenericContainer<Point> points = new GenericContainer<>(
-            new ArrayList<Point>()
-        );
+        private final GenericContainer<String> strings = new GenericContainer<>(new ArrayList<String>());
+        private final GenericContainer<Point> points = new GenericContainer<>(new ArrayList<Point>());
     }
 
     static final class GenericContainer<T> {

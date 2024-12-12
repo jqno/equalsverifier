@@ -2,22 +2,23 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 
 /** Contains a cache of factories, for {@link VintageValueProvider}. */
 public class FactoryCache {
 
     /**
-     * We store Strings instead of Classes, so that the cache can be lazy and initializers won't be
-     * called until the class is actually needed.
+     * We store Strings instead of Classes, so that the cache can be lazy and initializers won't be called until the
+     * class is actually needed.
      */
     private final Map<String, PrefabValueFactory<?>> cache = new HashMap<>();
 
     /**
      * Adds the given factory to the cache and associates it with the given type.
      *
-     * @param <T> The type of the factory.
-     * @param type The type to associate with the factory.
+     * @param <T>     The type of the factory.
+     * @param type    The type to associate with the factory.
      * @param factory The factory to associate with the type.
      */
     public <T> void put(Class<?> type, PrefabValueFactory<T> factory) {
@@ -29,9 +30,9 @@ public class FactoryCache {
     /**
      * Adds the given factory to the cache and associates it with the given type name.
      *
-     * @param <T> Should match {@code typeName}.
+     * @param <T>      Should match {@code typeName}.
      * @param typeName The fully qualified name of the type.
-     * @param factory The factory to associate with {@code typeName}
+     * @param factory  The factory to associate with {@code typeName}
      */
     public <T> void put(String typeName, PrefabValueFactory<T> factory) {
         if (typeName != null) {
@@ -42,10 +43,10 @@ public class FactoryCache {
     /**
      * Retrieves the factory from the cache for the given type.
      *
-     * <p>What happens when there is no factory, is undefined. Always call {@link #contains(Class)}
-     * first.
+     * <p>
+     * What happens when there is no factory, is undefined. Always call {@link #contains(Class)} first.
      *
-     * @param <T> The returned factory will have this as generic type.
+     * @param <T>  The returned factory will have this as generic type.
      * @param type The type for which a factory is needed.
      * @return A factory for the given type, or {@code null} if none is available.
      */
@@ -77,8 +78,8 @@ public class FactoryCache {
     }
 
     /**
-     * Returns a new {@code FactoryCache} instance containing the factories from {@code this} and
-     * from the {@code other} cache.
+     * Returns a new {@code FactoryCache} instance containing the factories from {@code this} and from the {@code other}
+     * cache.
      *
      * @param other The other cache
      * @return a new instance containing factories from {@code this} and {@code other}

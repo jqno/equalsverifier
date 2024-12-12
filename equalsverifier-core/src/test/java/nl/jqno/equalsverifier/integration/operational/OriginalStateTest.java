@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
@@ -49,13 +50,13 @@ public class OriginalStateTest {
         try {
             EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify();
             fail("EqualsVerifier should have failed on FailingEqualsContainerContainer.");
-        } catch (AssertionError e) {
+        }
+        catch (AssertionError e) {
             // Make sure EV fails on a check that actually mutates fields.
             assertTrue(e.getMessage().contains("Mutability"));
-        } catch (Throwable ignored) {
-            fail(
-                "EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception."
-            );
+        }
+        catch (Throwable ignored) {
+            fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
         }
 
         assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);

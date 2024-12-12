@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.basic_contract;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -19,19 +20,16 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(TwoFieldsUsingOr.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Transitivity",
-                "two of these three instances are equal to each other, so the third one" +
-                " should be, too",
-                TwoFieldsUsingOr.class.getSimpleName()
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(TwoFieldsUsingOr.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Transitivity",
+                    "two of these three instances are equal to each other, so the third one should be, too",
+                    TwoFieldsUsingOr.class.getSimpleName());
     }
 
     @Test
@@ -42,14 +40,13 @@ public class TransitivityTest {
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(ThreeFieldsUsingOr.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(ThreeFieldsUsingOr.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
@@ -60,81 +57,75 @@ public class TransitivityTest {
         ThreeFieldsUsingOr other = new ThreeFieldsUsingOr("d", "4", "delta");
 
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forRelaxedEqualExamples(one, two, three)
-                    .andUnequalExample(other)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forRelaxedEqualExamples(one, two, three)
+                            .andUnequalExample(other)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(ThreeFieldsUsingAndOr.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(ThreeFieldsUsingAndOr.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(ThreeFieldsUsingOrAnd.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(ThreeFieldsUsingOrAnd.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(FiveFieldsUsingOr.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(FiveFieldsUsingOr.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Test
     public void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(FiveFieldsUsingAndsAndOrs.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(FiveFieldsUsingAndsAndOrs.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     @Disabled("This class is not transitive, and it should fail. See issue 78.")
     @Test
     public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(AtLeast2FieldsAreEqual.class)
-                    .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Transitivity");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(AtLeast2FieldsAreEqual.class)
+                            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Transitivity");
     }
 
     static final class TwoFieldsUsingAnd {
@@ -205,11 +196,7 @@ public class TransitivityTest {
                 return false;
             }
             ThreeFieldsUsingAnd other = (ThreeFieldsUsingAnd) obj;
-            return (
-                Objects.equals(f, other.f) &&
-                Objects.equals(g, other.g) &&
-                Objects.equals(h, other.h)
-            );
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g) && Objects.equals(h, other.h);
         }
 
         @Override
@@ -236,11 +223,7 @@ public class TransitivityTest {
                 return false;
             }
             ThreeFieldsUsingOr other = (ThreeFieldsUsingOr) obj;
-            return (
-                Objects.equals(f, other.f) ||
-                Objects.equals(g, other.g) ||
-                Objects.equals(h, other.h)
-            );
+            return Objects.equals(f, other.f) || Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override
@@ -267,10 +250,7 @@ public class TransitivityTest {
                 return false;
             }
             ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr) obj;
-            return (
-                (Objects.equals(f, other.f) && Objects.equals(g, other.g)) ||
-                Objects.equals(h, other.h)
-            );
+            return (Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h));
         }
 
         @Override
@@ -297,10 +277,7 @@ public class TransitivityTest {
                 return false;
             }
             ThreeFieldsUsingOrAnd other = (ThreeFieldsUsingOrAnd) obj;
-            return (
-                Objects.equals(f, other.f) ||
-                (Objects.equals(g, other.g) && Objects.equals(h, other.h))
-            );
+            return Objects.equals(f, other.f) || (Objects.equals(g, other.g) && Objects.equals(h, other.h));
         }
 
         @Override
@@ -331,13 +308,11 @@ public class TransitivityTest {
                 return false;
             }
             FiveFieldsUsingOr other = (FiveFieldsUsingOr) obj;
-            return (
-                Objects.equals(f, other.f) ||
-                Objects.equals(g, other.g) ||
-                Objects.equals(h, other.h) ||
-                Objects.equals(i, other.i) ||
-                Objects.equals(j, other.j)
-            );
+            return Objects.equals(f, other.f)
+                    || Objects.equals(g, other.g)
+                    || Objects.equals(h, other.h)
+                    || Objects.equals(i, other.i)
+                    || Objects.equals(j, other.j);
         }
 
         @Override
@@ -368,11 +343,9 @@ public class TransitivityTest {
                 return false;
             }
             FiveFieldsUsingAndsAndOrs other = (FiveFieldsUsingAndsAndOrs) obj;
-            return (
-                Objects.equals(f, other.f) ||
-                (Objects.equals(g, other.g) && Objects.equals(h, other.h)) ||
-                (Objects.equals(i, other.i) && Objects.equals(j, other.j))
-            );
+            return Objects.equals(f, other.f)
+                    || (Objects.equals(g, other.g) && Objects.equals(h, other.h))
+                    || (Objects.equals(i, other.i) && Objects.equals(j, other.j));
         }
 
         @Override

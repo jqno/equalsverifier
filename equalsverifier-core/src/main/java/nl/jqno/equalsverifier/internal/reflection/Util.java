@@ -14,14 +14,15 @@ public final class Util {
      * Helper method to resolve a Class of a given name.
      *
      * @param className The fully qualified name of the class to resolve.
-     * @param <T> The type of the class to resolve.
+     * @param <T>       The type of the class to resolve.
      * @return The corresponding class if it exists, null otherwise.
      */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> classForName(String className) {
         try {
             return (Class<T>) Class.forName(className);
-        } catch (ClassNotFoundException | VerifyError e) {
+        }
+        catch (ClassNotFoundException | VerifyError e) {
             // Catching VerifyError fixes issue #147. I don't know how to unit test it.
             return null;
         }
@@ -31,15 +32,16 @@ public final class Util {
      * Helper method to resolve a Class of a given name through a given ClassLoader.
      *
      * @param classLoader The class loader to resolve the class against.
-     * @param className The fully qualified name of the class to resolve.
-     * @param <T> The type of the class to resolve.
+     * @param className   The fully qualified name of the class to resolve.
+     * @param <T>         The type of the class to resolve.
      * @return The corresponding class if it exists, null otherwise.
      */
     @SuppressWarnings("unchecked")
     public static <T> Class<T> classForName(ClassLoader classLoader, String className) {
         try {
             return (Class<T>) classLoader.loadClass(className);
-        } catch (ClassNotFoundException | VerifyError e) {
+        }
+        catch (ClassNotFoundException | VerifyError e) {
             // Catching VerifyError fixes issue #147. I don't know how to unit test it.
             return null;
         }
@@ -77,7 +79,7 @@ public final class Util {
     /**
      * Helper method to create an array of Objects.
      *
-     * @param first The first object to construct an array out of.
+     * @param first  The first object to construct an array out of.
      * @param second The second object in the array.
      * @return An array with the given objects.
      */
@@ -88,9 +90,9 @@ public final class Util {
     /**
      * Helper method to create an array of Objects.
      *
-     * @param first The first object to construct an array out of.
+     * @param first  The first object to construct an array out of.
      * @param second The second object in the array.
-     * @param third The third object in the array.
+     * @param third  The third object in the array.
      * @return An array with the given objects.
      */
     public static Object[] objects(Object first, Object second, Object third) {
@@ -100,7 +102,7 @@ public final class Util {
     /**
      * Helper method to create a set of object.
      *
-     * @param ts The objects to add to the set.
+     * @param ts  The objects to add to the set.
      * @param <T> The type of objects to add to the set.
      * @return A set with the given objets.
      */

@@ -37,7 +37,6 @@ public class MainPomTest {
             () -> pom.assertDependencyIsOptional(3),
             () -> pom.assertDependencyIsOptional(4),
             () -> pom.assertDependency(5, "org.objenesis", "objenesis"),
-            () -> pom.assertDependency(6, "net.bytebuddy", "byte-buddy")
-        );
+            () -> pom.assertDependency(6, "net.bytebuddy", "byte-buddy"));
     }
 }

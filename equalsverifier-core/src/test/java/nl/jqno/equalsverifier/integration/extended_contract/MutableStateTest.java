@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Arrays;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -17,49 +18,40 @@ public class MutableStateTest {
     @Test
     public void fail_whenClassHasAMutablePrimitiveField() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
-            .assertFailure()
-            .assertMessageContains(MUTABILITY, "second");
+                .when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, "second");
     }
 
     @Test
     public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
-        EqualsVerifier
-            .forClass(UnusedPrimitiveMutableField.class)
-            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+        EqualsVerifier.forClass(UnusedPrimitiveMutableField.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
     public void succeed_whenClassHasAMutablePrimitiveField_givenWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(PrimitiveMutableField.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(PrimitiveMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
     public void fail_whenClassHasAMutableObjectField() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
-            .assertFailure()
-            .assertMessageContains(MUTABILITY, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
     public void succeed_whenClassHasAMutableObjectField_givenWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(ObjectMutableField.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(ObjectMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
     public void fail_whenClassHasAMutableEnumField() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
-            .assertFailure()
-            .assertMessageContains(MUTABILITY, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -70,9 +62,9 @@ public class MutableStateTest {
     @Test
     public void fail_whenClassHasAMutableArrayField() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
-            .assertFailure()
-            .assertMessageContains(MUTABILITY, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
+                .assertFailure()
+                .assertMessageContains(MUTABILITY, FIELD_NAME);
     }
 
     @Test
@@ -151,8 +143,7 @@ public class MutableStateTest {
     static final class EnumMutableField {
 
         public enum Enum {
-            RED,
-            BLUE
+            RED, BLUE
         }
 
         private Enum field;
@@ -190,7 +181,7 @@ public class MutableStateTest {
 
         @Override
         public int hashCode() {
-            return (field == null) ? 0 : Arrays.hashCode(field);
+            return field == null ? 0 : Arrays.hashCode(field);
         }
     }
 }

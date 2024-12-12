@@ -17,11 +17,7 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
     private final AnnotationCache annotationCache;
 
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
-    public TransientFieldsCheck(
-        SubjectCreator<T> subjectCreator,
-        TypeTag typeTag,
-        AnnotationCache annotationCache
-    ) {
+    public TransientFieldsCheck(SubjectCreator<T> subjectCreator, TypeTag typeTag, AnnotationCache annotationCache) {
         this.subjectCreator = subjectCreator;
         this.typeTag = typeTag;
         this.annotationCache = annotationCache;
@@ -33,19 +29,15 @@ public class TransientFieldsCheck<T> implements FieldCheck<T> {
         T changed = subjectCreator.withFieldChanged(fieldProbe.getField());
 
         boolean equalsChanged = !reference.equals(changed);
-        boolean hasAnnotation = annotationCache.hasFieldAnnotation(
-            typeTag.getType(),
-            fieldProbe.getName(),
-            SupportedAnnotations.TRANSIENT
-        );
+        boolean hasAnnotation = annotationCache
+                .hasFieldAnnotation(typeTag.getType(), fieldProbe.getName(), SupportedAnnotations.TRANSIENT);
         boolean fieldIsTransient = fieldProbe.isTransient() || hasAnnotation;
         if (equalsChanged && fieldIsTransient) {
             fail(
-                Formatter.of(
-                    "Transient field %% should not be included in equals/hashCode contract.",
-                    fieldProbe.getName()
-                )
-            );
+                Formatter
+                        .of(
+                            "Transient field %% should not be included in equals/hashCode contract.",
+                            fieldProbe.getName()));
         }
     }
 }

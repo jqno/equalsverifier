@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.math.BigDecimal;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.BigDecimalFieldCheck;
@@ -15,43 +16,34 @@ public class BigDecimalTest {
     @Test
     public void fail_whenBigDecimalsComparedUsingEqualsWithComparablyConsistentHashCode() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(BigDecimalEqualsWithComparablyConsistentHashCode.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                BigDecimalFieldCheck.ERROR_DOC_TITLE,
-                "BigDecimal",
-                "equals",
-                "compareTo",
-                "bd",
-                Warning.BIGDECIMAL_EQUALITY.toString()
-            );
+                .when(() -> EqualsVerifier.forClass(BigDecimalEqualsWithComparablyConsistentHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    BigDecimalFieldCheck.ERROR_DOC_TITLE,
+                    "BigDecimal",
+                    "equals",
+                    "compareTo",
+                    "bd",
+                    Warning.BIGDECIMAL_EQUALITY.toString());
     }
 
     @Test
     public void fail_whenBigDecimalsComparedUsingCompareToWithInconsistentHashCode() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(BigDecimalInconsistentHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                BigDecimalFieldCheck.ERROR_DOC_TITLE,
-                "BigDecimal",
-                "hashCode",
-                "compareTo",
-                "bd",
-                Warning.BIGDECIMAL_EQUALITY.toString()
-            );
+                .when(() -> EqualsVerifier.forClass(BigDecimalInconsistentHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    BigDecimalFieldCheck.ERROR_DOC_TITLE,
+                    "BigDecimal",
+                    "hashCode",
+                    "compareTo",
+                    "bd",
+                    Warning.BIGDECIMAL_EQUALITY.toString());
     }
 
     @Test
     public void succeed_whenBigDecimalsComparedUsingEquals_givenBigDecimalEqualsWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(BigDecimalEquals.class)
-            .suppress(Warning.BIGDECIMAL_EQUALITY)
-            .verify();
+        EqualsVerifier.forClass(BigDecimalEquals.class).suppress(Warning.BIGDECIMAL_EQUALITY).verify();
     }
 
     @Test
@@ -60,8 +52,7 @@ public class BigDecimalTest {
     }
 
     /**
-     * Uses standard equals and hashCode for objects.
-     * 0 and 0.0 are not equal.
+     * Uses standard equals and hashCode for objects. 0 and 0.0 are not equal.
      */
     private static final class BigDecimalEquals {
 
@@ -87,8 +78,8 @@ public class BigDecimalTest {
     }
 
     /**
-     * Uses compareTo for BigDecimal equality and ensures hashCode is equal for equal BigDecimal instances.
-     * 0 and 0.0 are equal and produce the same hashCode.
+     * Uses compareTo for BigDecimal equality and ensures hashCode is equal for equal BigDecimal instances. 0 and 0.0
+     * are equal and produce the same hashCode.
      */
     private static final class BigDecimalCompareTo {
 
@@ -114,8 +105,8 @@ public class BigDecimalTest {
     }
 
     /**
-     * Uses standard equals but with a consistent hashCode for comparably equal instances.
-     * 0 and 0.0 are not equal but produce the same hashCode.
+     * Uses standard equals but with a consistent hashCode for comparably equal instances. 0 and 0.0 are not equal but
+     * produce the same hashCode.
      */
     private static final class BigDecimalEqualsWithComparablyConsistentHashCode {
 
@@ -135,7 +126,7 @@ public class BigDecimalTest {
                 return false;
             }
             BigDecimalEqualsWithComparablyConsistentHashCode other =
-                (BigDecimalEqualsWithComparablyConsistentHashCode) obj;
+                    (BigDecimalEqualsWithComparablyConsistentHashCode) obj;
             return Objects.equals(bd, other.bd);
         }
 
@@ -146,8 +137,8 @@ public class BigDecimalTest {
     }
 
     /**
-     * Uses compareTo for BigDecimal equality but has hashCode that is inconsistent.
-     * 0 and 0.0 are equal but produce different hashCodes.
+     * Uses compareTo for BigDecimal equality but has hashCode that is inconsistent. 0 and 0.0 are equal but produce
+     * different hashCodes.
      */
     private static final class BigDecimalInconsistentHashCode {
 

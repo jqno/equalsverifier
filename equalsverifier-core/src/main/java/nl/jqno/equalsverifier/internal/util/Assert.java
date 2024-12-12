@@ -12,12 +12,12 @@ public final class Assert {
     }
 
     /**
-     * Asserts that two Objects are equal to one another. Does nothing if they are; throws an
-     * AssertionException if they're not.
+     * Asserts that two Objects are equal to one another. Does nothing if they are; throws an AssertionException if
+     * they're not.
      *
-     * @param message Message to be included in the {@link AssertionException}.
+     * @param message  Message to be included in the {@link AssertionException}.
      * @param expected Expected value.
-     * @param actual Actual value.
+     * @param actual   Actual value.
      * @throws AssertionException If {@code expected} and {@code actual} are not equal.
      */
     public static void assertEquals(Formatter message, Object expected, Object actual) {
@@ -27,10 +27,9 @@ public final class Assert {
     }
 
     /**
-     * Asserts that an assertion is true. Does nothing if it is; throws an AssertionException if it
-     * isn't.
+     * Asserts that an assertion is true. Does nothing if it is; throws an AssertionException if it isn't.
      *
-     * @param message Message to be included in the {@link AssertionException}.
+     * @param message   Message to be included in the {@link AssertionException}.
      * @param assertion Assertion that must be true.
      * @throws AssertionException If {@code assertion} is false.
      */
@@ -41,10 +40,9 @@ public final class Assert {
     }
 
     /**
-     * Asserts that an assertion is false. Does nothing if it is; throws an AssertionException if it
-     * isn't.
+     * Asserts that an assertion is false. Does nothing if it is; throws an AssertionException if it isn't.
      *
-     * @param message Message to be included in the {@link AssertionException}.
+     * @param message   Message to be included in the {@link AssertionException}.
      * @param assertion Assertion that must be true.
      * @throws AssertionException If {@code assertion} is false.
      */
@@ -68,8 +66,7 @@ public final class Assert {
      * Throws an AssertionException.
      *
      * @param message Message to be included in the {@link AssertionException}.
-     * @param cause Throwable to be included as cause in the {@link AssertionException}. Can be
-     *     null.
+     * @param cause   Throwable to be included as cause in the {@link AssertionException}. Can be null.
      * @throws AssertionException Always.
      */
     public static void fail(Formatter message, Throwable cause) {

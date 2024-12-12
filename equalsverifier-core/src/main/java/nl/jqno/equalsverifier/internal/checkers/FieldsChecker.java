@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.checkers;
 
 import java.util.function.Predicate;
+
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.checkers.fieldchecks.*;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
@@ -34,31 +35,21 @@ public class FieldsChecker<T> implements Checker {
         final TypeTag typeTag = config.getTypeTag();
         final SubjectCreator<T> subjectCreator = context.getSubjectCreator();
 
-        final String cachedHashCodeFieldName = config
-            .getCachedHashCodeInitializer()
-            .getCachedHashCodeFieldName();
-        final Predicate<FieldProbe> isCachedHashCodeField = p ->
-            p.getName().equals(cachedHashCodeFieldName);
+        final String cachedHashCodeFieldName = config.getCachedHashCodeInitializer().getCachedHashCodeFieldName();
+        final Predicate<FieldProbe> isCachedHashCodeField = p -> p.getName().equals(cachedHashCodeFieldName);
 
-        this.arrayFieldCheck =
-            new ArrayFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
+        this.arrayFieldCheck = new ArrayFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
         this.floatAndDoubleFieldCheck = new FloatAndDoubleFieldCheck<>(subjectCreator);
-        this.mutableStateFieldCheck =
-            new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
+        this.mutableStateFieldCheck = new MutableStateFieldCheck<>(subjectCreator, isCachedHashCodeField);
         this.reflexivityFieldCheck = new ReflexivityFieldCheck<>(context);
         this.significantFieldCheck = new SignificantFieldCheck<>(context, isCachedHashCodeField);
         this.symmetryFieldCheck = new SymmetryFieldCheck<>(subjectCreator);
-        this.transientFieldsCheck =
-            new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
+        this.transientFieldsCheck = new TransientFieldsCheck<>(subjectCreator, typeTag, config.getAnnotationCache());
         this.transitivityFieldCheck = new TransitivityFieldCheck<>(subjectCreator);
-        this.stringFieldCheck =
-            new StringFieldCheck<>(
-                subjectCreator,
+        this.stringFieldCheck = new StringFieldCheck<>(subjectCreator,
                 context.getValueProvider(),
-                config.getCachedHashCodeInitializer()
-            );
-        this.bigDecimalFieldCheck =
-            new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
+                config.getCachedHashCodeInitializer());
+        this.bigDecimalFieldCheck = new BigDecimalFieldCheck<>(subjectCreator, config.getCachedHashCodeInitializer());
         this.jpaLazyGetterFieldCheck = new JpaLazyGetterFieldCheck<>(context);
     }
 
@@ -90,20 +81,16 @@ public class FieldsChecker<T> implements Checker {
         }
 
         AnnotationCache cache = config.getAnnotationCache();
-        if (
-            cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY) &&
-            !config.getWarningsToSuppress().contains(Warning.JPA_GETTER)
-        ) {
+        if (cache.hasClassAnnotation(config.getType(), SupportedAnnotations.ENTITY)
+                && !config.getWarningsToSuppress().contains(Warning.JPA_GETTER)) {
             inspector.check(jpaLazyGetterFieldCheck);
         }
     }
 
     private boolean ignoreMutability(Class<?> type) {
         AnnotationCache cache = config.getAnnotationCache();
-        return (
-            config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS) ||
-            cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE) ||
-            cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY)
-        );
+        return config.getWarningsToSuppress().contains(Warning.NONFINAL_FIELDS)
+                || cache.hasClassAnnotation(type, SupportedAnnotations.IMMUTABLE)
+                || cache.hasClassAnnotation(type, SupportedAnnotations.ENTITY);
     }
 }

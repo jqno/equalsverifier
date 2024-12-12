@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.internal.util.Configuration;
 import nl.jqno.equalsverifier.internal.util.ConfigurationHelper;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
@@ -122,33 +123,21 @@ public class FieldProbeTest {
 
     @Test
     public void canBeDefault_primitiveWithPrefabbedField() {
-        config =
-            ConfigurationHelper.emptyConfigurationWithPrefabbedFields(
-                PrimitiveContainer.class,
-                FIELD_NAME
-            );
+        config = ConfigurationHelper.emptyConfigurationWithPrefabbedFields(PrimitiveContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(PrimitiveContainer.class, FIELD_NAME);
         assertFalse(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_isMentionedExplicitly() {
-        config =
-            ConfigurationHelper.emptyConfigurationWithNonnullFields(
-                ObjectContainer.class,
-                FIELD_NAME
-            );
+        config = ConfigurationHelper.emptyConfigurationWithNonnullFields(ObjectContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
         assertFalse(probe.canBeDefault(config));
     }
 
     @Test
     public void canBeDefault_annotated() {
-        config =
-            ConfigurationHelper.emptyConfigurationWithNonnullFields(
-                NonNullContainer.class,
-                FIELD_NAME
-            );
+        config = ConfigurationHelper.emptyConfigurationWithNonnullFields(NonNullContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(NonNullContainer.class, FIELD_NAME);
         assertFalse(probe.canBeDefault(config));
     }
@@ -187,7 +176,8 @@ public class FieldProbeTest {
         try {
             Field field = type.getDeclaredField(fieldName);
             return FieldProbe.of(field);
-        } catch (NoSuchFieldException e) {
+        }
+        catch (NoSuchFieldException e) {
             throw new IllegalArgumentException("fieldName: " + fieldName);
         }
     }

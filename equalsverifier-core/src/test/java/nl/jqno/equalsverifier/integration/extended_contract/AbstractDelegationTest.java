@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -13,8 +14,7 @@ public class AbstractDelegationTest {
 
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String EQUALS_DELEGATES = "equals method delegates to an abstract method";
-    private static final String HASHCODE_DELEGATES =
-        "hashCode method delegates to an abstract method";
+    private static final String HASHCODE_DELEGATES = "hashCode method delegates to an abstract method";
     private static final String PREFAB = "Add prefab values for";
 
     @Test
@@ -25,27 +25,25 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenEqualsCallsAnAbstractMethod() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(AbstractEqualsDelegator.class).verify())
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                AbstractEqualsDelegator.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(AbstractEqualsDelegator.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    EQUALS_DELEGATES,
+                    AbstractEqualsDelegator.class.getSimpleName());
     }
 
     @Test
     public void failGracefully_whenHashCodeCallsAnAbstractMethod() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(AbstractHashCodeDelegator.class).verify())
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                AbstractHashCodeDelegator.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(AbstractHashCodeDelegator.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    HASHCODE_DELEGATES,
+                    AbstractHashCodeDelegator.class.getSimpleName());
     }
 
     @Test
@@ -56,55 +54,41 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenEqualsCallsAnAbstractFieldsAbstractMethod() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class).verify()
-            )
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                EqualsDelegatesToAbstractMethodInField.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(EqualsDelegatesToAbstractMethodInField.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    EQUALS_DELEGATES,
+                    EqualsDelegatesToAbstractMethodInField.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenEqualsCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
         EqualsVerifier
-            .forClass(EqualsDelegatesToAbstractMethodInField.class)
-            .withPrefabValues(
-                AbstractDelegator.class,
-                new AbstractDelegatorImpl(1),
-                new AbstractDelegatorImpl(2)
-            )
-            .verify();
+                .forClass(EqualsDelegatesToAbstractMethodInField.class)
+                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
+                .verify();
     }
 
     @Test
     public void failGracefully_whenHashCodeCallsAnAbstractFieldsAbstactMethod() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class).verify()
-            )
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                HashCodeDelegatesToAbstractMethodInField.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(HashCodeDelegatesToAbstractMethodInField.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    HASHCODE_DELEGATES,
+                    HashCodeDelegatesToAbstractMethodInField.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenHashCodeCallsAnAbstractFieldsAbstactMethod_givenAConcretePrefabImplementationOfSaidAbstractField() {
         EqualsVerifier
-            .forClass(HashCodeDelegatesToAbstractMethodInField.class)
-            .withPrefabValues(
-                AbstractDelegator.class,
-                new AbstractDelegatorImpl(1),
-                new AbstractDelegatorImpl(2)
-            )
-            .verify();
+                .forClass(HashCodeDelegatesToAbstractMethodInField.class)
+                .withPrefabValues(AbstractDelegator.class, new AbstractDelegatorImpl(1), new AbstractDelegatorImpl(2))
+                .verify();
     }
 
     @Test
@@ -115,57 +99,49 @@ public class AbstractDelegationTest {
     @Test
     public void failGracefully_whenAFieldsEqualsMethodCallsAnAbstractField() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class).verify()
-            )
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                PREFAB,
-                AbstractEqualsDelegator.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(EqualsInFieldDelegatesToAbstractMethod.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    EQUALS_DELEGATES,
+                    PREFAB,
+                    AbstractEqualsDelegator.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenAFieldsEqualsMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier
-            .forClass(EqualsInFieldDelegatesToAbstractMethod.class)
-            .withPrefabValues(
-                AbstractEqualsDelegator.class,
-                new AbstractEqualsDelegatorImpl(1),
-                new AbstractEqualsDelegatorImpl(2)
-            )
-            .verify();
+                .forClass(EqualsInFieldDelegatesToAbstractMethod.class)
+                .withPrefabValues(
+                    AbstractEqualsDelegator.class,
+                    new AbstractEqualsDelegatorImpl(1),
+                    new AbstractEqualsDelegatorImpl(2))
+                .verify();
     }
 
     @Test
     public void failGracefully_whenAFieldsHashCodeMethodCallsAnAbstractField() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class).verify()
-            )
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                HASHCODE_DELEGATES,
-                PREFAB,
-                AbstractHashCodeDelegator.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(HashCodeInFieldDelegatesToAbstractMethod.class).verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    HASHCODE_DELEGATES,
+                    PREFAB,
+                    AbstractHashCodeDelegator.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenAFieldsHashCodeMethodCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier
-            .forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
-            .withPrefabValues(
-                AbstractHashCodeDelegator.class,
-                new AbstractHashCodeDelegatorImpl(1),
-                new AbstractHashCodeDelegatorImpl(2)
-            )
-            .verify();
+                .forClass(HashCodeInFieldDelegatesToAbstractMethod.class)
+                .withPrefabValues(
+                    AbstractHashCodeDelegator.class,
+                    new AbstractHashCodeDelegatorImpl(1),
+                    new AbstractHashCodeDelegatorImpl(2))
+                .verify();
     }
 
     @Test
@@ -190,49 +166,42 @@ public class AbstractDelegationTest {
 
     @Test
     public void succeed_evenThoughEqualsInSuperclassCallsAnAbstractMethod_givenUsingGetClass() {
-        EqualsVerifier
-            .forClass(AbstractEqualsUsingGetClassDelegatorImpl.class)
-            .usingGetClass()
-            .verify();
+        EqualsVerifier.forClass(AbstractEqualsUsingGetClassDelegatorImpl.class).usingGetClass().verify();
     }
 
     @Test
     public void originalMessageIsIncludedInErrorMessage_whenEqualsVerifierSignalsAnAbstractDelegationIssue() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("This is AbstractMethodError's original message");
+                .when(() -> EqualsVerifier.forClass(ThrowsAbstractMethodErrorWithMessage.class).verify())
+                .assertFailure()
+                .assertMessageContains("This is AbstractMethodError's original message");
     }
 
     @Test
     public void failGracefully_whenAFieldsEqualsMethodDoesntDoAnIdentityCheckButCallsAnAbstractField() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertCause(AbstractMethodError.class)
-            .assertMessageContains(
-                ABSTRACT_DELEGATION,
-                EQUALS_DELEGATES,
-                PREFAB,
-                AbstractEqualsWithoutIdentityCheckDelegator.class.getSimpleName()
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
+                            .verify())
+                .assertFailure()
+                .assertCause(AbstractMethodError.class)
+                .assertMessageContains(
+                    ABSTRACT_DELEGATION,
+                    EQUALS_DELEGATES,
+                    PREFAB,
+                    AbstractEqualsWithoutIdentityCheckDelegator.class.getSimpleName());
     }
 
     @Test
     public void succeed_whenAFieldsEqualsMethodDoesntDoAnIdentityCheckButCallsAnAbstractField_givenAConcretePrefabImplementationOfSaidField() {
         EqualsVerifier
-            .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
-            .withPrefabValues(
-                AbstractEqualsWithoutIdentityCheckDelegator.class,
-                new AbstractEqualsWithoutIdentityCheckDelegatorImpl(1),
-                new AbstractEqualsWithoutIdentityCheckDelegatorImpl(2)
-            )
-            .verify();
+                .forClass(EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod.class)
+                .withPrefabValues(
+                    AbstractEqualsWithoutIdentityCheckDelegator.class,
+                    new AbstractEqualsWithoutIdentityCheckDelegatorImpl(1),
+                    new AbstractEqualsWithoutIdentityCheckDelegatorImpl(2))
+                .verify();
     }
 
     private abstract static class AbstractClass {
@@ -339,8 +308,7 @@ public class AbstractDelegationTest {
             if (theAnswer()) {
                 return true;
             }
-            AbstractEqualsWithoutIdentityCheckDelegator other =
-                (AbstractEqualsWithoutIdentityCheckDelegator) obj;
+            AbstractEqualsWithoutIdentityCheckDelegator other = (AbstractEqualsWithoutIdentityCheckDelegator) obj;
             return i == other.i;
         }
 
@@ -351,7 +319,7 @@ public class AbstractDelegationTest {
     }
 
     static final class AbstractEqualsWithoutIdentityCheckDelegatorImpl
-        extends AbstractEqualsWithoutIdentityCheckDelegator {
+            extends AbstractEqualsWithoutIdentityCheckDelegator {
 
         public AbstractEqualsWithoutIdentityCheckDelegatorImpl(int i) {
             super(i);
@@ -473,8 +441,7 @@ public class AbstractDelegationTest {
         }
     }
 
-    static final class AbstractEqualsUsingGetClassDelegatorImpl
-        extends AbstractEqualsUsingGetClassDelegator {
+    static final class AbstractEqualsUsingGetClassDelegatorImpl extends AbstractEqualsUsingGetClassDelegator {
 
         public AbstractEqualsUsingGetClassDelegatorImpl(int i) {
             super(i);
@@ -535,8 +502,7 @@ public class AbstractDelegationTest {
             if (delegator != null) {
                 delegator.abstractDelegation();
             }
-            EqualsDelegatesToAbstractMethodInField other =
-                (EqualsDelegatesToAbstractMethodInField) obj;
+            EqualsDelegatesToAbstractMethodInField other = (EqualsDelegatesToAbstractMethodInField) obj;
             return i == other.i && Objects.equals(delegator, other.delegator);
         }
 
@@ -612,8 +578,7 @@ public class AbstractDelegationTest {
             if (!(obj instanceof EqualsInFieldDelegatesToAbstractMethod)) {
                 return false;
             }
-            EqualsInFieldDelegatesToAbstractMethod other =
-                (EqualsInFieldDelegatesToAbstractMethod) obj;
+            EqualsInFieldDelegatesToAbstractMethod other = (EqualsInFieldDelegatesToAbstractMethod) obj;
             return Objects.equals(delegator, other.delegator);
         }
 
@@ -690,8 +655,7 @@ public class AbstractDelegationTest {
         private final AbstractEqualsWithoutIdentityCheckDelegator id;
 
         protected EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod(
-            AbstractEqualsWithoutIdentityCheckDelegator id
-        ) {
+                AbstractEqualsWithoutIdentityCheckDelegator id) {
             this.id = id;
         }
 
@@ -701,7 +665,7 @@ public class AbstractDelegationTest {
                 return false;
             }
             EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod that =
-                (EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod) other;
+                    (EqualsInFieldWithoutIdentityCheckDelegatesToAbstractMethod) other;
             return Objects.equals(id, that.id);
         }
 

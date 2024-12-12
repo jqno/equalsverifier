@@ -9,6 +9,7 @@ import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
 import net.bytebuddy.dynamic.loading.ClassLoadingStrategy;
@@ -19,18 +20,12 @@ import org.objenesis.instantiator.ObjectInstantiator;
 /**
  * Instantiates objects of a given class.
  *
- * @param <T> {@link Instantiator} instantiates objects of this class, or of an anonymous subclass
- *     of this class.
+ * @param <T> {@link Instantiator} instantiates objects of this class, or of an anonymous subclass of this class.
  */
 public final class Instantiator<T> {
 
-    private static final List<String> FORBIDDEN_PACKAGES = Arrays.asList(
-        "java.",
-        "javax.",
-        "sun.",
-        "com.sun.",
-        "org.w3c.dom."
-    );
+    private static final List<String> FORBIDDEN_PACKAGES =
+            Arrays.asList("java.", "javax.", "sun.", "com.sun.", "org.w3c.dom.");
     private static final String FALLBACK_PACKAGE_NAME = getPackageName(Instantiator.class);
 
     private final Class<T> type;
@@ -47,8 +42,8 @@ public final class Instantiator<T> {
     /**
      * Factory method.
      *
-     * @param <T> The class on which {@link Instantiator} operates.
-     * @param type The class on which {@link Instantiator} operates. Should be the same as T.
+     * @param <T>       The class on which {@link Instantiator} operates.
+     * @param type      The class on which {@link Instantiator} operates. Should be the same as T.
      * @param objenesis To instantiate non-record classes.
      * @return An {@link Instantiator} for {@link #type}.
      */
@@ -66,8 +61,8 @@ public final class Instantiator<T> {
     /**
      * Instantiates an object of type T.
      *
-     * <p>All fields will be initialized to their initial values. I.e., 0 for ints, null for
-     * objects, etc.
+     * <p>
+     * All fields will be initialized to their initial values. I.e., 0 for ints, null for objects, etc.
      *
      * @return An object of type T.
      */
@@ -91,21 +86,14 @@ public final class Instantiator<T> {
 
     @SuppressWarnings("unchecked")
     public static synchronized <S> Class<S> giveDynamicSubclass(
-        Class<S> superclass,
-        String nameSuffix,
-        UnaryOperator<DynamicType.Builder<S>> modify
-    ) {
+            Class<S> superclass,
+            String nameSuffix,
+            UnaryOperator<DynamicType.Builder<S>> modify) {
         boolean isSystemClass = isSystemClass(superclass.getName());
 
         String namePrefix = isSystemClass ? FALLBACK_PACKAGE_NAME : getPackageName(superclass);
-        String name =
-            namePrefix +
-            (namePrefix.isEmpty() ? "" : ".") +
-            superclass.getSimpleName() +
-            "$$DynamicSubclass$" +
-            Integer.toHexString(superclass.hashCode()) +
-            "$" +
-            nameSuffix;
+        String name = namePrefix + (namePrefix.isEmpty() ? "" : ".") + superclass.getSimpleName() + "$$DynamicSubclass$"
+                + Integer.toHexString(superclass.hashCode()) + "$" + nameSuffix;
 
         Class<?> context = isSystemClass ? Instantiator.class : superclass;
         ClassLoader classLoader = context.getClassLoader();
@@ -118,10 +106,7 @@ public final class Instantiator<T> {
         }
 
         ClassLoadingStrategy<ClassLoader> cs = getClassLoadingStrategy(context);
-        DynamicType.Builder<S> builder = new ByteBuddy()
-            .with(TypeValidation.DISABLED)
-            .subclass(superclass)
-            .name(name);
+        DynamicType.Builder<S> builder = new ByteBuddy().with(TypeValidation.DISABLED).subclass(superclass).name(name);
 
         builder = modify.apply(builder);
 
@@ -131,22 +116,21 @@ public final class Instantiator<T> {
     private static String getPackageName(Class<?> type) {
         String cn = type.getName();
         int dot = cn.lastIndexOf('.');
-        return (dot != -1) ? cn.substring(0, dot).intern() : "";
+        return dot != -1 ? cn.substring(0, dot).intern() : "";
     }
 
     private static <S> ClassLoadingStrategy<ClassLoader> getClassLoadingStrategy(Class<S> context) {
         if (System.getProperty("java.version").startsWith("1.")) {
             return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
-        } else {
-            ConditionalInstantiator ci = new ConditionalInstantiator(
-                "java.lang.invoke.MethodHandles$Lookup"
-            );
-            Object lookup = ci.callFactory(
-                "java.lang.invoke.MethodHandles",
-                "privateLookupIn",
-                classes(Class.class, MethodHandles.Lookup.class),
-                objects(context, MethodHandles.lookup())
-            );
+        }
+        else {
+            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
+            Object lookup = ci
+                    .callFactory(
+                        "java.lang.invoke.MethodHandles",
+                        "privateLookupIn",
+                        classes(Class.class, MethodHandles.Lookup.class),
+                        objects(context, MethodHandles.lookup()));
             return ClassLoadingStrategy.UsingLookup.of(lookup);
         }
     }

@@ -23,45 +23,41 @@ public class BalancedAbstractnessTest {
     @Test
     public void fail_whenBothEqualsAndHashCodeAreAbstract() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(AbstractBoth.class)
-                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(AbstractBoth.class)
+                            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(BOTH_ARE_ABSTRACT, AbstractBoth.class.getSimpleName());
     }
 
     @Test
     public void fail_whenEqualsIsAbstract() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(AbstractEquals.class)
-                    .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                EQUALS_IS_ABSTRACT,
-                HASHCODE_IS_NOT,
-                BOTH_SHOULD_BE_CONCRETE,
-                AbstractEquals.class.getSimpleName()
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(AbstractEquals.class)
+                            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    EQUALS_IS_ABSTRACT,
+                    HASHCODE_IS_NOT,
+                    BOTH_SHOULD_BE_CONCRETE,
+                    AbstractEquals.class.getSimpleName());
     }
 
     @Test
     public void fail_whenHashCodeIsAbstract() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(AbstractHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                HASHCODE_IS_ABSTRACT,
-                EQUALS_IS_NOT,
-                BOTH_SHOULD_BE_CONCRETE,
-                AbstractHashCode.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(AbstractHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    HASHCODE_IS_ABSTRACT,
+                    EQUALS_IS_NOT,
+                    BOTH_SHOULD_BE_CONCRETE,
+                    AbstractHashCode.class.getSimpleName());
     }
 
     @Test

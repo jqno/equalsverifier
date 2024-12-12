@@ -6,6 +6,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
@@ -34,10 +35,7 @@ public class EnumTest {
 
     @Test
     public void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(NullThrowingSingletonUser.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(NullThrowingSingletonUser.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
@@ -56,9 +54,7 @@ public class EnumTest {
     }
 
     enum Enum {
-        ONE,
-        TWO,
-        THREE
+        ONE, TWO, THREE
     }
 
     enum Singleton {

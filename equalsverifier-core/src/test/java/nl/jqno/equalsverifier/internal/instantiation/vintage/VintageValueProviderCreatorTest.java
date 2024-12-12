@@ -82,51 +82,39 @@ public class VintageValueProviderCreatorTest {
 
     @Test
     public void dontAddOneStepRecursiveType() {
-        ExpectedException
-            .when(() -> valueProvider.giveRed(NODE_TAG))
-            .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> valueProvider.giveRed(NODE_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
     public void oneStepRecursiveArrayType() {
-        factoryCache.put(
-            NodeArray.class,
-            values(new NodeArray(), new NodeArray(), new NodeArray())
-        );
+        factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(NODE_ARRAY_TAG);
     }
 
     @Test
     public void dontAddOneStepRecursiveArrayType() {
-        ExpectedException
-            .when(() -> valueProvider.giveRed(NODE_ARRAY_TAG))
-            .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> valueProvider.giveRed(NODE_ARRAY_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
     public void addTwoStepRecursiveType() {
-        factoryCache.put(
-            TwoStepNodeB.class,
-            values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB())
-        );
+        factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
     public void dontAddTwoStepRecursiveType() {
-        ExpectedException
-            .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
-            .assertThrows(RecursionException.class);
+        ExpectedException.when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
     public void twoStepRecursiveArrayType() {
-        factoryCache.put(
-            TwoStepNodeArrayB.class,
-            values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB())
-        );
+        factoryCache
+                .put(
+                    TwoStepNodeArrayB.class,
+                    values(new TwoStepNodeArrayB(), new TwoStepNodeArrayB(), new TwoStepNodeArrayB()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG);
     }
@@ -134,8 +122,8 @@ public class VintageValueProviderCreatorTest {
     @Test
     public void dontAddTwoStepRecursiveArrayType() {
         ExpectedException
-            .when(() -> valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
-            .assertThrows(RecursionException.class);
+                .when(() -> valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
+                .assertThrows(RecursionException.class);
     }
 
     @Test
@@ -146,21 +134,18 @@ public class VintageValueProviderCreatorTest {
     @Test
     public void recursiveWithAnotherFieldFirst() {
         ExpectedException
-            .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
-            .assertThrows(RecursionException.class)
-            .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
-            .assertDescriptionDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
+                .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
+                .assertThrows(RecursionException.class)
+                .assertDescriptionContains(RecursiveWithAnotherFieldFirst.class.getSimpleName())
+                .assertDescriptionDoesNotContain(RecursiveThisIsTheOtherField.class.getSimpleName());
     }
 
     @Test
     public void exceptionMessage() {
         ExpectedException
-            .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
-            .assertThrows(RecursionException.class)
-            .assertDescriptionContains(
-                TwoStepNodeA.class.getSimpleName(),
-                TwoStepNodeB.class.getSimpleName()
-            );
+                .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
+                .assertThrows(RecursionException.class)
+                .assertDescriptionContains(TwoStepNodeA.class.getSimpleName(), TwoStepNodeB.class.getSimpleName());
     }
 
     @Test

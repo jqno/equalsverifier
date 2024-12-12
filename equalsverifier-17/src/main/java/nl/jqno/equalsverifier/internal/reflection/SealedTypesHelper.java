@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Modifier;
 import java.util.Optional;
+
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 
 public final class SealedTypesHelper {
@@ -17,9 +18,8 @@ public final class SealedTypesHelper {
     }
 
     private static <T, U extends T> Optional<Class<U>> findInstantiablePermittedClass(
-        Class<T> type,
-        boolean checkCurrent
-    ) {
+            Class<T> type,
+            boolean checkCurrent) {
         if (checkCurrent && (!isAbstract(type) || !type.isSealed())) {
             @SuppressWarnings("unchecked")
             var result = (Class<U>) type;
@@ -39,8 +39,7 @@ public final class SealedTypesHelper {
             }
         }
         throw new EqualsVerifierInternalBugException(
-            "Could not find a non-sealed subtype for " + type.getCanonicalName()
-        );
+                "Could not find a non-sealed subtype for " + type.getCanonicalName());
     }
 
     private static boolean isAbstract(Class<?> type) {

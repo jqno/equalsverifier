@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
+
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
@@ -77,7 +78,8 @@ public class InPlaceObjectAccessorCopyingTest {
         for (Field field : FieldIterable.of(type)) {
             try {
                 assertEquals(field.get(original), field.get(copy));
-            } catch (IllegalAccessException e) {
+            }
+            catch (IllegalAccessException e) {
                 throw new IllegalStateException(e);
             }
         }

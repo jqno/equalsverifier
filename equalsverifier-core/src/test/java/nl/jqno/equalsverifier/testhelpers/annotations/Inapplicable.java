@@ -7,5 +7,4 @@ import java.lang.annotation.Target;
 
 @Target({ ElementType.FIELD, ElementType.TYPE })
 @Retention(RetentionPolicy.CLASS)
-public @interface Inapplicable {
-}
+public @interface Inapplicable {}

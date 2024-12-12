@@ -11,10 +11,7 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "PrefabValues is inherently mutable."
-    )
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "PrefabValues is inherently mutable.")
     public TransitivityFieldCheck(SubjectCreator<T> subjectCreator) {
         this.subjectCreator = subjectCreator;
     }
@@ -31,14 +28,13 @@ public class TransitivityFieldCheck<T> implements FieldCheck<T> {
 
         if (countFalses(x, y, z) == 1) {
             fail(
-                Formatter.of(
-                    "Transitivity: two of these three instances are equal to each other," +
-                    " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
-                    a1,
-                    b1,
-                    b2
-                )
-            );
+                Formatter
+                        .of(
+                            "Transitivity: two of these three instances are equal to each other,"
+                                    + " so the third one should be, too:\n-  %%\n-  %%\n-  %%",
+                            a1,
+                            b1,
+                            b2));
         }
     }
 

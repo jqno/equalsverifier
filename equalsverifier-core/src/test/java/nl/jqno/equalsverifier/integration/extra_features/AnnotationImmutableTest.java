@@ -20,22 +20,17 @@ public class AnnotationImmutableTest {
     @Test
     public void succeed_whenRedefinableClassHasNonfinalFields_givenImmutableAnnotationAndAppropriateSubclass() {
         EqualsVerifier
-            .forClass(ImmutableCanEqualPoint.class)
-            .withRedefinedSubclass(MutableCanEqualColorPoint.class)
-            .verify();
+                .forClass(ImmutableCanEqualPoint.class)
+                .withRedefinedSubclass(MutableCanEqualColorPoint.class)
+                .verify();
     }
 
     @Test
     public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(MutableCanEqualColorPoint.class)
-                    .withRedefinedSuperclass()
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Mutability", "equals depends on mutable field", "color");
+                .when(() -> EqualsVerifier.forClass(MutableCanEqualColorPoint.class).withRedefinedSuperclass().verify())
+                .assertFailure()
+                .assertMessageContains("Mutability", "equals depends on mutable field", "color");
     }
 
     @Immutable

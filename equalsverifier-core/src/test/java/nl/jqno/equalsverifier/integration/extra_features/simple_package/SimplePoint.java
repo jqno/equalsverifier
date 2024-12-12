@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extra_features.simple_package;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 
 public class SimplePoint {

@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.eclipse.NonnullEclipseOnPackage;
@@ -41,68 +42,46 @@ public class AnnotationNonnullEclipseTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
-        EqualsVerifier
-            .forClass(NonnullEclipseWithNullableOnClass.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
-        EqualsVerifier
-            .forClass(NonnullEclipseWithNullableOnClassAndNullCheckInEquals.class)
-            .verify();
+        EqualsVerifier.forClass(NonnullEclipseWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackageAndWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+                .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NonnullEclipseWithInapplicableLocationOnClass.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullEclipseWithInapplicableLocationOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
@@ -252,7 +231,7 @@ public class AnnotationNonnullEclipseTest {
                 return false;
             }
             NonnullEclipseWithNullableOnClassAndNullCheckInEquals other =
-                (NonnullEclipseWithNullableOnClassAndNullCheckInEquals) obj;
+                    (NonnullEclipseWithNullableOnClassAndNullCheckInEquals) obj;
             return o == null ? other.o == null : o.equals(other.o);
         }
 
@@ -277,7 +256,7 @@ public class AnnotationNonnullEclipseTest {
                 return false;
             }
             NonnullEclipseWithNullableOnPackageAndNullCheckInEquals other =
-                (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals) obj;
+                    (NonnullEclipseWithNullableOnPackageAndNullCheckInEquals) obj;
             return o.equals(other.o);
         }
 
@@ -301,8 +280,7 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithInapplicableLocationOnClass)) {
                 return false;
             }
-            NonnullEclipseWithInapplicableLocationOnClass other =
-                (NonnullEclipseWithInapplicableLocationOnClass) obj;
+            NonnullEclipseWithInapplicableLocationOnClass other = (NonnullEclipseWithInapplicableLocationOnClass) obj;
             return o.equals(other.o);
         }
 
@@ -326,8 +304,7 @@ public class AnnotationNonnullEclipseTest {
             if (!(obj instanceof NonnullEclipseWithApplicableLocationOnClass)) {
                 return false;
             }
-            NonnullEclipseWithApplicableLocationOnClass other =
-                (NonnullEclipseWithApplicableLocationOnClass) obj;
+            NonnullEclipseWithApplicableLocationOnClass other = (NonnullEclipseWithApplicableLocationOnClass) obj;
             return o.equals(other.o);
         }
 

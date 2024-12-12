@@ -20,16 +20,12 @@ public final class Context<T> {
     private final SubjectCreator<T> subjectCreator;
     private final ValueProvider valueProvider;
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "FieldCache is inherently mutable"
-    )
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "FieldCache is inherently mutable")
     public Context(
-        Configuration<T> configuration,
-        FactoryCache factoryCache,
-        FieldCache fieldCache,
-        Objenesis objenesis
-    ) {
+            Configuration<T> configuration,
+            FactoryCache factoryCache,
+            FieldCache fieldCache,
+            Objenesis objenesis) {
         this.type = configuration.getType();
         this.configuration = configuration;
         this.classProbe = new ClassProbe<>(configuration.getType());
@@ -37,8 +33,7 @@ public final class Context<T> {
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);
         this.valueProvider = new VintageValueProvider(cache, objenesis);
-        this.subjectCreator =
-            new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
+        this.subjectCreator = new SubjectCreator<>(configuration, valueProvider, fieldCache, objenesis);
     }
 
     public Class<T> getType() {
@@ -58,10 +53,7 @@ public final class Context<T> {
         return fieldCache;
     }
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP",
-        justification = "VintageValueProvider can use a mutable cache."
-    )
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP", justification = "VintageValueProvider can use a mutable cache.")
     public ValueProvider getValueProvider() {
         return valueProvider;
     }

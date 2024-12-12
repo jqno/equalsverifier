@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -10,16 +11,16 @@ public class SealedTypesTest {
     @Test
     public void succeed_whenSealedParentHasAFinalChild_givenItHasCorrectEqualsAndHashCode() {
         EqualsVerifier
-            .forClass(SealedParentWithFinalChild.class)
-            .withRedefinedSubclass(FinalSealedChild.class)
-            .verify();
+                .forClass(SealedParentWithFinalChild.class)
+                .withRedefinedSubclass(FinalSealedChild.class)
+                .verify();
     }
 
     @Test
     public void fail_whenSealedParentHasAFinalChild_givenEqualsVerifierIsCalledIncorrectly() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SealedParentWithFinalChild.class).verify())
-            .assertFailure();
+                .when(() -> EqualsVerifier.forClass(SealedParentWithFinalChild.class).verify())
+                .assertFailure();
     }
 
     @Test
@@ -30,16 +31,16 @@ public class SealedTypesTest {
     @Test
     public void succeed_whenSealedParentHasANonsealedChild_givenItHasCorrectEqualsAndHashCode() {
         EqualsVerifier
-            .forClass(SealedParentWithNonsealedChild.class)
-            .withRedefinedSubclass(NonsealedSealedChild.class)
-            .verify();
+                .forClass(SealedParentWithNonsealedChild.class)
+                .withRedefinedSubclass(NonsealedSealedChild.class)
+                .verify();
     }
 
     @Test
     public void fail_whenSealedParentHasANonsealedChild_givenEqualsVerifierIsCalledIncorrectly() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SealedParentWithNonsealedChild.class).verify())
-            .assertFailure();
+                .when(() -> EqualsVerifier.forClass(SealedParentWithNonsealedChild.class).verify())
+                .assertFailure();
     }
 
     @Test
@@ -55,13 +56,12 @@ public class SealedTypesTest {
     @Test
     public void fail_whenSealeadParentHasAnIncorrectImplementationOfEquals() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(IncorrectSealedParent.class)
-                    .withRedefinedSubclass(IncorrectSealedChild.class)
-                    .verify()
-            )
-            .assertFailure();
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(IncorrectSealedParent.class)
+                            .withRedefinedSubclass(IncorrectSealedChild.class)
+                            .verify())
+                .assertFailure();
     }
 
     @Test
@@ -113,8 +113,7 @@ public class SealedTypesTest {
         }
     }
 
-    public abstract static sealed class SealedParentWithNonsealedChild
-        permits NonsealedSealedChild {
+    public abstract static sealed class SealedParentWithNonsealedChild permits NonsealedSealedChild {
 
         private final int i;
 
@@ -159,20 +158,17 @@ public class SealedTypesTest {
         private final SealedParentWithNonsealedChild sealedWithNonsealedChild;
 
         public SealedTypeContainer(
-            SealedParentWithFinalChild sealedWithFinalChild,
-            SealedParentWithNonsealedChild sealedWithNonsealedChild
-        ) {
+                SealedParentWithFinalChild sealedWithFinalChild,
+                SealedParentWithNonsealedChild sealedWithNonsealedChild) {
             this.sealedWithFinalChild = sealedWithFinalChild;
             this.sealedWithNonsealedChild = sealedWithNonsealedChild;
         }
 
         @Override
         public boolean equals(Object obj) {
-            return (
-                obj instanceof SealedTypeContainer other &&
-                Objects.equals(sealedWithFinalChild, other.sealedWithFinalChild) &&
-                Objects.equals(sealedWithNonsealedChild, other.sealedWithNonsealedChild)
-            );
+            return obj instanceof SealedTypeContainer other
+                    && Objects.equals(sealedWithFinalChild, other.sealedWithFinalChild)
+                    && Objects.equals(sealedWithNonsealedChild, other.sealedWithNonsealedChild);
         }
 
         @Override
@@ -217,11 +213,9 @@ public class SealedTypesTest {
 
         @Override
         public boolean equals(Object other) {
-            return (
-                other != null &&
-                (this.getClass() == other.getClass()) &&
-                Objects.equals(this.value, ((SealedParentWithTwoChildren) other).value)
-            );
+            return other != null
+                    && (this.getClass() == other.getClass())
+                    && Objects.equals(this.value, ((SealedParentWithTwoChildren) other).value);
         }
 
         @Override

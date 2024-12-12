@@ -19,8 +19,7 @@ public final class NonnullFindbugs1xWithCheckForNullOnPackage {
         if (!(obj instanceof NonnullFindbugs1xWithCheckForNullOnPackage)) {
             return false;
         }
-        NonnullFindbugs1xWithCheckForNullOnPackage other =
-            (NonnullFindbugs1xWithCheckForNullOnPackage) obj;
+        NonnullFindbugs1xWithCheckForNullOnPackage other = (NonnullFindbugs1xWithCheckForNullOnPackage) obj;
         return o.equals(other.o) && p.equals(other.p);
     }
 

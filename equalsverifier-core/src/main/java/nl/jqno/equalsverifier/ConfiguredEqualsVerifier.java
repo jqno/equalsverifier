@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Function;
+
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.api.EqualsVerifierApi;
@@ -32,11 +33,10 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     /** Private constructor. For internal use only. */
     private ConfiguredEqualsVerifier(
-        EnumSet<Warning> warningsToSuppress,
-        FactoryCache factoryCache,
-        boolean usingGetClass,
-        Function<String, String> fieldnameToGetter
-    ) {
+            EnumSet<Warning> warningsToSuppress,
+            FactoryCache factoryCache,
+            boolean usingGetClass,
+            Function<String, String> fieldnameToGetter) {
         this.warningsToSuppress = warningsToSuppress;
         this.factoryCache = factoryCache;
         this.usingGetClass = usingGetClass;
@@ -49,12 +49,10 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @return a copy of the configuration.
      */
     public ConfiguredEqualsVerifier copy() {
-        return new ConfiguredEqualsVerifier(
-            EnumSet.copyOf(warningsToSuppress),
-            factoryCache.copy(),
-            usingGetClass,
-            fieldnameToGetter
-        );
+        return new ConfiguredEqualsVerifier(EnumSet.copyOf(warningsToSuppress),
+                factoryCache.copy(),
+                usingGetClass,
+                fieldnameToGetter);
     }
 
     /** {@inheritDoc} */
@@ -73,20 +71,14 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
 
     /** {@inheritDoc} */
     @Override
-    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
-        Class<S> otherType,
-        Func1<?, S> factory
-    ) {
+    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func1<?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
 
     /** {@inheritDoc} */
     @Override
-    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(
-        Class<S> otherType,
-        Func2<?, ?, S> factory
-    ) {
+    public <S> ConfiguredEqualsVerifier withGenericPrefabValues(Class<S> otherType, Func2<?, ?, S> factory) {
         PrefabValuesApi.addGenericPrefabValues(factoryCache, otherType, factory);
         return this;
     }
@@ -99,15 +91,14 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     }
 
     @Override
-    public ConfiguredEqualsVerifier withFieldnameToGetterConverter(
-        Function<String, String> converter
-    ) {
+    public ConfiguredEqualsVerifier withFieldnameToGetterConverter(Function<String, String> converter) {
         this.fieldnameToGetter = converter;
         return this;
     }
 
     /**
      * {@inheritDoc}
+     * 
      * @deprecated No longer needed; this happens automatically.
      */
     @Deprecated
@@ -119,26 +110,23 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /**
      * Factory method. For general use.
      *
-     * @param <T> The type.
+     * @param <T>  The type.
      * @param type The class for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
     public <T> SingleTypeEqualsVerifierApi<T> forClass(Class<T> type) {
-        return new SingleTypeEqualsVerifierApi<>(
-            type,
-            EnumSet.copyOf(warningsToSuppress),
-            factoryCache.copy(),
-            objenesis,
-            usingGetClass,
-            fieldnameToGetter
-        );
+        return new SingleTypeEqualsVerifierApi<>(type,
+                EnumSet.copyOf(warningsToSuppress),
+                factoryCache.copy(),
+                objenesis,
+                usingGetClass,
+                fieldnameToGetter);
     }
 
     /**
      * Factory method. For general use.
      *
-     * @param classes An iterable containing the classes for which {@code equals} method should be
-     *     tested.
+     * @param classes An iterable containing the classes for which {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
     public MultipleTypeEqualsVerifierApi forClasses(Iterable<Class<?>> classes) {
@@ -148,27 +136,21 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /**
      * Factory method. For general use.
      *
-     * @param first A class for which the {@code equals} method should be tested.
+     * @param first  A class for which the {@code equals} method should be tested.
      * @param second Another class for which the {@code equals} method should be tested.
-     * @param more More classes for which the {@code equals} method should be tested.
+     * @param more   More classes for which the {@code equals} method should be tested.
      * @return A fluent API for EqualsVerifier.
      */
-    public MultipleTypeEqualsVerifierApi forClasses(
-        Class<?> first,
-        Class<?> second,
-        Class<?>... more
-    ) {
-        return new MultipleTypeEqualsVerifierApi(
-            ListBuilders.buildListOfAtLeastTwo(first, second, more),
-            this
-        );
+    public MultipleTypeEqualsVerifierApi forClasses(Class<?> first, Class<?> second, Class<?>... more) {
+        return new MultipleTypeEqualsVerifierApi(ListBuilders.buildListOfAtLeastTwo(first, second, more), this);
     }
 
     /**
      * Factory method. For general use.
      *
-     * <p>Note that this operation may be slow. If the test is too slow, use {@link
-     * #forClasses(Class, Class, Class...)} instead.
+     * <p>
+     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
+     * instead.
      *
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @return A fluent API for EqualsVerifier.
@@ -180,10 +162,11 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /**
      * Factory method. For general use.
      *
-     * <p>Note that this operation may be slow. If the test is too slow, use {@link
-     * #forClasses(Class, Class, Class...)} instead.
+     * <p>
+     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
+     * instead.
      *
-     * @param packageName A package for which each class's {@code equals} should be tested.
+     * @param packageName     A package for which each class's {@code equals} should be tested.
      * @param scanRecursively true to scan all sub-packages
      * @return A fluent API for EqualsVerifier.
      */
@@ -196,14 +179,15 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     /**
      * Factory method. For general use.
      *
-     * <p>Note that this operation may be slow. If the test is too slow, use {@link
-     * #forClasses(Class, Class, Class...)} instead.
+     * <p>
+     * Note that this operation may be slow. If the test is too slow, use {@link #forClasses(Class, Class, Class...)}
+     * instead.
      *
-     * <p>Also note that if {@code mustExtend} is given, and it exists within {@code packageName},
-     * it will NOT be included.
+     * <p>
+     * Also note that if {@code mustExtend} is given, and it exists within {@code packageName}, it will NOT be included.
      *
      * @param packageName A package for which each class's {@code equals} should be tested.
-     * @param mustExtend if not null, returns only classes that extend or implement this class.
+     * @param mustExtend  if not null, returns only classes that extend or implement this class.
      * @return A fluent API for EqualsVerifier.
      */
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {

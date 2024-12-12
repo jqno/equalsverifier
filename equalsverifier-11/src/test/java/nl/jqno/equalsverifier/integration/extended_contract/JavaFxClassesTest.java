@@ -18,6 +18,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
@@ -79,20 +80,19 @@ public class JavaFxClassesTest {
         private final StringProperty stringProperty;
 
         public JavaFxApiClassesContainer(
-            ObservableList observableList,
-            ObservableMap observableMap,
-            ObservableSet observableSet,
-            BooleanProperty booleanProperty,
-            DoubleProperty doubleProperty,
-            FloatProperty floatProperty,
-            IntegerProperty integerProperty,
-            ListProperty listProperty,
-            LongProperty longProperty,
-            MapProperty mapProperty,
-            ObjectProperty objectProperty,
-            SetProperty setProperty,
-            StringProperty stringProperty
-        ) {
+                ObservableList observableList,
+                ObservableMap observableMap,
+                ObservableSet observableSet,
+                BooleanProperty booleanProperty,
+                DoubleProperty doubleProperty,
+                FloatProperty floatProperty,
+                IntegerProperty integerProperty,
+                ListProperty listProperty,
+                LongProperty longProperty,
+                MapProperty mapProperty,
+                ObjectProperty objectProperty,
+                SetProperty setProperty,
+                StringProperty stringProperty) {
             this.observableList = observableList;
             this.observableMap = observableMap;
             this.observableSet = observableSet;

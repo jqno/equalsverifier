@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -17,17 +18,17 @@ public class JpaEntityTest {
     @Test
     public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
     public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(EntityByNonJpaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(EntityByNonJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
@@ -38,17 +39,17 @@ public class JpaEntityTest {
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
     public void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
@@ -59,19 +60,17 @@ public class JpaEntityTest {
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
     public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Entity

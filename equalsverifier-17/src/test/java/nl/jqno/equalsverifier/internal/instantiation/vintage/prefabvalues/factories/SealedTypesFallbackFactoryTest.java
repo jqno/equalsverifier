@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -33,11 +34,7 @@ public class SealedTypesFallbackFactoryTest {
 
     @Test
     public void redCopyHasTheSameValuesAsRed_whenSutIsAbstractSealedAndPermittedTypeAddsField() {
-        Tuple<?> tuple = factory.createValues(
-            new TypeTag(SealedParentWithFinalChild.class),
-            valueProvider,
-            typeStack
-        );
+        Tuple<?> tuple = factory.createValues(new TypeTag(SealedParentWithFinalChild.class), valueProvider, typeStack);
 
         assertEquals(tuple.getRed(), tuple.getRedCopy());
         assertNotSame(tuple.getRed(), tuple.getRedCopy());

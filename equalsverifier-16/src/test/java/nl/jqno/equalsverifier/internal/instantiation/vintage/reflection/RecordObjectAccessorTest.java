@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
@@ -25,8 +26,7 @@ public class RecordObjectAccessorTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        Constructor<?> constructor =
-            SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
+        Constructor<?> constructor = SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
         constructor.setAccessible(true);
         objenesis = new ObjenesisStd();
         recordInstance = constructor.newInstance(42, "hello");
@@ -46,39 +46,33 @@ public class RecordObjectAccessorTest {
 
     @Test
     public void fail_whenConstructorThrowsNpe() {
-        Object instance = Instantiator
-            .of(NpeThrowingConstructorRecord.class, objenesis)
-            .instantiate();
+        Object instance = Instantiator.of(NpeThrowingConstructorRecord.class, objenesis).instantiate();
 
         ExpectedException
-            .when(() -> accessorFor(instance).copy(objenesis))
-            .assertThrows(ReflectionException.class)
-            .assertMessageContains("Record:", "failed to run constructor", "Warning.NULL_FIELDS");
+                .when(() -> accessorFor(instance).copy(objenesis))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("Record:", "failed to run constructor", "Warning.NULL_FIELDS");
     }
 
     @Test
     public void fail_whenConstructorThrowsOnZero() {
-        Object instance = Instantiator
-            .of(ZeroThrowingConstructorRecord.class, objenesis)
-            .instantiate();
+        Object instance = Instantiator.of(ZeroThrowingConstructorRecord.class, objenesis).instantiate();
 
         ExpectedException
-            .when(() -> accessorFor(instance).copy(objenesis))
-            .assertThrows(ReflectionException.class)
-            .assertMessageContains("Record:", "failed to run constructor", "Warning.ZERO_FIELDS");
+                .when(() -> accessorFor(instance).copy(objenesis))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("Record:", "failed to run constructor", "Warning.ZERO_FIELDS");
     }
 
     @Test
     public void fail_whenConstructorThrowsOnSomethingElse() {
-        Object instance = Instantiator
-            .of(OtherThrowingConstructorRecord.class, objenesis)
-            .instantiate();
+        Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 
         VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);
         ExpectedException
-            .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
-            .assertThrows(ReflectionException.class)
-            .assertMessageContains("Record:", "failed to run constructor", "prefab values");
+                .when(() -> accessorFor(instance).scramble(vp, TypeTag.NULL, EMPTY_TYPE_STACK))
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("Record:", "failed to run constructor", "prefab values");
     }
 
     @SuppressWarnings("unchecked")

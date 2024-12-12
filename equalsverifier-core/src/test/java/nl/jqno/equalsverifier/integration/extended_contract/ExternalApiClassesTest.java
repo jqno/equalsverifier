@@ -3,12 +3,13 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
-import com.google.common.base.Optional;
-import com.google.common.collect.*;
-import com.google.common.reflect.TypeToken;
 import java.math.BigDecimal;
 import javax.naming.Reference;
 import javax.swing.tree.DefaultMutableTreeNode;
+
+import com.google.common.base.Optional;
+import com.google.common.collect.*;
+import com.google.common.reflect.TypeToken;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.joda.time.*;
 import org.junit.jupiter.api.Test;
@@ -98,16 +99,15 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedMultiset<?> immutableSortedMultiset;
 
         public GuavaMultisetContainer(
-            Multiset<?> multiset,
-            SortedMultiset<?> sortedMultiset,
-            HashMultiset<?> hashMultiset,
-            TreeMultiset<?> treeMultiset,
-            LinkedHashMultiset<?> linkedHashMultiset,
-            ConcurrentHashMultiset<?> concurrentHashMultiset,
-            EnumMultiset<?> enumMultiset,
-            ImmutableMultiset<?> immutableMultiset,
-            ImmutableSortedMultiset<?> immutableSortedMultiset
-        ) {
+                Multiset<?> multiset,
+                SortedMultiset<?> sortedMultiset,
+                HashMultiset<?> hashMultiset,
+                TreeMultiset<?> treeMultiset,
+                LinkedHashMultiset<?> linkedHashMultiset,
+                ConcurrentHashMultiset<?> concurrentHashMultiset,
+                EnumMultiset<?> enumMultiset,
+                ImmutableMultiset<?> immutableMultiset,
+                ImmutableSortedMultiset<?> immutableSortedMultiset) {
             this.multiset = multiset;
             this.sortedMultiset = sortedMultiset;
             this.hashMultiset = hashMultiset;
@@ -147,19 +147,18 @@ public class ExternalApiClassesTest {
         private final ImmutableSetMultimap<?, ?> immutableSetMultimap;
 
         public GuavaMultimapContainer(
-            Multimap<?, ?> multimap,
-            ListMultimap<?, ?> listMultimap,
-            SetMultimap<?, ?> setMultimap,
-            SortedSetMultimap<?, ?> sortedSetMultimap,
-            ArrayListMultimap<?, ?> arrayListMultimap,
-            HashMultimap<?, ?> hashMultimap,
-            LinkedListMultimap<?, ?> linkedListMultimap,
-            LinkedHashMultimap<?, ?> linkedHashMultimap,
-            TreeMultimap<?, ?> treeMultimap,
-            ImmutableMultimap<?, ?> immutableMultimap,
-            ImmutableListMultimap<?, ?> immutableListMultimap,
-            ImmutableSetMultimap<?, ?> immutableSetMultimap
-        ) {
+                Multimap<?, ?> multimap,
+                ListMultimap<?, ?> listMultimap,
+                SetMultimap<?, ?> setMultimap,
+                SortedSetMultimap<?, ?> sortedSetMultimap,
+                ArrayListMultimap<?, ?> arrayListMultimap,
+                HashMultimap<?, ?> hashMultimap,
+                LinkedListMultimap<?, ?> linkedListMultimap,
+                LinkedHashMultimap<?, ?> linkedHashMultimap,
+                TreeMultimap<?, ?> treeMultimap,
+                ImmutableMultimap<?, ?> immutableMultimap,
+                ImmutableListMultimap<?, ?> immutableListMultimap,
+                ImmutableSetMultimap<?, ?> immutableSetMultimap) {
             this.multimap = multimap;
             this.listMultimap = listMultimap;
             this.setMultimap = setMultimap;
@@ -195,12 +194,11 @@ public class ExternalApiClassesTest {
         private final ImmutableBiMap<?, ?> immutableBiMap;
 
         public GuavaBiMapContainer(
-            BiMap<?, ?> biMap,
-            HashBiMap<?, ?> hashBiMap,
-            EnumBiMap<?, ?> enumBiMap,
-            EnumHashBiMap<?, ?> enumHashBiMap,
-            ImmutableBiMap<?, ?> immutableBiMap
-        ) {
+                BiMap<?, ?> biMap,
+                HashBiMap<?, ?> hashBiMap,
+                EnumBiMap<?, ?> enumBiMap,
+                EnumHashBiMap<?, ?> enumHashBiMap,
+                ImmutableBiMap<?, ?> immutableBiMap) {
             this.biMap = biMap;
             this.hashBiMap = hashBiMap;
             this.enumBiMap = enumBiMap;
@@ -229,12 +227,11 @@ public class ExternalApiClassesTest {
         private final ImmutableTable<?, ?, ?> immutableTable;
 
         public GuavaTableContainer(
-            Table<?, ?, ?> table,
-            HashBasedTable<?, ?, ?> hashBasedTable,
-            TreeBasedTable<?, ?, ?> treeBasedTable,
-            ArrayTable<?, ?, ?> arrayTable,
-            ImmutableTable<?, ?, ?> immutableTable
-        ) {
+                Table<?, ?, ?> table,
+                HashBasedTable<?, ?, ?> hashBasedTable,
+                TreeBasedTable<?, ?, ?> treeBasedTable,
+                ArrayTable<?, ?, ?> arrayTable,
+                ImmutableTable<?, ?, ?> immutableTable) {
             this.table = table;
             this.hashBasedTable = hashBasedTable;
             this.treeBasedTable = treeBasedTable;
@@ -263,12 +260,11 @@ public class ExternalApiClassesTest {
         private final TreeRangeSet<BigDecimal> treeRangeSet;
 
         public GuavaRegularCollectionsContainer(
-            EvictingQueue<?> evictingQueue,
-            MinMaxPriorityQueue<?> minMaxPriorityQueue,
-            RangeSet<Instant> rangeSet,
-            ImmutableRangeSet<String> immutableRangeSet,
-            TreeRangeSet<BigDecimal> treeRangeSet
-        ) {
+                EvictingQueue<?> evictingQueue,
+                MinMaxPriorityQueue<?> minMaxPriorityQueue,
+                RangeSet<Instant> rangeSet,
+                ImmutableRangeSet<String> immutableRangeSet,
+                TreeRangeSet<BigDecimal> treeRangeSet) {
             this.evictingQueue = evictingQueue;
             this.minMaxPriorityQueue = minMaxPriorityQueue;
             this.rangeSet = rangeSet;
@@ -298,13 +294,12 @@ public class ExternalApiClassesTest {
         private final ImmutableSortedSet<?> iSortedSet;
 
         public GuavaImmutableContainer(
-            ImmutableCollection<?> immutableCollection,
-            ImmutableList<?> immutableList,
-            ImmutableMap<?, ?> immutableMap,
-            ImmutableSet<?> immutableSet,
-            ImmutableSortedMap<?, ?> iSortedMap,
-            ImmutableSortedSet<?> iSortedSet
-        ) {
+                ImmutableCollection<?> immutableCollection,
+                ImmutableList<?> immutableList,
+                ImmutableMap<?, ?> immutableMap,
+                ImmutableSet<?> immutableSet,
+                ImmutableSortedMap<?, ?> iSortedMap,
+                ImmutableSortedSet<?> iSortedSet) {
             this.iCollection = immutableCollection;
             this.iList = immutableList;
             this.iMap = immutableMap;
@@ -332,11 +327,7 @@ public class ExternalApiClassesTest {
         private final Optional<?> optional;
         private final TypeToken<?> typeToken;
 
-        public GuavaOtherContainer(
-            Range<Integer> range,
-            Optional<?> optional,
-            TypeToken<?> typeToken
-        ) {
+        public GuavaOtherContainer(Range<Integer> range, Optional<?> optional, TypeToken<?> typeToken) {
             this.range = range;
             this.optional = optional;
             this.typeToken = typeToken;
@@ -368,17 +359,16 @@ public class ExternalApiClassesTest {
         private final MonthDay monthDay;
 
         public JodaTimeContainer(
-            LocalDate localDate,
-            LocalTime localTime,
-            LocalDateTime localDateTime,
-            Chronology chronology,
-            DateTimeZone dateTimeZone,
-            Partial partial,
-            PeriodType periodType,
-            Period period,
-            YearMonth yearMonth,
-            MonthDay monthDay
-        ) {
+                LocalDate localDate,
+                LocalTime localTime,
+                LocalDateTime localDateTime,
+                Chronology chronology,
+                DateTimeZone dateTimeZone,
+                Partial partial,
+                PeriodType periodType,
+                Period period,
+                YearMonth yearMonth,
+                MonthDay monthDay) {
             this.localDate = localDate;
             this.localTime = localTime;
             this.localDateTime = localDateTime;

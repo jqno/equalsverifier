@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -47,9 +48,8 @@ public final class FieldProbe {
      * @throws ReflectionException If the operation fails.
      */
     @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "Only called in test code, not production."
-    )
+            value = "DP_DO_INSIDE_DO_PRIVILEGED",
+            justification = "Only called in test code, not production.")
     public Object getValue(Object object) {
         field.setAccessible(true);
         return rethrow(() -> field.get(object));
@@ -102,16 +102,12 @@ public final class FieldProbe {
 
         boolean isAnnotated = isAnnotatedNonnull(config.getAnnotationCache());
         boolean isMentionedExplicitly = config.getNonnullFields().contains(field.getName());
-        return (
-            !config.getWarningsToSuppress().contains(Warning.NULL_FIELDS) &&
-            !isAnnotated &&
-            !isMentionedExplicitly
-        );
+        return !config.getWarningsToSuppress().contains(Warning.NULL_FIELDS) && !isAnnotated && !isMentionedExplicitly;
     }
 
     /**
-     * Checks whether the given field is marked with an Nonnull annotation, whether directly, or
-     * through some default annotation mechanism.
+     * Checks whether the given field is marked with an Nonnull annotation, whether directly, or through some default
+     * annotation mechanism.
      *
      * @param annotationCache To retrieve annotations from.
      * @return True if the field is to be treated as Nonnull.
@@ -124,18 +120,9 @@ public final class FieldProbe {
         if (annotationCache.hasFieldAnnotation(type, field.getName(), NULLABLE)) {
             return false;
         }
-        boolean hasFindbugsAnnotation = annotationCache.hasClassAnnotation(
-            type,
-            FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL
-        );
-        boolean hasJsr305Annotation = annotationCache.hasClassAnnotation(
-            type,
-            JSR305_DEFAULT_ANNOTATION_NONNULL
-        );
-        boolean hasDefaultAnnotation = annotationCache.hasClassAnnotation(
-            type,
-            DEFAULT_ANNOTATION_NONNULL
-        );
+        boolean hasFindbugsAnnotation = annotationCache.hasClassAnnotation(type, FINDBUGS1X_DEFAULT_ANNOTATION_NONNULL);
+        boolean hasJsr305Annotation = annotationCache.hasClassAnnotation(type, JSR305_DEFAULT_ANNOTATION_NONNULL);
+        boolean hasDefaultAnnotation = annotationCache.hasClassAnnotation(type, DEFAULT_ANNOTATION_NONNULL);
         return hasFindbugsAnnotation || hasJsr305Annotation || hasDefaultAnnotation;
     }
 

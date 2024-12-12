@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -17,33 +18,22 @@ public class TransientFieldsTest {
     @Test
     public void fail_whenFieldsWithTransientModifierAreUsedInEquals() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Transient field",
-                "should not be included in equals/hashCode contract"
-            );
+                .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).verify())
+                .assertFailure()
+                .assertMessageContains("Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
     public void succeed_whenFieldsWithTransientModifierAreUsedInEquals_givenWarningsAreSuppressed() {
-        EqualsVerifier
-            .forClass(UsingFieldsWithTransientModifier.class)
-            .suppress(Warning.TRANSIENT_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).suppress(Warning.TRANSIENT_FIELDS).verify();
     }
 
     @Test
     public void fail_whenFieldsWithTransientModifierAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Transient field",
-                "should not be included in equals/hashCode contract"
-            );
+                .when(() -> EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify())
+                .assertFailure()
+                .assertMessageContains("Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
@@ -54,46 +44,30 @@ public class TransientFieldsTest {
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Transient field",
-                "should not be included in equals/hashCode contract"
-            );
+                .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
     public void succeed_whenFieldsWithTransientAnnotationAreUsedInEquals_givenWarningsAreSuppressed() {
-        EqualsVerifier
-            .forClass(UsingFieldsWithTransientAnnotation.class)
-            .suppress(Warning.TRANSIENT_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).suppress(Warning.TRANSIENT_FIELDS).verify();
     }
 
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(SubclassUsingFieldsWithTransientAnnotation.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Transient field",
-                "should not be included in equals/hashCode contract"
-            );
+                .when(() -> EqualsVerifier.forClass(SubclassUsingFieldsWithTransientAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Transient field", "should not be included in equals/hashCode contract");
     }
 
     @Test
     public void fail_whenFieldsWithTransientAnnotationAreNotUsedInEquals_givenAnnotationIsNotAJpaAnnotation() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Significant fields",
-                "equals does not use j, or it is stateless"
-            );
+                .when(() -> EqualsVerifier.forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields", "equals does not use j, or it is stateless");
     }
 
     static class NotUsingFieldsWithTransientModifier {
@@ -170,8 +144,7 @@ public class TransientFieldsTest {
             if (!(obj instanceof NotUsingFieldsWithTransientAnnotation)) {
                 return false;
             }
-            NotUsingFieldsWithTransientAnnotation other =
-                (NotUsingFieldsWithTransientAnnotation) obj;
+            NotUsingFieldsWithTransientAnnotation other = (NotUsingFieldsWithTransientAnnotation) obj;
             return i == other.i;
         }
 
@@ -208,8 +181,7 @@ public class TransientFieldsTest {
         }
     }
 
-    static class SubclassUsingFieldsWithTransientAnnotation
-        extends UsingFieldsWithTransientAnnotation {
+    static class SubclassUsingFieldsWithTransientAnnotation extends UsingFieldsWithTransientAnnotation {
 
         public SubclassUsingFieldsWithTransientAnnotation(int i, int j) {
             super(i, j);
@@ -233,8 +205,7 @@ public class TransientFieldsTest {
             if (!(obj instanceof NotUsingFieldsWithNonJpaTransientAnnotation)) {
                 return false;
             }
-            NotUsingFieldsWithNonJpaTransientAnnotation other =
-                (NotUsingFieldsWithNonJpaTransientAnnotation) obj;
+            NotUsingFieldsWithNonJpaTransientAnnotation other = (NotUsingFieldsWithNonJpaTransientAnnotation) obj;
             return i == other.i;
         }
 

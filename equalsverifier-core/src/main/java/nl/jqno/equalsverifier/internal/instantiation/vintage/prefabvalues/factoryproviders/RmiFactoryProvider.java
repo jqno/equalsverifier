@@ -4,6 +4,7 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 
 import java.rmi.dgc.VMID;
 import java.rmi.server.UID;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 
 public final class RmiFactoryProvider implements FactoryProvider {

@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.integration.extra_features.nonnull.findbugs1x.custom.NonnullFindbugs1xCustomOnPackage;
@@ -30,14 +31,13 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFieldsHaveNonnullAnnotationButOneDoesnt() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullManualMissedOne.class).verify())
-            .assertFailure()
-            .assertCause(NullPointerException.class)
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field noAnnotation"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullManualMissedOne.class).verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains(
+                    "Non-nullity",
+                    "equals throws NullPointerException",
+                    "'this' object's field noAnnotation");
     }
 
     @Test
@@ -58,17 +58,17 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenEmptyFindbugs1xDefaultAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(EmptyFindbugs1xCustomOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains("Non-nullity");
+                .when(() -> EqualsVerifier.forClass(EmptyFindbugs1xCustomOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationWithoutNonnullAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NotNonnullFindbugs1xCustomOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains("Non-nullity");
+                .when(() -> EqualsVerifier.forClass(NotNonnullFindbugs1xCustomOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity");
     }
 
     @Test
@@ -89,13 +89,9 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAnnotationForParameters() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xForParameters.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
@@ -111,71 +107,46 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClass.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnClass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnClass.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndNullableAnnotationOnPackage() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnPackage.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnPackage.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenFindbugs1xDefaultAndCheckForNullAnnotationOnPackage() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void succeed_whenEqualsDoenstCheckForNull_givenJsr305DefaultAndCheckForNullOnPackageAndWarningSuppressed() {
         EqualsVerifier
-            .forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+                .forClass(NonnullFindbugs1xWithCheckForNullOnPackage.class)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
-        EqualsVerifier
-            .forClass(NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals.class)
-            .verify();
+        EqualsVerifier.forClass(NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 
     @Test
@@ -191,13 +162,9 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullJsr305InapplicableOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305InapplicableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
@@ -213,25 +180,17 @@ public class AnnotationNonnullTest {
     @Test
     public void succeed_whenEqualsDoesntCheckForNull_givenJsr305DefaultAnnotationWithInapplicableTypeQualifierDefaultOnPackage() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullJsr305InapplicableOnPackage.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field o"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305InapplicableOnPackage.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field o");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305WithNullableOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
@@ -247,55 +206,35 @@ public class AnnotationNonnullTest {
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClass() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClass.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClass.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndNullableAnnotationOnPackage() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void fail_whenEqualsDoesntCheckForNull_givenJsr305DefaultAndCheckForNullAnnotationOnPackage() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnPackage.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Non-nullity",
-                "equals throws NullPointerException",
-                "'this' object's field p"
-            );
+                .when(() -> EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnPackage.class).verify())
+                .assertFailure()
+                .assertMessageContains("Non-nullity", "equals throws NullPointerException", "'this' object's field p");
     }
 
     @Test
     public void succeed_whenEqualsDoenstCheckForNull_givenJsr305DefaultAndNullableOnPackageAndWarningSuppressed() {
-        EqualsVerifier
-            .forClass(NonnullJsr305WithNullableOnPackage.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(NonnullJsr305WithNullableOnPackage.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenEqualsChecksForNull_givenJsr305DefaultAndCheckForNullAnnotationOnClass() {
-        EqualsVerifier
-            .forClass(NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals.class)
-            .verify();
+        EqualsVerifier.forClass(NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals.class).verify();
     }
 
     static class NonnullManual {
@@ -360,9 +299,7 @@ public class AnnotationNonnullTest {
                 return false;
             }
             NonnullManualMissedOne other = (NonnullManualMissedOne) obj;
-            return (
-                o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q)
-            );
+            return o.equals(other.o) && noAnnotation.equals(other.noAnnotation) && q.equals(other.q);
         }
 
         @Override
@@ -614,8 +551,7 @@ public class AnnotationNonnullTest {
             if (!(obj instanceof NonnullFindbugs1xWithCheckForNullOnClass)) {
                 return false;
             }
-            NonnullFindbugs1xWithCheckForNullOnClass other =
-                (NonnullFindbugs1xWithCheckForNullOnClass) obj;
+            NonnullFindbugs1xWithCheckForNullOnClass other = (NonnullFindbugs1xWithCheckForNullOnClass) obj;
             return o.equals(other.o) && p.equals(other.p);
         }
 
@@ -644,7 +580,7 @@ public class AnnotationNonnullTest {
                 return false;
             }
             NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals other =
-                (NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals) obj;
+                    (NonnullFindbugs1xWithNullableOnClassAndNullCheckInEquals) obj;
             return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
         }
 
@@ -854,7 +790,7 @@ public class AnnotationNonnullTest {
                 return false;
             }
             NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals other =
-                (NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals) obj;
+                    (NonnullJsr305WithCheckForNullOnClassAndNullCheckInEquals) obj;
             return o.equals(other.o) && (p == null ? other.p == null : p.equals(other.p));
         }
 

@@ -17,11 +17,11 @@ public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     }
 
     /**
-     * Factory method for a SuperlcassIterator that iterates over type's superclasses, excluding
-     * itself and excluding Object.
+     * Factory method for a SuperlcassIterator that iterates over type's superclasses, excluding itself and excluding
+     * Object.
      *
      * @param type The class over whose superclasses to iterate.
-     * @param <T> Type parameter for type.
+     * @param <T>  Type parameter for type.
      * @return A SuperclassIterator.
      */
     public static <T> SuperclassIterable<T> of(Class<T> type) {
@@ -29,11 +29,11 @@ public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     }
 
     /**
-     * Factory method for a SuperlcassIterator that iterates over type's superclasses, including
-     * itself but excluding Object.
+     * Factory method for a SuperlcassIterator that iterates over type's superclasses, including itself but excluding
+     * Object.
      *
      * @param type The class over whose superclasses to iterate.
-     * @param <T> Type parameter for type.
+     * @param <T>  Type parameter for type.
      * @return A SuperclassIterator.
      */
     public static <T> SuperclassIterable<T> ofIncludeSelf(Class<T> type) {
@@ -41,8 +41,8 @@ public final class SuperclassIterable<T> implements Iterable<Class<? super T>> {
     }
 
     /**
-     * Returns an iterator over all superclasses of the class. Is empty if type has no superclasses
-     * and SuperclassIterable does not include self.
+     * Returns an iterator over all superclasses of the class. Is empty if type has no superclasses and
+     * SuperclassIterable does not include self.
      *
      * @return The iterator.
      */

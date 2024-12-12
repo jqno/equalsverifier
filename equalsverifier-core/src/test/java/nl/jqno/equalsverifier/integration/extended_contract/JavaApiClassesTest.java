@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper;
@@ -75,10 +76,10 @@ public class JavaApiClassesTest {
     @Test
     public void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier
-            .forClass(ReflectionClassesContainer.class)
-            // Because java.lang.reflect.Constructor's hashCode() is unhelpful
-            .suppress(Warning.STRICT_HASHCODE)
-            .verify();
+                .forClass(ReflectionClassesContainer.class)
+                // Because java.lang.reflect.Constructor's hashCode() is unhelpful
+                .suppress(Warning.STRICT_HASHCODE)
+                .verify();
     }
 
     @Test
@@ -103,18 +104,15 @@ public class JavaApiClassesTest {
 
     @Test
     public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
-        EqualsVerifier
-            .forClass(StringBuilderContainer.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(StringBuilderContainer.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
         EqualsVerifier
-            .forClass(UnusedInEqualsButPresentInClassContainer.class)
-            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+                .forClass(UnusedInEqualsButPresentInClassContainer.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
     }
 
     abstract static class CollectionContainer {
@@ -180,13 +178,12 @@ public class JavaApiClassesTest {
         private final Stack<String> stack;
 
         public ListContainer(
-            List<String> list,
-            CopyOnWriteArrayList<String> copyOnWriteArrayList,
-            LinkedList<String> linkedList,
-            ArrayList<String> arrayList,
-            Vector<String> vector,
-            Stack<String> stack
-        ) {
+                List<String> list,
+                CopyOnWriteArrayList<String> copyOnWriteArrayList,
+                LinkedList<String> linkedList,
+                ArrayList<String> arrayList,
+                Vector<String> vector,
+                Stack<String> stack) {
             this.list = list;
             this.copyOnWriteArrayList = copyOnWriteArrayList;
             this.linkedList = linkedList;
@@ -224,14 +221,13 @@ public class JavaApiClassesTest {
         private final EnumSet<TypeHelper.Enum> enumSet;
 
         public SetContainer(
-            Set<String> set,
-            SortedSet<String> sortedSet,
-            NavigableSet<String> navigableSet,
-            CopyOnWriteArraySet<String> copyOnWriteArraySet,
-            HashSet<String> hashSet,
-            TreeSet<String> treeSet,
-            EnumSet<TypeHelper.Enum> enumSet
-        ) {
+                Set<String> set,
+                SortedSet<String> sortedSet,
+                NavigableSet<String> navigableSet,
+                CopyOnWriteArraySet<String> copyOnWriteArraySet,
+                HashSet<String> hashSet,
+                TreeSet<String> treeSet,
+                EnumSet<TypeHelper.Enum> enumSet) {
             this.set = set;
             this.sortedSet = sortedSet;
             this.navigableSet = navigableSet;
@@ -273,17 +269,16 @@ public class JavaApiClassesTest {
         private final SynchronousQueue<String> synchronousQueue;
 
         public QueueContainer(
-            Queue<String> queue,
-            BlockingQueue<String> blockingQueue,
-            Deque<String> deque,
-            BlockingDeque<String> blockingDeque,
-            ArrayBlockingQueue<String> arrayBlockingQueue,
-            ConcurrentLinkedQueue<String> concurrentLinkedQueue,
-            DelayQueue<Delayed> delayQueue,
-            LinkedBlockingQueue<String> linkedBlockingQueue,
-            PriorityBlockingQueue<String> priorityBlockingQueue,
-            SynchronousQueue<String> synchronousQueue
-        ) {
+                Queue<String> queue,
+                BlockingQueue<String> blockingQueue,
+                Deque<String> deque,
+                BlockingDeque<String> blockingDeque,
+                ArrayBlockingQueue<String> arrayBlockingQueue,
+                ConcurrentLinkedQueue<String> concurrentLinkedQueue,
+                DelayQueue<Delayed> delayQueue,
+                LinkedBlockingQueue<String> linkedBlockingQueue,
+                PriorityBlockingQueue<String> priorityBlockingQueue,
+                SynchronousQueue<String> synchronousQueue) {
             this.queue = queue;
             this.blockingQueue = blockingQueue;
             this.deque = deque;
@@ -331,19 +326,18 @@ public class JavaApiClassesTest {
         private final EnumMap<TypeHelper.Enum, String> enumMap;
 
         public MapContainer(
-            Map<String, String> map,
-            SortedMap<String, String> sortedMap,
-            NavigableMap<String, String> navigableMap,
-            ConcurrentNavigableMap<String, String> concurrentNavigableMap,
-            ConcurrentHashMap<String, String> concurrentHashMap,
-            HashMap<String, String> hashMap,
-            Hashtable<String, String> hashtable,
-            LinkedHashMap<String, String> linkedHashMap,
-            Properties properties,
-            TreeMap<String, String> treeMap,
-            WeakHashMap<String, String> weakHashMap,
-            EnumMap<TypeHelper.Enum, String> enumMap
-        ) {
+                Map<String, String> map,
+                SortedMap<String, String> sortedMap,
+                NavigableMap<String, String> navigableMap,
+                ConcurrentNavigableMap<String, String> concurrentNavigableMap,
+                ConcurrentHashMap<String, String> concurrentHashMap,
+                HashMap<String, String> hashMap,
+                Hashtable<String, String> hashtable,
+                LinkedHashMap<String, String> linkedHashMap,
+                Properties properties,
+                TreeMap<String, String> treeMap,
+                WeakHashMap<String, String> weakHashMap,
+                EnumMap<TypeHelper.Enum, String> enumMap) {
             this.map = map;
             this.sortedMap = sortedMap;
             this.navigableMap = navigableMap;
@@ -391,15 +385,14 @@ public class JavaApiClassesTest {
         private final ShortBuffer shortBuffer;
 
         public NioBufferContainer(
-            Buffer buffer,
-            ByteBuffer byteBuffer,
-            CharBuffer charBuffer,
-            DoubleBuffer doubleBuffer,
-            FloatBuffer floatBuffer,
-            IntBuffer intBuffer,
-            LongBuffer longBuffer,
-            ShortBuffer shortBuffer
-        ) {
+                Buffer buffer,
+                ByteBuffer byteBuffer,
+                CharBuffer charBuffer,
+                DoubleBuffer doubleBuffer,
+                FloatBuffer floatBuffer,
+                IntBuffer intBuffer,
+                LongBuffer longBuffer,
+                ShortBuffer shortBuffer) {
             this.buffer = buffer;
             this.byteBuffer = byteBuffer;
             this.charBuffer = charBuffer;
@@ -453,34 +446,33 @@ public class JavaApiClassesTest {
         private final PrintStream printStream;
 
         public CommonClassesContainer(
-            String string,
-            Integer integer,
-            BitSet bitset,
-            Calendar calendar,
-            Date date,
-            File file,
-            GregorianCalendar gregorianCalendar,
-            Pattern pattern,
-            DecimalFormat decimalFormat,
-            NumberFormat numberFormat,
-            SimpleDateFormat simpleDateFormat,
-            URI uri,
-            URL url,
-            UUID uuid,
-            InetAddress inetAddress,
-            Inet4Address inet4Address,
-            Inet6Address inet6Address,
-            InetSocketAddress inetSocketAddress,
-            Thread thread,
-            java.sql.Date sqlDate,
-            java.sql.Time sqlTime,
-            java.sql.Timestamp sqlTimestamp,
-            Currency currency,
-            EventObject eventObject,
-            Charset charset,
-            Semaphore semaphore,
-            PrintStream printStream
-        ) {
+                String string,
+                Integer integer,
+                BitSet bitset,
+                Calendar calendar,
+                Date date,
+                File file,
+                GregorianCalendar gregorianCalendar,
+                Pattern pattern,
+                DecimalFormat decimalFormat,
+                NumberFormat numberFormat,
+                SimpleDateFormat simpleDateFormat,
+                URI uri,
+                URL url,
+                UUID uuid,
+                InetAddress inetAddress,
+                Inet4Address inet4Address,
+                Inet6Address inet6Address,
+                InetSocketAddress inetSocketAddress,
+                Thread thread,
+                java.sql.Date sqlDate,
+                java.sql.Time sqlTime,
+                java.sql.Timestamp sqlTimestamp,
+                Currency currency,
+                EventObject eventObject,
+                Charset charset,
+                Semaphore semaphore,
+                PrintStream printStream) {
             this.string = string;
             this.integer = integer;
             this.bitset = bitset;
@@ -552,33 +544,32 @@ public class JavaApiClassesTest {
         private final LongSummaryStatistics longSummaryStatistics;
 
         public Java8ApiClassesContainer(
-            Optional<?> optional,
-            OptionalDouble optionalDouble,
-            OptionalInt optionalInt,
-            OptionalLong optionalLong,
-            LocalDate localDate,
-            LocalTime localTime,
-            LocalDateTime localDateTime,
-            ZoneId zoneId,
-            ZoneOffset zoneOffset,
-            ZonedDateTime zonedDateTime,
-            DateTimeFormatter dateTimeFormatter,
-            CompletableFuture<?> completableFuture,
-            StampedLock stampedLock,
-            Supplier<?> supplier,
-            Clock clock,
-            Duration duration,
-            Instant instant,
-            MonthDay monthDay,
-            OffsetDateTime offsetDateTime,
-            OffsetTime offsetTime,
-            Period period,
-            Year year,
-            YearMonth yearMonth,
-            DoubleSummaryStatistics doubleSummaryStatistics,
-            IntSummaryStatistics intSummaryStatistics,
-            LongSummaryStatistics longSummaryStatistics
-        ) {
+                Optional<?> optional,
+                OptionalDouble optionalDouble,
+                OptionalInt optionalInt,
+                OptionalLong optionalLong,
+                LocalDate localDate,
+                LocalTime localTime,
+                LocalDateTime localDateTime,
+                ZoneId zoneId,
+                ZoneOffset zoneOffset,
+                ZonedDateTime zonedDateTime,
+                DateTimeFormatter dateTimeFormatter,
+                CompletableFuture<?> completableFuture,
+                StampedLock stampedLock,
+                Supplier<?> supplier,
+                Clock clock,
+                Duration duration,
+                Instant instant,
+                MonthDay monthDay,
+                OffsetDateTime offsetDateTime,
+                OffsetTime offsetTime,
+                Period period,
+                Year year,
+                YearMonth yearMonth,
+                DoubleSummaryStatistics doubleSummaryStatistics,
+                IntSummaryStatistics intSummaryStatistics,
+                LongSummaryStatistics longSummaryStatistics) {
             this.optional = optional;
             this.optionalDouble = optionalDouble;
             this.optionalInt = optionalInt;
@@ -625,11 +616,7 @@ public class JavaApiClassesTest {
         private final Exception exception;
         private final RuntimeException runtimeException;
 
-        public ExceptionsContainer(
-            Throwable throwable,
-            Exception exception,
-            RuntimeException runtimeException
-        ) {
+        public ExceptionsContainer(Throwable throwable, Exception exception, RuntimeException runtimeException) {
             this.throwable = throwable;
             this.exception = exception;
             this.runtimeException = runtimeException;
@@ -654,12 +641,7 @@ public class JavaApiClassesTest {
         private final Field field;
         private final Constructor<?> constructor;
 
-        public ReflectionClassesContainer(
-            Class<?> type,
-            Method method,
-            Field field,
-            Constructor<?> constructor
-        ) {
+        public ReflectionClassesContainer(Class<?> type, Method method, Field field, Constructor<?> constructor) {
             this.type = type;
             this.method = method;
             this.field = field;
@@ -695,20 +677,19 @@ public class JavaApiClassesTest {
         private final LongAccumulator longAccumulator;
 
         public AtomicClassesContainer(
-            AtomicBoolean atomicBoolean,
-            AtomicInteger atomicInteger,
-            AtomicIntegerArray atomicIntegerArray,
-            AtomicLong atomicLong,
-            AtomicLongArray atomicLongArray,
-            AtomicMarkableReference<?> atomicMarkableReference,
-            AtomicReference<?> atomicReference,
-            AtomicReferenceArray<?> atomicReferenceArray,
-            AtomicStampedReference<?> atomicStampedReference,
-            DoubleAdder doubleAdder,
-            DoubleAccumulator doubleAccumulator,
-            LongAdder longAdder,
-            LongAccumulator longAccumulator
-        ) {
+                AtomicBoolean atomicBoolean,
+                AtomicInteger atomicInteger,
+                AtomicIntegerArray atomicIntegerArray,
+                AtomicLong atomicLong,
+                AtomicLongArray atomicLongArray,
+                AtomicMarkableReference<?> atomicMarkableReference,
+                AtomicReference<?> atomicReference,
+                AtomicReferenceArray<?> atomicReferenceArray,
+                AtomicStampedReference<?> atomicStampedReference,
+                DoubleAdder doubleAdder,
+                DoubleAccumulator doubleAccumulator,
+                LongAdder longAdder,
+                LongAccumulator longAccumulator) {
             this.atomicBoolean = atomicBoolean;
             this.atomicInteger = atomicInteger;
             this.atomicIntegerArray = atomicIntegerArray;
@@ -747,14 +728,13 @@ public class JavaApiClassesTest {
         private final java.rmi.server.UID uid;
 
         public AncientJavaApiClassesContainer(
-            java.awt.color.ColorSpace awtColorSpace,
-            java.awt.color.ICC_ColorSpace iccColorSpace,
-            java.awt.color.ICC_Profile iccProfile,
-            java.awt.Font font,
-            java.awt.Image image,
-            java.rmi.dgc.VMID vmid,
-            java.rmi.server.UID uid
-        ) {
+                java.awt.color.ColorSpace awtColorSpace,
+                java.awt.color.ICC_ColorSpace iccColorSpace,
+                java.awt.color.ICC_Profile iccProfile,
+                java.awt.Font font,
+                java.awt.Image image,
+                java.rmi.dgc.VMID vmid,
+                java.rmi.server.UID uid) {
             this.awtColorSpace = awtColorSpace;
             this.iccColorSpace = iccColorSpace;
             this.iccProfile = iccProfile;
