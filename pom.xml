@@ -60,10 +60,9 @@
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <argline.module />
         <argline.preview />
         <argline.experimental />
-        <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
+        <argline.full>${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.95</analysis.jacoco.threshold>
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
@@ -238,10 +237,6 @@
                     <name>!disableStaticAnalysis</name>
                 </property>
             </activation>
-
-            <properties>
-                <argline.module>--illegal-access=deny</argline.module>
-            </properties>
 
             <build>
                 <plugins>
