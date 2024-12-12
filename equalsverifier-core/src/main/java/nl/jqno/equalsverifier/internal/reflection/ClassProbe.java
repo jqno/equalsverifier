@@ -4,6 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Modifier;
 
+import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
+import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
+
 /**
  * Provides read-only reflective access to a class.
  */

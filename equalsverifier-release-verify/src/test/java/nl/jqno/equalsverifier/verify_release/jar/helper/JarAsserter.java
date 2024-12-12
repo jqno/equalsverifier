@@ -30,9 +30,9 @@ public class JarAsserter {
 
     public void assertPresenceOfMultiReleaseClasses() {
         assertPresenceOf(
-            "/META-INF/versions/11" + EV + "/internal/reflection/ModuleHelper.class",
-            "/META-INF/versions/16" + EV + "/internal/reflection/RecordsHelper.class",
-            "/META-INF/versions/17" + EV + "/internal/reflection/SealedTypesHelper.class");
+            "/META-INF/versions/11" + EV + "/internal/versionspecific/ModuleHelper.class",
+            "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class",
+            "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class");
     }
 
     public void assertPresenceOfEmbeddedDepedencies() {
@@ -83,14 +83,18 @@ public class JarAsserter {
     }
 
     public void assertVersionsOfClassFiles() {
+        // See https://javaalmanac.io/bytecode/versions/
         assertAll(
             () -> assertVersionOfClassFile(52, EV + "/EqualsVerifier.class"),
             () -> assertVersionOfClassFile(
+                55,
+                "/META-INF/versions/11" + EV + "/internal/versionspecific/ModuleHelper.class"),
+            () -> assertVersionOfClassFile(
                 60,
-                "/META-INF/versions/16" + EV + "/internal/reflection/RecordsHelper.class"),
+                "/META-INF/versions/16" + EV + "/internal/versionspecific/RecordsHelper.class"),
             () -> assertVersionOfClassFile(
                 61,
-                "/META-INF/versions/17" + EV + "/internal/reflection/SealedTypesHelper.class"));
+                "/META-INF/versions/17" + EV + "/internal/versionspecific/SealedTypesHelper.class"));
     }
 
     public void assertVersionsOfEmbeddedClassFiles() {

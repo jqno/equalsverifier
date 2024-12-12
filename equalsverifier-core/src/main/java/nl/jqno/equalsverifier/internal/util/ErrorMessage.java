@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.reflection.ModuleHelper;
+import nl.jqno.equalsverifier.internal.versionspecific.ModuleHelper;
 
 public final class ErrorMessage {
 
