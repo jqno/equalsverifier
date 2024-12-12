@@ -53,17 +53,18 @@
     </issueManagement>
 
     <properties>
-        <encoding>UTF-8</encoding>
         <version.java.base>8</version.java.base>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <maven.javadoc.skip>true</maven.javadoc.skip>
         <maven.source.skip>true</maven.source.skip>
         <maven.install.skip>true</maven.install.skip>
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <argline.module />
         <argline.preview />
         <argline.experimental />
-        <argline.full>${argline.module} ${argline.preview} ${argline.experimental}</argline.full>
+        <argline.full>${argline.preview} ${argline.experimental}</argline.full>
 
         <analysis.jacoco.threshold>0.95</analysis.jacoco.threshold>
         <analysis.checkstyle.config>build/checkstyle-config.xml</analysis.checkstyle.config>
@@ -233,15 +234,10 @@
         <profile>
             <id>static-analysis</id>
             <activation>
-                <jdk>[21,)</jdk>
                 <property>
                     <name>!disableStaticAnalysis</name>
                 </property>
             </activation>
-
-            <properties>
-                <argline.module>--illegal-access=deny</argline.module>
-            </properties>
 
             <build>
                 <plugins>
@@ -387,7 +383,6 @@
             <!-- This profile exists for Checkstyle's regression CI: see issues 216 and 586 -->
             <id>static-analysis-checkstyle</id>
             <activation>
-                <jdk>[17,)</jdk>
                 <property>
                     <name>!disableStaticAnalysis</name>
                 </property>
@@ -409,7 +404,6 @@
                         <configuration>
                             <configLocation>${analysis.checkstyle.config}</configLocation>
                             <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                            <encoding>UTF-8</encoding>
                             <linkXRef>false</linkXRef>
                             <consoleOutput>true</consoleOutput>
                         </configuration>
