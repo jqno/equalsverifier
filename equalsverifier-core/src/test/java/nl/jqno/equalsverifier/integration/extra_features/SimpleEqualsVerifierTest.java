@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -17,103 +18,77 @@ public class SimpleEqualsVerifierTest {
     @Test
     public void succeed_whenTestingClassesRecursively_givenASimpleEqualsVerifier() {
         EqualsVerifier
-            .simple()
-            .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
-            .verify();
+                .simple()
+                .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
+                .verify();
     }
 
     @Test
     public void succeed_whenTestingClassesThatMustExtendSomething_givenASimpleEqualsVerifier() {
         EqualsVerifier
-            .simple()
-            .forPackage(
-                "nl.jqno.equalsverifier.integration.extra_features.simple_package",
-                Object.class
-            )
-            .verify();
+                .simple()
+                .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", Object.class)
+                .verify();
     }
 
     @Test
     public void mentionSimple_whenTestingClass_givenNothingSpecial() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SimplePoint.class).verify())
-            .assertFailure()
-            .assertMessageContains("or use EqualsVerifier.simple()");
+                .when(() -> EqualsVerifier.forClass(SimplePoint.class).verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void mentionSimple_whenTestingClassesRecursively_givenNothingSpecial() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forPackage(
-                        "nl.jqno.equalsverifier.integration.extra_features.simple_package",
-                        true
-                    )
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("or use EqualsVerifier.simple()");
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void mentionSimple_whenTestingClassesThatMustExtendSomething_givenNothingSpecial() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forPackage(
-                        "nl.jqno.equalsverifier.integration.extra_features.simple_package",
-                        Object.class
-                    )
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("or use EqualsVerifier.simple()");
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(
+                                "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                                Object.class)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void mentionSimple_whenTestingClass_givenSuppressWarningStrictInheritance() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SimplePoint.class)
-                    .suppress(Warning.STRICT_INHERITANCE)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("or use EqualsVerifier.simple()");
+                .when(() -> EqualsVerifier.forClass(SimplePoint.class).suppress(Warning.STRICT_INHERITANCE).verify())
+                .assertFailure()
+                .assertMessageContains("or use EqualsVerifier.simple()");
     }
 
     @Test
     public void fail_whenTestingClassesRecursively_whenPackageHasNoClasses() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .simple()
-                    .forPackage("nl.jqno.equalsverifier.doesnotexist", true)
-                    .verify()
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "nl.jqno.equalsverifier.doesnotexist",
-                "doesn't contain any (non-Test) types"
-            );
+                .when(() -> EqualsVerifier.simple().forPackage("nl.jqno.equalsverifier.doesnotexist", true).verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
 
     @Test
     public void fail_whenTestingClassesThatMustExtendSomething_whenPackageHasNoClasses() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .simple()
-                    .forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class)
-                    .verify()
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "nl.jqno.equalsverifier.doesnotexist",
-                "doesn't contain any (non-Test) types"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .simple()
+                            .forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class)
+                            .verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
 
     public static class SimplePoint {

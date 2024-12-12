@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.RecordProbe;
@@ -12,9 +13,8 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.objenesis.Objenesis;
 
 /**
- * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through
- * calling its class's constructor. This only works when the constructor matches the class's fields
- * exactly, such as in a record.
+ * Implementation of ObjectAccessor that returns modified copies of its wrapped object, through calling its class's
+ * constructor. This only works when the constructor matches the class's fields exactly, such as in a record.
  *
  * @param <T> The specified object's class.
  */
@@ -23,7 +23,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     private final RecordProbe<T> probe;
 
     /** Package-private constructor. Call {@link ObjectAccessor#of(Object)} to instantiate. */
-    /* default */RecordObjectAccessor(T object, Class<T> type) {
+    /* default */ RecordObjectAccessor(T object, Class<T> type) {
         super(object, type);
         this.probe = new RecordProbe<>(type);
     }
@@ -38,10 +38,9 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     /** {@inheritDoc} */
     @Override
     public ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
-        TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
-    ) {
+            VintageValueProvider valueProvider,
+            TypeTag enclosingType,
+            LinkedHashSet<TypeTag> typeStack) {
         return makeAccessor(f -> {
             Object value = getField(f);
             TypeTag tag = TypeTag.of(f, enclosingType);

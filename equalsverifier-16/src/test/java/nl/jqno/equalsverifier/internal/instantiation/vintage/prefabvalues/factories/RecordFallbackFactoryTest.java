@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -32,11 +33,7 @@ public class RecordFallbackFactoryTest {
 
     @Test
     public void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {
-        Tuple<?> tuple = factory.createValues(
-            new TypeTag(GenericRecordContainer.class),
-            valueProvider,
-            typeStack
-        );
+        Tuple<?> tuple = factory.createValues(new TypeTag(GenericRecordContainer.class), valueProvider, typeStack);
 
         assertEquals(tuple.getRed(), tuple.getRedCopy());
         assertNotSame(tuple.getRed(), tuple.getRedCopy());

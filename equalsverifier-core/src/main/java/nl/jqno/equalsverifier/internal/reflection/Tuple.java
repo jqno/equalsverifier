@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 /**
- * Container for three values of the same type: a "red" one, a "blue" one, and a shallow copy of the
- * "red" one.
+ * Container for three values of the same type: a "red" one, a "blue" one, and a shallow copy of the "red" one.
  */
 public final class Tuple<T> {
 
@@ -13,8 +12,8 @@ public final class Tuple<T> {
     /**
      * Constructor.
      *
-     * @param red The red value.
-     * @param blue The blue value.
+     * @param red     The red value.
+     * @param blue    The blue value.
      * @param redCopy A shallow copy of the red value.
      */
     public Tuple(T red, T blue, T redCopy) {
@@ -26,10 +25,10 @@ public final class Tuple<T> {
     /**
      * Factory method that turns three untyped values into a typed tuple.
      *
-     * @param red The red value.
-     * @param blue The blue value.
+     * @param red     The red value.
+     * @param blue    The blue value.
      * @param redCopy A shallow copy of the red value.
-     * @param <U> The assumed type of the values.
+     * @param <U>     The assumed type of the values.
      * @return A typed tuple with the three given values.
      */
     @SuppressWarnings("unchecked")

@@ -29,16 +29,9 @@ public class FormatterTest {
 
     @Test
     public void multipleSimpleParameters() {
-        Formatter f = Formatter.of(
-            "Multiple simple parameters: %% and %% and also %%",
-            new Simple(0),
-            new Simple(1),
-            new Simple(2)
-        );
-        assertEquals(
-            "Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2",
-            f.format()
-        );
+        Formatter f = Formatter
+                .of("Multiple simple parameters: %% and %% and also %%", new Simple(0), new Simple(1), new Simple(2));
+        assertEquals("Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2", f.format());
     }
 
     @Test
@@ -46,29 +39,21 @@ public class FormatterTest {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, "string"));
         assertEquals(
             "One throwing parameter: [Throwing i=1337 s=string]-throws IllegalStateException(msg)",
-            f.format()
-        );
+            f.format());
     }
 
     @Test
     public void oneThrowingParameterWithNullSubparameter() {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, null));
-        assertEquals(
-            "One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)",
-            f.format()
-        );
+        assertEquals("One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)", f.format());
     }
 
     @Test
     public void oneParameterWithNoFieldsAndThrowsWithNullMessage() {
-        Formatter f = Formatter.of(
-            "No fields, null message: %%",
-            new NoFieldsAndThrowsNullMessage()
-        );
+        Formatter f = Formatter.of("No fields, null message: %%", new NoFieldsAndThrowsNullMessage());
         assertEquals(
             "No fields, null message: [NoFieldsAndThrowsNullMessage (no fields)]-throws NullPointerException(null)",
-            f.format()
-        );
+            f.format());
     }
 
     @Test
@@ -94,10 +79,7 @@ public class FormatterTest {
 
     @Test
     public void oneDelegatedConcreteSubclassParameter() {
-        Instantiator<AbstractDelegationImpl> i = Instantiator.of(
-            AbstractDelegationImpl.class,
-            objenesis
-        );
+        Instantiator<AbstractDelegationImpl> i = Instantiator.of(AbstractDelegationImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
         assertThat(f.format(), containsString("Concrete: something concrete"));
     }
@@ -108,7 +90,7 @@ public class FormatterTest {
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
-            "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
+                "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
         assertThat(f.format(), containsString(expected));
     }
 
@@ -118,10 +100,7 @@ public class FormatterTest {
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
         Formatter f = Formatter.of("AC: %%", ac);
-        assertThat(
-            f.format(),
-            containsString("AC: [AbstractContainer ad=[AbstractDelegation y=0]]")
-        );
+        assertThat(f.format(), containsString("AC: [AbstractContainer ad=[AbstractDelegation y=0]]"));
     }
 
     @Test
@@ -131,8 +110,8 @@ public class FormatterTest {
 
         Formatter f = Formatter.of("%%", mix);
         String expected =
-            "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]" +
-            "-throws UnsupportedOperationException(null)";
+                "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]"
+                        + "-throws UnsupportedOperationException(null)";
         assertThat(f.format(), containsString(expected));
     }
 
@@ -158,9 +137,9 @@ public class FormatterTest {
         Formatter f = Formatter.of("Not enough: %% and %%");
 
         ExpectedException
-            .when(() -> f.format())
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains("Not enough parameters");
+                .when(() -> f.format())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Not enough parameters");
     }
 
     @Test
@@ -168,9 +147,9 @@ public class FormatterTest {
         Formatter f = Formatter.of("Too many!", new Simple(0));
 
         ExpectedException
-            .when(() -> f.format())
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains("Too many parameters");
+                .when(() -> f.format())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Too many parameters");
     }
 
     static class Simple {

@@ -7,6 +7,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.util.Context;
@@ -49,12 +50,7 @@ public class SignatureChecker<T> implements Checker {
     }
 
     private void failOverloaded(String message) {
-        fail(
-            Formatter.of(
-                "Overloaded: %%.\nSignature should be: public boolean equals(Object obj)",
-                message
-            )
-        );
+        fail(Formatter.of("Overloaded: %%.\nSignature should be: public boolean equals(Object obj)", message));
     }
 
     private void checkEquals(Method equals) {
@@ -75,19 +71,14 @@ public class SignatureChecker<T> implements Checker {
     }
 
     private void checkEqualsIsDefined() {
-        boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(
-            Warning.INHERITED_DIRECTLY_FROM_OBJECT
-        );
+        boolean dontAllowDirectlyInherited = !warningsToSuppress.contains(Warning.INHERITED_DIRECTLY_FROM_OBJECT);
         boolean isDirectlyInherited = classProbe.isEqualsInheritedFromObject();
         if (dontAllowDirectlyInherited && isDirectlyInherited) {
             fail(
-                Formatter.of(
-                    "Equals is inherited directly from Object.\n" +
-                    "Suppress Warning." +
-                    Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() +
-                    " to skip this check."
-                )
-            );
+                Formatter
+                        .of(
+                            "Equals is inherited directly from Object.\nSuppress Warning."
+                                    + Warning.INHERITED_DIRECTLY_FROM_OBJECT.name() + " to skip this check."));
         }
     }
 }

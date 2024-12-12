@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.testhelpers;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -12,9 +13,8 @@ public final class Util {
     private Util() {}
 
     @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "Only called in test code, not production."
-    )
+            value = "DP_DO_INSIDE_DO_PRIVILEGED",
+            justification = "Only called in test code, not production.")
     public static boolean defaultEquals(Object here, Object there) {
         Class<?> type = here.getClass();
         if (there == null || !there.getClass().isAssignableFrom(type)) {
@@ -30,16 +30,16 @@ public final class Util {
                     equals &= Objects.equals(x, y);
                 }
             }
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             throw new AssertionError(e.toString(), e);
         }
         return equals;
     }
 
     @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "Only called in test code, not production."
-    )
+            value = "DP_DO_INSIDE_DO_PRIVILEGED",
+            justification = "Only called in test code, not production.")
     public static int defaultHashCode(Object x) {
         int hash = 59;
         try {
@@ -50,7 +50,8 @@ public final class Util {
                     hash += 59 * Objects.hashCode(val);
                 }
             }
-        } catch (IllegalAccessException e) {
+        }
+        catch (IllegalAccessException e) {
             throw new AssertionError(e.toString(), e);
         }
         return hash;
@@ -65,7 +66,8 @@ public final class Util {
             Constructor<?> constructor = type.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructor.newInstance();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new AssertionError("Could not call constructor of " + type.getName(), e);
         }
     }

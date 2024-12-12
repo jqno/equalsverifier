@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import java.util.function.Function;
+
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -8,43 +9,44 @@ import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 /**
  * Utilities for catching checked exceptions and re-throwing them as a RuntimeException.
  *
- * <p>Java's reflection API declares lots of checked exceptions that it rarely actually throws, if
- * ever. We still need to catch all of them, but the code in the catch blocks is never executed. It
- * is hard to create tests to do so. Besides, EqualsVerifier contains a lot of extra checks to make
- * sure these cases can never occur.
+ * <p>
+ * Java's reflection API declares lots of checked exceptions that it rarely actually throws, if ever. We still need to
+ * catch all of them, but the code in the catch blocks is never executed. It is hard to create tests to do so. Besides,
+ * EqualsVerifier contains a lot of extra checks to make sure these cases can never occur.
  *
- * <p>This adds a lot of noise to the test coverage and mutation coverage reports, that needs to be
- * inspected manually every time. This makes me too lazy to actually do it, which is how needless
- * gaps in coverage accumulate. By using Rethrow, we can easily cover the exception code, making
- * gaps in coverage actual gaps in coverage that need to be dealt with instead of ignored over and
- * over.
+ * <p>
+ * This adds a lot of noise to the test coverage and mutation coverage reports, that needs to be inspected manually
+ * every time. This makes me too lazy to actually do it, which is how needless gaps in coverage accumulate. By using
+ * Rethrow, we can easily cover the exception code, making gaps in coverage actual gaps in coverage that need to be
+ * dealt with instead of ignored over and over.
  *
- * <p>As a nice side effect, it makes it easier to increase the coverage threshold even more, though
- * this is not the purpose of this class.
+ * <p>
+ * As a nice side effect, it makes it easier to increase the coverage threshold even more, though this is not the
+ * purpose of this class.
  */
 public final class Rethrow {
 
     /** Do not instantiate. */
     private Rethrow() {}
 
-    public static <T> T rethrow(
-        ThrowingSupplier<T> supplier,
-        Function<Throwable, String> errorMessage
-    ) {
+    public static <T> T rethrow(ThrowingSupplier<T> supplier, Function<Throwable, String> errorMessage) {
         try {
             return supplier.get();
-        } catch (RuntimeException e) {
+        }
+        catch (RuntimeException e) {
             if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
                 throw new ModuleException(
-                    "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
-                    e
-                );
-            } else {
+                        "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
+                        e);
+            }
+            else {
                 throw e;
             }
-        } catch (ReflectiveOperationException e) {
+        }
+        catch (ReflectiveOperationException e) {
             throw new ReflectionException(errorMessage.apply(e), e);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             throw new EqualsVerifierInternalBugException(errorMessage.apply(e), e);
         }
     }
@@ -54,13 +56,10 @@ public final class Rethrow {
     }
 
     public static void rethrow(ThrowingRunnable block, Function<Throwable, String> errorMessage) {
-        rethrow(
-            () -> {
-                block.run();
-                return null;
-            },
-            errorMessage
-        );
+        rethrow(() -> {
+            block.run();
+            return null;
+        }, errorMessage);
     }
 
     public static void rethrow(ThrowingRunnable block) {

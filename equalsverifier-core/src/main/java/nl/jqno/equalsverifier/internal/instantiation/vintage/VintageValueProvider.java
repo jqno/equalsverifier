@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import java.util.*;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -16,9 +17,8 @@ import org.objenesis.Objenesis;
 /**
  * Creator of prefabricated instances of classes, using a "vintage" strategy for doing so.
  *
- * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been
- * using since its inception. This strategy is quite hacky and messy, and other strategies might
- * be preferable.
+ * Vintage in this case means that it employs the creation strategy that EqualsVerifier has been using since its
+ * inception. This strategy is quite hacky and messy, and other strategies might be preferable.
  */
 public class VintageValueProvider implements ValueProvider {
 
@@ -32,7 +32,7 @@ public class VintageValueProvider implements ValueProvider {
      * Constructor.
      *
      * @param factoryCache The factories that can be used to create values.
-     * @param objenesis To instantiate non-record classes.
+     * @param objenesis    To instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable.")
     public VintageValueProvider(FactoryCache factoryCache, Objenesis objenesis) {
@@ -49,7 +49,8 @@ public class VintageValueProvider implements ValueProvider {
     /**
      * Returns the "red" prefabricated value of the specified type.
      *
-     * <p>It's always a different value from the "blue" one.
+     * <p>
+     * It's always a different value from the "blue" one.
      *
      * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic parameters.
@@ -62,7 +63,8 @@ public class VintageValueProvider implements ValueProvider {
     /**
      * Returns the "blue" prefabricated value of the specified type.
      *
-     * <p>It's always a different value from the "red" one.
+     * <p>
+     * It's always a different value from the "red" one.
      *
      * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic parameters.
@@ -75,7 +77,8 @@ public class VintageValueProvider implements ValueProvider {
     /**
      * Returns a shallow copy of the "red" prefabricated value of the specified type.
      *
-     * <p>When possible, it's equal to but not the same as the "red" object.
+     * <p>
+     * When possible, it's equal to but not the same as the "red" object.
      *
      * @param <T> The return value is cast to this type.
      * @param tag A description of the desired type, including generic parameters.
@@ -86,23 +89,18 @@ public class VintageValueProvider implements ValueProvider {
     }
 
     /**
-     * Returns a prefabricated value of the specified type, that is different from the specified
-     * value.
+     * Returns a prefabricated value of the specified type, that is different from the specified value.
      *
-     * @param <T> The type of the value.
-     * @param tag A description of the desired type, including generic parameters.
-     * @param value A value that is different from the value that will be returned.
+     * @param <T>       The type of the value.
+     * @param tag       A description of the desired type, including generic parameters.
+     * @param value     A value that is different from the value that will be returned.
      * @param typeStack Keeps track of recursion in the type.
      * @return A value that is different from {@code value}.
      */
     // CHECKSTYLE OFF: CyclomaticComplexity
     public <T> T giveOther(TypeTag tag, T value, LinkedHashSet<TypeTag> typeStack) {
         Class<T> type = tag.getType();
-        if (
-            value != null &&
-            !type.isAssignableFrom(value.getClass()) &&
-            !wraps(type, value.getClass())
-        ) {
+        if (value != null && !type.isAssignableFrom(value.getClass()) && !wraps(type, value.getClass())) {
             throw new ReflectionException("TypeTag does not match value.");
         }
 
@@ -119,7 +117,8 @@ public class VintageValueProvider implements ValueProvider {
                 if (tuple.getRed().equals(value)) {
                     return tuple.getBlue();
                 }
-            } catch (AbstractMethodError e) {
+            }
+            catch (AbstractMethodError e) {
                 return tuple.getRed();
             }
         }
@@ -138,11 +137,10 @@ public class VintageValueProvider implements ValueProvider {
     }
 
     /**
-     * Makes sure that values for the specified type are present in the cache, but doesn't return
-     * them.
+     * Makes sure that values for the specified type are present in the cache, but doesn't return them.
      *
-     * @param <T> The desired type.
-     * @param tag A description of the desired type, including generic parameters.
+     * @param <T>       The desired type.
+     * @param tag       A description of the desired type, including generic parameters.
      * @param typeStack Keeps track of recursion in the type.
      */
     public <T> void realizeCacheFor(TypeTag tag, LinkedHashSet<TypeTag> typeStack) {

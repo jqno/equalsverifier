@@ -31,10 +31,7 @@ public class ReportTest {
         assertFalse(report.isSuccessful());
         assertThat(
             report.getMessage(),
-            startsWith(
-                "EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"
-            )
-        );
+            startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"));
         assertEquals(AssertionException.class, report.getCause().getClass());
         assertNull(report.getCause().getMessage());
     }
@@ -45,7 +42,8 @@ public class ReportTest {
         try {
             EqualsVerifier.forClass(Point.class).verify();
             fail("Should have failed");
-        } catch (AssertionError e) {
+        }
+        catch (AssertionError e) {
             assertEquals(e.getMessage(), report.getMessage());
             assertEquals(e.getCause().getClass(), report.getCause().getClass());
 

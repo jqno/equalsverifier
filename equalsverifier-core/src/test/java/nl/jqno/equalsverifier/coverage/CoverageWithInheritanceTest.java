@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.coverage;
 
 import java.util.stream.Stream;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,10 +24,10 @@ public class CoverageWithInheritanceTest {
     @MethodSource("data")
     public <T> void testSubCoverage(Classes<T> classes) {
         EqualsVerifier
-            .forClass(classes.subType)
-            .withRedefinedSuperclass()
-            .withRedefinedSubclass(classes.endpointType)
-            .verify();
+                .forClass(classes.subType)
+                .withRedefinedSuperclass()
+                .withRedefinedSubclass(classes.endpointType)
+                .verify();
     }
 
     @ParameterizedTest
@@ -34,12 +35,8 @@ public class CoverageWithInheritanceTest {
     public void callTheConstructors(Classes<?> classes) throws Exception {
         classes.containerType.getConstructor().newInstance();
         classes.superType.getConstructor(int.class, int.class).newInstance(0, 0);
-        classes.subType
-            .getConstructor(int.class, int.class, Color.class)
-            .newInstance(0, 0, Color.INDIGO);
-        classes.endpointType
-            .getConstructor(int.class, int.class, Color.class)
-            .newInstance(0, 0, Color.INDIGO);
+        classes.subType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
+        classes.endpointType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);
     }
 
     private static final class Classes<T> {
@@ -50,11 +47,10 @@ public class CoverageWithInheritanceTest {
         private final Class<? extends T> endpointType;
 
         private Classes(
-            Class<?> containerType,
-            Class<? super T> superType,
-            Class<T> subType,
-            Class<? extends T> endpointType
-        ) {
+                Class<?> containerType,
+                Class<? super T> superType,
+                Class<T> subType,
+                Class<? extends T> endpointType) {
             this.containerType = containerType;
             this.superType = superType;
             this.subType = subType;

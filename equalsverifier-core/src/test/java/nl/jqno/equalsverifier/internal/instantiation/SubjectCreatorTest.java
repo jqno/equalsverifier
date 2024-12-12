@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import java.lang.reflect.Field;
 import java.util.Objects;
 import java.util.Optional;
+
 import nl.jqno.equalsverifier.internal.exceptions.NoValueException;
 import nl.jqno.equalsverifier.internal.reflection.FieldCache;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -25,18 +26,11 @@ public class SubjectCreatorTest {
     private static final String S_RED = "abc";
     private static final String S_BLUE = "xyz";
 
-    private Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(
-        SomeClass.class
-    );
+    private Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
     private ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
     private FieldCache fieldCache = new FieldCache();
     private Objenesis objenesis = new ObjenesisStd();
-    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(
-        config,
-        valueProvider,
-        fieldCache,
-        objenesis
-    );
+    private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, fieldCache, objenesis);
 
     private Field fieldX;
     private Field fieldI;
@@ -198,10 +192,7 @@ public class SubjectCreatorTest {
     public void noValueFound() {
         sut = new SubjectCreator<>(config, new NoValueProvider(), fieldCache, objenesis);
 
-        ExpectedException
-            .when(() -> sut.plain())
-            .assertThrows(NoValueException.class)
-            .assertDescriptionContains("int");
+        ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertDescriptionContains("int");
 
         assertEquals(expected, actual);
     }
@@ -281,12 +272,10 @@ public class SubjectCreatorTest {
                 return false;
             }
             SomeClass other = (SomeClass) obj;
-            return (
-                other.canEqual(this) &&
-                super.equals(other) &&
-                Objects.equals(i, other.i) &&
-                Objects.equals(s, other.s)
-            );
+            return other.canEqual(this)
+                    && super.equals(other)
+                    && Objects.equals(i, other.i)
+                    && Objects.equals(s, other.s);
         }
 
         @Override

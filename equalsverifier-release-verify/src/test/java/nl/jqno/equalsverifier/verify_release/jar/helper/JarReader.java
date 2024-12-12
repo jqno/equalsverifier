@@ -44,7 +44,8 @@ public class JarReader implements AutoCloseable {
         try (var out = new ByteArrayOutputStream()) {
             Files.copy(path, out);
             return out.toByteArray();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new AssertionError("Failed to read " + innerFilename + " from " + filename, e);
         }
     }
@@ -54,7 +55,8 @@ public class JarReader implements AutoCloseable {
         try {
             var uri = URI.create("jar:" + file.toURI().toString());
             return FileSystems.newFileSystem(uri, Map.of());
-        } catch (IOException | URISyntaxException e) {
+        }
+        catch (IOException | URISyntaxException e) {
             throw new AssertionError("Failed to read " + filename, e);
         }
     }
@@ -62,11 +64,9 @@ public class JarReader implements AutoCloseable {
     private Set<String> buildEntryList() {
         var path = fs.getPath("/");
         try (var walk = Files.walk(path)) {
-            return StreamSupport
-                .stream(walk.spliterator(), false)
-                .map(Path::toString)
-                .collect(Collectors.toSet());
-        } catch (IOException e) {
+            return StreamSupport.stream(walk.spliterator(), false).map(Path::toString).collect(Collectors.toSet());
+        }
+        catch (IOException e) {
             throw new AssertionError("Failed to read files from " + filename, e);
         }
     }

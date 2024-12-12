@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -17,7 +18,7 @@ public abstract class ObjectAccessor<T> {
     private final Class<T> type;
 
     /** Package private constructor. Call {@link #of(Object)} to instantiate. */
-    /* default */ObjectAccessor(T object, Class<T> type) {
+    /* default */ ObjectAccessor(T object, Class<T> type) {
         this.object = object;
         this.type = type;
     }
@@ -25,7 +26,7 @@ public abstract class ObjectAccessor<T> {
     /**
      * Factory method.
      *
-     * @param <T> {@link #object}'s type.
+     * @param <T>    {@link #object}'s type.
      * @param object The object to wrap.
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
@@ -38,10 +39,9 @@ public abstract class ObjectAccessor<T> {
     /**
      * Factory method.
      *
-     * @param <T> {@link #object}'s type, or a supertype.
+     * @param <T>    {@link #object}'s type, or a supertype.
      * @param object The object to wrap.
-     * @param type Superclass of {@link #object}'s type, as which it will be treated by {@link
-     *     ObjectAccessor}.
+     * @param type   Superclass of {@link #object}'s type, as which it will be treated by {@link ObjectAccessor}.
      * @return An {@link ObjectAccessor} for {@link #object}.
      */
     public static <T> ObjectAccessor<T> of(T object, Class<T> type) {
@@ -72,7 +72,8 @@ public abstract class ObjectAccessor<T> {
     /**
      * Creates a copy of the wrapped object.
      *
-     * <p>Note: it does a "shallow" copy. Reference fields are not copied recursively.
+     * <p>
+     * Note: it does a "shallow" copy. Reference fields are not copied recursively.
      *
      * @param objenesis Needed to instantiate the copy.
      * @return A shallow copy.
@@ -80,27 +81,26 @@ public abstract class ObjectAccessor<T> {
     public abstract T copy(Objenesis objenesis);
 
     /**
-     * Modifies all fields of the wrapped object that are declared in T and in its superclasses. It
-     * may or may not mutate the object of the current ObjectAccessor. Either way, the current
-     * ObjectAccessor and any reference to its object should be considered 'spent' after calling
-     * this method. The returned ObjectAccessor can safely be used.
+     * Modifies all fields of the wrapped object that are declared in T and in its superclasses. It may or may not
+     * mutate the object of the current ObjectAccessor. Either way, the current ObjectAccessor and any reference to its
+     * object should be considered 'spent' after calling this method. The returned ObjectAccessor can safely be used.
      *
-     * <p>This method is consistent: given two equal objects; after scrambling both objects, they
-     * remain equal to each other.
+     * <p>
+     * This method is consistent: given two equal objects; after scrambling both objects, they remain equal to each
+     * other.
      *
-     * <p>It may not be able to modify: 1. static final fields, and 2. final fields that are
-     * initialized to a compile-time constant in the field declaration. These fields may be left
-     * unmodified.
+     * <p>
+     * It may not be able to modify: 1. static final fields, and 2. final fields that are initialized to a compile-time
+     * constant in the field declaration. These fields may be left unmodified.
      *
      * @param valueProvider Prefabricated values to take values from.
-     * @param enclosingType Describes the type that contains this object as a field, to determine
-     *     any generic parameters it may contain.
-     * @param typeStack Keeps track of recursion in the type.
+     * @param enclosingType Describes the type that contains this object as a field, to determine any generic parameters
+     *                          it may contain.
+     * @param typeStack     Keeps track of recursion in the type.
      * @return An accessor to the scrambled object.
      */
     public abstract ObjectAccessor<T> scramble(
-        VintageValueProvider valueProvider,
-        TypeTag enclosingType,
-        LinkedHashSet<TypeTag> typeStack
-    );
+            VintageValueProvider valueProvider,
+            TypeTag enclosingType,
+            LinkedHashSet<TypeTag> typeStack);
 }

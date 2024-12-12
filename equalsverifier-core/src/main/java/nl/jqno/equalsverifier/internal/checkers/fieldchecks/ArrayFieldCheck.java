@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.checkers.fieldchecks;
 import static nl.jqno.equalsverifier.internal.util.Assert.assertEquals;
 
 import java.lang.reflect.Array;
+
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.CachedHashCodeInitializer;
@@ -13,10 +14,7 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     private final SubjectCreator<T> subjectCreator;
     private final CachedHashCodeInitializer<T> cachedHashCodeInitializer;
 
-    public ArrayFieldCheck(
-        SubjectCreator<T> subjectCreator,
-        CachedHashCodeInitializer<T> cachedHashCodeInitializer
-    ) {
+    public ArrayFieldCheck(SubjectCreator<T> subjectCreator, CachedHashCodeInitializer<T> cachedHashCodeInitializer) {
         this.subjectCreator = subjectCreator;
         this.cachedHashCodeInitializer = cachedHashCodeInitializer;
     }
@@ -36,7 +34,8 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
 
         if (arrayType.getComponentType().isArray()) {
             assertDeep(fieldProbe.getName(), reference, changed);
-        } else {
+        }
+        else {
             assertArray(fieldProbe.getName(), reference, changed);
         }
     }
@@ -56,7 +55,8 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
         for (int i = 0; i < length; i++) {
             if (componentType.isArray()) {
                 Array.set(result, i, arrayCopy(Array.get(array, i)));
-            } else {
+            }
+            else {
                 Array.set(result, i, Array.get(array, i));
             }
         }
@@ -64,41 +64,32 @@ public class ArrayFieldCheck<T> implements FieldCheck<T> {
     }
 
     private void assertDeep(String fieldName, Object reference, Object changed) {
-        Formatter eqEqFormatter = Formatter.of(
-            "Multidimensional array: ==, regular equals() or Arrays.equals() used" +
-            " instead of Arrays.deepEquals() for field %%.",
-            fieldName
-        );
+        Formatter eqEqFormatter = Formatter
+                .of(
+                    "Multidimensional array: ==, regular equals() or Arrays.equals() used"
+                            + " instead of Arrays.deepEquals() for field %%.",
+                    fieldName);
         assertEquals(eqEqFormatter, reference, changed);
 
-        Formatter regularFormatter = Formatter.of(
-            "Multidimensional array: regular hashCode() or Arrays.hashCode() used" +
-            " instead of Arrays.deepHashCode() for field %%.",
-            fieldName
-        );
+        Formatter regularFormatter = Formatter
+                .of(
+                    "Multidimensional array: regular hashCode() or Arrays.hashCode() used"
+                            + " instead of Arrays.deepHashCode() for field %%.",
+                    fieldName);
         assertEquals(
             regularFormatter,
             cachedHashCodeInitializer.getInitializedHashCode(reference),
-            cachedHashCodeInitializer.getInitializedHashCode(changed)
-        );
+            cachedHashCodeInitializer.getInitializedHashCode(changed));
     }
 
     private void assertArray(String fieldName, Object reference, Object changed) {
         assertEquals(
-            Formatter.of(
-                "Array: == or regular equals() used instead of Arrays.equals() for field %%.",
-                fieldName
-            ),
+            Formatter.of("Array: == or regular equals() used instead of Arrays.equals() for field %%.", fieldName),
             reference,
-            changed
-        );
+            changed);
         assertEquals(
-            Formatter.of(
-                "Array: regular hashCode() used instead of Arrays.hashCode() for field %%.",
-                fieldName
-            ),
+            Formatter.of("Array: regular hashCode() used instead of Arrays.hashCode() for field %%.", fieldName),
             cachedHashCodeInitializer.getInitializedHashCode(reference),
-            cachedHashCodeInitializer.getInitializedHashCode(changed)
-        );
+            cachedHashCodeInitializer.getInitializedHashCode(changed));
     }
 }

@@ -11,10 +11,7 @@ public class SymmetryFieldCheck<T> implements FieldCheck<T> {
 
     private final SubjectCreator<T> subjectCreator;
 
-    @SuppressFBWarnings(
-        value = "EI_EXPOSE_REP2",
-        justification = "PrefabValues is inherently mutable."
-    )
+    @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "PrefabValues is inherently mutable.")
     public SymmetryFieldCheck(SubjectCreator<T> subjectCreator) {
         this.subjectCreator = subjectCreator;
     }
@@ -32,7 +29,6 @@ public class SymmetryFieldCheck<T> implements FieldCheck<T> {
     private void checkSymmetry(T left, T right) {
         assertTrue(
             Formatter.of("Symmetry: objects are not symmetric:\n  %%\nand\n  %%", left, right),
-            left.equals(right) == right.equals(left)
-        );
+            left.equals(right) == right.equals(left));
     }
 }

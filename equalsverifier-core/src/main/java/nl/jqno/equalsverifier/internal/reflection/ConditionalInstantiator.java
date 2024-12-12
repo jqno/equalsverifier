@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
@@ -17,8 +18,7 @@ public class ConditionalInstantiator {
     /**
      * Constructor.
      *
-     * @param fullyQualifiedClassName The fully-qualified name of the class that we intend to
-     *     instantiate.
+     * @param fullyQualifiedClassName The fully-qualified name of the class that we intend to instantiate.
      */
     public ConditionalInstantiator(String fullyQualifiedClassName) {
         this(fullyQualifiedClassName, true);
@@ -27,9 +27,8 @@ public class ConditionalInstantiator {
     /**
      * Constructor.
      *
-     * @param fullyQualifiedClassName The fully-qualified name of the class that we intend to
-     *     instantiate.
-     * @param throwExceptions Whether to throw exceptions when the class can't be instantiated.
+     * @param fullyQualifiedClassName The fully-qualified name of the class that we intend to instantiate.
+     * @param throwExceptions         Whether to throw exceptions when the class can't be instantiated.
      */
     public ConditionalInstantiator(String fullyQualifiedClassName, boolean throwExceptions) {
         this.fullyQualifiedClassName = fullyQualifiedClassName;
@@ -49,18 +48,14 @@ public class ConditionalInstantiator {
     /**
      * Attempts to instantiate the type.
      *
-     * @param <T> The type to instantiate.
-     * @param paramTypes The types of the constructor parameters of the constructor that we want to
-     *     call.
+     * @param <T>         The type to instantiate.
+     * @param paramTypes  The types of the constructor parameters of the constructor that we want to call.
      * @param paramValues The values that we want to pass into the constructor.
-     * @return An instance of the type given in the constructor with the given parameter values, or
-     *     null if the type does not exist.
+     * @return An instance of the type given in the constructor with the given parameter values, or null if the type
+     *             does not exist.
      * @throws ReflectionException If instantiation fails.
      */
-    @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "EV is run only from within unit tests"
-    )
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     public <T> T instantiate(Class<?>[] paramTypes, Object[] paramValues) {
         try {
             Class<T> type = resolve();
@@ -70,7 +65,8 @@ public class ConditionalInstantiator {
             Constructor<T> c = type.getConstructor(paramTypes);
             c.setAccessible(true);
             return c.newInstance(paramValues);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return handleException(e);
         }
     }
@@ -78,13 +74,12 @@ public class ConditionalInstantiator {
     /**
      * Attempts to call a static factory method on the type.
      *
-     * @param <T> The return type of the factory method.
+     * @param <T>           The return type of the factory method.
      * @param factoryMethod The name of the factory method.
-     * @param paramTypes The types of the parameters of the specific overload of the factory method
-     *     we want to call.
-     * @param paramValues The values that we want to pass into the factory method.
-     * @return An instance of the type given by the factory method with the given parameter values,
-     *     or null of the type does not exist.
+     * @param paramTypes    The types of the parameters of the specific overload of the factory method we want to call.
+     * @param paramValues   The values that we want to pass into the factory method.
+     * @return An instance of the type given by the factory method with the given parameter values, or null of the type
+     *             does not exist.
      * @throws ReflectionException If the call to the factory method fails.
      */
     public <T> T callFactory(String factoryMethod, Class<?>[] paramTypes, Object[] paramValues) {
@@ -94,27 +89,23 @@ public class ConditionalInstantiator {
     /**
      * Attempts to call a static factory method on a type.
      *
-     * @param <T> The return type of the factory method.
+     * @param <T>             The return type of the factory method.
      * @param factoryTypeName The type that contains the factory method.
-     * @param factoryMethod The name of the factory method.
-     * @param paramTypes The types of the parameters of the specific overload of the factory method
-     *     we want to call.
-     * @param paramValues The values that we want to pass into the factory method.
-     * @return An instance of the type given by the factory method with the given parameter values,
-     *     or null of the type does not exist.
+     * @param factoryMethod   The name of the factory method.
+     * @param paramTypes      The types of the parameters of the specific overload of the factory method we want to
+     *                            call.
+     * @param paramValues     The values that we want to pass into the factory method.
+     * @return An instance of the type given by the factory method with the given parameter values, or null of the type
+     *             does not exist.
      * @throws ReflectionException If the call to the factory method fails.
      */
-    @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "EV is run only from within unit tests"
-    )
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     @SuppressWarnings("unchecked")
     public <T> T callFactory(
-        String factoryTypeName,
-        String factoryMethod,
-        Class<?>[] paramTypes,
-        Object[] paramValues
-    ) {
+            String factoryTypeName,
+            String factoryMethod,
+            Class<?>[] paramTypes,
+            Object[] paramValues) {
         try {
             Class<T> type = resolve();
             if (type == null) {
@@ -124,7 +115,8 @@ public class ConditionalInstantiator {
             Method factory = factoryType.getMethod(factoryMethod, paramTypes);
             factory.setAccessible(true);
             return (T) factory.invoke(null, paramValues);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return handleException(e);
         }
     }
@@ -132,15 +124,12 @@ public class ConditionalInstantiator {
     /**
      * Attempts to resolve a static constant on the type.
      *
-     * @param <T> The type of the constant.
+     * @param <T>          The type of the constant.
      * @param constantName The name of the constant.
      * @return The value of the constant, or null if the type does not exist.
      * @throws ReflectionException If resolving the constant fails.
      */
-    @SuppressFBWarnings(
-        value = "DP_DO_INSIDE_DO_PRIVILEGED",
-        justification = "EV is run only from within unit tests"
-    )
+    @SuppressFBWarnings(value = "DP_DO_INSIDE_DO_PRIVILEGED", justification = "EV is run only from within unit tests")
     @SuppressWarnings("unchecked")
     public <T> T returnConstant(String constantName) {
         try {
@@ -151,7 +140,8 @@ public class ConditionalInstantiator {
             Field field = type.getField(constantName);
             field.setAccessible(true);
             return (T) field.get(null);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             return handleException(e);
         }
     }
@@ -159,7 +149,8 @@ public class ConditionalInstantiator {
     private <T> T handleException(Exception e) {
         if (throwExceptions) {
             throw new ReflectionException(e);
-        } else {
+        }
+        else {
             return null;
         }
     }

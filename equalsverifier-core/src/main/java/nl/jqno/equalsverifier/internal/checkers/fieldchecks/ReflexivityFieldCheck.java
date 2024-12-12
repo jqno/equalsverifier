@@ -6,6 +6,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertFalse;
 import java.lang.reflect.Field;
 import java.util.EnumSet;
 import java.util.Set;
+
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -80,19 +81,18 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         Field field = probe.getField();
         String fieldName = field.getName();
         TypeTag tag = TypeTag.of(field, typeTag);
-        Tuple<?> tuple = prefabbedFields.contains(fieldName)
-            ? fieldCache.get(fieldName)
-            : valueProvider.provideOrThrow(tag);
+        Tuple<?> tuple =
+                prefabbedFields.contains(fieldName) ? fieldCache.get(fieldName) : valueProvider.provideOrThrow(tag);
 
         Object left = subjectCreator.withFieldSetTo(field, tuple.getRed());
         Object right = subjectCreator.withFieldSetTo(field, tuple.getRedCopy());
 
-        Formatter f = Formatter.of(
-            "Reflexivity: == used instead of .equals() on field: %%" +
-            "\nIf this is intentional, consider suppressing Warning.%%",
-            probe.getName(),
-            Warning.REFERENCE_EQUALITY.toString()
-        );
+        Formatter f = Formatter
+                .of(
+                    "Reflexivity: == used instead of .equals() on field: %%"
+                            + "\nIf this is intentional, consider suppressing Warning.%%",
+                    probe.getName(),
+                    Warning.REFERENCE_EQUALITY.toString());
         assertEquals(f, left, right);
     }
 
@@ -116,31 +116,30 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
 
     private void checkReflexivityFor(T left, T right) {
         if (warningsToSuppress.contains(Warning.IDENTICAL_COPY)) {
-            Formatter f = Formatter.of(
-                "Unnecessary suppression: %%. Two identical copies are equal.",
-                Warning.IDENTICAL_COPY.toString()
-            );
+            Formatter f = Formatter
+                    .of(
+                        "Unnecessary suppression: %%. Two identical copies are equal.",
+                        Warning.IDENTICAL_COPY.toString());
             assertFalse(f, left.equals(right));
-        } else {
-            boolean isEntity = annotationCache.hasClassAnnotation(
-                typeTag.getType(),
-                SupportedAnnotations.ENTITY
-            );
+        }
+        else {
+            boolean isEntity = annotationCache.hasClassAnnotation(typeTag.getType(), SupportedAnnotations.ENTITY);
             if (isEntity) {
-                Formatter f = Formatter.of(
-                    "Reflexivity: entity does not equal an identical copy of itself:\n  %%" +
-                    "\nIf this is intentional, consider suppressing Warning.%%.",
-                    left,
-                    Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString()
-                );
+                Formatter f = Formatter
+                        .of(
+                            "Reflexivity: entity does not equal an identical copy of itself:\n  %%"
+                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            left,
+                            Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY.toString());
                 assertEquals(f, left, right);
-            } else {
-                Formatter f = Formatter.of(
-                    "Reflexivity: object does not equal an identical copy of itself:\n  %%" +
-                    "\nIf this is intentional, consider suppressing Warning.%%.",
-                    left,
-                    Warning.IDENTICAL_COPY.toString()
-                );
+            }
+            else {
+                Formatter f = Formatter
+                        .of(
+                            "Reflexivity: object does not equal an identical copy of itself:\n  %%"
+                                    + "\nIf this is intentional, consider suppressing Warning.%%.",
+                            left,
+                            Warning.IDENTICAL_COPY.toString());
                 assertEquals(f, left, right);
             }
         }

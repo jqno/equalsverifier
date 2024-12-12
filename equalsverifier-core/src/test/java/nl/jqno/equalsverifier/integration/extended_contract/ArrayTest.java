@@ -5,6 +5,7 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Arrays;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -13,29 +14,29 @@ import org.junit.jupiter.api.Test;
 public class ArrayTest {
 
     private static final String REGULAR_EQUALS =
-        "Array: == or regular equals() used instead of Arrays.equals() for field";
+            "Array: == or regular equals() used instead of Arrays.equals() for field";
     private static final String REGULAR_HASHCODE =
-        "Array: regular hashCode() used instead of Arrays.hashCode() for field";
+            "Array: regular hashCode() used instead of Arrays.hashCode() for field";
     private static final String MULTIDIMENSIONAL_EQUALS =
-        "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
+            "Multidimensional array: ==, regular equals() or Arrays.equals() used instead of Arrays.deepEquals() for field";
     private static final String MULTIDIMENSIONAL_HASHCODE =
-        "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
+            "Multidimensional array: regular hashCode() or Arrays.hashCode() used instead of Arrays.deepHashCode() for field";
     private static final String FIELD_NAME = "array";
 
     @Test
     public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify())
-            .assertFailure()
-            .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
     }
 
     @Test
@@ -46,26 +47,25 @@ public class ArrayTest {
     @Test
     public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify())
-            .assertFailure()
-            .assertMessageContains(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
     }
 
     @Test
     public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(MULTIDIMENSIONAL_HASHCODE, FIELD_NAME);
     }
 
     @Test
@@ -76,13 +76,9 @@ public class ArrayTest {
     @Test
     public void failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("second", MULTIDIMENSIONAL_HASHCODE);
+                .when(() -> EqualsVerifier.forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class).verify())
+                .assertFailure()
+                .assertMessageContains("second", MULTIDIMENSIONAL_HASHCODE);
     }
 
     @Test
@@ -93,27 +89,25 @@ public class ArrayTest {
     @Test
     public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify()
-            )
-            .assertThrows(AssertionError.class)
-            .assertMessageContains("Recursive datastructure");
+                .when(() -> EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify())
+                .assertThrows(AssertionError.class)
+                .assertMessageContains("Recursive datastructure");
     }
 
     @Test
     public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAnObjectArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ObjectArrayRegularEquals.class).verify())
-            .assertFailure()
-            .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(ObjectArrayRegularEquals.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_EQUALS, FIELD_NAME);
     }
 
     @Test
     public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAnObjectArray() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
+                .when(() -> EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains(REGULAR_HASHCODE, FIELD_NAME);
     }
 
     @Test
@@ -123,18 +117,15 @@ public class ArrayTest {
 
     @Test
     public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
-        EqualsVerifier
-            .forClass(ArrayAndSomethingUnused.class)
-            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+        EqualsVerifier.forClass(ArrayAndSomethingUnused.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
     public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
         EqualsVerifier
-            .forClass(ArraysAreUnused.class)
-            .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+                .forClass(ArraysAreUnused.class)
+                .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
     }
 
     @Test
@@ -154,10 +145,10 @@ public class ArrayTest {
         int[][] x = { a, a, a };
         int[][] y = { b, b, b };
         EqualsVerifier
-            .forClass(Invariant.class)
-            .withPrefabValues(int[].class, a, b)
-            .withPrefabValues(int[][].class, x, y)
-            .verify();
+                .forClass(Invariant.class)
+                .withPrefabValues(int[].class, a, b)
+                .withPrefabValues(int[][].class, x, y)
+                .verify();
     }
 
     static final class PrimitiveArrayRegularEquals {
@@ -179,7 +170,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.hashCode(array);
+            return array == null ? 0 : Arrays.hashCode(array);
         }
     }
 
@@ -225,7 +216,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.hashCode(array);
+            return array == null ? 0 : Arrays.hashCode(array);
         }
     }
 
@@ -248,7 +239,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.deepHashCode(array);
+            return array == null ? 0 : Arrays.deepHashCode(array);
         }
     }
 
@@ -271,7 +262,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : array.hashCode();
+            return array == null ? 0 : array.hashCode();
         }
     }
 
@@ -317,7 +308,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.deepHashCode(array);
+            return array == null ? 0 : Arrays.deepHashCode(array);
         }
     }
 
@@ -326,10 +317,7 @@ public class ArrayTest {
         private final Object[][] first;
         private final Object[][] second;
 
-        public TwoMultidimensionalArraysShallowHashCodeForSecond(
-            Object[][] first,
-            Object[][] second
-        ) {
+        public TwoMultidimensionalArraysShallowHashCodeForSecond(Object[][] first, Object[][] second) {
             this.first = first;
             this.second = second;
         }
@@ -340,7 +328,7 @@ public class ArrayTest {
                 return false;
             }
             TwoMultidimensionalArraysShallowHashCodeForSecond other =
-                (TwoMultidimensionalArraysShallowHashCodeForSecond) obj;
+                    (TwoMultidimensionalArraysShallowHashCodeForSecond) obj;
             return Arrays.deepEquals(first, other.first) && Arrays.deepEquals(second, other.second);
         }
 
@@ -373,7 +361,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.deepHashCode(array);
+            return array == null ? 0 : Arrays.deepHashCode(array);
         }
     }
 
@@ -429,7 +417,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.hashCode(array);
+            return array == null ? 0 : Arrays.hashCode(array);
         }
     }
 
@@ -475,7 +463,7 @@ public class ArrayTest {
 
         @Override
         public int hashCode() {
-            return (array == null) ? 0 : Arrays.hashCode(array);
+            return array == null ? 0 : Arrays.hashCode(array);
         }
     }
 
@@ -570,9 +558,7 @@ public class ArrayTest {
                 return false;
             }
             Invariant other = (Invariant) obj;
-            return (
-                Arrays.equals(array, other.array) && Arrays.deepEquals(multiArray, other.multiArray)
-            );
+            return Arrays.equals(array, other.array) && Arrays.deepEquals(multiArray, other.multiArray);
         }
 
         @Override

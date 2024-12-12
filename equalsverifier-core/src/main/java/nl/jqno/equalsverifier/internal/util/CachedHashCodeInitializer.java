@@ -5,23 +5,26 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
 /**
- * Records an initializer for a cached hash code (field name and recompute method), if any, for the
- * object to be verified.
+ * Records an initializer for a cached hash code (field name and recompute method), if any, for the object to be
+ * verified.
  *
- * <p>EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to obtain the hash
- * code, call the {@link #getInitializedHashCode(Object)} method in this class:
+ * <p>
+ * EqualsVerifier may then, instead of calling <code>Object.hashCode()</code> to obtain the hash code, call the
+ * {@link #getInitializedHashCode(Object)} method in this class:
  *
- * <p>* If this class has recorded a cached hash code initializer for the object, that method will
- * recompute and update the cached hash code in the object automatically, before returning the
- * result of <code>Object.hashCode()</code>.
+ * <p>
+ * * If this class has recorded a cached hash code initializer for the object, that method will recompute and update the
+ * cached hash code in the object automatically, before returning the result of <code>Object.hashCode()</code>.
  *
- * <p>* If this class has not recorded a cached hash code initializer for the object, it will simply
- * return the value of <code>Object.hashCode()</code> as normal instead.
+ * <p>
+ * * If this class has not recorded a cached hash code initializer for the object, it will simply return the value of
+ * <code>Object.hashCode()</code> as normal instead.
  */
 public class CachedHashCodeInitializer<T> {
 
@@ -35,11 +38,10 @@ public class CachedHashCodeInitializer<T> {
     }
 
     private CachedHashCodeInitializer(
-        boolean passthrough,
-        Field cachedHashCodeField,
-        Method calculateMethod,
-        T example
-    ) {
+            boolean passthrough,
+            Field cachedHashCodeField,
+            Method calculateMethod,
+            T example) {
         this.passthrough = passthrough;
         this.cachedHashCodeField = cachedHashCodeField;
         this.calculateMethod = calculateMethod;
@@ -48,11 +50,10 @@ public class CachedHashCodeInitializer<T> {
 
     @SuppressFBWarnings(value = "CT_CONSTRUCTOR_THROW", justification = "Will evaluate this later")
     public CachedHashCodeInitializer(
-        Class<?> type,
-        String cachedHashCodeField,
-        String calculateHashCodeMethod,
-        T example
-    ) {
+            Class<?> type,
+            String cachedHashCodeField,
+            String calculateHashCodeMethod,
+            T example) {
         this.passthrough = false;
         this.cachedHashCodeField = findCachedHashCodeField(type, cachedHashCodeField);
         this.calculateMethod = findCalculateHashCodeMethod(type, calculateHashCodeMethod, false);
@@ -66,12 +67,10 @@ public class CachedHashCodeInitializer<T> {
     public static <T> CachedHashCodeInitializer<T> lombokCachedHashcode(T example) {
         @SuppressWarnings("unchecked")
         final Class<T> type = (Class<T>) example.getClass();
-        return new CachedHashCodeInitializer<>(
-            false,
-            findCachedHashCodeField(type, "$hashCodeCache"),
-            findCalculateHashCodeMethod(type, "hashCode", true),
-            example
-        );
+        return new CachedHashCodeInitializer<>(false,
+                findCachedHashCodeField(type, "$hashCodeCache"),
+                findCalculateHashCodeMethod(type, "hashCode", true),
+                example);
     }
 
     public boolean isPassthrough() {
@@ -108,45 +107,35 @@ public class CachedHashCodeInitializer<T> {
     private static Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
         for (Field candidateField : FieldIterable.of(type)) {
             if (candidateField.getName().equals(cachedHashCodeFieldName)) {
-                if (
-                    !Modifier.isPublic(candidateField.getModifiers()) &&
-                    candidateField.getType().equals(int.class)
-                ) {
+                if (!Modifier.isPublic(candidateField.getModifiers()) && candidateField.getType().equals(int.class)) {
                     candidateField.setAccessible(true);
                     return candidateField;
                 }
             }
         }
-        throw new IllegalArgumentException(
-            "Cached hashCode: Could not find cachedHashCodeField: must be 'private int " +
-            cachedHashCodeFieldName +
-            ";'"
-        );
+        throw new IllegalArgumentException("Cached hashCode: Could not find cachedHashCodeField: must be 'private int "
+                + cachedHashCodeFieldName + ";'");
     }
 
     private static Method findCalculateHashCodeMethod(
-        Class<?> type,
-        String calculateHashCodeMethodName,
-        boolean acceptPublicMethod
-    ) {
+            Class<?> type,
+            String calculateHashCodeMethodName,
+            boolean acceptPublicMethod) {
         for (Class<?> currentClass : SuperclassIterable.ofIncludeSelf(type)) {
             try {
                 Method method = currentClass.getDeclaredMethod(calculateHashCodeMethodName);
-                if (
-                    (acceptPublicMethod || !Modifier.isPublic(method.getModifiers())) &&
-                    method.getReturnType().equals(int.class)
-                ) {
+                if ((acceptPublicMethod || !Modifier.isPublic(method.getModifiers()))
+                        && method.getReturnType().equals(int.class)) {
                     method.setAccessible(true);
                     return method;
                 }
-            } catch (NoSuchMethodException ignore) {
+            }
+            catch (NoSuchMethodException ignore) {
                 // Method not found; continue.
             }
         }
         throw new IllegalArgumentException(
-            "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int " +
-            calculateHashCodeMethodName +
-            "()'"
-        );
+                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int "
+                        + calculateHashCodeMethodName + "()'");
     }
 }

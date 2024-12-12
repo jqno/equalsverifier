@@ -20,11 +20,7 @@ public final class HandwrittenGetClassPoint {
             return false;
         }
         HandwrittenGetClassPoint other = (HandwrittenGetClassPoint) obj;
-        return (
-            x == other.x &&
-            y == other.y &&
-            (color == null ? other.color == null : color.equals(other.color))
-        );
+        return x == other.x && y == other.y && (color == null ? other.color == null : color.equals(other.color));
     }
 
     @Override

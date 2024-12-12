@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 
 public class SealedTypesHelperTest {

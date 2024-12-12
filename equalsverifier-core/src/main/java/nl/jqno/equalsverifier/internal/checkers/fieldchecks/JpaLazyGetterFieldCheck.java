@@ -7,6 +7,7 @@ import static nl.jqno.equalsverifier.internal.util.Assert.assertTrue;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.function.Function;
+
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
@@ -45,23 +46,20 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         String fieldName = fieldProbe.getName();
         String getterName = fieldnameToGetter.apply(fieldName);
 
-        if (
-            !fieldIsUsed(fieldProbe.getField(), true) ||
-            !fieldIsLazy(fieldName) ||
-            Modifier.isFinal(type.getModifiers())
-        ) {
+        if (!fieldIsUsed(fieldProbe.getField(), true)
+                || !fieldIsLazy(fieldName)
+                || Modifier.isFinal(type.getModifiers())) {
             return;
         }
 
         assertTrue(
-            Formatter.of(
-                "Class %% doesn't contain getter %%() for field %%.",
-                classProbe.getType().getSimpleName(),
-                getterName,
-                fieldName
-            ),
-            classProbe.hasMethod(getterName)
-        );
+            Formatter
+                    .of(
+                        "Class %% doesn't contain getter %%() for field %%.",
+                        classProbe.getType().getSimpleName(),
+                        getterName,
+                        fieldName),
+            classProbe.hasMethod(getterName));
 
         TypeTag sub = new TypeTag(throwingGetterCreator(getterName));
         Tuple<T> tuple = valueProvider.<T>provideOrThrow(sub);
@@ -71,7 +69,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         boolean equalsExceptionCaught = false;
         try {
             red1.equals(red2);
-        } catch (EqualsVerifierInternalBugException e) {
+        }
+        catch (EqualsVerifierInternalBugException e) {
             equalsExceptionCaught = true;
         }
         assertEntity(fieldName, "equals", getterName, equalsExceptionCaught);
@@ -80,7 +79,8 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
         boolean hashCodeExceptionCaught = false;
         try {
             red1.hashCode();
-        } catch (EqualsVerifierInternalBugException e) {
+        }
+        catch (EqualsVerifierInternalBugException e) {
             hashCodeExceptionCaught = true;
         }
         assertEntity(fieldName, "hashCode", getterName, hashCodeExceptionCaught || !usedInHashcode);
@@ -92,47 +92,35 @@ public class JpaLazyGetterFieldCheck<T> implements FieldCheck<T> {
 
         if (forEquals) {
             return !red.equals(blue);
-        } else {
+        }
+        else {
             return red.hashCode() != blue.hashCode();
         }
     }
 
     private boolean fieldIsLazy(String fieldName) {
-        return (
-            annotationCache.hasFieldAnnotation(
-                type,
-                fieldName,
-                SupportedAnnotations.JPA_LINKED_FIELD
-            ) ||
-            annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.JPA_LAZY_FIELD)
-        );
+        return annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.JPA_LINKED_FIELD)
+                || annotationCache.hasFieldAnnotation(type, fieldName, SupportedAnnotations.JPA_LAZY_FIELD);
     }
 
     private Class<T> throwingGetterCreator(String getterName) {
-        return Instantiator.giveDynamicSubclass(
-            type,
-            getterName,
-            builder ->
-                builder
-                    .method(named(getterName))
-                    .intercept(throwing(EqualsVerifierInternalBugException.class))
-        );
+        return Instantiator
+                .giveDynamicSubclass(
+                    type,
+                    getterName,
+                    builder -> builder
+                            .method(named(getterName))
+                            .intercept(throwing(EqualsVerifierInternalBugException.class)));
     }
 
-    private void assertEntity(
-        String fieldName,
-        String method,
-        String getterName,
-        boolean assertion
-    ) {
+    private void assertEntity(String fieldName, String method, String getterName, boolean assertion) {
         assertTrue(
-            Formatter.of(
-                "JPA Entity: direct reference to field %% used in %% instead of getter %%().",
-                fieldName,
-                method,
-                getterName
-            ),
-            assertion
-        );
+            Formatter
+                    .of(
+                        "JPA Entity: direct reference to field %% used in %% instead of getter %%().",
+                        fieldName,
+                        method,
+                        getterName),
+            assertion);
     }
 }

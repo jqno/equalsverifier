@@ -18,51 +18,46 @@ public class AbstractHierarchyTest {
     @Test
     public void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
         EqualsVerifier
-            .forClass(AbstractRedefinablePoint.class)
-            .withRedefinedSubclass(FinalRedefinedPoint.class)
-            .verify();
+                .forClass(AbstractRedefinablePoint.class)
+                .withRedefinedSubclass(FinalRedefinedPoint.class)
+                .verify();
     }
 
     @Test
     public void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
-            .assertFailure()
-            .assertCause(NullPointerException.class)
-            .assertMessageContains("Non-nullity: equals throws NullPointerException");
+                .when(() -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
+                .assertFailure()
+                .assertCause(NullPointerException.class)
+                .assertMessageContains("Non-nullity: equals throws NullPointerException");
     }
 
     @Test
     public void succeed_whenEqualsThrowsNull_givenClassIsAbstractAndWarningIsSuppressed() {
-        EqualsVerifier
-            .forClass(NullThrowingColorContainer.class)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(NullThrowingColorContainer.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
     public void fail_whenAbstractImplementationThrowsNpe() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(NullThrowingLazyObjectContainer.class)
-                    .suppress(Warning.NONFINAL_FIELDS)
-                    .withIgnoredFields("objectFactory")
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains(
-                "Abstract delegation: equals throws AbstractMethodError when field object is null"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(NullThrowingLazyObjectContainer.class)
+                            .suppress(Warning.NONFINAL_FIELDS)
+                            .withIgnoredFields("objectFactory")
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Abstract delegation: equals throws AbstractMethodError when field object is null");
     }
 
     @Test
     public void succeed_whenAbstractImplementationThrowsNpe_givenWarningIsSuppressed() {
         EqualsVerifier
-            .forClass(NullThrowingLazyObjectContainer.class)
-            .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
-            .withIgnoredFields("objectFactory")
-            .verify();
+                .forClass(NullThrowingLazyObjectContainer.class)
+                .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)
+                .withIgnoredFields("objectFactory")
+                .verify();
     }
 
     abstract static class AbstractFinalMethodsPoint {
@@ -206,9 +201,7 @@ public class AbstractHierarchyTest {
 
         private final SupplierThatDoesntHaveAPrefab<Object> objectFactory;
 
-        protected NullThrowingLazyObjectContainer(
-            SupplierThatDoesntHaveAPrefab<Object> flourFactory
-        ) {
+        protected NullThrowingLazyObjectContainer(SupplierThatDoesntHaveAPrefab<Object> flourFactory) {
             this.objectFactory = flourFactory;
         }
 

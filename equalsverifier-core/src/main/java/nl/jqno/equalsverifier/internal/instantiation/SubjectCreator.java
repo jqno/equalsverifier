@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.ModuleException;
 import nl.jqno.equalsverifier.internal.reflection.*;
@@ -11,8 +12,7 @@ import nl.jqno.equalsverifier.internal.util.Rethrow;
 import org.objenesis.Objenesis;
 
 /**
- * Creates a subject, i.e. an instance of the class that is currently being tested by
- * EqualsVerifier.
+ * Creates a subject, i.e. an instance of the class that is currently being tested by EqualsVerifier.
  */
 public class SubjectCreator<T> {
 
@@ -28,18 +28,17 @@ public class SubjectCreator<T> {
     /**
      * Constructor.
      *
-     * @param config A configuration object.
+     * @param config        A configuration object.
      * @param valueProvider To provide values for the fields of the subject.
-     * @param fieldCache Prepared values for the fields of the subject.
-     * @param objenesis Needed by InstanceCreator to instantiate non-record classes.
+     * @param fieldCache    Prepared values for the fields of the subject.
+     * @param objenesis     Needed by InstanceCreator to instantiate non-record classes.
      */
     @SuppressFBWarnings(value = "EI_EXPOSE_REP2", justification = "A cache is inherently mutable")
     public SubjectCreator(
-        Configuration<T> config,
-        ValueProvider valueProvider,
-        FieldCache fieldCache,
-        Objenesis objenesis
-    ) {
+            Configuration<T> config,
+            ValueProvider valueProvider,
+            FieldCache fieldCache,
+            Objenesis objenesis) {
         this.typeTag = config.getTypeTag();
         this.type = typeTag.getType();
         this.config = config;
@@ -51,9 +50,8 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates an instance with all values set with prefab values assigned to their respective field
-     * names or types, or, if no prefab values are given, values created by the
-     * {@link ValueProvider}.
+     * Creates an instance with all values set with prefab values assigned to their respective field names or types, or,
+     * if no prefab values are given, values created by the {@link ValueProvider}.
      *
      * @return A plain instance.
      */
@@ -62,8 +60,8 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates a {@link #plain()} instance, but with the given field set to its type's default
-     * value: null for object references, 0 for numbers, false for booleans.
+     * Creates a {@link #plain()} instance, but with the given field set to its type's default value: null for object
+     * references, 0 for numbers, false for booleans.
      *
      * @param field The field to default.
      * @return A plain instance with a field defaulted.
@@ -73,8 +71,8 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates an instance with all values set to their type's default value: null for object
-     * references, 0 for numbers, false for booleans.
+     * Creates an instance with all values set to their type's default value: null for object references, 0 for numbers,
+     * false for booleans.
      *
      * @return An instance with all fields defaulted.
      */
@@ -87,9 +85,8 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates an instance with all values set to their type's default value: null for object
-     * references, 0 for numbers, false for booleans; except for the given field which is set
-     * to its {@link #plain()} value.
+     * Creates an instance with all values set to their type's default value: null for object references, 0 for numbers,
+     * false for booleans; except for the given field which is set to its {@link #plain()} value.
      *
      * @param field The field that should not be defaulted.
      * @return An instance with all fields defaulted except for {@code field}.
@@ -144,9 +141,8 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates a {@link #plain()} instance, but with all fields that are declared in the current
-     * class set to another value. Fields coming from the superclasses get their {@link #plain()}
-     * value.
+     * Creates a {@link #plain()} instance, but with all fields that are declared in the current class set to another
+     * value. Fields coming from the superclasses get their {@link #plain()} value.
      *
      * @return A plain instance with all non-inherited fields changed.
      */
@@ -160,8 +156,7 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates a new instance with all fields set to the same value as their counterparts from
-     * {@code original}.
+     * Creates a new instance with all fields set to the same value as their counterparts from {@code original}.
      *
      * @param original The instance to copy.
      * @return A copy of the given original.
@@ -171,29 +166,26 @@ public class SubjectCreator<T> {
     }
 
     /**
-     * Creates a new instance of the superclass of the current class, with all fields that exist
-     * within that superclass set to the same value as their counterparts from {@code original}.
+     * Creates a new instance of the superclass of the current class, with all fields that exist within that superclass
+     * set to the same value as their counterparts from {@code original}.
      *
      * @param original The instance to copy.
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
     public Object copyIntoSuperclass(T original) {
-        InstanceCreator<? super T> superCreator = new InstanceCreator<>(
-            new ClassProbe<>(type.getSuperclass()),
-            objenesis
-        );
+        InstanceCreator<? super T> superCreator =
+                new InstanceCreator<>(new ClassProbe<>(type.getSuperclass()), objenesis);
         return superCreator.copy(original);
     }
 
     /**
-     * Creates a new instance of the given subclass of the current class, with all fields that also
-     * exist in the current class set to the same value as their counterparts from
-     * {@code original}. All fields declared in the subclass are set to their {@link #plain()}
-     * values.
+     * Creates a new instance of the given subclass of the current class, with all fields that also exist in the current
+     * class set to the same value as their counterparts from {@code original}. All fields declared in the subclass are
+     * set to their {@link #plain()} values.
      *
-     * @param <S> A subtype of original's type.
+     * @param <S>      A subtype of original's type.
      * @param original The instance to copy.
-     * @param subType A subtype of original's type.
+     * @param subType  A subtype of original's type.
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
@@ -210,8 +202,7 @@ public class SubjectCreator<T> {
         Map<Field, Object> values = new HashMap<>(givens);
         for (Field f : fields()) {
             boolean fieldIsAbsent = !values.containsKey(f);
-            boolean fieldCannotBeNull =
-                values.get(f) == null && !FieldProbe.of(f).canBeDefault(config);
+            boolean fieldCannotBeNull = values.get(f) == null && !FieldProbe.of(f).canBeDefault(config);
             if (fieldIsAbsent || fieldCannotBeNull) {
                 Object value = valuesFor(f).getRed();
                 values.put(f, value);
@@ -248,17 +239,11 @@ public class SubjectCreator<T> {
             Tuple<?> tuple = valueProvider.provideOrThrow(fieldTag);
             fieldCache.put(fieldName, tuple);
             return tuple;
-        } catch (ModuleException e) {
-            throw new ModuleException(
-                "Field " +
-                f.getName() +
-                " of type " +
-                f.getType().getName() +
-                " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type " +
-                f.getType().getName() +
-                ".",
-                e
-            );
+        }
+        catch (ModuleException e) {
+            throw new ModuleException("Field " + f.getName() + " of type " + f.getType().getName()
+                    + " is not accessible via the Java Module System.\nConsider opening the module that contains it, or add prefab values for type "
+                    + f.getType().getName() + ".", e);
         }
     }
 }

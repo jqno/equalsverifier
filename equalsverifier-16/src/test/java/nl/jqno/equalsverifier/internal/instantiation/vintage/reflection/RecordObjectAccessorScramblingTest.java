@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
+
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
@@ -37,14 +38,13 @@ public class RecordObjectAccessorScramblingTest {
     @Test
     public void scramble() throws Exception {
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
-        factoryCache.put(
-            Point.class,
-            values(
-                constructor.newInstance(1, 2),
-                constructor.newInstance(2, 3),
-                constructor.newInstance(1, 2)
-            )
-        );
+        factoryCache
+                .put(
+                    Point.class,
+                    values(
+                        constructor.newInstance(1, 2),
+                        constructor.newInstance(2, 3),
+                        constructor.newInstance(1, 2)));
         Object original = constructor.newInstance(1, 2);
 
         Object scrambled = doScramble(original);

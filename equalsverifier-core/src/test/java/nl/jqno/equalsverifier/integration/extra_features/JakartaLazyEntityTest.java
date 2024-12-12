@@ -1,8 +1,9 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import jakarta.persistence.*;
 import java.util.Arrays;
 import java.util.Objects;
+
+import jakarta.persistence.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -14,35 +15,32 @@ public class JakartaLazyEntityTest {
 
     @Test
     public void gettersAreUsed() {
-        EqualsVerifier
-            .forClass(CorrectJakartaLazyFieldContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+        EqualsVerifier.forClass(CorrectJakartaLazyFieldContainer.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
     public void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier
-            .forClass(CorrectBasicJakartaEagerFieldContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+                .forClass(CorrectBasicJakartaEagerFieldContainer.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 
     @Test
     public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier
-            .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
-            .withIgnoredFields("basic")
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+                .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
+                .withIgnoredFields("basic")
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 
     @Test
     public void basicGetterNotUsed_givenWarningSuppressed() {
         EqualsVerifier
-            .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
-            .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
-            .verify();
+                .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
+                .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
+                .verify();
     }
 
     @Test
@@ -101,74 +99,52 @@ public class JakartaLazyEntityTest {
 
     @Test
     public void constantHashCode_givenStrictHashCodeSuppressed() {
-        EqualsVerifier
-            .forClass(ConstantHashCodeContainer.class)
-            .suppress(Warning.STRICT_HASHCODE)
-            .verify();
+        EqualsVerifier.forClass(ConstantHashCodeContainer.class).suppress(Warning.STRICT_HASHCODE).verify();
     }
 
     @Test
     public void differentCodingStyle_single() {
         EqualsVerifier
-            .forClass(DifferentCodingStyleContainer.class)
-            .suppress(Warning.NONFINAL_FIELDS)
-            .withFieldnameToGetterConverter(fn ->
-                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
-            )
-            .verify();
+                .forClass(DifferentCodingStyleContainer.class)
+                .suppress(Warning.NONFINAL_FIELDS)
+                .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
+                .verify();
     }
 
     @Test
     public void differentCodingStyle_configured() {
         EqualsVerifier
-            .configure()
-            .suppress(Warning.NONFINAL_FIELDS)
-            .withFieldnameToGetterConverter(fn ->
-                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
-            )
-            .forClass(DifferentCodingStyleContainer.class)
-            .verify();
+                .configure()
+                .suppress(Warning.NONFINAL_FIELDS)
+                .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
+                .forClass(DifferentCodingStyleContainer.class)
+                .verify();
     }
 
     @Test
     public void differentCodingStyle_multiple() {
         EqualsVerifier
-            .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
-            .suppress(Warning.NONFINAL_FIELDS)
-            .withFieldnameToGetterConverter(fn ->
-                "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3)
-            )
-            .verify();
+                .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
+                .suppress(Warning.NONFINAL_FIELDS)
+                .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
+                .verify();
     }
 
     @Test
     public void getterUsedForGeneratedId() {
+        EqualsVerifier.forClass(CorrectGeneratedJakartaIdContainer.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier
-            .forClass(CorrectGeneratedJakartaIdContainer.class)
-            .suppress(Warning.SURROGATE_KEY)
-            .verify();
-        EqualsVerifier
-            .forClass(CorrectGeneratedJakartaIdContainer.class)
-            .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
-            .verify();
+                .forClass(CorrectGeneratedJakartaIdContainer.class)
+                .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)
+                .verify();
     }
 
     @Test
     public void getterNotUsedForGeneratedId() {
         getterNotUsed(IncorrectGeneratedJakartaIdContainer.class, "equals", Warning.SURROGATE_KEY);
-        getterNotUsed_warningSuppressed(
-            IncorrectGeneratedJakartaIdContainer.class,
-            Warning.SURROGATE_KEY
-        );
-        getterNotUsed(
-            IncorrectGeneratedJakartaIdContainer.class,
-            "equals",
-            Warning.SURROGATE_OR_BUSINESS_KEY
-        );
-        getterNotUsed_warningSuppressed(
-            IncorrectGeneratedJakartaIdContainer.class,
-            Warning.SURROGATE_OR_BUSINESS_KEY
-        );
+        getterNotUsed_warningSuppressed(IncorrectGeneratedJakartaIdContainer.class, Warning.SURROGATE_KEY);
+        getterNotUsed(IncorrectGeneratedJakartaIdContainer.class, "equals", Warning.SURROGATE_OR_BUSINESS_KEY);
+        getterNotUsed_warningSuppressed(IncorrectGeneratedJakartaIdContainer.class, Warning.SURROGATE_OR_BUSINESS_KEY);
     }
 
     @Test
@@ -183,17 +159,13 @@ public class JakartaLazyEntityTest {
 
     private void getterNotUsed(Class<?> type, String method, Warning... additionalWarnings) {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
-            .assertFailure()
-            .assertMessageContains("JPA Entity", method, "direct reference");
+                .when(() -> EqualsVerifier.forClass(type).suppress(additionalWarnings).verify())
+                .assertFailure()
+                .assertMessageContains("JPA Entity", method, "direct reference");
     }
 
     private void getterNotUsed_warningSuppressed(Class<?> type, Warning... additionalWarnings) {
-        EqualsVerifier
-            .forClass(type)
-            .suppress(Warning.JPA_GETTER)
-            .suppress(additionalWarnings)
-            .verify();
+        EqualsVerifier.forClass(type).suppress(Warning.JPA_GETTER).suppress(additionalWarnings).verify();
     }
 
     @Entity
@@ -247,26 +219,24 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             CorrectJakartaLazyFieldContainer other = (CorrectJakartaLazyFieldContainer) obj;
-            return (
-                Objects.equals(getBasic(), other.getBasic()) &&
-                Objects.equals(getOneToOne(), other.getOneToOne()) &&
-                Objects.equals(getOneToMany(), other.getOneToMany()) &&
-                Objects.equals(getManyToOne(), other.getManyToOne()) &&
-                Objects.equals(getManyToMany(), other.getManyToMany()) &&
-                Objects.equals(getElementCollection(), other.getElementCollection())
-            );
+            return Objects.equals(getBasic(), other.getBasic())
+                    && Objects.equals(getOneToOne(), other.getOneToOne())
+                    && Objects.equals(getOneToMany(), other.getOneToMany())
+                    && Objects.equals(getManyToOne(), other.getManyToOne())
+                    && Objects.equals(getManyToMany(), other.getManyToMany())
+                    && Objects.equals(getElementCollection(), other.getElementCollection());
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(
-                getBasic(),
-                getOneToOne(),
-                getOneToMany(),
-                getManyToOne(),
-                getManyToMany(),
-                getElementCollection()
-            );
+            return Objects
+                    .hash(
+                        getBasic(),
+                        getOneToOne(),
+                        getOneToMany(),
+                        getManyToOne(),
+                        getManyToMany(),
+                        getElementCollection());
         }
     }
 
@@ -285,8 +255,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof CorrectBasicJakartaEagerFieldContainer)) {
                 return false;
             }
-            CorrectBasicJakartaEagerFieldContainer other =
-                (CorrectBasicJakartaEagerFieldContainer) obj;
+            CorrectBasicJakartaEagerFieldContainer other = (CorrectBasicJakartaEagerFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -313,8 +282,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof CorrectBasicJakartaIgnoredLazyFieldContainer)) {
                 return false;
             }
-            CorrectBasicJakartaIgnoredLazyFieldContainer other =
-                (CorrectBasicJakartaIgnoredLazyFieldContainer) obj;
+            CorrectBasicJakartaIgnoredLazyFieldContainer other = (CorrectBasicJakartaIgnoredLazyFieldContainer) obj;
             return Objects.equals(somethingElse, other.somethingElse);
         }
 
@@ -339,8 +307,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaLazyGetterContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaLazyGetterContainer other =
-                (IncorrectBasicJakartaLazyGetterContainer) obj;
+            IncorrectBasicJakartaLazyGetterContainer other = (IncorrectBasicJakartaLazyGetterContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -366,7 +333,7 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             IncorrectBasicJakartaLazyFieldContainerHashCode other =
-                (IncorrectBasicJakartaLazyFieldContainerHashCode) obj;
+                    (IncorrectBasicJakartaLazyFieldContainerHashCode) obj;
             return Objects.equals(getBasic(), other.getBasic());
         }
 
@@ -391,8 +358,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectBasicJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectBasicJakartaLazyFieldContainer other =
-                (IncorrectBasicJakartaLazyFieldContainer) obj;
+            IncorrectBasicJakartaLazyFieldContainer other = (IncorrectBasicJakartaLazyFieldContainer) obj;
             return Objects.equals(basic, other.basic);
         }
 
@@ -417,8 +383,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToOneJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToOneJakartaLazyFieldContainer other =
-                (IncorrectOneToOneJakartaLazyFieldContainer) obj;
+            IncorrectOneToOneJakartaLazyFieldContainer other = (IncorrectOneToOneJakartaLazyFieldContainer) obj;
             return Objects.equals(oneToOne, other.oneToOne);
         }
 
@@ -443,8 +408,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectOneToManyJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectOneToManyJakartaLazyFieldContainer other =
-                (IncorrectOneToManyJakartaLazyFieldContainer) obj;
+            IncorrectOneToManyJakartaLazyFieldContainer other = (IncorrectOneToManyJakartaLazyFieldContainer) obj;
             return Objects.equals(oneToMany, other.oneToMany);
         }
 
@@ -469,8 +433,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToOneJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToOneJakartaLazyFieldContainer other =
-                (IncorrectManyToOneJakartaLazyFieldContainer) obj;
+            IncorrectManyToOneJakartaLazyFieldContainer other = (IncorrectManyToOneJakartaLazyFieldContainer) obj;
             return Objects.equals(manyToOne, other.manyToOne);
         }
 
@@ -495,8 +458,7 @@ public class JakartaLazyEntityTest {
             if (!(obj instanceof IncorrectManyToManyJakartaLazyFieldContainer)) {
                 return false;
             }
-            IncorrectManyToManyJakartaLazyFieldContainer other =
-                (IncorrectManyToManyJakartaLazyFieldContainer) obj;
+            IncorrectManyToManyJakartaLazyFieldContainer other = (IncorrectManyToManyJakartaLazyFieldContainer) obj;
             return Objects.equals(manyToMany, other.manyToMany);
         }
 
@@ -522,7 +484,7 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             IncorrectElementCollectionJakartaLazyFieldContainer other =
-                (IncorrectElementCollectionJakartaLazyFieldContainer) obj;
+                    (IncorrectElementCollectionJakartaLazyFieldContainer) obj;
             return Objects.equals(elementCollection, other.elementCollection);
         }
 
@@ -597,10 +559,8 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             ConstantHashCodeContainer other = (ConstantHashCodeContainer) obj;
-            return (
-                Objects.equals(getOneToMany(), other.getOneToMany()) &&
-                Objects.equals(getManyToOne(), other.getManyToOne())
-            );
+            return Objects.equals(getOneToMany(), other.getOneToMany())
+                    && Objects.equals(getManyToOne(), other.getManyToOne());
         }
 
         @Override
@@ -635,10 +595,8 @@ public class JakartaLazyEntityTest {
                 return false;
             }
             DifferentCodingStyleContainer other = (DifferentCodingStyleContainer) obj;
-            return (
-                Objects.equals(getOneToMany(), other.getOneToMany()) &&
-                Objects.equals(getManyToOne(), other.getManyToOne())
-            );
+            return Objects.equals(getOneToMany(), other.getOneToMany())
+                    && Objects.equals(getManyToOne(), other.getManyToOne());
         }
 
         @Override

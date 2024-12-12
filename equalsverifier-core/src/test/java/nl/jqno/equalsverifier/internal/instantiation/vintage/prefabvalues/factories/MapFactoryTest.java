@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
+
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
@@ -18,24 +19,13 @@ import org.objenesis.ObjenesisStd;
 public class MapFactoryTest {
 
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
-    private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(
-        Map.class,
-        STRING_TYPETAG,
-        STRING_TYPETAG
-    );
+    private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);
     private static final TypeTag OBJECT_TYPETAG = new TypeTag(Object.class);
-    private static final TypeTag WILDCARDMAP_TYPETAG = new TypeTag(
-        Map.class,
-        OBJECT_TYPETAG,
-        OBJECT_TYPETAG
-    );
+    private static final TypeTag WILDCARDMAP_TYPETAG = new TypeTag(Map.class, OBJECT_TYPETAG, OBJECT_TYPETAG);
     private static final TypeTag RAWMAP_TYPETAG = new TypeTag(Map.class);
     private static final TypeTag ONEELEMENTENUM_TYPETAG = new TypeTag(OneElementEnum.class);
-    private static final TypeTag ONEELEMENTENUMKEYMAP_TYPETAG = new TypeTag(
-        Map.class,
-        ONEELEMENTENUM_TYPETAG,
-        OBJECT_TYPETAG
-    );
+    private static final TypeTag ONEELEMENTENUMKEYMAP_TYPETAG =
+            new TypeTag(Map.class, ONEELEMENTENUM_TYPETAG, OBJECT_TYPETAG);
 
     private static final MapFactory<Map> MAP_FACTORY = new MapFactory<>(HashMap::new);
 
@@ -59,11 +49,7 @@ public class MapFactoryTest {
 
     @Test
     public void createMapsOfStringToString() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(
-            STRINGSTRINGMAP_TYPETAG,
-            valueProvider,
-            typeStack
-        );
+        Tuple<Map> tuple = MAP_FACTORY.createValues(STRINGSTRINGMAP_TYPETAG, valueProvider, typeStack);
         assertEquals(mapOf(red, blue), tuple.getRed());
         assertEquals(mapOf(blue, blue), tuple.getBlue());
     }
@@ -84,11 +70,7 @@ public class MapFactoryTest {
 
     @Test
     public void createMapOfOneElementEnumKey() {
-        Tuple<Map> tuple = MAP_FACTORY.createValues(
-            ONEELEMENTENUMKEYMAP_TYPETAG,
-            valueProvider,
-            typeStack
-        );
+        Tuple<Map> tuple = MAP_FACTORY.createValues(ONEELEMENTENUMKEYMAP_TYPETAG, valueProvider, typeStack);
         assertEquals(mapOf(redEnum, blueObject), tuple.getRed());
         assertEquals(new HashMap<>(), tuple.getBlue());
     }

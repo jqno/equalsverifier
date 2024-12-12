@@ -2,10 +2,11 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.facto
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.*;
 
-import com.google.common.collect.*;
-import com.google.common.reflect.TypeToken;
 import java.util.*;
 import java.util.function.Supplier;
+
+import com.google.common.collect.*;
+import com.google.common.reflect.TypeToken;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.*;
@@ -14,9 +15,7 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public final class GuavaFactoryProvider implements FactoryProvider {
 
-    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(
-        Object::hashCode
-    );
+    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
@@ -42,10 +41,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         cache.put(ConcurrentHashMultiset.class, collection(ConcurrentHashMultiset::create));
         cache.put(EnumMultiset.class, new EnumSetFactory<>(c -> EnumMultiset.create(c)));
         cache.put(ImmutableMultiset.class, copy(Set.class, ImmutableMultiset::copyOf));
-        cache.put(
-            ImmutableSortedMultiset.class,
-            copy(SortedMultiset.class, ImmutableSortedMultiset::copyOfSorted)
-        );
+        cache.put(ImmutableSortedMultiset.class, copy(SortedMultiset.class, ImmutableSortedMultiset::copyOfSorted));
     }
 
     @SuppressWarnings("unchecked")
@@ -53,18 +49,12 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         cache.put(Multimap.class, multimap(ArrayListMultimap::create));
         cache.put(ListMultimap.class, multimap(ArrayListMultimap::create));
         cache.put(SetMultimap.class, multimap(HashMultimap::create));
-        cache.put(
-            SortedSetMultimap.class,
-            multimap(() -> TreeMultimap.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR))
-        );
+        cache.put(SortedSetMultimap.class, multimap(() -> TreeMultimap.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
         cache.put(ArrayListMultimap.class, multimap(ArrayListMultimap::create));
         cache.put(HashMultimap.class, multimap(HashMultimap::create));
         cache.put(LinkedListMultimap.class, multimap(LinkedListMultimap::create));
         cache.put(LinkedHashMultimap.class, multimap(LinkedHashMultimap::create));
-        cache.put(
-            TreeMultimap.class,
-            multimap(() -> TreeMultimap.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR))
-        );
+        cache.put(TreeMultimap.class, multimap(() -> TreeMultimap.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
         cache.put(ImmutableListMultimap.class, copy(Multimap.class, ImmutableListMultimap::copyOf));
         cache.put(ImmutableSetMultimap.class, copy(Multimap.class, ImmutableSetMultimap::copyOf));
         cache.put(ImmutableMultimap.class, copy(Multimap.class, ImmutableListMultimap::copyOf));
@@ -83,10 +73,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
     private void putTables(FactoryCache cache) {
         cache.put(Table.class, table(HashBasedTable::create));
         cache.put(HashBasedTable.class, table(HashBasedTable::create));
-        cache.put(
-            TreeBasedTable.class,
-            table(() -> TreeBasedTable.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR))
-        );
+        cache.put(TreeBasedTable.class, table(() -> TreeBasedTable.create(OBJECT_COMPARATOR, OBJECT_COMPARATOR)));
         cache.put(ArrayTable.class, copy(Table.class, ArrayTable::create));
         cache.put(ImmutableTable.class, copy(Table.class, ImmutableTable::copyOf));
     }
@@ -94,10 +81,10 @@ public final class GuavaFactoryProvider implements FactoryProvider {
     @SuppressWarnings("unchecked")
     private void putRegularCollections(FactoryCache cache) {
         cache.put(EvictingQueue.class, collection(() -> EvictingQueue.create(10)));
-        cache.put(
-            MinMaxPriorityQueue.class,
-            collection(() -> MinMaxPriorityQueue.orderedBy(OBJECT_COMPARATOR).create())
-        );
+        cache
+                .put(
+                    MinMaxPriorityQueue.class,
+                    collection(() -> MinMaxPriorityQueue.orderedBy(OBJECT_COMPARATOR).create()));
         cache.put(ImmutableRangeSet.class, copy(Range.class, ImmutableRangeSet::of));
         cache.put(TreeRangeSet.class, copy(ImmutableRangeSet.class, TreeRangeSet::create));
         cache.put(RangeSet.class, copy(ImmutableRangeSet.class, TreeRangeSet::create));
@@ -114,38 +101,26 @@ public final class GuavaFactoryProvider implements FactoryProvider {
     }
 
     private void putNewTypes(FactoryCache cache) {
-        cache.put(
-            Range.class,
-            Factories.<Comparable<?>, Range<?>>simple(Range::atLeast, Range::all)
-        );
-        cache.put(
-            com.google.common.base.Optional.class,
-            simple(com.google.common.base.Optional::of, com.google.common.base.Optional::absent)
-        );
-        cache.put(
-            TypeToken.class,
-            values(
-                TypeToken.of(Object.class),
-                TypeToken.of(String.class),
-                TypeToken.of(Object.class)
-            )
-        );
+        cache.put(Range.class, Factories.<Comparable<?>, Range<?>>simple(Range::atLeast, Range::all));
+        cache
+                .put(
+                    com.google.common.base.Optional.class,
+                    simple(com.google.common.base.Optional::of, com.google.common.base.Optional::absent));
+        cache
+                .put(
+                    TypeToken.class,
+                    values(TypeToken.of(Object.class), TypeToken.of(String.class), TypeToken.of(Object.class)));
     }
 
-    private <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(
-        Supplier<T> factory
-    ) {
+    private <K, V, T extends Multimap<K, V>> MultimapFactory<K, V, T> multimap(Supplier<T> factory) {
         return new MultimapFactory<>(factory);
     }
 
-    private <C, R, V, T extends Table<C, R, V>> TableFactory<C, R, V, T> table(
-        Supplier<T> factory
-    ) {
+    private <C, R, V, T extends Table<C, R, V>> TableFactory<C, R, V, T> table(Supplier<T> factory) {
         return new TableFactory<>(factory);
     }
 
-    private static final class MultimapFactory<K, V, T extends Multimap<K, V>>
-        extends AbstractGenericFactory<T> {
+    private static final class MultimapFactory<K, V, T extends Multimap<K, V>> extends AbstractGenericFactory<T> {
 
         private final Supplier<T> factory;
 
@@ -155,10 +130,9 @@ public final class GuavaFactoryProvider implements FactoryProvider {
 
         @Override
         public Tuple<T> createValues(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
-        ) {
+                TypeTag tag,
+                VintageValueProvider valueProvider,
+                LinkedHashSet<TypeTag> typeStack) {
             LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
             TypeTag keyTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag valueTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
@@ -174,8 +148,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
         }
     }
 
-    private static final class TableFactory<C, R, V, T extends Table<C, R, V>>
-        extends AbstractGenericFactory<T> {
+    private static final class TableFactory<C, R, V, T extends Table<C, R, V>> extends AbstractGenericFactory<T> {
 
         private final Supplier<T> factory;
 
@@ -185,10 +158,9 @@ public final class GuavaFactoryProvider implements FactoryProvider {
 
         @Override
         public Tuple<T> createValues(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
-        ) {
+                TypeTag tag,
+                VintageValueProvider valueProvider,
+                LinkedHashSet<TypeTag> typeStack) {
             LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
             TypeTag columnTag = determineAndCacheActualTypeTag(0, tag, valueProvider, clone);
             TypeTag rowTag = determineAndCacheActualTypeTag(1, tag, valueProvider, clone);
@@ -197,21 +169,17 @@ public final class GuavaFactoryProvider implements FactoryProvider {
             T red = factory.get();
             T blue = factory.get();
             T redCopy = factory.get();
-            red.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
-            );
-            blue.put(
-                valueProvider.giveBlue(columnTag),
-                valueProvider.giveBlue(rowTag),
-                valueProvider.giveBlue(valueTag)
-            );
-            redCopy.put(
-                valueProvider.giveRed(columnTag),
-                valueProvider.giveRed(rowTag),
-                valueProvider.giveBlue(valueTag)
-            );
+            red.put(valueProvider.giveRed(columnTag), valueProvider.giveRed(rowTag), valueProvider.giveBlue(valueTag));
+            blue
+                    .put(
+                        valueProvider.giveBlue(columnTag),
+                        valueProvider.giveBlue(rowTag),
+                        valueProvider.giveBlue(valueTag));
+            redCopy
+                    .put(
+                        valueProvider.giveRed(columnTag),
+                        valueProvider.giveRed(rowTag),
+                        valueProvider.giveBlue(valueTag));
 
             return Tuple.of(red, blue, redCopy);
         }

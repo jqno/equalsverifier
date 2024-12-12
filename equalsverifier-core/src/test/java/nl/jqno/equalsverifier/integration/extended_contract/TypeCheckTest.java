@@ -9,29 +9,27 @@ public class TypeCheckTest {
     @Test
     public void fail_whenEqualsReturnsTrueForACompletelyUnrelatedType() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(WrongTypeCheck.class).verify())
-            .assertFailure()
-            .assertMessageContains("Type-check: equals returns true for an unrelated type.");
+                .when(() -> EqualsVerifier.forClass(WrongTypeCheck.class).verify())
+                .assertFailure()
+                .assertMessageContains("Type-check: equals returns true for an unrelated type.");
     }
 
     @Test
     public void fail_whenEqualsDoesNotTypeCheck() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NoTypeCheck.class).verify())
-            .assertFailure()
-            .assertCause(ClassCastException.class)
-            .assertMessageContains("Type-check: equals throws ClassCastException");
+                .when(() -> EqualsVerifier.forClass(NoTypeCheck.class).verify())
+                .assertFailure()
+                .assertCause(ClassCastException.class)
+                .assertMessageContains("Type-check: equals throws ClassCastException");
     }
 
     @Test
     public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify()
-            )
-            .assertFailure()
-            .assertCause(IllegalStateException.class)
-            .assertMessageContains("Type-check: equals throws IllegalStateException");
+                .when(() -> EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify())
+                .assertFailure()
+                .assertCause(IllegalStateException.class)
+                .assertMessageContains("Type-check: equals throws IllegalStateException");
     }
 
     static final class WrongTypeCheck {
@@ -86,7 +84,8 @@ public class TypeCheckTest {
                     return false;
                 }
                 return i == ((NoTypeCheckButNoClassCastExceptionEither) obj).i;
-            } catch (ClassCastException e) {
+            }
+            catch (ClassCastException e) {
                 throw new IllegalStateException(e);
             }
         }

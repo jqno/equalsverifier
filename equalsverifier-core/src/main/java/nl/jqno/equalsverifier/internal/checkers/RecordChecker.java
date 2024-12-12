@@ -9,6 +9,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -53,18 +54,18 @@ public class RecordChecker<T> implements Checker {
                 if (!originalField.equals(copyField)) {
                     failedFields.add(f.getName());
                 }
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            }
+            catch (IllegalAccessException | InvocationTargetException e) {
                 fail(Formatter.of("Record: failed to run accessor method: " + accessorMethod));
             }
         }
 
         fail(
-            Formatter.of(
-                "Record invariant: constructor invariant failed for field%%: %%",
-                failedFields.size() > 1 ? "s" : "",
-                failedFields.stream().collect(Collectors.joining(","))
-            )
-        );
+            Formatter
+                    .of(
+                        "Record invariant: constructor invariant failed for field%%: %%",
+                        failedFields.size() > 1 ? "s" : "",
+                        failedFields.stream().collect(Collectors.joining(","))));
     }
 
     private Method getAccessorMethodFor(Class<T> type, Field f) {

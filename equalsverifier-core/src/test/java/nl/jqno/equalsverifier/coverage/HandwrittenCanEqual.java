@@ -56,11 +56,9 @@ public class HandwrittenCanEqual {
                 return false;
             }
             ColorPoint other = (ColorPoint) obj;
-            return (
-                other.canEqual(this) &&
-                super.equals(other) &&
-                (color == null ? other.color == null : color.equals(other.color))
-            );
+            return other.canEqual(this)
+                    && super.equals(other)
+                    && (color == null ? other.color == null : color.equals(other.color));
         }
 
         @Override

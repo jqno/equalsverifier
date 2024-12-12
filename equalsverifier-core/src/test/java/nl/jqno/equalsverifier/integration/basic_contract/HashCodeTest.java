@@ -9,23 +9,17 @@ public class HashCodeTest {
     @Test
     public void fail_whenHashCodesAreInconsistent() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "hashCode: hashCode should be consistent",
-                RandomHashCode.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains("hashCode: hashCode should be consistent", RandomHashCode.class.getSimpleName());
     }
 
     @Test
     public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "hashCode: hashCodes should be equal",
-                NoHashCode.class.getSimpleName()
-            );
+                .when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
+                .assertFailure()
+                .assertMessageContains("hashCode: hashCodes should be equal", NoHashCode.class.getSimpleName());
     }
 
     @Test

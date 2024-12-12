@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -12,14 +13,13 @@ class SealedTypesRecursionTest {
         // A container with a field of a sealed interface.
         // The sealed interface permits only 1 type, which refers back to the container.
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SealedContainer.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Recursive datastructure",
-                "Add prefab values for one of the following types",
-                "SealedContainer",
-                "SealedInterface"
-            );
+                .when(() -> EqualsVerifier.forClass(SealedContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Recursive datastructure",
+                    "Add prefab values for one of the following types",
+                    "SealedContainer",
+                    "SealedInterface");
     }
 
     @Test
@@ -27,14 +27,13 @@ class SealedTypesRecursionTest {
         // A container with a field of a sealed interface.
         // The sealed interface permits only 1 type, which is a record that refers back to the container.
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SealedRecordContainer.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Recursive datastructure",
-                "Add prefab values for one of the following types",
-                "SealedRecordContainer",
-                "SealedRecordInterface"
-            );
+                .when(() -> EqualsVerifier.forClass(SealedRecordContainer.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Recursive datastructure",
+                    "Add prefab values for one of the following types",
+                    "SealedRecordContainer",
+                    "SealedRecordInterface");
     }
 
     static final class SealedContainer {
@@ -120,5 +119,5 @@ class SealedTypesRecursionTest {
     sealed interface SealedRecordInterface permits OnlyPermittedRecordImplementation {}
 
     static final record OnlyPermittedRecordImplementation(SealedRecordContainer container)
-        implements SealedRecordInterface {}
+            implements SealedRecordInterface {}
 }

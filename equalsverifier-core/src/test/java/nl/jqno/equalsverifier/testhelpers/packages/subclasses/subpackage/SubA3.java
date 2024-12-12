@@ -1,6 +1,7 @@
 package nl.jqno.equalsverifier.testhelpers.packages.subclasses.subpackage;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.testhelpers.packages.subclasses.SuperA;
 
 public final class SubA3 extends SuperA {

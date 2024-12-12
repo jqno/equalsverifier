@@ -3,10 +3,7 @@ package nl.jqno.equalsverifier.internal.testhelpers;
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.MessagingException;
 
-@SuppressFBWarnings(
-    value = "NM_CLASS_NOT_EXCEPTION",
-    justification = "Only called in test code, not production."
-)
+@SuppressFBWarnings(value = "NM_CLASS_NOT_EXCEPTION", justification = "Only called in test code, not production.")
 public final class ExpectedException {
 
     private final Throwable e;
@@ -19,7 +16,8 @@ public final class ExpectedException {
         try {
             runnable.run();
             return new ExpectedException(null);
-        } catch (Throwable e) {
+        }
+        catch (Throwable e) {
             return new ExpectedException(e);
         }
     }
@@ -30,12 +28,8 @@ public final class ExpectedException {
         }
         if (!expectedException.isInstance(e)) {
             fail(
-                "Expected " +
-                expectedException.getCanonicalName() +
-                " but was " +
-                e.getClass().getCanonicalName() +
-                "."
-            );
+                "Expected " + expectedException.getCanonicalName() + " but was " + e.getClass().getCanonicalName()
+                        + ".");
         }
         return this;
     }
@@ -60,11 +54,7 @@ public final class ExpectedException {
         Throwable cause = e.getCause();
         while (cause != null) {
             if (cause.getClass().equals(expectedCause)) {
-                fail(
-                    "Expected " +
-                    expectedCause.getSimpleName() +
-                    " not to be in the cause but it was."
-                );
+                fail("Expected " + expectedCause.getSimpleName() + " not to be in the cause but it was.");
             }
             cause = cause.getCause();
         }
@@ -113,14 +103,7 @@ public final class ExpectedException {
         }
         if (occurrences != 1) {
             fail(
-                "Message [" +
-                e.getMessage() +
-                "] contains [" +
-                fragment +
-                "] " +
-                occurrences +
-                " times; should be 1."
-            );
+                "Message [" + e.getMessage() + "] contains [" + fragment + "] " + occurrences + " times; should be 1.");
         }
         return this;
     }
@@ -135,10 +118,7 @@ public final class ExpectedException {
         return this;
     }
 
-    public ExpectedException assertMessageDoesNotContainAfterRemove(
-        String toRemove,
-        String... fragments
-    ) {
+    public ExpectedException assertMessageDoesNotContainAfterRemove(String toRemove, String... fragments) {
         String message = e.getMessage().replaceAll(toRemove, "");
         for (String fragment : fragments) {
             if (message.contains(fragment)) {

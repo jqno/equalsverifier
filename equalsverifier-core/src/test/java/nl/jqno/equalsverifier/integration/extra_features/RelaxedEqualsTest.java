@@ -22,9 +22,9 @@ public class RelaxedEqualsTest {
     @Test
     public void fail_whenObjectsWithDifferentFieldsAreEqual() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(Multiple.class).verify())
-            .assertFailure()
-            .assertMessageContains("Significant fields");
+                .when(() -> EqualsVerifier.forClass(Multiple.class).verify())
+                .assertFailure()
+                .assertMessageContains("Significant fields");
     }
 
     @Test
@@ -35,23 +35,17 @@ public class RelaxedEqualsTest {
     @Test
     public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
         ExpectedException
-            .when(() -> EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a))
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "an equal example also appears as unequal example."
-            );
+                .when(() -> EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "an equal example also appears as unequal example.");
     }
 
     @Test
     public void succeed_whenAnUnusedFieldIsNull_givenItIsGivenAsARelaxedEqualExample() {
         EqualsVerifier
-            .forRelaxedEqualExamples(
-                new NullContainingSubMultiple(1, 2),
-                new NullContainingSubMultiple(2, 1)
-            )
-            .andUnequalExample(new NullContainingSubMultiple(2, 2))
-            .verify();
+                .forRelaxedEqualExamples(new NullContainingSubMultiple(1, 2), new NullContainingSubMultiple(2, 1))
+                .andUnequalExample(new NullContainingSubMultiple(2, 2))
+                .verify();
     }
 
     public class NullContainingSubMultiple extends Multiple {

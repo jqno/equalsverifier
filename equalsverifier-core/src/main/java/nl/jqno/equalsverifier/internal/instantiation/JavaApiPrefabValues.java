@@ -28,6 +28,7 @@ import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.StampedLock;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
+
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
@@ -39,47 +40,32 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 /**
  * Creates instances of classes for use in a {@link VintageValueProvider} object.
  *
- * <p>Contains hand-made instances of well-known Java API classes that cannot be instantiated
- * dynamically because of an internal infinite recursion of types, or other issues.
+ * <p>
+ * Contains hand-made instances of well-known Java API classes that cannot be instantiated dynamically because of an
+ * internal infinite recursion of types, or other issues.
  */
 @SuppressFBWarnings(
-    value = "SIC_INNER_SHOULD_BE_STATIC_ANON",
-    justification = "That would be dozens of separate classes"
-)
+        value = "SIC_INNER_SHOULD_BE_STATIC_ANON",
+        justification = "That would be dozens of separate classes")
 public final class JavaApiPrefabValues {
 
     private static final String JAVAFX_COLLECTIONS_PACKAGE = "javafx.collections.";
     private static final String JAVAFX_PROPERTY_PACKAGE = "javafx.beans.property.";
     private static final String GUAVA_PACKAGE = "com.google.common.collect.";
     private static final String JODA_PACKAGE = "org.joda.time.";
-    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>(
-        "AwtFactoryProvider"
-    );
-    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>(
-        "JavaFxFactoryProvider"
-    );
-    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>(
-        "JavaxFactoryProvider"
-    );
-    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>(
-        "GuavaFactoryProvider"
-    );
-    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>(
-        "JodaFactoryProvider"
-    );
-    private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>(
-        "RmiFactoryProvider"
-    );
+    private static final ExternalFactory<?> AWT_FACTORY = new ExternalFactory<>("AwtFactoryProvider");
+    private static final ExternalFactory<?> JAVAFX_FACTORY = new ExternalFactory<>("JavaFxFactoryProvider");
+    private static final ExternalFactory<?> JAVAX_FACTORY = new ExternalFactory<>("JavaxFactoryProvider");
+    private static final ExternalFactory<?> GUAVA_FACTORY = new ExternalFactory<>("GuavaFactoryProvider");
+    private static final ExternalFactory<?> JODA_FACTORY = new ExternalFactory<>("JodaFactoryProvider");
+    private static final ExternalFactory<?> RMI_FACTORY = new ExternalFactory<>("RmiFactoryProvider");
 
-    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(
-        Object::hashCode
-    );
+    private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
     private final FactoryCache factoryCache;
 
     private enum Dummy {
-        RED,
-        BLUE
+        RED, BLUE
     }
 
     /** Private constructor. Use {@link #build()}. */
@@ -88,8 +74,7 @@ public final class JavaApiPrefabValues {
     }
 
     /**
-     * Creates a FactoryCache pre-populated with instances of Java API classes that cannot be
-     * instantiated dynamically.
+     * Creates a FactoryCache pre-populated with instances of Java API classes that cannot be instantiated dynamically.
      *
      * @return A pre-populated {@link FactoryCache}.
      */
@@ -127,9 +112,8 @@ public final class JavaApiPrefabValues {
     }
 
     @SuppressFBWarnings(
-        value = { "DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR" },
-        justification = "We really do need a separate instances with the same value"
-    )
+            value = { "DM_BOOLEAN_CTOR", "DM_NUMBER_CTOR", "DM_FP_NUMBER_CTOR", "DM_STRING_CTOR" },
+            justification = "We really do need a separate instances with the same value")
     private void addPrimitiveClasses() {
         addValues(boolean.class, true, false, true);
         addValues(byte.class, (byte) 1, (byte) 2, (byte) 1);
@@ -156,35 +140,19 @@ public final class JavaApiPrefabValues {
 
     // CHECKSTYLE OFF: ExecutableStatementCount
     @SuppressFBWarnings(
-        value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
-        justification = "We just need an instance of File and Thread; they're not for actual use."
-    )
+            value = { "DMI_HARDCODED_ABSOLUTE_FILENAME", "DM_USELESS_THREAD" },
+            justification = "We just need an instance of File and Thread; they're not for actual use.")
     private void addCommonClasses() {
         addValues(BigDecimal.class, BigDecimal.ZERO, BigDecimal.ONE, BigDecimal.ZERO);
         addValues(BigInteger.class, BigInteger.ZERO, BigInteger.ONE, BigInteger.ZERO);
-        addValues(
-            Charset.class,
-            StandardCharsets.UTF_8,
-            StandardCharsets.US_ASCII,
-            StandardCharsets.UTF_8
-        );
+        addValues(Charset.class, StandardCharsets.UTF_8, StandardCharsets.US_ASCII, StandardCharsets.UTF_8);
         addValues(File.class, new File(""), new File("/"), new File(""));
         addValues(Formatter.class, new Formatter(), new Formatter(), new Formatter());
         addValues(Locale.class, new Locale("nl"), new Locale("hu"), new Locale("nl"));
-        addValues(
-            Pattern.class,
-            Pattern.compile("one"),
-            Pattern.compile("two"),
-            Pattern.compile("one")
-        );
+        addValues(Pattern.class, Pattern.compile("one"), Pattern.compile("two"), Pattern.compile("one"));
         addValues(Scanner.class, new Scanner("one"), new Scanner("two"), new Scanner("one"));
         addValues(StampedLock.class, new StampedLock(), new StampedLock(), new StampedLock());
-        addValues(
-            StringBuilder.class,
-            new StringBuilder("one"),
-            new StringBuilder("two"),
-            new StringBuilder("three")
-        );
+        addValues(StringBuilder.class, new StringBuilder("one"), new StringBuilder("two"), new StringBuilder("three"));
         addValues(Thread.class, new Thread("one"), new Thread("two"), new Thread("one"));
         addValues(Throwable.class, new Throwable(), new Throwable(), new Throwable());
         addValues(URI.class, URI.create("x"), URI.create("y"), URI.create("x"));
@@ -192,27 +160,16 @@ public final class JavaApiPrefabValues {
         addValues(PrintStream.class, System.out, System.err, System.out);
 
         rethrow(
-            () ->
-                addValues(
-                    URL.class,
-                    new URL("http://example.com"),
-                    new URL("http://localhost"),
-                    new URL("http://example.com")
-                ),
-            e -> "Can't add prefab values for java.net.URL"
-        );
+            () -> addValues(
+                URL.class,
+                new URL("http://example.com"),
+                new URL("http://localhost"),
+                new URL("http://example.com")),
+            e -> "Can't add prefab values for java.net.URL");
 
-        addFactory(
-            CompletableFuture.class,
-            simple(ignored -> new CompletableFuture<>(), CompletableFuture::new)
-        );
+        addFactory(CompletableFuture.class, simple(ignored -> new CompletableFuture<>(), CompletableFuture::new));
         addFactory(Optional.class, simple(Optional::of, Optional::empty));
-        addValues(
-            OptionalDouble.class,
-            OptionalDouble.of(0.5),
-            OptionalDouble.of(1.0),
-            OptionalDouble.of(0.5)
-        );
+        addValues(OptionalDouble.class, OptionalDouble.of(0.5), OptionalDouble.of(1.0), OptionalDouble.of(0.5));
         addValues(OptionalInt.class, OptionalInt.of(1), OptionalInt.of(2), OptionalInt.of(1));
         addValues(OptionalLong.class, OptionalLong.of(1), OptionalLong.of(2), OptionalLong.of(1));
         addFactory(Supplier.class, simple(a -> () -> a, () -> () -> null));
@@ -220,8 +177,7 @@ public final class JavaApiPrefabValues {
             Currency.class,
             Currency.getInstance("USD"),
             Currency.getInstance("EUR"),
-            Currency.getInstance("JPY")
-        );
+            Currency.getInstance("JPY"));
 
         Semaphore redSemaphore = new Semaphore(1);
         Semaphore blueSemaphore = new Semaphore(1);
@@ -244,34 +200,25 @@ public final class JavaApiPrefabValues {
             Calendar.class,
             new GregorianCalendar(2010, Calendar.AUGUST, 4),
             new GregorianCalendar(2010, Calendar.AUGUST, 5),
-            new GregorianCalendar(2010, Calendar.AUGUST, 4)
-        );
-        addValues(
-            Clock.class,
-            Clock.systemUTC(),
-            Clock.system(ZoneId.of("-10")),
-            Clock.systemUTC()
-        );
+            new GregorianCalendar(2010, Calendar.AUGUST, 4));
+        addValues(Clock.class, Clock.systemUTC(), Clock.system(ZoneId.of("-10")), Clock.systemUTC());
         addValues(Date.class, new Date(0), new Date(1), new Date(0));
         addValues(
             DateFormat.class,
             DateFormat.getTimeInstance(),
             DateFormat.getDateInstance(),
-            DateFormat.getTimeInstance()
-        );
+            DateFormat.getTimeInstance());
         addValues(
             DateTimeFormatter.class,
             DateTimeFormatter.ISO_TIME,
             DateTimeFormatter.ISO_DATE,
-            DateTimeFormatter.ISO_TIME
-        );
+            DateTimeFormatter.ISO_TIME);
         addValues(Duration.class, Duration.ZERO, Duration.ofDays(1L), Duration.ZERO);
         addValues(
             GregorianCalendar.class,
             new GregorianCalendar(2010, Calendar.AUGUST, 4),
             new GregorianCalendar(2010, Calendar.AUGUST, 5),
-            new GregorianCalendar(2010, Calendar.AUGUST, 4)
-        );
+            new GregorianCalendar(2010, Calendar.AUGUST, 4));
         addValues(Instant.class, Instant.MIN, Instant.MAX, Instant.MIN);
         addValues(LocalDateTime.class, LocalDateTime.MIN, LocalDateTime.MAX, LocalDateTime.MIN);
         addValues(LocalDate.class, LocalDate.MIN, LocalDate.MAX, LocalDate.MIN);
@@ -280,50 +227,27 @@ public final class JavaApiPrefabValues {
         addValues(OffsetDateTime.class, OffsetDateTime.MIN, OffsetDateTime.MAX, OffsetDateTime.MIN);
         addValues(OffsetTime.class, OffsetTime.MIN, OffsetTime.MAX, OffsetTime.MIN);
         addValues(Period.class, Period.ZERO, Period.of(1, 1, 1), Period.ZERO);
-        addValues(
-            DecimalFormat.class,
-            new DecimalFormat("x0.0"),
-            new DecimalFormat("y0.0"),
-            new DecimalFormat("x0.0")
-        );
-        addValues(
-            NumberFormat.class,
-            new DecimalFormat("x0.0"),
-            new DecimalFormat("y0.0"),
-            new DecimalFormat("x0.0")
-        );
+        addValues(DecimalFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
+        addValues(NumberFormat.class, new DecimalFormat("x0.0"), new DecimalFormat("y0.0"), new DecimalFormat("x0.0"));
         addValues(
             SimpleDateFormat.class,
             new SimpleDateFormat("yMd"),
             new SimpleDateFormat("dMy"),
-            new SimpleDateFormat("yMd")
-        );
+            new SimpleDateFormat("yMd"));
         addValues(
             TimeZone.class,
             TimeZone.getTimeZone("GMT+1"),
             TimeZone.getTimeZone("GMT+2"),
-            TimeZone.getTimeZone("GMT+1")
-        );
+            TimeZone.getTimeZone("GMT+1"));
         addValues(Year.class, Year.of(2000), Year.of(2010), Year.of(2000));
-        addValues(
-            YearMonth.class,
-            YearMonth.of(2000, 1),
-            YearMonth.of(2010, 12),
-            YearMonth.of(2000, 1)
-        );
+        addValues(YearMonth.class, YearMonth.of(2000, 1), YearMonth.of(2010, 12), YearMonth.of(2000, 1));
         addValues(ZoneId.class, ZoneId.of("+1"), ZoneId.of("-10"), ZoneId.of("+1"));
-        addValues(
-            ZoneOffset.class,
-            ZoneOffset.ofHours(1),
-            ZoneOffset.ofHours(-1),
-            ZoneOffset.ofHours(1)
-        );
+        addValues(ZoneOffset.class, ZoneOffset.ofHours(1), ZoneOffset.ofHours(-1), ZoneOffset.ofHours(1));
         addValues(
             ZonedDateTime.class,
             ZonedDateTime.parse("2017-12-13T10:15:30+01:00"),
             ZonedDateTime.parse("2016-11-12T09:14:29-01:00"),
-            ZonedDateTime.parse("2017-12-13T10:15:30+01:00")
-        );
+            ZonedDateTime.parse("2017-12-13T10:15:30+01:00"));
     }
 
     private void addUncommonClasses() {
@@ -338,28 +262,24 @@ public final class JavaApiPrefabValues {
             sqlDate.resolve(),
             sqlDate.instantiate(classes(long.class), objects(1337)),
             sqlDate.instantiate(classes(long.class), objects(42)),
-            sqlDate.instantiate(classes(long.class), objects(1337))
-        );
+            sqlDate.instantiate(classes(long.class), objects(1337)));
         addValues(
             sqlTime.resolve(),
             sqlTime.instantiate(classes(long.class), objects(1337)),
             sqlTime.instantiate(classes(long.class), objects(42)),
-            sqlTime.instantiate(classes(long.class), objects(1337))
-        );
+            sqlTime.instantiate(classes(long.class), objects(1337)));
         addValues(
             sqlTimestamp.resolve(),
             sqlTimestamp.instantiate(classes(long.class), objects(1337)),
             sqlTimestamp.instantiate(classes(long.class), objects(42)),
-            sqlTimestamp.instantiate(classes(long.class), objects(1337))
-        );
+            sqlTimestamp.instantiate(classes(long.class), objects(1337)));
 
         addValues(EventObject.class, new EventObject(1), new EventObject(2), new EventObject(1));
         addValues(
             InetSocketAddress.class,
             InetSocketAddress.createUnresolved("localhost", 8080),
             InetSocketAddress.createUnresolved("127.0.0.1", 8080),
-            InetSocketAddress.createUnresolved("localhost", 8080)
-        );
+            InetSocketAddress.createUnresolved("localhost", 8080));
 
         // Constructing InetAddress reflectively, because it might throw an awkward exception
         // otherwise.
@@ -370,35 +290,26 @@ public final class JavaApiPrefabValues {
             inetAddress.resolve(),
             inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
             inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1"))
-        );
+            inetAddress.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(
             inet4Address.resolve(),
             inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")),
             inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.42")),
-            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1"))
-        );
+            inet4Address.callFactory("getByName", classes(String.class), objects("127.0.0.1")));
         addValues(
             inet6Address.resolve(),
             inet6Address.callFactory("getByName", classes(String.class), objects("::1")),
             inet6Address.callFactory("getByName", classes(String.class), objects("::")),
-            inet6Address.callFactory("getByName", classes(String.class), objects("::1"))
-        );
+            inet6Address.callFactory("getByName", classes(String.class), objects("::1")));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addCollection() {
-        addFactory(
-            Iterable.class,
-            simple(
-                a -> {
-                    Collection coll = new ArrayList<>();
-                    coll.add(a);
-                    return coll;
-                },
-                ArrayList::new
-            )
-        );
+        addFactory(Iterable.class, simple(a -> {
+            Collection coll = new ArrayList<>();
+            coll.add(a);
+            return coll;
+        }, ArrayList::new));
         addFactory(Collection.class, collection(ArrayList::new));
     }
 
@@ -417,10 +328,7 @@ public final class JavaApiPrefabValues {
         addFactory(Map.class, map(HashMap::new));
         addFactory(SortedMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
         addFactory(NavigableMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
-        addFactory(
-            ConcurrentNavigableMap.class,
-            map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR))
-        );
+        addFactory(ConcurrentNavigableMap.class, map(() -> new ConcurrentSkipListMap<>(OBJECT_COMPARATOR)));
         addFactory(ConcurrentHashMap.class, map(ConcurrentHashMap::new));
         addFactory(HashMap.class, map(HashMap::new));
         addFactory(Hashtable.class, map(Hashtable::new));
@@ -444,8 +352,7 @@ public final class JavaApiPrefabValues {
             BitSet.class,
             BitSet.valueOf(new byte[] { 0 }),
             BitSet.valueOf(new byte[] { 1 }),
-            BitSet.valueOf(new byte[] { 0 })
-        );
+            BitSet.valueOf(new byte[] { 0 }));
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -458,16 +365,8 @@ public final class JavaApiPrefabValues {
         addFactory(ConcurrentLinkedQueue.class, collection(ConcurrentLinkedQueue::new));
         addFactory(DelayQueue.class, collection(DelayQueue::new));
         addFactory(LinkedBlockingQueue.class, collection(() -> new LinkedBlockingQueue(1)));
-        addFactory(
-            PriorityBlockingQueue.class,
-            collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR))
-        );
-        addValues(
-            SynchronousQueue.class,
-            new SynchronousQueue<>(),
-            new SynchronousQueue<>(),
-            new SynchronousQueue<>()
-        );
+        addFactory(PriorityBlockingQueue.class, collection(() -> new PriorityBlockingQueue<>(1, OBJECT_COMPARATOR)));
+        addValues(SynchronousQueue.class, new SynchronousQueue<>(), new SynchronousQueue<>(), new SynchronousQueue<>());
     }
 
     private void addNioBuffers() {
@@ -475,50 +374,38 @@ public final class JavaApiPrefabValues {
             Buffer.class,
             ByteBuffer.wrap(new byte[] { 0 }),
             ByteBuffer.wrap(new byte[] { 1 }),
-            ByteBuffer.wrap(new byte[] { 0 })
-        );
+            ByteBuffer.wrap(new byte[] { 0 }));
         addValues(
             ByteBuffer.class,
             ByteBuffer.wrap(new byte[] { 0 }),
             ByteBuffer.wrap(new byte[] { 1 }),
-            ByteBuffer.wrap(new byte[] { 0 })
-        );
-        addValues(
-            CharBuffer.class,
-            CharBuffer.wrap("a"),
-            CharBuffer.wrap("b"),
-            CharBuffer.wrap("a")
-        );
+            ByteBuffer.wrap(new byte[] { 0 }));
+        addValues(CharBuffer.class, CharBuffer.wrap("a"), CharBuffer.wrap("b"), CharBuffer.wrap("a"));
         addValues(
             DoubleBuffer.class,
             DoubleBuffer.wrap(new double[] { 0.0 }),
             DoubleBuffer.wrap(new double[] { 1.0 }),
-            DoubleBuffer.wrap(new double[] { 0.0 })
-        );
+            DoubleBuffer.wrap(new double[] { 0.0 }));
         addValues(
             FloatBuffer.class,
             FloatBuffer.wrap(new float[] { 0.0f }),
             FloatBuffer.wrap(new float[] { 1.0f }),
-            FloatBuffer.wrap(new float[] { 0.0f })
-        );
+            FloatBuffer.wrap(new float[] { 0.0f }));
         addValues(
             IntBuffer.class,
             IntBuffer.wrap(new int[] { 0 }),
             IntBuffer.wrap(new int[] { 1 }),
-            IntBuffer.wrap(new int[] { 0 })
-        );
+            IntBuffer.wrap(new int[] { 0 }));
         addValues(
             LongBuffer.class,
             LongBuffer.wrap(new long[] { 0 }),
             LongBuffer.wrap(new long[] { 1 }),
-            LongBuffer.wrap(new long[] { 0 })
-        );
+            LongBuffer.wrap(new long[] { 0 }));
         addValues(
             ShortBuffer.class,
             ShortBuffer.wrap(new short[] { 0 }),
             ShortBuffer.wrap(new short[] { 1 }),
-            ShortBuffer.wrap(new short[] { 0 })
-        );
+            ShortBuffer.wrap(new short[] { 0 }));
     }
 
     private void addExceptions() {
@@ -532,27 +419,16 @@ public final class JavaApiPrefabValues {
 
         RuntimeException redRuntimeException = new RuntimeException();
         RuntimeException blueRuntimeException = new RuntimeException();
-        addValues(
-            RuntimeException.class,
-            redRuntimeException,
-            blueRuntimeException,
-            redRuntimeException
-        );
+        addValues(RuntimeException.class, redRuntimeException, blueRuntimeException, redRuntimeException);
     }
 
     @SuppressWarnings("unused")
     private static class JavaApiReflectionClassesContainer {
 
-        @SuppressFBWarnings(
-            value = "UUF_UNUSED_FIELD",
-            justification = "These fields are accessed through reflection"
-        )
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
         Object a;
 
-        @SuppressFBWarnings(
-            value = "UUF_UNUSED_FIELD",
-            justification = "These fields are accessed through reflection"
-        )
+        @SuppressFBWarnings(value = "UUF_UNUSED_FIELD", justification = "These fields are accessed through reflection")
         Object b;
 
         public JavaApiReflectionClassesContainer() {}
@@ -567,109 +443,67 @@ public final class JavaApiPrefabValues {
     private void addReflectionClasses() {
         addValues(Class.class, Class.class, Object.class, Class.class);
 
-        rethrow(
-            () -> {
-                Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
-                Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
-                addValues(Field.class, f1, f2, f1);
-            },
-            e -> "Can't add prefab values for java.lang.reflect.Field"
-        );
+        rethrow(() -> {
+            Field f1 = JavaApiReflectionClassesContainer.class.getDeclaredField("a");
+            Field f2 = JavaApiReflectionClassesContainer.class.getDeclaredField("b");
+            addValues(Field.class, f1, f2, f1);
+        }, e -> "Can't add prefab values for java.lang.reflect.Field");
 
-        rethrow(
-            () -> {
-                Constructor<?> c1 =
-                    JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
-                Constructor<?> c2 =
-                    JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
-                addValues(Constructor.class, c1, c2, c1);
-            },
-            e -> "Can't add prefab values for java.lang.reflect.Constructor"
-        );
+        rethrow(() -> {
+            Constructor<?> c1 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor();
+            Constructor<?> c2 = JavaApiReflectionClassesContainer.class.getDeclaredConstructor(Object.class);
+            addValues(Constructor.class, c1, c2, c1);
+        }, e -> "Can't add prefab values for java.lang.reflect.Constructor");
 
-        rethrow(
-            () -> {
-                Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
-                Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
-                addValues(Method.class, m1, m2, m1);
-            },
-            e -> "Can't add prefab values for java.lang.reflect.Method"
-        );
+        rethrow(() -> {
+            Method m1 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m1");
+            Method m2 = JavaApiReflectionClassesContainer.class.getDeclaredMethod("m2");
+            addValues(Method.class, m1, m2, m1);
+        }, e -> "Can't add prefab values for java.lang.reflect.Method");
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addAtomicClasses() {
-        addValues(
-            AtomicBoolean.class,
-            new AtomicBoolean(true),
-            new AtomicBoolean(false),
-            new AtomicBoolean(true)
-        );
-        addValues(
-            AtomicInteger.class,
-            new AtomicInteger(1),
-            new AtomicInteger(2),
-            new AtomicInteger(1)
-        );
+        addValues(AtomicBoolean.class, new AtomicBoolean(true), new AtomicBoolean(false), new AtomicBoolean(true));
+        addValues(AtomicInteger.class, new AtomicInteger(1), new AtomicInteger(2), new AtomicInteger(1));
         addValues(
             AtomicIntegerArray.class,
             new AtomicIntegerArray(new int[] { 1 }),
             new AtomicIntegerArray(new int[] { 2 }),
-            new AtomicIntegerArray(new int[] { 1 })
-        );
+            new AtomicIntegerArray(new int[] { 1 }));
         addValues(AtomicLong.class, new AtomicLong(1L), new AtomicLong(2L), new AtomicLong(1L));
         addValues(
             AtomicLongArray.class,
             new AtomicLongArray(new long[] { 1L }),
             new AtomicLongArray(new long[] { 2L }),
-            new AtomicLongArray(new long[] { 1L })
-        );
-        addFactory(
-            AtomicMarkableReference.class,
-            simple(r -> new AtomicMarkableReference(r, true), null)
-        );
+            new AtomicLongArray(new long[] { 1L }));
+        addFactory(AtomicMarkableReference.class, simple(r -> new AtomicMarkableReference(r, true), null));
         addFactory(AtomicReference.class, simple(AtomicReference::new, null));
-        addFactory(
-            AtomicStampedReference.class,
-            simple(r -> new AtomicStampedReference(r, 0), null)
-        );
-        addFactory(
-            AtomicReferenceArray.class,
-            (tag, pv, stack) -> {
-                TypeTag y = tag.getGenericTypes().get(0);
-                Object[] red = new Object[] { pv.giveRed(y) };
-                Object[] blue = new Object[] { pv.giveBlue(y) };
-                Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
-                return Tuple.of(
-                    new AtomicReferenceArray(red),
-                    new AtomicReferenceArray(blue),
-                    new AtomicReferenceArray(redCopy)
-                );
-            }
-        );
+        addFactory(AtomicStampedReference.class, simple(r -> new AtomicStampedReference(r, 0), null));
+        addFactory(AtomicReferenceArray.class, (tag, pv, stack) -> {
+            TypeTag y = tag.getGenericTypes().get(0);
+            Object[] red = new Object[] { pv.giveRed(y) };
+            Object[] blue = new Object[] { pv.giveBlue(y) };
+            Object[] redCopy = new Object[] { pv.giveRedCopy(y) };
+            return Tuple
+                    .of(
+                        new AtomicReferenceArray(red),
+                        new AtomicReferenceArray(blue),
+                        new AtomicReferenceArray(redCopy));
+        });
 
         DoubleAdder redDoubleAdder = new DoubleAdder();
         DoubleAdder blueDoubleAdder = new DoubleAdder();
         addValues(DoubleAdder.class, redDoubleAdder, blueDoubleAdder, redDoubleAdder);
         DoubleAccumulator redDoubleAccumulator = new DoubleAccumulator((a, b) -> a + b, 0.0);
         DoubleAccumulator blueDoubleAccumulator = new DoubleAccumulator((a, b) -> a * b, 1.0);
-        addValues(
-            DoubleAccumulator.class,
-            redDoubleAccumulator,
-            blueDoubleAccumulator,
-            redDoubleAccumulator
-        );
+        addValues(DoubleAccumulator.class, redDoubleAccumulator, blueDoubleAccumulator, redDoubleAccumulator);
         LongAdder redLongAdder = new LongAdder();
         LongAdder blueLongAdder = new LongAdder();
         addValues(LongAdder.class, redLongAdder, blueLongAdder, redLongAdder);
         LongAccumulator redLongAccumulator = new LongAccumulator((a, b) -> a + b, 0);
         LongAccumulator blueLongAccumulator = new LongAccumulator((a, b) -> a * b, 1);
-        addValues(
-            LongAccumulator.class,
-            redLongAccumulator,
-            blueLongAccumulator,
-            redLongAccumulator
-        );
+        addValues(LongAccumulator.class, redLongAccumulator, blueLongAccumulator, redLongAccumulator);
     }
 
     private void addAncientJavaApiClasses() {
@@ -685,9 +519,7 @@ public final class JavaApiPrefabValues {
             values(
                 new PropertyChangeSupport("this"),
                 new PropertyChangeSupport("that"),
-                new PropertyChangeSupport("this")
-            )
-        );
+                new PropertyChangeSupport("this")));
 
         addLazyFactory("java.rmi.dgc.VMID", RMI_FACTORY);
         addLazyFactory("java.rmi.server.UID", RMI_FACTORY);

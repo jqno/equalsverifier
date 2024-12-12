@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
@@ -14,19 +15,16 @@ import org.junit.jupiter.api.Test;
 
 public class TypeTagTest {
 
-    private static final TypeTag SOME_LONG_TYPETAG = new TypeTag(
-        Map.class,
-        new TypeTag(Integer.class),
-        new TypeTag(List.class, new TypeTag(String.class))
-    );
+    private static final TypeTag SOME_LONG_TYPETAG =
+            new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
 
     @Test
     public void equalsAndHashCode() {
         EqualsVerifier
-            .forClass(TypeTag.class)
-            .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG)
-            .suppress(Warning.NULL_FIELDS)
-            .verify();
+                .forClass(TypeTag.class)
+                .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG)
+                .suppress(Warning.NULL_FIELDS)
+                .verify();
     }
 
     @Test
@@ -41,10 +39,8 @@ public class TypeTagTest {
 
     @Test
     public void getGenericTypes() {
-        List<TypeTag> expected = Arrays.asList(
-            new TypeTag(Integer.class),
-            new TypeTag(List.class, new TypeTag(String.class))
-        );
+        List<TypeTag> expected =
+                Arrays.asList(new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
         assertEquals(expected, SOME_LONG_TYPETAG.getGenericTypes());
     }
 
@@ -96,10 +92,7 @@ public class TypeTagTest {
         Field f = Container.class.getDeclaredField("tss");
         TypeTag actual = TypeTag.of(f, enclosingType);
 
-        assertEquals(
-            new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))),
-            actual
-        );
+        assertEquals(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))), actual);
     }
 
     @Test
@@ -112,8 +105,7 @@ public class TypeTagTest {
 
     @Test
     public void correctnessOfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
-        Field field =
-            RecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
+        Field field = RecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
         assertEquals(expected, actual);
@@ -121,10 +113,7 @@ public class TypeTagTest {
 
     @Test
     public void correctnessOfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
-        Field field =
-            RecursiveBoundedWildcardTypeVariable.class.getDeclaredField(
-                    "fieldWithBoundedTypeVariable"
-                );
+        Field field = RecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
         assertEquals(expected, actual);

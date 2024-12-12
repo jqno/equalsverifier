@@ -3,10 +3,11 @@ package nl.jqno.equalsverifier.integration.extended_contract;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
-import com.google.common.collect.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.function.Supplier;
+
+import com.google.common.collect.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -108,27 +109,25 @@ public class GenericTypesTest {
     @Test
     public void failGracefully_whenClassHasASelfReferenceGenericParameter() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SelfReferringGenericType.class).verify())
-            .assertFailure()
-            .assertMessageContains(
-                "Reflection error",
-                "try adding a prefab value",
-                "field wrapped",
-                "of type " + SelfReferringGenericType.class.getName()
-            );
+                .when(() -> EqualsVerifier.forClass(SelfReferringGenericType.class).verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "Reflection error",
+                    "try adding a prefab value",
+                    "field wrapped",
+                    "of type " + SelfReferringGenericType.class.getName());
     }
 
     @Test
     public void succeed_whenClassHasASelfReferenceGenericParameter_givenPrefabValues() {
         EqualsVerifier
-            .forClass(SelfReferringGenericType.class)
-            .withPrefabValues(
-                SelfReferringGenericType.class,
-                new SelfReferringGenericType<>(1),
-                new SelfReferringGenericType<>(2)
-            )
-            .suppress(Warning.NONFINAL_FIELDS)
-            .verify();
+                .forClass(SelfReferringGenericType.class)
+                .withPrefabValues(
+                    SelfReferringGenericType.class,
+                    new SelfReferringGenericType<>(1),
+                    new SelfReferringGenericType<>(2))
+                .suppress(Warning.NONFINAL_FIELDS)
+                .verify();
     }
 
     @Test
@@ -138,10 +137,7 @@ public class GenericTypesTest {
 
     @Test
     public void succeed_whenClassContainsAClassThatContainsAMapWithArray() {
-        EqualsVerifier
-            .forClass(ArrayMapContainerContainer.class)
-            .withNonnullFields("mapContainer")
-            .verify();
+        EqualsVerifier.forClass(ArrayMapContainerContainer.class).withNonnullFields("mapContainer").verify();
     }
 
     static final class GenericContainerWithBuiltin {
@@ -198,10 +194,9 @@ public class GenericTypesTest {
         private final AtomicReferenceArray<Point> atomicReferenceArray;
 
         public JavaGenericTypeContainer(
-            Optional<Point> optional,
-            Supplier<Point> supplier,
-            AtomicReferenceArray<Point> atomicReferenceArray
-        ) {
+                Optional<Point> optional,
+                Supplier<Point> supplier,
+                AtomicReferenceArray<Point> atomicReferenceArray) {
             this.optional = optional;
             this.supplier = supplier;
             this.atomicReferenceArray = atomicReferenceArray;
@@ -219,14 +214,10 @@ public class GenericTypesTest {
             Point thisSupplierPoint = supplier != null ? supplier.get() : null;
             Point thatSupplierPoint = other.supplier != null ? other.supplier.get() : null;
             Point thisAraPoint = atomicReferenceArray != null ? atomicReferenceArray.get(0) : null;
-            Point thatAraPoint = other.atomicReferenceArray != null
-                ? other.atomicReferenceArray.get(0)
-                : null;
-            return (
-                Objects.equals(thisOptionalPoint, thatOptionalPoint) &&
-                Objects.equals(thisSupplierPoint, thatSupplierPoint) &&
-                Objects.equals(thisAraPoint, thatAraPoint)
-            );
+            Point thatAraPoint = other.atomicReferenceArray != null ? other.atomicReferenceArray.get(0) : null;
+            return Objects.equals(thisOptionalPoint, thatOptionalPoint)
+                    && Objects.equals(thisSupplierPoint, thatSupplierPoint)
+                    && Objects.equals(thisAraPoint, thatAraPoint);
         }
 
         // CHECKSTYLE ON: NPathComplexity
@@ -781,12 +772,8 @@ public class GenericTypesTest {
             if (!(obj instanceof TwoGenericsContainerWithIntrospection)) {
                 return false;
             }
-            TwoGenericsContainerWithIntrospection other =
-                (TwoGenericsContainerWithIntrospection) obj;
-            return (
-                Objects.equals(stringList, other.stringList) &&
-                Objects.equals(intList, other.intList)
-            );
+            TwoGenericsContainerWithIntrospection other = (TwoGenericsContainerWithIntrospection) obj;
+            return Objects.equals(stringList, other.stringList) && Objects.equals(intList, other.intList);
         }
 
         @Override

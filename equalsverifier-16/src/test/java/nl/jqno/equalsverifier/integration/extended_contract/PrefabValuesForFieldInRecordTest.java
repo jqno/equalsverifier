@@ -9,47 +9,43 @@ public class PrefabValuesForFieldInRecordTest {
     @Test
     public void fail_whenRecordHasSinglePrecondition() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "[1]");
+                .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record:", "failed to run constructor", "[1]");
     }
 
     @Test
     public void succeed_whenRecordHasSinglePrecondition_givenPrefabValuesForField() {
-        EqualsVerifier
-            .forClass(SinglePrecondition.class)
-            .withPrefabValuesForField("i", 111, 142)
-            .verify();
+        EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("i", 111, 142).verify();
     }
 
     @Test
     public void fail_whenRecordHasDualPrecondition() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
-            .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "[1, 1]");
+                .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
+                .assertFailure()
+                .assertMessageContains("Record:", "failed to run constructor", "[1, 1]");
     }
 
     @Test
     public void fail_whenRecordHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(DualPrecondition.class)
-                    .withPrefabValuesForField("x", 111, 142)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Record:", "failed to run constructor", "[111, 1]");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(DualPrecondition.class)
+                            .withPrefabValuesForField("x", 111, 142)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("Record:", "failed to run constructor", "[111, 1]");
     }
 
     @Test
     public void succeed_whenRecordHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
-            .forClass(DualPrecondition.class)
-            .withPrefabValuesForField("x", 111, 142)
-            .withPrefabValuesForField("y", 505, 555)
-            .verify();
+                .forClass(DualPrecondition.class)
+                .withPrefabValuesForField("x", 111, 142)
+                .withPrefabValuesForField("y", 505, 555)
+                .verify();
     }
 
     record SinglePrecondition(int i) {

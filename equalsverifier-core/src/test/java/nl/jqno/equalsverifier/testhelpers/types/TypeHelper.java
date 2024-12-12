@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.testhelpers.annotations.*;
 
 public class TypeHelper {
@@ -14,8 +15,7 @@ public class TypeHelper {
     private static final Object OBJECT = new Object();
 
     public enum Enum {
-        FIRST,
-        SECOND
+        FIRST, SECOND
     }
 
     public static final class AllTypesContainer {
@@ -65,10 +65,8 @@ public class TypeHelper {
             result &= _Boolean == other._Boolean;
             result &= Objects.equals(_Byte, other._Byte);
             result &= _Char == other._Char;
-            result &=
-            _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
-            result &=
-            _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
+            result &= _Double == null ? other._Double == null : Double.compare(_Double, other._Double) == 0;
+            result &= _Float == null ? other._Float == null : Float.compare(_Float, other._Float) == 0;
             result &= Objects.equals(_Int, other._Int);
             result &= Objects.equals(_Long, other._Long);
             result &= Objects.equals(_Short, other._Short);
@@ -156,8 +154,7 @@ public class TypeHelper {
     }
 
     @SuppressWarnings("unused")
-    public static class DifferentAccessModifiersSubFieldContainer
-        extends DifferentAccessModifiersFieldContainer {
+    public static class DifferentAccessModifiersSubFieldContainer extends DifferentAccessModifiersFieldContainer {
 
         public final String d = "";
         protected final String c = "";
@@ -286,8 +283,7 @@ public class TypeHelper {
     }
 
     public enum TwoElementEnum {
-        ONE,
-        TWO
+        ONE, TWO
     }
 
     public enum OneElementEnum {
@@ -316,9 +312,8 @@ public class TypeHelper {
         private final SingleGenericContainer<Integer> integer;
 
         public SingleGenericContainerContainer(
-            SingleGenericContainer<String> string,
-            SingleGenericContainer<Integer> integer
-        ) {
+                SingleGenericContainer<String> string,
+                SingleGenericContainer<Integer> integer) {
             this.string = string;
             this.integer = integer;
         }
@@ -366,9 +361,8 @@ public class TypeHelper {
         private final DoubleGenericContainer<Integer, Byte> integerByte;
 
         public DoubleGenericContainerContainer(
-            DoubleGenericContainer<String, Boolean> stringBoolean,
-            DoubleGenericContainer<Integer, Byte> integerByte
-        ) {
+                DoubleGenericContainer<String, Boolean> stringBoolean,
+                DoubleGenericContainer<Integer, Byte> integerByte) {
             this.stringBoolean = stringBoolean;
             this.integerByte = integerByte;
         }
@@ -390,8 +384,7 @@ public class TypeHelper {
     @SuppressWarnings("unused")
     public static final class DoubleGenericContainer<T, U> {
 
-        private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues =
-            null;
+        private final DoubleGenericContainer<Void, Void> justToMakeItRecursiveAndForcePrefabValues = null;
 
         private final T t;
         private final U u;

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -48,10 +49,7 @@ public class SuperclassIterableTest {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubSubclass.class)) {
             actual.add(type);
         }
-        assertEquals(
-            asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class),
-            actual
-        );
+        assertEquals(asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
     }
 
     @Test

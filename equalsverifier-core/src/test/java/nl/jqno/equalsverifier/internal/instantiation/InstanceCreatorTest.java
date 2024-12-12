@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;

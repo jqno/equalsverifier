@@ -25,7 +25,7 @@ public class FieldMutator {
     /**
      * Assigns {@code newValue} to the current field in {@code object}.
      *
-     * @param object The instance on which to re-assign the current field.
+     * @param object   The instance on which to re-assign the current field.
      * @param newValue The value to assign to the field.
      */
     public void setNewValue(Object object, Object newValue) {

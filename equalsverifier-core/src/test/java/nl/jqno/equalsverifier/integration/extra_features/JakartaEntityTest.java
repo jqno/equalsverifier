@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 
 import java.util.Objects;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
@@ -17,9 +18,9 @@ public class JakartaEntityTest {
     @Test
     public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(SubclassEntityByJakartaAnnotation.class).verify())
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassEntityByJakartaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
@@ -30,11 +31,9 @@ public class JakartaEntityTest {
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(SubclassEmbeddableByJakartaAnnotation.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassEmbeddableByJakartaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @Test
@@ -45,11 +44,9 @@ public class JakartaEntityTest {
     @Test
     public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier.forClass(SubclassMappedSuperclassByJakartaAnnotation.class).verify()
-            )
-            .assertFailure()
-            .assertMessageContains("Subclass");
+                .when(() -> EqualsVerifier.forClass(SubclassMappedSuperclassByJakartaAnnotation.class).verify())
+                .assertFailure()
+                .assertMessageContains("Subclass");
     }
 
     @jakarta.persistence.Entity
@@ -143,6 +140,5 @@ public class JakartaEntityTest {
         }
     }
 
-    static class SubclassMappedSuperclassByJakartaAnnotation
-        extends MappedSuperclassByJakartaAnnotation {}
+    static class SubclassMappedSuperclassByJakartaAnnotation extends MappedSuperclassByJakartaAnnotation {}
 }

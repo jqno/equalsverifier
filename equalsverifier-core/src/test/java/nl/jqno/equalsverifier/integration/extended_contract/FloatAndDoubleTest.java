@@ -14,17 +14,17 @@ public class FloatAndDoubleTest {
     @Test
     public void fail_whenFloatsAreComparedByReference() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify())
-            .assertFailure()
-            .assertMessageContains(FLOAT, "f");
+                .when(() -> EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify())
+                .assertFailure()
+                .assertMessageContains(FLOAT, "f");
     }
 
     @Test
     public void fail_whenObjectFloatsAreComparedByReference() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
-            .assertFailure()
-            .assertMessageContains(FLOAT, "f");
+                .when(() -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
+                .assertFailure()
+                .assertMessageContains(FLOAT, "f");
     }
 
     @Test
@@ -35,17 +35,17 @@ public class FloatAndDoubleTest {
     @Test
     public void fail_whenDoublesAreComparedByReference() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify())
-            .assertFailure()
-            .assertMessageContains(DOUBLE, "d");
+                .when(() -> EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify())
+                .assertFailure()
+                .assertMessageContains(DOUBLE, "d");
     }
 
     @Test
     public void fail_whenObjectDoublesAreComparedByReference() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify())
-            .assertFailure()
-            .assertMessageContains(DOUBLE, "d");
+                .when(() -> EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify())
+                .assertFailure()
+                .assertMessageContains(DOUBLE, "d");
     }
 
     @Test

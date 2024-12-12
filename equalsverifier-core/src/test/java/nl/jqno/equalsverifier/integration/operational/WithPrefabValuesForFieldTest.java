@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.operational;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
+
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -19,101 +20,85 @@ public class WithPrefabValuesForFieldTest {
     @Test
     public void fail_whenClassHasSinglePrecondition() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .suppress(Warning.NULL_FIELDS)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("x coordinate must be");
+                .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).suppress(Warning.NULL_FIELDS).verify())
+                .assertFailure()
+                .assertMessageContains("x coordinate must be");
     }
 
     @Test
     public void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField() {
-        EqualsVerifier
-            .forClass(SinglePrecondition.class)
-            .withPrefabValuesForField("point", pRed, pBlue)
-            .verify();
+        EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", pRed, pBlue).verify();
     }
 
     @Test
     public void fail_whenClassHasDualPrecondition() {
         ExpectedException
-            .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
-            .assertFailure()
-            .assertMessageContains("x must be between");
+                .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
+                .assertFailure()
+                .assertMessageContains("x must be between");
     }
 
     @Test
     public void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(DualPrecondition.class)
-                    .withPrefabValuesForField("x", iRed, iBlue)
-                    .verify()
-            )
-            .assertFailure()
-            .assertMessageContains("y must be between");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(DualPrecondition.class)
+                            .withPrefabValuesForField("x", iRed, iBlue)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains("y must be between");
     }
 
     @Test
     public void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
-            .forClass(DualPrecondition.class)
-            .withPrefabValuesForField("x", iRed, iBlue)
-            .withPrefabValuesForField("y", 505, 555)
-            .verify();
+                .forClass(DualPrecondition.class)
+                .withPrefabValuesForField("x", iRed, iBlue)
+                .withPrefabValuesForField("y", 505, 555)
+                .verify();
     }
 
     @Test
     public void throw_whenFieldDoesNotExistInClass() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("doesnt_exist", 1, 2)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains("Precondition:", "does not contain field doesnt_exist");
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("doesnt_exist", 1, 2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition:", "does not contain field doesnt_exist");
     }
 
     @Test
     public void throw_whenFirstPrefabValueIsNull() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("point", null, pBlue)
-            )
-            .assertThrows(NullPointerException.class);
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", null, pBlue))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenSecondPrefabValueIsNull() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("point", pRed, null)
-            )
-            .assertThrows(NullPointerException.class);
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, null))
+                .assertThrows(NullPointerException.class);
     }
 
     @Test
     public void throw_whenThePrefabValuesAreTheSame() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("point", pRed, pRed)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "both prefab values of type FinalPoint are equal"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", pRed, pRed))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
     }
 
     @Test
@@ -122,59 +107,44 @@ public class WithPrefabValuesForFieldTest {
         FinalPoint red2 = new FinalPoint(3, 4);
 
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("point", red1, red2)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "both prefab values of type FinalPoint are equal"
-            );
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(SinglePrecondition.class)
+                            .withPrefabValuesForField("point", red1, red2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "both prefab values of type FinalPoint are equal");
     }
 
     @Test
     public void throw_whenFieldsDontMatch() {
         ExpectedException
-            .when(() ->
-                EqualsVerifier
-                    .forClass(SinglePrecondition.class)
-                    .withPrefabValuesForField("point", 1, 2)
-            )
-            .assertThrows(IllegalStateException.class)
-            .assertMessageContains(
-                "Precondition",
-                "for field point should be of type FinalPoint but are"
-            );
+                .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", 1, 2))
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("Precondition", "for field point should be of type FinalPoint but are");
     }
 
     @Test
     public void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
         EqualsVerifier
-            .forClass(OtherModuleContainer.class)
-            .withPrefabValuesForField("date", LocalDate.of(2024, 9, 18), LocalDate.of(2024, 9, 19))
-            .verify();
+                .forClass(OtherModuleContainer.class)
+                .withPrefabValuesForField("date", LocalDate.of(2024, 9, 18), LocalDate.of(2024, 9, 19))
+                .verify();
     }
 
     @Test
     public void succeed_whenPrefabForArrayIsOverridden() {
         EqualsVerifier
-            .forClass(ThrowingArrayContainer.class)
-            .withPrefabValuesForField("field", new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 })
-            .verify();
+                .forClass(ThrowingArrayContainer.class)
+                .withPrefabValuesForField("field", new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 })
+                .verify();
     }
 
     @Test
     public void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
         EqualsVerifier
-            .forClass(ListContainer.class)
-            .withPrefabValuesForField(
-                "list",
-                Collections.singletonList("x"),
-                Collections.singletonList("y")
-            )
-            .verify();
+                .forClass(ListContainer.class)
+                .withPrefabValuesForField("list", Collections.singletonList("x"), Collections.singletonList("y"))
+                .verify();
     }
 
     @Test
@@ -182,13 +152,9 @@ public class WithPrefabValuesForFieldTest {
         DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
         DifficultGeneric two = new DifficultGeneric(null);
         EqualsVerifier
-            .forClass(DifficultGeneric.class)
-            .withPrefabValuesForField(
-                "list",
-                Collections.singletonList(one),
-                Collections.singletonList(two)
-            )
-            .verify();
+                .forClass(DifficultGeneric.class)
+                .withPrefabValuesForField("list", Collections.singletonList(one), Collections.singletonList(two))
+                .verify();
     }
 
     static final class SinglePrecondition {

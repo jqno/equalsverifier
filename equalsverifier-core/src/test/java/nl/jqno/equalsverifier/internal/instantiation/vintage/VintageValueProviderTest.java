@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.*;
+
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -46,10 +47,7 @@ public class VintageValueProviderTest {
     @Test
     public void provide() {
         Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
-        assertEquals(
-            Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)),
-            actual.get()
-        );
+        assertEquals(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)), actual.get());
     }
 
     @Test
@@ -153,18 +151,18 @@ public class VintageValueProviderTest {
         TypeTag throwingInitializerTag = new TypeTag(ThrowingInitializer.class);
 
         // Shouldn't throw, because constructing PrefabValues doesn't instantiate objects:
-        factoryCache.put(
-            ThrowingInitializer.class.getName(),
-            (t, p, ts) ->
-                Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X)
-        );
+        factoryCache
+                .put(
+                    ThrowingInitializer.class.getName(),
+                    (t, p, ts) -> Tuple.of(ThrowingInitializer.X, ThrowingInitializer.Y, ThrowingInitializer.X));
         vp = new VintageValueProvider(factoryCache, objenesis);
 
         // Should throw, because `giveRed` does instantiate objects:
         try {
             vp.giveRed(throwingInitializerTag);
             fail("Expected an exception");
-        } catch (Error e) {
+        }
+        catch (Error e) {
             // succeed
         }
     }
@@ -204,10 +202,9 @@ public class VintageValueProviderTest {
 
         @Override
         public Tuple<String> createValues(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
-        ) {
+                TypeTag tag,
+                VintageValueProvider valueProvider,
+                LinkedHashSet<TypeTag> typeStack) {
             red += "r";
             blue += "b";
             return new Tuple<>(red, blue, new String(red));
@@ -220,10 +217,9 @@ public class VintageValueProviderTest {
         @Override
         @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
-            TypeTag tag,
-            VintageValueProvider valueProvider,
-            LinkedHashSet<TypeTag> typeStack
-        ) {
+                TypeTag tag,
+                VintageValueProvider valueProvider,
+                LinkedHashSet<TypeTag> typeStack) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
             List red = new ArrayList<>();

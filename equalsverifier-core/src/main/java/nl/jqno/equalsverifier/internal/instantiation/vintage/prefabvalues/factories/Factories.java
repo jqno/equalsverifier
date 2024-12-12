@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 
@@ -17,23 +18,15 @@ public final class Factories {
         return new SimpleFactory<>(red, blue, redCopy);
     }
 
-    public static <A, T> PrefabValueFactory<T> simple(
-        Func1<A, T> factory,
-        Supplier<T> emptyFactory
-    ) {
+    public static <A, T> PrefabValueFactory<T> simple(Func1<A, T> factory, Supplier<T> emptyFactory) {
         return new SimpleGenericFactory<>(factory, emptyFactory);
     }
 
-    public static <A, B, T> PrefabValueFactory<T> simple(
-        Func2<A, B, T> factory,
-        Supplier<T> emptyFactory
-    ) {
+    public static <A, B, T> PrefabValueFactory<T> simple(Func2<A, B, T> factory, Supplier<T> emptyFactory) {
         return new SimpleGenericFactory<>(factory, emptyFactory);
     }
 
-    public static <A, T extends Collection<A>> PrefabValueFactory<T> collection(
-        Supplier<T> emptyFactory
-    ) {
+    public static <A, T extends Collection<A>> PrefabValueFactory<T> collection(Supplier<T> emptyFactory) {
         Func1<A, T> f = a -> {
             T coll = emptyFactory.get();
             coll.add(a);

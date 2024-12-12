@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.BiConsumer;
+
 import nl.jqno.equalsverifier.internal.reflection.*;
 import nl.jqno.equalsverifier.internal.util.PrimitiveMappers;
 import org.objenesis.Objenesis;
@@ -19,7 +20,7 @@ public class InstanceCreator<T> {
     /**
      * Constructor.
      *
-     * @param probe Represents the class to instantiate.
+     * @param probe     Represents the class to instantiate.
      * @param objenesis To instantiate non-record classes.
      */
     public InstanceCreator(ClassProbe<T> probe, Objenesis objenesis) {
@@ -29,9 +30,9 @@ public class InstanceCreator<T> {
     }
 
     /**
-     * Creates an instance of the given type, with its field set to the given values. If no value
-     * is given for a specific field, the field will be set to its default value: null for object
-     * references, 0 for numbers, false for booleans.
+     * Creates an instance of the given type, with its field set to the given values. If no value is given for a
+     * specific field, the field will be set to its default value: null for object references, 0 for numbers, false for
+     * booleans.
      *
      * @param values Values to assign to the instance's fields.
      * @return An instance with assigned values.
@@ -41,8 +42,7 @@ public class InstanceCreator<T> {
     }
 
     /**
-     * Creates a new instance with all fields set to the same value as their counterparts from
-     * {@code original}.
+     * Creates a new instance with all fields set to the same value as their counterparts from {@code original}.
      *
      * @param original The instance to copy.
      * @return A copy of the given original.
@@ -65,10 +65,7 @@ public class InstanceCreator<T> {
 
     private T createClassInstance(Map<Field, Object> values) {
         T instance = instantiator.instantiate();
-        traverseFields(
-            values,
-            (f, v) -> new FieldMutator(FieldProbe.of(f)).setNewValue(instance, v)
-        );
+        traverseFields(values, (f, v) -> new FieldMutator(FieldProbe.of(f)).setNewValue(instance, v));
         return instance;
     }
 
