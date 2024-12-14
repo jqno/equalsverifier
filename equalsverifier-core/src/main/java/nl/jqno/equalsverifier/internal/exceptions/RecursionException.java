@@ -7,7 +7,6 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 /** Signals that a recursion has been detected while traversing the fields of a data structure. */
-@SuppressWarnings("serial")
 @SuppressFBWarnings(value = "SE_BAD_FIELD", justification = "EqualsVerifier doesn't serialize.")
 public class RecursionException extends MessagingException {
 

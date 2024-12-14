@@ -538,6 +538,5 @@ public class TypeHelper {
         }
     }
 
-    @SuppressWarnings("serial")
     public static final class LoadedBySystemClassLoader extends Exception {}
 }

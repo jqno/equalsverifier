@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
 /** Signals a bug in EqualsVerifier. */
-@SuppressWarnings("serial")
 public class EqualsVerifierInternalBugException extends RuntimeException {
 
     private static final String BUG =
