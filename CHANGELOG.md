@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Tools like IntelliJ, Spotbugs and ErrorProne now report when you forget to call `.verify()` at the end of an EqualsVerifier invocation (through the `@CheckReturnValue` annotation).
+- Adds prefab values for Java 21's `SequencedCollection`, `SequencedSet` and `SequencedMap`.
 
 ## [3.17.5] - 2024-12-06
 

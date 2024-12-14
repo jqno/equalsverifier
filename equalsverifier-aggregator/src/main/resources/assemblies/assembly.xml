@@ -1,4 +1,4 @@
-<component 
+<component
     xmlns="http://maven.apache.org/ASSEMBLY-COMPONENT/2.1.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/ASSEMBLY-COMPONENT/2.1.0 http://maven.apache.org/xsd/assembly-component-2.1.0.xsd">
@@ -58,6 +58,22 @@
             </includes>
             <binaries>
                 <outputDirectory>META-INF/versions/17</outputDirectory>
+                <unpack>true</unpack>
+                <includeDependencies>false</includeDependencies>
+                <unpackOptions>
+                    <excludes>
+                        <exclude>/META-INF/**</exclude>
+                    </excludes>
+                </unpackOptions>
+            </binaries>
+        </moduleSet>
+        <moduleSet>
+            <useAllReactorProjects>true</useAllReactorProjects>
+            <includes>
+                <include>nl.jqno.equalsverifier:equalsverifier-21</include>
+            </includes>
+            <binaries>
+                <outputDirectory>META-INF/versions/21</outputDirectory>
                 <unpack>true</unpack>
                 <includeDependencies>false</includeDependencies>
                 <unpackOptions>
