@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.versionspecific;
 
 public final class ModuleHelper {
 

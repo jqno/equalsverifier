@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.versionspecific;
 
 import java.lang.reflect.Modifier;
 import java.util.Optional;

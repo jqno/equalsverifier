@@ -3,8 +3,8 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.RecordsHelper;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
 import org.objenesis.Objenesis;
 
 /**

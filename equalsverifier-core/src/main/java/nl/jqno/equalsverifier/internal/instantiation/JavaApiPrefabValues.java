@@ -36,6 +36,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factor
 import nl.jqno.equalsverifier.internal.reflection.ConditionalInstantiator;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.versionspecific.SequencedCollectionsHelper;
 
 /**
  * Creates instances of classes for use in a {@link VintageValueProvider} object.
@@ -94,6 +95,7 @@ public final class JavaApiPrefabValues {
         addMaps();
         addSets();
         addQueues();
+        SequencedCollectionsHelper.add(factoryCache);
         addNioBuffers();
         addExceptions();
         addReflectionClasses();

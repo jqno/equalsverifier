@@ -1,4 +1,4 @@
-package nl.jqno.equalsverifier.internal.reflection;
+package nl.jqno.equalsverifier.internal.versionspecific;
 
 /**
  * Note: this is a generic implementation for a multi-release jar class. See equalsverifier-11 submodule.
