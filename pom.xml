@@ -73,7 +73,7 @@
         <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
         <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
 
-        <version.bytebuddy>1.15.10</version.bytebuddy>
+        <version.bytebuddy>1.15.11</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
 
         <version.archunit>1.3.0</version.archunit>
@@ -92,7 +92,7 @@
 
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
-        <version.checkstyle>10.20.2</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
+        <version.checkstyle>10.21.0</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.flatten-maven-plugin>1.6.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.12</version.jacoco>
