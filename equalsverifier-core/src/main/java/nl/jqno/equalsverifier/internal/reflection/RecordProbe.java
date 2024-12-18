@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,7 +18,7 @@ public class RecordProbe<T> {
         this.type = type;
     }
 
-    public Stream<Field> fields() {
+    public Stream<FieldProbe> fields() {
         return StreamSupport.stream(FieldIterable.ofIgnoringStatic(type).spliterator(), false);
     }
 
@@ -30,7 +29,7 @@ public class RecordProbe<T> {
 
     private Constructor<T> getRecordConstructor() {
         return rethrow(() -> {
-            List<Class<?>> constructorTypes = fields().map(Field::getType).collect(Collectors.toList());
+            List<Class<?>> constructorTypes = fields().map(FieldProbe::getType).collect(Collectors.toList());
             Constructor<T> result = type.getDeclaredConstructor(constructorTypes.toArray(new Class<?>[0]));
             result.setAccessible(true);
             return result;

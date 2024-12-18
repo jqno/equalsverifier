@@ -4,9 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
@@ -33,9 +32,9 @@ public class RecordObjectAccessorCopyingTest {
         RecordObjectAccessor<?> copyAccessor = create(copy);
 
         assertNotSame(original, copy);
-        for (Field f : FieldIterable.of(original.getClass())) {
-            Object a = originalAccessor.getField(f);
-            Object b = copyAccessor.getField(f);
+        for (FieldProbe p : FieldIterable.of(original.getClass())) {
+            Object a = originalAccessor.getField(p);
+            Object b = copyAccessor.getField(p);
             assertSame(a, b);
         }
     }

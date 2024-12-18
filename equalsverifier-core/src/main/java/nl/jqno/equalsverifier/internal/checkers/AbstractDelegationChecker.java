@@ -2,8 +2,6 @@ package nl.jqno.equalsverifier.internal.checkers;
 
 import static nl.jqno.equalsverifier.internal.util.Assert.fail;
 
-import java.lang.reflect.Field;
-
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.instantiation.ValueProvider;
@@ -60,8 +58,8 @@ public class AbstractDelegationChecker<T> implements Checker {
     }
 
     private void checkAbstractDelegationInFields() {
-        for (Field field : FieldIterable.of(type)) {
-            TypeTag tag = TypeTag.of(field, typeTag);
+        for (FieldProbe probe : FieldIterable.of(type)) {
+            TypeTag tag = TypeTag.of(probe.getField(), typeTag);
             Tuple<?> tuple = safelyGetTuple(tag);
             if (tuple != null) {
                 Object instance = tuple.getRed();

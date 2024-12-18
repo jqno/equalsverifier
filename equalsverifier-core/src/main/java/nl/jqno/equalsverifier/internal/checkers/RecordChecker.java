@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.Context;
 import nl.jqno.equalsverifier.internal.util.Formatter;
 
@@ -46,13 +47,13 @@ public class RecordChecker<T> implements Checker {
         }
 
         List<String> failedFields = new ArrayList<>();
-        for (Field f : FieldIterable.of(type)) {
-            Method accessorMethod = getAccessorMethodFor(type, f);
+        for (FieldProbe p : FieldIterable.of(type)) {
+            Method accessorMethod = getAccessorMethodFor(type, p.getField());
             try {
                 Object originalField = accessorMethod.invoke(original);
                 Object copyField = accessorMethod.invoke(copy);
                 if (!originalField.equals(copyField)) {
-                    failedFields.add(f.getName());
+                    failedFields.add(p.getName());
                 }
             }
             catch (IllegalAccessException | InvocationTargetException e) {

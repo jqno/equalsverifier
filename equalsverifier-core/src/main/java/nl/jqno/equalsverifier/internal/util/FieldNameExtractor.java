@@ -1,11 +1,11 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 
 public final class FieldNameExtractor {
 
@@ -13,8 +13,8 @@ public final class FieldNameExtractor {
 
     public static <T> Set<String> extractFieldNames(Class<T> type) {
         Set<String> actualFieldNames = new HashSet<>();
-        for (Field f : FieldIterable.of(type)) {
-            String name = f.getName();
+        for (FieldProbe p : FieldIterable.of(type)) {
+            String name = p.getName();
             actualFieldNames.add(name);
         }
 

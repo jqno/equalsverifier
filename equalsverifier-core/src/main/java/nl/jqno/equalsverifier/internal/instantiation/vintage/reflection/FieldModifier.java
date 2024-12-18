@@ -12,24 +12,26 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 
 public final class FieldModifier {
 
+    private final FieldProbe fieldProbe;
     private final Field field;
     private final Object object;
 
     /** Private constructor. Call {@link #of(Field, Object)} to instantiate. */
-    private FieldModifier(Field field, Object object) {
-        this.field = field;
+    private FieldModifier(FieldProbe fieldProbe, Object object) {
+        this.fieldProbe = fieldProbe;
+        this.field = fieldProbe.getField();
         this.object = object;
     }
 
     /**
      * Factory method.
      *
-     * @param field  The field to modify.
-     * @param object An object that contains the field we want to modify.
+     * @param fieldProbe A reference to the field to modify.
+     * @param object     An object that contains the field we want to modify.
      * @return A {@link FieldModifier} for {@link field} in {@link object}.
      */
-    public static FieldModifier of(Field field, Object object) {
-        return new FieldModifier(field, object);
+    public static FieldModifier of(FieldProbe fieldProbe, Object object) {
+        return new FieldModifier(fieldProbe, object);
     }
 
     /**
@@ -72,11 +74,10 @@ public final class FieldModifier {
     }
 
     private void change(FieldChanger changer, boolean includeStatic) {
-        FieldProbe probe = FieldProbe.of(field);
-        if (!probe.canBeModifiedReflectively()) {
+        if (!fieldProbe.canBeModifiedReflectively()) {
             return;
         }
-        if (!includeStatic && probe.isStatic()) {
+        if (!includeStatic && fieldProbe.isStatic()) {
             return;
         }
 

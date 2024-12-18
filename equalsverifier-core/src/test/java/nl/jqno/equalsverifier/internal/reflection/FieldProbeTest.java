@@ -38,6 +38,18 @@ public class FieldProbeTest {
     }
 
     @Test
+    public void isNotPublic() {
+        FieldProbe probe = getProbeFor(DifferentAccessModifiersFieldContainer.class, "K");
+        assertFalse(probe.isPublic());
+    }
+
+    @Test
+    public void isPublic() {
+        FieldProbe probe = getProbeFor(DifferentAccessModifiersFieldContainer.class, "L");
+        assertTrue(probe.isPublic());
+    }
+
+    @Test
     public void isNotPrimitive() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
         assertFalse(probe.isPrimitive());

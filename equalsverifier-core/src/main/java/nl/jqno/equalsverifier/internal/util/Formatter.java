@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -84,14 +83,13 @@ public final class Formatter {
         result.append(typeName);
 
         boolean foundFields = false;
-        for (Field field : FieldIterable.of(type)) {
+        for (FieldProbe probe : FieldIterable.of(type)) {
             foundFields = true;
-            String fieldName = field.getName();
+            String fieldName = probe.getName();
             result.append(" ");
             result.append(fieldName);
             result.append("=");
 
-            FieldProbe probe = FieldProbe.of(field);
             Object value = probe.getValue(obj);
             result.append(stringify(value));
         }

@@ -1,10 +1,10 @@
 package nl.jqno.equalsverifier.internal.testhelpers;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 
@@ -22,16 +22,15 @@ public final class Util {
         }
         boolean equals = true;
         try {
-            for (Field f : FieldIterable.of(type)) {
-                if (isRelevant(f)) {
-                    f.setAccessible(true);
-                    Object x = f.get(here);
-                    Object y = f.get(there);
+            for (FieldProbe p : FieldIterable.of(type)) {
+                if (isRelevant(p)) {
+                    Object x = p.getValue(here);
+                    Object y = p.getValue(there);
                     equals &= Objects.equals(x, y);
                 }
             }
         }
-        catch (IllegalAccessException e) {
+        catch (ReflectionException e) {
             throw new AssertionError(e.toString(), e);
         }
         return equals;
@@ -43,22 +42,21 @@ public final class Util {
     public static int defaultHashCode(Object x) {
         int hash = 59;
         try {
-            for (Field f : FieldIterable.of(x.getClass())) {
-                if (isRelevant(f)) {
-                    f.setAccessible(true);
-                    Object val = f.get(x);
+            for (FieldProbe p : FieldIterable.of(x.getClass())) {
+                if (isRelevant(p)) {
+                    Object val = p.getValue(x);
                     hash += 59 * Objects.hashCode(val);
                 }
             }
         }
-        catch (IllegalAccessException e) {
+        catch (ReflectionException e) {
             throw new AssertionError(e.toString(), e);
         }
         return hash;
     }
 
-    private static boolean isRelevant(Field f) {
-        return FieldProbe.of(f).canBeModifiedReflectively();
+    private static boolean isRelevant(FieldProbe p) {
+        return p.canBeModifiedReflectively();
     }
 
     public static void coverThePrivateConstructor(Class<?> type) {

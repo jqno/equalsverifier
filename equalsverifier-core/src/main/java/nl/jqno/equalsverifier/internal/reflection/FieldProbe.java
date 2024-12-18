@@ -70,6 +70,11 @@ public final class FieldProbe {
         return getType().isPrimitive();
     }
 
+    /** @return Whether the field has public visibility */
+    public boolean isPublic() {
+        return Modifier.isPublic(field.getModifiers());
+    }
+
     /** @return Whether the field is marked with the final modifier. */
     public boolean isFinal() {
         return Modifier.isFinal(field.getModifiers());

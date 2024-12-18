@@ -3,7 +3,6 @@ package nl.jqno.equalsverifier.internal.checkers;
 import static nl.jqno.equalsverifier.internal.util.Assert.*;
 import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,6 +11,7 @@ import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.exceptions.AssertionException;
 import nl.jqno.equalsverifier.internal.instantiation.SubjectCreator;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.util.*;
 
 public class ExamplesChecker<T> implements Checker {
@@ -169,9 +169,8 @@ public class ExamplesChecker<T> implements Checker {
 
     private boolean isIdentical(T reference, T other) {
         return rethrow(() -> {
-            for (Field field : FieldIterable.of(reference.getClass())) {
-                field.setAccessible(true);
-                if (!Objects.equals(field.get(reference), field.get(other))) {
+            for (FieldProbe probe : FieldIterable.of(reference.getClass())) {
+                if (!Objects.equals(probe.getValue(reference), probe.getValue(other))) {
                     return false;
                 }
             }

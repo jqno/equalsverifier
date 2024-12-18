@@ -1,12 +1,9 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
-import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.TypeTag;
+import nl.jqno.equalsverifier.internal.reflection.*;
 import org.objenesis.Objenesis;
 
 /**
@@ -25,8 +22,8 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
     @Override
     public T copy(Objenesis objenesis) {
         T copy = Instantiator.of(type(), objenesis).instantiate();
-        for (Field field : FieldIterable.of(type())) {
-            fieldModifierFor(field).copyTo(copy);
+        for (FieldProbe probe : FieldIterable.of(type())) {
+            fieldModifierFor(probe).copyTo(copy);
         }
         return copy;
     }
@@ -37,13 +34,13 @@ final class InPlaceObjectAccessor<T> extends ObjectAccessor<T> {
             VintageValueProvider valueProvider,
             TypeTag enclosingType,
             LinkedHashSet<TypeTag> typeStack) {
-        for (Field field : FieldIterable.of(type())) {
-            fieldModifierFor(field).changeField(valueProvider, enclosingType, typeStack);
+        for (FieldProbe probe : FieldIterable.of(type())) {
+            fieldModifierFor(probe).changeField(valueProvider, enclosingType, typeStack);
         }
         return this;
     }
 
-    private FieldModifier fieldModifierFor(Field field) {
-        return FieldModifier.of(field, get());
+    private FieldModifier fieldModifierFor(FieldProbe probe) {
+        return FieldModifier.of(probe, get());
     }
 }

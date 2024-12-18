@@ -78,8 +78,8 @@ public class SubjectCreator<T> {
      */
     public T withAllFieldsDefaulted() {
         Map<Field, Object> values = empty();
-        for (Field f : fields()) {
-            values.put(f, null);
+        for (FieldProbe p : fields()) {
+            values.put(p.getField(), null);
         }
         return createInstance(values);
     }
@@ -93,7 +93,8 @@ public class SubjectCreator<T> {
      */
     public T withAllFieldsDefaultedExcept(Field field) {
         Map<Field, Object> values = empty();
-        for (Field f : fields()) {
+        for (FieldProbe p : fields()) {
+            Field f = p.getField();
             if (!f.equals(field)) {
                 values.put(f, null);
             }
@@ -133,7 +134,8 @@ public class SubjectCreator<T> {
      */
     public T withAllFieldsChanged() {
         Map<Field, Object> values = empty();
-        for (Field f : fields()) {
+        for (FieldProbe p : fields()) {
+            Field f = p.getField();
             Object value = valuesFor(f).getBlue();
             values.put(f, value);
         }
@@ -148,7 +150,8 @@ public class SubjectCreator<T> {
      */
     public T withAllFieldsShallowlyChanged() {
         Map<Field, Object> values = empty();
-        for (Field f : nonSuperFields()) {
+        for (FieldProbe p : nonSuperFields()) {
+            Field f = p.getField();
             Object value = valuesFor(f).getBlue();
             values.put(f, value);
         }
@@ -199,9 +202,10 @@ public class SubjectCreator<T> {
 
     private Map<Field, Object> determineValues(Map<Field, Object> givens) {
         Map<Field, Object> values = new HashMap<>(givens);
-        for (Field f : fields()) {
+        for (FieldProbe p : fields()) {
+            Field f = p.getField();
             boolean fieldIsAbsent = !values.containsKey(f);
-            boolean fieldCannotBeNull = values.get(f) == null && !FieldProbe.of(f).canBeDefault(config);
+            boolean fieldCannotBeNull = values.get(f) == null && !p.canBeDefault(config);
             if (fieldIsAbsent || fieldCannotBeNull) {
                 Object value = valuesFor(f).getRed();
                 values.put(f, value);

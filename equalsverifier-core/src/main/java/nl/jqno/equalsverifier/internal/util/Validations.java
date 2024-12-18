@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.annotations.AnnotationCache;
 import nl.jqno.equalsverifier.internal.reflection.annotations.SupportedAnnotations;
 
@@ -161,18 +162,18 @@ public final class Validations {
             AnnotationCache cache,
             Set<Warning> warnings,
             Set<String> includedFields) {
-        FieldIterable.of(type).forEach(f -> validateFieldAnnotation(type, f, cache, warnings, includedFields));
+        FieldIterable.of(type).forEach(p -> validateFieldAnnotation(type, p, cache, warnings, includedFields));
     }
 
     private static void validateFieldAnnotation(
             Class<?> type,
-            Field f,
+            FieldProbe p,
             AnnotationCache cache,
             Set<Warning> warnings,
             Set<String> includedFields) {
         validate(
-            includedFields.contains(f.getName())
-                    && cache.hasFieldAnnotation(type, f.getName(), SupportedAnnotations.ID)
+            includedFields.contains(p.getName())
+                    && cache.hasFieldAnnotation(type, p.getName(), SupportedAnnotations.ID)
                     && !warnings.contains(Warning.SURROGATE_OR_BUSINESS_KEY),
             "you can't use withOnlyTheseFields on a field marked @Id or @EmbeddedId.\n"
                     + "Suppress Warning.SURROGATE_KEY and remove withOnlyTheseFields "

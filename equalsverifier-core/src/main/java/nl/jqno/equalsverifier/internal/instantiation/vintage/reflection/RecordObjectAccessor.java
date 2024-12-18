@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import java.lang.reflect.Field;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.function.Function;
@@ -41,14 +40,14 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
             VintageValueProvider valueProvider,
             TypeTag enclosingType,
             LinkedHashSet<TypeTag> typeStack) {
-        return makeAccessor(f -> {
-            Object value = getField(f);
-            TypeTag tag = TypeTag.of(f, enclosingType);
+        return makeAccessor(fieldProbe -> {
+            Object value = getField(fieldProbe);
+            TypeTag tag = TypeTag.of(fieldProbe.getField(), enclosingType);
             return valueProvider.giveOther(tag, value, typeStack);
         });
     }
 
-    private ObjectAccessor<T> makeAccessor(Function<Field, Object> determineValue) {
+    private ObjectAccessor<T> makeAccessor(Function<FieldProbe, Object> determineValue) {
         List<Object> params = probe.fields().map(determineValue).collect(Collectors.toList());
         T newObject = callRecordConstructor(params);
         return ObjectAccessor.of(newObject);
@@ -60,7 +59,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     @SuppressWarnings("unchecked")
-    public T getField(Field field) {
-        return (T) FieldProbe.of(field).getValue(get());
+    public T getField(FieldProbe fieldProbe) {
+        return (T) fieldProbe.getValue(get());
     }
 }

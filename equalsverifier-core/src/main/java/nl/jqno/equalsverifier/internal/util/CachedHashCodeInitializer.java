@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 
 import nl.jqno.equalsverifier.internal.SuppressFBWarnings;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
+import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 
 /**
@@ -29,7 +30,7 @@ import nl.jqno.equalsverifier.internal.reflection.SuperclassIterable;
 public class CachedHashCodeInitializer<T> {
 
     private final boolean passthrough;
-    private final Field cachedHashCodeField;
+    private final FieldProbe cachedHashCodeField;
     private final Method calculateMethod;
     private final T example;
 
@@ -39,7 +40,7 @@ public class CachedHashCodeInitializer<T> {
 
     private CachedHashCodeInitializer(
             boolean passthrough,
-            Field cachedHashCodeField,
+            FieldProbe cachedHashCodeField,
             Method calculateMethod,
             T example) {
         this.passthrough = passthrough;
@@ -97,19 +98,20 @@ public class CachedHashCodeInitializer<T> {
 
     private void recomputeCachedHashCode(Object object) {
         rethrow(() -> {
+            Field f = cachedHashCodeField.getField();
+            f.setAccessible(true);
             // zero the field first, in case calculateMethod checks it
-            cachedHashCodeField.set(object, 0);
+            f.set(object, 0);
             Integer recomputedHashCode = (Integer) calculateMethod.invoke(object);
-            cachedHashCodeField.set(object, recomputedHashCode);
+            f.set(object, recomputedHashCode);
         });
     }
 
-    private static Field findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
-        for (Field candidateField : FieldIterable.of(type)) {
-            if (candidateField.getName().equals(cachedHashCodeFieldName)) {
-                if (!Modifier.isPublic(candidateField.getModifiers()) && candidateField.getType().equals(int.class)) {
-                    candidateField.setAccessible(true);
-                    return candidateField;
+    private static FieldProbe findCachedHashCodeField(Class<?> type, String cachedHashCodeFieldName) {
+        for (FieldProbe candidate : FieldIterable.of(type)) {
+            if (candidate.getName().equals(cachedHashCodeFieldName)) {
+                if (!candidate.isPublic() && candidate.getType().equals(int.class)) {
+                    return candidate;
                 }
             }
         }

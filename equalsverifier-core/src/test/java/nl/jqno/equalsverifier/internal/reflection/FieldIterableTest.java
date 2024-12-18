@@ -20,8 +20,8 @@ public class FieldIterableTest {
     @Test
     public void simpleFields() {
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(FIELD_CONTAINER_FIELDS, actual);
@@ -30,8 +30,8 @@ public class FieldIterableTest {
     @Test
     public void simpleFieldsWithoutStatics() {
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(NONSTATIC_FIELD_CONTAINER_FIELDS, actual);
@@ -40,8 +40,8 @@ public class FieldIterableTest {
     @Test
     public void subAndSuperClassFields() {
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(FIELD_AND_SUB_FIELD_CONTAINER_FIELDS, actual);
@@ -50,8 +50,8 @@ public class FieldIterableTest {
     @Test
     public void onlySubClassFields() {
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(SUB_FIELD_CONTAINER_FIELDS, actual);
@@ -69,8 +69,8 @@ public class FieldIterableTest {
         expected.add(NoFieldsSubWithFields.class.getField("field"));
 
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.of(NoFieldsSubWithFields.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.of(NoFieldsSubWithFields.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(expected, actual);
@@ -79,8 +79,8 @@ public class FieldIterableTest {
     @Test
     public void subHasNoFields() {
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.of(EmptySubFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.of(EmptySubFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(FIELD_CONTAINER_FIELDS, actual);
@@ -93,8 +93,8 @@ public class FieldIterableTest {
         expected.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
 
         Set<Field> actual = new HashSet<>();
-        for (Field field : FieldIterable.of(SubEmptySubFieldContainer.class)) {
-            actual.add(field);
+        for (FieldProbe probe : FieldIterable.of(SubEmptySubFieldContainer.class)) {
+            actual.add(probe.getField());
         }
 
         assertEquals(expected, actual);
@@ -104,8 +104,8 @@ public class FieldIterableTest {
     public void orderingTest() {
         FieldIterable iterable = FieldIterable.of(UnorderedFieldContainer.class);
         List<String> actual = new ArrayList<>();
-        for (Field f : iterable) {
-            actual.add(f.getName());
+        for (FieldProbe probe : iterable) {
+            actual.add(probe.getName());
         }
 
         assertEquals(Arrays.asList("one", "two", "THREE", "FOUR"), actual);
@@ -119,7 +119,7 @@ public class FieldIterableTest {
 
     @Test
     public void nextAfterLastElement() {
-        Iterator<Field> iterator = FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
+        Iterator<FieldProbe> iterator = FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
         while (iterator.hasNext()) {
             iterator.next();
         }
@@ -143,8 +143,8 @@ public class FieldIterableTest {
     public void ignoreNonSyntheticCoberturaFields() {
         FieldIterable iterable = FieldIterable.of(CoberturaContainer.class);
         List<Field> fields = new ArrayList<>();
-        for (Field f : iterable) {
-            fields.add(f);
+        for (FieldProbe probe : iterable) {
+            fields.add(probe.getField());
         }
         assertEquals(1, fields.size());
         assertEquals("i", fields.get(0).getName());

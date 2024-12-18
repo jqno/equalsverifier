@@ -49,33 +49,33 @@ public class InstanceCreator<T> {
      */
     public T copy(Object original) {
         Map<Field, Object> values = new HashMap<>();
-        for (Field f : fields(original.getClass())) {
-            Object value = FieldProbe.of(f).getValue(original);
-            values.put(f, value);
+        for (FieldProbe p : fields(original.getClass())) {
+            Object value = p.getValue(original);
+            values.put(p.getField(), value);
         }
         return instantiate(values);
     }
 
     private T createRecordInstance(Map<Field, Object> values) {
         List<Object> params = new ArrayList<>();
-        traverseFields(values, (f, v) -> params.add(v));
+        traverseFields(values, (p, v) -> params.add(v));
         RecordProbe<T> recordProbe = new RecordProbe<>(type);
         return recordProbe.callRecordConstructor(params);
     }
 
     private T createClassInstance(Map<Field, Object> values) {
         T instance = instantiator.instantiate();
-        traverseFields(values, (f, v) -> new FieldMutator(FieldProbe.of(f)).setNewValue(instance, v));
+        traverseFields(values, (p, v) -> new FieldMutator(p).setNewValue(instance, v));
         return instance;
     }
 
-    private void traverseFields(Map<Field, Object> values, BiConsumer<Field, Object> setValue) {
-        for (Field f : fields(type)) {
-            Object value = values.get(f);
+    private void traverseFields(Map<Field, Object> values, BiConsumer<FieldProbe, Object> setValue) {
+        for (FieldProbe p : fields(type)) {
+            Object value = values.get(p.getField());
             if (value == null) {
-                value = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(f.getType());
+                value = PrimitiveMappers.DEFAULT_VALUE_MAPPER.get(p.getType());
             }
-            setValue.accept(f, value);
+            setValue.accept(p, value);
         }
     }
 
