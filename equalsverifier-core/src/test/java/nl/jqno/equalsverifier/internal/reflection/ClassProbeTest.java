@@ -18,8 +18,8 @@ public class ClassProbeTest {
 
     @BeforeEach
     public void setup() {
-        pointProbe = new ClassProbe<>(PointContainer.class);
-        abstractProbe = new ClassProbe<>(AbstractEqualsAndHashCode.class);
+        pointProbe = ClassProbe.of(PointContainer.class);
+        abstractProbe = ClassProbe.of(AbstractEqualsAndHashCode.class);
     }
 
     @Test
@@ -47,7 +47,7 @@ public class ClassProbeTest {
 
     @Test
     public void doesNotDeclareEquals() {
-        ClassProbe<?> accessor = new ClassProbe<>(Empty.class);
+        ClassProbe<?> accessor = ClassProbe.of(Empty.class);
         assertFalse(accessor.declaresEquals());
     }
 
@@ -59,37 +59,37 @@ public class ClassProbeTest {
 
     @Test
     public void doesNotDeclareHashCode() {
-        ClassProbe<?> accessor = new ClassProbe<>(Empty.class);
+        ClassProbe<?> accessor = ClassProbe.of(Empty.class);
         assertFalse(accessor.declaresHashCode());
     }
 
     @Test
     public void hasMethod() {
-        ClassProbe<?> accessor = new ClassProbe<>(MethodContainer.class);
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
         assertTrue(accessor.hasMethod("m"));
     }
 
     @Test
     public void hasProtectedMethod() {
-        ClassProbe<?> accessor = new ClassProbe<>(MethodContainer.class);
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
         assertTrue(accessor.hasMethod("m_protected"));
     }
 
     @Test
     public void hasMethodInSuper() {
-        ClassProbe<?> accessor = new ClassProbe<>(ChildOfMethodContainer.class);
+        ClassProbe<?> accessor = ClassProbe.of(ChildOfMethodContainer.class);
         assertTrue(accessor.hasMethod("m"));
     }
 
     @Test
     public void hasProtectedMethodInSuper() {
-        ClassProbe<?> accessor = new ClassProbe<>(ChildOfMethodContainer.class);
+        ClassProbe<?> accessor = ClassProbe.of(ChildOfMethodContainer.class);
         assertTrue(accessor.hasMethod("m_protected"));
     }
 
     @Test
     public void doesNotHaveMethod() {
-        ClassProbe<?> accessor = new ClassProbe<>(MethodContainer.class);
+        ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
         assertFalse(accessor.hasMethod("doesNotExist"));
     }
 
@@ -115,7 +115,7 @@ public class ClassProbeTest {
 
     @Test
     public void equalsIsInheritedFromObject() {
-        ClassProbe<NoFieldsSubWithFields> accessor = new ClassProbe<>(NoFieldsSubWithFields.class);
+        ClassProbe<NoFieldsSubWithFields> accessor = ClassProbe.of(NoFieldsSubWithFields.class);
         assertTrue(accessor.isEqualsInheritedFromObject());
     }
 
@@ -132,7 +132,7 @@ public class ClassProbeTest {
 
     @Test
     public void getSuperAccessorInHierarchy() {
-        ClassProbe<ColorPoint3D> accessor = new ClassProbe<>(ColorPoint3D.class);
+        ClassProbe<ColorPoint3D> accessor = ClassProbe.of(ColorPoint3D.class);
         ClassProbe<? super ColorPoint3D> superAccessor = accessor.getSuperProbe();
         assertEquals(Point3D.class, superAccessor.getType());
     }

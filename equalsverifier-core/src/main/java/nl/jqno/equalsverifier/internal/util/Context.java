@@ -28,7 +28,7 @@ public final class Context<T> {
             Objenesis objenesis) {
         this.type = configuration.getType();
         this.configuration = configuration;
-        this.classProbe = new ClassProbe<>(configuration.getType());
+        this.classProbe = ClassProbe.of(configuration.getType());
         this.fieldCache = fieldCache;
 
         FactoryCache cache = JavaApiPrefabValues.build().merge(factoryCache);

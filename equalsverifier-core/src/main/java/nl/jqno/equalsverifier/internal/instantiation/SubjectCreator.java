@@ -43,7 +43,7 @@ public class SubjectCreator<T> {
         this.type = typeTag.getType();
         this.config = config;
         this.valueProvider = valueProvider;
-        this.classProbe = new ClassProbe<>(type);
+        this.classProbe = ClassProbe.of(type);
         this.fieldCache = fieldCache;
         this.objenesis = objenesis;
         this.instanceCreator = new InstanceCreator<>(classProbe, objenesis);
@@ -173,8 +173,7 @@ public class SubjectCreator<T> {
      * @return An instance of the givenoriginal's superclass, but otherwise a copy of the original.
      */
     public Object copyIntoSuperclass(T original) {
-        InstanceCreator<? super T> superCreator =
-                new InstanceCreator<>(new ClassProbe<>(type.getSuperclass()), objenesis);
+        InstanceCreator<? super T> superCreator = new InstanceCreator<>(ClassProbe.of(type.getSuperclass()), objenesis);
         return superCreator.copy(original);
     }
 
@@ -189,7 +188,7 @@ public class SubjectCreator<T> {
      * @return An instance of the given subType, but otherwise a copy of the given original.
      */
     public <S extends T> S copyIntoSubclass(T original, Class<S> subType) {
-        InstanceCreator<S> subCreator = new InstanceCreator<>(new ClassProbe<>(subType), objenesis);
+        InstanceCreator<S> subCreator = new InstanceCreator<>(ClassProbe.of(subType), objenesis);
         return subCreator.copy(original);
     }
 

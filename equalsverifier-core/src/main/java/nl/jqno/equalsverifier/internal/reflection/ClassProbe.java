@@ -10,12 +10,24 @@ import nl.jqno.equalsverifier.internal.versionspecific.SealedTypesHelper;
 /**
  * Provides read-only reflective access to a class.
  */
-public class ClassProbe<T> {
+public final class ClassProbe<T> {
 
     private final Class<T> type;
 
-    public ClassProbe(Class<T> type) {
+    /** Private constructor. Call {@link #of(Class)} instead. */
+    private ClassProbe(Class<T> type) {
         this.type = type;
+    }
+
+    /**
+     * Factory method.
+     *
+     * @param <T>  The class on which {@link ClassProbe} operates.
+     * @param type The class on which {@link ClassProbe} operates.
+     * @return A {@link ClassProbe} for T.
+     */
+    public static <T> ClassProbe<T> of(Class<T> type) {
+        return new ClassProbe<>(type);
     }
 
     /** @return The class on which {@link ClassProbe} operates. */

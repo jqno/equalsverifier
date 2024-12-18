@@ -8,7 +8,7 @@ public class ClassProbeRecordTest {
 
     @Test
     public void isRecord() {
-        var probe = new ClassProbe<>(SimpleRecord.class);
+        var probe = ClassProbe.of(SimpleRecord.class);
         assertTrue(probe.isRecord());
     }
 

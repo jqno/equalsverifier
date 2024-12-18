@@ -15,7 +15,7 @@ public class InstanceCreatorTest {
 
     @Test
     public void instantiate() throws NoSuchFieldException {
-        ClassProbe<SomeClass> probe = new ClassProbe<>(SomeClass.class);
+        ClassProbe<SomeClass> probe = ClassProbe.of(SomeClass.class);
         Objenesis objenesis = new ObjenesisStd();
         InstanceCreator<SomeClass> sut = new InstanceCreator<>(probe, objenesis);
 
@@ -34,7 +34,7 @@ public class InstanceCreatorTest {
 
     @Test
     public void copy() throws NoSuchFieldException {
-        ClassProbe<SomeSubClass> probe = new ClassProbe<>(SomeSubClass.class);
+        ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
         Objenesis objenesis = new ObjenesisStd();
         InstanceCreator<SomeSubClass> sut = new InstanceCreator<>(probe, objenesis);
 

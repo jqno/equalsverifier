@@ -9,13 +9,13 @@ public class ClassProbeSealedTest {
 
     @Test
     public void isNotSealed() {
-        var probe = new ClassProbe<>(SealedChild.class);
+        var probe = ClassProbe.of(SealedChild.class);
         assertFalse(probe.isSealed());
     }
 
     @Test
     public void isSealed() {
-        var probe = new ClassProbe<>(SealedParent.class);
+        var probe = ClassProbe.of(SealedParent.class);
         assertTrue(probe.isSealed());
     }
 

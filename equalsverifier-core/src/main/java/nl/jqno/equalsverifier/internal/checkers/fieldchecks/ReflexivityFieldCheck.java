@@ -69,7 +69,7 @@ public class ReflexivityFieldCheck<T> implements FieldCheck<T> {
         if (probe.isStatic()) {
             return;
         }
-        ClassProbe<?> fieldTypeProbe = new ClassProbe<>(fieldType);
+        ClassProbe<?> fieldTypeProbe = ClassProbe.of(fieldType);
         if (!fieldTypeProbe.declaresEquals()) {
             return;
         }
