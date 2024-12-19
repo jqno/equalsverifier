@@ -8,7 +8,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 #
-# If you need help with YAML syntax, here are some quick references for you: 
+# If you need help with YAML syntax, here are some quick references for you:
 # https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
 # https://learnxinyminutes.com/docs/yaml/
 #
@@ -31,12 +31,8 @@ author:
   github_project: jqno/equalsverifier
   stackoverflow_tag: equalsverifier
   uri_author: https://jqno.nl
-  twitter_author: jqno
   bluesky_author: "https://bsky.app/profile/jqno.nl"
   mastodon_author: "https://mastodon.online/@jqno"
-
-twitter:
-  username: jqno
 
 footer:
   links:
@@ -44,9 +40,6 @@ footer:
       url: "https://jqno.nl/privacy"
     - label: "Climate considerations"
       url: "/climate"
-    - label: "Twitter"
-      icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/jqno"
     - label: "Bluesky"
       icon: "fab fa-fw fa-bluesky"
       url: "https://bsky.app/profile/jqno.nl"
