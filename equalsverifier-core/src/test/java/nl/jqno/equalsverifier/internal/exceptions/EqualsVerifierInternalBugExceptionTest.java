@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,24 +46,24 @@ class EqualsVerifierInternalBugExceptionTest {
 
     private void assertNoMessage() {
         assertMessagePreamble();
-        assertThat(actual.getMessage(), not(containsString("\n")));
+        assertThat(actual.getMessage()).doesNotContain("\n");
     }
 
     private void assertMessage(String message) {
         assertMessagePreamble();
-        assertThat(actual.getMessage(), containsString("\n"));
-        assertThat(actual.getMessage(), containsString(message));
+        assertThat(actual.getMessage()).contains("\n");
+        assertThat(actual.getMessage()).contains(message);
     }
 
     private void assertMessagePreamble() {
-        assertThat(actual.getMessage(), containsString("This is a bug in EqualsVerifier"));
+        assertThat(actual.getMessage()).contains("This is a bug in EqualsVerifier");
     }
 
     private void assertNoCause() {
-        assertThat(actual.getCause(), is(nullValue()));
+        assertThat(actual.getCause()).isEqualTo(null);
     }
 
     private void assertCause(Throwable cause) {
-        assertThat(actual.getCause(), is(cause));
+        assertThat(actual.getCause()).isEqualTo(cause);
     }
 }

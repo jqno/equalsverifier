@@ -4,9 +4,6 @@ import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -36,7 +33,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
 
         Class<?> actual = ci.resolve();
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -45,14 +42,14 @@ class ConditionalInstantiatorTest {
         Calendar expected = new GregorianCalendar(1999, 11, 31);
 
         Calendar actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 11, 31));
-        assertThat(actual, is(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void nullIsReturned_whenInstantiateIsCalled_givenTypeDoesNotExist() {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
         Object actual = ci.instantiate(classes(String.class), objects("nope"));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -68,7 +65,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.util.GregorianCalendar", false);
 
         Object actual = ci.instantiate(classes(int.class, int.class, int.class), objects(1999, 31, "hello"));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -77,14 +74,14 @@ class ConditionalInstantiatorTest {
         int expected = Integer.valueOf(42);
 
         int actual = ci.callFactory("valueOf", classes(int.class), objects(42));
-        assertThat(actual, is(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void nullIsReturned_whenFactoryIsCalled_givenTypeDoesNotExist() {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
         Object actual = ci.callFactory("factory", classes(String.class), objects("nope"));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -100,7 +97,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.lang.Integer", false);
 
         Object actual = ci.callFactory("thisMethodDoesntExist", classes(int.class), objects(42));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -116,7 +113,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.lang.Integer", false);
 
         Object actual = ci.callFactory("valueOf", classes(int.class, int.class), objects(42));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -125,14 +122,14 @@ class ConditionalInstantiatorTest {
         List<?> expected = Collections.emptyList();
 
         List<?> actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
-        assertThat(actual, is(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
     void nullIsReturned_whenExternalFactoryIsCalled_givenTypeDoesNotExist() {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
         Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(), objects());
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -148,7 +145,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.util.List", false);
 
         Object actual = ci.callFactory("java.util.ThisTypeDoesNotExist", "emptyList", classes(), objects());
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -165,7 +162,7 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.util.List", false);
 
         Object actual = ci.callFactory("java.util.Collections", "thisMethodDoesntExist", classes(), objects());
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -182,14 +179,14 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.util.List", false);
 
         Object actual = ci.callFactory("java.util.Collections", "emptyList", classes(int.class), objects(42));
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
     void nullIsReturned_whenReturnConstantIsCalled_givenTypeDoesNotExist() {
         ci = new ConditionalInstantiator(THIS_TYPE_DOES_NOT_EXIST);
         Object actual = ci.returnConstant("NOPE");
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 
     @Test
@@ -198,7 +195,7 @@ class ConditionalInstantiatorTest {
         BigDecimal expected = BigDecimal.TEN;
 
         BigDecimal actual = ci.returnConstant("TEN");
-        assertThat(actual, is(expected));
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
@@ -213,6 +210,6 @@ class ConditionalInstantiatorTest {
         ci = new ConditionalInstantiator("java.math.BigDecimal", false);
 
         Object actual = ci.returnConstant("FORTY-TWO");
-        assertThat(actual, is(nullValue()));
+        assertThat(actual).isEqualTo(null);
     }
 }
