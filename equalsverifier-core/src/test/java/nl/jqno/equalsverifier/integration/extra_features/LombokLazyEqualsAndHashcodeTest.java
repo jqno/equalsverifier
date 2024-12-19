@@ -1,10 +1,8 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: LocalFinalVariableName
@@ -24,23 +22,24 @@ class LombokLazyEqualsAndHashcodeTest {
 
     @Test
     void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcode() {
-        final AssertionError error = assertThrows(
-            AssertionError.class,
-            () -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify());
-        assertThat(error.getMessage()).contains("hashCode relies on $hashCodeCache, but equals does not.");
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify())
+                .assertFailure()
+                .assertMessageContains("hashCode relies on $hashCodeCache, but equals does not.");
     }
 
     @Test
     void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcodeWhenUsingWithCachedHashCode() {
-        final IllegalArgumentException error = assertThrows(
-            IllegalArgumentException.class,
-            () -> EqualsVerifier
-                    .forClass(LazyPojo.class)
-                    .suppress(Warning.STRICT_INHERITANCE)
-                    .withCachedHashCode("$hashCodeCache", "hashCode", new LazyPojo("bar", new Object()))
-                    .verify());
-        assertThat(error.getMessage())
-                .contains("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'");
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(LazyPojo.class)
+                            .suppress(Warning.STRICT_INHERITANCE)
+                            .withCachedHashCode("$hashCodeCache", "hashCode", new LazyPojo("bar", new Object()))
+                            .verify())
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains(
+                    "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'");
     }
 
     /**
