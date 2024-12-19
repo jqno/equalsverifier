@@ -1,22 +1,21 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class ClassProbeSealedTest {
+class ClassProbeSealedTest {
 
     @Test
-    public void isNotSealed() {
+    void isNotSealed() {
         var probe = ClassProbe.of(SealedChild.class);
-        assertFalse(probe.isSealed());
+        assertThat(probe.isSealed()).isFalse();
     }
 
     @Test
-    public void isSealed() {
+    void isSealed() {
         var probe = ClassProbe.of(SealedParent.class);
-        assertTrue(probe.isSealed());
+        assertThat(probe.isSealed()).isTrue();
     }
 
     public abstract static sealed class SealedParent {}

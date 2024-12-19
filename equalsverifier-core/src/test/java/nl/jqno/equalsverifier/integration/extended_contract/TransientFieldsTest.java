@@ -8,15 +8,15 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.persistence.Transient;
 import org.junit.jupiter.api.Test;
 
-public class TransientFieldsTest {
+class TransientFieldsTest {
 
     @Test
-    public void succeed_whenFieldsWithTransientModifierAreNotUsedInEquals() {
+    void succeed_whenFieldsWithTransientModifierAreNotUsedInEquals() {
         EqualsVerifier.forClass(NotUsingFieldsWithTransientModifier.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsWithTransientModifierAreUsedInEquals() {
+    void fail_whenFieldsWithTransientModifierAreUsedInEquals() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).verify())
                 .assertFailure()
@@ -24,12 +24,12 @@ public class TransientFieldsTest {
     }
 
     @Test
-    public void succeed_whenFieldsWithTransientModifierAreUsedInEquals_givenWarningsAreSuppressed() {
+    void succeed_whenFieldsWithTransientModifierAreUsedInEquals_givenWarningsAreSuppressed() {
         EqualsVerifier.forClass(UsingFieldsWithTransientModifier.class).suppress(Warning.TRANSIENT_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenFieldsWithTransientModifierAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
+    void fail_whenFieldsWithTransientModifierAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassUsingFieldsWithTransientModifier.class).verify())
                 .assertFailure()
@@ -37,12 +37,12 @@ public class TransientFieldsTest {
     }
 
     @Test
-    public void succeed_whenFieldsWithTransientAnnotationAreNotUsedInEquals() {
+    void succeed_whenFieldsWithTransientAnnotationAreNotUsedInEquals() {
         EqualsVerifier.forClass(NotUsingFieldsWithTransientAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals() {
+    void fail_whenFieldsWithTransientAnnotationAreUsedInEquals() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).verify())
                 .assertFailure()
@@ -50,12 +50,12 @@ public class TransientFieldsTest {
     }
 
     @Test
-    public void succeed_whenFieldsWithTransientAnnotationAreUsedInEquals_givenWarningsAreSuppressed() {
+    void succeed_whenFieldsWithTransientAnnotationAreUsedInEquals_givenWarningsAreSuppressed() {
         EqualsVerifier.forClass(UsingFieldsWithTransientAnnotation.class).suppress(Warning.TRANSIENT_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenFieldsWithTransientAnnotationAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
+    void fail_whenFieldsWithTransientAnnotationAreUsedInEquals_givenTheyreDeclaredInSuperclass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassUsingFieldsWithTransientAnnotation.class).verify())
                 .assertFailure()
@@ -63,7 +63,7 @@ public class TransientFieldsTest {
     }
 
     @Test
-    public void fail_whenFieldsWithTransientAnnotationAreNotUsedInEquals_givenAnnotationIsNotAJpaAnnotation() {
+    void fail_whenFieldsWithTransientAnnotationAreNotUsedInEquals_givenAnnotationIsNotAJpaAnnotation() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NotUsingFieldsWithNonJpaTransientAnnotation.class).verify())
                 .assertFailure()

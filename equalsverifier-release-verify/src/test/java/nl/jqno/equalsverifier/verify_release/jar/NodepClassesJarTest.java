@@ -6,50 +6,50 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class NodepClassesJarTest {
+class NodepClassesJarTest {
 
     private static final String FILENAME = "equalsverifier-nodep.jar";
     private static JarReader reader;
     private static JarAsserter jar;
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         reader = new JarReader(FILENAME);
         jar = new JarAsserter(reader);
     }
 
     @AfterAll
-    public static void clean() throws Exception {
+    static void clean() throws Exception {
         reader.close();
     }
 
     @Test
-    public void presenceOfCoreClasses() {
+    void presenceOfCoreClasses() {
         jar.assertPresenceOfCoreClasses();
     }
 
     @Test
-    public void presenceOfMultiReleaseClasses() {
+    void presenceOfMultiReleaseClasses() {
         jar.assertPresenceOfMultiReleaseClasses();
     }
 
     @Test
-    public void assertPresenceOfEmbeddedDependencies() {
+    void assertPresenceOfEmbeddedDependencies() {
         jar.assertPresenceOfEmbeddedDepedencies();
     }
 
     @Test
-    public void contentOfManifest() {
+    void contentOfManifest() {
         jar.assertContentOfManifest("EqualsVerifier (no dependencies)");
     }
 
     @Test
-    public void versionsOfClassFiles() {
+    void versionsOfClassFiles() {
         jar.assertVersionsOfClassFiles();
     }
 
     @Test
-    public void versionsOfEmbeddedDependencies() {
+    void versionsOfEmbeddedDependencies() {
         jar.assertVersionsOfEmbeddedClassFiles();
     }
 }

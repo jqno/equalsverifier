@@ -4,10 +4,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class HashCodeTest {
+class HashCodeTest {
 
     @Test
-    public void fail_whenHashCodesAreInconsistent() {
+    void fail_whenHashCodesAreInconsistent() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(RandomHashCode.class).verify())
                 .assertFailure()
@@ -15,7 +15,7 @@ public class HashCodeTest {
     }
 
     @Test
-    public void fail_whenHashCodesAreUnequal_givenEqualObjects() {
+    void fail_whenHashCodesAreUnequal_givenEqualObjects() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NoHashCode.class).verify())
                 .assertFailure()
@@ -23,7 +23,7 @@ public class HashCodeTest {
     }
 
     @Test
-    public void succeed_whenEqualsShortCircuitsOnHashCode() {
+    void succeed_whenEqualsShortCircuitsOnHashCode() {
         EqualsVerifier.forClass(ShortCircuitOnHashCode.class).verify();
     }
 

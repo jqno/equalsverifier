@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -15,8 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-@SuppressWarnings("rawtypes")
-public class MapFactoryTest {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+class MapFactoryTest {
 
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag STRINGSTRINGMAP_TYPETAG = new TypeTag(Map.class, STRING_TYPETAG, STRING_TYPETAG);
@@ -38,7 +38,7 @@ public class MapFactoryTest {
     private OneElementEnum redEnum;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
         red = valueProvider.giveRed(STRING_TYPETAG);
         blue = valueProvider.giveBlue(STRING_TYPETAG);
@@ -48,31 +48,31 @@ public class MapFactoryTest {
     }
 
     @Test
-    public void createMapsOfStringToString() {
+    void createMapsOfStringToString() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(STRINGSTRINGMAP_TYPETAG, valueProvider, typeStack);
-        assertEquals(mapOf(red, blue), tuple.getRed());
-        assertEquals(mapOf(blue, blue), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(mapOf(red, blue));
+        assertThat(tuple.getBlue()).isEqualTo(mapOf(blue, blue));
     }
 
     @Test
-    public void createMapsOfWildcard() {
+    void createMapsOfWildcard() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, valueProvider, typeStack);
-        assertEquals(mapOf(redObject, blueObject), tuple.getRed());
-        assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(mapOf(redObject, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(mapOf(blueObject, blueObject));
     }
 
     @Test
-    public void createRawMaps() {
+    void createRawMaps() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, typeStack);
-        assertEquals(mapOf(redObject, blueObject), tuple.getRed());
-        assertEquals(mapOf(blueObject, blueObject), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(mapOf(redObject, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(mapOf(blueObject, blueObject));
     }
 
     @Test
-    public void createMapOfOneElementEnumKey() {
+    void createMapOfOneElementEnumKey() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(ONEELEMENTENUMKEYMAP_TYPETAG, valueProvider, typeStack);
-        assertEquals(mapOf(redEnum, blueObject), tuple.getRed());
-        assertEquals(new HashMap<>(), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(mapOf(redEnum, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(new HashMap<>());
     }
 
     private <K, V> Map<K, V> mapOf(K key, V value) {

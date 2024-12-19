@@ -2,17 +2,17 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class OriginalStateTest {
+// because of the use of defaultEquals and defaultHashCode
+@SuppressWarnings("unused")
+class OriginalStateTest {
 
     private static final String INSTANCE_1 = "instance 1";
     private static final String INSTANCE_2 = "instance 2";
@@ -20,47 +20,47 @@ public class OriginalStateTest {
     private static final String STATIC_FINAL = "static final";
 
     @Test
-    public void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
+    void staticValueReturnsToOriginalState_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEquals.class).verify();
-        assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
-        assertEquals(STATIC, CorrectEquals.staticValue);
+        assertThat(CorrectEquals.STATIC_FINAL_VALUE).isEqualTo(STATIC_FINAL);
+        assertThat(CorrectEquals.staticValue).isEqualTo(STATIC);
     }
 
     @Test
-    public void staticValueReturnsToOriginalStateRecursively_whenEqualsVerifierIsFinished() {
+    void staticValueReturnsToOriginalStateRecursively_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEqualsContainer.class).verify();
-        assertEquals(STATIC, CorrectEquals.staticValue);
+        assertThat(CorrectEquals.staticValue).isEqualTo(STATIC);
     }
 
     @Test
-    public void staticValueReturnsToOriginalStateDeeplyRecursively_whenEqualsVerifierIsFinished() {
+    void staticValueReturnsToOriginalStateDeeplyRecursively_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(CorrectEqualsContainerContainer.class).verify();
-        assertEquals(STATIC, CorrectEquals.staticValue);
+        assertThat(CorrectEquals.staticValue).isEqualTo(STATIC);
     }
 
     @Test
-    public void staticValueInSuperReturnsToOriginalState_whenEqualsVerifierIsFinished() {
+    void staticValueInSuperReturnsToOriginalState_whenEqualsVerifierIsFinished() {
         EqualsVerifier.forClass(SubContainer.class).verify();
-        assertEquals(STATIC, SuperContainer.staticValue);
-        assertEquals(STATIC_FINAL, SuperContainer.STATIC_FINAL_VALUE);
+        assertThat(SuperContainer.staticValue).isEqualTo(STATIC);
+        assertThat(SuperContainer.STATIC_FINAL_VALUE).isEqualTo(STATIC_FINAL);
     }
 
     @Test
-    public void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() {
+    void allValuesReturnToOriginalState_whenEqualsVerifierIsFinishedWithException() {
         try {
             EqualsVerifier.forClass(FailingEqualsContainerContainer.class).verify();
             fail("EqualsVerifier should have failed on FailingEqualsContainerContainer.");
         }
         catch (AssertionError e) {
             // Make sure EV fails on a check that actually mutates fields.
-            assertTrue(e.getMessage().contains("Mutability"));
+            assertThat(e.getMessage().contains("Mutability")).isTrue();
         }
         catch (Throwable ignored) {
             fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");
         }
 
-        assertEquals(STATIC_FINAL, CorrectEquals.STATIC_FINAL_VALUE);
-        assertEquals(STATIC, CorrectEquals.staticValue);
+        assertThat(CorrectEquals.STATIC_FINAL_VALUE).isEqualTo(STATIC_FINAL);
+        assertThat(CorrectEquals.staticValue).isEqualTo(STATIC);
     }
 
     static final class CorrectEquals {

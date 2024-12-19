@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: HiddenField
 
-public class JpaLazyEntityTest {
+class JpaLazyEntityTest {
 
     @Test
-    public void gettersAreUsed() {
+    void gettersAreUsed() {
         EqualsVerifier.forClass(CorrectJpaLazyFieldContainer.class).verify();
     }
 
     @Test
-    public void basicGetterAbsent() {
+    void basicGetterAbsent() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(LazyFieldWithoutGetterContainer.class).verify())
                 .assertFailure()
@@ -27,17 +27,17 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterNotUsed_givenEagerLoading() {
+    void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier.forClass(CorrectBasicJpaEagerFieldContainer.class).verify();
     }
 
     @Test
-    public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
+    void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier.forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class).withIgnoredFields("basic").verify();
     }
 
     @Test
-    public void basicGetterNotUsed_givenWarningSuppressed() {
+    void basicGetterNotUsed_givenWarningSuppressed() {
         EqualsVerifier
                 .forClass(CorrectBasicJpaIgnoredLazyFieldContainer.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -45,66 +45,66 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterNotUsed_givenAnnotationIsOnGetter() {
+    void basicGetterNotUsed_givenAnnotationIsOnGetter() {
         getterNotUsed(IncorrectBasicJpaLazyGetterContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyGetterContainer.class);
     }
 
     @Test
-    public void basicGetterNotUsedInHashCode() {
+    void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainerHashCode.class, "hashCode");
         getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainerHashCode.class);
     }
 
     @Test
-    public void basicGetterNotUsed() {
+    void basicGetterNotUsed() {
         getterNotUsed(IncorrectBasicJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void oneToOneGetterNotUsed() {
+    void oneToOneGetterNotUsed() {
         getterNotUsed(IncorrectOneToOneJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectOneToOneJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void oneToManyGetterNotUsed() {
+    void oneToManyGetterNotUsed() {
         getterNotUsed(IncorrectOneToManyJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectOneToManyJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void manyToOneGetterNotUsed() {
+    void manyToOneGetterNotUsed() {
         getterNotUsed(IncorrectManyToOneJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectManyToOneJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void manyToManyGetterNotUsed() {
+    void manyToManyGetterNotUsed() {
         getterNotUsed(IncorrectManyToManyJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectManyToManyJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void elementCollectionGetterNotUsed() {
+    void elementCollectionGetterNotUsed() {
         getterNotUsed(IncorrectElementCollectionJpaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectElementCollectionJpaLazyFieldContainer.class);
     }
 
     @Test
-    public void lazyGettersPickedUpInSuper() {
+    void lazyGettersPickedUpInSuper() {
         EqualsVerifier.forClass(LazyGetterContainer.class).usingGetClass().verify();
         EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
     }
 
     @Test
-    public void constantHashCode_givenStrictHashCodeSuppressed() {
+    void constantHashCode_givenStrictHashCodeSuppressed() {
         EqualsVerifier.forClass(ConstantHashCodeContainer.class).suppress(Warning.STRICT_HASHCODE).verify();
     }
 
     @Test
-    public void differentCodingStyle_single() {
+    void differentCodingStyle_single() {
         EqualsVerifier
                 .forClass(DifferentCodingStyleContainer.class)
                 .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
@@ -112,7 +112,7 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void differentCodingStyle_configured() {
+    void differentCodingStyle_configured() {
         EqualsVerifier
                 .configure()
                 .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
@@ -121,7 +121,7 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void differentCodingStyle_multiple() {
+    void differentCodingStyle_multiple() {
         EqualsVerifier
                 .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
                 .withFieldnameToGetterConverter(fn -> "get" + Character.toUpperCase(fn.charAt(2)) + fn.substring(3))
@@ -129,7 +129,7 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void getterUsedForGeneratedId() {
+    void getterUsedForGeneratedId() {
         EqualsVerifier.forClass(CorrectGeneratedJpaIdContainer.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier
                 .forClass(CorrectGeneratedJpaIdContainer.class)
@@ -138,7 +138,7 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void getterNotUsedForGeneratedId() {
+    void getterNotUsedForGeneratedId() {
         getterNotUsed(IncorrectGeneratedJpaIdContainer.class, "equals", Warning.SURROGATE_KEY);
         getterNotUsed_warningSuppressed(IncorrectGeneratedJpaIdContainer.class, Warning.SURROGATE_KEY);
         getterNotUsed(IncorrectGeneratedJpaIdContainer.class, "equals", Warning.SURROGATE_OR_BUSINESS_KEY);
@@ -146,12 +146,12 @@ public class JpaLazyEntityTest {
     }
 
     @Test
-    public void gettersAreUsedAndProtected() {
+    void gettersAreUsedAndProtected() {
         EqualsVerifier.forClass(ProtectedJpaLazyFieldContainer.class).verify();
     }
 
     @Test
-    public void finalEntitiesArentLazy() {
+    void finalEntitiesArentLazy() {
         EqualsVerifier.forClass(FinalEntity.class).verify();
     }
 

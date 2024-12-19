@@ -1,15 +1,15 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class ClassProbeRecordTest {
+class ClassProbeRecordTest {
 
     @Test
-    public void isRecord() {
+    void isRecord() {
         var probe = ClassProbe.of(SimpleRecord.class);
-        assertTrue(probe.isRecord());
+        assertThat(probe.isRecord()).isTrue();
     }
 
     record SimpleRecord(int i) {}

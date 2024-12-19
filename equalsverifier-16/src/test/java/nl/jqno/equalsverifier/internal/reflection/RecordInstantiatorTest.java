@@ -1,17 +1,17 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-public class RecordInstantiatorTest {
+class RecordInstantiatorTest {
 
     @Test
-    public void instantiateRecord() {
+    void instantiateRecord() {
         Instantiator<?> instantiator = Instantiator.of(SimpleRecord.class, new ObjenesisStd());
         Object simpleRecord = instantiator.instantiate();
-        assertEquals(SimpleRecord.class, simpleRecord.getClass());
+        assertThat(simpleRecord.getClass()).isEqualTo(SimpleRecord.class);
     }
 
     record SimpleRecord(int i) {}

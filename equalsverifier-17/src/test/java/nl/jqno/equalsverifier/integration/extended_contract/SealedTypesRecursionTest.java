@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 class SealedTypesRecursionTest {
 
     @Test
-    public void dontThrowStackOverflowError_whenOnlyPermittedSubclassInSealedInterfaceRefersBackToContainer() {
+    void dontThrowStackOverflowError_whenOnlyPermittedSubclassInSealedInterfaceRefersBackToContainer() {
         // A container with a field of a sealed interface.
         // The sealed interface permits only 1 type, which refers back to the container.
         ExpectedException
@@ -23,7 +23,7 @@ class SealedTypesRecursionTest {
     }
 
     @Test
-    public void dontThrowStackOverflowError_whenOnlyPermittedRecordInSealedInterfaceRefersBackToContainer() {
+    void dontThrowStackOverflowError_whenOnlyPermittedRecordInSealedInterfaceRefersBackToContainer() {
         // A container with a field of a sealed interface.
         // The sealed interface permits only 1 type, which is a record that refers back to the container.
         ExpectedException

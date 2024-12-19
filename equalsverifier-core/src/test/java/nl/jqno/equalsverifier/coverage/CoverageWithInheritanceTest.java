@@ -16,13 +16,13 @@ public class CoverageWithInheritanceTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public <T> void testSuperCoverage(Classes<T> classes) {
+    <T> void superCoverage(Classes<T> classes) {
         EqualsVerifier.forClass(classes.superType).withRedefinedSubclass(classes.subType).verify();
     }
 
     @ParameterizedTest
     @MethodSource("data")
-    public <T> void testSubCoverage(Classes<T> classes) {
+    <T> void subCoverage(Classes<T> classes) {
         EqualsVerifier
                 .forClass(classes.subType)
                 .withRedefinedSuperclass()
@@ -32,7 +32,7 @@ public class CoverageWithInheritanceTest {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void callTheConstructors(Classes<?> classes) throws Exception {
+    void callTheConstructors(Classes<?> classes) throws Exception {
         classes.containerType.getConstructor().newInstance();
         classes.superType.getConstructor(int.class, int.class).newInstance(0, 0);
         classes.subType.getConstructor(int.class, int.class, Color.class).newInstance(0, 0, Color.INDIGO);

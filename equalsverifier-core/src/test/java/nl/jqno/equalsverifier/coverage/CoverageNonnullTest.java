@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 // CHECKSTYLE OFF: LocalFinalVariableName
 // CHECKSTYLE OFF: NeedBraces
 
-public class CoverageNonnullTest {
+class CoverageNonnullTest {
 
     @Test
-    public void lombokCoverage() {
+    void lombokCoverage() {
         EqualsVerifier.forClass(LombokNonnullStringContainer.class).withIgnoredAnnotations(Nonnull.class).verify();
 
         // Also cover the constructor

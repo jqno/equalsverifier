@@ -6,13 +6,13 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class FloatAndDoubleTest {
+class FloatAndDoubleTest {
 
     private static final String FLOAT = "Float: equals doesn't use Float.compare for field";
     private static final String DOUBLE = "Double: equals doesn't use Double.compare for field";
 
     @Test
-    public void fail_whenFloatsAreComparedByReference() {
+    void fail_whenFloatsAreComparedByReference() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ComparePrimitiveFloatsByReference.class).verify())
                 .assertFailure()
@@ -20,7 +20,7 @@ public class FloatAndDoubleTest {
     }
 
     @Test
-    public void fail_whenObjectFloatsAreComparedByReference() {
+    void fail_whenObjectFloatsAreComparedByReference() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(CompareObjectFloatByReference.class).verify())
                 .assertFailure()
@@ -28,12 +28,12 @@ public class FloatAndDoubleTest {
     }
 
     @Test
-    public void succeed_whenFloatsAreComparedWithFloatCompare() {
+    void succeed_whenFloatsAreComparedWithFloatCompare() {
         EqualsVerifier.forClass(CompareFloatCorrectly.class).verify();
     }
 
     @Test
-    public void fail_whenDoublesAreComparedByReference() {
+    void fail_whenDoublesAreComparedByReference() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ComparePrimitiveDoubleByReference.class).verify())
                 .assertFailure()
@@ -41,7 +41,7 @@ public class FloatAndDoubleTest {
     }
 
     @Test
-    public void fail_whenObjectDoublesAreComparedByReference() {
+    void fail_whenObjectDoublesAreComparedByReference() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(CompareObjectDoubleByReference.class).verify())
                 .assertFailure()
@@ -49,7 +49,7 @@ public class FloatAndDoubleTest {
     }
 
     @Test
-    public void succeed_whenDoublesAreComparedWithDoubleCompare() {
+    void succeed_whenDoublesAreComparedWithDoubleCompare() {
         EqualsVerifier.forClass(CompareDoubleCorrectly.class).verify();
     }
 

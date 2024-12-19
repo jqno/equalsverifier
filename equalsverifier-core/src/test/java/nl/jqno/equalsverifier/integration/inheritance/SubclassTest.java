@@ -18,15 +18,15 @@ import org.junit.jupiter.api.Test;
  * <p>
  * 2. "can equal", as described by Odersky, Spoon and Venners in Programming in Scala.
  */
-public class SubclassTest {
+class SubclassTest {
 
     @Test
-    public void succeed_whenClassIsFinal() {
+    void succeed_whenClassIsFinal() {
         EqualsVerifier.forClass(FinalPoint.class).verify();
     }
 
     @Test
-    public void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
+    void fail_whenClassIsNotEqualToATrivialSubclassWithEqualFields() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(LiskovSubstitutionPrincipleBroken.class).verify())
                 .assertFailure()
@@ -38,7 +38,7 @@ public class SubclassTest {
     }
 
     @Test
-    public void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
+    void fail_whenEqualsIsOverridableAndBlindlyEqualsIsPresent() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -54,17 +54,17 @@ public class SubclassTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsOverridableAndBlindlyEqualsIsPresent_givenACorrectSubclass() {
+    void succeed_whenEqualsIsOverridableAndBlindlyEqualsIsPresent_givenACorrectSubclass() {
         EqualsVerifier.forClass(BlindlyEqualsPoint.class).withRedefinedSubclass(BlindlyEqualsColorPoint.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsIsOverriddenTwiceThroughBlindlyEquals_givenWithRedefinedSuperclass() {
+    void succeed_whenEqualsIsOverriddenTwiceThroughBlindlyEquals_givenWithRedefinedSuperclass() {
         EqualsVerifier.forClass(BlindlyEqualsColorPoint.class).withRedefinedSuperclass().verify();
     }
 
     @Test
-    public void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
+    void fail_whenEqualsIsOverridableAndCanEqualIsPresent() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -80,17 +80,17 @@ public class SubclassTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsOverridableAndCanEqualIsPresent_givenACorrectSubclass() {
+    void succeed_whenEqualsIsOverridableAndCanEqualIsPresent_givenACorrectSubclass() {
         EqualsVerifier.forClass(CanEqualPoint.class).withRedefinedSubclass(CanEqualColorPoint.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsIsOverridenTwiceThroughCanEqual_givenWithRedefinedSuperclass() {
+    void succeed_whenEqualsIsOverridenTwiceThroughCanEqual_givenWithRedefinedSuperclass() {
         EqualsVerifier.forClass(CanEqualColorPoint.class).withRedefinedSuperclass().verify();
     }
 
     @Test
-    public void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
+    void fail_whenWithRedefinedEqualsIsUsed_givenEqualsAndHashCodeAreFinal() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -106,7 +106,7 @@ public class SubclassTest {
     }
 
     @Test
-    public void succeed_whenClassIsAbstract_givenACorrectImplementationOfEqualsUnderInheritanceAndARedefinedSubclass() {
+    void succeed_whenClassIsAbstract_givenACorrectImplementationOfEqualsUnderInheritanceAndARedefinedSubclass() {
         EqualsVerifier
                 .forClass(AbstractRedefinablePoint.class)
                 .withRedefinedSubclass(SubclassForAbstractRedefinablePoint.class)
@@ -114,7 +114,7 @@ public class SubclassTest {
     }
 
     @Test
-    public void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
+    void fail_whenWithRedefinedSubclassIsUsed_givenStrictInheritanceWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -127,7 +127,7 @@ public class SubclassTest {
     }
 
     @Test
-    public void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
+    void fail_whenStrictInhertianceWarningIsSuppressed_givenWithRedefinedSubclassIsUsed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

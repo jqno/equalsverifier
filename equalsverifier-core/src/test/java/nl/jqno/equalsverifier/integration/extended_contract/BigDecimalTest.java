@@ -11,10 +11,10 @@ import nl.jqno.equalsverifier.internal.checkers.fieldchecks.BigDecimalFieldCheck
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class BigDecimalTest {
+class BigDecimalTest {
 
     @Test
-    public void fail_whenBigDecimalsComparedUsingEqualsWithComparablyConsistentHashCode() {
+    void fail_whenBigDecimalsComparedUsingEqualsWithComparablyConsistentHashCode() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BigDecimalEqualsWithComparablyConsistentHashCode.class).verify())
                 .assertFailure()
@@ -28,7 +28,7 @@ public class BigDecimalTest {
     }
 
     @Test
-    public void fail_whenBigDecimalsComparedUsingCompareToWithInconsistentHashCode() {
+    void fail_whenBigDecimalsComparedUsingCompareToWithInconsistentHashCode() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BigDecimalInconsistentHashCode.class).verify())
                 .assertFailure()
@@ -42,12 +42,12 @@ public class BigDecimalTest {
     }
 
     @Test
-    public void succeed_whenBigDecimalsComparedUsingEquals_givenBigDecimalEqualsWarningIsSuppressed() {
+    void succeed_whenBigDecimalsComparedUsingEquals_givenBigDecimalEqualsWarningIsSuppressed() {
         EqualsVerifier.forClass(BigDecimalEquals.class).suppress(Warning.BIGDECIMAL_EQUALITY).verify();
     }
 
     @Test
-    public void succeed_whenBigDecimalsComparedUsingCompareTo() {
+    void succeed_whenBigDecimalsComparedUsingCompareTo() {
         EqualsVerifier.forClass(BigDecimalCompareTo.class).verify();
     }
 

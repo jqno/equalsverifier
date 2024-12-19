@@ -14,10 +14,10 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: LineLength
 
-public class VersionedEntityTest {
+class VersionedEntityTest {
 
     @Test
-    public void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
+    void fail_whenInstanceWithAZeroIdDoesNotEqualItself() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(OtherwiseStatelessVersionedEntity.class).verify())
                 .assertFailure()
@@ -27,7 +27,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
+    void fail_whenInstanceWithANonzeroIdEqualsItself_givenIdenticalCopyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -39,7 +39,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenVersionedEntityWarningIsSuppressed() {
+    void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(OtherwiseStatelessVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -47,7 +47,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithAZeroIdDoesNotEqualItself_givenAVersionedEntityWithState() {
+    void fail_whenInstanceWithAZeroIdDoesNotEqualItself_givenAVersionedEntityWithState() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(LongIdStringFieldVersionedEntity.class).verify())
                 .assertFailure()
@@ -57,7 +57,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithANonzeroIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
+    void fail_whenInstanceWithANonzeroIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -69,7 +69,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+    void succeed_whenInstanceWithAZeroIdDoesNotEqualItselfAndInstanceWithANonzeroIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(LongIdStringFieldVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -77,7 +77,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithANullIdDoesNotEqualItself_givenAVersionedEntityWithState() {
+    void fail_whenInstanceWithANullIdDoesNotEqualItself_givenAVersionedEntityWithState() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UuidIdStringFieldVersionedEntity.class).verify())
                 .assertFailure()
@@ -87,7 +87,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithANonnullIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
+    void fail_whenInstanceWithANonnullIdEqualsItself_givenAVersionedEntityWithStateAndIdenticalCopyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -99,7 +99,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenInstanceWithANullIdDoesNotEqualItselfAndInstanceWithANonnullIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+    void succeed_whenInstanceWithANullIdDoesNotEqualItselfAndInstanceWithANonnullIdDoes_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(UuidIdStringFieldVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -107,7 +107,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
+    void fail_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithState() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(WeakStringVersionedEntity.class).verify())
                 .assertFailure()
@@ -115,7 +115,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+    void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(WeakStringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -123,12 +123,12 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
+    void succeed_whenInstanceWithAZeroIdCanEqualItselfAndInstanceWithANonzeroIdAlso_givenAVersionedEntityWithStateAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(WeakStringVersionedEntity.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
-    public void succeed_whenInstanceWithANullableIdDoesNullCheck_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+    void succeed_whenInstanceWithANullableIdDoesNullCheck_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(NullCheckStringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -136,7 +136,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenEntityWithABusinessKey_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
+    void succeed_whenEntityWithABusinessKey_givenAVersionedEntityWithStateAndVersionedEntityWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(BusinessKeyStringVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY)
@@ -144,12 +144,12 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
+    void succeed_whenTheParentOfTheVersionedEntityIsCheckedForSanity() {
         EqualsVerifier.forClass(CanEqualVersionedEntity.class).verify();
     }
 
     @Test
-    public void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
+    void fail_whenAnExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonReflexiveCanEqualVersionedEntity.class).verify())
                 .assertFailure()
@@ -157,7 +157,7 @@ public class VersionedEntityTest {
     }
 
     @Test
-    public void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenVersionedEntityWarningIsSuppressed() {
+    void fail_whenTheExceptionIsThrownInADifficultToReachPartOfTheSubclassOfAVersionedEntity_givenVersionedEntityWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

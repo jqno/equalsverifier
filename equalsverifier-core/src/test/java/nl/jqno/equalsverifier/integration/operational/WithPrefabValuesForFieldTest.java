@@ -10,7 +10,7 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import org.junit.jupiter.api.Test;
 
-public class WithPrefabValuesForFieldTest {
+class WithPrefabValuesForFieldTest {
 
     private final FinalPoint pRed = new FinalPoint(3, 42);
     private final FinalPoint pBlue = new FinalPoint(3, 1337);
@@ -18,7 +18,7 @@ public class WithPrefabValuesForFieldTest {
     private final int iBlue = 142;
 
     @Test
-    public void fail_whenClassHasSinglePrecondition() {
+    void fail_whenClassHasSinglePrecondition() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).suppress(Warning.NULL_FIELDS).verify())
                 .assertFailure()
@@ -26,12 +26,12 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField() {
+    void succeed_whenClassHasSinglePrecondition_givenPrefabValuesForField() {
         EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", pRed, pBlue).verify();
     }
 
     @Test
-    public void fail_whenClassHasDualPrecondition() {
+    void fail_whenClassHasDualPrecondition() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
                 .assertFailure()
@@ -39,7 +39,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
+    void fail_whenClassHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -51,7 +51,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields() {
+    void succeed_whenClassHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
                 .forClass(DualPrecondition.class)
                 .withPrefabValuesForField("x", iRed, iBlue)
@@ -60,7 +60,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenFieldDoesNotExistInClass() {
+    void throw_whenFieldDoesNotExistInClass() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -71,7 +71,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenFirstPrefabValueIsNull() {
+    void throw_whenFirstPrefabValueIsNull() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -81,7 +81,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenSecondPrefabValueIsNull() {
+    void throw_whenSecondPrefabValueIsNull() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -91,7 +91,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenThePrefabValuesAreTheSame() {
+    void throw_whenThePrefabValuesAreTheSame() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -102,7 +102,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenThePrefabValuesAreEqual() {
+    void throw_whenThePrefabValuesAreEqual() {
         FinalPoint red1 = new FinalPoint(3, 4);
         FinalPoint red2 = new FinalPoint(3, 4);
 
@@ -116,7 +116,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void throw_whenFieldsDontMatch() {
+    void throw_whenFieldsDontMatch() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("point", 1, 2))
                 .assertThrows(IllegalStateException.class)
@@ -124,7 +124,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
+    void dontThrow_whenAddingPrefabValuesFromAnotherModuleAndThereforeARedCopyCantBeMade() {
         EqualsVerifier
                 .forClass(OtherModuleContainer.class)
                 .withPrefabValuesForField("date", LocalDate.of(2024, 9, 18), LocalDate.of(2024, 9, 19))
@@ -132,7 +132,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenPrefabForArrayIsOverridden() {
+    void succeed_whenPrefabForArrayIsOverridden() {
         EqualsVerifier
                 .forClass(ThrowingArrayContainer.class)
                 .withPrefabValuesForField("field", new int[] { 1, 2, 3 }, new int[] { 4, 5, 6 })
@@ -140,7 +140,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
+    void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
         EqualsVerifier
                 .forClass(ListContainer.class)
                 .withPrefabValuesForField("list", Collections.singletonList("x"), Collections.singletonList("y"))
@@ -148,7 +148,7 @@ public class WithPrefabValuesForFieldTest {
     }
 
     @Test
-    public void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
+    void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
         DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
         DifficultGeneric two = new DifficultGeneric(null);
         EqualsVerifier

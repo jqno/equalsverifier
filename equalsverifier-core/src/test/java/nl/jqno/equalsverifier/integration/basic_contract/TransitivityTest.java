@@ -10,15 +10,15 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-public class TransitivityTest {
+class TransitivityTest {
 
     @Test
-    public void succeed_whenEqualityForTwoFieldsIsCombinedUsingAnd() {
+    void succeed_whenEqualityForTwoFieldsIsCombinedUsingAnd() {
         EqualsVerifier.forClass(TwoFieldsUsingAnd.class).verify();
     }
 
     @Test
-    public void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
+    void fail_whenEqualityForTwoFieldsIsCombinedUsingOr() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -33,12 +33,12 @@ public class TransitivityTest {
     }
 
     @Test
-    public void succeed_whenEqualityForThreeFieldsIsCombinedUsingAnd() {
+    void succeed_whenEqualityForThreeFieldsIsCombinedUsingAnd() {
         EqualsVerifier.forClass(ThreeFieldsUsingAnd.class).verify();
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
+    void fail_whenEqualityForThreeFieldsIsCombinedUsingOr() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -50,7 +50,7 @@ public class TransitivityTest {
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOr_givenRelaxedEqualExamples() {
+    void fail_whenEqualityForThreeFieldsIsCombinedUsingOr_givenRelaxedEqualExamples() {
         ThreeFieldsUsingOr one = new ThreeFieldsUsingOr("a", "1", "alpha");
         ThreeFieldsUsingOr two = new ThreeFieldsUsingOr("b", "1", "alpha");
         ThreeFieldsUsingOr three = new ThreeFieldsUsingOr("c", "1", "alpha");
@@ -68,7 +68,7 @@ public class TransitivityTest {
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
+    void fail_whenEqualityForThreeFieldsIsCombinedUsingAndAndOr() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -80,7 +80,7 @@ public class TransitivityTest {
     }
 
     @Test
-    public void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
+    void fail_whenEqualityForThreeFieldsIsCombinedUsingOrAndAnd() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -92,7 +92,7 @@ public class TransitivityTest {
     }
 
     @Test
-    public void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
+    void fail_whenEqualityForFiveFieldsIsCombinedUsingOr() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -104,7 +104,7 @@ public class TransitivityTest {
     }
 
     @Test
-    public void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
+    void fail_whenEqualityForFiveFieldsIsCombinedUsingAndsAndOrs() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -117,7 +117,7 @@ public class TransitivityTest {
 
     @Disabled("This class is not transitive, and it should fail. See issue 78.")
     @Test
-    public void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
+    void fail_whenInstancesAreEqualIfAtLeastTwoFieldsAreEqual() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.verify_release.jar.helper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.function.Function;
@@ -64,7 +63,7 @@ public class JarAsserter {
 
     private void assertForAll(Predicate<String> assertion, Function<String, String> message, String... filenames) {
         Stream<Executable> assertions =
-                Arrays.stream(filenames).map(fn -> () -> assertTrue(assertion.test(fn), message.apply(fn)));
+                Arrays.stream(filenames).map(fn -> () -> assertThat(assertion.test(fn)).as(message.apply(fn)).isTrue());
         assertAll(assertions);
     }
 
@@ -80,7 +79,7 @@ public class JarAsserter {
     }
 
     private void assertContains(String needle, String haystack, String innerFilename) {
-        assertTrue(haystack.contains(needle), "Expected to find '" + needle + "' in " + innerFilename);
+        assertThat(haystack.contains(needle)).as("Expected to find '" + needle + "' in " + innerFilename).isTrue();
     }
 
     public void assertVersionsOfClassFiles() {
@@ -110,10 +109,10 @@ public class JarAsserter {
     private void assertVersionOfClassFile(int expectedVersion, String innerFilename) {
         var classFile = reader.getContentOf(innerFilename);
         var actualVersion = classFile[7];
-        assertEquals(
-            (byte) expectedVersion,
-            actualVersion,
-            "Expected " + innerFilename + " to have version " + expectedVersion + ", but it has version "
-                    + actualVersion);
+        assertThat(actualVersion)
+                .as(
+                    "Expected " + innerFilename + " to have version " + expectedVersion + ", but it has version "
+                            + actualVersion)
+                .isEqualTo((byte) expectedVersion);
     }
 }

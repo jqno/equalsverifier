@@ -7,10 +7,10 @@ import nl.jqno.equalsverifier.testhelpers.types.Color;
 import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
 import org.junit.jupiter.api.Test;
 
-public class WarningsMixTest {
+class WarningsMixTest {
 
     @Test
-    public void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
+    void fail_whenFieldsAreNonfinalAndClassIsNonfinal_givenOnlyStrictInheritanceWarningIsSuppressed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.STRICT_INHERITANCE).verify())
                 .assertFailure()
@@ -18,7 +18,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
+    void fail_whenFieldsAreNonFinalAndClassIsNonFinal_givenOnlyNonfinalFieldsWarningIsSuppressed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MutablePoint.class).suppress(Warning.NONFINAL_FIELDS).verify())
                 .assertFailure()
@@ -26,7 +26,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenBothStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         EqualsVerifier
                 .forClass(MutablePoint.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NONFINAL_FIELDS)
@@ -34,7 +34,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
+    void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -47,7 +47,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
+    void fail_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenOnlyNullFieldsWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier.forClass(NeverNullColorContainer.class).suppress(Warning.NULL_FIELDS).verify())
@@ -56,7 +56,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+    void succeed_whenClassIsNonfinalAndEqualsDoesNotCheckNull_givenBothStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
         EqualsVerifier
                 .forClass(NeverNullColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS)
@@ -64,7 +64,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void succeed_whenWarningsAreSuppressedSeparately_givenBothWarningsNeedToBeSuppressed() {
+    void succeed_whenWarningsAreSuppressedSeparately_givenBothWarningsNeedToBeSuppressed() {
         EqualsVerifier
                 .forClass(NeverNullColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE)
@@ -73,7 +73,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
+    void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNullFieldsWarningsAreSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -85,7 +85,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
+    void fail_whenClassAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyStrictInheritanceAndNonfinalFieldsWarningsAreSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -98,7 +98,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
+    void fail_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenOnlyNonfinalFieldsAndNullFieldsWarningsAreSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -110,7 +110,7 @@ public class WarningsMixTest {
     }
 
     @Test
-    public void succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
+    void succeed_whenClassIsNonfinalAndFieldsAreNonfinalAndEqualsDoesNotCheckNull_givenAllNecessaryWarningsAreSuppressed() {
         EqualsVerifier
                 .forClass(NeverNullAndMutableColorContainer.class)
                 .suppress(Warning.STRICT_INHERITANCE, Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)

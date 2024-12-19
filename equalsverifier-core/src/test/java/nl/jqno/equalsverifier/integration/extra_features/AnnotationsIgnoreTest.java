@@ -11,10 +11,10 @@ import nl.jqno.equalsverifier.testhelpers.annotations.Immutable;
 import nl.jqno.equalsverifier.testhelpers.annotations.javax.annotation.Nonnull;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationsIgnoreTest {
+class AnnotationsIgnoreTest {
 
     @Test
-    public void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
+    void fail_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -26,7 +26,7 @@ public class AnnotationsIgnoreTest {
     }
 
     @Test
-    public void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughDefaultAnnotation() {
+    void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughDefaultAnnotation() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -38,7 +38,7 @@ public class AnnotationsIgnoreTest {
     }
 
     @Test
-    public void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughJsr305() {
+    void fail_whenIgnoringNonnullAnnotation_givenNonnullIsIndirectlyAppliedThroughJsr305() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Jsr305Nonnull.class).withIgnoredAnnotations(Nonnull.class).verify())
                 .assertFailure()
@@ -46,7 +46,7 @@ public class AnnotationsIgnoreTest {
     }
 
     @Test
-    public void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
+    void succeed_whenClassHasNonfinalFieldsAndImmutableAnnotation_givenImmutableAnnotationIsIgnored_butItsADifferentImmutableAnnotation() {
         EqualsVerifier
                 .forClass(ImmutableByAnnotation.class)
                 .withIgnoredAnnotations(net.jcip.annotations.Immutable.class)
@@ -54,7 +54,7 @@ public class AnnotationsIgnoreTest {
     }
 
     @Test
-    public void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
+    void fail_whenIgnoredAnnotationClassIsntAnAnnotation() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ImmutableByAnnotation.class).withIgnoredAnnotations(String.class))
                 .assertThrows(IllegalStateException.class)

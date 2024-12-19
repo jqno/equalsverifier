@@ -7,29 +7,29 @@ import nl.jqno.equalsverifier.verify_release.pom.helper.PomReader;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class MainPomTest {
+class MainPomTest {
 
     private static final String FILENAME = "equalsverifier-main.pom";
     private static PomAsserter pom;
 
     @BeforeAll
-    public static void setup() throws Exception {
+    static void setup() throws Exception {
         var reader = new PomReader(FILENAME);
         pom = new PomAsserter(reader);
     }
 
     @Test
-    public void commonProperties() {
+    void commonProperties() {
         pom.assertCommonProperties();
     }
 
     @Test
-    public void artifactId() {
+    void artifactId() {
         pom.assertArtifactId("equalsverifier");
     }
 
     @Test
-    public void dependencies() {
+    void dependencies() {
         assertAll(
             () -> pom.assertNumberOfDependencies(6),
             () -> pom.assertDependencyIsOptional(1),

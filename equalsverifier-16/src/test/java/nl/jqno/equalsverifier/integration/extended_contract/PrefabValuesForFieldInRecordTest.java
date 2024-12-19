@@ -4,10 +4,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class PrefabValuesForFieldInRecordTest {
+class PrefabValuesForFieldInRecordTest {
 
     @Test
-    public void fail_whenRecordHasSinglePrecondition() {
+    void fail_whenRecordHasSinglePrecondition() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SinglePrecondition.class).verify())
                 .assertFailure()
@@ -15,12 +15,12 @@ public class PrefabValuesForFieldInRecordTest {
     }
 
     @Test
-    public void succeed_whenRecordHasSinglePrecondition_givenPrefabValuesForField() {
+    void succeed_whenRecordHasSinglePrecondition_givenPrefabValuesForField() {
         EqualsVerifier.forClass(SinglePrecondition.class).withPrefabValuesForField("i", 111, 142).verify();
     }
 
     @Test
-    public void fail_whenRecordHasDualPrecondition() {
+    void fail_whenRecordHasDualPrecondition() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(DualPrecondition.class).verify())
                 .assertFailure()
@@ -28,7 +28,7 @@ public class PrefabValuesForFieldInRecordTest {
     }
 
     @Test
-    public void fail_whenRecordHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
+    void fail_whenRecordHasDualPrecondition_givenPrefabValuesForOnlyOneField() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -40,7 +40,7 @@ public class PrefabValuesForFieldInRecordTest {
     }
 
     @Test
-    public void succeed_whenRecordHasDualPrecondition_givenPrefabValueForBothFields() {
+    void succeed_whenRecordHasDualPrecondition_givenPrefabValueForBothFields() {
         EqualsVerifier
                 .forClass(DualPrecondition.class)
                 .withPrefabValuesForField("x", 111, 142)

@@ -8,8 +8,9 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class BalancedAbstractnessTest {
+// because of the use of defaultEquals and defaultHashCode
+@SuppressWarnings("unused")
+class BalancedAbstractnessTest {
 
     private static final String ABSTRACT_DELEGATION = "Abstract delegation";
     private static final String BOTH_ARE_ABSTRACT = "equals and hashCode methods are both abstract";
@@ -21,7 +22,7 @@ public class BalancedAbstractnessTest {
     private static final String BOTH_SHOULD_BE_SAME = "Both should be either abstract or concrete";
 
     @Test
-    public void fail_whenBothEqualsAndHashCodeAreAbstract() {
+    void fail_whenBothEqualsAndHashCodeAreAbstract() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -33,7 +34,7 @@ public class BalancedAbstractnessTest {
     }
 
     @Test
-    public void fail_whenEqualsIsAbstract() {
+    void fail_whenEqualsIsAbstract() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -49,7 +50,7 @@ public class BalancedAbstractnessTest {
     }
 
     @Test
-    public void fail_whenHashCodeIsAbstract() {
+    void fail_whenHashCodeIsAbstract() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(AbstractHashCode.class).verify())
                 .assertFailure()
@@ -61,22 +62,22 @@ public class BalancedAbstractnessTest {
     }
 
     @Test
-    public void succeed_whenBothAreAbstractInSuperclass() {
+    void succeed_whenBothAreAbstractInSuperclass() {
         EqualsVerifier.forClass(SubclassOfAbstractBoth.class).verify();
     }
 
     @Test
-    public void succeed_whenOnlyEqualsIsAbstractInSuperclass() {
+    void succeed_whenOnlyEqualsIsAbstractInSuperclass() {
         EqualsVerifier.forClass(SubclassOfAbstractEqualsButNotHashCode.class).verify();
     }
 
     @Test
-    public void succeed_whenOnlyHashCodeIsAbstractInSuperclass() {
+    void succeed_whenOnlyHashCodeIsAbstractInSuperclass() {
         EqualsVerifier.forClass(SubclassOfAbstractHashCodeButNotEquals.class).verify();
     }
 
     @Test
-    public void succeed_whenBothAreAbstractInSuperclassOfSuperclass() {
+    void succeed_whenBothAreAbstractInSuperclassOfSuperclass() {
         EqualsVerifier.forClass(SubclassOfSubclassOfAbstractBoth.class).verify();
     }
 

@@ -11,7 +11,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class ArrayTest {
+class ArrayTest {
 
     private static final String REGULAR_EQUALS =
             "Array: == or regular equals() used instead of Arrays.equals() for field";
@@ -24,7 +24,7 @@ public class ArrayTest {
     private static final String FIELD_NAME = "array";
 
     @Test
-    public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
+    void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAPrimitiveArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularEquals.class).verify())
                 .assertFailure()
@@ -32,7 +32,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
+    void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAPrimitiveArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(PrimitiveArrayRegularHashCode.class).verify())
                 .assertFailure()
@@ -40,12 +40,12 @@ public class ArrayTest {
     }
 
     @Test
-    public void succeed_whenCorrectMethodsAreUsed_givenAPrimitiveArray() {
+    void succeed_whenCorrectMethodsAreUsed_givenAPrimitiveArray() {
         EqualsVerifier.forClass(PrimitiveArrayCorrect.class).verify();
     }
 
     @Test
-    public void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
+    void fail_whenArraysEqualsIsUsedInsteadOfDeepEquals_givenAMultidimensionalArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysEquals.class).verify())
                 .assertFailure()
@@ -53,7 +53,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
+    void fail_whenRegularHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MultidimensionalArrayRegularHashCode.class).verify())
                 .assertFailure()
@@ -61,7 +61,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
+    void fail_whenArraysHashCodeIsUsedInsteadOfDeepHashCode_givenAMultidimensionalArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MultidimensionalArrayArraysHashCode.class).verify())
                 .assertFailure()
@@ -69,12 +69,12 @@ public class ArrayTest {
     }
 
     @Test
-    public void succeed_whenCorrectMethodsAreUsed_givenAMultidimensionalArray() {
+    void succeed_whenCorrectMethodsAreUsed_givenAMultidimensionalArray() {
         EqualsVerifier.forClass(MultidimensionalArrayCorrect.class).verify();
     }
 
     @Test
-    public void failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
+    void failWithCorrectMessage_whenShallowHashCodeIsUsedOnSecondArray_givenTwoMultidimensionalArrays() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(TwoMultidimensionalArraysShallowHashCodeForSecond.class).verify())
                 .assertFailure()
@@ -82,12 +82,12 @@ public class ArrayTest {
     }
 
     @Test
-    public void succeed_whenCorrectMethodsAreUsed_givenAThreedimensionalArray() {
+    void succeed_whenCorrectMethodsAreUsed_givenAThreedimensionalArray() {
         EqualsVerifier.forClass(ThreeDimensionalArrayCorrect.class).verify();
     }
 
     @Test
-    public void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
+    void failWithRecursionError_whenClassContainsARecursionButAlsoAMutltiDimensionalArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MultiDimensionalArrayAndRecursion.Board.class).verify())
                 .assertThrows(AssertionError.class)
@@ -95,7 +95,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAnObjectArray() {
+    void fail_whenRegularEqualsIsUsedInsteadOfArraysEquals_givenAnObjectArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ObjectArrayRegularEquals.class).verify())
                 .assertFailure()
@@ -103,7 +103,7 @@ public class ArrayTest {
     }
 
     @Test
-    public void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAnObjectArray() {
+    void fail_whenRegularHashCodeIsUsedInsteadOfArraysHashCode_givenAnObjectArray() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ObjectArrayRegularHashCode.class).verify())
                 .assertFailure()
@@ -111,17 +111,17 @@ public class ArrayTest {
     }
 
     @Test
-    public void succeed_whenCorrectMethodsAreUsed_givenAnObjectArray() {
+    void succeed_whenCorrectMethodsAreUsed_givenAnObjectArray() {
         EqualsVerifier.forClass(ObjectArrayCorrect.class).verify();
     }
 
     @Test
-    public void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
+    void succeed_whenCorrectMethodsAreUsed_givenAnArrayAndAnUnusedField() {
         EqualsVerifier.forClass(ArrayAndSomethingUnused.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
-    public void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
+    void succeed_whenArraysAreNotUsedInEquals_givenArrayFields() {
         EqualsVerifier
                 .forClass(ArraysAreUnused.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -129,17 +129,17 @@ public class ArrayTest {
     }
 
     @Test
-    public void succeed_whenStaticFinalArrayIsEmpty() {
+    void succeed_whenStaticFinalArrayIsEmpty() {
         EqualsVerifier.forClass(EmptyStaticFinalArrayContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenStaticArrayIsUninitialized() {
+    void succeed_whenStaticArrayIsUninitialized() {
         EqualsVerifier.forClass(UninitializedStaticArrayContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenArrayLengthIsInvariant() {
+    void succeed_whenArrayLengthIsInvariant() {
         int[] a = { 1, 2, 3 };
         int[] b = { 4, 5, 6 };
         int[][] x = { a, a, a };

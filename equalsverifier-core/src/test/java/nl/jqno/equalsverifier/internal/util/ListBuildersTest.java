@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateCo
 
 import org.junit.jupiter.api.Test;
 
-public class ListBuildersTest {
+class ListBuildersTest {
 
     @Test
-    public void coverTheConstructor() {
+    void coverTheConstructor() {
         coverThePrivateConstructor(ListBuilders.class);
     }
 }

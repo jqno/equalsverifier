@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 
@@ -12,176 +12,176 @@ import org.junit.jupiter.api.Test;
 /*
  * FieldProbe.isAnnotatedNonnull() is tested in AnnotationNonnullTest
  */
-public class FieldProbeTest {
+class FieldProbeTest {
 
     private static final String FIELD_NAME = "field";
     private Configuration<?> config = ConfigurationHelper.emptyConfiguration(ObjectContainer.class);
 
     @Test
-    public void getField() throws NoSuchFieldException {
+    void getField() throws NoSuchFieldException {
         ObjectContainer foo = new ObjectContainer();
         Field field = foo.getClass().getDeclaredField(FIELD_NAME);
         FieldProbe probe = FieldProbe.of(field);
-        assertSame(field, probe.getField());
+        assertThat(probe.getField()).isSameAs(field);
     }
 
     @Test
-    public void getType() {
+    void getType() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertEquals(Object.class, probe.getType());
+        assertThat(probe.getType()).isEqualTo(Object.class);
     }
 
     @Test
-    public void getName() {
+    void getName() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertEquals(FIELD_NAME, probe.getName());
+        assertThat(probe.getName()).isEqualTo(FIELD_NAME);
     }
 
     @Test
-    public void isNotPublic() {
+    void isNotPublic() {
         FieldProbe probe = getProbeFor(DifferentAccessModifiersFieldContainer.class, "K");
-        assertFalse(probe.isPublic());
+        assertThat(probe.isPublic()).isFalse();
     }
 
     @Test
-    public void isPublic() {
+    void isPublic() {
         FieldProbe probe = getProbeFor(DifferentAccessModifiersFieldContainer.class, "L");
-        assertTrue(probe.isPublic());
+        assertThat(probe.isPublic()).isTrue();
     }
 
     @Test
-    public void isNotPrimitive() {
+    void isNotPrimitive() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertFalse(probe.isPrimitive());
+        assertThat(probe.isPrimitive()).isFalse();
     }
 
     @Test
-    public void isPrimitive() {
+    void isPrimitive() {
         FieldProbe probe = getProbeFor(PrimitiveContainer.class, FIELD_NAME);
-        assertTrue(probe.isPrimitive());
+        assertThat(probe.isPrimitive()).isTrue();
     }
 
     @Test
-    public void isNotFinal() {
+    void isNotFinal() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertFalse(probe.isFinal());
+        assertThat(probe.isFinal()).isFalse();
     }
 
     @Test
-    public void isFinal() {
+    void isFinal() {
         FieldProbe probe = getProbeFor(FinalContainer.class, FIELD_NAME);
-        assertTrue(probe.isFinal());
+        assertThat(probe.isFinal()).isTrue();
     }
 
     @Test
-    public void isNotStatic() {
+    void isNotStatic() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertFalse(probe.isStatic());
+        assertThat(probe.isStatic()).isFalse();
     }
 
     @Test
-    public void isStatic() {
+    void isStatic() {
         FieldProbe probe = getProbeFor(StaticContainer.class, FIELD_NAME);
-        assertTrue(probe.isStatic());
+        assertThat(probe.isStatic()).isTrue();
     }
 
     @Test
-    public void isNotTransient() {
+    void isNotTransient() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertFalse(probe.isTransient());
+        assertThat(probe.isTransient()).isFalse();
     }
 
     @Test
-    public void isTransient() {
+    void isTransient() {
         FieldProbe probe = getProbeFor(TransientContainer.class, FIELD_NAME);
-        assertTrue(probe.isTransient());
+        assertThat(probe.isTransient()).isTrue();
     }
 
     @Test
-    public void isNotEnum() {
+    void isNotEnum() {
         FieldProbe probe = getProbeFor(PrimitiveContainer.class, FIELD_NAME);
-        assertFalse(probe.isEmptyOrSingleValueEnum());
+        assertThat(probe.isEmptyOrSingleValueEnum()).isFalse();
     }
 
     @Test
-    public void isEnumButNotSingleValue() {
+    void isEnumButNotSingleValue() {
         FieldProbe probe = getProbeFor(EnumContainer.class, "twoElementEnum");
-        assertFalse(probe.isEmptyOrSingleValueEnum());
+        assertThat(probe.isEmptyOrSingleValueEnum()).isFalse();
     }
 
     @Test
-    public void isSingleValueEnum() {
+    void isSingleValueEnum() {
         FieldProbe probe = getProbeFor(EnumContainer.class, "oneElementEnum");
-        assertTrue(probe.isEmptyOrSingleValueEnum());
+        assertThat(probe.isEmptyOrSingleValueEnum()).isTrue();
     }
 
     @Test
-    public void isEmptyEnum() {
+    void isEmptyEnum() {
         FieldProbe probe = getProbeFor(EnumContainer.class, "emptyEnum");
-        assertTrue(probe.isEmptyOrSingleValueEnum());
+        assertThat(probe.isEmptyOrSingleValueEnum()).isTrue();
     }
 
     @Test
-    public void canBeDefault_forObject() {
+    void canBeDefault_forObject() {
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertTrue(probe.canBeDefault(config));
+        assertThat(probe.canBeDefault(config)).isTrue();
     }
 
     @Test
-    public void canBeDefault_primitive() {
+    void canBeDefault_primitive() {
         FieldProbe probe = getProbeFor(PrimitiveContainer.class, FIELD_NAME);
-        assertTrue(probe.canBeDefault(config));
+        assertThat(probe.canBeDefault(config)).isTrue();
     }
 
     @Test
-    public void canBeDefault_primitiveWithPrefabbedField() {
+    void canBeDefault_primitiveWithPrefabbedField() {
         config = ConfigurationHelper.emptyConfigurationWithPrefabbedFields(PrimitiveContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(PrimitiveContainer.class, FIELD_NAME);
-        assertFalse(probe.canBeDefault(config));
+        assertThat(probe.canBeDefault(config)).isFalse();
     }
 
     @Test
-    public void canBeDefault_isMentionedExplicitly() {
+    void canBeDefault_isMentionedExplicitly() {
         config = ConfigurationHelper.emptyConfigurationWithNonnullFields(ObjectContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(ObjectContainer.class, FIELD_NAME);
-        assertFalse(probe.canBeDefault(config));
+        assertThat(probe.canBeDefault(config)).isFalse();
     }
 
     @Test
-    public void canBeDefault_annotated() {
+    void canBeDefault_annotated() {
         config = ConfigurationHelper.emptyConfigurationWithNonnullFields(NonNullContainer.class, FIELD_NAME);
         FieldProbe probe = getProbeFor(NonNullContainer.class, FIELD_NAME);
-        assertFalse(probe.canBeDefault(config));
+        assertThat(probe.canBeDefault(config)).isFalse();
     }
 
     @Test
-    public void canBeModifiedReflectively_synthetic() {
+    void canBeModifiedReflectively_synthetic() {
         FieldProbe probe = getProbeFor(NonStaticInner.class, "this$0");
-        assertFalse(probe.canBeModifiedReflectively());
+        assertThat(probe.canBeModifiedReflectively()).isFalse();
     }
 
     @Test
-    public void canBeModifiedReflectively_staticFinal() {
+    void canBeModifiedReflectively_staticFinal() {
         FieldProbe publicStaticFinal = getProbeFor(ModifierMix.class, "PUBLIC_STATIC_FINAL");
-        assertFalse(publicStaticFinal.canBeModifiedReflectively());
+        assertThat(publicStaticFinal.canBeModifiedReflectively()).isFalse();
     }
 
     @Test
-    public void canBeModifiedReflectively_static() {
+    void canBeModifiedReflectively_static() {
         FieldProbe publicStatic = getProbeFor(ModifierMix.class, "publicStatic");
-        assertTrue(publicStatic.canBeModifiedReflectively());
+        assertThat(publicStatic.canBeModifiedReflectively()).isTrue();
     }
 
     @Test
-    public void canBeModifiedReflectively_final() {
+    void canBeModifiedReflectively_final() {
         FieldProbe publicFinal = getProbeFor(ModifierMix.class, "publicFinal");
-        assertTrue(publicFinal.canBeModifiedReflectively());
+        assertThat(publicFinal.canBeModifiedReflectively()).isTrue();
     }
 
     @Test
-    public void canBeModifiedReflectively_noModifiers() {
+    void canBeModifiedReflectively_noModifiers() {
         FieldProbe publicNothingElse = getProbeFor(ModifierMix.class, "publicNothingElse");
-        assertTrue(publicNothingElse.canBeModifiedReflectively());
+        assertThat(publicNothingElse.canBeModifiedReflectively()).isTrue();
     }
 
     private FieldProbe getProbeFor(Class<?> type, String fieldName) {

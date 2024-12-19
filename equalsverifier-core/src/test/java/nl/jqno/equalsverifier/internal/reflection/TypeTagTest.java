@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -13,13 +13,13 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class TypeTagTest {
+class TypeTagTest {
 
     private static final TypeTag SOME_LONG_TYPETAG =
             new TypeTag(Map.class, new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
 
     @Test
-    public void equalsAndHashCode() {
+    void equalsAndHashCode() {
         EqualsVerifier
                 .forClass(TypeTag.class)
                 .withPrefabValues(TypeTag.class, new TypeTag(Integer.class), SOME_LONG_TYPETAG)
@@ -28,103 +28,103 @@ public class TypeTagTest {
     }
 
     @Test
-    public void typeCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> new TypeTag(null));
+    void typeCannotBeNull() {
+        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> new TypeTag(null));
     }
 
     @Test
-    public void getType() {
-        assertEquals(Map.class, SOME_LONG_TYPETAG.getType());
+    void getType() {
+        assertThat(SOME_LONG_TYPETAG.getType()).isEqualTo(Map.class);
     }
 
     @Test
-    public void getGenericTypes() {
+    void getGenericTypes() {
         List<TypeTag> expected =
                 Arrays.asList(new TypeTag(Integer.class), new TypeTag(List.class, new TypeTag(String.class)));
-        assertEquals(expected, SOME_LONG_TYPETAG.getGenericTypes());
+        assertThat(SOME_LONG_TYPETAG.getGenericTypes()).isEqualTo(expected);
     }
 
     @Test
-    public void testToString() {
-        assertEquals("String", new TypeTag(String.class).toString());
-        assertEquals("List<String>", new TypeTag(List.class, new TypeTag(String.class)).toString());
-        assertEquals("Map<Integer, List<String>>", SOME_LONG_TYPETAG.toString());
+    void testToString() {
+        assertThat(new TypeTag(String.class).toString()).isEqualTo("String");
+        assertThat(new TypeTag(List.class, new TypeTag(String.class)).toString()).isEqualTo("List<String>");
+        assertThat(SOME_LONG_TYPETAG.toString()).isEqualTo("Map<Integer, List<String>>");
     }
 
     @Test
-    public void matchParameterizedField() throws Exception {
+    void matchParameterizedField() throws Exception {
         Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
         TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
 
         Field f = Container.class.getDeclaredField("t");
         TypeTag actual = TypeTag.of(f, enclosingType);
 
-        assertEquals(new TypeTag(String.class), actual);
+        assertThat(actual).isEqualTo(new TypeTag(String.class));
     }
 
     @Test
-    public void matchParameterizedGenericField() throws Exception {
+    void matchParameterizedGenericField() throws Exception {
         Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
         TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
 
         Field f = Container.class.getDeclaredField("ts");
         TypeTag actual = TypeTag.of(f, enclosingType);
 
-        assertEquals(new TypeTag(List.class, new TypeTag(String.class)), actual);
+        assertThat(actual).isEqualTo(new TypeTag(List.class, new TypeTag(String.class)));
     }
 
     @Test
-    public void matchParameterizedArrayField() throws Exception {
+    void matchParameterizedArrayField() throws Exception {
         Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
         TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
 
         Field f = Container.class.getDeclaredField("tarr");
         TypeTag actual = TypeTag.of(f, enclosingType);
 
-        assertEquals(new TypeTag(String[].class), actual);
+        assertThat(actual).isEqualTo(new TypeTag(String[].class));
     }
 
     @Test
-    public void matchNestedParameterizedGenericField() throws Exception {
+    void matchNestedParameterizedGenericField() throws Exception {
         Field enclosingField = ContainerContainer.class.getDeclaredField("stringContainer");
         TypeTag enclosingType = TypeTag.of(enclosingField, TypeTag.NULL);
 
         Field f = Container.class.getDeclaredField("tss");
         TypeTag actual = TypeTag.of(f, enclosingType);
 
-        assertEquals(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))), actual);
+        assertThat(actual).isEqualTo(new TypeTag(List.class, new TypeTag(List.class, new TypeTag(String.class))));
     }
 
     @Test
-    public void correctnessOfBoundedTypeVariable() throws NoSuchFieldException {
+    void correctnessOfBoundedTypeVariable() throws NoSuchFieldException {
         Field field = BoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Point.class);
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void correctnessOfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
+    void correctnessOfRecursiveBoundedTypeVariable() throws NoSuchFieldException {
         Field field = RecursiveBoundedTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void correctnessOfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
+    void correctnessOfRecursiveBoundedWildcardTypeVariable() throws NoSuchFieldException {
         Field field = RecursiveBoundedWildcardTypeVariable.class.getDeclaredField("fieldWithBoundedTypeVariable");
         TypeTag expected = new TypeTag(Comparable.class, new TypeTag(Object.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void correctnessOfWildcardFieldWithBoundedType() throws NoSuchFieldException {
+    void correctnessOfWildcardFieldWithBoundedType() throws NoSuchFieldException {
         Field field = WildcardBoundedTypeVariableContainer.class.getDeclaredField("wildcard");
         TypeTag expected = new TypeTag(BoundedTypeVariable.class, new TypeTag(Point.class));
         TypeTag actual = TypeTag.of(field, TypeTag.NULL);
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @SuppressWarnings("unused")

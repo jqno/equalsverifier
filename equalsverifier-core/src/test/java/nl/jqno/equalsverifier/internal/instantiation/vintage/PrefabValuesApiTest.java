@@ -4,10 +4,10 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateCo
 
 import org.junit.jupiter.api.Test;
 
-public class PrefabValuesApiTest {
+class PrefabValuesApiTest {
 
     @Test
-    public void coverTheConstructor() {
+    void coverTheConstructor() {
         coverThePrivateConstructor(PrefabValuesApi.class);
     }
 }

@@ -1,28 +1,28 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
-public class SimpleFactoryTest {
+class SimpleFactoryTest {
 
     private SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));
 
     @Test
-    public void createRed() {
-        assertEquals("red", factory.createValues(null, null, null).getRed());
+    void createRed() {
+        assertThat(factory.createValues(null, null, null).getRed()).isEqualTo("red");
     }
 
     @Test
-    public void createBlue() {
-        assertEquals("blue", factory.createValues(null, null, null).getBlue());
+    void createBlue() {
+        assertThat(factory.createValues(null, null, null).getBlue()).isEqualTo("blue");
     }
 
     @Test
-    public void redCopy() {
+    void redCopy() {
         String redCopy = factory.createValues(null, null, null).getRedCopy();
-        assertEquals("red", redCopy);
+        assertThat(redCopy).isEqualTo("red");
         assertNotSame("red", redCopy);
     }
 }

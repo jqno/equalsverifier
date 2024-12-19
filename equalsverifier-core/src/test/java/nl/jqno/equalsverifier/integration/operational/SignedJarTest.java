@@ -4,15 +4,15 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.signedjar.SignedJarPoint;
 import org.junit.jupiter.api.Test;
 
-public class SignedJarTest {
+class SignedJarTest {
 
     @Test
-    public void succeed_whenTestingAClassFromASignedJar() {
+    void succeed_whenTestingAClassFromASignedJar() {
         EqualsVerifier.forClass(SignedJarPoint.class).verify();
     }
 
     @Test
-    public void succeed_whenTestingAClassThatExtendsFromAClassFromASignedJar() {
+    void succeed_whenTestingAClassThatExtendsFromAClassFromASignedJar() {
         EqualsVerifier.forClass(SubclassOfSignedJarPoint.class).verify();
     }
 

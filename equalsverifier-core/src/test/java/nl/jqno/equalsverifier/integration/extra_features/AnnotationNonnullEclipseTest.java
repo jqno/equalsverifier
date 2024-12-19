@@ -12,35 +12,35 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationNonnullEclipseTest {
+class AnnotationNonnullEclipseTest {
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseAnnotationOnFieldType() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseAnnotationOnFieldType() {
         EqualsVerifier.forClass(NonnullTypeUse.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
         EqualsVerifier.forClass(NonnullEclipseOnClass.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
         EqualsVerifier.forClass(NonnullEclipseOnPackage.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
         EqualsVerifier.forClass(NonnullEclipseOuter.FInner.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
         EqualsVerifier.forClass(NonnullEclipseOuter.FMiddle.FInnerInner.class).verify();
     }
 
     @Test
-    public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
+    void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).verify())
                 .assertFailure()
@@ -48,17 +48,17 @@ public class AnnotationNonnullEclipseTest {
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
         EqualsVerifier.forClass(NonnullEclipseWithNullableOnClass.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
+    void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         EqualsVerifier.forClass(NonnullEclipseWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 
     @Test
-    public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
+    void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackage() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -69,7 +69,7 @@ public class AnnotationNonnullEclipseTest {
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackageAndWarningIsSuppressed() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnPackageAndWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(NonnullEclipseWithNullableOnPackageAndNullCheckInEquals.class)
                 .suppress(Warning.NULL_FIELDS)
@@ -77,7 +77,7 @@ public class AnnotationNonnullEclipseTest {
     }
 
     @Test
-    public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
+    void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationButInapplicableLocationOnClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonnullEclipseWithInapplicableLocationOnClass.class).verify())
                 .assertFailure()
@@ -85,7 +85,7 @@ public class AnnotationNonnullEclipseTest {
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationWithApplicableLocationOnClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationWithApplicableLocationOnClass() {
         EqualsVerifier.forClass(NonnullEclipseWithApplicableLocationOnClass.class).verify();
     }
 

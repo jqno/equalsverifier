@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.testhelpers.types.ColorPoint3D;
 import nl.jqno.equalsverifier.testhelpers.types.Point3D;
@@ -11,130 +11,130 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.NoFieldsSubWithFields
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class ClassProbeTest {
+class ClassProbeTest {
 
     private ClassProbe<PointContainer> pointProbe;
     private ClassProbe<AbstractEqualsAndHashCode> abstractProbe;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         pointProbe = ClassProbe.of(PointContainer.class);
         abstractProbe = ClassProbe.of(AbstractEqualsAndHashCode.class);
     }
 
     @Test
-    public void getType() {
-        assertSame(PointContainer.class, pointProbe.getType());
+    void getType() {
+        assertThat(pointProbe.getType()).isSameAs(PointContainer.class);
     }
 
     /* Tests the false case. The true case is tested in {@link ClassProbeCompilerTest}. */
     @Test
-    public void isRecord() {
-        assertFalse(pointProbe.isRecord());
+    void isRecord() {
+        assertThat(pointProbe.isRecord()).isFalse();
     }
 
     /* Tests the false case. The true case is tested in {@link ClassProbeSealedTest}. */
     @Test
-    public void isSealed() {
-        assertFalse(pointProbe.isSealed());
+    void isSealed() {
+        assertThat(pointProbe.isSealed()).isFalse();
     }
 
     @Test
-    public void declaresEquals() {
-        assertTrue(pointProbe.declaresEquals());
-        assertTrue(abstractProbe.declaresEquals());
+    void declaresEquals() {
+        assertThat(pointProbe.declaresEquals()).isTrue();
+        assertThat(abstractProbe.declaresEquals()).isTrue();
     }
 
     @Test
-    public void doesNotDeclareEquals() {
+    void doesNotDeclareEquals() {
         ClassProbe<?> accessor = ClassProbe.of(Empty.class);
-        assertFalse(accessor.declaresEquals());
+        assertThat(accessor.declaresEquals()).isFalse();
     }
 
     @Test
-    public void declaresHashCode() {
-        assertTrue(pointProbe.declaresHashCode());
-        assertTrue(abstractProbe.declaresHashCode());
+    void declaresHashCode() {
+        assertThat(pointProbe.declaresHashCode()).isTrue();
+        assertThat(abstractProbe.declaresHashCode()).isTrue();
     }
 
     @Test
-    public void doesNotDeclareHashCode() {
+    void doesNotDeclareHashCode() {
         ClassProbe<?> accessor = ClassProbe.of(Empty.class);
-        assertFalse(accessor.declaresHashCode());
+        assertThat(accessor.declaresHashCode()).isFalse();
     }
 
     @Test
-    public void hasMethod() {
+    void hasMethod() {
         ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
-        assertTrue(accessor.hasMethod("m"));
+        assertThat(accessor.hasMethod("m")).isTrue();
     }
 
     @Test
-    public void hasProtectedMethod() {
+    void hasProtectedMethod() {
         ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
-        assertTrue(accessor.hasMethod("m_protected"));
+        assertThat(accessor.hasMethod("m_protected")).isTrue();
     }
 
     @Test
-    public void hasMethodInSuper() {
+    void hasMethodInSuper() {
         ClassProbe<?> accessor = ClassProbe.of(ChildOfMethodContainer.class);
-        assertTrue(accessor.hasMethod("m"));
+        assertThat(accessor.hasMethod("m")).isTrue();
     }
 
     @Test
-    public void hasProtectedMethodInSuper() {
+    void hasProtectedMethodInSuper() {
         ClassProbe<?> accessor = ClassProbe.of(ChildOfMethodContainer.class);
-        assertTrue(accessor.hasMethod("m_protected"));
+        assertThat(accessor.hasMethod("m_protected")).isTrue();
     }
 
     @Test
-    public void doesNotHaveMethod() {
+    void doesNotHaveMethod() {
         ClassProbe<?> accessor = ClassProbe.of(MethodContainer.class);
-        assertFalse(accessor.hasMethod("doesNotExist"));
+        assertThat(accessor.hasMethod("doesNotExist")).isFalse();
     }
 
     @Test
-    public void equalsIsNotAbstract() {
-        assertFalse(pointProbe.isEqualsAbstract());
+    void equalsIsNotAbstract() {
+        assertThat(pointProbe.isEqualsAbstract()).isFalse();
     }
 
     @Test
-    public void equalsIsAbstract() {
-        assertTrue(abstractProbe.isEqualsAbstract());
+    void equalsIsAbstract() {
+        assertThat(abstractProbe.isEqualsAbstract()).isTrue();
     }
 
     @Test
-    public void hashCodeIsNotAbstract() {
-        assertFalse(pointProbe.isHashCodeAbstract());
+    void hashCodeIsNotAbstract() {
+        assertThat(pointProbe.isHashCodeAbstract()).isFalse();
     }
 
     @Test
-    public void hashCodeIsAbstract() {
-        assertTrue(abstractProbe.isHashCodeAbstract());
+    void hashCodeIsAbstract() {
+        assertThat(abstractProbe.isHashCodeAbstract()).isTrue();
     }
 
     @Test
-    public void equalsIsInheritedFromObject() {
+    void equalsIsInheritedFromObject() {
         ClassProbe<NoFieldsSubWithFields> accessor = ClassProbe.of(NoFieldsSubWithFields.class);
-        assertTrue(accessor.isEqualsInheritedFromObject());
+        assertThat(accessor.isEqualsInheritedFromObject()).isTrue();
     }
 
     @Test
-    public void equalsIsNotInheritedFromObject() {
-        assertFalse(pointProbe.isEqualsInheritedFromObject());
+    void equalsIsNotInheritedFromObject() {
+        assertThat(pointProbe.isEqualsInheritedFromObject()).isFalse();
     }
 
     @Test
-    public void getSuperAccessorForPojo() {
+    void getSuperAccessorForPojo() {
         ClassProbe<? super PointContainer> superAccessor = pointProbe.getSuperProbe();
-        assertEquals(Object.class, superAccessor.getType());
+        assertThat(superAccessor.getType()).isEqualTo(Object.class);
     }
 
     @Test
-    public void getSuperAccessorInHierarchy() {
+    void getSuperAccessorInHierarchy() {
         ClassProbe<ColorPoint3D> accessor = ClassProbe.of(ColorPoint3D.class);
         ClassProbe<? super ColorPoint3D> superAccessor = accessor.getSuperProbe();
-        assertEquals(Point3D.class, superAccessor.getType());
+        assertThat(superAccessor.getType()).isEqualTo(Point3D.class);
     }
 
     static class MethodContainer {

@@ -31,50 +31,50 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
-public class JavaApiClassesTest {
+class JavaApiClassesTest {
 
     @Test
-    public void succeed_whenClassContainsASuperCollection() {
+    void succeed_whenClassContainsASuperCollection() {
         EqualsVerifier.forClass(SuperCollectionContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAList() {
+    void succeed_whenClassContainsAList() {
         EqualsVerifier.forClass(ListContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsASet() {
+    void succeed_whenClassContainsASet() {
         EqualsVerifier.forClass(SetContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAQueue() {
+    void succeed_whenClassContainsAQueue() {
         EqualsVerifier.forClass(QueueContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAMap() {
+    void succeed_whenClassContainsAMap() {
         EqualsVerifier.forClass(MapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsANioBuffer() {
+    void succeed_whenClassContainsANioBuffer() {
         EqualsVerifier.forClass(NioBufferContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsACommonJavaApiClass() {
+    void succeed_whenClassContainsACommonJavaApiClass() {
         EqualsVerifier.forClass(CommonClassesContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsExceptions() {
+    void succeed_whenClassContainsExceptions() {
         EqualsVerifier.forClass(ExceptionsContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsReflectionApiClass() {
+    void succeed_whenClassContainsReflectionApiClass() {
         EqualsVerifier
                 .forClass(ReflectionClassesContainer.class)
                 // Because java.lang.reflect.Constructor's hashCode() is unhelpful
@@ -83,32 +83,32 @@ public class JavaApiClassesTest {
     }
 
     @Test
-    public void succeed_whenClassContainsACommonJava8ApiClass() {
+    void succeed_whenClassContainsACommonJava8ApiClass() {
         EqualsVerifier.forClass(Java8ApiClassesContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAnAtomicValue() {
+    void succeed_whenClassContainsAnAtomicValue() {
         EqualsVerifier.forClass(AtomicClassesContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAnAncientJavaApiClass() {
+    void succeed_whenClassContainsAnAncientJavaApiClass() {
         EqualsVerifier.forClass(AncientJavaApiClassesContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAThreadLocalField() {
+    void succeed_whenClassContainsAThreadLocalField() {
         EqualsVerifier.forClass(ThreadLocalContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
+    void succeed_whenClassContainsStringBuilderThatCallsToStringInEquals() {
         EqualsVerifier.forClass(StringBuilderContainer.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
+    void succeed_whenClassContainsClassesButDoesntUseThemInEquals() {
         EqualsVerifier
                 .forClass(UnusedInEqualsButPresentInClassContainer.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)

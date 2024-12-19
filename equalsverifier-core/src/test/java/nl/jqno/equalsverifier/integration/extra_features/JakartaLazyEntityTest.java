@@ -11,15 +11,15 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: HiddenField
 
-public class JakartaLazyEntityTest {
+class JakartaLazyEntityTest {
 
     @Test
-    public void gettersAreUsed() {
+    void gettersAreUsed() {
         EqualsVerifier.forClass(CorrectJakartaLazyFieldContainer.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
-    public void basicGetterNotUsed_givenEagerLoading() {
+    void basicGetterNotUsed_givenEagerLoading() {
         EqualsVerifier
                 .forClass(CorrectBasicJakartaEagerFieldContainer.class)
                 .suppress(Warning.NONFINAL_FIELDS)
@@ -27,7 +27,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
+    void basicGetterNotUsed_givenCorrespondingFieldIgnored() {
         EqualsVerifier
                 .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
                 .withIgnoredFields("basic")
@@ -36,7 +36,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterNotUsed_givenWarningSuppressed() {
+    void basicGetterNotUsed_givenWarningSuppressed() {
         EqualsVerifier
                 .forClass(CorrectBasicJakartaIgnoredLazyFieldContainer.class)
                 .suppress(Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -44,66 +44,66 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void basicGetterNotUsed_givenAnnotationIsOnGetter() {
+    void basicGetterNotUsed_givenAnnotationIsOnGetter() {
         getterNotUsed(IncorrectBasicJakartaLazyGetterContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyGetterContainer.class);
     }
 
     @Test
-    public void basicGetterNotUsedInHashCode() {
+    void basicGetterNotUsedInHashCode() {
         getterNotUsed(IncorrectBasicJakartaLazyFieldContainerHashCode.class, "hashCode");
         getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyFieldContainerHashCode.class);
     }
 
     @Test
-    public void basicGetterNotUsed() {
+    void basicGetterNotUsed() {
         getterNotUsed(IncorrectBasicJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectBasicJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void oneToOneGetterNotUsed() {
+    void oneToOneGetterNotUsed() {
         getterNotUsed(IncorrectOneToOneJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectOneToOneJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void oneToManyGetterNotUsed() {
+    void oneToManyGetterNotUsed() {
         getterNotUsed(IncorrectOneToManyJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectOneToManyJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void manyToOneGetterNotUsed() {
+    void manyToOneGetterNotUsed() {
         getterNotUsed(IncorrectManyToOneJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectManyToOneJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void manyToManyGetterNotUsed() {
+    void manyToManyGetterNotUsed() {
         getterNotUsed(IncorrectManyToManyJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectManyToManyJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void elementCollectionGetterNotUsed() {
+    void elementCollectionGetterNotUsed() {
         getterNotUsed(IncorrectElementCollectionJakartaLazyFieldContainer.class, "equals");
         getterNotUsed_warningSuppressed(IncorrectElementCollectionJakartaLazyFieldContainer.class);
     }
 
     @Test
-    public void lazyGettersPickedUpInSuper() {
+    void lazyGettersPickedUpInSuper() {
         EqualsVerifier.forClass(LazyGetterContainer.class).usingGetClass().verify();
         EqualsVerifier.forClass(ChildOfLazyGetterContainer.class).usingGetClass().verify();
     }
 
     @Test
-    public void constantHashCode_givenStrictHashCodeSuppressed() {
+    void constantHashCode_givenStrictHashCodeSuppressed() {
         EqualsVerifier.forClass(ConstantHashCodeContainer.class).suppress(Warning.STRICT_HASHCODE).verify();
     }
 
     @Test
-    public void differentCodingStyle_single() {
+    void differentCodingStyle_single() {
         EqualsVerifier
                 .forClass(DifferentCodingStyleContainer.class)
                 .suppress(Warning.NONFINAL_FIELDS)
@@ -112,7 +112,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void differentCodingStyle_configured() {
+    void differentCodingStyle_configured() {
         EqualsVerifier
                 .configure()
                 .suppress(Warning.NONFINAL_FIELDS)
@@ -122,7 +122,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void differentCodingStyle_multiple() {
+    void differentCodingStyle_multiple() {
         EqualsVerifier
                 .forClasses(Arrays.asList(DifferentCodingStyleContainer.class))
                 .suppress(Warning.NONFINAL_FIELDS)
@@ -131,7 +131,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void getterUsedForGeneratedId() {
+    void getterUsedForGeneratedId() {
         EqualsVerifier.forClass(CorrectGeneratedJakartaIdContainer.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier
                 .forClass(CorrectGeneratedJakartaIdContainer.class)
@@ -140,7 +140,7 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void getterNotUsedForGeneratedId() {
+    void getterNotUsedForGeneratedId() {
         getterNotUsed(IncorrectGeneratedJakartaIdContainer.class, "equals", Warning.SURROGATE_KEY);
         getterNotUsed_warningSuppressed(IncorrectGeneratedJakartaIdContainer.class, Warning.SURROGATE_KEY);
         getterNotUsed(IncorrectGeneratedJakartaIdContainer.class, "equals", Warning.SURROGATE_OR_BUSINESS_KEY);
@@ -148,12 +148,12 @@ public class JakartaLazyEntityTest {
     }
 
     @Test
-    public void gettersAreUsedAndProtected() {
+    void gettersAreUsedAndProtected() {
         EqualsVerifier.forClass(ProtectedJakartaLazyFieldContainer.class).verify();
     }
 
     @Test
-    public void finalEntitiesArentLazy() {
+    void finalEntitiesArentLazy() {
         EqualsVerifier.forClass(FinalEntity.class).verify();
     }
 

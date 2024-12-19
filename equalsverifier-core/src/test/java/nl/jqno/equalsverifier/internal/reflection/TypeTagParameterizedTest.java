@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class TypeTagParameterizedTest<T> {
+class TypeTagParameterizedTest<T> {
 
     @SuppressWarnings("unused")
     private final String simpleField = null;
@@ -105,9 +105,9 @@ public class TypeTagParameterizedTest<T> {
 
     @ParameterizedTest
     @MethodSource("data")
-    public void correctness(String fieldName, TypeTag expected) {
+    void correctness(String fieldName, TypeTag expected) {
         TypeTag actual = TypeTag.of(getField(fieldName), TypeTag.NULL);
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     private Field getField(String name) {

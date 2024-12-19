@@ -10,15 +10,15 @@ import nl.jqno.equalsverifier.testhelpers.types.ImmutableCanEqualPoint;
 import nl.jqno.equalsverifier.testhelpers.types.MutableCanEqualColorPoint;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationImmutableTest {
+class AnnotationImmutableTest {
 
     @Test
-    public void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
+    void succeed_whenClassHasNonfinalFields_givenImmutableAnnotation() {
         EqualsVerifier.forClass(ImmutableByAnnotation.class).verify();
     }
 
     @Test
-    public void succeed_whenRedefinableClassHasNonfinalFields_givenImmutableAnnotationAndAppropriateSubclass() {
+    void succeed_whenRedefinableClassHasNonfinalFields_givenImmutableAnnotationAndAppropriateSubclass() {
         EqualsVerifier
                 .forClass(ImmutableCanEqualPoint.class)
                 .withRedefinedSubclass(MutableCanEqualColorPoint.class)
@@ -26,7 +26,7 @@ public class AnnotationImmutableTest {
     }
 
     @Test
-    public void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
+    void fail_whenSuperclassHasImmutableAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MutableCanEqualColorPoint.class).withRedefinedSuperclass().verify())
                 .assertFailure()

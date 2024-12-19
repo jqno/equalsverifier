@@ -11,45 +11,45 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
-public class EnumTest {
+class EnumTest {
 
     @Test
-    public void succeed_whenClassIsAnEnum() {
+    void succeed_whenClassIsAnEnum() {
         EqualsVerifier.forClass(Enum.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasAnEmptyEnumButIgnoresIt() {
+    void succeed_whenClassHasAnEmptyEnumButIgnoresIt() {
         EqualsVerifier.forClass(EmptyEnumContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasASingletonEnumButIgnoresIt() {
+    void succeed_whenClassHasASingletonEnumButIgnoresIt() {
         EqualsVerifier.forClass(SingletonContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasASingletonEnumAndUsesItInEquals() {
+    void succeed_whenClassHasASingletonEnumAndUsesItInEquals() {
         EqualsVerifier.forClass(SingletonUser.class).verify();
     }
 
     @Test
-    public void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
+    void succeed_whenSingletonIsUsedWithoutNullCheck_givenNullFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(NullThrowingSingletonUser.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenClassHasSingletonCollection() {
+    void succeed_whenClassHasSingletonCollection() {
         EqualsVerifier.forClass(SingletonCollectionContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasMapWithSingletonKey() {
+    void succeed_whenClassHasMapWithSingletonKey() {
         EqualsVerifier.forClass(SingletonKeyMapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasSingletonOptional() {
+    void succeed_whenClassHasSingletonOptional() {
         EqualsVerifier.forClass(SingletonOptionalContainer.class).verify();
     }
 

@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 
@@ -8,10 +8,10 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class RecursionExceptionTest {
+class RecursionExceptionTest {
 
     @Test
-    public void descriptionContainsAllTypes() {
+    void descriptionContainsAllTypes() {
         LinkedHashSet<TypeTag> stack = new LinkedHashSet<>();
         stack.add(new TypeTag(String.class));
         stack.add(new TypeTag(Point.class));
@@ -20,7 +20,7 @@ public class RecursionExceptionTest {
         String message = new RecursionException(stack).getDescription();
 
         for (TypeTag tag : stack) {
-            assertTrue(message.contains(tag.toString()));
+            assertThat(message.contains(tag.toString())).isTrue();
         }
     }
 }

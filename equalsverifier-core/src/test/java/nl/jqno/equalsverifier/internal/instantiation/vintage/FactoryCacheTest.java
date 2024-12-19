@@ -1,12 +1,12 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.SimpleFactory;
 import org.junit.jupiter.api.Test;
 
-public class FactoryCacheTest {
+class FactoryCacheTest {
 
     private static final Class<String> STRING_CLASS = String.class;
     private static final PrefabValueFactory<String> STRING_FACTORY =
@@ -17,49 +17,49 @@ public class FactoryCacheTest {
     private final FactoryCache cache = new FactoryCache();
 
     @Test
-    public void putAndGetTuple() {
+    void putAndGetTuple() {
         cache.put(STRING_CLASS, STRING_FACTORY);
-        assertEquals(STRING_FACTORY, cache.get(STRING_CLASS));
+        assertThat(cache.get(STRING_CLASS)).isEqualTo(STRING_FACTORY);
     }
 
     @Test
-    public void putTwiceAndGetBoth() {
+    void putTwiceAndGetBoth() {
         cache.put(STRING_CLASS, STRING_FACTORY);
         cache.put(INT_CLASS, INT_FACTORY);
 
-        assertEquals(INT_FACTORY, cache.get(INT_CLASS));
-        assertEquals(STRING_FACTORY, cache.get(STRING_CLASS));
+        assertThat(cache.get(INT_CLASS)).isEqualTo(INT_FACTORY);
+        assertThat(cache.get(STRING_CLASS)).isEqualTo(STRING_FACTORY);
     }
 
     @Test
-    public void putNullAndGetNothingBack() {
+    void putNullAndGetNothingBack() {
         cache.put((Class<?>) null, STRING_FACTORY);
-        assertNull(cache.get(null));
+        assertThat(cache.get(null)).isNull();
     }
 
     @Test
-    public void contains() {
+    void contains() {
         cache.put(STRING_CLASS, STRING_FACTORY);
-        assertTrue(cache.contains(STRING_CLASS));
+        assertThat(cache.contains(STRING_CLASS)).isTrue();
     }
 
     @Test
-    public void doesntContain() {
-        assertFalse(cache.contains(STRING_CLASS));
+    void doesntContain() {
+        assertThat(cache.contains(STRING_CLASS)).isFalse();
     }
 
     @Test
-    public void copy() {
+    void copy() {
         cache.put(STRING_CLASS, STRING_FACTORY);
         FactoryCache copy = cache.copy();
         copy.put(INT_CLASS, INT_FACTORY);
-        assertTrue(copy.contains(STRING_CLASS));
-        assertFalse(copy == cache);
-        assertFalse(cache.contains(INT_CLASS));
+        assertThat(copy.contains(STRING_CLASS)).isTrue();
+        assertThat(copy == cache).isFalse();
+        assertThat(cache.contains(INT_CLASS)).isFalse();
     }
 
     @Test
-    public void merge() {
+    void merge() {
         FactoryCache a = new FactoryCache();
         a.put(STRING_CLASS, STRING_FACTORY);
 
@@ -68,11 +68,11 @@ public class FactoryCacheTest {
 
         FactoryCache combined = a.merge(b);
 
-        assertTrue(combined.contains(STRING_CLASS));
-        assertTrue(combined.contains(INT_CLASS));
+        assertThat(combined.contains(STRING_CLASS)).isTrue();
+        assertThat(combined.contains(INT_CLASS)).isTrue();
 
-        assertFalse(a == combined);
-        assertFalse(a.contains(INT_CLASS));
-        assertFalse(b.contains(STRING_CLASS));
+        assertThat(a == combined).isFalse();
+        assertThat(a.contains(INT_CLASS)).isFalse();
+        assertThat(b.contains(STRING_CLASS)).isFalse();
     }
 }

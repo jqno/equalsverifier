@@ -5,10 +5,10 @@ import java.util.*;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-public class SequencedCollectionsClassesTest {
+class SequencedCollectionsClassesTest {
 
     @Test
-    public void succeed_whenClassContainsSequencedCollections() {
+    void succeed_whenClassContainsSequencedCollections() {
         EqualsVerifier.forClass(SequencedCollectionContainer.class).verify();
     }
 

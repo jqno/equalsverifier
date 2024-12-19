@@ -15,20 +15,20 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
 import org.junit.jupiter.api.Test;
 
-public class ConfiguredEqualsVerifierSingleTest {
+class ConfiguredEqualsVerifierSingleTest {
 
     @Test
-    public void succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
+    void succeed_whenEqualsUsesGetClassInsteadOfInstanceOf_givenUsingGetClassIsPreConfigured() {
         EqualsVerifier.configure().usingGetClass().forClass(GetClassPoint.class).verify();
     }
 
     @Test
-    public void suppressedWarningsArePassedOn() {
+    void suppressedWarningsArePassedOn() {
         EqualsVerifier.configure().suppress(Warning.STRICT_INHERITANCE).forClass(PointContainer.class).verify();
     }
 
     @Test
-    public void sanity_fail_whenTypeIsRecursive() {
+    void sanity_fail_whenTypeIsRecursive() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(RecursiveType.class).verify())
                 .assertFailure()
@@ -36,7 +36,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void succeed_whenTypeIsRecursive_givenPrefabValuesArePreconfigured() {
+    void succeed_whenTypeIsRecursive_givenPrefabValuesArePreconfigured() {
         EqualsVerifier
                 .configure()
                 .withPrefabValues(
@@ -48,7 +48,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void sanity_fail_whenSingleGenericTypeIsRecursive() {
+    void sanity_fail_whenSingleGenericTypeIsRecursive() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SingleGenericContainerContainer.class).verify())
                 .assertFailure()
@@ -56,7 +56,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void succeed_whenSingleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+    void succeed_whenSingleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
         EqualsVerifier
                 .configure()
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
@@ -65,7 +65,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void sanity_fail_whenDoubleGenericTypeIsRecursive() {
+    void sanity_fail_whenDoubleGenericTypeIsRecursive() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(DoubleGenericContainerContainer.class).verify())
                 .assertFailure()
@@ -73,7 +73,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void succeed_whenDoubleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
+    void succeed_whenDoubleGenericTypeIsRecursive_givenGenericPrefabValuesArePreconfigured() {
         EqualsVerifier
                 .configure()
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
@@ -82,7 +82,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void succeed_whenConfigurationIsShared() {
+    void succeed_whenConfigurationIsShared() {
         ConfiguredEqualsVerifier ev = EqualsVerifier
                 .configure()
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
@@ -93,7 +93,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void individuallySuppressedWarningsAreNotAddedGlobally() {
+    void individuallySuppressedWarningsAreNotAddedGlobally() {
         ConfiguredEqualsVerifier ev = EqualsVerifier.configure().suppress(Warning.STRICT_INHERITANCE);
 
         // should succeed
@@ -107,7 +107,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void individuallyAddedPrefabValuesAreNotAddedGlobally() {
+    void individuallyAddedPrefabValuesAreNotAddedGlobally() {
         ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
 
         // should succeed
@@ -127,7 +127,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void individuallyAddedGenericPrefabValuesAreNotAddedGlobally() {
+    void individuallyAddedGenericPrefabValuesAreNotAddedGlobally() {
         ConfiguredEqualsVerifier ev = EqualsVerifier.configure();
 
         // should succeed
@@ -144,7 +144,7 @@ public class ConfiguredEqualsVerifierSingleTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenTwoWarningsAreSuppressedButInDifferentPlaces() {
+    void succeed_whenFieldsAreNonfinalAndClassIsNonfinal_givenTwoWarningsAreSuppressedButInDifferentPlaces() {
         EqualsVerifier
                 .configure()
                 .suppress(Warning.STRICT_INHERITANCE)

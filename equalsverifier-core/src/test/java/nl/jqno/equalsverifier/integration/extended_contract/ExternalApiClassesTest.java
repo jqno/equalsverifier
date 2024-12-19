@@ -16,50 +16,50 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
-public class ExternalApiClassesTest {
+class ExternalApiClassesTest {
 
     @Test
-    public void succeed_whenClassUsesJavaxClasses() {
+    void succeed_whenClassUsesJavaxClasses() {
         EqualsVerifier.forClass(JavaxContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaMultiset() {
+    void succeed_whenClassUsesGoogleGuavaMultiset() {
         EqualsVerifier.forClass(GuavaMultisetContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaMultimap() {
+    void succeed_whenClassUsesGoogleGuavaMultimap() {
         EqualsVerifier.forClass(GuavaMultimapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaBiMap() {
+    void succeed_whenClassUsesGoogleGuavaBiMap() {
         EqualsVerifier.forClass(GuavaBiMapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaTable() {
+    void succeed_whenClassUsesGoogleGuavaTable() {
         EqualsVerifier.forClass(GuavaTableContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
+    void succeed_whenClassUsesGoogleGuavaImmutableCollection() {
         EqualsVerifier.forClass(GuavaImmutableContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesGoogleGuavaRegularCollection() {
+    void succeed_whenClassUsesGoogleGuavaRegularCollection() {
         EqualsVerifier.forClass(GuavaRegularCollectionsContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesOtherGoogleGuavaClass() {
+    void succeed_whenClassUsesOtherGoogleGuavaClass() {
         EqualsVerifier.forClass(GuavaOtherContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassUsesJodaTimeClass() {
+    void succeed_whenClassUsesJodaTimeClass() {
         EqualsVerifier.forClass(JodaTimeContainer.class).verify();
     }
 

@@ -14,11 +14,11 @@ import org.junit.jupiter.api.condition.JRE;
  * Let's hope nobody needs prefab values for `java.text.AttributedString`, because we need a class here from je Java
  * APIs that doesn't already have prefab values.
  */
-public class ModulesTest {
+class ModulesTest {
 
     @Test
     @DisabledForJreRange(max = JRE.JAVA_11)
-    public void giveProperErrorMessage_whenClassUnderTestIsInaccessible() {
+    void giveProperErrorMessage_whenClassUnderTestIsInaccessible() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -31,7 +31,7 @@ public class ModulesTest {
 
     @Test
     @DisabledForJreRange(max = JRE.JAVA_11)
-    public void giveProperErrorMessage_whenFieldIsInaccessible() {
+    void giveProperErrorMessage_whenFieldIsInaccessible() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(InaccessibleContainer.class).verify())
                 .assertFailure()

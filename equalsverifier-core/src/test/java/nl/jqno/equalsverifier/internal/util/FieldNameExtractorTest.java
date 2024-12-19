@@ -1,15 +1,15 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-public class FieldNameExtractorTest {
+class FieldNameExtractorTest {
 
     private static final String FIELD_NOT_FOUND = "field not found: ";
 
@@ -19,34 +19,35 @@ public class FieldNameExtractorTest {
     private static final String FIELD_PRIMITIVE_INT = "fieldPrimitiveInt";
 
     @Test
-    public void coverTheConstructor() {
+    void coverTheConstructor() {
         coverThePrivateConstructor(FieldNameExtractor.class);
     }
 
     @Test
-    public void should_extractFields_succesfully() {
+    void should_extractFields_succesfully() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        assertTrue(fields.contains(FIELD_STRING), FIELD_NOT_FOUND + FIELD_STRING);
-        assertTrue(fields.contains(FIELD_OBJECT), FIELD_NOT_FOUND + FIELD_OBJECT);
-        assertTrue(fields.contains(FIELD_LIST), FIELD_NOT_FOUND + FIELD_LIST);
-        assertTrue(fields.contains(FIELD_PRIMITIVE_INT), FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT);
+        assertThat(fields.contains(FIELD_STRING)).as(FIELD_NOT_FOUND + FIELD_STRING).isTrue();
+        assertThat(fields.contains(FIELD_OBJECT)).as(FIELD_NOT_FOUND + FIELD_OBJECT).isTrue();
+        assertThat(fields.contains(FIELD_LIST)).as(FIELD_NOT_FOUND + FIELD_LIST).isTrue();
+        assertThat(fields.contains(FIELD_PRIMITIVE_INT)).as(FIELD_NOT_FOUND + FIELD_PRIMITIVE_INT).isTrue();
 
-        assertTrue(4 == fields.size(), "Total number of fields was not equal to expected value");
+        assertThat(fields.size()).as("Total number of fields was not equal to expected value").isEqualTo(4);
     }
 
     @Test
-    public void should_disallow_adding_extra_fields() {
+    void should_disallow_adding_extra_fields() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        assertThrows(UnsupportedOperationException.class, () -> fields.add("illegally added field"));
+        assertThatExceptionOfType(UnsupportedOperationException.class)
+                .isThrownBy(() -> fields.add("illegally added field"));
     }
 
     @Test
-    public void should_disallow_removing_fields() {
+    void should_disallow_removing_fields() {
         Set<String> fields = FieldNameExtractor.extractFieldNames(FieldNameExtractorTestHelper.class);
 
-        assertThrows(UnsupportedOperationException.class, () -> fields.remove(FIELD_STRING));
+        assertThatExceptionOfType(UnsupportedOperationException.class).isThrownBy(() -> fields.remove(FIELD_STRING));
     }
 
     class FieldNameExtractorTestHelper {

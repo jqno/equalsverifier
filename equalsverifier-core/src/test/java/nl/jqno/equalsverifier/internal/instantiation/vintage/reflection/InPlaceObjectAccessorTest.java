@@ -1,25 +1,24 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class InPlaceObjectAccessorTest {
+class InPlaceObjectAccessorTest {
 
     @Test
-    public void of() {
+    void of() {
         Point p = new Point(1, 2);
         ObjectAccessor<Point> actual = ObjectAccessor.of(p);
-        assertTrue(actual instanceof InPlaceObjectAccessor);
+        assertThat(actual instanceof InPlaceObjectAccessor).isTrue();
     }
 
     @Test
-    public void get() {
+    void get() {
         Object foo = new Object();
         InPlaceObjectAccessor<Object> accessor = create(foo);
-        assertSame(foo, accessor.get());
+        assertThat(accessor.get()).isSameAs(foo);
     }
 
     @SuppressWarnings("unchecked")

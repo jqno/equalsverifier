@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 // CHECKSTYLE OFF: MemberName
 // CHECKSTYLE OFF: NeedBraces
 
-public class LombokLazyEqualsAndHashcodeTest {
+class LombokLazyEqualsAndHashcodeTest {
 
     @Test
-    void testWithLombokCachedHashCode() {
+    void withLombokCachedHashCode() {
         EqualsVerifier
                 .forClass(LazyPojo.class)
                 .withLombokCachedHashCode(new LazyPojo("a", new Object()))
@@ -24,7 +24,7 @@ public class LombokLazyEqualsAndHashcodeTest {
     }
 
     @Test
-    void testDefaultEqualsVerifierFailsForCachedLombokEqualsAndHashcode() {
+    void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcode() {
         final AssertionError error = assertThrows(
             AssertionError.class,
             () -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify());
@@ -32,7 +32,7 @@ public class LombokLazyEqualsAndHashcodeTest {
     }
 
     @Test
-    void testDefaultEqualsVerifierFailsForCachedLombokEqualsAndHashcodeWhenUsingWithCachedHashCode() {
+    void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcodeWhenUsingWithCachedHashCode() {
         final IllegalArgumentException error = assertThrows(
             IllegalArgumentException.class,
             () -> EqualsVerifier

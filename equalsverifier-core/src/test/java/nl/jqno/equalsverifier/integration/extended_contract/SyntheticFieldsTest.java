@@ -9,36 +9,37 @@ import java.util.Objects;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class SyntheticFieldsTest {
+// because of the use of defaultEquals and defaultHashCode
+@SuppressWarnings("unused")
+class SyntheticFieldsTest {
 
     @Test
-    public void succeed_whenClassHasASyntheticClassAsAField() {
+    void succeed_whenClassHasASyntheticClassAsAField() {
         EqualsVerifier.forClass(LambdaContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasASyntheticFieldBecauseItsInsideAUnitTestClass() {
+    void succeed_whenClassHasASyntheticFieldBecauseItsInsideAUnitTestClass() {
         EqualsVerifier.forClass(Outer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasASyntheticFieldBecauseItsAnInnerClass() {
+    void succeed_whenClassHasASyntheticFieldBecauseItsAnInnerClass() {
         EqualsVerifier.forClass(Outer.Inner.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasAFieldThatHasASyntheticField() {
+    void succeed_whenClassHasAFieldThatHasASyntheticField() {
         EqualsVerifier.forClass(OuterContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
+    void succeed_whenClassIsInstrumentedByCobertura_givenCoberturaDoesntMarkItsFieldsSynthetic() {
         EqualsVerifier.forClass(CoberturaContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenScalacOptionCheckinitIsEnabled_givenScalaDoesntMarkItsFieldsSynthetic() {
+    void succeed_whenScalacOptionCheckinitIsEnabled_givenScalaDoesntMarkItsFieldsSynthetic() {
         EqualsVerifier.forClass(ScalaCheckinit.class).verify();
     }
 

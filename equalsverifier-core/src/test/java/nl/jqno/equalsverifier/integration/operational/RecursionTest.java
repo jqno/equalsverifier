@@ -14,7 +14,7 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RecursionTest {
+class RecursionTest {
 
     private static final String RECURSIVE_DATASTRUCTURE = "Recursive datastructure";
     private static final String PREFAB = "Add prefab values for one of the following types";
@@ -25,7 +25,7 @@ public class RecursionTest {
     private Tree blueTree;
 
     @BeforeEach
-    public void createSomeNodes() {
+    void createSomeNodes() {
         red = new Node(null);
         blue = new Node(new Node(null));
         redTree = new Tree(Collections.<Tree>emptyList());
@@ -33,7 +33,7 @@ public class RecursionTest {
     }
 
     @Test
-    public void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
+    void fail_whenDatastructureIsRecursive_givenItIsPassedInAsAClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Node.class).verify())
                 .assertFailure()
@@ -41,27 +41,27 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
+    void succeed_whenDatastructureIsRecursive_givenPrefabValues() {
         EqualsVerifier.forClass(Node.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForField() {
+    void succeed_whenDatastructureIsRecursive_givenPrefabValuesForField() {
         EqualsVerifier.forClass(Node.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
+    void succeed_whenDatastructureIsRecursive_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNode.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursive_givenPrefabValuesForFieldOfSuperclass() {
+    void succeed_whenDatastructureIsRecursive_givenPrefabValuesForFieldOfSuperclass() {
         EqualsVerifier.forClass(SubNode.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
-    public void fail_whenFieldIsARecursiveType() {
+    void fail_whenFieldIsARecursiveType() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NodeContainer.class).verify())
                 .assertFailure()
@@ -69,27 +69,27 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
+    void succeed_whenFieldIsARecursiveType_givenPrefabValues() {
         EqualsVerifier.forClass(NodeContainer.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForField() {
+    void succeed_whenFieldIsARecursiveType_givenPrefabValuesForField() {
         EqualsVerifier.forClass(NodeContainer.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
+    void succeed_whenFieldIsARecursiveType_givenPrefabValuesOfSuperclass() {
         EqualsVerifier.forClass(SubNodeContainer.class).withPrefabValues(Node.class, red, blue).verify();
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveType_givenPrefabValuesForFieldOfSuperclass() {
+    void succeed_whenFieldIsARecursiveType_givenPrefabValuesForFieldOfSuperclass() {
         EqualsVerifier.forClass(SubNodeContainer.class).withPrefabValuesForField("node", red, blue).verify();
     }
 
     @Test
-    public void fail_whenDatastructureIsRecursiveInGenerics() {
+    void fail_whenDatastructureIsRecursiveInGenerics() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Tree.class).verify())
                 .assertFailure()
@@ -97,12 +97,12 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenDatastructureIsRecursiveInGenerics_givenPrefabValues() {
+    void succeed_whenDatastructureIsRecursiveInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(Tree.class).withPrefabValues(Tree.class, redTree, blueTree).verify();
     }
 
     @Test
-    public void fail_whenFieldIsARecursiveTypeInGenerics() {
+    void fail_whenFieldIsARecursiveTypeInGenerics() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(TreeContainer.class).verify())
                 .assertFailure()
@@ -110,12 +110,12 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
+    void succeed_whenFieldIsARecursiveTypeInGenerics_givenPrefabValues() {
         EqualsVerifier.forClass(TreeContainer.class).withPrefabValues(Tree.class, redTree, blueTree).verify();
     }
 
     @Test
-    public void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
+    void giveCorrectErrorMessage_whenFieldIsInstantiatedUsingReflectiveFactory() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ImmutableListTree.class).verify())
                 .assertFailure()
@@ -126,7 +126,7 @@ public class RecursionTest {
     }
 
     @Test
-    public void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
+    void succeed_whenStaticFinalFieldIsRecursive_givenNoPrefabValues() {
         EqualsVerifier.forClass(StaticFinalNodeContainer.class).verify();
     }
 

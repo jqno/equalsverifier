@@ -8,25 +8,25 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-public class NodepJavadocJarTest {
+class NodepJavadocJarTest {
 
     private static final String FILENAME = "equalsverifier-nodep-javadoc.jar";
     private static JarReader reader;
     private static JarAsserter jar;
 
     @BeforeAll
-    public static void setup() {
+    static void setup() {
         reader = new JarReader(FILENAME);
         jar = new JarAsserter(reader);
     }
 
     @AfterAll
-    public static void clean() throws Exception {
+    static void clean() throws Exception {
         reader.close();
     }
 
     @Test
-    public void presenceOfCoreSources() {
+    void presenceOfCoreSources() {
         jar.assertPresenceOf("/index.html", EV + "/EqualsVerifier.html");
     }
 }

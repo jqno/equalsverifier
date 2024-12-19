@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class InstanceCreatorTest {
+class InstanceCreatorTest {
 
     @Test
-    public void instantiate() throws NoSuchFieldException {
+    void instantiate() throws NoSuchFieldException {
         ClassProbe<SomeClass> probe = ClassProbe.of(SomeClass.class);
         Objenesis objenesis = new ObjenesisStd();
         InstanceCreator<SomeClass> sut = new InstanceCreator<>(probe, objenesis);
@@ -27,13 +27,13 @@ public class InstanceCreatorTest {
 
         SomeClass actual = sut.instantiate(values);
 
-        assertEquals(42, actual.x);
-        assertEquals(0, actual.y);
-        assertEquals("42", actual.z);
+        assertThat(actual.x).isEqualTo(42);
+        assertThat(actual.y).isEqualTo(0);
+        assertThat(actual.z).isEqualTo("42");
     }
 
     @Test
-    public void copy() throws NoSuchFieldException {
+    void copy() throws NoSuchFieldException {
         ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
         Objenesis objenesis = new ObjenesisStd();
         InstanceCreator<SomeSubClass> sut = new InstanceCreator<>(probe, objenesis);
@@ -41,10 +41,10 @@ public class InstanceCreatorTest {
         SomeClass original = new SomeClass(42, 1337, "yeah");
         SomeSubClass copy = sut.copy(original);
 
-        assertEquals(original.x, copy.x);
-        assertEquals(original.y, copy.y);
-        assertEquals(original.z, copy.z);
-        assertEquals(0, copy.a);
+        assertThat(copy.x).isEqualTo(original.x);
+        assertThat(copy.y).isEqualTo(original.y);
+        assertThat(copy.z).isEqualTo(original.z);
+        assertThat(copy.a).isEqualTo(0);
     }
 
     static class SomeClass {

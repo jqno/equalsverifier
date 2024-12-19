@@ -6,14 +6,14 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class SymmetryTest {
+class SymmetryTest {
 
     private static final String SYMMETRY = "Symmetry";
     private static final String NOT_SYMMETRIC = "objects are not symmetric";
     private static final String AND = "and";
 
     @Test
-    public void fail_whenEqualsIsNotSymmetrical() {
+    void fail_whenEqualsIsNotSymmetrical() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SymmetryIntentionallyBroken.class).verify())
                 .assertFailure()

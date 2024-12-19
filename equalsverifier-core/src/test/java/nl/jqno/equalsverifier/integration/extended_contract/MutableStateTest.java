@@ -10,13 +10,13 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class MutableStateTest {
+class MutableStateTest {
 
     private static final String MUTABILITY = "Mutability: equals depends on mutable field";
     private static final String FIELD_NAME = "field";
 
     @Test
-    public void fail_whenClassHasAMutablePrimitiveField() {
+    void fail_whenClassHasAMutablePrimitiveField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(PrimitiveMutableField.class).verify())
                 .assertFailure()
@@ -24,17 +24,17 @@ public class MutableStateTest {
     }
 
     @Test
-    public void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
+    void succeed_whenClassHasAMutablePrimitiveField_givenItDoesNotUseThatFieldInEquals() {
         EqualsVerifier.forClass(UnusedPrimitiveMutableField.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
-    public void succeed_whenClassHasAMutablePrimitiveField_givenWarningIsSuppressed() {
+    void succeed_whenClassHasAMutablePrimitiveField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(PrimitiveMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenClassHasAMutableObjectField() {
+    void fail_whenClassHasAMutableObjectField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ObjectMutableField.class).verify())
                 .assertFailure()
@@ -42,12 +42,12 @@ public class MutableStateTest {
     }
 
     @Test
-    public void succeed_whenClassHasAMutableObjectField_givenWarningIsSuppressed() {
+    void succeed_whenClassHasAMutableObjectField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(ObjectMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenClassHasAMutableEnumField() {
+    void fail_whenClassHasAMutableEnumField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EnumMutableField.class).verify())
                 .assertFailure()
@@ -55,12 +55,12 @@ public class MutableStateTest {
     }
 
     @Test
-    public void succeed_whenClassHasAMutableEnumField_givenWarningIsSuppressed() {
+    void succeed_whenClassHasAMutableEnumField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(EnumMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenClassHasAMutableArrayField() {
+    void fail_whenClassHasAMutableArrayField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ArrayMutableField.class).verify())
                 .assertFailure()
@@ -68,7 +68,7 @@ public class MutableStateTest {
     }
 
     @Test
-    public void succeed_whenClassHasAMutableArrayField_givenWarningIsSuppressed() {
+    void succeed_whenClassHasAMutableArrayField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(ArrayMutableField.class).suppress(Warning.NONFINAL_FIELDS).verify();
     }
 

@@ -6,10 +6,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class SealedTypesTest {
+class SealedTypesTest {
 
     @Test
-    public void succeed_whenSealedParentHasAFinalChild_givenItHasCorrectEqualsAndHashCode() {
+    void succeed_whenSealedParentHasAFinalChild_givenItHasCorrectEqualsAndHashCode() {
         EqualsVerifier
                 .forClass(SealedParentWithFinalChild.class)
                 .withRedefinedSubclass(FinalSealedChild.class)
@@ -17,19 +17,19 @@ public class SealedTypesTest {
     }
 
     @Test
-    public void fail_whenSealedParentHasAFinalChild_givenEqualsVerifierIsCalledIncorrectly() {
+    void fail_whenSealedParentHasAFinalChild_givenEqualsVerifierIsCalledIncorrectly() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SealedParentWithFinalChild.class).verify())
                 .assertFailure();
     }
 
     @Test
-    public void succeed_whenFinalChildHasCorrectEqualsAndHashCode() {
+    void succeed_whenFinalChildHasCorrectEqualsAndHashCode() {
         EqualsVerifier.forClass(FinalSealedChild.class).withRedefinedSuperclass().verify();
     }
 
     @Test
-    public void succeed_whenSealedParentHasANonsealedChild_givenItHasCorrectEqualsAndHashCode() {
+    void succeed_whenSealedParentHasANonsealedChild_givenItHasCorrectEqualsAndHashCode() {
         EqualsVerifier
                 .forClass(SealedParentWithNonsealedChild.class)
                 .withRedefinedSubclass(NonsealedSealedChild.class)
@@ -37,24 +37,24 @@ public class SealedTypesTest {
     }
 
     @Test
-    public void fail_whenSealedParentHasANonsealedChild_givenEqualsVerifierIsCalledIncorrectly() {
+    void fail_whenSealedParentHasANonsealedChild_givenEqualsVerifierIsCalledIncorrectly() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SealedParentWithNonsealedChild.class).verify())
                 .assertFailure();
     }
 
     @Test
-    public void succeed_whenNonsealedChildHasCorrectEqualsAndHashCode() {
+    void succeed_whenNonsealedChildHasCorrectEqualsAndHashCode() {
         EqualsVerifier.forClass(NonsealedSealedChild.class).withRedefinedSuperclass().verify();
     }
 
     @Test
-    public void succeed_whenClassContainsASealedType() {
+    void succeed_whenClassContainsASealedType() {
         EqualsVerifier.forClass(SealedTypeContainer.class).verify();
     }
 
     @Test
-    public void fail_whenSealeadParentHasAnIncorrectImplementationOfEquals() {
+    void fail_whenSealeadParentHasAnIncorrectImplementationOfEquals() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

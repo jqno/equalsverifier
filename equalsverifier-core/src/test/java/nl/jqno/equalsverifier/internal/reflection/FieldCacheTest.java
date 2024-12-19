@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,7 +8,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-public class FieldCacheTest {
+class FieldCacheTest {
 
     private String stringField = "string";
     private final Tuple<String> stringValues = Tuple.of("red", "blue", "red");
@@ -19,44 +19,44 @@ public class FieldCacheTest {
     private FieldCache cache = new FieldCache();
 
     @Test
-    public void putAndGetTuple() {
+    void putAndGetTuple() {
         cache.put(stringField, stringValues);
-        assertEquals(stringValues, cache.get(stringField));
+        assertThat(cache.get(stringField)).isEqualTo(stringValues);
     }
 
     @Test
-    public void putTwiceAndGetBoth() {
+    void putTwiceAndGetBoth() {
         cache.put(stringField, stringValues);
         cache.put(intField, intValues);
 
-        assertEquals(intValues, cache.get(intField));
-        assertEquals(stringValues, cache.get(stringField));
+        assertThat(cache.get(intField)).isEqualTo(intValues);
+        assertThat(cache.get(stringField)).isEqualTo(stringValues);
     }
 
     @Test
-    public void putNullAndGetNothingBack() {
+    void putNullAndGetNothingBack() {
         cache.put(null, stringValues);
-        assertNull(cache.get(null));
+        assertThat(cache.get(null)).isNull();
     }
 
     @Test
-    public void contains() {
+    void contains() {
         cache.put(stringField, stringValues);
-        assertTrue(cache.contains(stringField));
+        assertThat(cache.contains(stringField)).isTrue();
     }
 
     @Test
-    public void doesntContain() {
-        assertFalse(cache.contains(stringField));
+    void doesntContain() {
+        assertThat(cache.contains(stringField)).isFalse();
     }
 
     @Test
-    public void getFieldNames() {
-        assertEquals(Collections.emptySet(), cache.getFieldNames());
+    void getFieldNames() {
+        assertThat(cache.getFieldNames()).isEqualTo(Collections.emptySet());
 
         cache.put(stringField, stringValues);
         Set<String> expected = new HashSet<>();
         expected.add(stringField);
-        assertEquals(expected, cache.getFieldNames());
+        assertThat(cache.getFieldNames()).isEqualTo(expected);
     }
 }

@@ -9,8 +9,9 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
-@SuppressWarnings("unused") // because of the use of defaultEquals and defaultHashCode
-public class NullFieldsTest {
+// because of the use of defaultEquals and defaultHashCode
+@SuppressWarnings("unused")
+class NullFieldsTest {
 
     private static final String NON_NULLITY = "Non-nullity";
     private static final String EQUALS = "equals throws NullPointerException";
@@ -19,7 +20,7 @@ public class NullFieldsTest {
     private static final String ON_THE_OTHER_FIELD = "on the parameter's";
 
     @Test
-    public void fail_whenEqualsThrowsNpeOnThissField() {
+    void fail_whenEqualsThrowsNpeOnThissField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).verify())
                 .assertFailure()
@@ -28,7 +29,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void fail_whenEqualsThrowsNpeOnOthersField() {
+    void fail_whenEqualsThrowsNpeOnOthersField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnOther.class).verify())
                 .assertFailure()
@@ -37,7 +38,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void fail_whenEqualsThrowsNpeOnStaticField() {
+    void fail_whenEqualsThrowsNpeOnStaticField() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EqualsThrowsNpeOnStatic.class).verify())
                 .assertFailure()
@@ -46,7 +47,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void fail_whenHashCodeThrowsNpe() {
+    void fail_whenHashCodeThrowsNpe() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeThrowsNpe.class).verify())
                 .assertFailure()
@@ -55,32 +56,32 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
+    void succeed_whenEqualsThrowsNpeOnThissField_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(EqualsThrowsNpeOnThis.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenEqualsTestFieldWhichThrowsNpe() {
+    void succeed_whenEqualsTestFieldWhichThrowsNpe() {
         EqualsVerifier.forClass(CheckedDeepNullA.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsThrowsNpeOnFieldWhichAlsoThrowsNpe_givenWarningIsSuppressed() {
+    void succeed_whenEqualsThrowsNpeOnFieldWhichAlsoThrowsNpe_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(DeepNullA.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
+    void succeed_whenDoingASanityCheckOnTheFieldUsedInThePreviousTests_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(DeepNullB.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenConstantFieldIsNull() {
+    void succeed_whenConstantFieldIsNull() {
         EqualsVerifier.forClass(ConstantFieldIsNull.class).verify();
     }
 
     @Test
-    public void fail_whenClassHasNullChecksForOnlySomeFields() {
+    void fail_whenClassHasNullChecksForOnlySomeFields() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MixedNullFields.class).verify())
                 .assertFailure()
@@ -89,17 +90,17 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void succeed_whenClassHasNullChecksForOnlySomeFields_givenWarningIsSuppressed() {
+    void succeed_whenClassHasNullChecksForOnlySomeFields_givenWarningIsSuppressed() {
         EqualsVerifier.forClass(MixedNullFields.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenClassHasNullChecksForOnlySomeFields_givenTheOtherFieldIsFlagged() {
+    void succeed_whenClassHasNullChecksForOnlySomeFields_givenTheOtherFieldIsFlagged() {
         EqualsVerifier.forClass(MixedNullFields.class).withNonnullFields("o").verify();
     }
 
     @Test
-    public void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
+    void anExceptionIsThrown_whenANonExistingFieldIsGivenToWithNonnullFields() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MixedNullFields.class).withNonnullFields("thisFieldDoesNotExist"))
                 .assertThrows(IllegalStateException.class)
@@ -109,7 +110,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
+    void anExceptionIsThrown_whenWithNonnullFieldsOverlapsWithSuppressWarnings() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -123,7 +124,7 @@ public class NullFieldsTest {
     }
 
     @Test
-    public void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
+    void anExceptionIsThrown_whenSuppressWarningsOverlapsWithWithNonnullFields() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

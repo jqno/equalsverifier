@@ -1,53 +1,53 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class FieldMutatorTest {
+class FieldMutatorTest {
 
     private FieldProbe p;
     private FieldMutator sut;
     private Container o = new Container();
 
     @Test
-    public void setPrimitive() throws NoSuchFieldException {
+    void setPrimitive() throws NoSuchFieldException {
         p = FieldProbe.of(Container.class.getDeclaredField("i"));
         sut = new FieldMutator(p);
 
-        assertEquals(10, o.i);
+        assertThat(o.i).isEqualTo(10);
         sut.setNewValue(o, 1337);
-        assertEquals(1337, o.i);
+        assertThat(o.i).isEqualTo(1337);
     }
 
     @Test
-    public void setObject() throws NoSuchFieldException {
+    void setObject() throws NoSuchFieldException {
         p = FieldProbe.of(Container.class.getDeclaredField("s"));
         sut = new FieldMutator(p);
 
-        assertEquals("NON-FINAL", o.s);
+        assertThat(o.s).isEqualTo("NON-FINAL");
         sut.setNewValue(o, "changed");
-        assertEquals("changed", o.s);
+        assertThat(o.s).isEqualTo("changed");
     }
 
     @Test
-    public void dontSetConstantPrimitive() throws NoSuchFieldException {
+    void dontSetConstantPrimitive() throws NoSuchFieldException {
         p = FieldProbe.of(Container.class.getDeclaredField("FINAL_INT"));
         sut = new FieldMutator(p);
 
-        assertEquals(42, Container.FINAL_INT);
+        assertThat(Container.FINAL_INT).isEqualTo(42);
         sut.setNewValue(o, 1337);
-        assertEquals(42, Container.FINAL_INT);
+        assertThat(Container.FINAL_INT).isEqualTo(42);
     }
 
     @Test
-    public void dontSetConstantObject() throws NoSuchFieldException {
+    void dontSetConstantObject() throws NoSuchFieldException {
         p = FieldProbe.of(Container.class.getDeclaredField("FINAL_STRING"));
         sut = new FieldMutator(p);
 
-        assertEquals("FINAL", Container.FINAL_STRING);
+        assertThat(Container.FINAL_STRING).isEqualTo("FINAL");
         sut.setNewValue(o, "changed");
-        assertEquals("FINAL", Container.FINAL_STRING);
+        assertThat(Container.FINAL_STRING).isEqualTo("FINAL");
     }
 
     static class Container {

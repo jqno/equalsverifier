@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
@@ -18,14 +17,14 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class RecordObjectAccessorTest {
+class RecordObjectAccessorTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private Objenesis objenesis;
     private Object recordInstance;
 
     @BeforeEach
-    public void setUp() throws Exception {
+    void setUp() throws Exception {
         Constructor<?> constructor = SimpleRecord.class.getDeclaredConstructor(int.class, String.class);
         constructor.setAccessible(true);
         objenesis = new ObjenesisStd();
@@ -33,19 +32,19 @@ public class RecordObjectAccessorTest {
     }
 
     @Test
-    public void of() {
+    void of() {
         ObjectAccessor<?> actual = ObjectAccessor.of(recordInstance);
-        assertTrue(actual instanceof RecordObjectAccessor);
+        assertThat(actual instanceof RecordObjectAccessor).isTrue();
     }
 
     @Test
-    public void get() {
+    void get() {
         RecordObjectAccessor<Object> accessor = accessorFor(recordInstance);
-        assertSame(recordInstance, accessor.get());
+        assertThat(accessor.get()).isSameAs(recordInstance);
     }
 
     @Test
-    public void fail_whenConstructorThrowsNpe() {
+    void fail_whenConstructorThrowsNpe() {
         Object instance = Instantiator.of(NpeThrowingConstructorRecord.class, objenesis).instantiate();
 
         ExpectedException
@@ -55,7 +54,7 @@ public class RecordObjectAccessorTest {
     }
 
     @Test
-    public void fail_whenConstructorThrowsOnZero() {
+    void fail_whenConstructorThrowsOnZero() {
         Object instance = Instantiator.of(ZeroThrowingConstructorRecord.class, objenesis).instantiate();
 
         ExpectedException
@@ -65,7 +64,7 @@ public class RecordObjectAccessorTest {
     }
 
     @Test
-    public void fail_whenConstructorThrowsOnSomethingElse() {
+    void fail_whenConstructorThrowsOnSomethingElse() {
         Object instance = Instantiator.of(OtherThrowingConstructorRecord.class, objenesis).instantiate();
 
         VintageValueProvider vp = new VintageValueProvider(JavaApiPrefabValues.build(), objenesis);

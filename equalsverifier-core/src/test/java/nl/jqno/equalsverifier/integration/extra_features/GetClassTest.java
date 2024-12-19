@@ -11,10 +11,10 @@ import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class GetClassTest {
+class GetClassTest {
 
     @Test
-    public void fail_whenEqualsUsesGetClassInsteadOfInstanceof() {
+    void fail_whenEqualsUsesGetClassInsteadOfInstanceof() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(GetClassPoint.class).verify())
                 .assertFailure()
@@ -25,17 +25,17 @@ public class GetClassTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
+    void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenUsingGetClassIsUsed() {
         EqualsVerifier.forClass(GetClassPoint.class).usingGetClass().verify();
     }
 
     @Test
-    public void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenWarningStrictInheritanceIsSuppressed() {
+    void succeed_whenEqualsUsesGetClassInsteadOfInstanceof_givenWarningStrictInheritanceIsSuppressed() {
         EqualsVerifier.forClass(GetClassPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
-    public void fail_whenEqualsUsesGetClassButForgetsToCheckNull_givenUsingGetClassIsUsed() {
+    void fail_whenEqualsUsesGetClassButForgetsToCheckNull_givenUsingGetClassIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(GetClassPointNull.class).usingGetClass().verify())
                 .assertFailure()
@@ -44,7 +44,7 @@ public class GetClassTest {
     }
 
     @Test
-    public void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
+    void fail_whenEqualsUsesInstanceof_givenUsingGetClassIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalMethodsPoint.class).usingGetClass().verify())
                 .assertFailure()
@@ -55,7 +55,7 @@ public class GetClassTest {
     }
 
     @Test
-    public void fail_whenSuperclassUsesGetClass() {
+    void fail_whenSuperclassUsesGetClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(GetClassColorPoint.class).verify())
                 .assertFailure()
@@ -63,17 +63,17 @@ public class GetClassTest {
     }
 
     @Test
-    public void succeed_whenSuperclassUsesGetClass_givenUsingGetClassIsUsed() {
+    void succeed_whenSuperclassUsesGetClass_givenUsingGetClassIsUsed() {
         EqualsVerifier.forClass(GetClassColorPoint.class).usingGetClass().verify();
     }
 
     @Test
-    public void succeed_whenSuperclassUsesGetClass_givenWarningStrictInheritanceIsSuppressed() {
+    void succeed_whenSuperclassUsesGetClass_givenWarningStrictInheritanceIsSuppressed() {
         EqualsVerifier.forClass(GetClassColorPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
-    public void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
+    void fail_whenEqualsUsesGetClassButSuperclassUsesInstanceof_givenUsingGetClassIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(GetClassColorPointWithEqualSuper.class).usingGetClass().verify())
                 .assertFailure()

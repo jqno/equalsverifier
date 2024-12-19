@@ -9,40 +9,40 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class SignatureTest {
+class SignatureTest {
 
     private static final String OVERLOADED = "Overloaded";
     private static final String SIGNATURE_SHOULD_BE = "Signature should be";
     private static final String SIGNATURE = "public boolean equals(Object obj)";
 
     @Test
-    public void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
+    void fail_whenEqualsIsOverloadedWithTypeInsteadOfObject() {
         expectOverloadFailure(
             "Parameter should be an Object, not " + OverloadedWithOwnType.class.getSimpleName(),
             () -> EqualsVerifier.forClass(OverloadedWithOwnType.class).verify());
     }
 
     @Test
-    public void fail_whenEqualsIsOverloadedWithTwoParameters() {
+    void fail_whenEqualsIsOverloadedWithTwoParameters() {
         expectOverloadFailure(
             "Too many parameters",
             () -> EqualsVerifier.forClass(OverloadedWithTwoParameters.class).verify());
     }
 
     @Test
-    public void fail_whenEqualsIsOverloadedWithNoParameter() {
+    void fail_whenEqualsIsOverloadedWithNoParameter() {
         expectOverloadFailure("No parameter", () -> EqualsVerifier.forClass(OverloadedWithNoParameter.class).verify());
     }
 
     @Test
-    public void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
+    void fail_whenEqualsIsOverloadedWithUnrelatedParameter() {
         expectOverloadFailure(
             "Parameter should be an Object",
             () -> EqualsVerifier.forClass(OverloadedWithUnrelatedParameter.class).verify());
     }
 
     @Test
-    public void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
+    void fail_whenEqualsIsProperlyOverriddenButAlsoOverloaded() {
         expectOverloadFailure(
             "More than one equals method found",
             () -> EqualsVerifier
@@ -52,7 +52,7 @@ public class SignatureTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsNeitherOverriddenOrOverloaded_givenInheritedDirectlyWarningIsSuppressed() {
+    void succeed_whenEqualsIsNeitherOverriddenOrOverloaded_givenInheritedDirectlyWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(NoEqualsMethod.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT, Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -60,7 +60,7 @@ public class SignatureTest {
     }
 
     @Test
-    public void succeed_whenAStaticEqualsExists() {
+    void succeed_whenAStaticEqualsExists() {
         EqualsVerifier.forClass(StaticEqualsMethod.class).verify();
     }
 
