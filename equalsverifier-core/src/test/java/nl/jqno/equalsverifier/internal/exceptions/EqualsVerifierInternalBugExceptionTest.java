@@ -60,7 +60,7 @@ class EqualsVerifierInternalBugExceptionTest {
     }
 
     private void assertNoCause() {
-        assertThat(actual.getCause()).isEqualTo(null);
+        assertThat(actual.getCause()).isNull();
     }
 
     private void assertCause(Throwable cause) {

@@ -114,14 +114,14 @@ class InPlaceObjectAccessorScramblingTest {
     void scrambleNestedGenerics() {
         GenericContainerContainer foo = new GenericContainerContainer();
 
-        assertThat(foo.strings.ts.isEmpty()).isTrue();
-        assertThat(foo.points.ts.isEmpty()).isTrue();
+        assertThat(foo.strings.ts).isEmpty();
+        assertThat(foo.points.ts).isEmpty();
 
         doScramble(foo);
 
-        assertThat(foo.strings.ts.isEmpty()).isFalse();
+        assertThat(foo.strings.ts).isNotEmpty();
         assertThat(foo.strings.ts.get(0).getClass()).isEqualTo(String.class);
-        assertThat(foo.points.ts.isEmpty()).isFalse();
+        assertThat(foo.points.ts).isNotEmpty();
         assertThat(foo.points.ts.get(0).getClass()).isEqualTo(Point.class);
     }
 

@@ -46,7 +46,7 @@ class VintageValueProviderTest {
     @Test
     void provide() {
         Optional<Tuple<Point>> actual = vp.provide(POINT_TAG);
-        assertThat(actual.get()).isEqualTo(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
+        assertThat(actual).contains(Tuple.of(new Point(42, 42), new Point(1337, 1337), new Point(42, 42)));
     }
 
     @Test

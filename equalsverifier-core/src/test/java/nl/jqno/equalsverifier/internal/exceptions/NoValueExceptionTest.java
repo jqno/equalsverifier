@@ -11,6 +11,6 @@ class NoValueExceptionTest {
     void description() {
         TypeTag tag = new TypeTag(String.class);
         NoValueException e = new NoValueException(tag);
-        assertThat(e.getDescription().contains("String")).isTrue();
+        assertThat(e.getDescription()).contains("String");
     }
 }
