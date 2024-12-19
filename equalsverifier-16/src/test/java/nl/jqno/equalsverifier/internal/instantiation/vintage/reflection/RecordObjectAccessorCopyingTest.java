@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -19,7 +18,7 @@ class RecordObjectAccessorCopyingTest {
         Object original = instantiate(SimpleRecord.class);
         Object copy = copyOf(original);
 
-        assertNotSame(original, copy);
+        assertThat(copy).isNotSameAs(original);
         assertThat(copy).isEqualTo(original);
     }
 
@@ -30,7 +29,7 @@ class RecordObjectAccessorCopyingTest {
         RecordObjectAccessor<?> originalAccessor = create(original);
         RecordObjectAccessor<?> copyAccessor = create(copy);
 
-        assertNotSame(original, copy);
+        assertThat(copy).isNotSameAs(original);
         for (FieldProbe p : FieldIterable.of(original.getClass())) {
             Object a = originalAccessor.getField(p);
             Object b = copyAccessor.getField(p);

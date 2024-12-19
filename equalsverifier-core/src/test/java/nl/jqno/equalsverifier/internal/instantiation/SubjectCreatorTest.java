@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -165,7 +164,7 @@ class SubjectCreatorTest {
         actual = sut.copy(original);
 
         assertThat(actual).isEqualTo(expected);
-        assertNotSame(expected, actual);
+        assertThat(actual).isNotSameAs(expected);
     }
 
     @Test

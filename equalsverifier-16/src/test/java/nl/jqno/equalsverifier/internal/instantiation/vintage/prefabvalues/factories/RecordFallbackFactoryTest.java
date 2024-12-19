@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.facto
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.LinkedHashSet;
 
@@ -36,7 +35,7 @@ class RecordFallbackFactoryTest {
         Tuple<?> tuple = factory.createValues(new TypeTag(GenericRecordContainer.class), valueProvider, typeStack);
 
         assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
-        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+        assertThat(tuple.getRedCopy()).isNotSameAs(tuple.getRed());
     }
 
     record GenericRecord<T>(T t) {}

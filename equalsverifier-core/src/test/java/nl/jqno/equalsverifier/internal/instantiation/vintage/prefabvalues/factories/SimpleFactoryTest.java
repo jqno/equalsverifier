@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,7 +21,6 @@ class SimpleFactoryTest {
     @Test
     void redCopy() {
         String redCopy = factory.createValues(null, null, null).getRedCopy();
-        assertThat(redCopy).isEqualTo("red");
-        assertNotSame("red", redCopy);
+        assertThat(redCopy).isEqualTo("red").isNotSameAs("red");
     }
 }
