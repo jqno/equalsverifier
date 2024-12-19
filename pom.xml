@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>nl.jqno.equalsverifier</groupId>
@@ -90,9 +92,11 @@
         <version.openjfx>19.0.2.1</version.openjfx>
         <version.slf4j>2.0.16</version.slf4j>
 
+        <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
+        <version.checkstyle>10.21.0</version.checkstyle>
+
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
-        <version.checkstyle>10.21.0</version.checkstyle> <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
         <version.copy-rename-maven-plugin>1.0.1</version.copy-rename-maven-plugin>
         <version.flatten-maven-plugin>1.6.0</version.flatten-maven-plugin>
         <version.jacoco>0.8.12</version.jacoco>
@@ -321,13 +325,18 @@
                     </plugin>
 
                     <plugin>
-                        <!-- provides the pitest-git:aggregate goal to aggregate json files to be stored as artifact when accepting PRs from untrusted forks -->
+                        <!--
+                            provides the pitest-git:aggregate goal to aggregate json files to be
+                            stored as artifact when accepting PRs from untrusted forks
+                        -->
                         <groupId>com.groupcdg</groupId>
                         <artifactId>pitest-git-maven-plugin</artifactId>
                         <version>${version.pitest.github}</version>
                     </plugin>
                     <plugin>
-                        <!-- provides direct integration with github when accepting PRs from trusted branches -->
+                        <!--
+                            provides direct integration with github when accepting PRs from trusted branches
+                        -->
                         <groupId>com.groupcdg</groupId>
                         <artifactId>pitest-github-maven-plugin</artifactId>
                         <version>${version.pitest.github}</version>
@@ -461,7 +470,10 @@
         </profile>
 
         <profile>
-            <!-- Byte Buddy often supports new class file versions for current EA releases if its experimental flag is set to true -->
+            <!--
+                Byte Buddy often supports new class file versions for current EA releases
+                if its experimental flag is set to true
+            -->
             <id>argline-experimental</id>
             <activation>
                 <property>
