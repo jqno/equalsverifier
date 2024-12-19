@@ -25,40 +25,40 @@ import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: ParameterNumber
 
-public class JavaFxClassesTest {
+class JavaFxClassesTest {
 
     @Test
-    public void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
+    void successfullyInstantiatesAJavaFxClass_whenJavaFxIsAvailable() {
         EqualsVerifier.forClass(JavaFxApiClassesContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtObservableListFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtObservableListFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxObservableListContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtObservableMapFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtObservableMapFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxObservableMapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtObservableSetFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtObservableSetFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxObservableSetContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtListPropertyFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtListPropertyFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxListPropertyContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtMapPropertyFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtMapPropertyFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxMapPropertyContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtSetPropertyFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtSetPropertyFieldsGenericContent() {
         EqualsVerifier.forClass(JavaFxSetPropertyContainer.class).verify();
     }
 

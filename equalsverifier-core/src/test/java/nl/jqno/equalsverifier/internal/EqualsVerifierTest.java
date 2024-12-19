@@ -5,10 +5,10 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateCo
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-public class EqualsVerifierTest {
+class EqualsVerifierTest {
 
     @Test
-    public void coverTheConstructor() {
+    void coverTheConstructor() {
         coverThePrivateConstructor(EqualsVerifier.class);
     }
 }

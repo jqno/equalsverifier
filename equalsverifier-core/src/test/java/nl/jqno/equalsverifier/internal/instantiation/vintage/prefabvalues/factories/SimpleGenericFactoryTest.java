@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
@@ -14,8 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-@SuppressWarnings("rawtypes")
-public class SimpleGenericFactoryTest {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+class SimpleGenericFactoryTest {
 
     private static final TypeTag STRING_TYPETAG = new TypeTag(String.class);
     private static final TypeTag INTEGER_TYPETAG = new TypeTag(Integer.class);
@@ -39,7 +39,7 @@ public class SimpleGenericFactoryTest {
     private Object blueObject;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
         redString = valueProvider.giveRed(STRING_TYPETAG);
         blueString = valueProvider.giveBlue(STRING_TYPETAG);
@@ -50,30 +50,30 @@ public class SimpleGenericFactoryTest {
     }
 
     @Test
-    public void createOptionalsOfMapOfString() {
+    void createOptionalsOfMapOfString() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(STRINGOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertEquals(Optional.of(redString), tuple.getRed());
-        assertEquals(Optional.of(blueString), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(Optional.of(redString));
+        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueString));
     }
 
     @Test
-    public void createOptionalsOfWildcard() {
+    void createOptionalsOfWildcard() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(WILDCARDOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertEquals(Optional.of(redObject), tuple.getRed());
-        assertEquals(Optional.of(blueObject), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(Optional.of(redObject));
+        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueObject));
     }
 
     @Test
-    public void createRawOptionals() {
+    void createRawOptionals() {
         Tuple<Optional> tuple = OPTIONAL_FACTORY.createValues(RAWOPTIONAL_TYPETAG, valueProvider, typeStack);
-        assertEquals(Optional.of(redObject), tuple.getRed());
-        assertEquals(Optional.of(blueObject), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(Optional.of(redObject));
+        assertThat(tuple.getBlue()).isEqualTo(Optional.of(blueObject));
     }
 
     @Test
-    public void createSomethingWithMoreThanOneTypeParameter() {
+    void createSomethingWithMoreThanOneTypeParameter() {
         Tuple<Pair> tuple = PAIR_FACTORY.createValues(PAIR_TYPETAG, valueProvider, typeStack);
-        assertEquals(new Pair<>(redString, redInt), tuple.getRed());
-        assertEquals(new Pair<>(blueString, blueInt), tuple.getBlue());
+        assertThat(tuple.getRed()).isEqualTo(new Pair<>(redString, redInt));
+        assertThat(tuple.getBlue()).isEqualTo(new Pair<>(blueString, blueInt));
     }
 }

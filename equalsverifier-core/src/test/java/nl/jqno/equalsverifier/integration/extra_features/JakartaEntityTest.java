@@ -8,15 +8,15 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class JakartaEntityTest {
+class JakartaEntityTest {
 
     @Test
-    public void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
+    void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
         EqualsVerifier.forClass(EntityByJakartaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
+    void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassEntityByJakartaAnnotation.class).verify())
                 .assertFailure()
@@ -24,12 +24,12 @@ public class JakartaEntityTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
+    void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
         EqualsVerifier.forClass(EmbeddableByJakartaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
+    void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassEmbeddableByJakartaAnnotation.class).verify())
                 .assertFailure()
@@ -37,12 +37,12 @@ public class JakartaEntityTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
+    void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
         EqualsVerifier.forClass(MappedSuperclassByJakartaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
+    void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassMappedSuperclassByJakartaAnnotation.class).verify())
                 .assertFailure()

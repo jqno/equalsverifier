@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.integration.extended_contract;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -13,26 +12,26 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.internal.versionspecific.RecordsHelper;
 import org.junit.jupiter.api.Test;
 
-public class RecordsTest {
+class RecordsTest {
 
     @Test
-    public void sanityCheckForRecordsHelper() {
-        assertTrue(RecordsHelper.isRecord(SimpleRecord.class));
-        assertFalse(RecordsHelper.isRecord(String.class));
+    void sanityCheckForRecordsHelper() {
+        assertThat(RecordsHelper.isRecord(SimpleRecord.class)).isTrue();
+        assertThat(RecordsHelper.isRecord(String.class)).isFalse();
     }
 
     @Test
-    public void succeed_whenClassIsARecord() {
+    void succeed_whenClassIsARecord() {
         EqualsVerifier.forClass(SimpleRecord.class).verify();
     }
 
     @Test
-    public void succeed_whenClassIsAPrivateRecord() {
+    void succeed_whenClassIsAPrivateRecord() {
         EqualsVerifier.forClass(PrivateSimpleRecord.class).verify();
     }
 
     @Test
-    public void fail_whenConstructorChecksNull() {
+    void fail_whenConstructorChecksNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullCheckingRecord.class).verify())
                 .assertFailure()
@@ -40,12 +39,12 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenConstructorChecksNull_givenSuppressedWarning() {
+    void succeed_whenConstructorChecksNull_givenSuppressedWarning() {
         EqualsVerifier.forClass(NullCheckingRecord.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenConstructorChecksValue() {
+    void fail_whenConstructorChecksValue() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ValueCheckingRecord.class).verify())
                 .assertFailure()
@@ -53,7 +52,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
+    void fail_whenRecordInvariantIsViolated_givenIntFieldIsModifiedInConstructor() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BrokenInvariantIntFieldRecord.class).verify())
                 .assertFailure()
@@ -61,7 +60,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
+    void fail_whenRecordInvariantIsViolated_givenStringFieldIsModifiedInConstructor() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BrokenInvariantStringFieldRecord.class).verify())
                 .assertFailure()
@@ -69,7 +68,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
+    void fail_whenRecordInvariantIsViolated_givenBothFieldsAreModifiedInConstructor() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BrokenInvariantBothRecord.class).verify())
                 .assertFailure()
@@ -77,12 +76,12 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenRecordImplementsItsOwnEquals() {
+    void succeed_whenRecordImplementsItsOwnEquals() {
         EqualsVerifier.forClass(EqualsRecord.class).verify();
     }
 
     @Test
-    public void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
+    void fail_whenRecordImplementsItsOwnEquals_givenNotAllFieldsAreUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NotAllFieldsRecord.class).verify())
                 .assertFailure()
@@ -90,7 +89,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordConstructorThrows() {
+    void fail_whenRecordConstructorThrows() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ThrowingConstructorRecord.class).verify())
                 .assertFailure()
@@ -98,7 +97,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordConstructorThrowsNpe() {
+    void fail_whenRecordConstructorThrowsNpe() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullFieldRecord.class).verify())
                 .assertFailure()
@@ -106,7 +105,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordAccessorThrows() {
+    void fail_whenRecordAccessorThrows() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ThrowingAccessorRecord.class).verify())
                 .assertFailure()
@@ -114,7 +113,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void fail_whenRecordAccessorThrowsNpe() {
+    void fail_whenRecordAccessorThrowsNpe() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullAccessorRecord.class).verify())
                 .assertFailure()
@@ -122,12 +121,12 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenRecordContainsStaticField() {
+    void succeed_whenRecordContainsStaticField() {
         EqualsVerifier.forClass(StaticFieldRecord.class).verify();
     }
 
     @Test
-    public void succeed_whenRecordValidatesInput_givenValidPrefabValues() {
+    void succeed_whenRecordValidatesInput_givenValidPrefabValues() {
         EqualsVerifier
                 .forClass(ValidatingConstructorRecord.class)
                 .withPrefabValues(String.class, "valid-1", "valid-2")
@@ -135,7 +134,7 @@ public class RecordsTest {
     }
 
     @Test
-    public void succeed_whenRecordHasBoundedWildcardGeneric() {
+    void succeed_whenRecordHasBoundedWildcardGeneric() {
         EqualsVerifier.forClass(WildcardGenericRecordContainer.class).verify();
     }
 

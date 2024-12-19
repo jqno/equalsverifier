@@ -1,9 +1,9 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -11,81 +11,81 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class FormatterTest {
+class FormatterTest {
 
     private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
-    public void noParameters() {
+    void noParameters() {
         Formatter f = Formatter.of("No parameters");
-        assertEquals("No parameters", f.format());
+        assertThat(f.format()).isEqualTo("No parameters");
     }
 
     @Test
-    public void oneSimpleParameter() {
+    void oneSimpleParameter() {
         Formatter f = Formatter.of("One simple parameter: %%", new Simple(42));
-        assertEquals("One simple parameter: Simple: 42", f.format());
+        assertThat(f.format()).isEqualTo("One simple parameter: Simple: 42");
     }
 
     @Test
-    public void multipleSimpleParameters() {
+    void multipleSimpleParameters() {
         Formatter f = Formatter
                 .of("Multiple simple parameters: %% and %% and also %%", new Simple(0), new Simple(1), new Simple(2));
-        assertEquals("Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2", f.format());
+        assertThat(f.format()).isEqualTo("Multiple simple parameters: Simple: 0 and Simple: 1 and also Simple: 2");
     }
 
     @Test
-    public void oneThrowingParameter() {
+    void oneThrowingParameter() {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, "string"));
-        assertEquals(
-            "One throwing parameter: [Throwing i=1337 s=string]-throws IllegalStateException(msg)",
-            f.format());
+        assertThat(f.format())
+                .isEqualTo("One throwing parameter: [Throwing i=1337 s=string]-throws IllegalStateException(msg)");
     }
 
     @Test
-    public void oneThrowingParameterWithNullSubparameter() {
+    void oneThrowingParameterWithNullSubparameter() {
         Formatter f = Formatter.of("One throwing parameter: %%", new Throwing(1337, null));
-        assertEquals("One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)", f.format());
+        assertThat(f.format())
+                .isEqualTo("One throwing parameter: [Throwing i=1337 s=null]-throws IllegalStateException(msg)");
     }
 
     @Test
-    public void oneParameterWithNoFieldsAndThrowsWithNullMessage() {
+    void oneParameterWithNoFieldsAndThrowsWithNullMessage() {
         Formatter f = Formatter.of("No fields, null message: %%", new NoFieldsAndThrowsNullMessage());
-        assertEquals(
-            "No fields, null message: [NoFieldsAndThrowsNullMessage (no fields)]-throws NullPointerException(null)",
-            f.format());
+        assertThat(f.format())
+                .isEqualTo(
+                    "No fields, null message: [NoFieldsAndThrowsNullMessage (no fields)]-throws NullPointerException(null)");
     }
 
     @Test
-    public void oneAbstractParameter() {
+    void oneAbstractParameter() {
         Instantiator<Abstract> i = Instantiator.of(Abstract.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format(), containsString("Abstract: [Abstract x=0]"));
     }
 
     @Test
-    public void oneConcreteSubclassParameter() {
+    void oneConcreteSubclassParameter() {
         Instantiator<AbstractImpl> i = Instantiator.of(AbstractImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
         assertThat(f.format(), containsString("Concrete: something concrete"));
     }
 
     @Test
-    public void oneDelegatedAbstractParameter() {
+    void oneDelegatedAbstractParameter() {
         Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
         assertThat(f.format(), containsString("Abstract: [AbstractDelegation y=0]"));
     }
 
     @Test
-    public void oneDelegatedConcreteSubclassParameter() {
+    void oneDelegatedConcreteSubclassParameter() {
         Instantiator<AbstractDelegationImpl> i = Instantiator.of(AbstractDelegationImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
         assertThat(f.format(), containsString("Concrete: something concrete"));
     }
 
     @Test
-    public void oneThrowingContainerParameter() {
+    void oneThrowingContainerParameter() {
         Instantiator<Throwing> i = Instantiator.of(Throwing.class, objenesis);
         ThrowingContainer tc = new ThrowingContainer(i.instantiate());
         Formatter f = Formatter.of("TC: %%", tc);
@@ -95,7 +95,7 @@ public class FormatterTest {
     }
 
     @Test
-    public void oneAbstractContainerParameter() {
+    void oneAbstractContainerParameter() {
         Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
@@ -104,7 +104,7 @@ public class FormatterTest {
     }
 
     @Test
-    public void parameterWithMixOfVariousFields() {
+    void parameterWithMixOfVariousFields() {
         Mix mix = new Mix();
         mix.throwing = new Throwing(42, "empty");
 
@@ -116,24 +116,24 @@ public class FormatterTest {
     }
 
     @Test
-    public void connectedParameters() {
+    void connectedParameters() {
         Formatter f = Formatter.of("%%%%", 1, 2);
         assertThat(f.format(), containsString("12"));
     }
 
     @Test
-    public void nullParameter() {
+    void nullParameter() {
         Formatter f = Formatter.of("This parameter is null: %%", (Object) null);
-        assertEquals("This parameter is null: null", f.format());
+        assertThat(f.format()).isEqualTo("This parameter is null: null");
     }
 
     @Test
-    public void nullMessage() {
-        assertThrows(NullPointerException.class, () -> Formatter.of(null));
+    void nullMessage() {
+        assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> Formatter.of(null));
     }
 
     @Test
-    public void notEnoughParameters() {
+    void notEnoughParameters() {
         Formatter f = Formatter.of("Not enough: %% and %%");
 
         ExpectedException
@@ -143,7 +143,7 @@ public class FormatterTest {
     }
 
     @Test
-    public void tooManyParameters() {
+    void tooManyParameters() {
         Formatter f = Formatter.of("Too many!", new Simple(0));
 
         ExpectedException

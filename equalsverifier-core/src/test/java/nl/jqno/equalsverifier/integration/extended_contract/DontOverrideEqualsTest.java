@@ -6,10 +6,10 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class DontOverrideEqualsTest {
+class DontOverrideEqualsTest {
 
     @Test
-    public void fail_whenEqualsIsInheritedDirectlyFromObject() {
+    void fail_whenEqualsIsInheritedDirectlyFromObject() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NoEqualsNoHashCodeMethod.class).verify())
                 .assertFailure()
@@ -17,7 +17,7 @@ public class DontOverrideEqualsTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
+    void succeed_whenEqualsIsInheritedDirectlyFromObject_givenDirectlyInheritedWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(NoEqualsNoHashCodeMethod.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
@@ -25,12 +25,12 @@ public class DontOverrideEqualsTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsInheritedButNotFromObject() {
+    void succeed_whenEqualsIsInheritedButNotFromObject() {
         EqualsVerifier.forClass(InheritedEqualsAndHashCodeMethod.class).verify();
     }
 
     @Test
-    public void succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
+    void succeed_whenClassIsAPojoAndEqualsIsInheritedDirectlyFromObject_givenVariousWarningsAreSuppressed() {
         EqualsVerifier
                 .forClass(Pojo.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)
@@ -39,7 +39,7 @@ public class DontOverrideEqualsTest {
     }
 
     @Test
-    public void succeed_whenClassInheritsFromSomethingWithStateAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
+    void succeed_whenClassInheritsFromSomethingWithStateAndEqualsIsInheritedDirectlyFromObject_givenDetailMessageIsIgnored() {
         EqualsVerifier
                 .forClass(SubclassWithoutEqualsButWithStateFromSuper.class)
                 .suppress(Warning.INHERITED_DIRECTLY_FROM_OBJECT)

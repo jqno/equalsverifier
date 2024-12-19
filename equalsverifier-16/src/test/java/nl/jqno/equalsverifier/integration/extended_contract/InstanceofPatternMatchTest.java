@@ -4,7 +4,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.Util;
 import org.junit.jupiter.api.Test;
 
-public class InstanceofPatternMatchTest {
+class InstanceofPatternMatchTest {
 
     @Test
     void succeed_whenEqualsUsesInstanceofPatternMatch() {

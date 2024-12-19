@@ -14,22 +14,22 @@ import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
-public class JpaIdTest {
+class JpaIdTest {
 
     @Test
-    public void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
+    void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
         EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class).verify();
         EqualsVerifier.forClass(JpaIdBusinessKeyPersonReorderedFields.class).verify();
     }
 
     @Test
-    public void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
+    void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
-    public void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
+    void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
         EqualsVerifier.forClass(JpaIdValueKeyPerson.class).suppress(Warning.SURROGATE_OR_BUSINESS_KEY).verify();
         EqualsVerifier
                 .forClass(JpaIdValueKeyPersonReorderedFields.class)
@@ -38,7 +38,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -50,7 +50,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
+    void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JpaIdSurrogateKeyPerson.class).verify())
                 .assertFailure()
@@ -62,7 +62,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
+    void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JpaIdSurrogateKeyPersonReorderedFields.class).verify())
                 .assertFailure()
@@ -73,7 +73,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -89,7 +89,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -105,13 +105,13 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenEmbeddedIdIsUsedCorrectly() {
+    void succeed_whenEmbeddedIdIsUsedCorrectly() {
         EqualsVerifier.forClass(JpaEmbeddedIdBusinessKeyPerson.class).verify();
         EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
-    public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
+    void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JpaEmbeddedIdSurrogateKeyPerson.class).verify())
                 .assertFailure()
@@ -123,7 +123,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -139,7 +139,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
+    void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -153,17 +153,17 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
+    void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class).verify();
     }
 
     @Test
-    public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdAndNothingIsAnnotatedWithJpaId() {
+    void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdAndNothingIsAnnotatedWithJpaId() {
         EqualsVerifier.forClass(NaturalIdWithoutJpaIdBusinessKeyPerson.class).verify();
     }
 
     @Test
-    public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
+    void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -175,12 +175,12 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
+    void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
         EqualsVerifier.forClass(JpaIdBusinessKeyPersonDoesntUseName.class).withIgnoredFields("name").verify();
     }
 
     @Test
-    public void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
+    void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
         EqualsVerifier
                 .forClass(JpaIdBusinessKeyPersonDoesntUseName.class)
                 .withOnlyTheseFields("socialSecurity", "birthdate")
@@ -188,17 +188,17 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenIdIsPartOfAProperJpaEntity() {
+    void succeed_whenIdIsPartOfAProperJpaEntity() {
         EqualsVerifier.forClass(JpaIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
-    public void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
+    void succeed_whenNaturalIdIsPartOfAProperJpaEntity() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
+    void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
         EqualsVerifier
                 .forClass(JpaIdVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -206,12 +206,12 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenMethodsAreAnnotatedInsteadOfFields() {
+    void succeed_whenMethodsAreAnnotatedInsteadOfFields() {
         EqualsVerifier.forClass(MethodAnnotatedBusinessKeyPerson.class).verify();
     }
 
     @Test
-    public void fail_whenIdFieldIsTheOnlyFieldUsed() {
+    void fail_whenIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JpaIdBusinessKeyPerson.class).withOnlyTheseFields("id").verify())
                 .assertFailure()
@@ -221,7 +221,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
+    void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -234,7 +234,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -248,7 +248,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -262,7 +262,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
+    void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -275,7 +275,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
+    void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -288,7 +288,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -301,7 +301,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
+    void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -314,7 +314,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
+    void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -327,7 +327,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
+    void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -340,7 +340,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
+    void fail_whenAnIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonJpaIdBusinessKeyPerson.class).verify())
                 .assertFailure()
@@ -348,7 +348,7 @@ public class JpaIdTest {
     }
 
     @Test
-    public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
+    void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify())
                 .assertFailure()
@@ -356,12 +356,12 @@ public class JpaIdTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsImplementedInSuperclass_givenWarningSurrogateKeyIsSuppressed() {
+    void succeed_whenEqualsIsImplementedInSuperclass_givenWarningSurrogateKeyIsSuppressed() {
         EqualsVerifier.forClass(SubclassEntity.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
-    public void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
+    void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
         EqualsVerifier
                 .forClass(JpaIdDirtyTrackingPerson.class)
                 .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)

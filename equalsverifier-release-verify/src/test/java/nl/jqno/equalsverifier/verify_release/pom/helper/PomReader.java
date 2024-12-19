@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.verify_release.pom.helper;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -31,20 +31,20 @@ public class PomReader {
 
     public void assertNode(String expression, String value) {
         var actual = (String) getValue(expression, XPathConstants.STRING);
-        assertEquals(
-            value,
-            actual,
-            "Expected: " + value + ", but was: " + actual + "\nFilename: " + filename + "; expression: [" + expression
-                    + "]");
+        assertThat(actual)
+                .as(
+                    "Expected: " + value + ", but was: " + actual + "\nFilename: " + filename + "; expression: ["
+                            + expression + "]")
+                .isEqualTo(value);
     }
 
     public void assertNodeSize(int expectedLength, String expression) {
         var nodes = (NodeList) getValue(expression, XPathConstants.NODESET);
-        assertEquals(
-            expectedLength,
-            nodes.getLength(),
-            "Expected node to have " + expectedLength + " nodes, but it has " + nodes.getLength() + "!\nFilename: "
-                    + filename + "; expression: [" + expression + "]");
+        assertThat(nodes.getLength())
+                .as(
+                    "Expected node to have " + expectedLength + " nodes, but it has " + nodes.getLength()
+                            + "!\nFilename: " + filename + "; expression: [" + expression + "]")
+                .isEqualTo(expectedLength);
     }
 
     private Object getValue(String expression, QName qname) {

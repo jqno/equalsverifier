@@ -15,12 +15,12 @@ import org.junit.jupiter.api.Test;
 class ValidationsTest {
 
     @Test
-    public void coverTheConstructor() {
+    void coverTheConstructor() {
         coverThePrivateConstructor(Validations.class);
     }
 
     @Test
-    public void validateFieldTypeMatches_shouldFailOnWrongType() {
+    void validateFieldTypeMatches_shouldFailOnWrongType() {
         assertAll(() -> {
             ExpectedException
                     .when(() -> Validations.validateFieldTypeMatches(TestContainer.class, "listField", HashSet.class))
@@ -41,7 +41,7 @@ class ValidationsTest {
     }
 
     @Test
-    public void validateFieldTypeMatches_shouldAllowSubTypes() {
+    void validateFieldTypeMatches_shouldAllowSubTypes() {
         assertAll(
             () -> assertDoesNotThrow(
                 () -> Validations.validateFieldTypeMatches(TestContainer.class, "listField", ArrayList.class),
@@ -55,7 +55,7 @@ class ValidationsTest {
     }
 
     @Test
-    public void validateFieldTypeMatches_shouldFailOnSuperTypes() {
+    void validateFieldTypeMatches_shouldFailOnSuperTypes() {
         assertAll(() -> {
             ExpectedException
                     .when(

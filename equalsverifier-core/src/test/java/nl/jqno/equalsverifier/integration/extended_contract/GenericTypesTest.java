@@ -14,100 +14,100 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class GenericTypesTest {
+class GenericTypesTest {
 
     @Test
-    public void succeed_whenClassHasGenericFieldThatsSpecifiedToABuiltinGeneric() {
+    void succeed_whenClassHasGenericFieldThatsSpecifiedToABuiltinGeneric() {
         EqualsVerifier.forClass(GenericContainerWithBuiltin.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
+    void succeed_whenEqualsLooksAtJava8TypesGenericContent() {
         EqualsVerifier.forClass(JavaGenericTypeContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtListFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtListFieldsGenericContent() {
         EqualsVerifier.forClass(ListContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtSetFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtSetFieldsGenericContent() {
         EqualsVerifier.forClass(SetContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtMapFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtMapFieldsGenericContent() {
         EqualsVerifier.forClass(MapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtListOfTFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtListOfTFieldsGenericContent() {
         EqualsVerifier.forClass(ListOfTContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtArrayOfTFieldsGenericContent() {
         EqualsVerifier.forClass(ArrayOfTContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtImmutableCollectionFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtImmutableCollectionFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableCollectionContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtImmutableListFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtImmutableListFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableListContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtImmutableMapFieldsGenericContent() {
         EqualsVerifier.forClass(ImmutableMapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtBiMapFieldsGenericContent() {
+    void succeed_whenEqualsLooksAtBiMapFieldsGenericContent() {
         EqualsVerifier.forClass(BiMapContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtRangeEndpointGenericContent() {
+    void succeed_whenEqualsLooksAtRangeEndpointGenericContent() {
         EqualsVerifier.forClass(RangeContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtNonCollectionGenericContent() {
+    void succeed_whenEqualsLooksAtNonCollectionGenericContent() {
         EqualsVerifier.forClass(SparseArrayEqualsContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenHashCodeLooksAtNonCollectionGenericContent() {
+    void succeed_whenHashCodeLooksAtNonCollectionGenericContent() {
         EqualsVerifier.forClass(SparseArrayHashCodeContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenToStringLooksAtNonCollectionGenericContent() {
+    void succeed_whenToStringLooksAtNonCollectionGenericContent() {
         EqualsVerifier.forClass(SparseArrayToStringContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsLooksAtGenericContent_givenTwoGenericFields() {
+    void succeed_whenEqualsLooksAtGenericContent_givenTwoGenericFields() {
         EqualsVerifier.forClass(TwoGenericsContainerWithIntrospection.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasTypeVariableThatExtendsSomething() {
+    void succeed_whenClassHasTypeVariableThatExtendsSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsContainer.class).verify();
     }
 
     @Test
-    public void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
+    void succeed_whenClassHasTypeVariableThatExtendsSomethingThatSupersSomething() {
         EqualsVerifier.forClass(TypeVariableExtendsWithSuperContainer.class).verify();
     }
 
     @Test
-    public void failGracefully_whenClassHasASelfReferenceGenericParameter() {
+    void failGracefully_whenClassHasASelfReferenceGenericParameter() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SelfReferringGenericType.class).verify())
                 .assertFailure()
@@ -119,7 +119,7 @@ public class GenericTypesTest {
     }
 
     @Test
-    public void succeed_whenClassHasASelfReferenceGenericParameter_givenPrefabValues() {
+    void succeed_whenClassHasASelfReferenceGenericParameter_givenPrefabValues() {
         EqualsVerifier
                 .forClass(SelfReferringGenericType.class)
                 .withPrefabValues(
@@ -131,12 +131,12 @@ public class GenericTypesTest {
     }
 
     @Test
-    public void succeed_whenClassContainsAMapWithAnArray() {
+    void succeed_whenClassContainsAMapWithAnArray() {
         EqualsVerifier.forClass(ArrayMapContainer.class).withNonnullFields("map").verify();
     }
 
     @Test
-    public void succeed_whenClassContainsAClassThatContainsAMapWithArray() {
+    void succeed_whenClassContainsAClassThatContainsAMapWithArray() {
         EqualsVerifier.forClass(ArrayMapContainerContainer.class).withNonnullFields("mapContainer").verify();
     }
 

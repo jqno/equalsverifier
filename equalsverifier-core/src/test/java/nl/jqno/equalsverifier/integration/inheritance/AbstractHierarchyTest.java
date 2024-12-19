@@ -8,15 +8,15 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
 import org.junit.jupiter.api.Test;
 
-public class AbstractHierarchyTest {
+class AbstractHierarchyTest {
 
     @Test
-    public void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
+    void succeed_whenEqualsAndHashCodeAreFinal_givenClassIsAbstract() {
         EqualsVerifier.forClass(AbstractFinalMethodsPoint.class).verify();
     }
 
     @Test
-    public void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
+    void succeed_whenAnImplementingClassWithCorrectlyImplementedEquals_givenClassIsAbstract() {
         EqualsVerifier
                 .forClass(AbstractRedefinablePoint.class)
                 .withRedefinedSubclass(FinalRedefinedPoint.class)
@@ -24,7 +24,7 @@ public class AbstractHierarchyTest {
     }
 
     @Test
-    public void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
+    void fail_whenEqualsThrowsNull_givenClassIsAbstract() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullThrowingColorContainer.class).verify())
                 .assertFailure()
@@ -33,12 +33,12 @@ public class AbstractHierarchyTest {
     }
 
     @Test
-    public void succeed_whenEqualsThrowsNull_givenClassIsAbstractAndWarningIsSuppressed() {
+    void succeed_whenEqualsThrowsNull_givenClassIsAbstractAndWarningIsSuppressed() {
         EqualsVerifier.forClass(NullThrowingColorContainer.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenAbstractImplementationThrowsNpe() {
+    void fail_whenAbstractImplementationThrowsNpe() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -52,7 +52,7 @@ public class AbstractHierarchyTest {
     }
 
     @Test
-    public void succeed_whenAbstractImplementationThrowsNpe_givenWarningIsSuppressed() {
+    void succeed_whenAbstractImplementationThrowsNpe_givenWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(NullThrowingLazyObjectContainer.class)
                 .suppress(Warning.NULL_FIELDS, Warning.NONFINAL_FIELDS)

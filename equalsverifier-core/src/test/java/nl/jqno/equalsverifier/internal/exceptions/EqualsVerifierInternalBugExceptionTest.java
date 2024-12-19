@@ -5,12 +5,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class EqualsVerifierInternalBugExceptionTest {
+class EqualsVerifierInternalBugExceptionTest {
 
     private EqualsVerifierInternalBugException actual;
 
     @Test
-    public void exceptionHasNoSpecificMessage() {
+    void exceptionHasNoSpecificMessage() {
         actual = new EqualsVerifierInternalBugException();
 
         assertNoMessage();
@@ -18,7 +18,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasSpecificMessage() {
+    void exceptionHasSpecificMessage() {
         String message = "my message";
         actual = new EqualsVerifierInternalBugException(message);
 
@@ -27,7 +27,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasACause() {
+    void exceptionHasACause() {
         Throwable cause = new IllegalStateException("cause of the bug");
         actual = new EqualsVerifierInternalBugException(cause);
 
@@ -36,7 +36,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasMessageAndCause() {
+    void exceptionHasMessageAndCause() {
         String message = "some message";
         Throwable cause = new IllegalArgumentException("some cause");
         actual = new EqualsVerifierInternalBugException(message, cause);

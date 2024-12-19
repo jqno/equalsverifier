@@ -6,12 +6,12 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class JavaCollectionSubclassTest {
+class JavaCollectionSubclassTest {
 
     private static final String MESSAGE_FRAGMENT = "cannot verify subclasses of";
 
     @Test
-    public void failWithHelpfulMessage_whenVerifyingArrayListSubclass() {
+    void failWithHelpfulMessage_whenVerifyingArrayListSubclass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(CustomArrayList.class).verify())
                 .assertFailure()

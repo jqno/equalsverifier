@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -15,12 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class InPlaceObjectAccessorCopyingTest {
+class InPlaceObjectAccessorCopyingTest {
 
     private Objenesis objenesis = new ObjenesisStd();
 
     @Test
-    public void copyHappyPath() {
+    void copyHappyPath() {
         Point original = new Point(2, 3);
         Point copy = copyOf(original);
 
@@ -28,22 +27,22 @@ public class InPlaceObjectAccessorCopyingTest {
     }
 
     @Test
-    public void shallowCopy() {
+    void shallowCopy() {
         PointContainer original = new PointContainer(new Point(1, 2));
         PointContainer copy = copyOf(original);
 
         assertNotSame(original, copy);
-        assertTrue(original.getPoint() == copy.getPoint());
+        assertThat(original.getPoint() == copy.getPoint()).isTrue();
     }
 
     @Test
-    public void copyStaticFinal() {
+    void copyStaticFinal() {
         StaticFinalContainer foo = new StaticFinalContainer();
         copyOf(foo);
     }
 
     @Test
-    public void inheritanceCopy() {
+    void inheritanceCopy() {
         Point3D original = new Point3D(2, 3, 4);
         Point3D copy = copyOf(original);
 
@@ -52,11 +51,11 @@ public class InPlaceObjectAccessorCopyingTest {
     }
 
     @Test
-    public void copyFromSub() {
+    void copyFromSub() {
         Point3D original = new Point3D(2, 3, 4);
         Point copy = copyOf(original, Point.class);
 
-        assertEquals(Point.class, copy.getClass());
+        assertThat(copy.getClass()).isEqualTo(Point.class);
         assertAllFieldsEqual(original, copy, Point.class);
     }
 
@@ -77,7 +76,7 @@ public class InPlaceObjectAccessorCopyingTest {
         assertNotSame(original, copy);
         for (FieldProbe probe : FieldIterable.of(type)) {
             try {
-                assertEquals(probe.getValue(original), probe.getValue(copy));
+                assertThat(probe.getValue(copy)).isEqualTo(probe.getValue(original));
             }
             catch (ReflectionException e) {
                 throw new IllegalStateException(e);

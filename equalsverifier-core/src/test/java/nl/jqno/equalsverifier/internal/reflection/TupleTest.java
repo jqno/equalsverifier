@@ -1,39 +1,39 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
 import org.junit.jupiter.api.Test;
 
-public class TupleTest {
+class TupleTest {
 
     private Tuple<String> tuple = Tuple.of("red", "blue", new String("red"));
 
     @Test
-    public void equalsAndHashCode() {
+    void equalsAndHashCode() {
         EqualsVerifier.forClass(Tuple.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void getRed() {
-        assertEquals("red", tuple.getRed());
+    void getRed() {
+        assertThat(tuple.getRed()).isEqualTo("red");
     }
 
     @Test
-    public void getBlue() {
-        assertEquals("blue", tuple.getBlue());
+    void getBlue() {
+        assertThat(tuple.getBlue()).isEqualTo("blue");
     }
 
     @Test
-    public void getRedCopy() {
-        assertEquals("red", tuple.getRedCopy());
+    void getRedCopy() {
+        assertThat(tuple.getRedCopy()).isEqualTo("red");
     }
 
     @Test
-    public void redAndRedCopyInvariant() {
-        assertEquals(tuple.getRed(), tuple.getRedCopy());
+    void redAndRedCopyInvariant() {
+        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
         assertNotSame(tuple.getRed(), tuple.getRedCopy());
     }
 }
