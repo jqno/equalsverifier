@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.internal.util;
 
+// CHECKSTYLE OFF: IllegalImport
+
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;

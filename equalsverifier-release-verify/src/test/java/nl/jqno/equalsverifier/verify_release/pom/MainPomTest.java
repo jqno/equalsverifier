@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.verify_release.pom;
 
+// CHECKSTYLE OFF: IllegalImport
+
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomAsserter;

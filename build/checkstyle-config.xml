@@ -50,7 +50,10 @@
             <property name="ignoreConstructorParameter" value="true"/>
         </module>
         <module name="HideUtilityClassConstructor"/>
-        <module name="IllegalImport"/>
+        <module name="IllegalImport">
+            <property name="illegalClasses" value="org\.junit\.jupiter\.api\.Assertions\..*"/>
+            <property name="regexp" value="true"/>
+        </module>
         <module name="IllegalThrows"/>
         <module name="IllegalToken">
             <property name="tokens" value="INC,DEC,BSR,BSR_ASSIGN,SL,SL_ASSIGN,SR,SR_ASSIGN"/>
