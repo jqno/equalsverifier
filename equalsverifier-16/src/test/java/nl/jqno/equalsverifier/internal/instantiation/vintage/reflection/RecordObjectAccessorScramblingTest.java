@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
@@ -32,7 +31,7 @@ class RecordObjectAccessorScramblingTest {
         Constructor<?> c = Point.class.getDeclaredConstructor(int.class, int.class);
         Object original = c.newInstance(2, 3);
         Object copy = doScramble(original).get();
-        assertNotSame(original, copy);
+        assertThat(original).isNotSameAs(copy);
     }
 
     @Test

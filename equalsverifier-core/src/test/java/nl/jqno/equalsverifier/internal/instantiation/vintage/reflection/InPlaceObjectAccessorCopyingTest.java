@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
@@ -31,7 +30,7 @@ class InPlaceObjectAccessorCopyingTest {
         PointContainer original = new PointContainer(new Point(1, 2));
         PointContainer copy = copyOf(original);
 
-        assertNotSame(original, copy);
+        assertThat(original).isNotSameAs(copy);
         assertThat(original.getPoint() == copy.getPoint()).isTrue();
     }
 
@@ -73,7 +72,7 @@ class InPlaceObjectAccessorCopyingTest {
     }
 
     private static <T> void assertAllFieldsEqual(T original, T copy, Class<? extends T> type) {
-        assertNotSame(original, copy);
+        assertThat(original).isNotSameAs(copy);
         for (FieldProbe probe : FieldIterable.of(type)) {
             try {
                 assertThat(probe.getValue(copy)).isEqualTo(probe.getValue(original));

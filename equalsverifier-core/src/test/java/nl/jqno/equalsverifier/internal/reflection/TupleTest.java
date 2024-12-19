@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -33,7 +32,6 @@ class TupleTest {
 
     @Test
     void redAndRedCopyInvariant() {
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
-        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed()).isNotSameAs(tuple.getRed());
     }
 }

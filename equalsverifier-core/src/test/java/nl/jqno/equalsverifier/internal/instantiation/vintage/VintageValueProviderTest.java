@@ -5,7 +5,6 @@ import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.*;
 
@@ -74,15 +73,13 @@ class VintageValueProviderTest {
 
     @Test
     void giveRedCopyFromFactory() {
-        assertThat(vp.<String>giveRedCopy(STRING_TAG)).isEqualTo("r");
-        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
+        assertThat(vp.<String>giveRedCopy(STRING_TAG)).isEqualTo("r").isNotSameAs(vp.giveRed(STRING_TAG));
     }
 
     @Test
     void giveRedCopyFromCache() {
         vp.giveRedCopy(STRING_TAG);
-        assertThat(vp.<String>giveRedCopy(STRING_TAG)).isEqualTo("r");
-        assertNotSame(vp.giveRed(STRING_TAG), vp.giveRedCopy(STRING_TAG));
+        assertThat(vp.<String>giveRedCopy(STRING_TAG)).isEqualTo("r").isNotSameAs(vp.giveRed(STRING_TAG));
     }
 
     @Test
@@ -99,9 +96,7 @@ class VintageValueProviderTest {
 
     @Test
     void giveRedCopyFromFallbackFactory() {
-        Point actual = vp.giveRedCopy(POINT_TAG);
-        assertThat(actual).isEqualTo(new Point(42, 42));
-        assertNotSame(vp.giveRed(POINT_TAG), actual);
+        assertThat(vp.<Point>giveRedCopy(POINT_TAG)).isEqualTo(new Point(42, 42)).isNotSameAs(vp.giveRed(POINT_TAG));
     }
 
     @Test

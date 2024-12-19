@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultEquals;
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.defaultHashCode;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
 
 import java.util.LinkedHashSet;
 
@@ -75,8 +74,7 @@ class FallbackFactoryTest {
     void redCopyIsNotSameAsRed() {
         Tuple<?> tuple = factory.createValues(new TypeTag(IntContainer.class), valueProvider, typeStack);
 
-        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
-        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed()).isNotSameAs(tuple.getRed());
     }
 
     @Test
