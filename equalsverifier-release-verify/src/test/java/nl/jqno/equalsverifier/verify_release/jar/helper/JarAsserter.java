@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier.verify_release.jar.helper;
 
+// CHECKSTYLE OFF: IllegalImport
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
