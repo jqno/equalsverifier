@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Constructor;
 import java.util.LinkedHashSet;
@@ -15,28 +14,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-public class RecordObjectAccessorScramblingTest {
+class RecordObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private FactoryCache factoryCache;
     private VintageValueProvider valueProvider;
 
     @BeforeEach
-    public void setup() throws Exception {
+    void setup() throws Exception {
         factoryCache = JavaApiPrefabValues.build();
         valueProvider = new VintageValueProvider(factoryCache, new ObjenesisStd());
     }
 
     @Test
-    public void scrambleLeavesOriginalUnaffected() throws Exception {
+    void scrambleLeavesOriginalUnaffected() throws Exception {
         Constructor<?> c = Point.class.getDeclaredConstructor(int.class, int.class);
         Object original = c.newInstance(2, 3);
         Object copy = doScramble(original).get();
-        assertNotSame(original, copy);
+        assertThat(original).isNotSameAs(copy);
     }
 
     @Test
-    public void scramble() throws Exception {
+    void scramble() throws Exception {
         Constructor<?> constructor = Point.class.getDeclaredConstructor(int.class, int.class);
         factoryCache
                 .put(
@@ -48,7 +47,7 @@ public class RecordObjectAccessorScramblingTest {
         Object original = constructor.newInstance(1, 2);
 
         Object scrambled = doScramble(original);
-        assertFalse(original.equals(scrambled));
+        assertThat(scrambled).isNotEqualTo(original);
     }
 
     @SuppressWarnings("unchecked")

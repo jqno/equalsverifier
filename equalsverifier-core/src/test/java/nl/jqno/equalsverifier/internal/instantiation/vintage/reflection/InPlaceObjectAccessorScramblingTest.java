@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.AttributedString;
 import java.util.ArrayList;
@@ -24,14 +24,14 @@ import org.junit.jupiter.api.condition.JRE;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class InPlaceObjectAccessorScramblingTest {
+class InPlaceObjectAccessorScramblingTest {
 
     private static final LinkedHashSet<TypeTag> EMPTY_TYPE_STACK = new LinkedHashSet<>();
     private Objenesis objenesis;
     private VintageValueProvider valueProviderTest;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         FactoryCache factoryCache = JavaApiPrefabValues.build();
         factoryCache.put(Point.class, values(new Point(1, 2), new Point(2, 3), new Point(1, 2)));
         objenesis = new ObjenesisStd();
@@ -39,95 +39,95 @@ public class InPlaceObjectAccessorScramblingTest {
     }
 
     @Test
-    public void scrambleReturnsThis() {
+    void scrambleReturnsThis() {
         Point original = new Point(2, 3);
         Point copy = copy(original);
 
         ObjectAccessor<Object> actual = doScramble(copy);
-        assertSame(copy, actual.get());
+        assertThat(actual.get()).isSameAs(copy);
     }
 
     @Test
-    public void scramble() {
+    void scramble() {
         Point original = new Point(2, 3);
         Point copy = copy(original);
 
-        assertTrue(original.equals(copy));
+        assertThat(copy).isEqualTo(original);
         doScramble(copy);
-        assertFalse(original.equals(copy));
+        assertThat(copy).isNotEqualTo(original);
     }
 
     @Test
-    public void deepScramble() {
+    void deepScramble() {
         Point3D modified = new Point3D(2, 3, 4);
         Point3D reference = copy(modified);
 
         doScramble(modified);
 
-        assertFalse(modified.equals(reference));
+        assertThat(reference).isNotEqualTo(modified);
         modified.z = 4;
-        assertFalse(modified.equals(reference));
+        assertThat(reference).isNotEqualTo(modified);
     }
 
     @SuppressWarnings("static-access")
     @Test
-    public void scrambleStaticFinal() {
+    void scrambleStaticFinal() {
         StaticFinalContainer foo = new StaticFinalContainer();
         int originalInt = StaticFinalContainer.CONST;
         Object originalObject = StaticFinalContainer.OBJECT;
 
         doScramble(foo);
 
-        assertEquals(originalInt, foo.CONST);
-        assertEquals(originalObject, foo.OBJECT);
+        assertThat(originalInt).isEqualTo(foo.CONST);
+        assertThat(originalObject).isEqualTo(foo.OBJECT);
     }
 
     @Test
-    public void scrambleString() {
+    void scrambleString() {
         StringContainer foo = new StringContainer();
         String before = foo.s;
         doScramble(foo);
-        assertFalse(before.equals(foo.s));
+        assertThat(foo.s).isNotEqualTo(before);
     }
 
     @Test
-    public void privateFinalStringCannotBeScrambled() {
+    void privateFinalStringCannotBeScrambled() {
         FinalAssignedStringContainer foo = new FinalAssignedStringContainer();
         String before = foo.s;
 
         doScramble(foo);
 
-        assertEquals(before, foo.s);
+        assertThat(foo.s).isEqualTo(before);
     }
 
     @Test
-    public void scramblePrivateFinalPoint() {
+    void scramblePrivateFinalPoint() {
         FinalAssignedPointContainer foo = new FinalAssignedPointContainer();
         Point before = foo.p;
 
-        assertTrue(before.equals(foo.p));
+        assertThat(foo.p).isEqualTo(before);
         doScramble(foo);
-        assertFalse(before.equals(foo.p));
+        assertThat(foo.p).isNotEqualTo(before);
     }
 
     @Test
-    public void scrambleNestedGenerics() {
+    void scrambleNestedGenerics() {
         GenericContainerContainer foo = new GenericContainerContainer();
 
-        assertTrue(foo.strings.ts.isEmpty());
-        assertTrue(foo.points.ts.isEmpty());
+        assertThat(foo.strings.ts.isEmpty()).isTrue();
+        assertThat(foo.points.ts.isEmpty()).isTrue();
 
         doScramble(foo);
 
-        assertFalse(foo.strings.ts.isEmpty());
-        assertEquals(String.class, foo.strings.ts.get(0).getClass());
-        assertFalse(foo.points.ts.isEmpty());
-        assertEquals(Point.class, foo.points.ts.get(0).getClass());
+        assertThat(foo.strings.ts.isEmpty()).isFalse();
+        assertThat(foo.strings.ts.get(0).getClass()).isEqualTo(String.class);
+        assertThat(foo.points.ts.isEmpty()).isFalse();
+        assertThat(foo.points.ts.get(0).getClass()).isEqualTo(Point.class);
     }
 
     @Test
     @DisabledForJreRange(max = JRE.JAVA_11)
-    public void scrambleSutInaccessible() {
+    void scrambleSutInaccessible() {
         AttributedString as = new AttributedString("x");
 
         ExpectedException
@@ -139,7 +139,7 @@ public class InPlaceObjectAccessorScramblingTest {
 
     @Test
     @DisabledForJreRange(max = JRE.JAVA_11)
-    public void scrambleFieldInaccessible() {
+    void scrambleFieldInaccessible() {
         InaccessibleContainer ic = new InaccessibleContainer(new AttributedString("x"));
 
         ExpectedException.when(() -> doScramble(ic)).assertThrows(ModuleException.class);

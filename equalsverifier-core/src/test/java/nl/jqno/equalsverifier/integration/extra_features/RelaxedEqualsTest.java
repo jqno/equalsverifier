@@ -6,21 +6,21 @@ import nl.jqno.equalsverifier.testhelpers.types.Multiple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RelaxedEqualsTest {
+class RelaxedEqualsTest {
 
     private Multiple a;
     private Multiple b;
     private Multiple x;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         a = new Multiple(1, 2);
         b = new Multiple(2, 1);
         x = new Multiple(2, 2);
     }
 
     @Test
-    public void fail_whenObjectsWithDifferentFieldsAreEqual() {
+    void fail_whenObjectsWithDifferentFieldsAreEqual() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Multiple.class).verify())
                 .assertFailure()
@@ -28,12 +28,12 @@ public class RelaxedEqualsTest {
     }
 
     @Test
-    public void succeed_whenObjectsWithDifferentFieldsAreEqual_givenTheyAreGivenAsRelaxedEqualExamples() {
+    void succeed_whenObjectsWithDifferentFieldsAreEqual_givenTheyAreGivenAsRelaxedEqualExamples() {
         EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExample(x).verify();
     }
 
     @Test
-    public void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
+    void fail_whenTheSameObjectIsGivenAsAnUnequalExample() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(a, b).andUnequalExamples(a))
                 .assertThrows(IllegalStateException.class)
@@ -41,7 +41,7 @@ public class RelaxedEqualsTest {
     }
 
     @Test
-    public void succeed_whenAnUnusedFieldIsNull_givenItIsGivenAsARelaxedEqualExample() {
+    void succeed_whenAnUnusedFieldIsNull_givenItIsGivenAsARelaxedEqualExample() {
         EqualsVerifier
                 .forRelaxedEqualExamples(new NullContainingSubMultiple(1, 2), new NullContainingSubMultiple(2, 1))
                 .andUnequalExample(new NullContainingSubMultiple(2, 2))

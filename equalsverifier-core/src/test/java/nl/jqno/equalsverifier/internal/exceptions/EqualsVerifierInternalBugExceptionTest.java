@@ -1,16 +1,15 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class EqualsVerifierInternalBugExceptionTest {
+class EqualsVerifierInternalBugExceptionTest {
 
     private EqualsVerifierInternalBugException actual;
 
     @Test
-    public void exceptionHasNoSpecificMessage() {
+    void exceptionHasNoSpecificMessage() {
         actual = new EqualsVerifierInternalBugException();
 
         assertNoMessage();
@@ -18,7 +17,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasSpecificMessage() {
+    void exceptionHasSpecificMessage() {
         String message = "my message";
         actual = new EqualsVerifierInternalBugException(message);
 
@@ -27,7 +26,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasACause() {
+    void exceptionHasACause() {
         Throwable cause = new IllegalStateException("cause of the bug");
         actual = new EqualsVerifierInternalBugException(cause);
 
@@ -36,7 +35,7 @@ public class EqualsVerifierInternalBugExceptionTest {
     }
 
     @Test
-    public void exceptionHasMessageAndCause() {
+    void exceptionHasMessageAndCause() {
         String message = "some message";
         Throwable cause = new IllegalArgumentException("some cause");
         actual = new EqualsVerifierInternalBugException(message, cause);
@@ -47,24 +46,24 @@ public class EqualsVerifierInternalBugExceptionTest {
 
     private void assertNoMessage() {
         assertMessagePreamble();
-        assertThat(actual.getMessage(), not(containsString("\n")));
+        assertThat(actual.getMessage()).doesNotContain("\n");
     }
 
     private void assertMessage(String message) {
         assertMessagePreamble();
-        assertThat(actual.getMessage(), containsString("\n"));
-        assertThat(actual.getMessage(), containsString(message));
+        assertThat(actual.getMessage()).contains("\n");
+        assertThat(actual.getMessage()).contains(message);
     }
 
     private void assertMessagePreamble() {
-        assertThat(actual.getMessage(), containsString("This is a bug in EqualsVerifier"));
+        assertThat(actual.getMessage()).contains("This is a bug in EqualsVerifier");
     }
 
     private void assertNoCause() {
-        assertThat(actual.getCause(), is(nullValue()));
+        assertThat(actual.getCause()).isEqualTo(null);
     }
 
     private void assertCause(Throwable cause) {
-        assertThat(actual.getCause(), is(cause));
+        assertThat(actual.getCause()).isEqualTo(cause);
     }
 }

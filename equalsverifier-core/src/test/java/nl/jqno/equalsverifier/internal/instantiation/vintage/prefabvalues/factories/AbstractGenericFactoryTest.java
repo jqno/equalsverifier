@@ -2,7 +2,7 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.facto
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
 import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import java.util.LinkedHashSet;
 
@@ -13,13 +13,13 @@ import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class AbstractGenericFactoryTest {
+class AbstractGenericFactoryTest {
 
     private String receiver;
     private AbstractGenericFactory<String> factory;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         receiver = "";
         factory = new AbstractGenericFactory<String>() {
             @Override
@@ -33,10 +33,10 @@ public class AbstractGenericFactoryTest {
     }
 
     @Test
-    public void throwTheUnthrowableException() {
-        assertThrows(
-            ReflectionException.class,
-            () -> factory.invoke(String.class, receiver, "this method does not exist", classes(), objects()));
+    void throwTheUnthrowableException() {
+        assertThatExceptionOfType(ReflectionException.class)
+                .isThrownBy(
+                    () -> factory.invoke(String.class, receiver, "this method does not exist", classes(), objects()));
     }
     // The rest of this class is tested indirectly through its subclasses.
 }

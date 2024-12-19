@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 
@@ -10,12 +9,12 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.ObjectContainer;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.PrimitiveContainer;
 import org.junit.jupiter.api.Test;
 
-public class FieldModifierTest {
+class FieldModifierTest {
 
     private static final String FIELD_NAME = "field";
 
     @Test
-    public void copyToPrimitiveField() {
+    void copyToPrimitiveField() {
         int value = 10;
 
         PrimitiveContainer from = new PrimitiveContainer();
@@ -24,11 +23,11 @@ public class FieldModifierTest {
         PrimitiveContainer to = new PrimitiveContainer();
         doCopyField(to, from, FIELD_NAME);
 
-        assertEquals(value, to.field);
+        assertThat(to.field).isEqualTo(value);
     }
 
     @Test
-    public void copyToObjectField() {
+    void copyToObjectField() {
         Object value = new Object();
 
         ObjectContainer from = new ObjectContainer();
@@ -37,7 +36,7 @@ public class FieldModifierTest {
         ObjectContainer to = new ObjectContainer();
         doCopyField(to, from, FIELD_NAME);
 
-        assertSame(value, to.field);
+        assertThat(to.field).isSameAs(value);
     }
 
     private void doCopyField(Object to, Object from, String fieldName) {

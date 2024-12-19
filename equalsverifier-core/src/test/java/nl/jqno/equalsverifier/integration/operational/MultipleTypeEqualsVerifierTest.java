@@ -1,10 +1,6 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +19,7 @@ import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.Incor
 import nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.IncorrectP;
 import org.junit.jupiter.api.Test;
 
-public class MultipleTypeEqualsVerifierTest {
+class MultipleTypeEqualsVerifierTest {
 
     private static final String CORRECT_PACKAGE = "nl.jqno.equalsverifier.testhelpers.packages.correct";
     private static final String INCORRECT_PACKAGE = "nl.jqno.equalsverifier.testhelpers.packages.twoincorrect";
@@ -35,38 +31,38 @@ public class MultipleTypeEqualsVerifierTest {
     private static final String INCORRECT_P = INCORRECT_PACKAGE + ".subpackage.IncorrectP";
 
     @Test
-    public void succeed_whenVerifyingSeveralCorrectClasses_givenIterableOverload() {
+    void succeed_whenVerifyingSeveralCorrectClasses_givenIterableOverload() {
         List<Class<?>> classes = Arrays.asList(A.class, B.class, C.class);
         EqualsVerifier.forClasses(classes).verify();
     }
 
     @Test
-    public void succeed_whenVerifyingSeveralCorrectClasses_givenVarargsOverload() {
+    void succeed_whenVerifyingSeveralCorrectClasses_givenVarargsOverload() {
         EqualsVerifier.forClasses(A.class, B.class, C.class).verify();
     }
 
     @Test
-    public void succeed_whenVerifyingACorrectPackage() {
+    void succeed_whenVerifyingACorrectPackage() {
         EqualsVerifier.forPackage(CORRECT_PACKAGE).verify();
     }
 
     @Test
-    public void succeed_whenVerifyingACorrectPackageRecursively() {
+    void succeed_whenVerifyingACorrectPackageRecursively() {
         EqualsVerifier.forPackage(CORRECT_PACKAGE, true).verify();
     }
 
     @Test
-    public void succeed_whenVerifyingAPackageWithASuperclass() {
+    void succeed_whenVerifyingAPackageWithASuperclass() {
         EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperA.class).verify();
     }
 
     @Test
-    public void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
+    void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
         EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperI.class).verify();
     }
 
     @Test
-    public void doesNotReportNonrecursive_whenPackageContainsRecursiveAndNonrecursiveClasses() {
+    void doesNotReportNonrecursive_whenPackageContainsRecursiveAndNonrecursiveClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(SOME_RECURSIVE_PACKAGE).verify())
                 .assertFailure()
@@ -75,7 +71,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenVerifyingOneIncorrectClass() {
+    void fail_whenVerifyingOneIncorrectClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class).verify())
                 .assertFailure()
@@ -86,7 +82,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenVerifyingTwoIncorrectClasses() {
+    void fail_whenVerifyingTwoIncorrectClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class, IncorrectN.class).verify())
                 .assertFailure()
@@ -99,7 +95,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenVerifyingAPackageWithTwoIncorrectClasses() {
+    void fail_whenVerifyingAPackageWithTwoIncorrectClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE).verify())
                 .assertFailure()
@@ -112,7 +108,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenVerifyingAPackageRecursivelyWithFourIncorrectClasses() {
+    void fail_whenVerifyingAPackageRecursivelyWithFourIncorrectClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
                 .assertFailure()
@@ -127,7 +123,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenVerifyingAPackageWithASuperclassWithFourIncorrectClasses() {
+    void fail_whenVerifyingAPackageWithASuperclassWithFourIncorrectClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, Object.class).verify())
                 .assertFailure()
@@ -142,7 +138,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackage_whenPackageHasNoClasses() {
+    void fail_whenCallingForPackage_whenPackageHasNoClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist"))
                 .assertThrows(IllegalStateException.class)
@@ -150,7 +146,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackageRecursively_whenPackageHasNoClasses() {
+    void fail_whenCallingForPackageRecursively_whenPackageHasNoClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", true))
                 .assertThrows(IllegalStateException.class)
@@ -158,7 +154,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackageWithASuperclass_whenPackageHasNoClasses() {
+    void fail_whenCallingForPackageWithASuperclass_whenPackageHasNoClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class))
                 .assertThrows(IllegalStateException.class)
@@ -166,12 +162,12 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
+    void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(IncorrectM.class, IncorrectN.class).verify();
     }
 
     @Test
-    public void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
+    void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
                 .forPackage(INCORRECT_PACKAGE, true)
                 .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
@@ -179,7 +175,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void succeed_whenCallingForPackageWithASuperclassOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
+    void succeed_whenCallingForPackageWithASuperclassOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
                 .forPackage(INCORRECT_PACKAGE, Object.class)
                 .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
@@ -187,7 +183,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenExceptingAClassThatDoesntExistInThePackage() {
+    void fail_whenExceptingAClassThatDoesntExistInThePackage() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE).except(IncorrectM.class))
                 .assertThrows(IllegalStateException.class)
@@ -195,7 +191,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
+    void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, true).except(IncorrectM.class))
                 .assertThrows(IllegalStateException.class)
@@ -203,12 +199,12 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
+    void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
         EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> c.getSimpleName().contains("Incorrect")).verify();
     }
 
     @Test
-    public void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
+    void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
         EqualsVerifier
                 .forPackage(INCORRECT_PACKAGE, true)
                 .except(c -> c.getSimpleName().contains("Incorrect"))
@@ -216,7 +212,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
+    void fail_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> false).verify())
                 .assertFailure()
@@ -224,7 +220,7 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
+    void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify())
                 .assertFailure()
@@ -232,41 +228,41 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
-    public void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
+    void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
         EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(c -> true).verify();
     }
 
     @Test
-    public void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
+    void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
         EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> true).verify();
     }
 
     @Test
-    public void succeed_whenReportingOnSeveralCorrectClasses() {
+    void succeed_whenReportingOnSeveralCorrectClasses() {
         List<EqualsVerifierReport> reports = EqualsVerifier.forClasses(A.class, B.class, C.class).report();
 
-        assertEquals(3, reports.size());
+        assertThat(reports.size()).isEqualTo(3);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(1), B.class);
         assertSuccessful(reports.get(2), C.class);
     }
 
     @Test
-    public void fail_whenReportingOnOneIncorrectClass() {
+    void fail_whenReportingOnOneIncorrectClass() {
         List<EqualsVerifierReport> reports = EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class).report();
 
-        assertEquals(3, reports.size());
+        assertThat(reports.size()).isEqualTo(3);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(2), C.class);
         assertUnsuccessful(reports.get(1), IncorrectM.class, "Subclass: equals is not final.");
     }
 
     @Test
-    public void fail_whenReportingOnTwoIncorrectClasses() {
+    void fail_whenReportingOnTwoIncorrectClasses() {
         List<EqualsVerifierReport> reports =
                 EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class, IncorrectN.class).report();
 
-        assertEquals(4, reports.size());
+        assertThat(reports.size()).isEqualTo(4);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(2), C.class);
         assertUnsuccessful(reports.get(1), IncorrectM.class, "Subclass: equals is not final.");
@@ -274,13 +270,13 @@ public class MultipleTypeEqualsVerifierTest {
     }
 
     private void assertSuccessful(EqualsVerifierReport report, Class<?> type) {
-        assertTrue(report.isSuccessful());
-        assertEquals(type, report.getType());
+        assertThat(report.isSuccessful()).isTrue();
+        assertThat(report.getType()).isEqualTo(type);
     }
 
     private void assertUnsuccessful(EqualsVerifierReport report, Class<?> type, String message) {
-        assertFalse(report.isSuccessful());
-        assertEquals(type, report.getType());
-        assertThat(report.getMessage(), containsString(message));
+        assertThat(report.isSuccessful()).isFalse();
+        assertThat(report.getType()).isEqualTo(type);
+        assertThat(report.getMessage()).contains(message);
     }
 }

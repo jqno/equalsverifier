@@ -8,15 +8,15 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class JpaEntityTest {
+class JpaEntityTest {
 
     @Test
-    public void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
+    void succeed_whenClassIsNonFinalAndFieldsAreMutable_givenClassHasJpaEntityAnnotation() {
         EqualsVerifier.forClass(EntityByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
+    void fail_whenClassIsNonFinalAndFieldsAreMutable_givenSuperclassHasJpaEntityAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassEntityByJpaAnnotation.class).verify())
                 .assertFailure()
@@ -24,7 +24,7 @@ public class JpaEntityTest {
     }
 
     @Test
-    public void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
+    void fail_whenClassIsJpaEntity_givenEntityAnnotationResidesInWrongPackage() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EntityByNonJpaAnnotation.class).verify())
                 .assertFailure()
@@ -32,12 +32,12 @@ public class JpaEntityTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
+    void succeed_whenFieldsAreMutable_givenClassHasJpaEmbeddableAnnotation() {
         EqualsVerifier.forClass(EmbeddableByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
+    void fail_whenFieldsAreMutable_givenSuperclassHasJpaEmbeddableAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassEmbeddableByJpaAnnotation.class).verify())
                 .assertFailure()
@@ -45,7 +45,7 @@ public class JpaEntityTest {
     }
 
     @Test
-    public void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
+    void fail_whenClassIsJpaEmbeddable_givenEmbeddableAnnotationResidesInWrongPackage() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EmbeddableByNonJpaAnnotation.class).verify())
                 .assertFailure()
@@ -53,12 +53,12 @@ public class JpaEntityTest {
     }
 
     @Test
-    public void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
+    void succeed_whenFieldsAreMutable_givenClassHasJpaMappedSuperclassAnnotation() {
         EqualsVerifier.forClass(MappedSuperclassByJpaAnnotation.class).verify();
     }
 
     @Test
-    public void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
+    void fail_whenFieldsAreMutable_givenSuperclassHasJpaMappedSuperclassAnnotationButThisClassDoesnt() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SubclassMappedSuperclassByJpaAnnotation.class).verify())
                 .assertFailure()
@@ -66,7 +66,7 @@ public class JpaEntityTest {
     }
 
     @Test
-    public void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
+    void fail_whenClassIsJpaMappedSuperclass_givenMappedSuperclassAnnotationResidesInWrongPackage() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(MappedSuperclassByNonJpaAnnotation.class).verify())
                 .assertFailure()

@@ -4,10 +4,10 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class TypeCheckTest {
+class TypeCheckTest {
 
     @Test
-    public void fail_whenEqualsReturnsTrueForACompletelyUnrelatedType() {
+    void fail_whenEqualsReturnsTrueForACompletelyUnrelatedType() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(WrongTypeCheck.class).verify())
                 .assertFailure()
@@ -15,7 +15,7 @@ public class TypeCheckTest {
     }
 
     @Test
-    public void fail_whenEqualsDoesNotTypeCheck() {
+    void fail_whenEqualsDoesNotTypeCheck() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NoTypeCheck.class).verify())
                 .assertFailure()
@@ -24,7 +24,7 @@ public class TypeCheckTest {
     }
 
     @Test
-    public void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
+    void fail_whenEqualsDoesNotTypeCheckAndThrowsAnExceptionOtherThanClassCastException() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NoTypeCheckButNoClassCastExceptionEither.class).verify())
                 .assertFailure()

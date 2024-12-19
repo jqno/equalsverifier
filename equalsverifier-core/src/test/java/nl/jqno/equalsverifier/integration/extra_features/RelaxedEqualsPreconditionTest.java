@@ -6,7 +6,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Multiple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class RelaxedEqualsPreconditionTest {
+class RelaxedEqualsPreconditionTest {
 
     private static final String PRECONDITION = "Precondition";
     private static final String DIFFERENT_CLASSES = "are of different classes";
@@ -21,14 +21,14 @@ public class RelaxedEqualsPreconditionTest {
     private Multiple green;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         red = new Multiple(1, 2);
         blue = new Multiple(2, 1);
         green = new Multiple(2, 2);
     }
 
     @Test
-    public void throw_whenTheFirstExampleIsNull() {
+    void throw_whenTheFirstExampleIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(null, blue))
                 .assertThrows(IllegalArgumentException.class)
@@ -36,7 +36,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void throw_whenTheSecondExampleIsNull() {
+    void throw_whenTheSecondExampleIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, null))
                 .assertThrows(IllegalArgumentException.class)
@@ -44,12 +44,12 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void succeed_whenTheVarargArrayIsNull() {
+    void succeed_whenTheVarargArrayIsNull() {
         EqualsVerifier.forRelaxedEqualExamples(red, blue, (Multiple[]) null).andUnequalExample(green).verify();
     }
 
     @Test
-    public void fail_whenAVarargParameterIsNull() {
+    void fail_whenAVarargParameterIsNull() {
         Multiple another = new Multiple(-1, -2);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, blue, another, null))
@@ -58,7 +58,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTheUnequalExampleIsNull() {
+    void fail_whenTheUnequalExampleIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExample(null))
                 .assertThrows(IllegalArgumentException.class)
@@ -66,12 +66,12 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void succeed_whenTheUnequalVarargArrayIsNull() {
+    void succeed_whenTheUnequalVarargArrayIsNull() {
         EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, (Multiple[]) null).verify();
     }
 
     @Test
-    public void fail_whenAnUnequalVarargParameterIsNull() {
+    void fail_whenAnUnequalVarargParameterIsNull() {
         Multiple another = new Multiple(3, 3);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, another, null))
@@ -79,7 +79,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenEqualExamplesAreOfDifferentRuntimeTypes() {
+    void fail_whenEqualExamplesAreOfDifferentRuntimeTypes() {
         SubMultiple sm = new SubMultiple(1, 2);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(sm, red).andUnequalExample(green).verify())
@@ -92,7 +92,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTheSameExampleIsGivenTwice() {
+    void fail_whenTheSameExampleIsGivenTwice() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, red).andUnequalExample(green).verify())
                 .assertFailure()
@@ -100,7 +100,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTwoExamplesAreIdentical() {
+    void fail_whenTwoExamplesAreIdentical() {
         Multiple aa = new Multiple(1, 2);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify())
@@ -109,7 +109,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTwoExamplesAreNotEqualAtAll() {
+    void fail_whenTwoExamplesAreNotEqualAtAll() {
         Multiple aa = new Multiple(42, 42);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, aa).andUnequalExample(green).verify())
@@ -118,7 +118,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenAnEqualExampleIsAlsoGivenAsAnUnequalExample() {
+    void fail_whenAnEqualExampleIsAlsoGivenAsAnUnequalExample() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, green).andUnequalExample(green))
                 .assertThrows(IllegalStateException.class)
@@ -126,7 +126,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTheSameUnequalExampleIsGivenTwice() {
+    void fail_whenTheSameUnequalExampleIsGivenTwice() {
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, green))
                 .assertThrows(IllegalStateException.class)
@@ -134,7 +134,7 @@ public class RelaxedEqualsPreconditionTest {
     }
 
     @Test
-    public void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
+    void fail_whenTwoUnequalExamplesAreEqualToEachOther() {
         Multiple xx = new Multiple(2, 2);
         ExpectedException
                 .when(() -> EqualsVerifier.forRelaxedEqualExamples(red, blue).andUnequalExamples(green, xx))

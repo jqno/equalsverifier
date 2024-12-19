@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.FieldIterable;
 import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
@@ -11,31 +9,31 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class RecordObjectAccessorCopyingTest {
+class RecordObjectAccessorCopyingTest {
 
     private Objenesis objenesis = new ObjenesisStd();
 
     @Test
-    public void copyHappyPath() {
+    void copyHappyPath() {
         Object original = instantiate(SimpleRecord.class);
         Object copy = copyOf(original);
 
-        assertNotSame(original, copy);
-        assertEquals(original, copy);
+        assertThat(copy).isNotSameAs(original);
+        assertThat(copy).isEqualTo(original);
     }
 
     @Test
-    public void shallowCopy() {
+    void shallowCopy() {
         Object original = instantiate(RecordContainer.class);
         Object copy = copyOf(original);
         RecordObjectAccessor<?> originalAccessor = create(original);
         RecordObjectAccessor<?> copyAccessor = create(copy);
 
-        assertNotSame(original, copy);
+        assertThat(copy).isNotSameAs(original);
         for (FieldProbe p : FieldIterable.of(original.getClass())) {
             Object a = originalAccessor.getField(p);
             Object b = copyAccessor.getField(p);
-            assertSame(a, b);
+            assertThat(b).isSameAs(a);
         }
     }
 

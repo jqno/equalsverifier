@@ -1,16 +1,16 @@
 package nl.jqno.equalsverifier.internal.exceptions;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
 import org.junit.jupiter.api.Test;
 
-public class NoValueExceptionTest {
+class NoValueExceptionTest {
 
     @Test
-    public void description() {
+    void description() {
         TypeTag tag = new TypeTag(String.class);
         NoValueException e = new NoValueException(tag);
-        assertTrue(e.getDescription().contains("String"));
+        assertThat(e.getDescription().contains("String")).isTrue();
     }
 }

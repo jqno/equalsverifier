@@ -7,10 +7,10 @@ import nl.jqno.equalsverifier.internal.checkers.fieldchecks.StringFieldCheck;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class StringTest {
+class StringTest {
 
     @Test
-    public void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive() {
+    void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(IncorrectIgnoreCaseStringEquals.class).verify())
                 .assertFailure()
@@ -23,12 +23,12 @@ public class StringTest {
     }
 
     @Test
-    public void succeed_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsAlsoCaseInsensitive() {
+    void succeed_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsAlsoCaseInsensitive() {
         EqualsVerifier.forClass(CorrectIgnoreCaseStringEquals.class).verify();
     }
 
     @Test
-    public void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive_givenHashCodeIsCached() {
+    void fail_whenStringIsComparedUsingEqualsIgnoreCaseAndHashCodeIsCaseSensitive_givenHashCodeIsCached() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

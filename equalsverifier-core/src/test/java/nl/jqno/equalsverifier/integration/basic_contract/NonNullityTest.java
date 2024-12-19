@@ -5,10 +5,10 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class NonNullityTest {
+class NonNullityTest {
 
     @Test
-    public void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
+    void fail_whenNullPointerExceptionIsThrown_givenNullInput() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullPointerExceptionThrower.class).verify())
                 .assertFailure()
@@ -16,7 +16,7 @@ public class NonNullityTest {
     }
 
     @Test
-    public void fail_whenEqualsReturnsTrue_givenNullInput() {
+    void fail_whenEqualsReturnsTrue_givenNullInput() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullReturnsTrue.class).verify())
                 .assertFailure()

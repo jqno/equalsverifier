@@ -1,17 +1,17 @@
 package nl.jqno.equalsverifier.internal.versionspecific;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
-public class SealedTypesHelperTest {
+class SealedTypesHelperTest {
 
     @Test
     void twoLevels() {
         var actual = SealedTypesHelper.findInstantiableSubclass(TwoLevelParent.class);
-        assertEquals(TwoLevelChild.class, actual.get());
+        assertThat(actual.get()).isEqualTo(TwoLevelChild.class);
     }
 
     sealed interface TwoLevelParent {}
@@ -21,7 +21,7 @@ public class SealedTypesHelperTest {
     @Test
     void fourLevels() {
         var actual = SealedTypesHelper.findInstantiableSubclass(FourLevelParent.class);
-        assertEquals(FourLevelChild.class, actual.get());
+        assertThat(actual.get()).isEqualTo(FourLevelChild.class);
     }
 
     sealed interface FourLevelParent {}
@@ -35,7 +35,7 @@ public class SealedTypesHelperTest {
     @Test
     void allConcrete() {
         var actual = SealedTypesHelper.findInstantiableSubclass(AllConcreteParent.class);
-        assertEquals(AllConcreteMiddle.class, actual.get());
+        assertThat(actual.get()).isEqualTo(AllConcreteMiddle.class);
     }
 
     sealed class AllConcreteParent {}
@@ -47,7 +47,7 @@ public class SealedTypesHelperTest {
     @Test
     void nonSealedAtTheBottom() {
         var actual = SealedTypesHelper.findInstantiableSubclass(NonSealedAtTheBottomParent.class);
-        assertEquals(NonSealedAtTheBottomChild.class, actual.get());
+        assertThat(actual.get()).isEqualTo(NonSealedAtTheBottomChild.class);
     }
 
     sealed interface NonSealedAtTheBottomParent {}
@@ -57,6 +57,6 @@ public class SealedTypesHelperTest {
     @Test
     void notSealed() {
         var actual = SealedTypesHelper.findInstantiableSubclass(Object.class);
-        assertEquals(Optional.empty(), actual);
+        assertThat(actual).isEqualTo(Optional.empty());
     }
 }

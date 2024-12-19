@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -10,7 +9,7 @@ import java.util.*;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
-public class FieldIterableTest {
+class FieldIterableTest {
 
     private static final Set<Field> FIELD_CONTAINER_FIELDS = createFieldContainerFields();
     private static final Set<Field> NONSTATIC_FIELD_CONTAINER_FIELDS = createNonStaticFieldContainerFields();
@@ -18,53 +17,53 @@ public class FieldIterableTest {
     private static final Set<Field> FIELD_AND_SUB_FIELD_CONTAINER_FIELDS = createFieldAndSubFieldContainerFields();
 
     @Test
-    public void simpleFields() {
+    void simpleFields() {
         Set<Field> actual = new HashSet<>();
         for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersFieldContainer.class)) {
             actual.add(probe.getField());
         }
 
-        assertEquals(FIELD_CONTAINER_FIELDS, actual);
+        assertThat(actual).isEqualTo(FIELD_CONTAINER_FIELDS);
     }
 
     @Test
-    public void simpleFieldsWithoutStatics() {
+    void simpleFieldsWithoutStatics() {
         Set<Field> actual = new HashSet<>();
         for (FieldProbe probe : FieldIterable.ofIgnoringStatic(DifferentAccessModifiersFieldContainer.class)) {
             actual.add(probe.getField());
         }
 
-        assertEquals(NONSTATIC_FIELD_CONTAINER_FIELDS, actual);
+        assertThat(actual).isEqualTo(NONSTATIC_FIELD_CONTAINER_FIELDS);
     }
 
     @Test
-    public void subAndSuperClassFields() {
+    void subAndSuperClassFields() {
         Set<Field> actual = new HashSet<>();
         for (FieldProbe probe : FieldIterable.of(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(probe.getField());
         }
 
-        assertEquals(FIELD_AND_SUB_FIELD_CONTAINER_FIELDS, actual);
+        assertThat(actual).isEqualTo(FIELD_AND_SUB_FIELD_CONTAINER_FIELDS);
     }
 
     @Test
-    public void onlySubClassFields() {
+    void onlySubClassFields() {
         Set<Field> actual = new HashSet<>();
         for (FieldProbe probe : FieldIterable.ofIgnoringSuper(DifferentAccessModifiersSubFieldContainer.class)) {
             actual.add(probe.getField());
         }
 
-        assertEquals(SUB_FIELD_CONTAINER_FIELDS, actual);
+        assertThat(actual).isEqualTo(SUB_FIELD_CONTAINER_FIELDS);
     }
 
     @Test
-    public void noFields() {
+    void noFields() {
         FieldIterable iterable = FieldIterable.of(NoFields.class);
-        assertFalse(iterable.iterator().hasNext());
+        assertThat(iterable.iterator().hasNext()).isFalse();
     }
 
     @Test
-    public void superHasNoFields() throws NoSuchFieldException {
+    void superHasNoFields() throws NoSuchFieldException {
         Set<Field> expected = new HashSet<>();
         expected.add(NoFieldsSubWithFields.class.getField("field"));
 
@@ -73,21 +72,21 @@ public class FieldIterableTest {
             actual.add(probe.getField());
         }
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void subHasNoFields() {
+    void subHasNoFields() {
         Set<Field> actual = new HashSet<>();
         for (FieldProbe probe : FieldIterable.of(EmptySubFieldContainer.class)) {
             actual.add(probe.getField());
         }
 
-        assertEquals(FIELD_CONTAINER_FIELDS, actual);
+        assertThat(actual).isEqualTo(FIELD_CONTAINER_FIELDS);
     }
 
     @Test
-    public void classInTheMiddleHasNoFields() throws NoSuchFieldException {
+    void classInTheMiddleHasNoFields() throws NoSuchFieldException {
         Set<Field> expected = new HashSet<>();
         expected.addAll(FIELD_CONTAINER_FIELDS);
         expected.add(SubEmptySubFieldContainer.class.getDeclaredField("field"));
@@ -97,57 +96,57 @@ public class FieldIterableTest {
             actual.add(probe.getField());
         }
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void orderingTest() {
+    void orderingTest() {
         FieldIterable iterable = FieldIterable.of(UnorderedFieldContainer.class);
         List<String> actual = new ArrayList<>();
         for (FieldProbe probe : iterable) {
             actual.add(probe.getName());
         }
 
-        assertEquals(Arrays.asList("one", "two", "THREE", "FOUR"), actual);
+        assertThat(actual).isEqualTo(Arrays.asList("one", "two", "THREE", "FOUR"));
     }
 
     @Test
-    public void interfaceTest() {
+    void interfaceTest() {
         FieldIterable iterable = FieldIterable.of(Interface.class);
-        assertFalse(iterable.iterator().hasNext());
+        assertThat(iterable.iterator().hasNext()).isFalse();
     }
 
     @Test
-    public void nextAfterLastElement() {
+    void nextAfterLastElement() {
         Iterator<FieldProbe> iterator = FieldIterable.of(DifferentAccessModifiersFieldContainer.class).iterator();
         while (iterator.hasNext()) {
             iterator.next();
         }
 
-        assertThrows(NoSuchElementException.class, () -> iterator.next());
+        assertThatExceptionOfType(NoSuchElementException.class).isThrownBy(() -> iterator.next());
     }
 
     @Test
-    public void objectHasNoElements() {
+    void objectHasNoElements() {
         FieldIterable iterable = FieldIterable.of(Object.class);
-        assertFalse(iterable.iterator().hasNext());
+        assertThat(iterable.iterator().hasNext()).isFalse();
     }
 
     @Test
-    public void ignoreSyntheticFields() {
+    void ignoreSyntheticFields() {
         FieldIterable iterable = FieldIterable.of(Outer.Inner.class);
-        assertFalse(iterable.iterator().hasNext());
+        assertThat(iterable.iterator().hasNext()).isFalse();
     }
 
     @Test
-    public void ignoreNonSyntheticCoberturaFields() {
+    void ignoreNonSyntheticCoberturaFields() {
         FieldIterable iterable = FieldIterable.of(CoberturaContainer.class);
         List<Field> fields = new ArrayList<>();
         for (FieldProbe probe : iterable) {
             fields.add(probe.getField());
         }
-        assertEquals(1, fields.size());
-        assertEquals("i", fields.get(0).getName());
+        assertThat(fields.size()).isEqualTo(1);
+        assertThat(fields.get(0).getName()).isEqualTo("i");
     }
 
     private static Set<Field> createFieldContainerFields() {

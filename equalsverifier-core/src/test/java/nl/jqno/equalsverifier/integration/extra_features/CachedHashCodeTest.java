@@ -7,7 +7,7 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class CachedHashCodeTest {
+class CachedHashCodeTest {
 
     private static final String SOME_NAME = "some name";
     private static final String CACHED_HASHCODE = "Cached hashCode:";
@@ -17,7 +17,7 @@ public class CachedHashCodeTest {
             "Could not find cachedHashCodeField: must be 'private int";
 
     @Test
-    public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsNotUsed() {
+    void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsNotUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ObjectWithValidCachedHashCode.class).verify())
                 .assertFailure()
@@ -25,7 +25,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsed() {
+    void succeed_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsed() {
         EqualsVerifier
                 .forClass(ObjectWithValidCachedHashCode.class)
                 .withCachedHashCode("cachedHashCode", "calcHashCode", new ObjectWithValidCachedHashCode(SOME_NAME))
@@ -33,7 +33,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeIsValidAndLocatedInSuperclass_givenWithCachedHashCodeIsUsed() {
+    void succeed_whenCachedHashCodeIsValidAndLocatedInSuperclass_givenWithCachedHashCodeIsUsed() {
         EqualsVerifier
                 .forClass(Subclass.class)
                 .withCachedHashCode("cachedHashCode", "calcHashCode", new Subclass(SOME_NAME))
@@ -41,7 +41,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeIsInvalid_givenWithCachedHashCodeIsUsed() {
+    void fail_whenCachedHashCodeIsInvalid_givenWithCachedHashCodeIsUsed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -56,7 +56,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeFieldDoesNotExist() {
+    void fail_whenCachedHashCodeFieldDoesNotExist() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -70,7 +70,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeFieldIsPublic() {
+    void fail_whenCachedHashCodeFieldIsPublic() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -84,7 +84,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeFieldIsNotAnInt() {
+    void fail_whenCachedHashCodeFieldIsNotAnInt() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -98,7 +98,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCalculateHashCodeMethodDoesNotExist() {
+    void fail_whenCalculateHashCodeMethodDoesNotExist() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -112,7 +112,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
+    void fail_whenCalculateHashCodeMethodDoesNotReturnInt() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -126,7 +126,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCalculateHashCodeMethodTakesParamters() {
+    void fail_whenCalculateHashCodeMethodTakesParamters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -140,7 +140,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCalculateHashCodeMethodIsPublic() {
+    void fail_whenCalculateHashCodeMethodIsPublic() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -154,7 +154,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldAreProtected() {
+    void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldAreProtected() {
         EqualsVerifier
                 .forClass(ObjectWithProtectedCalculateHashCodeMembers.class)
                 .withCachedHashCode(
@@ -165,7 +165,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldHaveDefaultVisibility() {
+    void succeed_whenCalculateHashCodeMethodAndCalcHashCodeFieldHaveDefaultVisibility() {
         EqualsVerifier
                 .forClass(ObjectWithDefaultVisibilityCalculateHashCodeMembers.class)
                 .withCachedHashCode(
@@ -176,7 +176,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenExampleIsNull() {
+    void fail_whenExampleIsNull() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -188,7 +188,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeFieldIsNotInitialized() {
+    void fail_whenCachedHashCodeFieldIsNotInitialized() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -203,7 +203,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenHashCodeIsZero() {
+    void fail_whenHashCodeIsZero() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -220,7 +220,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeFieldIsNotInitialized_givenExampleIsNullAndNoExampleForCachedHashCodeIsSuppressed() {
+    void succeed_whenCachedHashCodeFieldIsNotInitialized_givenExampleIsNullAndNoExampleForCachedHashCodeIsSuppressed() {
         EqualsVerifier
                 .forClass(ObjectWithUninitializedCachedHashCode.class)
                 .withCachedHashCode("cachedHashCode", "calcHashCode", null)
@@ -229,7 +229,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenNoExampleForCachedHashCodeIsSuppressedAndExampleIsNotNull() {
+    void fail_whenNoExampleForCachedHashCodeIsSuppressedAndExampleIsNotNull() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -247,7 +247,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsedAndWarningNonfinalFieldsIsSuppressed() {
+    void fail_whenCachedHashCodeIsValid_givenWithCachedHashCodeIsUsedAndWarningNonfinalFieldsIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -265,7 +265,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeIsLazilyInitialized_givenItIsValid() {
+    void succeed_whenCachedHashCodeIsLazilyInitialized_givenItIsValid() {
         EqualsVerifier
                 .forClass(ObjectWithLazilyInitializedCachedHashCode.class)
                 .withCachedHashCode(
@@ -276,7 +276,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeIsLazilyInitializedAndCachedHashCodeFieldIsCalledInEquals_givenItIsValid() {
+    void succeed_whenCachedHashCodeIsLazilyInitializedAndCachedHashCodeFieldIsCalledInEquals_givenItIsValid() {
         EqualsVerifier
                 .forClass(ObjectWithLazyCachedHashCodeAndFieldIsCalledInEquals.class)
                 .withCachedHashCode(
@@ -287,7 +287,7 @@ public class CachedHashCodeTest {
     }
 
     @Test
-    public void succeed_whenCachedHashCodeIsLazilyInitializedAndHashCodeMethodIsCalledInEquals_givenItIsValid() {
+    void succeed_whenCachedHashCodeIsLazilyInitializedAndHashCodeMethodIsCalledInEquals_givenItIsValid() {
         EqualsVerifier
                 .forClass(ObjectWithLazyCachedHashCodeAndMethodIsCalledInEquals.class)
                 .withCachedHashCode(

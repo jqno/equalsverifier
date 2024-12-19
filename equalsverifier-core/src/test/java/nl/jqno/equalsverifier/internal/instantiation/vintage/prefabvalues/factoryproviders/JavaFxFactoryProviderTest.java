@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 import java.util.Map;
@@ -17,23 +16,23 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-@SuppressWarnings("rawtypes")
-public class JavaFxFactoryProviderTest {
+@SuppressWarnings({ "rawtypes", "unchecked" })
+class JavaFxFactoryProviderTest {
 
     private VintageValueProvider valueProvider;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         valueProvider = new VintageValueProvider(JavaApiPrefabValues.build(), new ObjenesisStd());
     }
 
     @Test
-    public void maintainCoverageOnJdksThatDontHaveJavafx() {
-        assertNotNull(new JavaFxFactoryProvider().getFactoryCache());
+    void maintainCoverageOnJdksThatDontHaveJavafx() {
+        assertThat(new JavaFxFactoryProvider().getFactoryCache()).isNotNull();
     }
 
     @Test
-    public void createInstancesWithCorrectSingleGenericParameter() {
+    void createInstancesWithCorrectSingleGenericParameter() {
         TypeTag tag = new TypeTag(GenericContainer.class, new TypeTag(String.class));
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
@@ -41,13 +40,13 @@ public class JavaFxFactoryProviderTest {
                 new PropertyFactory<>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertEquals(valueProvider.giveRed(listTag), tuple.getRed().t);
-        assertEquals(valueProvider.giveBlue(listTag), tuple.getBlue().t);
-        assertEquals(String.class, tuple.getRed().t.get(0).getClass());
+        assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(listTag));
+        assertThat(tuple.getBlue().t).isEqualTo(valueProvider.giveBlue(listTag));
+        assertThat(tuple.getRed().t.get(0).getClass()).isEqualTo(String.class);
     }
 
     @Test
-    public void createInstancesWithCorrectMultipleGenericParameter() {
+    void createInstancesWithCorrectMultipleGenericParameter() {
         TypeTag tag = new TypeTag(GenericMultiContainer.class, new TypeTag(String.class), new TypeTag(Point.class));
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
@@ -55,12 +54,12 @@ public class JavaFxFactoryProviderTest {
                 new PropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
 
-        assertEquals(valueProvider.giveRed(mapTag), tuple.getRed().t);
-        assertEquals(valueProvider.giveBlue(mapTag), tuple.getBlue().t);
+        assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(mapTag));
+        assertThat(tuple.getBlue().t).isEqualTo(valueProvider.giveBlue(mapTag));
 
         Map.Entry next = (Map.Entry) tuple.getRed().t.entrySet().iterator().next();
-        assertEquals(String.class, next.getKey().getClass());
-        assertEquals(Point.class, next.getValue().getClass());
+        assertThat(next.getKey().getClass()).isEqualTo(String.class);
+        assertThat(next.getValue().getClass()).isEqualTo(Point.class);
     }
 
     private static final class GenericContainer<T> {

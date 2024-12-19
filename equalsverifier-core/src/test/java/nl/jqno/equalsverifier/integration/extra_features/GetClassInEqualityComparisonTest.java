@@ -3,20 +3,20 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import org.junit.jupiter.api.Test;
 
-public class GetClassInEqualityComparisonTest {
+class GetClassInEqualityComparisonTest {
 
     @Test
-    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
+    void succeed_whenGetClassIsPartOfEqualityComparison_givenAnAbstractSuperclassAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Identifiable.class).usingGetClass().verify();
     }
 
     @Test
-    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAConcreteImplementationAndUsingGetClassIsUsed() {
+    void succeed_whenGetClassIsPartOfEqualityComparison_givenAConcreteImplementationAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Person.class).usingGetClass().verify();
     }
 
     @Test
-    public void succeed_whenGetClassIsPartOfEqualityComparison_givenAnotherConcreteImplementationAndUsingGetClassIsUsed() {
+    void succeed_whenGetClassIsPartOfEqualityComparison_givenAnotherConcreteImplementationAndUsingGetClassIsUsed() {
         EqualsVerifier.forClass(Account.class).usingGetClass().verify();
     }
 

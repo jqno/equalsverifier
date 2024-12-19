@@ -10,30 +10,30 @@ import nl.jqno.equalsverifier.integration.extra_features.nonnull.jsr305.paramete
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationParametersAreNonnullByDefaultTest {
+class AnnotationParametersAreNonnullByDefaultTest {
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnClass() {
         EqualsVerifier.forClass(ParametersAreNonnullByDefaultOnClass.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnPackage() {
         EqualsVerifier.forClass(ParametersAreNonnullByDefaultOnPackage.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnOuterClass() {
         EqualsVerifier.forClass(ParametersAreNonnullByDefaultOuter.FInner.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAnnotationOnNestedOuterClass() {
         EqualsVerifier.forClass(ParametersAreNonnullByDefaultOuter.FMiddle.FInnerInner.class).verify();
     }
 
     @Test
-    public void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
+    void fail_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class).verify())
                 .assertFailure()
@@ -41,7 +41,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
+    void succeed_whenEqualsDoesntCheckForNull_givenEclipseDefaultAndNullableAnnotationOnClassAndWarningSuppressed() {
         EqualsVerifier
                 .forClass(ParametersAreNonnullByDefaultWithNullableOnClass.class)
                 .suppress(Warning.NULL_FIELDS)
@@ -49,7 +49,7 @@ public class AnnotationParametersAreNonnullByDefaultTest {
     }
 
     @Test
-    public void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
+    void succeed_whenEqualsChecksForNull_givenEclipseDefaultAndNullableAnnotationOnClass() {
         EqualsVerifier.forClass(ParamsNonnullByDefaultWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 

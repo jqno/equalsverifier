@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -10,10 +10,10 @@ import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
 import org.objenesis.ObjenesisStd;
 
-public class RecordInstanceCreatorTest {
+class RecordInstanceCreatorTest {
 
     @Test
-    public void instanceCreator() throws NoSuchFieldException {
+    void instanceCreator() throws NoSuchFieldException {
         ClassProbe<SomeRecord> probe = ClassProbe.of(SomeRecord.class);
         InstanceCreator<SomeRecord> sut = new InstanceCreator<>(probe, new ObjenesisStd());
 
@@ -25,9 +25,9 @@ public class RecordInstanceCreatorTest {
 
         SomeRecord actual = sut.instantiate(values);
 
-        assertEquals(42, actual.x);
-        assertEquals(0, actual.y);
-        assertEquals("42", actual.z);
+        assertThat(actual.x).isEqualTo(42);
+        assertThat(actual.y).isEqualTo(0);
+        assertThat(actual.z).isEqualTo("42");
     }
 
     record SomeRecord(int x, int y, String z) {}

@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class NullFieldsWithExceptionsTest {
+class NullFieldsWithExceptionsTest {
 
     private static final String EQUALS = "equals";
     private static final String HASH_CODE = "hashCode";
@@ -19,7 +19,7 @@ public class NullFieldsWithExceptionsTest {
     private static final String WHEN_FOO_IS_NULL = "when field foo is null";
 
     @Test
-    public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
+    void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInEquals_givenFieldIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EqualsIllegalArgumentThrower.class).verify())
                 .assertFailure()
@@ -28,7 +28,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     @Test
-    public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
+    void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInEquals_givenFieldIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(EqualsIllegalStateThrower.class).verify())
                 .assertFailure()
@@ -37,7 +37,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     @Test
-    public void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
+    void recogniseUnderlyingNpe_whenIllegalArgumentExceptionIsThrownInHashCode_givenFieldIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeIllegalArgumentThrower.class).verify())
                 .assertFailure()
@@ -46,7 +46,7 @@ public class NullFieldsWithExceptionsTest {
     }
 
     @Test
-    public void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
+    void recogniseUnderlyingNpe_whenIllegalStateExceptionIsThrownInHashCode_givenFieldIsNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeIllegalStateThrower.class).verify())
                 .assertFailure()

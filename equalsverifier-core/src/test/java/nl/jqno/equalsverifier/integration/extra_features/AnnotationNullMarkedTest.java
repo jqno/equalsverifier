@@ -10,30 +10,30 @@ import nl.jqno.equalsverifier.testhelpers.annotations.org.jspecify.annotations.N
 import nl.jqno.equalsverifier.testhelpers.annotations.org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
-public class AnnotationNullMarkedTest {
+class AnnotationNullMarkedTest {
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnClass() {
         EqualsVerifier.forClass(NullMarkedOnClass.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnPackage() {
+    void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnPackage() {
         EqualsVerifier.forClass(NullMarkedOnPackage.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnOuterClass() {
         EqualsVerifier.forClass(NullMarkedOuter.FInner.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnNestedOuterClass() {
+    void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAnnotationOnNestedOuterClass() {
         EqualsVerifier.forClass(NullMarkedOuter.FMiddle.FInnerInner.class).verify();
     }
 
     @Test
-    public void fail_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClass() {
+    void fail_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NullMarkedWithNullableOnClass.class).verify())
                 .assertFailure()
@@ -41,12 +41,12 @@ public class AnnotationNullMarkedTest {
     }
 
     @Test
-    public void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClassAndWarningSuppressed() {
+    void succeed_whenEqualsDoesntCheckForNull_givenNullMarkedAndNullableAnnotationOnClassAndWarningSuppressed() {
         EqualsVerifier.forClass(NullMarkedWithNullableOnClass.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void succeed_whenEqualsChecksForNull_givenNullMarkedAndNullableAnnotationOnClass() {
+    void succeed_whenEqualsChecksForNull_givenNullMarkedAndNullableAnnotationOnClass() {
         EqualsVerifier.forClass(NullMarkedWithNullableOnClassAndNullCheckInEquals.class).verify();
     }
 

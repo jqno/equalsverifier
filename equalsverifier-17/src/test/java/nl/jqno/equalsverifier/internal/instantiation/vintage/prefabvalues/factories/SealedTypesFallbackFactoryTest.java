@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 import java.util.Objects;
@@ -16,14 +15,14 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class SealedTypesFallbackFactoryTest {
+class SealedTypesFallbackFactoryTest {
 
     private FallbackFactory<?> factory;
     private VintageValueProvider valueProvider;
     private LinkedHashSet<TypeTag> typeStack;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Objenesis objenesis = new ObjenesisStd();
         factory = new FallbackFactory<>(objenesis);
         FactoryCache factoryCache = new FactoryCache();
@@ -33,11 +32,11 @@ public class SealedTypesFallbackFactoryTest {
     }
 
     @Test
-    public void redCopyHasTheSameValuesAsRed_whenSutIsAbstractSealedAndPermittedTypeAddsField() {
+    void redCopyHasTheSameValuesAsRed_whenSutIsAbstractSealedAndPermittedTypeAddsField() {
         Tuple<?> tuple = factory.createValues(new TypeTag(SealedParentWithFinalChild.class), valueProvider, typeStack);
 
-        assertEquals(tuple.getRed(), tuple.getRedCopy());
-        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
+        assertThat(tuple.getRedCopy()).isNotSameAs(tuple.getRed());
     }
 
     public abstract static sealed class SealedParentWithFinalChild permits FinalSealedChild {

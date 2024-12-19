@@ -11,10 +11,10 @@ import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContaine
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unchecked")
-public class WithGenericPrefabValuesTest {
+class WithGenericPrefabValuesTest {
 
     @Test
-    public void sanityCheck() {
+    void sanityCheck() {
         EqualsVerifier
                 .forClass(SingleGenericContainer.class)
                 .withPrefabValues(
@@ -33,7 +33,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsed_given1GenericParameter() {
+    void fail_whenRegularPrefabValuesOfWrongTypeAreUsed_given1GenericParameter() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -49,7 +49,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given1GenericParameter() {
+    void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given1GenericParameter() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -66,7 +66,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void succeed_whenPrefabValuesMatchGenericParameterInClassUnderTest_given1GenericParameter() {
+    void succeed_whenPrefabValuesMatchGenericParameterInClassUnderTest_given1GenericParameter() {
         EqualsVerifier
                 .forClass(SingleGenericContainerContainer.class)
                 .withGenericPrefabValues(SingleGenericContainer.class, SingleGenericContainer::new)
@@ -74,7 +74,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenTypeIsNull_given1GenericParameter() {
+    void throw_whenTypeIsNull_given1GenericParameter() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -84,7 +84,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenFactoryIsNull_given1GenericParameter() {
+    void throw_whenFactoryIsNull_given1GenericParameter() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -94,7 +94,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenFactoryHas2Parameters_given1GenericParameter() {
+    void throw_whenFactoryHas2Parameters_given1GenericParameter() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -107,7 +107,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsed_given2GenericParameters() {
+    void fail_whenRegularPrefabValuesOfWrongTypeAreUsed_given2GenericParameters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -123,7 +123,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given2GenericParameters() {
+    void fail_whenRegularPrefabValuesOfWrongTypeAreUsedAndMarkedAsNonnull_given2GenericParameters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -140,7 +140,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void succeed_whenPrefabValuesMatchGenericParametersInClassUnderTest_given2GenericParameters() {
+    void succeed_whenPrefabValuesMatchGenericParametersInClassUnderTest_given2GenericParameters() {
         EqualsVerifier
                 .forClass(DoubleGenericContainerContainer.class)
                 .withGenericPrefabValues(DoubleGenericContainer.class, DoubleGenericContainer::new)
@@ -148,7 +148,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenTypeIsNull_given2GenericParameters() {
+    void throw_whenTypeIsNull_given2GenericParameters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -158,7 +158,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenFactoryIsNull_given2GenericParameters() {
+    void throw_whenFactoryIsNull_given2GenericParameters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -168,7 +168,7 @@ public class WithGenericPrefabValuesTest {
     }
 
     @Test
-    public void throw_whenFactoryHas1Parameter_given2GenericParameters() {
+    void throw_whenFactoryHas1Parameter_given2GenericParameters() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier

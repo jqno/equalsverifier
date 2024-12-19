@@ -8,7 +8,7 @@ import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class FinalityTest {
+class FinalityTest {
 
     private static final String BOTH_FINAL_OR_NONFINAL =
             "Finality: equals and hashCode must both be final or both be non-final";
@@ -17,12 +17,12 @@ public class FinalityTest {
             "Make your class or your %s method final, or supply an instance of a redefined subclass using withRedefinedSubclass";
 
     @Test
-    public void fail_whenEqualsIsFinalButHashCodeIsNonFinal() {
+    void fail_whenEqualsIsFinalButHashCodeIsNonFinal() {
         check(FinalEqualsNonFinalHashCode.class);
     }
 
     @Test
-    public void fail_whenEqualsIsNotFinal_givenAClassThatIsNotFinal() {
+    void fail_whenEqualsIsNotFinal_givenAClassThatIsNotFinal() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Point.class).verify())
                 .assertFailure()
@@ -34,7 +34,7 @@ public class FinalityTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsFinalButHashCodeIsNonFinal_givenWarningIsSuppressed() {
+    void succeed_whenEqualsIsFinalButHashCodeIsNonFinal_givenWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(FinalEqualsNonFinalHashCode.class)
                 .usingGetClass()
@@ -43,17 +43,17 @@ public class FinalityTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsNotFinal_givenAClassThatIsNotFinalAndWarningIsSuppressed() {
+    void succeed_whenEqualsIsNotFinal_givenAClassThatIsNotFinalAndWarningIsSuppressed() {
         EqualsVerifier.forClass(Point.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 
     @Test
-    public void fail_whenEqualsIsNonFinalButHashCodeIsFinal() {
+    void fail_whenEqualsIsNonFinalButHashCodeIsFinal() {
         check(NonFinalEqualsFinalHashCode.class);
     }
 
     @Test
-    public void fail_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinal() {
+    void fail_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinal() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalEqualsPoint.class).verify())
                 .assertFailure()
@@ -65,7 +65,7 @@ public class FinalityTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsNonFinalButHashCodeIsFinal_givenWarningsAreSuppressed() {
+    void succeed_whenEqualsIsNonFinalButHashCodeIsFinal_givenWarningsAreSuppressed() {
         EqualsVerifier
                 .forClass(NonFinalEqualsFinalHashCode.class)
                 .usingGetClass()
@@ -74,7 +74,7 @@ public class FinalityTest {
     }
 
     @Test
-    public void succeed_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinalAndWarningIsSuppressed() {
+    void succeed_whenHashCodeIsNotFinal_givenAClassThatIsNotFinalAndAnEqualsMethodThatIsFinalAndWarningIsSuppressed() {
         EqualsVerifier.forClass(FinalEqualsPoint.class).suppress(Warning.STRICT_INHERITANCE).verify();
     }
 

@@ -1,21 +1,18 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
 // CHECKSTYLE OFF: LocalFinalVariableName
 // CHECKSTYLE OFF: MemberName
 // CHECKSTYLE OFF: NeedBraces
 
-public class LombokLazyEqualsAndHashcodeTest {
+class LombokLazyEqualsAndHashcodeTest {
 
     @Test
-    void testWithLombokCachedHashCode() {
+    void withLombokCachedHashCode() {
         EqualsVerifier
                 .forClass(LazyPojo.class)
                 .withLombokCachedHashCode(new LazyPojo("a", new Object()))
@@ -24,31 +21,30 @@ public class LombokLazyEqualsAndHashcodeTest {
     }
 
     @Test
-    void testDefaultEqualsVerifierFailsForCachedLombokEqualsAndHashcode() {
-        final AssertionError error = assertThrows(
-            AssertionError.class,
-            () -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify());
-        assertThat(error.getMessage(), containsString("hashCode relies on $hashCodeCache, but equals does not."));
+    void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcode() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify())
+                .assertFailure()
+                .assertMessageContains("hashCode relies on $hashCodeCache, but equals does not.");
     }
 
     @Test
-    void testDefaultEqualsVerifierFailsForCachedLombokEqualsAndHashcodeWhenUsingWithCachedHashCode() {
-        final IllegalArgumentException error = assertThrows(
-            IllegalArgumentException.class,
-            () -> EqualsVerifier
-                    .forClass(LazyPojo.class)
-                    .suppress(Warning.STRICT_INHERITANCE)
-                    .withCachedHashCode("$hashCodeCache", "hashCode", new LazyPojo("bar", new Object()))
-                    .verify());
-        assertThat(
-            error.getMessage(),
-            containsString(
-                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'"));
+    void defaultEqualsVerifierFailsForCachedLombokEqualsAndHashcodeWhenUsingWithCachedHashCode() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .forClass(LazyPojo.class)
+                            .suppress(Warning.STRICT_INHERITANCE)
+                            .withCachedHashCode("$hashCodeCache", "hashCode", new LazyPojo("bar", new Object()))
+                            .verify())
+                .assertThrows(IllegalArgumentException.class)
+                .assertMessageContains(
+                    "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'");
     }
 
     /**
      * This class has been generated with Lombok (1.18.20). It is equivalent to:
-     * 
+     *
      * <pre>
      * &#64;RequiredArgsConstructor
      * &#64;EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)

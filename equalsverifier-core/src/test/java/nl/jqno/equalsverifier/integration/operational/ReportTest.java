@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.integration.operational;
 
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
@@ -11,47 +10,46 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class ReportTest {
+class ReportTest {
 
     @Test
-    public void isEmptyWhenClassIsCorrect() {
+    void isEmptyWhenClassIsCorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(FinalPoint.class).report();
 
-        assertEquals(FinalPoint.class, report.getType());
-        assertTrue(report.isSuccessful());
-        assertEquals("", report.getMessage());
-        assertNull(report.getCause());
+        assertThat(report.getType()).isEqualTo(FinalPoint.class);
+        assertThat(report.isSuccessful()).isTrue();
+        assertThat(report.getMessage()).isEqualTo("");
+        assertThat(report.getCause()).isNull();
     }
 
     @Test
-    public void containsAppropriateErrorMessageAndExceptionWhenClassIsIncorrect() {
+    void containsAppropriateErrorMessageAndExceptionWhenClassIsIncorrect() {
         EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
 
-        assertEquals(Point.class, report.getType());
-        assertFalse(report.isSuccessful());
-        assertThat(
-            report.getMessage(),
-            startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"));
-        assertEquals(AssertionException.class, report.getCause().getClass());
-        assertNull(report.getCause().getMessage());
+        assertThat(report.getType()).isEqualTo(Point.class);
+        assertThat(report.isSuccessful()).isFalse();
+        assertThat(report.getMessage())
+                .startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point");
+        assertThat(report.getCause().getClass()).isEqualTo(AssertionException.class);
+        assertThat(report.getCause().getMessage()).isNull();
     }
 
     @Test
-    public void reportReturnsTheSameInformationAsVerify() {
+    void reportReturnsTheSameInformationAsVerify() {
         EqualsVerifierReport report = EqualsVerifier.forClass(Point.class).report();
         try {
             EqualsVerifier.forClass(Point.class).verify();
             fail("Should have failed");
         }
         catch (AssertionError e) {
-            assertEquals(e.getMessage(), report.getMessage());
-            assertEquals(e.getCause().getClass(), report.getCause().getClass());
+            assertThat(report.getMessage()).isEqualTo(e.getMessage());
+            assertThat(report.getCause().getClass()).isEqualTo(e.getCause().getClass());
 
             StackTraceElement[] verified = e.getCause().getStackTrace();
             StackTraceElement[] reported = report.getCause().getStackTrace();
             // Implementation detail:
             // `report` has 1 extra stack frame because it delegates to an overload.
-            assertEquals(verified.length + 1, reported.length);
+            assertThat(reported.length).isEqualTo(verified.length + 1);
 
             for (int i = 0; i < verified.length; i++) {
                 if (!verified[i].getMethodName().equals("verify")) {
@@ -59,7 +57,7 @@ public class ReportTest {
                     break;
                 }
 
-                assertEquals(verified[i], reported[i]);
+                assertThat(reported[i]).isEqualTo(verified[i]);
             }
         }
     }

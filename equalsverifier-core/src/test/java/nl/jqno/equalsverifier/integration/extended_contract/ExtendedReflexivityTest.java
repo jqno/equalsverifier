@@ -10,15 +10,15 @@ import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import org.junit.jupiter.api.Test;
 
-public class ExtendedReflexivityTest {
+class ExtendedReflexivityTest {
 
     @Test
-    public void succeed_whenEqualsUsesEqualsMethodForObjects() {
+    void succeed_whenEqualsUsesEqualsMethodForObjects() {
         EqualsVerifier.forClass(UsesEqualsMethod.class).verify();
     }
 
     @Test
-    public void fail_whenEqualsUsesDoubleEqualSignForObjects() {
+    void fail_whenEqualsUsesDoubleEqualSignForObjects() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSign.class).verify())
                 .assertFailure()
@@ -26,12 +26,12 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
+    void succeed_whenEqualsUsesDoubleEqualSignForObject_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier.forClass(UsesDoubleEqualSign.class).suppress(Warning.REFERENCE_EQUALITY).verify();
     }
 
     @Test
-    public void fail_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives() {
+    void fail_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class).verify())
                 .assertFailure()
@@ -39,7 +39,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives_givenDoubleEqualWarningIsSuppressed() {
+    void succeed_whenEqualsUsesDoubleEqualSignForBoxedCharacterPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(UsesDoubleEqualSignOnBoxedCharacterPrimitive.class)
                 .suppress(Warning.REFERENCE_EQUALITY)
@@ -47,7 +47,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void fail_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives() {
+    void fail_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class).verify())
                 .assertFailure()
@@ -55,7 +55,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives_givenDoubleEqualWarningIsSuppressed() {
+    void succeed_whenEqualsUsesDoubleEqualSignForBoxedIntegerPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(UsesDoubleEqualSignOnBoxedIntegerPrimitive.class)
                 .suppress(Warning.REFERENCE_EQUALITY)
@@ -63,7 +63,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void fail_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives() {
+    void fail_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class).verify())
                 .assertFailure()
@@ -71,7 +71,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives_givenDoubleEqualWarningIsSuppressed() {
+    void succeed_whenEqualsUsesDoubleEqualSignForBoxedLongPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(UsesDoubleEqualSignOnBoxedLongPrimitive.class)
                 .suppress(Warning.REFERENCE_EQUALITY)
@@ -79,7 +79,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void fail_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives() {
+    void fail_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class).verify())
                 .assertFailure()
@@ -87,7 +87,7 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives_givenDoubleEqualWarningIsSuppressed() {
+    void succeed_whenEqualsUsesDoubleEqualSignForBoxedShortPrimitives_givenDoubleEqualWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(UsesDoubleEqualSignOnBoxedShortPrimitive.class)
                 .suppress(Warning.REFERENCE_EQUALITY)
@@ -95,17 +95,17 @@ public class ExtendedReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectDoesntDeclareEquals() {
+    void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectDoesntDeclareEquals() {
         EqualsVerifier.forClass(FieldHasNoEquals.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterface() {
+    void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterface() {
         EqualsVerifier.forClass(FieldIsInterface.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterfaceWithEquals() {
+    void succeed_whenEqualsUsesDoubleEqualSignForObject_givenObjectIsAnInterfaceWithEquals() {
         EqualsVerifier.forClass(FieldIsInterfaceWithEquals.class).verify();
     }
 

@@ -1,7 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.internal.exceptions.RecursionException;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class VintageValueProviderCreatorTest {
+class VintageValueProviderCreatorTest {
 
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag ENUM_TAG = new TypeTag(Enum.class);
@@ -33,84 +33,84 @@ public class VintageValueProviderCreatorTest {
     private VintageValueProvider valueProvider;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         objenesis = new ObjenesisStd();
         factoryCache = FactoryCacheFactory.withPrimitiveFactories();
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
     }
 
     @Test
-    public void simple() {
+    void simple() {
         Point red = valueProvider.giveRed(POINT_TAG);
         Point blue = valueProvider.giveBlue(POINT_TAG);
-        assertFalse(red.equals(blue));
+        assertThat(blue).isNotEqualTo(red);
     }
 
     @Test
-    public void createSecondTimeIsNoOp() {
+    void createSecondTimeIsNoOp() {
         Point red = valueProvider.giveRed(POINT_TAG);
         Point blue = valueProvider.giveBlue(POINT_TAG);
 
-        assertSame(red, valueProvider.giveRed(POINT_TAG));
-        assertSame(blue, valueProvider.giveBlue(POINT_TAG));
+        assertThat(valueProvider.<Point>giveRed(POINT_TAG)).isSameAs(red);
+        assertThat(valueProvider.<Point>giveBlue(POINT_TAG)).isSameAs(blue);
     }
 
     @Test
-    public void createEnum() {
-        assertNotNull(valueProvider.giveRed(ENUM_TAG));
-        assertNotNull(valueProvider.giveBlue(ENUM_TAG));
+    void createEnum() {
+        assertThat(valueProvider.<Enum>giveRed(ENUM_TAG)).isNotNull();
+        assertThat(valueProvider.<Enum>giveBlue(ENUM_TAG)).isNotNull();
     }
 
     @Test
-    public void createOneElementEnum() {
-        assertNotNull(valueProvider.giveRed(ONE_ELT_ENUM_TAG));
-        assertNotNull(valueProvider.giveBlue(ONE_ELT_ENUM_TAG));
+    void createOneElementEnum() {
+        assertThat(valueProvider.<OneElementEnum>giveRed(ONE_ELT_ENUM_TAG)).isNotNull();
+        assertThat(valueProvider.<OneElementEnum>giveBlue(ONE_ELT_ENUM_TAG)).isNotNull();
     }
 
     @Test
-    public void createEmptyEnum() {
-        assertNull(valueProvider.giveRed(EMPTY_ENUM_TAG));
-        assertNull(valueProvider.giveBlue(EMPTY_ENUM_TAG));
+    void createEmptyEnum() {
+        assertThat(valueProvider.<EmptyEnum>giveRed(EMPTY_ENUM_TAG)).isNull();
+        assertThat(valueProvider.<EmptyEnum>giveBlue(EMPTY_ENUM_TAG)).isNull();
     }
 
     @Test
-    public void oneStepRecursiveType() {
+    void oneStepRecursiveType() {
         factoryCache.put(Node.class, values(new Node(), new Node(), new Node()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(NODE_TAG);
     }
 
     @Test
-    public void dontAddOneStepRecursiveType() {
+    void dontAddOneStepRecursiveType() {
         ExpectedException.when(() -> valueProvider.giveRed(NODE_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
-    public void oneStepRecursiveArrayType() {
+    void oneStepRecursiveArrayType() {
         factoryCache.put(NodeArray.class, values(new NodeArray(), new NodeArray(), new NodeArray()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(NODE_ARRAY_TAG);
     }
 
     @Test
-    public void dontAddOneStepRecursiveArrayType() {
+    void dontAddOneStepRecursiveArrayType() {
         ExpectedException.when(() -> valueProvider.giveRed(NODE_ARRAY_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
-    public void addTwoStepRecursiveType() {
+    void addTwoStepRecursiveType() {
         factoryCache.put(TwoStepNodeB.class, values(new TwoStepNodeB(), new TwoStepNodeB(), new TwoStepNodeB()));
         valueProvider = new VintageValueProvider(factoryCache, objenesis);
         valueProvider.giveRed(TWOSTEP_NODE_A_TAG);
     }
 
     @Test
-    public void dontAddTwoStepRecursiveType() {
+    void dontAddTwoStepRecursiveType() {
         ExpectedException.when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG)).assertThrows(RecursionException.class);
     }
 
     @Test
-    public void twoStepRecursiveArrayType() {
+    void twoStepRecursiveArrayType() {
         factoryCache
                 .put(
                     TwoStepNodeArrayB.class,
@@ -120,19 +120,19 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
-    public void dontAddTwoStepRecursiveArrayType() {
+    void dontAddTwoStepRecursiveArrayType() {
         ExpectedException
                 .when(() -> valueProvider.giveRed(TWOSTEP_NODE_ARRAY_A_TAG))
                 .assertThrows(RecursionException.class);
     }
 
     @Test
-    public void sameClassTwiceButNoRecursion() {
+    void sameClassTwiceButNoRecursion() {
         valueProvider.giveRed(new TypeTag(NotRecursiveA.class));
     }
 
     @Test
-    public void recursiveWithAnotherFieldFirst() {
+    void recursiveWithAnotherFieldFirst() {
         ExpectedException
                 .when(() -> valueProvider.giveRed(new TypeTag(RecursiveWithAnotherFieldFirst.class)))
                 .assertThrows(RecursionException.class)
@@ -141,7 +141,7 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
-    public void exceptionMessage() {
+    void exceptionMessage() {
         ExpectedException
                 .when(() -> valueProvider.giveRed(TWOSTEP_NODE_A_TAG))
                 .assertThrows(RecursionException.class)
@@ -149,7 +149,7 @@ public class VintageValueProviderCreatorTest {
     }
 
     @Test
-    public void skipStaticFinal() {
+    void skipStaticFinal() {
         valueProvider.giveRed(new TypeTag(StaticFinalContainer.class));
     }
 

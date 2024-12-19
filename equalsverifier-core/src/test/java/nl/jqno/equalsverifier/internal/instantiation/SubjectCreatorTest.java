@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.internal.instantiation;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.Objects;
@@ -19,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class SubjectCreatorTest {
+class SubjectCreatorTest {
 
     private static final int I_RED = 42;
     private static final int I_BLUE = 1337;
@@ -40,161 +39,161 @@ public class SubjectCreatorTest {
     private SomeClass actual;
 
     @BeforeEach
-    public void setup() throws NoSuchFieldException {
+    void setup() throws NoSuchFieldException {
         fieldX = SomeSuper.class.getDeclaredField("x");
         fieldI = SomeClass.class.getDeclaredField("i");
         fieldS = SomeClass.class.getDeclaredField("s");
     }
 
     @Test
-    public void plain() {
+    void plain() {
         expected = new SomeClass(I_RED, I_RED, S_RED);
         actual = sut.plain();
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldDefaulted_super() {
+    void withFieldDefaulted_super() {
         expected = new SomeClass(0, I_RED, S_RED);
         actual = sut.withFieldDefaulted(fieldX);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldDefaulted_primitive() {
+    void withFieldDefaulted_primitive() {
         expected = new SomeClass(I_RED, 0, S_RED);
         actual = sut.withFieldDefaulted(fieldI);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldDefaulted_object() {
+    void withFieldDefaulted_object() {
         expected = new SomeClass(I_RED, I_RED, null);
         actual = sut.withFieldDefaulted(fieldS);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withAllFieldsDefaulted() {
+    void withAllFieldsDefaulted() {
         expected = new SomeClass(0, 0, null);
         actual = sut.withAllFieldsDefaulted();
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withAllFieldsDefaultedExcept() {
+    void withAllFieldsDefaultedExcept() {
         expected = new SomeClass(0, I_RED, null);
         actual = sut.withAllFieldsDefaultedExcept(fieldI);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldSetTo_super() {
+    void withFieldSetTo_super() {
         expected = new SomeClass(99, I_RED, S_RED);
         actual = sut.withFieldSetTo(fieldX, 99);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldSetTo_primitive() {
+    void withFieldSetTo_primitive() {
         expected = new SomeClass(I_RED, 99, S_RED);
         actual = sut.withFieldSetTo(fieldI, 99);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldSetTo_object() {
+    void withFieldSetTo_object() {
         expected = new SomeClass(I_RED, I_RED, "value");
         actual = sut.withFieldSetTo(fieldS, "value");
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldChanged_super() {
+    void withFieldChanged_super() {
         expected = new SomeClass(I_BLUE, I_RED, S_RED);
         actual = sut.withFieldChanged(fieldX);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldChanged_primitive() {
+    void withFieldChanged_primitive() {
         expected = new SomeClass(I_RED, I_BLUE, S_RED);
         actual = sut.withFieldChanged(fieldI);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withFieldChanged_object() {
+    void withFieldChanged_object() {
         expected = new SomeClass(I_RED, I_RED, S_BLUE);
         actual = sut.withFieldChanged(fieldS);
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withAllFieldsChanged() {
+    void withAllFieldsChanged() {
         expected = new SomeClass(I_BLUE, I_BLUE, S_BLUE);
         actual = sut.withAllFieldsChanged();
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void withAllFieldsShallowlyChanged() {
+    void withAllFieldsShallowlyChanged() {
         expected = new SomeClass(I_RED, I_BLUE, S_BLUE);
         actual = sut.withAllFieldsShallowlyChanged();
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test
-    public void copy() {
+    void copy() {
         expected = new SomeClass(I_RED, I_RED, S_RED);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
         actual = sut.copy(original);
 
-        assertEquals(expected, actual);
-        assertNotSame(expected, actual);
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isNotSameAs(expected);
     }
 
     @Test
-    public void copyIntoSuperclass() {
+    void copyIntoSuperclass() {
         SomeSuper superExpected = new SomeSuper(I_RED);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
         Object superActual = sut.copyIntoSuperclass(original);
 
-        assertEquals(superExpected, superActual);
-        assertEquals(SomeSuper.class, superActual.getClass());
+        assertThat(superActual).isEqualTo(superExpected);
+        assertThat(superActual.getClass()).isEqualTo(SomeSuper.class);
     }
 
     @Test
-    public void copyIntoSubclass() {
+    void copyIntoSubclass() {
         expected = new SomeSub(I_RED, I_RED, S_RED, null);
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
         actual = sut.copyIntoSubclass(original, SomeSub.class);
 
-        assertEquals(expected, actual);
-        assertEquals(SomeSub.class, actual.getClass());
+        assertThat(actual).isEqualTo(expected);
+        assertThat(actual.getClass()).isEqualTo(SomeSub.class);
     }
 
     @Test
-    public void noValueFound() {
+    void noValueFound() {
         sut = new SubjectCreator<>(config, new NoValueProvider(), fieldCache, objenesis);
 
         ExpectedException.when(() -> sut.plain()).assertThrows(NoValueException.class).assertDescriptionContains("int");
 
-        assertEquals(expected, actual);
+        assertThat(actual).isEqualTo(expected);
     }
 
     static class SubjectCreatorTestValueProvider implements ValueProvider {

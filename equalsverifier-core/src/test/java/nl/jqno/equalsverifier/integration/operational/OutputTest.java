@@ -9,7 +9,7 @@ import nl.jqno.equalsverifier.testhelpers.types.Point;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.Node;
 import org.junit.jupiter.api.Test;
 
-public class OutputTest {
+class OutputTest {
 
     private static final String SEE_ALSO = "For more information, go to";
     private static final String WEBSITE_URL = "https://www.jqno.nl/equalsverifier/errormessages";
@@ -17,7 +17,7 @@ public class OutputTest {
     private static final String MESSAGE = "a message for an exception";
 
     @Test
-    public void messageIsValidForSingleType_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+    void messageIsValidForSingleType_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Point.class).verify())
                 .assertCause(AssertionException.class)
@@ -25,7 +25,7 @@ public class OutputTest {
     }
 
     @Test
-    public void messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
+    void messageIsValidForMultipleTypes_whenEqualsVerifierFails_givenExceptionIsGeneratedByEqualsVerifierItself() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClasses(Point.class, MutablePoint.class).verify())
                 .assertMessageContains(Point.class.getSimpleName())
@@ -36,7 +36,7 @@ public class OutputTest {
     }
 
     @Test
-    public void errorDescriptionAppearsOnlyAtTopOfStacktrace_notInOneOfItsCauses() {
+    void errorDescriptionAppearsOnlyAtTopOfStacktrace_notInOneOfItsCauses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Point.class).verify())
                 .assertMessageContains("Subclass")
@@ -44,7 +44,7 @@ public class OutputTest {
     }
 
     @Test
-    public void messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
+    void messageIsValidAndCauseHasCause_whenEqualsVerifierFails_givenOriginalExceptionHasACause() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(AssertionExceptionWithCauseThrower.class).verify())
                 .assertMessageContains(AssertionExceptionWithCauseThrower.class.getSimpleName())
@@ -55,7 +55,7 @@ public class OutputTest {
     }
 
     @Test
-    public void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
+    void originalMessageIsPresentInOutput_whenEqualsVerifierFails_givenOriginalExceptionHasAMessage() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(UnsupportedOperationExceptionWithMessageThrower.class).verify())
                 .assertMessageContains(UnsupportedOperationExceptionWithMessageThrower.class.getSimpleName())
@@ -67,7 +67,7 @@ public class OutputTest {
     }
 
     @Test
-    public void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
+    void messageIsValidAndDoesNotContainStringNull_whenEqualsVerifierFails_givenOriginalExceptionIsBare() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(IllegalStateExceptionThrower.class).verify())
                 .assertMessageContains(IllegalStateExceptionThrower.class.getSimpleName())
@@ -77,7 +77,7 @@ public class OutputTest {
     }
 
     @Test
-    public void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
+    void noStackOverflowErrorIsThrown_whenClassIsARecursiveDatastructure() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(Node.class).verify())
                 .assertMessageContains(Node.class.getSimpleName(), SEE_ALSO, WEBSITE_URL, SUFFIX)

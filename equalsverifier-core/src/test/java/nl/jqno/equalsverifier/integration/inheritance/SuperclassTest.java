@@ -17,15 +17,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.junit.jupiter.api.Test;
 
-public class SuperclassTest {
+class SuperclassTest {
 
     @Test
-    public void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
+    void succeed_whenSubclassRedefinesEqualsButOnlyCallsSuper_givenSuperHasRedefinedAlsoAndAllFieldsWarningIsSuppressed() {
         EqualsVerifier.forClass(ColorBlindColorPoint.class).suppress(Warning.ALL_FIELDS_SHOULD_BE_USED).verify();
     }
 
     @Test
-    public void fail_whenEqualsIsRedefinedSoItBreaksSymmetry_givenSuperHasRedefinedAlso() {
+    void fail_whenEqualsIsRedefinedSoItBreaksSymmetry_givenSuperHasRedefinedAlso() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SymmetryBrokenColorPoint.class).verify())
                 .assertFailure()
@@ -37,7 +37,7 @@ public class SuperclassTest {
     }
 
     @Test
-    public void fail_whenEqualsIsRedefinedSoItBreaksTransitivity_givenSuperHasRedefinedAlso() {
+    void fail_whenEqualsIsRedefinedSoItBreaksTransitivity_givenSuperHasRedefinedAlso() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(TransitivityBrokenColorPoint.class).verify())
                 .assertFailure()
@@ -50,7 +50,7 @@ public class SuperclassTest {
     }
 
     @Test
-    public void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
+    void fail_whenClassHasDifferentHashCodeThanSuper_givenEqualsIsTheSame() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(HashCodeBrokenPoint.class).verify())
                 .assertFailure()
@@ -63,14 +63,14 @@ public class SuperclassTest {
     }
 
     @Test
-    public void succeed_whenSuperDoesNotRedefineEquals() {
+    void succeed_whenSuperDoesNotRedefineEquals() {
         EqualsVerifier.forClass(SubclassOfEmpty.class).verify();
         EqualsVerifier.forClass(SubOfEmptySubOfEmpty.class).verify();
         EqualsVerifier.forClass(SubOfEmptySubOfAbstract.class).verify();
     }
 
     @Test
-    public void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
+    void fail_whenSuperDoesNotRedefineEquals_givenSuperOfSuperDoesRedefineEquals() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(BrokenCanEqualColorPointWithEmptySuper.class).verify())
                 .assertFailure()
@@ -78,7 +78,7 @@ public class SuperclassTest {
     }
 
     @Test
-    public void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
+    void fail_whenWithRedefinedSuperclassIsUsed_givenItIsNotNeeded() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ColorBlindColorPoint.class).withRedefinedSuperclass().verify())
                 .assertFailure()
@@ -91,17 +91,17 @@ public class SuperclassTest {
     }
 
     @Test
-    public void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassUsesCommonsLangEqualsBuilder() {
+    void succeed_whenClassInheritsEqualsAndHashCode_givenSuperclassUsesCommonsLangEqualsBuilder() {
         EqualsVerifier.forClass(ConcreteEqualsInheriter.class).withRedefinedSuperclass().verify();
     }
 
     @Test
-    public void succeed_whenVersionedEntityIncorrectlyImplementsCanEqual_givenIncorrectnessIsOnlyObservedFromSubclass() {
+    void succeed_whenVersionedEntityIncorrectlyImplementsCanEqual_givenIncorrectnessIsOnlyObservedFromSubclass() {
         EqualsVerifier.forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSuper.class).verify();
     }
 
     @Test
-    public void fail_whenSuperclassIsVersionedEntityAndIncorrectlyImplementsCanEqual_givenASubclassThatExploitsTheIncorrectness() {
+    void fail_whenSuperclassIsVersionedEntityAndIncorrectlyImplementsCanEqual_givenASubclassThatExploitsTheIncorrectness() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SymmetryBrokenForNullIdWithIncorrectCanEqualSub.class).verify())
                 .assertFailure()

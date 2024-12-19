@@ -11,16 +11,16 @@ import nl.jqno.equalsverifier.testhelpers.annotations.org.hibernate.annotations.
 import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("unused")
-public class JakartaIdTest {
+class JakartaIdTest {
 
     @Test
-    public void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
+    void succeed_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithId() {
         EqualsVerifier.forClass(JakartaIdBusinessKeyPerson.class).verify();
         EqualsVerifier.forClass(JakartaIdBusinessKeyPersonReorderedFields.class).verify();
     }
 
     @Test
-    public void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
+    void succeed_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
         EqualsVerifier
                 .forClass(JakartaIdSurrogateKeyPersonReorderedFields.class)
@@ -29,7 +29,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
+    void succeed_whenAllFieldsAreUsed_givenIdIsAnnotatedWithIdAndJpaKeyWarningIsSuppressed() {
         EqualsVerifier.forClass(JakartaIdValueKeyPerson.class).suppress(Warning.SURROGATE_OR_BUSINESS_KEY).verify();
         EqualsVerifier
                 .forClass(JakartaIdValueKeyPersonReorderedFields.class)
@@ -38,7 +38,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdButIdAnnotationIsIgnored() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -50,7 +50,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
+    void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPerson.class).verify())
                 .assertFailure()
@@ -62,7 +62,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
+    void fail_whenOnlyIdFieldIsUsed_givenIdIsAnnotatedWithId2() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JakartaIdSurrogateKeyPersonReorderedFields.class).verify())
                 .assertFailure()
@@ -73,7 +73,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -89,7 +89,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithIdAndSurrogateKeyWarningIsSuppressed2() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -105,13 +105,13 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenEmbeddedIdIsUsedCorrectly() {
+    void succeed_whenEmbeddedIdIsUsedCorrectly() {
         EqualsVerifier.forClass(JakartaEmbeddedIdBusinessKeyPerson.class).verify();
         EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
-    public void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
+    void fail_whenOnlyEmbeddedIdFieldIsUsed_givenIdIsAnnotatedWithEmbeddedId() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(JakartaEmbeddedIdSurrogateKeyPerson.class).verify())
                 .assertFailure()
@@ -123,7 +123,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
+    void fail_whenIdFieldIsNotUsed_givenIdIsAnnotatedWithEmbeddedIdAndSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -139,7 +139,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
+    void fail_whenEmbeddedIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -153,12 +153,12 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
+    void succeed_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalId() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPerson.class).verify();
     }
 
     @Test
-    public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
+    void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButIdAnnotationIsIgnored() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -170,12 +170,12 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
+    void succeed_whenIdAndNameFieldsAreNotUsed_givenNameIsIgnored() {
         EqualsVerifier.forClass(JakartaIdBusinessKeyPersonDoesntUseName.class).withIgnoredFields("name").verify();
     }
 
     @Test
-    public void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
+    void succeed_whenIdAndNameFieldsAreNotUsed_givenSocialSecurityAndBirthdateAreOnlyUsed() {
         EqualsVerifier
                 .forClass(JakartaIdBusinessKeyPersonDoesntUseName.class)
                 .withOnlyTheseFields("socialSecurity", "birthdate")
@@ -183,17 +183,17 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenIdIsPartOfAProperJakartaEntity() {
+    void succeed_whenIdIsPartOfAProperJakartaEntity() {
         EqualsVerifier.forClass(JakartaIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
-    public void succeed_whenNaturalIdIsPartOfAProperJakartaEntity() {
+    void succeed_whenNaturalIdIsPartOfAProperJakartaEntity() {
         EqualsVerifier.forClass(NaturalIdBusinessKeyPersonEntity.class).verify();
     }
 
     @Test
-    public void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
+    void succeed_whenEqualsBehavesLikeVersionedEntity_givenIdIsMarkedWithIdAndWarningVersionedEntityIsSuppressed() {
         EqualsVerifier
                 .forClass(JakartaIdVersionedEntity.class)
                 .suppress(Warning.IDENTICAL_COPY_FOR_VERSIONED_ENTITY, Warning.SURROGATE_KEY)
@@ -201,12 +201,12 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenMethodsAreAnnotatedInsteadOfFields() {
+    void succeed_whenMethodsAreAnnotatedInsteadOfFields() {
         EqualsVerifier.forClass(MethodAnnotatedBusinessKeyPerson.class).verify();
     }
 
     @Test
-    public void fail_whenIdFieldIsTheOnlyFieldUsed() {
+    void fail_whenIdFieldIsTheOnlyFieldUsed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier.forClass(JakartaIdBusinessKeyPerson.class).withOnlyTheseFields("id").verify())
@@ -217,7 +217,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
+    void fail_whenOnlySocialSecurityIsUsed_givenSocialSecurityIsAnnotatedWithNaturalIdButSurrogateKeyWarningIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -230,7 +230,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -244,7 +244,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -258,7 +258,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
+    void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -271,7 +271,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
+    void fail_whenFieldsAreIgnored_givenWarningSurrogateKeyIsSuppressedInReverse() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -284,7 +284,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
+    void fail_whenWithOnlyTheseFieldsIsUsed_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -297,7 +297,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
+    void fail_whenFieldsAreIgnored_givenFieldsAreMarkedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -310,7 +310,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
+    void fail_whenWarningVersionedEntityIsSuppressed_givenAFieldIsAnnotatedWithNaturalId() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -323,7 +323,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
+    void fail_whenWarningSurrogateKeyIsSuppressed_givenWarningSurrogateOrBusinessKeyIsAlsoSuppressed() {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
@@ -336,7 +336,7 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
+    void fail_whenANaturalIdAnnotationFromAnotherPackageIsUsed() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(NonHibernateNaturalIdBusinessKeyPerson.class).verify())
                 .assertFailure()
@@ -344,12 +344,12 @@ public class JakartaIdTest {
     }
 
     @Test
-    public void succeed_whenEqualsIsImplementedInSuperclass_givenWarningSurrogateKeyIsSuppressed() {
+    void succeed_whenEqualsIsImplementedInSuperclass_givenWarningSurrogateKeyIsSuppressed() {
         EqualsVerifier.forClass(SubclassEntity.class).suppress(Warning.SURROGATE_KEY).verify();
     }
 
     @Test
-    public void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
+    void succeed_whenEqualsUsesIdsAndNonIds_givenWarningSurrogateOrBusinessKeyIsSuppressed() {
         EqualsVerifier
                 .forClass(JakartaIdDirtyTrackingPerson.class)
                 .suppress(Warning.SURROGATE_OR_BUSINESS_KEY)

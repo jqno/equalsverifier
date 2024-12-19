@@ -1,8 +1,7 @@
 package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories;
 
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.LinkedHashSet;
 
@@ -15,14 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
 
-public class RecordFallbackFactoryTest {
+class RecordFallbackFactoryTest {
 
     private FallbackFactory<?> factory;
     private VintageValueProvider valueProvider;
     private LinkedHashSet<TypeTag> typeStack;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         Objenesis objenesis = new ObjenesisStd();
         factory = new FallbackFactory<>(objenesis);
         FactoryCache factoryCache = new FactoryCache();
@@ -32,11 +31,11 @@ public class RecordFallbackFactoryTest {
     }
 
     @Test
-    public void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {
+    void redCopyHasTheSameValuesAsRed_whenSutContainsGenericValueThatNeedsToBeIdenticalInRedAndRedCopy() {
         Tuple<?> tuple = factory.createValues(new TypeTag(GenericRecordContainer.class), valueProvider, typeStack);
 
-        assertEquals(tuple.getRed(), tuple.getRedCopy());
-        assertNotSame(tuple.getRed(), tuple.getRedCopy());
+        assertThat(tuple.getRedCopy()).isEqualTo(tuple.getRed());
+        assertThat(tuple.getRedCopy()).isNotSameAs(tuple.getRed());
     }
 
     record GenericRecord<T>(T t) {}

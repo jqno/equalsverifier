@@ -11,10 +11,10 @@ import nl.jqno.equalsverifier.testhelpers.types.FinalPoint;
 import nl.jqno.equalsverifier.testhelpers.types.Point;
 import org.junit.jupiter.api.Test;
 
-public class ReflexivityTest {
+class ReflexivityTest {
 
     @Test
-    public void fail_whenReferencesAreNotEqual() {
+    void fail_whenReferencesAreNotEqual() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ReflexivityIntentionallyBroken.class).verify())
                 .assertFailure()
@@ -25,7 +25,7 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void fail_whenTheWrongFieldsAreComparedInEquals() {
+    void fail_whenTheWrongFieldsAreComparedInEquals() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FieldsMixedUpInEquals.class).verify())
                 .assertFailure()
@@ -36,7 +36,7 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
+    void fail_whenReferencesAreNotEqual_givenFieldsThatAreNull() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).verify())
                 .assertFailure()
@@ -44,12 +44,12 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void succeed_whenReferencesAreNotEqual_givenFieldsThatAreNullAndWarningIsSuppressed() {
+    void succeed_whenReferencesAreNotEqual_givenFieldsThatAreNullAndWarningIsSuppressed() {
         EqualsVerifier.forClass(ReflexivityBrokenOnNullFields.class).suppress(Warning.NULL_FIELDS).verify();
     }
 
     @Test
-    public void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
+    void fail_whenObjectIsInstanceofCheckedWithWrongClass() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(WrongInstanceofCheck.class).verify())
                 .assertFailure()
@@ -60,7 +60,7 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
+    void fail_whenEqualsReturnsFalse_givenObjectsThatAreIdentical() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(SuperCallerWithUnusedField.class).verify())
                 .assertFailure()
@@ -68,7 +68,7 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void succeed_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
+    void succeed_whenEqualsReturnsFalse_givenObjectsThatAreIdenticalAndWarningIsSuppressed() {
         EqualsVerifier
                 .forClass(SuperCallerWithUnusedField.class)
                 .suppress(Warning.IDENTICAL_COPY, Warning.ALL_FIELDS_SHOULD_BE_USED)
@@ -76,7 +76,7 @@ public class ReflexivityTest {
     }
 
     @Test
-    public void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
+    void fail_whenIdenticalCopyWarningIsSuppressedUnnecessarily() {
         ExpectedException
                 .when(() -> EqualsVerifier.forClass(FinalPoint.class).suppress(Warning.IDENTICAL_COPY).verify())
                 .assertFailure()

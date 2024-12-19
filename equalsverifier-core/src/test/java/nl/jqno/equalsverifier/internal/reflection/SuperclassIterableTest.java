@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,77 +11,77 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class SuperclassIterableTest {
+class SuperclassIterableTest {
 
     private List<Class<?>> actual;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         actual = new ArrayList<>();
     }
 
     @Test
-    public void simpleClassExcludeSelf() {
+    void simpleClassExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleClass.class)) {
             actual.add(type);
         }
-        assertEquals(emptyList(), actual);
+        assertThat(actual).isEqualTo(emptyList());
     }
 
     @Test
-    public void simpleClassIncludeSelf() {
+    void simpleClassIncludeSelf() {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleClass.class)) {
             actual.add(type);
         }
-        assertEquals(singletonList(SimpleClass.class), actual);
+        assertThat(actual).isEqualTo(singletonList(SimpleClass.class));
     }
 
     @Test
-    public void hierarchyExcludeSelf() {
+    void hierarchyExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleSubSubclass.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleSubclass.class, SimpleClass.class), actual);
+        assertThat(actual).isEqualTo(asList(SimpleSubclass.class, SimpleClass.class));
     }
 
     @Test
-    public void hierarchyIncludeSelf() {
+    void hierarchyIncludeSelf() {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubSubclass.class)) {
             actual.add(type);
         }
-        assertEquals(asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class), actual);
+        assertThat(actual).isEqualTo(asList(SimpleSubSubclass.class, SimpleSubclass.class, SimpleClass.class));
     }
 
     @Test
-    public void interfaceExcludeSelf() {
+    void interfaceExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleInterface.class)) {
             actual.add(type);
         }
-        assertEquals(emptyList(), actual);
+        assertThat(actual).isEqualTo(emptyList());
     }
 
     @Test
-    public void interfaceIncludeSelf() {
+    void interfaceIncludeSelf() {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleInterface.class)) {
             actual.add(type);
         }
-        assertEquals(singletonList(SimpleInterface.class), actual);
+        assertThat(actual).isEqualTo(singletonList(SimpleInterface.class));
     }
 
     @Test
-    public void subInterfaceExcludeSelf() {
+    void subInterfaceExcludeSelf() {
         for (Class<?> type : SuperclassIterable.of(SimpleSubInterface.class)) {
             actual.add(type);
         }
-        assertEquals(emptyList(), actual);
+        assertThat(actual).isEqualTo(emptyList());
     }
 
     @Test
-    public void subInterfaceIncludeSelf() {
+    void subInterfaceIncludeSelf() {
         for (Class<?> type : SuperclassIterable.ofIncludeSelf(SimpleSubInterface.class)) {
             actual.add(type);
         }
-        assertEquals(singletonList(SimpleSubInterface.class), actual);
+        assertThat(actual).isEqualTo(singletonList(SimpleSubInterface.class));
     }
 
     static class SimpleClass {}
