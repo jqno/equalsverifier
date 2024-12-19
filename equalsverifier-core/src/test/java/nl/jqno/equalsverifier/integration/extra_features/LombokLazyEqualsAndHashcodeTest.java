@@ -1,7 +1,6 @@
 package nl.jqno.equalsverifier.integration.extra_features;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.StringContains.containsString;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
@@ -28,7 +27,7 @@ class LombokLazyEqualsAndHashcodeTest {
         final AssertionError error = assertThrows(
             AssertionError.class,
             () -> EqualsVerifier.forClass(LazyPojo.class).suppress(Warning.STRICT_INHERITANCE).verify());
-        assertThat(error.getMessage(), containsString("hashCode relies on $hashCodeCache, but equals does not."));
+        assertThat(error.getMessage()).contains("hashCode relies on $hashCodeCache, but equals does not.");
     }
 
     @Test
@@ -40,15 +39,13 @@ class LombokLazyEqualsAndHashcodeTest {
                     .suppress(Warning.STRICT_INHERITANCE)
                     .withCachedHashCode("$hashCodeCache", "hashCode", new LazyPojo("bar", new Object()))
                     .verify());
-        assertThat(
-            error.getMessage(),
-            containsString(
-                "Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'"));
+        assertThat(error.getMessage())
+                .contains("Cached hashCode: Could not find calculateHashCodeMethod: must be 'private int hashCode()'");
     }
 
     /**
      * This class has been generated with Lombok (1.18.20). It is equivalent to:
-     * 
+     *
      * <pre>
      * &#64;RequiredArgsConstructor
      * &#64;EqualsAndHashCode(cacheStrategy = EqualsAndHashCode.CacheStrategy.LAZY)

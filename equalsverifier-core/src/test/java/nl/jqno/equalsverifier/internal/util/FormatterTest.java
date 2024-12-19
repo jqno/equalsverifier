@@ -2,8 +2,6 @@ package nl.jqno.equalsverifier.internal.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
@@ -60,28 +58,28 @@ class FormatterTest {
     void oneAbstractParameter() {
         Instantiator<Abstract> i = Instantiator.of(Abstract.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [Abstract x=0]"));
+        assertThat(f.format()).contains("Abstract: [Abstract x=0]");
     }
 
     @Test
     void oneConcreteSubclassParameter() {
         Instantiator<AbstractImpl> i = Instantiator.of(AbstractImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
-        assertThat(f.format(), containsString("Concrete: something concrete"));
+        assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
     void oneDelegatedAbstractParameter() {
         Instantiator<AbstractDelegation> i = Instantiator.of(AbstractDelegation.class, objenesis);
         Formatter f = Formatter.of("Abstract: %%", i.instantiate());
-        assertThat(f.format(), containsString("Abstract: [AbstractDelegation y=0]"));
+        assertThat(f.format()).contains("Abstract: [AbstractDelegation y=0]");
     }
 
     @Test
     void oneDelegatedConcreteSubclassParameter() {
         Instantiator<AbstractDelegationImpl> i = Instantiator.of(AbstractDelegationImpl.class, objenesis);
         Formatter f = Formatter.of("Concrete: %%", i.instantiate());
-        assertThat(f.format(), containsString("Concrete: something concrete"));
+        assertThat(f.format()).contains("Concrete: something concrete");
     }
 
     @Test
@@ -91,7 +89,7 @@ class FormatterTest {
         Formatter f = Formatter.of("TC: %%", tc);
         String expected =
                 "TC: [ThrowingContainer t=[Throwing i=0 s=null]-throws IllegalStateException(msg)]-throws IllegalStateException(msg)";
-        assertThat(f.format(), containsString(expected));
+        assertThat(f.format()).contains(expected);
     }
 
     @Test
@@ -100,7 +98,7 @@ class FormatterTest {
         AbstractContainer ac = new AbstractContainer(i.instantiate());
 
         Formatter f = Formatter.of("AC: %%", ac);
-        assertThat(f.format(), containsString("AC: [AbstractContainer ad=[AbstractDelegation y=0]]"));
+        assertThat(f.format()).contains("AC: [AbstractContainer ad=[AbstractDelegation y=0]]");
     }
 
     @Test
@@ -112,13 +110,13 @@ class FormatterTest {
         String expected =
                 "[Mix i=42 s=null t=not null throwing=[Throwing i=42 s=empty]-throws IllegalStateException(msg)]"
                         + "-throws UnsupportedOperationException(null)";
-        assertThat(f.format(), containsString(expected));
+        assertThat(f.format()).contains(expected);
     }
 
     @Test
     void connectedParameters() {
         Formatter f = Formatter.of("%%%%", 1, 2);
-        assertThat(f.format(), containsString("12"));
+        assertThat(f.format()).contains("12");
     }
 
     @Test

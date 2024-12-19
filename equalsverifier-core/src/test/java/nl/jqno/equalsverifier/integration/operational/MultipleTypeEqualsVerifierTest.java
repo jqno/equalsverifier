@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.integration.operational;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -279,6 +277,6 @@ class MultipleTypeEqualsVerifierTest {
     private void assertUnsuccessful(EqualsVerifierReport report, Class<?> type, String message) {
         assertThat(report.isSuccessful()).isFalse();
         assertThat(report.getType()).isEqualTo(type);
-        assertThat(report.getMessage(), containsString(message));
+        assertThat(report.getMessage()).contains(message);
     }
 }

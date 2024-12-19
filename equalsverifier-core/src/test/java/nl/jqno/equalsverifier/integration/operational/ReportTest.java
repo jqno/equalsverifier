@@ -2,8 +2,6 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
-import static org.hamcrest.CoreMatchers.startsWith;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
@@ -30,9 +28,8 @@ class ReportTest {
 
         assertThat(report.getType()).isEqualTo(Point.class);
         assertThat(report.isSuccessful()).isFalse();
-        assertThat(
-            report.getMessage(),
-            startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point"));
+        assertThat(report.getMessage())
+                .startsWith("EqualsVerifier found a problem in class nl.jqno.equalsverifier.testhelpers.types.Point");
         assertThat(report.getCause().getClass()).isEqualTo(AssertionException.class);
         assertThat(report.getCause().getMessage()).isNull();
     }
