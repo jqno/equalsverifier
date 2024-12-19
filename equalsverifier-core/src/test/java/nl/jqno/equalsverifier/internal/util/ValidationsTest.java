@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,15 +43,22 @@ class ValidationsTest {
     @Test
     void validateFieldTypeMatches_shouldAllowSubTypes() {
         assertAll(
-            () -> assertDoesNotThrow(
-                () -> Validations.validateFieldTypeMatches(TestContainer.class, "listField", ArrayList.class),
-                "Should allow ArrayList as a List"),
-            () -> assertDoesNotThrow(
-                () -> Validations.validateFieldTypeMatches(TestContainer.class, "objectField", Integer.class),
-                "Should allow Integer as an Object"),
-            () -> assertDoesNotThrow(
-                () -> Validations.validateFieldTypeMatches(TestContainer.class, "charsField", String.class),
-                "Should allow String as a CharSequence"));
+            () -> assertThatCode(
+                () -> Validations.validateFieldTypeMatches(TestContainer.class, "listField", ArrayList.class))
+                    .as("Should allow ArrayList as a List")
+                    .doesNotThrowAnyException(),
+            () -> assertThatCode(
+                () -> Validations.validateFieldTypeMatches(TestContainer.class, "listField", ArrayList.class))
+                    .as("Should allow ArrayList as a List")
+                    .doesNotThrowAnyException(),
+            () -> assertThatCode(
+                () -> Validations.validateFieldTypeMatches(TestContainer.class, "objectField", Integer.class))
+                    .as("Should allow Integer as an Object")
+                    .doesNotThrowAnyException(),
+            () -> assertThatCode(
+                () -> Validations.validateFieldTypeMatches(TestContainer.class, "charsField", String.class))
+                    .as("Should allow String as a CharSequence")
+                    .doesNotThrowAnyException());
     }
 
     @Test
