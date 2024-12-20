@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.verify_release.pom.helper;
 
-// CHECKSTYLE OFF: IllegalImport
-
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class PomAsserter {
 
@@ -13,19 +11,20 @@ public class PomAsserter {
     }
 
     public void assertCommonProperties() {
-        assertAll(
-            () -> reader.assertNode("/project/groupId", "nl.jqno.equalsverifier"),
-            () -> reader.assertNode("/project/url", "https://www.jqno.nl/equalsverifier"),
-            () -> reader.assertNode("/project/inceptionYear", "2009"),
-            () -> reader.assertNode("/project/licenses/license[1]/name", "Apache License, Version 2.0"),
-            () -> reader.assertNode("/project/developers/developer[1]/name", "Jan Ouwens"),
-            () -> reader
-                    .assertNode(
-                        "/project/mailingLists/mailingList[1]/archive",
-                        "https://groups.google.com/group/equalsverifier"),
-            () -> reader.assertNode("/project/scm/url", "https://github.com/jqno/equalsverifier"),
-            () -> reader.assertNode("/project/issueManagement/url", "https://github.com/jqno/equalsverifier/issues"),
-            () -> reader.assertNode("/project/ciManagement/url", "https://github.com/jqno/equalsverifier/actions"));
+        assertThat(reader)
+                .satisfies(
+                    r -> r.assertNode("/project/groupId", "nl.jqno.equalsverifier"),
+                    r -> r.assertNode("/project/url", "https://www.jqno.nl/equalsverifier"),
+                    r -> r.assertNode("/project/inceptionYear", "2009"),
+                    r -> r.assertNode("/project/licenses/license[1]/name", "Apache License, Version 2.0"),
+                    r -> r.assertNode("/project/developers/developer[1]/name", "Jan Ouwens"),
+                    r -> r
+                            .assertNode(
+                                "/project/mailingLists/mailingList[1]/archive",
+                                "https://groups.google.com/group/equalsverifier"),
+                    r -> r.assertNode("/project/scm/url", "https://github.com/jqno/equalsverifier"),
+                    r -> r.assertNode("/project/issueManagement/url", "https://github.com/jqno/equalsverifier/issues"),
+                    r -> r.assertNode("/project/ciManagement/url", "https://github.com/jqno/equalsverifier/actions"));
     }
 
     public void assertArtifactId(String artifactId) {
@@ -38,16 +37,18 @@ public class PomAsserter {
 
     public void assertDependency(int idx, String groupId, String artifactId) {
         var prefix = "/project/dependencies/dependency[" + idx + "]";
-        assertAll(
-            () -> reader.assertNode(prefix + "/groupId", groupId),
-            () -> reader.assertNode(prefix + "/artifactId", artifactId),
-            () -> reader.assertNode(prefix + "/scope", "compile"));
+        assertThat(reader)
+                .satisfies(
+                    r -> r.assertNode(prefix + "/groupId", groupId),
+                    r -> r.assertNode(prefix + "/artifactId", artifactId),
+                    r -> r.assertNode(prefix + "/scope", "compile"));
     }
 
     public void assertDependencyIsOptional(int idx) {
         var prefix = "/project/dependencies/dependency[" + idx + "]";
-        assertAll(
-            () -> reader.assertNode(prefix + "/optional", "true"),
-            () -> reader.assertNode(prefix + "/scope", "provided"));
+        assertThat(reader)
+                .satisfies(
+                    r -> r.assertNode(prefix + "/optional", "true"),
+                    r -> r.assertNode(prefix + "/scope", "provided"));
     }
 }

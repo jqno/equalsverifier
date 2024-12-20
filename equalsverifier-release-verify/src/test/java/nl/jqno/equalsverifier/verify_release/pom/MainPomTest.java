@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.verify_release.pom;
 
-// CHECKSTYLE OFF: IllegalImport
-
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomAsserter;
 import nl.jqno.equalsverifier.verify_release.pom.helper.PomReader;
@@ -32,13 +30,14 @@ class MainPomTest {
 
     @Test
     void dependencies() {
-        assertAll(
-            () -> pom.assertNumberOfDependencies(6),
-            () -> pom.assertDependencyIsOptional(1),
-            () -> pom.assertDependencyIsOptional(2),
-            () -> pom.assertDependencyIsOptional(3),
-            () -> pom.assertDependencyIsOptional(4),
-            () -> pom.assertDependency(5, "org.objenesis", "objenesis"),
-            () -> pom.assertDependency(6, "net.bytebuddy", "byte-buddy"));
+        assertThat(pom)
+                .satisfies(
+                    p -> p.assertNumberOfDependencies(6),
+                    p -> p.assertDependencyIsOptional(1),
+                    p -> p.assertDependencyIsOptional(2),
+                    p -> p.assertDependencyIsOptional(3),
+                    p -> p.assertDependencyIsOptional(4),
+                    p -> p.assertDependency(5, "org.objenesis", "objenesis"),
+                    p -> p.assertDependency(6, "net.bytebuddy", "byte-buddy"));
     }
 }
