@@ -59,7 +59,7 @@ class FieldIterableTest {
     @Test
     void noFields() {
         FieldIterable iterable = FieldIterable.of(NoFields.class);
-        assertThat(iterable.iterator().hasNext()).isFalse();
+        assertThat(iterable.iterator()).isExhausted();
     }
 
     @Test
@@ -113,7 +113,7 @@ class FieldIterableTest {
     @Test
     void interfaceTest() {
         FieldIterable iterable = FieldIterable.of(Interface.class);
-        assertThat(iterable.iterator().hasNext()).isFalse();
+        assertThat(iterable.iterator()).isExhausted();
     }
 
     @Test
@@ -129,13 +129,13 @@ class FieldIterableTest {
     @Test
     void objectHasNoElements() {
         FieldIterable iterable = FieldIterable.of(Object.class);
-        assertThat(iterable.iterator().hasNext()).isFalse();
+        assertThat(iterable.iterator()).isExhausted();
     }
 
     @Test
     void ignoreSyntheticFields() {
         FieldIterable iterable = FieldIterable.of(Outer.Inner.class);
-        assertThat(iterable.iterator().hasNext()).isFalse();
+        assertThat(iterable.iterator()).isExhausted();
     }
 
     @Test
@@ -145,7 +145,7 @@ class FieldIterableTest {
         for (FieldProbe probe : iterable) {
             fields.add(probe.getField());
         }
-        assertThat(fields.size()).isEqualTo(1);
+        assertThat(fields).hasSize(1);
         assertThat(fields.get(0).getName()).isEqualTo("i");
     }
 

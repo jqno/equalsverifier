@@ -251,8 +251,8 @@ class AnnotationCacheBuilderTest {
         assertTypeHasAnnotation(AnnotationWithValuesContainer.class, annotation);
 
         Set<String> annotations = new HashSet<>(annotation.properties.getArrayValues("annotations"));
-        assertThat(annotations.contains("javax.annotation.Nonnull")).isTrue();
-        assertThat(annotations.contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull")).isTrue();
+        assertThat(annotations).contains("javax.annotation.Nonnull");
+        assertThat(annotations).contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull");
     }
 
     @Test

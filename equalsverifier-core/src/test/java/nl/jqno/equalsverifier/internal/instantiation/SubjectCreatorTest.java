@@ -163,8 +163,7 @@ class SubjectCreatorTest {
         SomeClass original = new SomeClass(I_RED, I_RED, S_RED);
         actual = sut.copy(original);
 
-        assertThat(actual).isEqualTo(expected);
-        assertThat(actual).isNotSameAs(expected);
+        assertThat(actual).isEqualTo(expected).isNotSameAs(expected);
     }
 
     @Test

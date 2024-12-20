@@ -53,7 +53,7 @@ class OriginalStateTest {
         }
         catch (AssertionError e) {
             // Make sure EV fails on a check that actually mutates fields.
-            assertThat(e.getMessage().contains("Mutability")).isTrue();
+            assertThat(e.getMessage()).contains("Mutability");
         }
         catch (Throwable ignored) {
             fail("EqualsVerifier should have failed on FailingEqualsContainerContainer with a different exception.");

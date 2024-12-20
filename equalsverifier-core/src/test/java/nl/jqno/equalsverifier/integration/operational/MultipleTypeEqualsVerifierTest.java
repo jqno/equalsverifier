@@ -241,7 +241,7 @@ class MultipleTypeEqualsVerifierTest {
     void succeed_whenReportingOnSeveralCorrectClasses() {
         List<EqualsVerifierReport> reports = EqualsVerifier.forClasses(A.class, B.class, C.class).report();
 
-        assertThat(reports.size()).isEqualTo(3);
+        assertThat(reports).hasSize(3);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(1), B.class);
         assertSuccessful(reports.get(2), C.class);
@@ -251,7 +251,7 @@ class MultipleTypeEqualsVerifierTest {
     void fail_whenReportingOnOneIncorrectClass() {
         List<EqualsVerifierReport> reports = EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class).report();
 
-        assertThat(reports.size()).isEqualTo(3);
+        assertThat(reports).hasSize(3);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(2), C.class);
         assertUnsuccessful(reports.get(1), IncorrectM.class, "Subclass: equals is not final.");
@@ -262,7 +262,7 @@ class MultipleTypeEqualsVerifierTest {
         List<EqualsVerifierReport> reports =
                 EqualsVerifier.forClasses(A.class, IncorrectM.class, C.class, IncorrectN.class).report();
 
-        assertThat(reports.size()).isEqualTo(4);
+        assertThat(reports).hasSize(4);
         assertSuccessful(reports.get(0), A.class);
         assertSuccessful(reports.get(2), C.class);
         assertUnsuccessful(reports.get(1), IncorrectM.class, "Subclass: equals is not final.");

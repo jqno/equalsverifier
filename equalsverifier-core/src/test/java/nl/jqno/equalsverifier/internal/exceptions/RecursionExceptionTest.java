@@ -20,7 +20,7 @@ class RecursionExceptionTest {
         String message = new RecursionException(stack).getDescription();
 
         for (TypeTag tag : stack) {
-            assertThat(message.contains(tag.toString())).isTrue();
+            assertThat(message).contains(tag.toString());
         }
     }
 }

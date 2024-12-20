@@ -18,8 +18,7 @@ class RecordObjectAccessorCopyingTest {
         Object original = instantiate(SimpleRecord.class);
         Object copy = copyOf(original);
 
-        assertThat(copy).isNotSameAs(original);
-        assertThat(copy).isEqualTo(original);
+        assertThat(copy).isNotSameAs(original).isEqualTo(original);
     }
 
     @Test

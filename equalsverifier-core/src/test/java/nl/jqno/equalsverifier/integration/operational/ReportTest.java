@@ -18,7 +18,7 @@ class ReportTest {
 
         assertThat(report.getType()).isEqualTo(FinalPoint.class);
         assertThat(report.isSuccessful()).isTrue();
-        assertThat(report.getMessage()).isEqualTo("");
+        assertThat(report.getMessage()).isEmpty();
         assertThat(report.getCause()).isNull();
     }
 
