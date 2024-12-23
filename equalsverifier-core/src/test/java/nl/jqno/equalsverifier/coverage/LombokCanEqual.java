@@ -99,6 +99,7 @@ public class LombokCanEqual {
             return true;
         }
 
+        @Override
         @java.lang.SuppressWarnings("all")
         public boolean canEqual(final java.lang.Object other) {
             return other instanceof LombokCanEqual.ColorPoint;

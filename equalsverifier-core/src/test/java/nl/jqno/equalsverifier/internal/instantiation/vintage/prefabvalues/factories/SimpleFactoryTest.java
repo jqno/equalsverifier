@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 class SimpleFactoryTest {
 
-    private SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));
+    private final SimpleFactory<String> factory = new SimpleFactory<>("red", "blue", new String("red"));
 
     @Test
     void createRed() {

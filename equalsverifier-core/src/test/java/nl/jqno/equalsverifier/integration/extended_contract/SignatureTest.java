@@ -200,6 +200,7 @@ class SignatureTest {
             this.i = i;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof StaticEqualsMethod)) {
                 return false;

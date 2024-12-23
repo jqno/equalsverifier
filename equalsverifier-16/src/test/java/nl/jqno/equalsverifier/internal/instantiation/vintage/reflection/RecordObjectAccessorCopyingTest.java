@@ -11,7 +11,7 @@ import org.objenesis.ObjenesisStd;
 
 class RecordObjectAccessorCopyingTest {
 
-    private Objenesis objenesis = new ObjenesisStd();
+    private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
     void copyHappyPath() {

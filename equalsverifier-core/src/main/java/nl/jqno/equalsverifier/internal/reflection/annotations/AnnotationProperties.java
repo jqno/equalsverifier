@@ -14,8 +14,8 @@ import java.util.Set;
 public class AnnotationProperties {
 
     private final String className;
-    private Map<String, String> enumValues = new HashMap<>();
-    private Map<String, Set<String>> arrayValues = new HashMap<>();
+    private final Map<String, String> enumValues = new HashMap<>();
+    private final Map<String, Set<String>> arrayValues = new HashMap<>();
 
     /**
      * Constructor.

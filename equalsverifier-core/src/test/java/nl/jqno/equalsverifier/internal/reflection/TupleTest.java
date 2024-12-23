@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class TupleTest {
 
-    private Tuple<String> tuple = Tuple.of("red", "blue", new String("red"));
+    private final Tuple<String> tuple = Tuple.of("red", "blue", new String("red"));
 
     @Test
     void equalsAndHashCode() {

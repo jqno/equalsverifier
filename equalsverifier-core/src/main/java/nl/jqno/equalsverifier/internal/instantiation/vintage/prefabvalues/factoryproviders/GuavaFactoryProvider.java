@@ -17,6 +17,7 @@ public final class GuavaFactoryProvider implements FactoryProvider {
 
     private static final Comparator<Object> OBJECT_COMPARATOR = Comparator.comparingInt(Object::hashCode);
 
+    @Override
     public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 

@@ -15,7 +15,7 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 public final class Formatter {
 
     private final String message;
-    private Object[] objects;
+    private final Object[] objects;
 
     /** Private constructor. Call {@link #of(String, Object...)} to instantiate. */
     private Formatter(String message, Object... objects) {

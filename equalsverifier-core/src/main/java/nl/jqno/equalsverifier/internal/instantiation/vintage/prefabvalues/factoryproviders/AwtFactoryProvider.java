@@ -17,6 +17,7 @@ public final class AwtFactoryProvider implements FactoryProvider {
     private static final int CS_RED = ColorSpace.CS_sRGB;
     private static final int CS_BLUE = ColorSpace.CS_LINEAR_RGB;
 
+    @Override
     public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 

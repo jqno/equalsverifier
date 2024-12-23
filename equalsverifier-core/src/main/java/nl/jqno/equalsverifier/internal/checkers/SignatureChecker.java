@@ -41,7 +41,7 @@ public class SignatureChecker<T> implements Checker {
         List<Method> result = new ArrayList<>();
 
         for (Method method : type.getDeclaredMethods()) {
-            if (method.getName().equals("equals") && !Modifier.isStatic(method.getModifiers())) {
+            if ("equals".equals(method.getName()) && !Modifier.isStatic(method.getModifiers())) {
                 result.add(method);
             }
         }

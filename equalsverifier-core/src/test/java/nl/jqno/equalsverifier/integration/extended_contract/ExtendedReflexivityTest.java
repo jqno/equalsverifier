@@ -311,6 +311,7 @@ class ExtendedReflexivityTest {
         }
 
         interface InterfaceWithEquals {
+            @Override
             boolean equals(Object obj);
         }
     }

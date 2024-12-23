@@ -24,8 +24,8 @@ class VintageValueProviderTest {
     private static final TypeTag POINT_TAG = new TypeTag(Point.class);
     private static final TypeTag INT_TAG = new TypeTag(int.class);
 
-    private Objenesis objenesis = new ObjenesisStd();
-    private FactoryCache factoryCache = new FactoryCache();
+    private final Objenesis objenesis = new ObjenesisStd();
+    private final FactoryCache factoryCache = new FactoryCache();
     private VintageValueProvider vp;
 
     @BeforeEach
@@ -170,6 +170,7 @@ class VintageValueProviderTest {
             this.i = i;
         }
 
+        @Override
         public boolean equals(Object obj) {
             if (obj == null) {
                 throw new NullPointerException();
@@ -180,6 +181,7 @@ class VintageValueProviderTest {
             return i == ((NpeThrowing) obj).i;
         }
 
+        @Override
         public int hashCode() {
             return i;
         }

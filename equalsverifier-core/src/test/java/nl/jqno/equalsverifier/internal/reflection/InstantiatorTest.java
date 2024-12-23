@@ -21,7 +21,7 @@ import org.w3c.dom.Element;
 
 class InstantiatorTest {
 
-    private Objenesis objenesis = new ObjenesisStd();
+    private final Objenesis objenesis = new ObjenesisStd();
 
     @Test
     void instantiateClass() {

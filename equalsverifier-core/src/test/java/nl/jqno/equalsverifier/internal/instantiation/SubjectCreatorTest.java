@@ -25,10 +25,10 @@ class SubjectCreatorTest {
     private static final String S_RED = "abc";
     private static final String S_BLUE = "xyz";
 
-    private Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
-    private ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
-    private FieldCache fieldCache = new FieldCache();
-    private Objenesis objenesis = new ObjenesisStd();
+    private final Configuration<SomeClass> config = ConfigurationHelper.emptyConfiguration(SomeClass.class);
+    private final ValueProvider valueProvider = new SubjectCreatorTestValueProvider();
+    private final FieldCache fieldCache = new FieldCache();
+    private final Objenesis objenesis = new ObjenesisStd();
     private SubjectCreator<SomeClass> sut = new SubjectCreator<>(config, valueProvider, fieldCache, objenesis);
 
     private Field fieldX;
@@ -197,6 +197,7 @@ class SubjectCreatorTest {
 
     static class SubjectCreatorTestValueProvider implements ValueProvider {
 
+        @Override
         @SuppressWarnings("unchecked")
         public <T> Optional<Tuple<T>> provide(TypeTag tag) {
             if (int.class.equals(tag.getType())) {

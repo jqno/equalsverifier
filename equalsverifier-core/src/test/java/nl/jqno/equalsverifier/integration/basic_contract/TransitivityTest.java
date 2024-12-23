@@ -250,7 +250,7 @@ class TransitivityTest {
                 return false;
             }
             ThreeFieldsUsingAndOr other = (ThreeFieldsUsingAndOr) obj;
-            return (Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h));
+            return Objects.equals(f, other.f) && Objects.equals(g, other.g) || Objects.equals(h, other.h);
         }
 
         @Override

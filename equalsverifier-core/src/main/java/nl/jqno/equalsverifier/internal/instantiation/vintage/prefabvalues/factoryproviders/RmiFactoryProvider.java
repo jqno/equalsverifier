@@ -9,6 +9,7 @@ import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 
 public final class RmiFactoryProvider implements FactoryProvider {
 
+    @Override
     public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 

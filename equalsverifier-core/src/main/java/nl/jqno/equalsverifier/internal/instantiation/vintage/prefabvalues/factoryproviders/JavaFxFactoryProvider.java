@@ -25,6 +25,7 @@ public final class JavaFxFactoryProvider implements FactoryProvider {
      * As long as there's no easy dependency for JavaFX to rely on in Maven, we can't refer to the actual types, and
      * have to go around it with String representations of the type names.
      */
+    @Override
     public FactoryCache getFactoryCache() {
         FactoryCache cache = new FactoryCache();
 

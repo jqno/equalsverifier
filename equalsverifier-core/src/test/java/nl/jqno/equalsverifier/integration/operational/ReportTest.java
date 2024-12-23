@@ -52,7 +52,7 @@ class ReportTest {
             assertThat(reported.length).isEqualTo(verified.length + 1);
 
             for (int i = 0; i < verified.length; i++) {
-                if (!verified[i].getMethodName().equals("verify")) {
+                if (!"verify".equals(verified[i].getMethodName())) {
                     // When the `verify` method is reached, the stacktraces start to diverge.
                     break;
                 }
