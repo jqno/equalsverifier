@@ -97,8 +97,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createJavaFieldList() {
-        List<FieldProbe> result = new ArrayList<>();
-
+        var result = new ArrayList<FieldProbe>();
         result.addAll(addFieldsFor(type));
 
         if (includeSuperclasses) {
@@ -111,10 +110,9 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createKotlinFieldList() {
-        List<FieldProbe> result = new ArrayList<>();
-
+        var result = new ArrayList<FieldProbe>();
         result.addAll(addFieldsFor(type));
-        Set<String> names = result.stream().map(FieldProbe::getName).collect(Collectors.toSet());
+        var names = result.stream().map(FieldProbe::getName).collect(Collectors.toSet());
 
         if (includeSuperclasses) {
             for (Class<?> c : SuperclassIterable.of(type)) {
@@ -129,8 +127,8 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> addFieldsFor(Class<?> c) {
-        List<FieldProbe> fields = new ArrayList<>();
-        List<FieldProbe> statics = new ArrayList<>();
+        var fields = new ArrayList<FieldProbe>();
+        var statics = new ArrayList<FieldProbe>();
 
         for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic()
@@ -148,7 +146,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
             }
         }
 
-        List<FieldProbe> result = new ArrayList<>();
+        var result = new ArrayList<FieldProbe>();
         result.addAll(fields);
         result.addAll(statics);
         return result;

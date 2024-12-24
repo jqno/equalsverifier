@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -55,7 +54,7 @@ class FieldCacheTest {
         assertThat(cache.getFieldNames()).isEqualTo(Collections.emptySet());
 
         cache.put(stringField, stringValues);
-        Set<String> expected = new HashSet<>();
+        var expected = new HashSet<String>();
         expected.add(stringField);
         assertThat(cache.getFieldNames()).isEqualTo(expected);
     }

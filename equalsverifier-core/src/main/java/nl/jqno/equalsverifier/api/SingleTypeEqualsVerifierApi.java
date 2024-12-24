@@ -410,7 +410,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
         Validations.validateClassCanBeVerified(type);
 
         Configuration<T> config = buildConfig();
-        Context<T> context = new Context<>(config, factoryCache, fieldCache, objenesis);
+        var context = new Context<T>(config, factoryCache, fieldCache, objenesis);
         Validations
                 .validateProcessedAnnotations(
                     type,

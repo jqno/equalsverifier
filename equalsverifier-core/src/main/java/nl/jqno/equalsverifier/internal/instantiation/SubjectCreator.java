@@ -201,7 +201,7 @@ public class SubjectCreator<T> {
     }
 
     private Map<Field, Object> determineValues(Map<Field, Object> givens) {
-        Map<Field, Object> values = new HashMap<>(givens);
+        var values = new HashMap<Field, Object>(givens);
         for (FieldProbe p : fields()) {
             Field f = p.getField();
             boolean fieldIsAbsent = !values.containsKey(f);

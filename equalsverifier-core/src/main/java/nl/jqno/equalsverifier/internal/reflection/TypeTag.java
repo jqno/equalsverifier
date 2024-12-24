@@ -56,7 +56,7 @@ public final class TypeTag {
             Class<?> typeAsClass,
             TypeTag enclosingType,
             boolean shortCircuitRecursiveTypeBound) {
-        List<TypeTag> nestedTags = new ArrayList<>();
+        var nestedTags = new ArrayList<TypeTag>();
         if (type instanceof Class) {
             return processClass((Class<?>) type, nestedTags);
         }
@@ -151,7 +151,7 @@ public final class TypeTag {
 
     private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
         TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
-        Map<String, TypeTag> lookup = new HashMap<>();
+        var lookup = new HashMap<String, TypeTag>();
         if (enclosingType.getGenericTypes().size() == 0) {
             return lookup;
         }

@@ -60,7 +60,7 @@ class UtilTest {
 
     @Test
     void setOfReturnsItsArguments() {
-        Set<String> expected = new HashSet<>();
+        var expected = new HashSet<String>();
         expected.add("one");
         expected.add("two");
 

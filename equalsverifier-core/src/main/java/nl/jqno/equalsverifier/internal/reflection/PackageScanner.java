@@ -71,7 +71,7 @@ public final class PackageScanner {
                         classes = getClassesInDir(packageName + "." + f.getName(), f, mustExtend, scanRecursively);
                     }
                     else {
-                        classes = Collections.singletonList(fileToClass(packageName, f));
+                        classes = List.of(fileToClass(packageName, f));
                     }
                     return classes.stream();
                 })

@@ -76,7 +76,7 @@ class MapFactoryTest {
     }
 
     private <K, V> Map<K, V> mapOf(K key, V value) {
-        Map<K, V> result = new HashMap<>();
+        var result = new HashMap<K, V>();
         result.put(key, value);
         return result;
     }

@@ -2,7 +2,10 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.Warning;
@@ -143,7 +146,7 @@ class WithPrefabValuesForFieldTest {
     void succeed_whenClassContainsSomethingThatAllowsSubclassesAndASubclassIsGiven() {
         EqualsVerifier
                 .forClass(ListContainer.class)
-                .withPrefabValuesForField("list", Collections.singletonList("x"), Collections.singletonList("y"))
+                .withPrefabValuesForField("list", List.of("x"), List.of("y"))
                 .verify();
     }
 
@@ -153,7 +156,7 @@ class WithPrefabValuesForFieldTest {
         DifficultGeneric two = new DifficultGeneric(null);
         EqualsVerifier
                 .forClass(DifficultGeneric.class)
-                .withPrefabValuesForField("list", Collections.singletonList(one), Collections.singletonList(two))
+                .withPrefabValuesForField("list", List.of(one), List.of(two))
                 .verify();
     }
 

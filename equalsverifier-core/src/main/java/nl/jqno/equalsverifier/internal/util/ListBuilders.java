@@ -23,7 +23,7 @@ public final class ListBuilders {
             throw new IllegalArgumentException("First example is null.");
         }
 
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         result.add(first);
         addArrayElementsToList(result, more);
 
@@ -48,7 +48,7 @@ public final class ListBuilders {
             throw new IllegalArgumentException("Second example is null.");
         }
 
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         result.add(first);
         result.add(second);
         addArrayElementsToList(result, more);
@@ -76,7 +76,7 @@ public final class ListBuilders {
      * @return A list with the elements of the Iterable.
      */
     public static <T> List<T> fromIterable(Iterable<T> iterable) {
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         for (T t : iterable) {
             result.add(t);
         }

@@ -57,7 +57,7 @@ public class ExamplesChecker<T> implements Checker {
             return examples;
         }
 
-        List<T> result = new ArrayList<>();
+        var result = new ArrayList<T>();
         result.add(subjectCreator.plain());
         result.add(subjectCreator.withAllFieldsChanged());
         return result;

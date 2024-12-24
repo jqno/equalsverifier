@@ -7,7 +7,6 @@ import java.util.Map;
 
 import nl.jqno.equalsverifier.internal.instantiation.JavaApiPrefabValues;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.VintageValueProvider;
-import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factoryproviders.JavaFxFactoryProvider.PropertyFactory;
 import nl.jqno.equalsverifier.internal.reflection.Tuple;
 import nl.jqno.equalsverifier.internal.reflection.TypeTag;
@@ -36,8 +35,7 @@ class JavaFxFactoryProviderTest {
         TypeTag tag = new TypeTag(GenericContainer.class, new TypeTag(String.class));
         TypeTag listTag = new TypeTag(List.class, new TypeTag(String.class));
 
-        PrefabValueFactory<GenericContainer> factory =
-                new PropertyFactory<>(GenericContainer.class.getName(), List.class);
+        var factory = new PropertyFactory<GenericContainer>(GenericContainer.class.getName(), List.class);
         Tuple<GenericContainer> tuple = factory.createValues(tag, valueProvider, null);
 
         assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(listTag));
@@ -50,8 +48,7 @@ class JavaFxFactoryProviderTest {
         TypeTag tag = new TypeTag(GenericMultiContainer.class, new TypeTag(String.class), new TypeTag(Point.class));
         TypeTag mapTag = new TypeTag(Map.class, new TypeTag(String.class), new TypeTag(Point.class));
 
-        PrefabValueFactory<GenericMultiContainer> factory =
-                new PropertyFactory<>(GenericMultiContainer.class.getName(), Map.class);
+        var factory = new PropertyFactory<GenericMultiContainer>(GenericMultiContainer.class.getName(), Map.class);
         Tuple<GenericMultiContainer> tuple = factory.createValues(tag, valueProvider, null);
 
         assertThat(tuple.getRed().t).isEqualTo(valueProvider.giveRed(mapTag));
