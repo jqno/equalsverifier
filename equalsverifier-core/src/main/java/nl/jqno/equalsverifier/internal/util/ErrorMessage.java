@@ -1,6 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
-import nl.jqno.equalsverifier.internal.versionspecific.ModuleHelper;
+import nl.jqno.equalsverifier.internal.reflection.ModuleProbe;
 
 public final class ErrorMessage {
 
@@ -16,7 +16,7 @@ public final class ErrorMessage {
                     WEBSITE_URL,
                     ErrorMessage.class.getPackage().getImplementationVersion(),
                     System.getProperty("java.version"),
-                    ModuleHelper.runsOnModulePath() ? "modulepath" : "classpath",
+                    ModuleProbe.runsOnModulePath() ? "modulepath" : "classpath",
                     System.getProperty("os.name"))
                 .format();
     }

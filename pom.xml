@@ -55,7 +55,7 @@
     </issueManagement>
 
     <properties>
-        <version.java.base>8</version.java.base>
+        <version.java.base>11</version.java.base>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -218,7 +218,6 @@
             <groupId>net.bytebuddy</groupId>
             <artifactId>byte-buddy</artifactId>
             <version>${version.bytebuddy}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -230,6 +229,12 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${version.guava}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-base</artifactId>
+            <version>${version.openjfx}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -515,17 +520,6 @@
         </profile>
 
         <profile>
-            <id>modules-jdk8</id>
-            <activation>
-                <jdk>[1.8,11)</jdk>
-            </activation>
-
-            <modules>
-                <module>equalsverifier-core</module>
-            </modules>
-        </profile>
-
-        <profile>
             <id>modules-jdk11</id>
             <activation>
                 <jdk>[11,16)</jdk>
@@ -533,7 +527,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-11</module>
             </modules>
         </profile>
 
@@ -545,7 +538,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
             </modules>
         </profile>
@@ -558,7 +550,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
             </modules>
@@ -572,7 +563,6 @@
 
             <modules>
                 <module>equalsverifier-core</module>
-                <module>equalsverifier-11</module>
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
                 <module>equalsverifier-21</module>
