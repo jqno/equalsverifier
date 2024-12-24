@@ -12,7 +12,7 @@ class RecursionExceptionTest {
 
     @Test
     void descriptionContainsAllTypes() {
-        LinkedHashSet<TypeTag> stack = new LinkedHashSet<>();
+        var stack = new LinkedHashSet<TypeTag>();
         stack.add(new TypeTag(String.class));
         stack.add(new TypeTag(Point.class));
         stack.add(new TypeTag(Object.class));

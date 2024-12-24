@@ -54,7 +54,7 @@ final class RecordObjectAccessor<T> extends ObjectAccessor<T> {
     }
 
     private T callRecordConstructor(List<?> params) {
-        RecordProbe<T> p = new RecordProbe<>(type());
+        var p = new RecordProbe<T>(type());
         return p.callRecordConstructor(params);
     }
 

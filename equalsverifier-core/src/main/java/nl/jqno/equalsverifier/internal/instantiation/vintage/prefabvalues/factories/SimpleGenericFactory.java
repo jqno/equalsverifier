@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.facto
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.function.Supplier;
 
 import nl.jqno.equalsverifier.Func;
@@ -24,8 +23,8 @@ public class SimpleGenericFactory<T> extends AbstractGenericFactory<T> {
     public Tuple<T> createValues(TypeTag tag, VintageValueProvider valueProvider, LinkedHashSet<TypeTag> typeStack) {
         LinkedHashSet<TypeTag> clone = cloneWith(typeStack, tag);
 
-        List<Object> redValues = new ArrayList<>();
-        List<Object> blueValues = new ArrayList<>();
+        var redValues = new ArrayList<Object>();
+        var blueValues = new ArrayList<Object>();
 
         boolean useEmpty = false;
         int n = tag.getType().getTypeParameters().length;

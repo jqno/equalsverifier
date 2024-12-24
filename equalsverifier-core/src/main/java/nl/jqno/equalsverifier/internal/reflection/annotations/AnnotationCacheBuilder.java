@@ -187,7 +187,7 @@ public class AnnotationCacheBuilder {
     private void addArrayProperties(Object val, String name, AnnotationProperties props) {
         if (val.getClass().isArray() && !val.getClass().getComponentType().isPrimitive()) {
             Object[] array = (Object[]) val;
-            Set<String> values = new HashSet<>();
+            var values = new HashSet<String>();
             for (Object obj : array) {
                 if (obj instanceof TypeDescription) {
                     values.add(((TypeDescription) obj).getName());

@@ -15,7 +15,7 @@ public final class PrimitiveMappers {
     public static final Collection<Object> ZEROS = DEFAULT_WRAPPED_VALUE_MAPPER.values();
 
     private static Map<Class<?>, Class<?>> createPrimitiveObjectMapper() {
-        Map<Class<?>, Class<?>> result = new HashMap<>();
+        var result = new HashMap<Class<?>, Class<?>>();
         result.put(boolean.class, Boolean.class);
         result.put(byte.class, Byte.class);
         result.put(char.class, Character.class);
@@ -28,7 +28,7 @@ public final class PrimitiveMappers {
     }
 
     private static Map<Class<?>, Object> createDefaultValueMapper(boolean includeWrapped) {
-        Map<Class<?>, Object> result = new HashMap<>();
+        var result = new HashMap<Class<?>, Object>();
         result.put(boolean.class, false);
         result.put(byte.class, Byte.valueOf((byte) 0));
         result.put(char.class, Character.valueOf((char) 0));

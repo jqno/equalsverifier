@@ -114,8 +114,7 @@ class PackageScannerTest {
         List<Class<?>> classes =
                 PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.anonymous", null, false);
 
-        assertThat(classes)
-                .isEqualTo(Collections.singletonList(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
+        assertThat(classes).isEqualTo(List.of(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
     }
 
     private void sort(List<Class<?>> classes) {

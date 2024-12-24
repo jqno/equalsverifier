@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.Map;
 
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
@@ -17,11 +16,11 @@ class InstanceCreatorTest {
     void instantiate() throws NoSuchFieldException {
         ClassProbe<SomeClass> probe = ClassProbe.of(SomeClass.class);
         Objenesis objenesis = new ObjenesisStd();
-        InstanceCreator<SomeClass> sut = new InstanceCreator<>(probe, objenesis);
+        var sut = new InstanceCreator<InstanceCreatorTest.SomeClass>(probe, objenesis);
 
         Field x = SomeClass.class.getDeclaredField("x");
         Field z = SomeClass.class.getDeclaredField("z");
-        Map<Field, Object> values = new HashMap<>();
+        var values = new HashMap<Field, Object>();
         values.put(x, 42);
         values.put(z, "42");
 
@@ -36,7 +35,7 @@ class InstanceCreatorTest {
     void copy() throws NoSuchFieldException {
         ClassProbe<SomeSubClass> probe = ClassProbe.of(SomeSubClass.class);
         Objenesis objenesis = new ObjenesisStd();
-        InstanceCreator<SomeSubClass> sut = new InstanceCreator<>(probe, objenesis);
+        var sut = new InstanceCreator<InstanceCreatorTest.SomeSubClass>(probe, objenesis);
 
         SomeClass original = new SomeClass(42, 1337, "yeah");
         SomeSubClass copy = sut.copy(original);

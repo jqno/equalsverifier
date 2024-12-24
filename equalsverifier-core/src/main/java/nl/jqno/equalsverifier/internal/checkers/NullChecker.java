@@ -18,7 +18,7 @@ public class NullChecker<T> implements Checker {
             return;
         }
 
-        FieldInspector<T> inspector = new FieldInspector<>(context.getType());
+        var inspector = new FieldInspector<T>(context.getType());
         inspector.check(new NullPointerExceptionFieldCheck<>(context));
     }
 }

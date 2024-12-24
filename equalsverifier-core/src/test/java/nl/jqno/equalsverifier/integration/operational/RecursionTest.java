@@ -29,7 +29,7 @@ class RecursionTest {
         red = new Node(null);
         blue = new Node(new Node(null));
         redTree = new Tree(Collections.<Tree>emptyList());
-        blueTree = new Tree(Collections.singletonList(new Tree(Collections.<Tree>emptyList())));
+        blueTree = new Tree(List.of(new Tree(Collections.<Tree>emptyList())));
     }
 
     @Test

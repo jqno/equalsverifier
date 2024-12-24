@@ -63,7 +63,7 @@ public class CoverageWithInheritanceTest {
             Class<? super T> superType = find(containingTypes, "Point");
             Class<T> subType = find(containingTypes, "ColorPoint");
             Class<? extends T> endpointType = find(containingTypes, "EndPoint");
-            Classes<T> result = new Classes<>(containerType, superType, subType, endpointType);
+            var result = new Classes<T>(containerType, superType, subType, endpointType);
             return Arguments.of(result);
         }
 

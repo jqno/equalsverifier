@@ -26,7 +26,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
-        List<TypeTag> genericTypes = new ArrayList<>();
+        var genericTypes = new ArrayList<TypeTag>();
         for (TypeTag tag : source.getGenericTypes()) {
             genericTypes.add(tag);
         }

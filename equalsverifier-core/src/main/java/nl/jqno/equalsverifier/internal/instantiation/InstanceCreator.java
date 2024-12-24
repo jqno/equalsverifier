@@ -48,7 +48,7 @@ public class InstanceCreator<T> {
      * @return A copy of the given original.
      */
     public T copy(Object original) {
-        Map<Field, Object> values = new HashMap<>();
+        var values = new HashMap<Field, Object>();
         for (FieldProbe p : fields(original.getClass())) {
             Object value = p.getValue(original);
             values.put(p.getField(), value);
@@ -57,9 +57,9 @@ public class InstanceCreator<T> {
     }
 
     private T createRecordInstance(Map<Field, Object> values) {
-        List<Object> params = new ArrayList<>();
+        var params = new ArrayList<Object>();
         traverseFields(values, (p, v) -> params.add(v));
-        RecordProbe<T> recordProbe = new RecordProbe<>(type);
+        var recordProbe = new RecordProbe<T>(type);
         return recordProbe.callRecordConstructor(params);
     }
 

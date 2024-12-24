@@ -250,7 +250,7 @@ class AnnotationCacheBuilderTest {
 
         assertTypeHasAnnotation(AnnotationWithValuesContainer.class, annotation);
 
-        Set<String> annotations = new HashSet<>(annotation.properties.getArrayValues("annotations"));
+        var annotations = new HashSet<String>(annotation.properties.getArrayValues("annotations"));
         assertThat(annotations).contains("javax.annotation.Nonnull");
         assertThat(annotations).contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull");
     }
@@ -320,7 +320,7 @@ class AnnotationCacheBuilderTest {
 
         @Override
         public Set<String> partialClassNames() {
-            Set<String> result = new HashSet<>();
+            var result = new HashSet<String>();
             result.add(AnnotationWithValues.class.getSimpleName());
             return result;
         }

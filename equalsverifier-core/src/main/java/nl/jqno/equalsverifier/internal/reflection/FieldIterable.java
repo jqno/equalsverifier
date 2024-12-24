@@ -76,7 +76,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createFieldList() {
-        List<FieldProbe> result = new ArrayList<>();
+        var result = new ArrayList<FieldProbe>();
 
         result.addAll(addFieldsFor(type));
 
@@ -90,8 +90,8 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> addFieldsFor(Class<?> c) {
-        List<FieldProbe> fields = new ArrayList<>();
-        List<FieldProbe> statics = new ArrayList<>();
+        var fields = new ArrayList<FieldProbe>();
+        var statics = new ArrayList<FieldProbe>();
 
         for (Field field : c.getDeclaredFields()) {
             if (!field.isSynthetic()
@@ -109,7 +109,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
             }
         }
 
-        List<FieldProbe> result = new ArrayList<>();
+        var result = new ArrayList<FieldProbe>();
         result.addAll(fields);
         result.addAll(statics);
         return result;
