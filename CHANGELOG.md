@@ -13,6 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.18] - 2024-12-24
+
 ### Added
 
 - Tools like IntelliJ, Spotbugs and ErrorProne now report when you forget to call `.verify()` at the end of an EqualsVerifier invocation (through the `@CheckReturnValue` annotation).
@@ -1293,7 +1295,8 @@ Please don't use version 1.3; [it's a broken release](https://jqno.nl/post/2013/
 
 You can now use EqualsVerifier!
 
-[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.5...HEAD
+[unreleased]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.18...HEAD
+[3.18]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.5...equalsverifier-3.18
 [3.17.5]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.4...equalsverifier-3.17.5
 [3.17.4]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.3...equalsverifier-3.17.4
 [3.17.3]: https://github.com/jqno/equalsverifier/compare/equalsverifier-3.17.2...equalsverifier-3.17.3
