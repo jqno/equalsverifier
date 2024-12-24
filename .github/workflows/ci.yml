@@ -15,12 +15,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - title: "Supported JDK 8"
-            experimental: false
-            cache-id: "jdk8"
-            java: 8
-            dist: temurin
-            flags: "-DdisableStaticAnalysis"
           - title: "Supported JDK 11"
             experimental: false
             cache-id: "jdk11"

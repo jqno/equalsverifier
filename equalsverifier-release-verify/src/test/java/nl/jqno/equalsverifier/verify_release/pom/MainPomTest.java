@@ -32,12 +32,11 @@ class MainPomTest {
     void dependencies() {
         assertThat(pom)
                 .satisfies(
-                    p -> p.assertNumberOfDependencies(6),
+                    p -> p.assertNumberOfDependencies(5),
                     p -> p.assertDependencyIsOptional(1),
                     p -> p.assertDependencyIsOptional(2),
                     p -> p.assertDependencyIsOptional(3),
-                    p -> p.assertDependencyIsOptional(4),
-                    p -> p.assertDependency(5, "org.objenesis", "objenesis"),
-                    p -> p.assertDependency(6, "net.bytebuddy", "byte-buddy"));
+                    p -> p.assertDependency(4, "org.objenesis", "objenesis"),
+                    p -> p.assertDependency(5, "net.bytebuddy", "byte-buddy"));
     }
 }

@@ -1,8 +1,8 @@
-package nl.jqno.equalsverifier.internal.versionspecific;
+package nl.jqno.equalsverifier.internal.reflection;
 
-public final class ModuleHelper {
+public final class ModuleProbe {
 
-    private ModuleHelper() {}
+    private ModuleProbe() {}
 
     public static boolean runsOnModulePath() {
         return ModuleLayer.boot().findModule("nl.jqno.equalsverifier").isPresent();

@@ -15,6 +15,7 @@
     <name>EqualsVerifier | core</name>
 
     <properties>
+        <maven.compiler.release>11</maven.compiler.release>
         <maven.javadoc.skip>false</maven.javadoc.skip>
         <maven.source.skip>false</maven.source.skip>
     </properties>
@@ -168,28 +169,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <!-- Remove these profiles when dropping support for JDK 8 -->
-        <profile>
-            <id>compile-from-legacy-jdk</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>1.8</maven.compiler.source>
-                <maven.compiler.target>1.8</maven.compiler.target>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>compile-from-recent-jdk</id>
-            <activation>
-                <jdk>[9,)</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.release>8</maven.compiler.release>
-            </properties>
-        </profile>
-    </profiles>
 </project>
