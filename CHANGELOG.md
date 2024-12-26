@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- EqualsVerifier now requires Java 11
+
 ## [3.18.2] - 2025-01-30
 
 ### Fixed
