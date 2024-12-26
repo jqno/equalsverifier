@@ -3,6 +3,8 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.simple;
 import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.Factories.values;
 
+import java.lang.reflect.InaccessibleObjectException;
+
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.factories.PrefabValueFactory;
@@ -32,8 +34,7 @@ public final class PrefabValuesApi {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
                 factoryCache.put(otherType, values(red, blue, redCopy));
             }
-            catch (RuntimeException ignored) {
-                /* specifically, on Java 9+: InacessibleObjectException */
+            catch (InaccessibleObjectException ignored) {
                 factoryCache.put(otherType, values(red, blue, red));
             }
         }
@@ -58,8 +59,7 @@ public final class PrefabValuesApi {
                 T redCopy = ObjectAccessor.of(red).copy(objenesis);
                 fieldCache.put(fieldName, Tuple.of(red, blue, redCopy));
             }
-            catch (RuntimeException ignored) {
-                /* specifically, on Java 9+: InacessibleObjectException */
+            catch (InaccessibleObjectException ignored) {
                 fieldCache.put(fieldName, Tuple.of(red, blue, red));
             }
         }

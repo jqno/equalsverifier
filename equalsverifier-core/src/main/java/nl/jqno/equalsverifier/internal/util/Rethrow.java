@@ -1,5 +1,6 @@
 package nl.jqno.equalsverifier.internal.util;
 
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.function.Function;
 
 import nl.jqno.equalsverifier.internal.exceptions.EqualsVerifierInternalBugException;
@@ -33,15 +34,13 @@ public final class Rethrow {
         try {
             return supplier.get();
         }
+        catch (InaccessibleObjectException e) {
+            throw new ModuleException(
+                    "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
+                    e);
+        }
         catch (RuntimeException e) {
-            if (e.getClass().getName().endsWith("InaccessibleObjectException")) {
-                throw new ModuleException(
-                        "The class is not accessible via the Java Module system. Consider opening the module that contains it.",
-                        e);
-            }
-            else {
-                throw e;
-            }
+            throw e;
         }
         catch (ReflectiveOperationException e) {
             throw new ReflectionException(errorMessage.apply(e), e);
