@@ -104,18 +104,6 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    @Override
-    @CheckReturnValue
-    public ConfiguredEqualsVerifier withResetCaches() {
-        return this;
-    }
-
-    /**
      * Factory method. For general use.
      *
      * @param <T>  The type.

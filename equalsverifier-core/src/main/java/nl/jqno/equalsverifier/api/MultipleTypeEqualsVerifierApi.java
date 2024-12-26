@@ -84,18 +84,6 @@ public class MultipleTypeEqualsVerifierApi implements EqualsVerifierApi<Void> {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    @Override
-    @CheckReturnValue
-    public MultipleTypeEqualsVerifierApi withResetCaches() {
-        return this;
-    }
-
-    /**
      * Removes the given type or types from the list of types to verify.
      *
      * @param type A type to remove from the list of types to verify.
