@@ -332,18 +332,6 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
     }
 
     /**
-     * {@inheritDoc}
-     *
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    @Override
-    @CheckReturnValue
-    public SingleTypeEqualsVerifierApi<T> withResetCaches() {
-        return this;
-    }
-
-    /**
      * Performs the verification of the contracts for {@code equals} and {@code hashCode} and throws an
      * {@link AssertionError} if there is a problem.
      *

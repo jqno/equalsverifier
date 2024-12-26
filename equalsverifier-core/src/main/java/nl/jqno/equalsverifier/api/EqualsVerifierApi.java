@@ -80,15 +80,4 @@ public interface EqualsVerifierApi<T> {
      * @return {@code this}, for easy method chaining.
      */
     EqualsVerifierApi<T> withFieldnameToGetterConverter(Function<String, String> converter);
-
-    /**
-     * Signals that all internal caches need to be reset. This is useful when the test framework uses multiple
-     * ClassLoaders to run tests, causing {@link java.lang.Class} instances that would normally be equal, to be unequal,
-     * because their ClassLoaders don't match.
-     *
-     * @return {@code this}, for easy method chaining.
-     * @deprecated No longer needed; this happens automatically.
-     */
-    @Deprecated
-    EqualsVerifierApi<T> withResetCaches();
 }

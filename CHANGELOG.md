@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - EqualsVerifier now requires Java 11
 
+### Removed
+
+- `#withResetCaches()`, which was deprecated since version 3.16.2.
+
 ## [3.18.2] - 2025-01-30
 
 ### Fixed
