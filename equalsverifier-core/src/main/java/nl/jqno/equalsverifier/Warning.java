@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier;
 
-import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
-
 /**
  * Enum of warnings that can be suppressed in {@link nl.jqno.equalsverifier.EqualsVerifier}.
  *
@@ -222,12 +220,4 @@ public enum Warning {
      * {@code EqualsVerifier} checks for this by default but it can be disabled by suppressing this warning.
      */
     BIGDECIMAL_EQUALITY,
-
-    /**
-     * No longer does anything.
-     *
-     * @deprecated Use {@link SingleTypeEqualsVerifierApi#withPrefabValuesForField(String, Object, Object)} instead.
-     */
-    @Deprecated
-    ZERO_FIELDS
 }
