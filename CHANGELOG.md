@@ -624,7 +624,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 -   `java.net.URI` fields cause illegal reflective access warning on Java 9+: added prefab values. ([Issue 214](https://github.com/jqno/equalsverifier/issues/214))
 -   Java 11 support is no longer experimental because internal ASM dependency is updated to version 7.0.
--   Updated internal ASM dependency to version 7.0, so Java 11 support is no longer experimental.
 
 ## [3.0] - 2018-09-26
 
