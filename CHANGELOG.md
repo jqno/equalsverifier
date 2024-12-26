@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - `#withResetCaches()`, which was deprecated since version 3.16.2.
+- `Warning.ZERO_FIELDS`, which was deprecated since version 3.17.
 
 ## [3.18.2] - 2025-01-30
 
