@@ -305,13 +305,9 @@ public final class JavaApiPrefabValues {
             inet6Address.callFactory("getByName", classes(String.class), objects("::1")));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     private void addCollection() {
-        addFactory(Iterable.class, simple(a -> {
-            Collection coll = new ArrayList<>();
-            coll.add(a);
-            return coll;
-        }, ArrayList::new));
+        addFactory(Iterable.class, simple(a -> List.of(a), ArrayList::new));
         addFactory(Collection.class, collection(ArrayList::new));
     }
 

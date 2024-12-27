@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.integration.operational;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -152,7 +151,7 @@ class WithPrefabValuesForFieldTest {
 
     @Test
     void succeed_whenClassContainsAGenericInterfaceThatRefersToItself() {
-        DifficultGeneric one = new DifficultGeneric(new ArrayList<>());
+        DifficultGeneric one = new DifficultGeneric(List.of());
         DifficultGeneric two = new DifficultGeneric(null);
         EqualsVerifier
                 .forClass(DifficultGeneric.class)

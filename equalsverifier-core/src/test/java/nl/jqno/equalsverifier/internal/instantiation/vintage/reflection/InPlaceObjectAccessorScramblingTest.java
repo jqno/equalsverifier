@@ -4,7 +4,6 @@ import static nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.text.AttributedString;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -175,8 +174,8 @@ class InPlaceObjectAccessorScramblingTest {
 
     static final class GenericContainerContainer {
 
-        private final GenericContainer<String> strings = new GenericContainer<>(new ArrayList<String>());
-        private final GenericContainer<Point> points = new GenericContainer<>(new ArrayList<Point>());
+        private final GenericContainer<String> strings = new GenericContainer<>(List.of());
+        private final GenericContainer<Point> points = new GenericContainer<>(List.of());
     }
 
     static final class GenericContainer<T> {
