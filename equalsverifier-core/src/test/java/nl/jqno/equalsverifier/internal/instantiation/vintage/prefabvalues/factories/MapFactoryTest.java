@@ -50,34 +50,28 @@ class MapFactoryTest {
     @Test
     void createMapsOfStringToString() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(STRINGSTRINGMAP_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(mapOf(red, blue));
-        assertThat(tuple.getBlue()).isEqualTo(mapOf(blue, blue));
+        assertThat(tuple.getRed()).isEqualTo(Map.of(red, blue));
+        assertThat(tuple.getBlue()).isEqualTo(Map.of(blue, blue));
     }
 
     @Test
     void createMapsOfWildcard() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(WILDCARDMAP_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(mapOf(redObject, blueObject));
-        assertThat(tuple.getBlue()).isEqualTo(mapOf(blueObject, blueObject));
+        assertThat(tuple.getRed()).isEqualTo(Map.of(redObject, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(Map.of(blueObject, blueObject));
     }
 
     @Test
     void createRawMaps() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(RAWMAP_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(mapOf(redObject, blueObject));
-        assertThat(tuple.getBlue()).isEqualTo(mapOf(blueObject, blueObject));
+        assertThat(tuple.getRed()).isEqualTo(Map.of(redObject, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(Map.of(blueObject, blueObject));
     }
 
     @Test
     void createMapOfOneElementEnumKey() {
         Tuple<Map> tuple = MAP_FACTORY.createValues(ONEELEMENTENUMKEYMAP_TYPETAG, valueProvider, typeStack);
-        assertThat(tuple.getRed()).isEqualTo(mapOf(redEnum, blueObject));
-        assertThat(tuple.getBlue()).isEqualTo(new HashMap<>());
-    }
-
-    private <K, V> Map<K, V> mapOf(K key, V value) {
-        var result = new HashMap<K, V>();
-        result.put(key, value);
-        return result;
+        assertThat(tuple.getRed()).isEqualTo(Map.of(redEnum, blueObject));
+        assertThat(tuple.getBlue()).isEqualTo(Map.of());
     }
 }

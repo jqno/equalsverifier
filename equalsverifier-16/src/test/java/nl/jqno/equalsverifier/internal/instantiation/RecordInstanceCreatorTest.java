@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.instantiation;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
+import java.util.Map;
 
 import nl.jqno.equalsverifier.internal.reflection.ClassProbe;
 import org.junit.jupiter.api.Test;
@@ -18,9 +18,7 @@ class RecordInstanceCreatorTest {
 
         Field x = SomeRecord.class.getDeclaredField("x");
         Field z = SomeRecord.class.getDeclaredField("z");
-        var values = new HashMap<Field, Object>();
-        values.put(x, 42);
-        values.put(z, "42");
+        var values = Map.<Field, Object>of(x, 42, z, "42");
 
         SomeRecord actual = sut.instantiate(values);
 
