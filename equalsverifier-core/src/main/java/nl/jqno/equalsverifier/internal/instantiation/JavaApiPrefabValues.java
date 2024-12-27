@@ -321,7 +321,7 @@ public final class JavaApiPrefabValues {
         addFactory(Stack.class, collection(Stack::new));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     private void addMaps() {
         addFactory(Map.class, map(HashMap::new));
         addFactory(SortedMap.class, map(() -> new TreeMap<>(OBJECT_COMPARATOR)));
@@ -337,7 +337,7 @@ public final class JavaApiPrefabValues {
         addFactory(EnumMap.class, new EnumMapFactory<>(EnumMap::new));
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @SuppressWarnings("unchecked")
     private void addSets() {
         addFactory(Set.class, collection(HashSet::new));
         addFactory(SortedSet.class, collection(() -> new TreeSet<>(OBJECT_COMPARATOR)));
