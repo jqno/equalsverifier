@@ -756,8 +756,8 @@ class GenericTypesTest {
 
     public static final class TwoGenericsContainerWithIntrospection {
 
-        private final List<String> stringList = new ArrayList<>();
-        private final List<Integer> intList = new ArrayList<>();
+        private final List<String> stringList = List.of();
+        private final List<Integer> intList = List.of();
 
         @SuppressWarnings("unused")
         @Override

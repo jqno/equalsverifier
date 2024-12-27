@@ -2,7 +2,6 @@ package nl.jqno.equalsverifier.internal.instantiation.vintage.prefabvalues.facto
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
@@ -26,10 +25,7 @@ public abstract class AbstractGenericFactory<T> implements PrefabValueFactory<T>
     }
 
     protected TypeTag copyGenericTypesInto(Class<?> type, TypeTag source) {
-        var genericTypes = new ArrayList<TypeTag>();
-        for (TypeTag tag : source.getGenericTypes()) {
-            genericTypes.add(tag);
-        }
+        var genericTypes = source.getGenericTypes();
         return new TypeTag(type, genericTypes.toArray(new TypeTag[genericTypes.size()]));
     }
 
