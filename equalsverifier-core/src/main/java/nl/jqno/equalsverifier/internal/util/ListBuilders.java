@@ -1,8 +1,8 @@
 package nl.jqno.equalsverifier.internal.util;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /** Helper functions for building lists with examples. */
 public final class ListBuilders {
@@ -91,6 +91,6 @@ public final class ListBuilders {
      * @return Whether the given list contains duplicates.
      */
     public static <T> boolean listContainsDuplicates(List<T> list) {
-        return list.size() != new HashSet<>(list).size();
+        return list.size() != Set.of(list).size();
     }
 }

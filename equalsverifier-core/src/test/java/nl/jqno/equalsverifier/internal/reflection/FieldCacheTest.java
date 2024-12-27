@@ -3,7 +3,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -54,8 +54,7 @@ class FieldCacheTest {
         assertThat(cache.getFieldNames()).isEqualTo(Collections.emptySet());
 
         cache.put(stringField, stringValues);
-        var expected = new HashSet<String>();
-        expected.add(stringField);
+        var expected = Set.of(stringField);
         assertThat(cache.getFieldNames()).isEqualTo(expected);
     }
 }
