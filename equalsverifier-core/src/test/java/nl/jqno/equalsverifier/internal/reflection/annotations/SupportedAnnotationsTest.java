@@ -1,6 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection.annotations;
 
-import static nl.jqno.equalsverifier.internal.reflection.Util.setOf;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.HashSet;
@@ -40,13 +39,13 @@ class SupportedAnnotationsTest {
 
     @Test
     void jpaIdAnnotationIsAlsoAddedAsAClassAnnotation() {
-        SupportedAnnotations.ID.postProcess(setOf(String.class), ANNOTATION_CACHE);
+        SupportedAnnotations.ID.postProcess(Set.of(String.class), ANNOTATION_CACHE);
         assertThat(ANNOTATION_CACHE.hasClassAnnotation(String.class, SupportedAnnotations.ID)).isTrue();
     }
 
     @Test
     void hibernateNaturalIdAnnotationIsAlsoAddedAsAClassAnnotation() {
-        SupportedAnnotations.NATURALID.postProcess(setOf(String.class), ANNOTATION_CACHE);
+        SupportedAnnotations.NATURALID.postProcess(Set.of(String.class), ANNOTATION_CACHE);
         assertThat(ANNOTATION_CACHE.hasClassAnnotation(String.class, SupportedAnnotations.NATURALID)).isTrue();
     }
 }

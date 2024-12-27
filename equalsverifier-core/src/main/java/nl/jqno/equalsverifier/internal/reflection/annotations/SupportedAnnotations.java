@@ -2,9 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection.annotations;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.Warning;
@@ -203,8 +201,7 @@ public enum SupportedAnnotations implements Annotation {
 
     SupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
-        this.partialClassNames = new HashSet<>();
-        this.partialClassNames.addAll(Arrays.asList(partialClassNames));
+        this.partialClassNames = Set.of(partialClassNames);
     }
 
     @Override

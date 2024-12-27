@@ -1,7 +1,5 @@
 package nl.jqno.equalsverifier.testhelpers.annotations;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Set;
 
 import nl.jqno.equalsverifier.internal.reflection.annotations.Annotation;
@@ -57,8 +55,7 @@ public enum TestSupportedAnnotations implements Annotation {
 
     TestSupportedAnnotations(boolean inherits, String... partialClassNames) {
         this.inherits = inherits;
-        this.partialClassNames = new HashSet<>();
-        this.partialClassNames.addAll(Arrays.asList(partialClassNames));
+        this.partialClassNames = Set.of(partialClassNames);
     }
 
     @Override

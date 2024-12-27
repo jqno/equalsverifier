@@ -1,9 +1,5 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 public final class Util {
 
     private Util() {
@@ -97,17 +93,5 @@ public final class Util {
      */
     public static Object[] objects(Object first, Object second, Object third) {
         return new Object[] { first, second, third };
-    }
-
-    /**
-     * Helper method to create a set of object.
-     *
-     * @param ts  The objects to add to the set.
-     * @param <T> The type of objects to add to the set.
-     * @return A set with the given objets.
-     */
-    @SafeVarargs
-    public static <T> Set<T> setOf(T... ts) {
-        return new HashSet<>(Arrays.asList(ts));
     }
 }

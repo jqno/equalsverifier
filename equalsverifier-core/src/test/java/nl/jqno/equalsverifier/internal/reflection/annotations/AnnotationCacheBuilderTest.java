@@ -10,11 +10,7 @@ import javax.annotation.Nonnull;
 
 import net.bytebuddy.description.modifier.Visibility;
 import nl.jqno.equalsverifier.internal.reflection.Instantiator;
-import nl.jqno.equalsverifier.internal.reflection.Util;
-import nl.jqno.equalsverifier.testhelpers.annotations.AnnotationWithValues;
-import nl.jqno.equalsverifier.testhelpers.annotations.FieldAnnotationRuntimeRetention;
-import nl.jqno.equalsverifier.testhelpers.annotations.NotNull;
-import nl.jqno.equalsverifier.testhelpers.annotations.TestSupportedAnnotations;
+import nl.jqno.equalsverifier.testhelpers.annotations.*;
 import nl.jqno.equalsverifier.testhelpers.packages.annotated.AnnotatedPackage;
 import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -199,7 +195,7 @@ class AnnotationCacheBuilderTest {
     @Test
     void searchIgnoredField() {
         cacheBuilder = new AnnotationCacheBuilder(TestSupportedAnnotations.values(),
-                Util.setOf(FieldAnnotationRuntimeRetention.class.getCanonicalName()));
+                Set.of(FieldAnnotationRuntimeRetention.class.getCanonicalName()));
         build(AnnotatedFields.class);
 
         assertFieldDoesNotHaveAnnotation(AnnotatedFields.class, "runtimeRetention", FIELD_RUNTIME_RETENTION);
@@ -250,7 +246,7 @@ class AnnotationCacheBuilderTest {
 
         assertTypeHasAnnotation(AnnotationWithValuesContainer.class, annotation);
 
-        var annotations = new HashSet<String>(annotation.properties.getArrayValues("annotations"));
+        var annotations = annotation.properties.getArrayValues("annotations");
         assertThat(annotations).contains("javax.annotation.Nonnull");
         assertThat(annotations).contains("nl.jqno.equalsverifier.testhelpers.annotations.NotNull");
     }
@@ -320,9 +316,7 @@ class AnnotationCacheBuilderTest {
 
         @Override
         public Set<String> partialClassNames() {
-            var result = new HashSet<String>();
-            result.add(AnnotationWithValues.class.getSimpleName());
-            return result;
+            return Set.of(AnnotationWithValues.class.getSimpleName());
         }
 
         @Override
