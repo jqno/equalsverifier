@@ -212,21 +212,15 @@ class VintageValueProviderTest {
     private static final class ListTestFactory implements PrefabValueFactory<List> {
 
         @Override
-        @SuppressWarnings("unchecked")
         public Tuple<List> createValues(
                 TypeTag tag,
                 VintageValueProvider valueProvider,
                 LinkedHashSet<TypeTag> typeStack) {
             TypeTag subtag = tag.getGenericTypes().get(0);
 
-            List red = new ArrayList<>();
-            red.add(valueProvider.giveRed(subtag));
-
-            List blue = new ArrayList<>();
-            blue.add(valueProvider.giveBlue(subtag));
-
-            List redCopy = new ArrayList<>();
-            redCopy.add(valueProvider.giveRed(subtag));
+            List red = List.of(valueProvider.<Object>giveRed(subtag));
+            List blue = List.of(valueProvider.<Object>giveBlue(subtag));
+            List redCopy = List.of(valueProvider.<Object>giveRed(subtag));
 
             return Tuple.of(red, blue, redCopy);
         }
