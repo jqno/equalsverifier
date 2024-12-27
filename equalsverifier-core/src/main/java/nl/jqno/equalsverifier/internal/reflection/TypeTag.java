@@ -151,11 +151,11 @@ public final class TypeTag {
 
     private static Map<String, TypeTag> buildLookup(TypeTag enclosingType) {
         TypeVariable<?>[] typeParameters = enclosingType.getType().getTypeParameters();
-        var lookup = new HashMap<String, TypeTag>();
         if (enclosingType.getGenericTypes().size() == 0) {
-            return lookup;
+            return Map.of();
         }
 
+        var lookup = new HashMap<String, TypeTag>();
         for (int i = 0; i < typeParameters.length; i++) {
             String name = typeParameters[i].getName();
             TypeTag tag = enclosingType.getGenericTypes().get(i);
