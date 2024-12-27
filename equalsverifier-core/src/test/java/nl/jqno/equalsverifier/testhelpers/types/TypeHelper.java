@@ -207,18 +207,6 @@ public class TypeHelper {
         public AbstractClass field;
     }
 
-    public static final class AbstractAndInterfaceArrayContainer {
-
-        public AbstractClass[] abstractClasses = new AbstractClass[] { null };
-        public Interface[] interfaces = new Interface[] { null };
-    }
-
-    public static final class GenericListContainer {
-
-        public List<String> stringList = new ArrayList<>();
-        public List<Integer> integerList = new ArrayList<>();
-    }
-
     public static final class GenericTypeVariableListContainer<T> {
 
         public List<T> tList = new ArrayList<>();
@@ -242,15 +230,6 @@ public class TypeHelper {
     public static final class TransientContainer {
 
         transient Object field = new Object();
-    }
-
-    public static class PrivateObjectContainer {
-
-        private Object field = new Object();
-
-        public Object get() {
-            return field;
-        }
     }
 
     public static class ArrayContainer {
@@ -298,11 +277,6 @@ public class TypeHelper {
         private EmptyEnum emptyEnum;
         private OneElementEnum oneElementEnum;
         private TwoElementEnum twoElementEnum;
-    }
-
-    public static final class PointArrayContainer {
-
-        public Point[] points = { new Point(1, 2) };
     }
 
     @SuppressWarnings("unused")
