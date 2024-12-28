@@ -153,6 +153,7 @@
                 <version>${version.maven-surefire-plugin}</version>
                 <configuration>
                     <argLine>@{argline.full}</argLine>
+                    <useModulePath>false</useModulePath>
                     <trimStackTrace>false</trimStackTrace>
                     <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>

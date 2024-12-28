@@ -14,6 +14,7 @@ public class JarAsserter {
 
     public void assertPresenceOfCoreClasses() {
         assertPresenceOf(
+            "/module-info.class",
             EV + "/EqualsVerifier.class",
             EV + "/internal/reflection/ClassProbe.class",
             EV + "/internal/checkers/HierarchyChecker.class");
@@ -51,7 +52,6 @@ public class JarAsserter {
         var manifest = new String(reader.getContentOf(filename));
         assertThat(manifest)
                 .satisfies(
-                    m -> assertContains("Automatic-Module-Name: nl.jqno.equalsverifier", m, filename),
                     m -> assertContains("Implementation-Title: " + implementationTitle, m, filename),
                     m -> assertContains("Implementation-Version: ", m, filename),
                     m -> assertContains("Multi-Release: true", m, filename),
