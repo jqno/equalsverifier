@@ -61,7 +61,6 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
                             <Multi-Release>true</Multi-Release>
                             <Implementation-Title>EqualsVerifier (no dependencies)</Implementation-Title>
                             <Website>${project.url}</Website>

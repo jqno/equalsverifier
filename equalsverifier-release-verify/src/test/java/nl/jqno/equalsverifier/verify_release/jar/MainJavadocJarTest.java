@@ -27,6 +27,6 @@ class MainJavadocJarTest {
 
     @Test
     void presenceOfCoreSources() {
-        jar.assertPresenceOf("/index.html", EV + "/EqualsVerifier.html");
+        jar.assertPresenceOf("/index.html", "/nl.jqno.equalsverifier" + EV + "/EqualsVerifier.html");
     }
 }
