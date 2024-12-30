@@ -93,7 +93,7 @@
         <version.slf4j>2.0.16</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>10.21.0</version.checkstyle>
+        <version.checkstyle>10.21.1</version.checkstyle>
 
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
