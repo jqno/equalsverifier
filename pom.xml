@@ -89,6 +89,7 @@
         <version.jcip-annotations>1.0</version.jcip-annotations>
         <version.joda-time>2.13.0</version.joda-time>
         <version.junit-jupiter>5.11.4</version.junit-jupiter>
+        <version.kotlin>2.1.0</version.kotlin>
         <version.openjfx>19.0.2.1</version.openjfx>
         <version.slf4j>2.0.16</version.slf4j>
 
@@ -576,6 +577,7 @@
                 <module>equalsverifier-16</module>
                 <module>equalsverifier-17</module>
                 <module>equalsverifier-21</module>
+                <module>equalsverifier-test-kotlin</module>
                 <module>equalsverifier-aggregator</module>
                 <module>equalsverifier-release-main</module>
                 <module>equalsverifier-release-nodep</module>

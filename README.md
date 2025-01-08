@@ -109,6 +109,7 @@ Here's a description of the modules:
 | equalsverifier-release-main   | release assembly for jar with dependencies                            |
 | equalsverifier-release-nodep  | release assembly for fat jar (with dependencies shaded in)            |
 | equalsverifier-release-verify | validation tests for the releases                                     |
+| equalsverifier-test-kotlin    | tests for Kotlin classes                                              |
 
 ## Signed JAR
 
