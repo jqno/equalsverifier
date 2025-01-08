@@ -1,9 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Iterable to iterate over all declared fields in a class and, if needed, over all declared fields of its superclasses.
@@ -76,6 +75,10 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createFieldList() {
+        return createJavaFieldList();
+    }
+
+    private List<FieldProbe> createJavaFieldList() {
         List<FieldProbe> result = new ArrayList<>();
 
         result.addAll(addFieldsFor(type));
@@ -83,6 +86,24 @@ public final class FieldIterable implements Iterable<FieldProbe> {
         if (includeSuperclasses) {
             for (Class<?> c : SuperclassIterable.of(type)) {
                 result.addAll(addFieldsFor(c));
+            }
+        }
+
+        return result;
+    }
+
+    private List<FieldProbe> createKotlinFieldList() {
+        List<FieldProbe> result = new ArrayList<>();
+
+        result.addAll(addFieldsFor(type));
+        Set<String> names = result.stream().map(FieldProbe::getName).collect(Collectors.toSet());
+
+        if (includeSuperclasses) {
+            for (Class<?> c : SuperclassIterable.of(type)) {
+                List<FieldProbe> superFields =
+                        addFieldsFor(c).stream().filter(p -> !names.contains(p.getName())).collect(Collectors.toList());
+                result.addAll(superFields);
+                superFields.stream().map(FieldProbe::getName).forEach(names::add);
             }
         }
 
