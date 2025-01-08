@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Improved Kotlin support. ([Issue 506](https://github.com/jqno/equalsverifier/issues/506#issuecomment-2563664670))
+
 ## [3.18] - 2024-12-24
 
 ### Added
