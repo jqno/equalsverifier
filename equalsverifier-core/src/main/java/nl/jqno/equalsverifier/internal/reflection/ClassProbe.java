@@ -63,9 +63,9 @@ public final class ClassProbe<T> {
     }
 
     /**
-     * Determines whether T has an {@code hashCode} method.
+     * Determines whether T has a {@code hashCode} method.
      *
-     * @return True if T has an {@code hashCode} method.
+     * @return True if T has a {@code hashCode} method.
      */
     public boolean declaresHashCode() {
         return declaresMethod(type, "hashCode");
