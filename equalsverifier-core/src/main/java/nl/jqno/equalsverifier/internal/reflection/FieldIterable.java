@@ -12,12 +12,14 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     private final Class<?> type;
     private final boolean includeSuperclasses;
     private final boolean includeStatic;
+    private final boolean isKotlin;
 
     /** Private constructor. Call {@link #of(Class)} or {@link #ofIgnoringSuper(Class)} instead. */
-    private FieldIterable(Class<?> type, boolean includeSuperclasses, boolean includeStatic) {
+    private FieldIterable(Class<?> type, boolean includeSuperclasses, boolean includeStatic, boolean isKotlin) {
         this.type = type;
         this.includeSuperclasses = includeSuperclasses;
         this.includeStatic = includeStatic;
+        this.isKotlin = isKotlin;
     }
 
     /**
@@ -28,7 +30,18 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable of(Class<?> type) {
-        return new FieldIterable(type, true, true);
+        return new FieldIterable(type, true, true, false);
+    }
+
+    /**
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type} and over the declared
+     * fields of all of its superclasses, but that ignores overridden Kotlin backing fields in superclasses.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterable.
+     */
+    public static FieldIterable ofKotlin(Class<?> type) {
+        return new FieldIterable(type, true, true, true);
     }
 
     /**
@@ -39,7 +52,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringSuper(Class<?> type) {
-        return new FieldIterable(type, false, true);
+        return new FieldIterable(type, false, true, false);
     }
 
     /**
@@ -50,7 +63,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringStatic(Class<?> type) {
-        return new FieldIterable(type, true, false);
+        return new FieldIterable(type, true, false, false);
     }
 
     /**
@@ -61,7 +74,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringSuperAndStatic(Class<?> type) {
-        return new FieldIterable(type, false, false);
+        return new FieldIterable(type, false, false, false);
     }
 
     /**
@@ -75,7 +88,12 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createFieldList() {
-        return createJavaFieldList();
+        if (isKotlin) {
+            return createKotlinFieldList();
+        }
+        else {
+            return createJavaFieldList();
+        }
     }
 
     private List<FieldProbe> createJavaFieldList() {

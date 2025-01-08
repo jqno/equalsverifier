@@ -55,7 +55,7 @@ public class FieldsChecker<T> implements Checker {
 
     @Override
     public void check() {
-        FieldInspector<T> inspector = new FieldInspector<>(context.getType());
+        FieldInspector<T> inspector = new FieldInspector<>(context.getType(), config.isKotlin());
 
         if (!context.getClassProbe().isEqualsInheritedFromObject()) {
             inspector.check(arrayFieldCheck);

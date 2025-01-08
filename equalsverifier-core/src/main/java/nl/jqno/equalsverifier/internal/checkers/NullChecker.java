@@ -18,7 +18,7 @@ public class NullChecker<T> implements Checker {
             return;
         }
 
-        FieldInspector<T> inspector = new FieldInspector<>(context.getType());
+        FieldInspector<T> inspector = new FieldInspector<>(context.getType(), context.getConfiguration().isKotlin());
         inspector.check(new NullPointerExceptionFieldCheck<>(context));
     }
 }

@@ -194,7 +194,9 @@ public enum SupportedAnnotations implements Annotation {
                 Set<String> ignoredAnnotations) {
             return "LAZY".equals(properties.getEnumValue("fetch"));
         }
-    };
+    },
+
+    KOTLIN(false, "kotlin.Metadata");
 
     private final boolean inherits;
     private final Set<String> partialClassNames;
