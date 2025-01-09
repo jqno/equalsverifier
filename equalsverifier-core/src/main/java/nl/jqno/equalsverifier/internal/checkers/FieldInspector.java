@@ -7,13 +7,16 @@ import nl.jqno.equalsverifier.internal.reflection.FieldProbe;
 public class FieldInspector<T> {
 
     private final Class<T> type;
+    private final boolean isKotlin;
 
-    public FieldInspector(Class<T> type) {
+    public FieldInspector(Class<T> type, boolean isKotlin) {
         this.type = type;
+        this.isKotlin = isKotlin;
     }
 
     public void check(FieldCheck<T> check) {
-        for (FieldProbe fieldProbe : FieldIterable.of(type)) {
+        FieldIterable it = isKotlin ? FieldIterable.ofKotlin(type) : FieldIterable.of(type);
+        for (FieldProbe fieldProbe : it) {
             check.execute(fieldProbe);
         }
     }

@@ -24,6 +24,7 @@ public final class Configuration<T> {
     private final boolean usingGetClass;
     private final EnumSet<Warning> warningsToSuppress;
     private final Function<String, String> fieldnameToGetter;
+    private final boolean isKotlin;
 
     private final TypeTag typeTag;
     private final AnnotationCache annotationCache;
@@ -46,6 +47,7 @@ public final class Configuration<T> {
             boolean usingGetClass,
             EnumSet<Warning> warningsToSuppress,
             Function<String, String> fieldnameToGetter,
+            boolean isKotlin,
             List<T> equalExamples,
             List<T> unequalExamples) {
         this.type = type;
@@ -60,6 +62,7 @@ public final class Configuration<T> {
         this.usingGetClass = usingGetClass;
         this.warningsToSuppress = warningsToSuppress;
         this.fieldnameToGetter = fieldnameToGetter;
+        this.isKotlin = isKotlin;
         this.equalExamples = equalExamples;
         this.unequalExamples = unequalExamples;
     }
@@ -91,6 +94,7 @@ public final class Configuration<T> {
             actualFields);
         Function<String, String> converter =
                 fieldnameToGetter != null ? fieldnameToGetter : DEFAULT_FIELDNAME_TO_GETTER_CONVERTER;
+        boolean isKotlin = annotationCache.hasClassAnnotation(type, SupportedAnnotations.KOTLIN);
 
         return new Configuration<>(type,
                 typeTag,
@@ -104,6 +108,7 @@ public final class Configuration<T> {
                 usingGetClass,
                 warningsToSuppress,
                 converter,
+                isKotlin,
                 equalExamples,
                 unequalExamples);
     }
@@ -198,6 +203,10 @@ public final class Configuration<T> {
 
     public Function<String, String> getFieldnameToGetter() {
         return fieldnameToGetter;
+    }
+
+    public boolean isKotlin() {
+        return isKotlin;
     }
 
     public List<T> getEqualExamples() {

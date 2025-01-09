@@ -1,9 +1,8 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Iterable to iterate over all declared fields in a class and, if needed, over all declared fields of its superclasses.
@@ -13,12 +12,14 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     private final Class<?> type;
     private final boolean includeSuperclasses;
     private final boolean includeStatic;
+    private final boolean isKotlin;
 
     /** Private constructor. Call {@link #of(Class)} or {@link #ofIgnoringSuper(Class)} instead. */
-    private FieldIterable(Class<?> type, boolean includeSuperclasses, boolean includeStatic) {
+    private FieldIterable(Class<?> type, boolean includeSuperclasses, boolean includeStatic, boolean isKotlin) {
         this.type = type;
         this.includeSuperclasses = includeSuperclasses;
         this.includeStatic = includeStatic;
+        this.isKotlin = isKotlin;
     }
 
     /**
@@ -29,7 +30,18 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable of(Class<?> type) {
-        return new FieldIterable(type, true, true);
+        return new FieldIterable(type, true, true, false);
+    }
+
+    /**
+     * Factory method for a FieldIterable that iterates over all declared fields of {@code type} and over the declared
+     * fields of all of its superclasses, but that ignores overridden Kotlin backing fields in superclasses.
+     *
+     * @param type The class that contains the fields over which to iterate.
+     * @return A FieldIterable.
+     */
+    public static FieldIterable ofKotlin(Class<?> type) {
+        return new FieldIterable(type, true, true, true);
     }
 
     /**
@@ -40,7 +52,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringSuper(Class<?> type) {
-        return new FieldIterable(type, false, true);
+        return new FieldIterable(type, false, true, false);
     }
 
     /**
@@ -51,7 +63,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringStatic(Class<?> type) {
-        return new FieldIterable(type, true, false);
+        return new FieldIterable(type, true, false, false);
     }
 
     /**
@@ -62,7 +74,7 @@ public final class FieldIterable implements Iterable<FieldProbe> {
      * @return A FieldIterable.
      */
     public static FieldIterable ofIgnoringSuperAndStatic(Class<?> type) {
-        return new FieldIterable(type, false, false);
+        return new FieldIterable(type, false, false, false);
     }
 
     /**
@@ -76,6 +88,15 @@ public final class FieldIterable implements Iterable<FieldProbe> {
     }
 
     private List<FieldProbe> createFieldList() {
+        if (isKotlin) {
+            return createKotlinFieldList();
+        }
+        else {
+            return createJavaFieldList();
+        }
+    }
+
+    private List<FieldProbe> createJavaFieldList() {
         List<FieldProbe> result = new ArrayList<>();
 
         result.addAll(addFieldsFor(type));
@@ -83,6 +104,24 @@ public final class FieldIterable implements Iterable<FieldProbe> {
         if (includeSuperclasses) {
             for (Class<?> c : SuperclassIterable.of(type)) {
                 result.addAll(addFieldsFor(c));
+            }
+        }
+
+        return result;
+    }
+
+    private List<FieldProbe> createKotlinFieldList() {
+        List<FieldProbe> result = new ArrayList<>();
+
+        result.addAll(addFieldsFor(type));
+        Set<String> names = result.stream().map(FieldProbe::getName).collect(Collectors.toSet());
+
+        if (includeSuperclasses) {
+            for (Class<?> c : SuperclassIterable.of(type)) {
+                List<FieldProbe> superFields =
+                        addFieldsFor(c).stream().filter(p -> !names.contains(p.getName())).collect(Collectors.toList());
+                result.addAll(superFields);
+                superFields.stream().map(FieldProbe::getName).forEach(names::add);
             }
         }
 
