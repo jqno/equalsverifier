@@ -12,6 +12,14 @@
     <componentDescriptors>
         <componentDescriptor>assemblies/assembly.xml</componentDescriptor>
     </componentDescriptors>
+    <files>
+        <file>
+            <!-- Override the existing module-info.class with the one from this module -->
+            <source>${project.build.outputDirectory}/module-info.class</source>
+            <outputDirectory>.</outputDirectory>
+            <destName>module-info.class</destName>
+        </file>
+    </files>
     <moduleSets>
         <moduleSet>
             <useAllReactorProjects>true</useAllReactorProjects>
