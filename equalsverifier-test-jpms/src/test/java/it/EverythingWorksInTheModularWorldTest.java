@@ -88,17 +88,17 @@ public class EverythingWorksInTheModularWorldTest {
     static class NonFinal {
         private final int i;
 
-        private NonFinal(int i) {
+        public NonFinal(int i) {
             this.i = i;
         }
 
         @Override
-        public boolean equals(Object obj) {
+        public final boolean equals(Object obj) {
             return obj instanceof NonFinal other && Objects.equals(i, other.i);
         }
 
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return Objects.hash(i);
         }
     }

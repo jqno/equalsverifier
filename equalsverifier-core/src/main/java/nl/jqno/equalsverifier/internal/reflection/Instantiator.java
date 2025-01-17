@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.reflection.Util.classForName;
-import static nl.jqno.equalsverifier.internal.reflection.Util.classes;
-import static nl.jqno.equalsverifier.internal.reflection.Util.objects;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Modifier;
@@ -121,18 +119,12 @@ public final class Instantiator<T> {
     }
 
     private static <S> ClassLoadingStrategy<ClassLoader> getClassLoadingStrategy(Class<S> context) {
-        if (System.getProperty("java.version").startsWith("1.")) {
-            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
-        }
-        else {
-            ConditionalInstantiator ci = new ConditionalInstantiator("java.lang.invoke.MethodHandles$Lookup");
-            Object lookup = ci
-                    .callFactory(
-                        "java.lang.invoke.MethodHandles",
-                        "privateLookupIn",
-                        classes(Class.class, MethodHandles.Lookup.class),
-                        objects(context, MethodHandles.lookup()));
+        try {
+            var lookup = MethodHandles.privateLookupIn(context, MethodHandles.lookup());
             return ClassLoadingStrategy.UsingLookup.of(lookup);
+        }
+        catch (IllegalAccessException e) {
+            return ClassLoadingStrategy.Default.INJECTION.with(context.getProtectionDomain());
         }
     }
 
