@@ -26,6 +26,11 @@ public class EverythingWorksInTheModularWorldTest {
         EqualsVerifier.forClass(FieldsFromJdkModulesHaver.class).verify();
     }
 
+    @Test
+    void nonFinalClassCanBeVerified() {
+        EqualsVerifier.forClass(NonFinal.class).verify();
+    }
+
     static final class ClassPoint {
         private final int x;
         private final int y;
@@ -77,6 +82,24 @@ public class EverythingWorksInTheModularWorldTest {
         @Override
         public int hashCode() {
             return Objects.hash(desktopAwtColor, rmiUid, sqlDate, namingReference);
+        }
+    }
+
+    static class NonFinal {
+        private final int i;
+
+        private NonFinal(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof NonFinal other && Objects.equals(i, other.i);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(i);
         }
     }
 }
