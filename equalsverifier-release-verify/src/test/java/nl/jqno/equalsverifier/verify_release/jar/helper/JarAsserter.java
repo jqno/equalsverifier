@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.verify_release.jar.helper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Set;
+
 public class JarAsserter {
 
     public static final String EV = "/nl/jqno/equalsverifier";
@@ -45,6 +47,12 @@ public class JarAsserter {
     public void assertAbsenceOf(String... fileNames) {
         var entries = reader.getEntries();
         assertThat(fileNames).allMatch(fn -> !entries.contains(fn), "absent from " + reader.getFilename());
+    }
+
+    public void assertAbsenceOfDirectory(String... dirNames) {
+        var dirs = Set.of(dirNames);
+        var entries = reader.getEntries();
+        assertThat(entries).noneMatch(dirs::contains);
     }
 
     public void assertContentOfManifest(String implementationTitle) {

@@ -26,7 +26,12 @@ class MainJavadocJarTest {
     }
 
     @Test
-    void presenceOfCoreSources() {
+    void presenceOfCoreFiles() {
         jar.assertPresenceOf("/index.html", "/nl.jqno.equalsverifier" + EV + "/EqualsVerifier.html");
+    }
+
+    @Test
+    void absenceOfNonExportedPackages() {
+        jar.assertAbsenceOf("/nl.jqno.equalsverifier" + EV + "/internal");
     }
 }
