@@ -52,4 +52,9 @@ class NodepClassesJarTest {
     void versionsOfEmbeddedDependencies() {
         jar.assertVersionsOfEmbeddedClassFiles();
     }
+
+    @Test
+    void presenceOfModuleInfoWithoutDependencies() {
+        jar.assertModuleInfoWithoutDependencies();
+    }
 }

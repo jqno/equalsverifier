@@ -92,4 +92,26 @@ public class JarAsserter {
                 + actualVersion;
         assertThat(actualVersion).as(description).isEqualTo((byte) expectedVersion);
     }
+
+    public void assertModuleInfoWithDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertRequires("net.bytebuddy", ""),
+                    m -> m.assertRequires("org.objenesis", ""));
+    }
+
+    public void assertModuleInfoWithoutDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertDoesNotRequire("net.bytebuddy"),
+                    m -> m.assertDoesNotRequire("org.objenesis"));
+    }
 }

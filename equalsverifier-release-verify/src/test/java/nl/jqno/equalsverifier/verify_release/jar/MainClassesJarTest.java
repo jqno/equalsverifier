@@ -47,4 +47,9 @@ class MainClassesJarTest {
     void versionsOfClassFiles() {
         jar.assertVersionsOfClassFiles();
     }
+
+    @Test
+    void presenceOfModuleInfoWithDependencies() {
+        jar.assertModuleInfoWithDependencies();
+    }
 }
