@@ -14,11 +14,24 @@ public class EverythingWorksInTheModularWorldTest {
     }
 
     @Test
+    void classContainingClassCanBeVerifier() {
+        EqualsVerifier.forClass(ClassPointContainer.class).verify();
+    }
+
+    @Test
     @Disabled("It's impossble to load `equalsverifier-16` in the module world "
             + "because it creates a split path. We can enable this test again "
             + "when EqualsVerifier's baseline becomes Java 17")
     void recordCanBeVerified() {
         EqualsVerifier.forClass(RecordPoint.class).verify();
+    }
+
+    @Test
+    @Disabled("It's impossble to load `equalsverifier-16` in the module world "
+            + "because it creates a split path. We can enable this test again "
+            + "when EqualsVerifier's baseline becomes Java 17")
+    void recordContainingRecordCanBeVerified() {
+        EqualsVerifier.forClass(RecordPointContainer.class).verify();
     }
 
     @Test
@@ -51,7 +64,27 @@ public class EverythingWorksInTheModularWorldTest {
         }
     }
 
+    static final class ClassPointContainer {
+        private final ClassPoint cp;
+
+        private ClassPointContainer(ClassPoint cp) {
+            this.cp = cp;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof ClassPointContainer other && Objects.equals(cp, other.cp);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(cp);
+        }
+    }
+
     record RecordPoint(int x, int y) {}
+
+    record RecordPointContainer(RecordPoint rp) {}
 
     static final class FieldsFromJdkModulesHaver {
         private final java.awt.Color desktopAwtColor;
