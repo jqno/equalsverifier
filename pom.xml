@@ -89,12 +89,12 @@
         <version.jcip-annotations>1.0</version.jcip-annotations>
         <version.joda-time>2.13.0</version.joda-time>
         <version.junit-jupiter>5.11.4</version.junit-jupiter>
-        <version.kotlin>2.1.0</version.kotlin>
+        <version.kotlin>2.1.10</version.kotlin>
         <version.openjfx>19.0.2.1</version.openjfx>
         <version.slf4j>2.0.16</version.slf4j>
 
         <!-- Property for Checkstyle's regression CI - see issues 216 and 586 -->
-        <version.checkstyle>10.21.1</version.checkstyle>
+        <version.checkstyle>10.21.2</version.checkstyle>
 
         <version.build-helper-maven-plugin>3.6.0</version.build-helper-maven-plugin>
         <version.checkstyle.maven>3.6.0</version.checkstyle.maven>
