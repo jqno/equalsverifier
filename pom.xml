@@ -114,7 +114,7 @@
         <version.pitest.junit5>1.2.1</version.pitest.junit5>
         <version.pitest.maven>1.17.4</version.pitest.maven>
         <version.spotbugs.maven>4.8.6.6</version.spotbugs.maven>
-        <version.spotbugs>4.9.0</version.spotbugs>
+        <version.spotbugs>4.8.6</version.spotbugs>
         <version.spotless>2.44.2</version.spotless>
     </properties>
 
