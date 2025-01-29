@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Gives readable error message when trying to use `forPackage()` on third-party dependency package, instead of a `NullPointerException`. ([Issue 1040](https://github.com/jqno/equalsverifier/issues/1040))
+
 ## [3.18.1] - 2025-01-09
 
 ### Added

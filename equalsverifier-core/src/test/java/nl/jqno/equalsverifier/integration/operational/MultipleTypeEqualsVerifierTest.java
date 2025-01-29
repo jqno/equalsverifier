@@ -7,6 +7,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
@@ -59,6 +60,14 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
         EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperI.class).verify();
+    }
+
+    @Test
+    void fail_whenVerifyingAThirdPartyPackage() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage("org.junit").verify())
+                .assertThrows(ReflectionException.class)
+                .assertMessageContains("Could not resolve");
     }
 
     @Test

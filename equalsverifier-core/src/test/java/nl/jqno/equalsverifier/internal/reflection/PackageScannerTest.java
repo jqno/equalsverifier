@@ -2,6 +2,7 @@ package nl.jqno.equalsverifier.internal.reflection;
 
 import static nl.jqno.equalsverifier.internal.testhelpers.Util.coverThePrivateConstructor;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.C;
@@ -116,6 +118,13 @@ class PackageScannerTest {
 
         assertThat(classes)
                 .isEqualTo(Collections.singletonList(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
+    }
+
+    @Test
+    void dependencyPackage() {
+        assertThatThrownBy(() -> PackageScanner.getClassesIn("org.junit", null, false))
+                .isInstanceOf(ReflectionException.class)
+                .hasMessageContaining("Could not resolve third-party resource");
     }
 
     private void sort(List<Class<?>> classes) {
