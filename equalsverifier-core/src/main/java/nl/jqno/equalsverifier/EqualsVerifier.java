@@ -2,10 +2,7 @@ package nl.jqno.equalsverifier;
 
 import java.util.List;
 
-import nl.jqno.equalsverifier.api.EqualsVerifierApi;
-import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.api.RelaxedEqualsVerifierApi;
-import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.api.*;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;

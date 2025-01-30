@@ -1,15 +1,14 @@
-package nl.jqno.equalsverifier;
+package nl.jqno.equalsverifier.api;
 
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.function.Function;
 
+import nl.jqno.equalsverifier.CheckReturnValue;
 import nl.jqno.equalsverifier.Func.Func1;
 import nl.jqno.equalsverifier.Func.Func2;
-import nl.jqno.equalsverifier.api.EqualsVerifierApi;
-import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
-import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
+import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;

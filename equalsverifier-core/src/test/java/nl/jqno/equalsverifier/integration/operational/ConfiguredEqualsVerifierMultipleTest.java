@@ -5,22 +5,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 import java.util.List;
 
-import nl.jqno.equalsverifier.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
 import nl.jqno.equalsverifier.Warning;
+import nl.jqno.equalsverifier.api.ConfiguredEqualsVerifier;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
-import nl.jqno.equalsverifier.testhelpers.types.FinalMethodsPoint;
-import nl.jqno.equalsverifier.testhelpers.types.GetClassPoint;
-import nl.jqno.equalsverifier.testhelpers.types.MutablePoint;
-import nl.jqno.equalsverifier.testhelpers.types.PointContainer;
+import nl.jqno.equalsverifier.testhelpers.types.*;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveType;
 import nl.jqno.equalsverifier.testhelpers.types.RecursiveTypeHelper.RecursiveTypeContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.DoubleGenericContainerContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainer;
-import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.SingleGenericContainerContainer;
+import nl.jqno.equalsverifier.testhelpers.types.TypeHelper.*;
 import org.junit.jupiter.api.Test;
 
 class ConfiguredEqualsVerifierMultipleTest {

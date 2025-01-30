@@ -57,7 +57,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      * @param type      The class for which the {@code equals} method should be tested.
      * @param objenesis To instantiate non-record classes.
      */
-    public SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
+    private SingleTypeEqualsVerifierApi(Class<T> type, Objenesis objenesis) {
         this.type = type;
         this.actualFields = FieldNameExtractor.extractFieldNames(type);
         this.objenesis = objenesis;
@@ -74,7 +74,7 @@ public class SingleTypeEqualsVerifierApi<T> implements EqualsVerifierApi<T> {
      *     equals}            method, instead of an {@code instanceof} check.
      * @param converter          A function that converts from field name to getter name.
      */
-    public SingleTypeEqualsVerifierApi(
+    /* package protected */ SingleTypeEqualsVerifierApi(
             Class<T> type,
             EnumSet<Warning> warningsToSuppress,
             FactoryCache factoryCache,
