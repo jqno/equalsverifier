@@ -75,7 +75,7 @@
         <analysis.spotless.formatter.config>build/eclipse-formatter-config.xml</analysis.spotless.formatter.config>
         <analysis.spotless.importorder.config>build/eclipse-formatter-config.importorder</analysis.spotless.importorder.config>
 
-        <version.bytebuddy>1.16.1</version.bytebuddy>
+        <version.bytebuddy>1.17.0</version.bytebuddy>
         <version.objenesis>3.4</version.objenesis>
 
         <version.archunit>1.3.0</version.archunit>
