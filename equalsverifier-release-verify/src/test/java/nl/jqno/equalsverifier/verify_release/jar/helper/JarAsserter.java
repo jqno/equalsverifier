@@ -2,6 +2,8 @@ package nl.jqno.equalsverifier.verify_release.jar.helper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Set;
+
 public class JarAsserter {
 
     public static final String EV = "/nl/jqno/equalsverifier";
@@ -14,6 +16,7 @@ public class JarAsserter {
 
     public void assertPresenceOfCoreClasses() {
         assertPresenceOf(
+            "/module-info.class",
             EV + "/EqualsVerifier.class",
             EV + "/internal/reflection/ClassProbe.class",
             EV + "/internal/checkers/HierarchyChecker.class");
@@ -46,12 +49,17 @@ public class JarAsserter {
         assertThat(fileNames).allMatch(fn -> !entries.contains(fn), "absent from " + reader.getFilename());
     }
 
+    public void assertAbsenceOfDirectory(String... dirNames) {
+        var dirs = Set.of(dirNames);
+        var entries = reader.getEntries();
+        assertThat(entries).noneMatch(dirs::contains);
+    }
+
     public void assertContentOfManifest(String implementationTitle) {
         var filename = "/META-INF/MANIFEST.MF";
         var manifest = new String(reader.getContentOf(filename));
         assertThat(manifest)
                 .satisfies(
-                    m -> assertContains("Automatic-Module-Name: nl.jqno.equalsverifier", m, filename),
                     m -> assertContains("Implementation-Title: " + implementationTitle, m, filename),
                     m -> assertContains("Implementation-Version: ", m, filename),
                     m -> assertContains("Multi-Release: true", m, filename),
@@ -91,5 +99,27 @@ public class JarAsserter {
         var description = "Expected " + innerFilename + " to have version " + expectedVersion + ", but it has version "
                 + actualVersion;
         assertThat(actualVersion).as(description).isEqualTo((byte) expectedVersion);
+    }
+
+    public void assertModuleInfoWithDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertRequires("net.bytebuddy", ""),
+                    m -> m.assertRequires("org.objenesis", ""));
+    }
+
+    public void assertModuleInfoWithoutDependencies() {
+        var moduleinfo = reader.getContentOf("module-info.class");
+        var module = ModuleInfoAsserter.parse(moduleinfo);
+        assertThat(module)
+                .satisfies(
+                    m -> m.assertName("nl.jqno.equalsverifier"),
+                    m -> m.assertExports("nl/jqno/equalsverifier", "nl/jqno/equalsverifier/api"),
+                    m -> m.assertDoesNotRequire("net.bytebuddy"),
+                    m -> m.assertDoesNotRequire("org.objenesis"));
     }
 }

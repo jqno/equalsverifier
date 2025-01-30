@@ -7,7 +7,7 @@
         <artifactId>equalsverifier-parent</artifactId>
         <version>3.18.2-SNAPSHOT</version>
     </parent>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <artifactId>equalsverifier-nodep</artifactId>
     <name>EqualsVerifier | release fat jar</name>
@@ -22,6 +22,7 @@
   </scm>
 
     <properties>
+        <maven.compiler.release>9</maven.compiler.release>
         <maven.install.skip>false</maven.install.skip>
         <maven.deploy.skip>false</maven.deploy.skip>
 
@@ -61,7 +62,6 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>
-                            <Automatic-Module-Name>nl.jqno.equalsverifier</Automatic-Module-Name>
                             <Multi-Release>true</Multi-Release>
                             <Implementation-Title>EqualsVerifier (no dependencies)</Implementation-Title>
                             <Website>${project.url}</Website>
