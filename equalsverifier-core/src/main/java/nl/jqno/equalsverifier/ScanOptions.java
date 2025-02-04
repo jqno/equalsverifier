@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 
@@ -31,6 +32,14 @@ final class ScanOptions {
         }
     }
 
+    static class ExclusionPredicate implements ScanOption {
+        final Predicate<Class<?>> exclusionPredicate;
+
+        ExclusionPredicate(Predicate<Class<?>> exclusionPredicate) {
+            this.exclusionPredicate = exclusionPredicate;
+        }
+    }
+
     public static PackageScanOptions process(ScanOption... options) {
         PackageScanOptions result = new PackageScanOptions();
         for (ScanOption option : options) {
@@ -44,6 +53,10 @@ final class ScanOptions {
             if (option instanceof ExceptClasses) {
                 ExceptClasses ec = (ExceptClasses) option;
                 result.exceptClasses.addAll(ec.types);
+            }
+            if (option instanceof ExclusionPredicate) {
+                ExclusionPredicate ep = (ExclusionPredicate) option;
+                result.exclusionPredicate = ep.exclusionPredicate;
             }
         }
         return result;

@@ -47,4 +47,21 @@ public class ForPackageDeprecationTest {
                 .except(IncorrectM.class, IncorrectN.class)
                 .verify();
     }
+
+    @Test
+    void directExceptPredicate() {
+        EqualsVerifier
+                .forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect")
+                .except(c -> c.getSimpleName().contains("Incorrect"))
+                .verify();
+    }
+
+    @Test
+    void simpleExceptPredicate() {
+        EqualsVerifier
+                .simple()
+                .forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect")
+                .except(c -> c.getSimpleName().contains("Incorrect"))
+                .verify();
+    }
 }

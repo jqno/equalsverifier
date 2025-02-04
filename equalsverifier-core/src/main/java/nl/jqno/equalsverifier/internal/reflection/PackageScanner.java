@@ -4,7 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.io.File;
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
@@ -35,6 +37,7 @@ public final class PackageScanner {
 
         Validations.validateTypesAreKnown(options.exceptClasses, result);
         result.removeAll(options.exceptClasses);
+        result.removeIf(options.exclusionPredicate);
         return result;
     }
 

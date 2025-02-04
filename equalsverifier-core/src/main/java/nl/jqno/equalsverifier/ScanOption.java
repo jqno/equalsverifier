@@ -1,5 +1,7 @@
 package nl.jqno.equalsverifier;
 
+import java.util.function.Predicate;
+
 /**
  * Contains a number of options that can be set in {@link EqualsVerifier#forPackage(String, ScanOption...)}. These
  * options affect the way in which EqualsVerifier scans the given package.
@@ -34,5 +36,15 @@ public interface ScanOption {
      */
     public static ScanOption except(Class<?> type, Class<?>... more) {
         return new ScanOptions.ExceptClasses(type, more);
+    }
+
+    /**
+     * Removes all types matching the given Predicate.
+     *
+     * @param exclusionPredicate A Predicate matching classes to remove from the list of types to verify.
+     * @return The 'except' flag with the associated Predicate.
+     */
+    public static ScanOption except(Predicate<Class<?>> exclusionPredicate) {
+        return new ScanOptions.ExclusionPredicate(exclusionPredicate);
     }
 }
