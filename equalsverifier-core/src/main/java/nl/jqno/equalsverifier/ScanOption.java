@@ -24,4 +24,15 @@ public interface ScanOption {
     public static ScanOption mustExtend(Class<?> type) {
         return new ScanOptions.MustExtend(type);
     }
+
+    /**
+     * Removes the given type or types from the list of types to verify.
+     *
+     * @param type A type to remove from the list of types to verify.
+     * @param more More types to remove from the list of types to verify.
+     * @return The 'except' flag with the associated types.
+     */
+    public static ScanOption except(Class<?> type, Class<?>... more) {
+        return new ScanOptions.ExceptClasses(type, more);
+    }
 }

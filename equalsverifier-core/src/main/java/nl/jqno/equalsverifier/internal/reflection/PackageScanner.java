@@ -8,6 +8,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
+import nl.jqno.equalsverifier.internal.util.Validations;
 
 /** Scans a package for classes. */
 public final class PackageScanner {
@@ -27,10 +28,14 @@ public final class PackageScanner {
      * @return the classes contained in the given package.
      */
     public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
-        return getDirs(packageName)
+        List<Class<?>> result = getDirs(packageName)
                 .stream()
                 .flatMap(d -> getClassesInDir(packageName, d, options).stream())
                 .collect(Collectors.toList());
+
+        Validations.validateTypesAreKnown(options.exceptClasses, result);
+        result.removeAll(options.exceptClasses);
+        return result;
     }
 
     private static List<File> getDirs(String packageName) {

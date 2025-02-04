@@ -178,29 +178,34 @@ class MultipleTypeEqualsVerifierTest {
 
     @Test
     void succeed_whenCallingForPackageOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE).except(IncorrectM.class, IncorrectN.class).verify();
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.except(IncorrectM.class, IncorrectN.class)).verify();
     }
 
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, ScanOption.recursive())
-                .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
+                .forPackage(
+                    INCORRECT_PACKAGE,
+                    ScanOption.recursive(),
+                    ScanOption.except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class))
                 .verify();
     }
 
     @Test
     void succeed_whenCallingForPackageWithASuperclassOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.mustExtend(Object.class))
-                .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
+                .forPackage(
+                    INCORRECT_PACKAGE,
+                    ScanOption.recursive(),
+                    ScanOption.mustExtend(Object.class),
+                    ScanOption.except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class))
                 .verify();
     }
 
     @Test
     void fail_whenExceptingAClassThatDoesntExistInThePackage() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE).except(IncorrectM.class))
+                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.except(IncorrectM.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
@@ -208,7 +213,9 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.recursive()).except(IncorrectM.class))
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(CORRECT_PACKAGE, ScanOption.recursive(), ScanOption.except(IncorrectM.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
