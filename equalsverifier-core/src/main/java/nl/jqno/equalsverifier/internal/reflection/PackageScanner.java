@@ -7,24 +7,15 @@ import java.net.URL;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 
 /** Scans a package for classes. */
 public final class PackageScanner {
 
-    private final boolean scanRecursively;
-
     /**
-     * Constructor.
-     *
-     * @param options Modifications to the standard package scanning behaviour.
+     * Do not instantiate.
      */
-    public PackageScanner(ScanOption... options) {
-        Set<ScanOption> opts = new HashSet<>();
-        Collections.addAll(opts, options);
-        this.scanRecursively = opts.contains(ScanOption.recursive());
-    }
+    private PackageScanner() {}
 
     /**
      * Scans the given package for classes.
@@ -32,17 +23,17 @@ public final class PackageScanner {
      * Note that if {@code mustExtend} is given, and it exists within {@code packageName}, it will NOT be included.
      *
      * @param packageName The package to scan.
-     * @param mustExtend  if not null, returns only classes that extend or implement this class.
+     * @param options     Modifications to the standard package scanning behaviour.
      * @return the classes contained in the given package.
      */
-    public List<Class<?>> getClassesIn(String packageName, Class<?> mustExtend) {
+    public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
         return getDirs(packageName)
                 .stream()
-                .flatMap(d -> getClassesInDir(packageName, d, mustExtend).stream())
+                .flatMap(d -> getClassesInDir(packageName, d, options).stream())
                 .collect(Collectors.toList());
     }
 
-    private List<File> getDirs(String packageName) {
+    private static List<File> getDirs(String packageName) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         return rethrow(
@@ -54,7 +45,7 @@ public final class PackageScanner {
             e -> "Could not scan package " + packageName);
     }
 
-    private String getResourcePath(URL r) {
+    private static String getResourcePath(URL r) {
         String result = rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
         if (result == null) {
             throw new ReflectionException("Could not resolve third-party resource " + r);
@@ -62,17 +53,17 @@ public final class PackageScanner {
         return result;
     }
 
-    private List<Class<?>> getClassesInDir(String packageName, File dir, Class<?> mustExtend, ScanOption... options) {
+    private static List<Class<?>> getClassesInDir(String packageName, File dir, PackageScanOptions options) {
         if (!dir.exists()) {
             return Collections.emptyList();
         }
         return Arrays
                 .stream(dir.listFiles())
-                .filter(f -> (scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
+                .filter(f -> (options.scanRecursively && f.isDirectory()) || f.getName().endsWith(".class"))
                 .flatMap(f -> {
                     List<Class<?>> classes;
                     if (f.isDirectory()) {
-                        classes = getClassesInDir(packageName + "." + f.getName(), f, mustExtend, options);
+                        classes = getClassesInDir(packageName + "." + f.getName(), f, options);
                     }
                     else {
                         classes = Collections.singletonList(fileToClass(packageName, f));
@@ -82,11 +73,13 @@ public final class PackageScanner {
                 .filter(c -> !c.isAnonymousClass())
                 .filter(c -> !c.isLocalClass())
                 .filter(c -> !c.getName().endsWith("Test"))
-                .filter(c -> mustExtend == null || (mustExtend.isAssignableFrom(c) && !mustExtend.equals(c)))
+                .filter(
+                    c -> options.mustExtend == null
+                            || (options.mustExtend.isAssignableFrom(c) && !options.mustExtend.equals(c)))
                 .collect(Collectors.toList());
     }
 
-    private Class<?> fileToClass(String packageName, File file) {
+    private static Class<?> fileToClass(String packageName, File file) {
         String className = file.getName().substring(0, file.getName().length() - 6);
         return rethrow(
             () -> Class.forName(packageName + "." + className),

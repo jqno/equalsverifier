@@ -12,6 +12,7 @@ import nl.jqno.equalsverifier.api.MultipleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.api.SingleTypeEqualsVerifierApi;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.FactoryCache;
 import nl.jqno.equalsverifier.internal.instantiation.vintage.PrefabValuesApi;
+import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
 import nl.jqno.equalsverifier.internal.reflection.PackageScanner;
 import nl.jqno.equalsverifier.internal.util.ListBuilders;
 import nl.jqno.equalsverifier.internal.util.Validations;
@@ -169,8 +170,8 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      */
     @CheckReturnValue
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, ScanOption... options) {
-        PackageScanner scanner = new PackageScanner(options);
-        List<Class<?>> classes = scanner.getClassesIn(packageName, null);
+        PackageScanOptions opts = ScanOptions.process(options);
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, this);
     }
@@ -206,11 +207,14 @@ public final class ConfiguredEqualsVerifier implements EqualsVerifierApi<Void> {
      * @param packageName A package for which each class's {@code equals} should be tested.
      * @param mustExtend  if not null, returns only classes that extend or implement this class.
      * @return A fluent API for EqualsVerifier.
+     * @deprecated Use {@link #forPackage(String, ScanOption...)} with {@link ScanOption#mustExtend(Class)}, and
+     *                 possibly {@link ScanOption#recursive()}, instead.
      */
     @CheckReturnValue
+    @Deprecated
     public MultipleTypeEqualsVerifierApi forPackage(String packageName, Class<?> mustExtend) {
-        PackageScanner scanner = new PackageScanner(ScanOption.recursive());
-        List<Class<?>> classes = scanner.getClassesIn(packageName, mustExtend);
+        PackageScanOptions opts = ScanOptions.process(ScanOption.recursive(), ScanOption.mustExtend(mustExtend));
+        List<Class<?>> classes = PackageScanner.getClassesIn(packageName, opts);
         Validations.validatePackageContainsClasses(packageName, classes);
         return new MultipleTypeEqualsVerifierApi(classes, this);
     }

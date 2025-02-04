@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.B;
@@ -17,36 +16,39 @@ import org.junit.jupiter.api.Test;
 
 class PackageScannerTest {
 
+    private PackageScanOptions opts = new PackageScanOptions();
+
     @Test
     void happyPath() {
-        PackageScanner scanner = new PackageScanner();
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", null);
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
         sort(classes);
         assertThat(classes).isEqualTo(Arrays.asList(A.class, B.class, C.class));
     }
 
     @Test
     void happyPathMustExtendClass() {
-        PackageScanner scanner = new PackageScanner();
+        opts.mustExtend = SuperA.class;
         List<Class<?>> classes =
-                scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", SuperA.class);
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
         assertThat(classes).isEqualTo(Arrays.asList(SubA1.class, SubA2.class));
     }
 
     @Test
     void happyPathMustExtendInterface() {
-        PackageScanner scanner = new PackageScanner();
+        opts.mustExtend = SuperI.class;
         List<Class<?>> classes =
-                scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", SuperI.class);
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
         assertThat(classes).isEqualTo(Arrays.asList(SubI1.class, SubI2.class));
     }
 
     @Test
     void happyPathRecursive() {
-        PackageScanner scanner = new PackageScanner(ScanOption.recursive());
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", null);
+        opts.scanRecursively = true;
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
         sort(classes);
         assertThat(classes)
                 .isEqualTo(
@@ -64,17 +66,17 @@ class PackageScannerTest {
 
     @Test
     void happyPathMustExtendClassRecursive() {
-        PackageScanner scanner = new PackageScanner(ScanOption.recursive());
+        opts.scanRecursively = true;
+        opts.mustExtend = SuperA.class;
         List<Class<?>> classes =
-                scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", SuperA.class);
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.subclasses", opts);
         sort(classes);
         assertThat(classes).isEqualTo(Arrays.asList(SubA1.class, SubA2.class, SubA3.class));
     }
 
     @Test
     void filterOutTestClasses() {
-        PackageScanner scanner = new PackageScanner();
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", null);
+        List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
         List<Class<?>> testClasses =
                 classes.stream().filter(c -> c.getName().endsWith("Test")).collect(Collectors.toList());
         assertThat(testClasses).isEqualTo(Collections.emptyList());
@@ -83,8 +85,8 @@ class PackageScannerTest {
 
     @Test
     void filterOutTestClassesRecursively() {
-        PackageScanner scanner = new PackageScanner(ScanOption.recursive());
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", null);
+        opts.scanRecursively = true;
+        List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
         List<Class<?>> testClasses =
                 classes.stream().filter(c -> c.getName().endsWith("Test")).collect(Collectors.toList());
         assertThat(testClasses).isEqualTo(Collections.emptyList());
@@ -93,22 +95,21 @@ class PackageScannerTest {
 
     @Test
     void nonexistentPackage() {
-        PackageScanner scanner = new PackageScanner();
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", null);
+        List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", opts);
         assertThat(classes).isEqualTo(Collections.emptyList());
     }
 
     @Test
     void nonexistentPackageAndSubPackage() {
-        PackageScanner scanner = new PackageScanner(ScanOption.recursive());
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", null);
+        opts.scanRecursively = true;
+        List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.nonexistentpackage", opts);
         assertThat(classes).isEqualTo(Collections.emptyList());
     }
 
     @Test
     void anonymousAndLocalClassesAreSkipped() {
-        PackageScanner scanner = new PackageScanner();
-        List<Class<?>> classes = scanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.anonymous", null);
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.anonymous", opts);
 
         assertThat(classes)
                 .isEqualTo(Collections.singletonList(nl.jqno.equalsverifier.testhelpers.packages.anonymous.A.class));
@@ -116,8 +117,7 @@ class PackageScannerTest {
 
     @Test
     void dependencyPackage() {
-        PackageScanner scanner = new PackageScanner();
-        assertThatThrownBy(() -> scanner.getClassesIn("org.junit", null))
+        assertThatThrownBy(() -> PackageScanner.getClassesIn("org.junit", opts))
                 .isInstanceOf(ReflectionException.class)
                 .hasMessageContaining("Could not resolve third-party resource");
     }

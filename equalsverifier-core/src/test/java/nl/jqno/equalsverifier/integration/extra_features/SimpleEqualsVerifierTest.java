@@ -28,7 +28,9 @@ class SimpleEqualsVerifierTest {
     void succeed_whenTestingClassesThatMustExtendSomething_givenASimpleEqualsVerifier() {
         EqualsVerifier
                 .simple()
-                .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", Object.class)
+                .forPackage(
+                    "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                    ScanOption.mustExtend(Object.class))
                 .verify();
     }
 
@@ -60,7 +62,7 @@ class SimpleEqualsVerifierTest {
                     () -> EqualsVerifier
                             .forPackage(
                                 "nl.jqno.equalsverifier.integration.extra_features.simple_package",
-                                Object.class)
+                                ScanOption.mustExtend(Object.class))
                             .verify())
                 .assertFailure()
                 .assertMessageContains("or use EqualsVerifier.simple()");
@@ -92,7 +94,7 @@ class SimpleEqualsVerifierTest {
                 .when(
                     () -> EqualsVerifier
                             .simple()
-                            .forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class)
+                            .forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.mustExtend(Object.class))
                             .verify())
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
@@ -104,7 +106,10 @@ class SimpleEqualsVerifierTest {
                 .when(
                     () -> EqualsVerifier
                             .simple()
-                            .forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect", Object.class)
+                            .forPackage(
+                                "nl.jqno.equalsverifier.testhelpers.packages.twoincorrect",
+                                ScanOption.recursive(),
+                                ScanOption.mustExtend(Object.class))
                             .verify())
                 .assertFailure()
                 .assertMessageContains(

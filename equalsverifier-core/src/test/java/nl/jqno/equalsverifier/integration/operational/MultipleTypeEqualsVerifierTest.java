@@ -55,12 +55,12 @@ class MultipleTypeEqualsVerifierTest {
 
     @Test
     void succeed_whenVerifyingAPackageWithASuperclass() {
-        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperA.class).verify();
+        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(SuperA.class)).verify();
     }
 
     @Test
     void succeed_whenVerifyingAPackageWithASuperInterface_givenOneOfTheImplementationsIsAlsoAnInterface() {
-        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, SuperI.class).verify();
+        EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(SuperI.class)).verify();
     }
 
     @Test
@@ -135,7 +135,10 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenVerifyingAPackageWithASuperclassWithFourIncorrectClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, Object.class).verify())
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.mustExtend(Object.class))
+                            .verify())
                 .assertFailure()
                 .assertMessageContains(
                     "EqualsVerifier found a problem in 4 classes.",
@@ -166,7 +169,9 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageWithASuperclass_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", Object.class))
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.mustExtend(Object.class)))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
@@ -187,7 +192,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void succeed_whenCallingForPackageWithASuperclassOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, Object.class)
+                .forPackage(INCORRECT_PACKAGE, ScanOption.recursive(), ScanOption.mustExtend(Object.class))
                 .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
                 .verify();
     }

@@ -14,4 +14,14 @@ public interface ScanOption {
     public static ScanOption recursive() {
         return ScanOptions.O.RECURSIVE;
     }
+
+    /**
+     * Finds only classes that extend or implement the given type.
+     *
+     * @param type The type that all classes must extend or implement.
+     * @return The 'mustExtend' flag with the associated type.
+     */
+    public static ScanOption mustExtend(Class<?> type) {
+        return new ScanOptions.MustExtend(type);
+    }
 }
