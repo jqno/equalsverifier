@@ -1,8 +1,6 @@
 package nl.jqno.equalsverifier;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import nl.jqno.equalsverifier.internal.reflection.PackageScanOptions;
@@ -18,6 +16,7 @@ final class ScanOptions {
         final Class<?> type;
 
         MustExtend(Class<?> type) {
+            Objects.requireNonNull(type);
             this.type = type;
         }
     }

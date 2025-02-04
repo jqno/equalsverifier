@@ -75,6 +75,24 @@ class PackageScannerTest {
     }
 
     @Test
+    void happyPathExceptClasses() {
+        opts.exceptClasses.add(B.class);
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
+        sort(classes);
+        assertThat(classes).isEqualTo(Arrays.asList(A.class, C.class));
+    }
+
+    @Test
+    void happyPathExceptPredicate() {
+        opts.exclusionPredicate = c -> c.getSimpleName().endsWith("B");
+        List<Class<?>> classes =
+                PackageScanner.getClassesIn("nl.jqno.equalsverifier.testhelpers.packages.correct", opts);
+        sort(classes);
+        assertThat(classes).isEqualTo(Arrays.asList(A.class, C.class));
+    }
+
+    @Test
     void filterOutTestClasses() {
         List<Class<?>> classes = PackageScanner.getClassesIn("nl.jqno.equalsverifier.internal.reflection", opts);
         List<Class<?>> testClasses =

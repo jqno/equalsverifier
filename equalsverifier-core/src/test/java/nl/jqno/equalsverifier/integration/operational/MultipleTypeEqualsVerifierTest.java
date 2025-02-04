@@ -54,6 +54,13 @@ class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
+    void fail_whenVerifyingAPackageWithASuperclass_ifSuperclassIsNull() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(null)).verify())
+                .assertThrows(NullPointerException.class);
+    }
+
+    @Test
     void succeed_whenVerifyingAPackageWithASuperclass() {
         EqualsVerifier.forPackage(SUBCLASSES_PACKAGE, ScanOption.mustExtend(SuperA.class)).verify();
     }
