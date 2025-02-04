@@ -3,6 +3,7 @@ package nl.jqno.equalsverifier.integration.extra_features;
 import java.util.Objects;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.Warning;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.types.Color;
@@ -19,7 +20,7 @@ class SimpleEqualsVerifierTest {
     void succeed_whenTestingClassesRecursively_givenASimpleEqualsVerifier() {
         EqualsVerifier
                 .simple()
-                .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
+                .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", ScanOption.recursive())
                 .verify();
     }
 
@@ -44,7 +45,9 @@ class SimpleEqualsVerifierTest {
         ExpectedException
                 .when(
                     () -> EqualsVerifier
-                            .forPackage("nl.jqno.equalsverifier.integration.extra_features.simple_package", true)
+                            .forPackage(
+                                "nl.jqno.equalsverifier.integration.extra_features.simple_package",
+                                ScanOption.recursive())
                             .verify())
                 .assertFailure()
                 .assertMessageContains("or use EqualsVerifier.simple()");
@@ -74,7 +77,11 @@ class SimpleEqualsVerifierTest {
     @Test
     void fail_whenTestingClassesRecursively_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.simple().forPackage("nl.jqno.equalsverifier.doesnotexist", true).verify())
+                .when(
+                    () -> EqualsVerifier
+                            .simple()
+                            .forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.recursive())
+                            .verify())
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
@@ -89,6 +96,22 @@ class SimpleEqualsVerifierTest {
                             .verify())
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
+    }
+
+    @Test
+    void fail_whenTestingClassesThatMustExtendSomething_whenClassesHaveErrors() {
+        ExpectedException
+                .when(
+                    () -> EqualsVerifier
+                            .simple()
+                            .forPackage("nl.jqno.equalsverifier.testhelpers.packages.twoincorrect", Object.class)
+                            .verify())
+                .assertFailure()
+                .assertMessageContains(
+                    "EqualsVerifier found a problem in 2 classes.",
+                    "* nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.IncorrectN",
+                    "* nl.jqno.equalsverifier.testhelpers.packages.twoincorrect.subpackage.IncorrectP",
+                    "Reflexivity: object does not equal itself:");
     }
 
     public static class SimplePoint {

@@ -7,6 +7,7 @@ import java.util.List;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
 import nl.jqno.equalsverifier.EqualsVerifierReport;
+import nl.jqno.equalsverifier.ScanOption;
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.testhelpers.ExpectedException;
 import nl.jqno.equalsverifier.testhelpers.packages.correct.A;
@@ -49,7 +50,7 @@ class MultipleTypeEqualsVerifierTest {
 
     @Test
     void succeed_whenVerifyingACorrectPackageRecursively() {
-        EqualsVerifier.forPackage(CORRECT_PACKAGE, true).verify();
+        EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.recursive()).verify();
     }
 
     @Test
@@ -119,7 +120,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenVerifyingAPackageRecursivelyWithFourIncorrectClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).verify())
+                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.recursive()).verify())
                 .assertFailure()
                 .assertMessageContains(
                     "EqualsVerifier found a problem in 4 classes.",
@@ -157,7 +158,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageRecursively_whenPackageHasNoClasses() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", true))
+                .when(() -> EqualsVerifier.forPackage("nl.jqno.equalsverifier.doesnotexist", ScanOption.recursive()))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("nl.jqno.equalsverifier.doesnotexist", "doesn't contain any (non-Test) types");
     }
@@ -178,7 +179,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExcepted() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
+                .forPackage(INCORRECT_PACKAGE, ScanOption.recursive())
                 .except(IncorrectM.class, IncorrectN.class, IncorrectO.class, IncorrectP.class)
                 .verify();
     }
@@ -202,7 +203,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenExceptingAClassThatDoesntExistInThePackageAndSubPackages() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, true).except(IncorrectM.class))
+                .when(() -> EqualsVerifier.forPackage(CORRECT_PACKAGE, ScanOption.recursive()).except(IncorrectM.class))
                 .assertThrows(IllegalStateException.class)
                 .assertMessageContains("Unknown class(es) found", "IncorrectM");
     }
@@ -215,7 +216,7 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreExceptedByPredicate() {
         EqualsVerifier
-                .forPackage(INCORRECT_PACKAGE, true)
+                .forPackage(INCORRECT_PACKAGE, ScanOption.recursive())
                 .except(c -> c.getSimpleName().contains("Incorrect"))
                 .verify();
     }
@@ -231,7 +232,11 @@ class MultipleTypeEqualsVerifierTest {
     @Test
     void fail_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenFailingClassesAreNotExceptedByPredicate() {
         ExpectedException
-                .when(() -> EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> false).verify())
+                .when(
+                    () -> EqualsVerifier
+                            .forPackage(INCORRECT_PACKAGE, ScanOption.recursive())
+                            .except(c -> false)
+                            .verify())
                 .assertFailure()
                 .assertMessageContains("EqualsVerifier found a problem in 4 classes");
     }
@@ -243,7 +248,7 @@ class MultipleTypeEqualsVerifierTest {
 
     @Test
     void succeed_whenCallingForPackageRecursivelyOnAPackageContainingFailingClasses_givenAllClassesAreExceptedByPredicate() {
-        EqualsVerifier.forPackage(INCORRECT_PACKAGE, true).except(c -> true).verify();
+        EqualsVerifier.forPackage(INCORRECT_PACKAGE, ScanOption.recursive()).except(c -> true).verify();
     }
 
     @Test
