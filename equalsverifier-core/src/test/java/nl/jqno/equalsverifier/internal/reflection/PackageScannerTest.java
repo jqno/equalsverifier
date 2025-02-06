@@ -140,6 +140,13 @@ class PackageScannerTest {
                 .hasMessageContaining("Could not resolve third-party resource");
     }
 
+    @Test
+    void dependencyPackageWithIgnore() {
+        opts.ignoreExternalJars = true;
+        List<Class<?>> classes = PackageScanner.getClassesIn("org.junit", opts);
+        assertThat(classes).isEmpty();
+    }
+
     private void sort(List<Class<?>> classes) {
         classes.sort(Comparator.comparing(Class::getName));
     }

@@ -4,10 +4,9 @@ import static nl.jqno.equalsverifier.internal.util.Rethrow.rethrow;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import nl.jqno.equalsverifier.internal.exceptions.ReflectionException;
 import nl.jqno.equalsverifier.internal.util.Validations;
@@ -30,7 +29,7 @@ public final class PackageScanner {
      * @return the classes contained in the given package.
      */
     public static List<Class<?>> getClassesIn(String packageName, PackageScanOptions options) {
-        List<Class<?>> result = getDirs(packageName)
+        List<Class<?>> result = getDirs(packageName, options)
                 .stream()
                 .flatMap(d -> getClassesInDir(packageName, d, options).stream())
                 .collect(Collectors.toList());
@@ -41,24 +40,27 @@ public final class PackageScanner {
         return result;
     }
 
-    private static List<File> getDirs(String packageName) {
+    private static List<File> getDirs(String packageName, PackageScanOptions options) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         String path = packageName.replace('.', '/');
         return rethrow(
             () -> Collections
                     .list(cl.getResources(path))
                     .stream()
-                    .map(r -> new File(getResourcePath(r)))
+                    .flatMap(r -> getResourcePath(r, options))
                     .collect(Collectors.toList()),
             e -> "Could not scan package " + packageName);
     }
 
-    private static String getResourcePath(URL r) {
+    private static Stream<File> getResourcePath(URL r, PackageScanOptions options) {
         String result = rethrow(() -> r.toURI().getPath(), e -> "Could not resolve resource path: " + e.getMessage());
         if (result == null) {
+            if (options.ignoreExternalJars) {
+                return Stream.empty();
+            }
             throw new ReflectionException("Could not resolve third-party resource " + r);
         }
-        return result;
+        return Stream.of(new File(result));
     }
 
     private static List<Class<?>> getClassesInDir(String packageName, File dir, PackageScanOptions options) {

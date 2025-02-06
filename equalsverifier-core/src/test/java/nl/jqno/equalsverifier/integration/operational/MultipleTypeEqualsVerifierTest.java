@@ -79,6 +79,14 @@ class MultipleTypeEqualsVerifierTest {
     }
 
     @Test
+    void failDifferently_whenVerifyingAThirdPartyPackage_givenScanOptionIgnoreExternalJars() {
+        ExpectedException
+                .when(() -> EqualsVerifier.forPackage("org.junit", ScanOption.ignoreExternalJars()).verify())
+                .assertThrows(IllegalStateException.class)
+                .assertMessageContains("org.junit", "doesn't contain any (non-Test) types");
+    }
+
+    @Test
     void doesNotReportNonrecursive_whenPackageContainsRecursiveAndNonrecursiveClasses() {
         ExpectedException
                 .when(() -> EqualsVerifier.forPackage(SOME_RECURSIVE_PACKAGE).verify())

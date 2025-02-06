@@ -9,7 +9,7 @@ final class ScanOptions {
     private ScanOptions() {}
 
     enum O implements ScanOption {
-        RECURSIVE;
+        RECURSIVE, IGNORE_EXTERNAL_JARS;
     }
 
     static class MustExtend implements ScanOption {
@@ -44,6 +44,9 @@ final class ScanOptions {
         for (ScanOption option : options) {
             if (option.equals(O.RECURSIVE)) {
                 result.scanRecursively = true;
+            }
+            if (option.equals(O.IGNORE_EXTERNAL_JARS)) {
+                result.ignoreExternalJars = true;
             }
             if (option instanceof MustExtend) {
                 MustExtend me = (MustExtend) option;

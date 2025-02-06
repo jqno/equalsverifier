@@ -18,6 +18,15 @@ public interface ScanOption {
     }
 
     /**
+     * Signals that packages from external jars, which can't be scanned, will be ignored rather than throw an exception.
+     *
+     * @return The 'ignore external jars' flag.
+     */
+    public static ScanOption ignoreExternalJars() {
+        return ScanOptions.O.IGNORE_EXTERNAL_JARS;
+    }
+
+    /**
      * Finds only classes that extend or implement the given type.
      *
      * @param type The type that all classes must extend or implement.

@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 public class PackageScanOptions {
 
     public boolean scanRecursively = false;
+    public boolean ignoreExternalJars = false;
     public Class<?> mustExtend = null;
     public Set<Class<?>> exceptClasses = new HashSet<>();
     public Predicate<Class<?>> exclusionPredicate = c -> false;
