@@ -16,10 +16,13 @@ This will test each class within the `com.example.app.domain` package.
 If there's a class within that package that you don't want to test with EqualsVerifier, for instance a helper class, you can exclude it as follows:
 
 {% highlight java %}
-EqualsVerifier.forPackage("com.example.app.domain")
-    .except(Helper.class)
+EqualsVerifier.forPackage(
+        "com.example.app.domain",
+        ScanOption.except(Helper.class))
     .verify();
 {% endhighlight %}
+
+Note that the `ScanOption` class contains several more tools to fine-tune your search. `ScanOption.recursive()` will let EqualsVerifier look in all the sub-packages of `com.example.app.domain` and `ScanOption.mustExtend(Foo.class)` only finds classes that extend or implement `Foo.class`.
 
 You can achieve even more granularity:
 
